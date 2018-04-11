@@ -40,11 +40,13 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^4.0.1",
     "gulp-uglify": "^3.0.0",
+    "nodemon": "^1.17.3",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   },
   "scripts": {
     "build": "gulp",
-    "start": "gulp watch|node server.js"
+    "start": "node server.js",
+    "watch": "gulp watch"
   }
 }
