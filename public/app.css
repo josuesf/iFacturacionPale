@@ -6270,7 +6270,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 .wrapper {
   display: flex;
-  align-items: stretch; }
+  align-items: stretch;
+  perspective: 1500px;
+  /* Define how many pixels the sidebar is placed from the view. */ }
+
+#content {
+  width: 100%; }
 
 #sidebar {
   min-width: 250px;
