@@ -38,8 +38,13 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^4.0.1",
     "vinyl-source-stream": "^1.1.0",
+<<<<<<< HEAD
     "watchify": "^3.7.0",
     "materialize-css": "^0.97.6"
+=======
+    "materialize-css": "^0.97.6",
+    "watchify": "^3.7.0"
+>>>>>>> d585942e4b53e48689eebcf1a87c58bbeee7bc99
   },
   "scripts": {
     "build": "gulp",
