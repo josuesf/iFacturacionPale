@@ -18,18 +18,12 @@
     "url": "https://github.com/josuesf/iFacturacionPale/issues"
   },
   "dependencies": {
-    "axios": "^0.11.0",
     "empty-element": "^1.0.0",
     "express": "^4.13.4",
     "file-extension": "^2.0.1",
-    "intl": "^1.1.0",
-    "intl-messageformat": "^1.3.0",
-    "intl-relativeformat": "^1.3.0",
-    "materialize-css": "^0.97.6",
     "multer": "^1.1.0",
     "page": "^1.7.1",
     "pug": "^2.0.0-alpha6",
-    "superagent": "^1.8.3",
     "title": "^1.0.0",
     "yo-yo": "^1.2.0"
   },
@@ -44,7 +38,8 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^4.0.1",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "materialize-css": "^0.97.6"
   },
   "scripts": {
     "build": "gulp",
