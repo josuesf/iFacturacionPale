@@ -47,6 +47,7 @@
   "scripts": {
     "build": "gulp",
     "start": "node server.js",
+    "rundev": "nodemon server.js",
     "watch": "gulp watch"
   }
 }
