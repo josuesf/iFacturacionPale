@@ -1,31 +1,25 @@
 var yo  =  require('yo-yo')
 var empty = require('empty-element');
 
-var el = yo`<div id="sidebar"><div class="sidebar-header">
-<h5>Palerp</h5>
-</div>
+var el = yo`<ul class="sidebar-menu" data-widget="tree">
+<li class="header">MAIN NAVIGATION</li>
+<li class="active treeview">
+  <a href="#">
+    <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+    <span class="pull-right-container">
+      <i class="fa fa-angle-left pull-right"></i>
+    </span>
+  </a>
+  <ul class="treeview-menu">
+    <li class="active"><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
+    <li><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
+  </ul>
+</li>
 
-<!-- Sidebar Links -->
-<ul class="list-unstyled components">
-<li class="active"><a href="#">Inicio</a></li>
-<li><a href="#">Comercial</a></li>
-
-<li><!-- Link with dropdown items -->
-    <a href="#homeSubmenu" class="nav-link dropdown-toggle" data-toggle="collapse" aria-expanded="false">Contabilidad</a>
-    <ul class="collapse list-unstyled" id="homeSubmenu">
-        <li><a href="#">Page</a></li>
-        <li><a href="#">Page</a></li>
-        <li><a href="#">Page</a></li>
-    </ul>
-
-<li><a href="#">Logistica</a></li>
-<li><a href="#">Activos Fijos</a></li>
-<li><a href="#">Planillas</a></li>
-<li><a href="#">Configuracion</a></li>
-</ul></div>`;
+</ul>`;
 
 module.exports = function navegador (ctx, next) {
-    var container = document.getElementById('nav-content')
+    var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     next();
   }

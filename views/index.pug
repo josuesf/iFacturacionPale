@@ -1,29 +1,111 @@
+doctype html
 html
   head
-    link(href='https://fonts.googleapis.com/css?family=Montserrat|Oleo+Script' rel='stylesheet' type='text/css')
-    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css')
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    link(rel='stylesheet' type='text/css' href='/app.css')
-
+    //- link(href='https://fonts.googleapis.com/css?family=Montserrat|Oleo+Script' rel='stylesheet' type='text/css')
+    //- link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css')
+    //- link(rel='stylesheet' type='text/css' href='/app.css')
+    //- link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
     meta(name='viewport' content='width=device-width, initial-scale=1.0, shrink-to-fit=no')
     meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    //- title AdminLTE 2 | Dashboard
+    // Tell the browser to be responsive to screen width
+    meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
+    // Bootstrap 3.3.7
+    link(rel='stylesheet', href='bower_components/bootstrap/dist/css/bootstrap.min.css')
+    // Font Awesome
+    link(rel='stylesheet', href='bower_components/font-awesome/css/font-awesome.min.css')
+    // Ionicons
+    link(rel='stylesheet', href='bower_components/Ionicons/css/ionicons.min.css')
+    // Theme style
+    link(rel='stylesheet', href='dist/css/AdminLTE.min.css')
+    
+    link(rel='stylesheet', href='dist/css/skins/_all-skins.min.css')
+    // Morris chart
+    link(rel='stylesheet', href='bower_components/morris.js/morris.css')
+    // Date Picker
+    link(rel='stylesheet', href='bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')
+    // bootstrap wysihtml5 - text editor
+    link(rel='stylesheet', href='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')
+    // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
+    // WARNING: Respond.js doesn't work if you view the page via file://
+
+    link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic')
+
     title=title
-  body
-    div.wrapper
-      div#nav-content
-      div#content
-        div#header-container
-        div#contenido
-      section#footer-container
-    script(src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous")
-    script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous")
+  body.hold-transition.sidebar-mini.fixed.skin-black
+    .wrapper
+      header.main-header
+        // Logo
+        a.logo(href='/')
+          // mini logo for sidebar mini 50x50 pixels
+          span.logo-mini
+            b P
+            | ale
+          // logo for regular state and mobile devices
+          span.logo-lg
+            b Pal
+            | ERP
+        // Header Navbar: style can be found in header.less
+        nav.navbar.navbar-static-top
+          // Sidebar toggle button
+          a.sidebar-toggle(href='#', data-toggle='push-menu', role='button')
+            span.sr-only Toggle navigation
+          .navbar-custom-menu
+            ul.nav.navbar-nav
+              // User Account: style can be found in dropdown.less
+              li.dropdown.user.user-menu
+                a.dropdown-toggle(href='#', data-toggle='dropdown')
+                  img.user-image(src='dist/img/user2-160x160.jpg', alt='User Image')
+                  span.hidden-xs Josue Farfan
+                ul.dropdown-menu
+                  // Menu Footer
+                  li.user-footer
+                    a(href='#') Cerrar Sesion
+      // Left side column. contains the logo and sidebar
+      aside.main-sidebar
+        // sidebar: style can be found in sidebar.less
+        section.sidebar
+          // Sidebar user panel
+          .user-panel
+            .pull-left.image
+              img.img-circle(src='dist/img/user2-160x160.jpg', alt='User Image')
+            .pull-left.info
+              p Josue Farfan Lazo
+          // sidebar menu: : style can be found in sidebar.less
+          div#nav-container
+        // /.sidebar
+      // Content Wrapper. Contains page content
+      .content-wrapper
+        div#main-contenido
+          
+      // /.content-wrapper
+      footer.main-footer
+        .pull-right.hidden-xs
+          b Version
+          |  1.0.0
+        strong
+          | © 2018 
+          a(href='https://palerp.com') PalERP Constructores. 
+        | Derechos reservados
+      
+   
+    script(src='bower_components/jquery/dist/jquery.min.js')
+    // jQuery UI 1.11.4
+    script(src='bower_components/jquery-ui/jquery-ui.min.js')
+    // Bootstrap 3.3.7
+    script(src='bower_components/bootstrap/dist/js/bootstrap.min.js')
+    // Morris.js charts
+    script(src='bower_components/raphael/raphael.min.js')
+    script(src='bower_components/morris.js/morris.min.js')
+    // datepicker
+    script(src='bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')
+    // Bootstrap WYSIHTML5
+    script(src='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')
+    // Slimscroll
+    script(src='bower_components/jquery-slimscroll/jquery.slimscroll.min.js')
+    // AdminLTE App
+    script(src='dist/js/adminlte.min.js')
+    script(src='dist/js/demo.js')
+
     script(type='application/javascript' src='/app.js')
-    script.
-      $(document).ready(function () {
-
-          $('#sidebarCollapse').on('click', function () {
-              $('#sidebar').toggleClass('active');
-          });
-
-      });

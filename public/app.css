@@ -6269,18 +6269,13 @@ a.text-dark:hover, a.text-dark:focus {
     border: 1px solid #dee2e6 !important; } }
 
 .wrapper {
-  display: flex;
-  align-items: stretch;
-  perspective: 1500px;
-  /* Define how many pixels the sidebar is placed from the view. */ }
-
-#content {
-  width: 100%; }
+  display: flex; }
 
 #sidebar {
   min-width: 250px;
   max-width: 250px;
-  min-height: 100vh; }
+  min-height: 100vh;
+  position: fixed; }
 
 #sidebar.active {
   margin-left: -250px; }
@@ -6289,14 +6284,14 @@ a[data-toggle="collapse"] {
   position: relative; }
 
 a[aria-expanded="false"]::before, a[aria-expanded="true"]::before {
-  content: '\e259';
+  content: '\f0d7';
   display: block;
   position: absolute;
   right: 20px;
-  font-family: 'Glyphicons Halflings'; }
+  font-family: FontAwesome; }
 
 a[aria-expanded="true"]::before {
-  content: '\e260'; }
+  content: '\f0d8'; }
 
 @media (max-width: 768px) {
   #sidebar {
@@ -6319,17 +6314,17 @@ a, a:hover, a:focus {
 
 #sidebar {
   /* don't forget to add all the previously mentioned styles here too */
-  background: #353b48;
+  background: #3c6382;
   color: #fff;
   transition: all 0.3s; }
 
 #sidebar .sidebar-header {
-  padding: 20px;
-  background: #353b48; }
+  padding: 14px;
+  background: #3c6382; }
 
 #sidebar ul.components {
   padding: 20px 0;
-  border-bottom: 1px solid #353b48; }
+  border-bottom: 0px solid #353b48; }
 
 #sidebar ul p {
   color: #fff;
@@ -6340,24 +6335,13 @@ a, a:hover, a:focus {
   display: block; }
 
 #sidebar ul li a:hover {
-  color: #487eb0;
-  background: #fff; }
+  color: #fff;
+  background: #38ada9; }
 
 #sidebar ul li.active > a, a[aria-expanded="true"] {
   color: #fff;
-  background: #40739e; }
+  background: #38ada9; }
 
 ul ul a {
   padding-left: 30px !important;
-<<<<<<< HEAD
-  background: #40739e; }
-=======
-<<<<<<< HEAD
-  background: #40739e; }
-=======
-  background: #6d7fcc; }
->>>>>>> 038d6fe35f54a12e9b65e6d7dec5750416f40e1d
-
-#content {
-  width: 100%; }
->>>>>>> 872909f8d477121fff85d7e7e47e8b6a5e7ef7b6
+  background: #079992; }
