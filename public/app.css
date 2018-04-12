@@ -6349,4 +6349,11 @@ a, a:hover, a:focus {
 
 ul ul a {
   padding-left: 30px !important;
+<<<<<<< HEAD
   background: #40739e; }
+=======
+  background: #6d7fcc; }
+
+#content {
+  width: 100%; }
+>>>>>>> 872909f8d477121fff85d7e7e47e8b6a5e7ef7b6
