@@ -8,6 +8,8 @@ var watchify = require('watchify');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 
+
+
 gulp.task('styles', function () {
     gulp
         .src('index.scss')
@@ -15,9 +17,11 @@ gulp.task('styles', function () {
         .pipe(rename('app.css'))
         .pipe(gulp.dest('public'));
 })
+ 
+
 
 function compile(watch) {
-    var bundle = browserify('./src/index.js', { debug: true });
+    var bundle = browserify(['./src/index.js'], { debug: true });
 
     if (watch) {
         bundle = watchify(bundle);
@@ -40,6 +44,8 @@ function compile(watch) {
     rebundle();
 }
 
+
+
 gulp.task('build', function () {
     return compile();
 });
@@ -53,7 +59,10 @@ gulp.task('compress', function () {
         .pipe(gulp.dest('public'));
 });
 
+gulp.task('watch-css', function () {
+    return gulp.watch('index.scss', ['styles']);
+  });
 
-gulp.task('watch', function () { return compile(true); });
+gulp.task('watch-js', function () { return compile(true); });
 
 gulp.task('default', ['styles', 'build']);
