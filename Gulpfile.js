@@ -8,12 +8,16 @@ var watchify = require('watchify');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 
-gulp.task('styles', function () {
+function bundleStyle(){
     gulp
         .src('index.scss')
         .pipe(sass())
         .pipe(rename('app.css'))
         .pipe(gulp.dest('public'));
+}
+
+gulp.task('styles', function () {
+    bundleStyle()
 })
 
 function compile(watch) {
