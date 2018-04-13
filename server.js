@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.get('/', function (req, res) {
   res.render('index', { title: 'iFacturacion' });
 })
-app.get('/usuarios', function (req, res) {
+app.get('/usuarios', function (req, res) {  
   res.render('index', { title: 'iFacturacion - Usuarios' });
 })
 //Routes

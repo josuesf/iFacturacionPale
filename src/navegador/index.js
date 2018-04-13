@@ -1,6 +1,5 @@
 var yo  =  require('yo-yo')
 var empty = require('empty-element');
-
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -12,13 +11,17 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="/usuarios"><i class="fa fa-circle-o"></i> Usuarios</a></li>
+            <li class=""><a href="" onclick=${()=>ListarUsuarios(true)}><i class="fa fa-circle-o"></i> Usuarios</a></li>
         </ul>
     </li>
 </ul>`;
 
+// function CargarUsuarios
+function ListarUsuarios(escritura){
+    var modulo = require('../usuarios')(escritura)
+}
 module.exports = function navegador (ctx, next) {
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     next();
-  }
+}
