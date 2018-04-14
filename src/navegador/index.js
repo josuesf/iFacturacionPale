@@ -1,5 +1,9 @@
 var yo  =  require('yo-yo')
 var empty = require('empty-element');
+
+var ListarUsuarios = require('../usuarios/listar')
+
+
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -16,11 +20,9 @@ var el = yo`
     </li>
 </ul>`;
 
-// function CargarUsuarios
-function ListarUsuarios(escritura){
-    var modulo = require('../usuarios')(escritura)
-}
+
 module.exports = function navegador (ctx, next) {
+    console.log()
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     next();
