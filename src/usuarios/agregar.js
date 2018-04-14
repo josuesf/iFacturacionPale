@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-var Listar = require('./listar.js')
+
+var Listar = require('./listar')
 
 module.exports = function NuevoUsuario(escritura, _estados, _perfiles, _escritura, usuario) {
     var el = yo`
