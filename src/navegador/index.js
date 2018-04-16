@@ -1,8 +1,8 @@
 var yo  =  require('yo-yo')
 var empty = require('empty-element');
 
-import {Listar} from '../usuarios/listar'
-
+import {ListarUsuarios} from '../usuarios/listar'
+import {ListarCajas} from '../cajas/listar'
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
@@ -15,11 +15,11 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="" onclick=${()=>Listar(true)}><i class="fa fa-circle-o"></i> Usuarios</a></li>
+            <li class=""><a href="" onclick=${()=>ListarUsuarios(true)}><i class="fa fa-circle-o"></i> Usuarios</a></li>
+            <li class=""><a href="" onclick=${()=>ListarCajas(true)}><i class="fa fa-circle-o"></i> Cajas</a></li>
         </ul>
     </li>
 </ul>`;
-
 
 module.exports = function navegador (ctx, next) {
     console.log()

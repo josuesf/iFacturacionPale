@@ -24,7 +24,9 @@ app.get('/usuarios', function (req, res) {
 })
 //Routes
 var usuarios_api = require('./routes/api-usuarios')
+var cajas_api = require('./routes/api-cajas')
 app.use('/usuarios_api', usuarios_api);
+app.use('/cajas_api', cajas_api);
 //Listen Server
 app.listen(3000, function (err) {
   if (err) return console.log('Hubo un error'), process.exit(1);
