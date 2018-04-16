@@ -19,7 +19,7 @@ html
     link(rel='stylesheet', href='bower_components/Ionicons/css/ionicons.min.css')
     // Theme style
     link(rel='stylesheet', href='dist/css/AdminLTE.min.css')
-    link(rel='stylesheet', href='dist/css/fakeLoader.css')
+    link(href='dist/css/loading.css', rel='stylesheet')
     
     link(rel='stylesheet', href='dist/css/skins/_all-skins.min.css')
     // Morris chart
@@ -35,7 +35,18 @@ html
 
     title=title
   body.hold-transition.sidebar-mini.fixed.skin-black
-    .fakeloader
+    section#H5_loading.H5_loading(style='background-color: rgba(0, 0, 0, 0.2);')
+      .H5_loading_process
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+        div(style='background: rgb(102, 102, 102);')
+
+
     .wrapper
       header.main-header
         // Logo
@@ -109,6 +120,7 @@ html
     // AdminLTE App
     script(src='dist/js/adminlte.min.js')
     script(src='dist/js/demo.js')
-    script(src='dist/js/fakeLoader.js')
+    script(src='dist/js/loading.js')
+
 
     script(type='application/javascript' src='/app.js')

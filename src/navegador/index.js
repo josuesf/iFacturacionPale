@@ -3,7 +3,6 @@ var empty = require('empty-element');
 
 import {Listar} from '../usuarios/listar'
 
-console.log(Listar)
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
