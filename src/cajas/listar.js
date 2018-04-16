@@ -129,7 +129,6 @@ function ListarCajas(escritura){
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                console.log(res.data.cajas)
                 
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
