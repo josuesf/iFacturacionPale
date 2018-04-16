@@ -107,8 +107,10 @@ function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
 }
 
 function EliminarUsuario(_escritura, usuario){
+    
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
+        H5_loading.show();
         var Cod_Usuarios = usuario.Cod_Usuarios
         const parametros = {
             method: 'POST',
@@ -123,6 +125,7 @@ function EliminarUsuario(_escritura, usuario){
         fetch('/usuarios_api/eliminar_usuario', parametros)
             .then(req => req.json())
             .then(res => {
+                
                 if (res.respuesta == 'ok') {
                     Listar(_escritura)
                     this.removeEventListener('click', Eliminar)
@@ -132,16 +135,22 @@ function EliminarUsuario(_escritura, usuario){
                     console.log('Error')
                     this.removeEventListener('click', Eliminar)
                 }
+                H5_loading.hide()
             })
     })
 }
 
+<<<<<<< HEAD
 function ListarUsuarios(escritura) {
     $(".fakeloader").fakeLoader({
         timeToHide:2000,
         spinner:"spinner6",
         bgColor:"#333"
     });
+=======
+function Listar(escritura) {
+    H5_loading.show();
+>>>>>>> 817e062dbff23230c327653e290c7222d48a5952
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -171,6 +180,7 @@ function ListarUsuarios(escritura) {
             }
             else
                 Ver([])
+            H5_loading.hide()
         })
 }
 

@@ -144,6 +144,7 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
 
 function Guardar(_escritura, usuario){
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
+    H5_loading.show();
     var Cod_Usuarios = usuario?usuario.Cod_Usuarios:document.getElementById('Cod_Usuarios').value.toUpperCase()
     var Nick = document.getElementById('Nick').value.toUpperCase()
     var Contrasena = document.getElementById('Contrasena').value
@@ -181,5 +182,6 @@ function Guardar(_escritura, usuario){
             else{
                 console.log('Error')
             }
+            H5_loading.hide()
         })
 }
