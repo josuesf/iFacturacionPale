@@ -3,6 +3,10 @@ var empty = require('empty-element');
 
 import {Listar} from '../usuarios/listar'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 817e062dbff23230c327653e290c7222d48a5952
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
