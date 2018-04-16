@@ -136,7 +136,7 @@ function EliminarUsuario(_escritura, usuario){
     })
 }
 
-function Listar(escritura) {
+function ListarUsuarios(escritura) {
     $(".fakeloader").fakeLoader({
         timeToHide:2000,
         spinner:"spinner6",
