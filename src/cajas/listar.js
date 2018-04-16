@@ -53,7 +53,7 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de Cajas</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevoUsuario(_escritura, _sucursales)} class="btn btn-info pull-right">
+                    ${_escritura ? yo`<a onclick=${()=>NuevaCaja(_escritura, _sucursales)} class="btn btn-info pull-right">
                         <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
