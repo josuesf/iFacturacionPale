@@ -12,3 +12,5 @@ package-lock.json
 public/app.js
 public/app.js
 src/navegador/index.js
+src/navegador/index.js
+public/app.js
