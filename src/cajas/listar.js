@@ -1,6 +1,9 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
+import {NuevaCaja} from './agregar'
+
+
 function Controles(escritura) {
     var controles = yo`<div><button class="btn btn-xs btn-success">Editar</button>
     <button class="btn btn-xs btn-danger">Borrar</button></div>`
@@ -35,23 +38,23 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
         <!-- /.modal-dialog -->
       </div>
             <h1>
-                Usuarios
-                <small>Control usuarios</small>
+                Cajas
+                <small>Control cajas</small>
             </h1>
             <ol class="breadcrumb">
                 <li>
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li class="active">Usuarios</li>
+                <li class="active">Cajas</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Usuarios</h3>
+                    <h3 class="box-title">Lista de Cajas</h3>
                     ${_escritura ? yo`<a onclick=${()=>NuevoUsuario(_escritura, _sucursales)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nuevo Usuario</a>`: yo``}
+                        <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
