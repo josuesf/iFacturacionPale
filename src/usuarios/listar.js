@@ -11,10 +11,30 @@ function Controles(escritura) {
         return yo`<div></div>`
 }
 
-function Ver(usuarios, paginas, escritura, _estados, _perfiles) {
+function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
     var el = yo`
     <div>
         <section class="content-header">
+        <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+              <h4 class="modal-title">¿Esta seguro que desea eliminar este usuario?</h4>
+            </div>
+            <div class="modal-body">
+              <p>Al eliminar el usuario se perderan todos los datos.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Eliminar</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
             <h1>
                 Usuarios
                 <small>Control usuarios</small>
@@ -31,7 +51,7 @@ function Ver(usuarios, paginas, escritura, _estados, _perfiles) {
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de Usuarios</h3>
-                    ${escritura ? yo`<a onclick=${()=>NuevoUsuario(escritura, _estados, _perfiles)} class="btn btn-info pull-right">
+                    ${_escritura ? yo`<a onclick=${()=>NuevoUsuario(_escritura, _estados, _perfiles)} class="btn btn-info pull-right">
                         <i class="fa fa-plus"></i> Nuevo Usuario</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
@@ -55,8 +75,8 @@ function Ver(usuarios, paginas, escritura, _estados, _perfiles) {
                                 <td>${u.Cod_Perfil}</td>
                                 <td>${u.Cod_Estado}</td>
                                 <td>
-                                    ${escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${escritura ? yo`<button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -86,7 +106,37 @@ function Ver(usuarios, paginas, escritura, _estados, _perfiles) {
     empty(main).appendChild(el);
 }
 
-module.exports = function Listar(escritura) {
+function EliminarUsuario(_escritura, usuario){
+    var btnEliminar = document.getElementById('btnEliminar')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        var Cod_Usuarios = usuario.Cod_Usuarios
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Usuarios,
+            })
+        }
+        fetch('/usuarios_api/eliminar_usuario', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    Listar(_escritura)
+                    this.removeEventListener('click', Eliminar)
+                }
+                else{
+
+                    console.log('Error')
+                    this.removeEventListener('click', Eliminar)
+                }
+            })
+    })
+}
+
+function Listar(escritura) {
     $(".fakeloader").fakeLoader({
         timeToHide:2000,
         spinner:"spinner6",
@@ -117,7 +167,7 @@ module.exports = function Listar(escritura) {
                 var _perfiles = res.data.perfiles
                 var _estados = res.data.estados
 
-                Ver(res.data.usuarios, paginas, escritura, _estados, _perfiles)
+                Ver(res.data.usuarios, paginas, _escritura, _estados, _perfiles)
             }
             else
                 Ver([])
@@ -125,3 +175,4 @@ module.exports = function Listar(escritura) {
 }
 
 
+export {Listar}

@@ -39,4 +39,15 @@ router.post('/guardar_usuario', function (req, res) {
     Ejecutar_Procedimientos(res,procedimientos)
 });
 
+router.post('/eliminar_usuario', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Usuarios', valor_parametro: input.Cod_Usuarios}
+    ]
+    procedimientos = [
+        {nom_respuesta:'usuario',sp_name:'usp_PRI_USUARIO_E', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 module.exports = router;
