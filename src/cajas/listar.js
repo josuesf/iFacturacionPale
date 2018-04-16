@@ -79,7 +79,7 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
                                 <td>${u.Cod_UsuarioCajero}</td>
                                 <td>${u.Cod_CuentaContable}</td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" "><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaCaja(_escritura, _sucursales, [], [], u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                     ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" ><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
