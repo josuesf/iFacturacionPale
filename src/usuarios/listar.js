@@ -140,17 +140,8 @@ function EliminarUsuario(_escritura, usuario){
     })
 }
 
-<<<<<<< HEAD
-function ListarUsuarios(escritura) {
-    $(".fakeloader").fakeLoader({
-        timeToHide:2000,
-        spinner:"spinner6",
-        bgColor:"#333"
-    });
-=======
 function Listar(escritura) {
     H5_loading.show();
->>>>>>> 817e062dbff23230c327653e290c7222d48a5952
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
