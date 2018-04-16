@@ -1,10 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
-import {ListarCajas} from './ListarCajas';
 
-
-module.exports = function NuevoUsuario(_escritura,sucursales, caja) {
+function NuevaCaja(_escritura,sucursales,caja) {
     console.log(caja)
 
     var el = yo`
@@ -51,8 +49,13 @@ module.exports = function NuevoUsuario(_escritura,sucursales, caja) {
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Flag_Activo">Es Activo</label>
-                                            <input type="text" class="form-control" id="Flag_Activo" value="${caja?caja.Flag_Activo:'0'}">
+                                            <label for="Flag_Activo"></label>
+                                            
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="Flag_Activo" value="${caja?caja.Flag_Activo:'0'}"> Es Activo?
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -144,3 +147,5 @@ function Guardar(_escritura, caja){
             }
         })
 }
+
+export {NuevaCaja}
