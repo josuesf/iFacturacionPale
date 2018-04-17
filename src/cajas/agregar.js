@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import {ListarCajas} from './listar'
+import { ListarCajas } from './listar'
 
-function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
+function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, documentos, productos) {
 
     var el = yo`
     <div>
@@ -16,15 +16,15 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li><a  onclick=${()=>ListarCajas(_escritura)} href="#">
+                <li><a  onclick=${() => ListarCajas(_escritura)} href="#">
                 Cajas</a></li>
-                <li class="active">${caja?'Editar':'Nuevo'}</li>
+                <li class="active">${caja ? 'Editar' : 'Nuevo'}</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <a onclick=${()=>ListarCajas(_escritura)}
+                    <a onclick=${() => ListarCajas(_escritura)}
                     class="btn btn-xs btn-warning">
                         <i class="fa fa-arrow-left"></i> Atras</a>
                     
@@ -40,7 +40,7 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
-                                    ${caja? yo``:yo`<div class="col-sm-6">
+                                    ${caja ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="Cod_Caja">Codigo Caja</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Caja" placeholder="Ingrese codigo caja" >
@@ -52,7 +52,7 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                             
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Activo" value="${caja?caja.Flag_Activo:0}"> Es Activo?
+                                                    <input type="checkbox" id="Flag_Activo" checked="${caja ? caja.Flag_Activo : 0}"> Es Activo?
                                                 </label>
                                             </div>
                                         </div>
@@ -62,14 +62,14 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Des_Caja">Nombre de la Caja</label>
-                                            <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_Caja" placeholder="Ingrese Nombre de caja" value="${caja?caja.Des_Caja:''}">
+                                            <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_Caja" placeholder="Ingrese Nombre de caja" value="${caja ? caja.Des_Caja : ''}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_Sucursal">Sucursal a la que pertence</label>
                                             <select id="Cod_Sucursal" class="form-control">
-                                                ${sucursales.map(e=>yo`<option style="text-transform:uppercase" value="${e}" ${caja?caja.Cod_Sucursal == e?'selected':'':''}>${e}</option>`)}
+                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                         <div class="form-group">
                                             <label for="Cod_UsuarioCajero">Usuario o vendedor responsable</label>
                                             <select id="Cod_UsuarioCajero" class="form-control select2">
-                                                ${sucursales.map(e=>yo`<option style="text-transform:uppercase" value="${e}" ${caja?caja.Cod_Sucursal == e?'selected':'':''}>${e}</option>`)}
+                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -87,12 +87,12 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                         <div class="form-group">
                                             <label for="Cod_CuentaContable">Cuenta Contable</label>
                                             <select id="Cod_CuentaContable" class="form-control select2">
-                                                ${sucursales.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaContable}" ${caja?caja.Cod_Sucursal == e?'selected':'':''}>${e}</option>`)}
+                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaContable}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                ${caja!=undefined? yo `
+                                ${caja != undefined ? yo`
                                     <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="nav-tabs-custom">
@@ -135,6 +135,22 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
+                                                                        ${documentos.map(u => yo`
+                                                                        <tr>
+                                                                            <td>${u.Item}</td>
+                                                                            <td>${u.Nom_TipoComprobante}</td>
+                                                                            <td>${u.Serie}</td>
+                                                                            <td>${u.Impresora}</td>
+                                                                            <td>${u.Flag_Imprimir}</td>
+                                                                            <td>${u.Nom_Archivo}</td>
+                                                                            <td>${u.Flag_FacRapida}</td>
+                                                                            <td>${u.Nro_SerieTicketera}</td>
+                                                                            <td>
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                                                                
+                                                                            </td>
+                                                                        </tr>`)}
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -145,7 +161,7 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                                                 <table class="table table-bordered table-striped">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th>Productos</th>
+                                                                            <th>Producto</th>
                                                                             <th>Almacen</th>
                                                                             <th>Unidad Medida</th>
                                                                             <th>Precio</th>
@@ -154,6 +170,19 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
+                                                                        ${productos.map(u => yo`
+                                                                        <tr>
+                                                                            <td>${u.Nom_Producto}</td>
+                                                                            <td>${u.Des_Almacen}</td>
+                                                                            <td>${u.Nom_UnidadMedida}</td>
+                                                                            <td>${u.Valor}</td>
+                                                                            <td>${u.Stock_Act}</td>
+                                                                            <td>
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                                                                
+                                                                            </td>
+                                                                        </tr>`)}
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -164,7 +193,7 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
                                             </div>
                                         
                                         </div>    
-                                    `:yo``}
+                                    `: yo``}
                                 
                             </div>
                             <!-- /.box-body -->
@@ -184,9 +213,9 @@ function NuevaCaja(_escritura,sucursales,usuarios,cuentas_contables,caja) {
     // $('.select2').select2();
 }
 
-function Guardar(_escritura, caja){
+function Guardar(_escritura, caja) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    var Cod_Usuarios = caja?caja.Cod_Usuarios:document.getElementById('Cod_Usuarios').value.toUpperCase()
+    var Cod_Usuarios = caja ? caja.Cod_Usuarios : document.getElementById('Cod_Usuarios').value.toUpperCase()
     var Nick = document.getElementById('Nick').value.toUpperCase()
     var Contrasena = document.getElementById('Contrasena').value
     var Pregunta = document.getElementById('Pregunta').value.toUpperCase()
@@ -218,12 +247,36 @@ function Guardar(_escritura, caja){
         .then(res => {
             if (res.respuesta == 'ok') {
                 ListarCajas(_escritura)
-                
+
             }
-            else{
+            else {
                 console.log('Error')
             }
         })
 }
 
-export {NuevaCaja}
+function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
+    H5_loading.show();
+    if (caja != undefined) {
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Cod_Caja:caja.Cod_Caja })
+        }
+        fetch('/cajas_api/get_documents_by_caja', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, res.data.documentos, res.data.productos)
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide();
+            })
+    } else Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, [], [])
+}
+export { NuevaCaja }

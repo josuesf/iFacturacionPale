@@ -19,4 +19,17 @@ router.post('/get_cajas', function (req, res) {
     ]
     Ejecutar_Procedimientos(res,procedimientos)
 });
+
+router.post('/get_documents_by_caja', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
+    ]
+    procedimientos =[
+        {nom_respuesta:'documentos',sp_name:'USP_CAJ_CAJAS_DOC_TXCod_Caja',parametros},
+        {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
 module.exports = router;
