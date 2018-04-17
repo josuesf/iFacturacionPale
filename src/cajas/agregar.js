@@ -6,6 +6,46 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
 
     var el = yo`
     <div>
+        <div class="modal fade" id="modal-buscar-responsable" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                            <h3 class="box-title">Busqueda de usuario</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
+                            <form role="form">
+                                <div class="box-body">
+                                
+                                    <label for="Cod_UsuarioCajero">Ingrese codigo o nombre de usuario</label>
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary" onclick="${()=> BusquedaDeUsuario()}">Buscar</button>
+                                        </div>
+                                        <input type="text" class="form-control" id="txtBuscarUsuario" onkeypress="${()=> BusquedaDeUsuario()}">
+                                    </div>
+                                    <br>
+                                    <div class="table-responsive" id="contenedorTablaUsuarios">
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <section class="content-header">
             <h1>
                 Cajas
@@ -76,11 +116,12 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="Cod_UsuarioCajero">Usuario o vendedor responsable</label>
-                                            <select id="Cod_UsuarioCajero" class="form-control select2">
-                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
-                                            </select>
+                                        <label for="Cod_UsuarioCajero">Usuario o vendedor responsable</label>
+                                        <div class="input-group">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable">Buscar responsable</button>
+                                            </div>
+                                            <input type="text" class="form-control" id="Cod_Usuario" disabled>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -105,20 +146,13 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                             <a href="#tab_2" data-toggle="tab" aria-expanded="false">
                                                                 <i class="fa fa-star"></i> Productos Favoritos</a>
                                                         </li>
-                                                        <li class="dropdown">
-                                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                                                                Acciones
-                                                                <span class="caret"></span>
-                                                            </a>
-                                                            <ul class="dropdown-menu">
-                                                                <li role="presentation">
-                                                                    <a role="menuitem" tabindex="-1" href="#">Nuevo Documento</a>
-                                                                </li>
-                                                            </ul>
-                                                        </li>
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab_1">
+                                                            <div class="box-header">
+                                                                <a class="btn btn-info pull-right">
+                                                                <i class="fa fa-plus"></i> Agregar</a>
+                                                            </div>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-striped">
                                                                     <thead>
@@ -157,6 +191,10 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_2">
+                                                            <div class="box-header">
+                                                                <a class="btn btn-info pull-right">
+                                                                <i class="fa fa-plus"></i> Agregar</a>
+                                                            </div>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-striped">
                                                                     <thead>
@@ -213,47 +251,71 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
     // $('.select2').select2();
 }
 
-function Guardar(_escritura, caja) {
-    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    var Cod_Usuarios = caja ? caja.Cod_Usuarios : document.getElementById('Cod_Usuarios').value.toUpperCase()
-    var Nick = document.getElementById('Nick').value.toUpperCase()
-    var Contrasena = document.getElementById('Contrasena').value
-    var Pregunta = document.getElementById('Pregunta').value.toUpperCase()
-    var Respuesta = document.getElementById('Respuesta').value.toUpperCase()
-    var Cod_Estado = document.getElementById('Cod_Estado').value.toUpperCase()
-    var Cod_Perfil = document.getElementById('Cod_Perfil').value.toUpperCase()
-    var Imagen = document.getElementById('Imagen').value
-    var Cod_Usuario = 'ADMINISTRADOR'
-
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Usuarios,
-            Nick,
-            Contrasena,
-            Pregunta,
-            Respuesta,
-            Cod_Estado,
-            Cod_Perfil,
-            Cod_Usuario
-        })
-    }
-    fetch('/usuarios_api/guardar_usuario', parametros)
+function BusquedaDeUsuario(){
+    var txtBuscarUsuario = document.getElementById("txtBuscarUsuario").value
+    console.log(txtBuscarUsuario)
+    if(txtBuscarUsuario.length >= 4){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                TamanoPagina: '20',
+                NumeroPagina: '0',
+                ScripOrden: ' ORDER BY Cod_Usuarios asc',
+                ScripWhere: txtBuscarUsuario
+            })
+        }
+        fetch('/cajas_api/buscar_usuarios', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                ListarCajas(_escritura)
-
+                var usuarios = res.data.usuarios
+                console.log(usuarios)
+                if(usuarios.length > 0)
+                    AgregarTabla(usuarios)
+                else  
+                    empty(document.getElementById('contenedorTablaUsuarios'));
             }
-            else {
-                console.log('Error')
-            }
+            else
+                empty(document.getElementById('contenedorTablaUsuarios'));
+            H5_loading.hide()
         })
+    }else{
+        empty(document.getElementById('contenedorTablaUsuarios'));
+    }
 }
+
+function AgregarTabla(usuarios){
+    var el = yo`<table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${usuarios.map(u => yo`
+        <tr>
+            <td>${u.Cod_Usuarios}</td>
+            <td>${u.Nick}</td>
+            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarUsuario(u)}"><i class="fa fa-check"></i> Elegir</button></td>
+        </tr>`)}
+    </tbody>
+
+</table>`
+    empty(document.getElementById('contenedorTablaUsuarios')).appendChild(el);
+}
+
+function SeleccionarUsuario(usuario){
+    var Cod_Usuario = document.getElementById('Cod_Usuario')
+    Cod_Usuario.value = usuario.Cod_Usuarios + " - " + usuario.Nick
+}
+
+
 
 function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
     H5_loading.show();
