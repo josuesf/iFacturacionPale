@@ -46,4 +46,13 @@ router.post('/buscar_usuarios', function (req, res){
     Ejecutar_Procedimientos(res,procedimientos)
 })
 
+router.post('/get_comprobantes', function (req, res){
+    input = req.body
+    parametros = []
+    procedimientos = [
+        {nom_respuesta:'comprobantes',sp_name:'USP_VIS_TIPO_COMPROBANTES_TT',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
 module.exports = router;

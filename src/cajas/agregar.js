@@ -10,8 +10,10 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
+                       
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Usuario o vendedor responsable</h4>
                     </div>
                     <div class="modal-body">
                         <div class="box box-primary">
@@ -45,6 +47,9 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="modal fade" id="modal-nuevo-editar-documento" style="display: none;">
+            
         </div>
         <section class="content-header">
             <h1>
@@ -150,7 +155,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab_1">
                                                             <div class="box-header">
-                                                                <a class="btn btn-info pull-right">
+                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento()}">
                                                                 <i class="fa fa-plus"></i> Agregar</a>
                                                             </div>
                                                             <div class="table-responsive">
@@ -251,10 +256,137 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
     // $('.select2').select2();
 }
 
+function VerAgregarDocumento(comprobantes, documento){
+    var el = yo`<div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Documentos de una caja</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                            <h3 class="box-title">ADMINISTRACION</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
+                            <form role="form">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Comprobante</label>
+                                            <select class="form-control">
+                                                <option>option 1</option>
+                                                <option>option 2</option>
+                                                <option>option 3</option>
+                                                <option>option 4</option>
+                                                <option>option 5</option>
+                                            </select>
+                                        </div>                
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Serie</label>
+                                                <input type="email" class="form-control" id="Ingrese la serie" placeholder="Serie">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6"> 
+                                            <div class="checkbox form-group">
+                                                <label>
+                                                <input type="checkbox"><b> Se imprime?</b>
+                                                </label>
+                                                <select class="form-control">
+                                                    <option>option 1</option>
+                                                    <option>option 2</option>
+                                                    <option>option 3</option>
+                                                    <option>option 4</option>
+                                                    <option>option 5</option>
+                                                </select>
+                                            </div>       
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">Documento *.rpt</label>
+                                                <input type="file" id="exampleInputFile">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="exampleInputFile">Publicar Web *.rpt</label>
+                                                <input type="file" id="exampleInputFile">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">  
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nro. de Serie</label>
+                                                <input type="email" class="form-control" id="Ingrese la serie" placeholder="Nro. de Serie">
+                                                <p class="help-block">Solo en caso de tener un Tiketera</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                        <label for="Flag_Activo"></label>
+                                            <div class="checkbox">
+                                                <label>
+                                                <input type="checkbox"><b> Documento de facturacion rapida</b>
+                                                </label>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>`
+
+    var modal_nuevo_editar_documento = document.getElementById('modal-nuevo-editar-documento')
+    empty(modal_nuevo_editar_documento).appendChild(el)
+}
+
+function AgregarDocumento(documento){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    }
+    fetch('/cajas_api/get_comprobantes', parametros)
+    .then(req => req.json())
+    .then(res => {
+        if (res.respuesta == 'ok') {
+            var comprobantes = res.data.comprobantes
+            
+            if(documento == undefined) 
+                VerAgregarDocumento(comprobantes)
+            else
+                VerAgregarDocumento(comprobantes, document)
+        }
+        else
+            VerAgregarDocumento({})
+    })
+}
+
 function BusquedaDeUsuario(){
     var txtBuscarUsuario = document.getElementById("txtBuscarUsuario").value
-    console.log(txtBuscarUsuario)
-    if(txtBuscarUsuario.length >= 4){
+    if(txtBuscarUsuario.length >= 3){
         const parametros = {
             method: 'POST',
             headers: {
@@ -273,7 +405,6 @@ function BusquedaDeUsuario(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var usuarios = res.data.usuarios
-                console.log(usuarios)
                 if(usuarios.length > 0)
                     AgregarTabla(usuarios)
                 else  
@@ -281,7 +412,6 @@ function BusquedaDeUsuario(){
             }
             else
                 empty(document.getElementById('contenedorTablaUsuarios'));
-            H5_loading.hide()
         })
     }else{
         empty(document.getElementById('contenedorTablaUsuarios'));
@@ -318,8 +448,8 @@ function SeleccionarUsuario(usuario){
 
 
 function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
-    H5_loading.show();
     if (caja != undefined) {
+        H5_loading.show();
         const parametros = {
             method: 'POST',
             headers: {
