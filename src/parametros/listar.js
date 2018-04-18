@@ -43,8 +43,7 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de Parametros</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevoParametro(_escritura)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nuevo Parametro</a>`: yo``}
+                    
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">

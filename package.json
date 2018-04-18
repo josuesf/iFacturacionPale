@@ -21,13 +21,14 @@
     "empty-element": "^1.0.0",
     "express": "^4.13.4",
     "file-extension": "^2.0.1",
+    "jsreport": "^1.10.0",
+    "md5": "^2.2.1",
+    "mssql": "^3.3.0",
     "multer": "^1.1.0",
     "page": "^1.7.1",
     "pug": "^2.0.0-alpha6",
     "title": "^1.0.0",
-    "yo-yo": "^1.2.0",
-    "mssql": "^3.3.0",
-    "md5": "^2.2.1"
+    "yo-yo": "^1.2.0"
   },
   "devDependencies": {
     "babel-plugin-syntax-async-functions": "^6.5.0",
@@ -44,13 +45,15 @@
     "gulp-uglify": "^3.0.0",
     "nodemon": "^1.17.3",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "watchify": "^3.7.0",
+    "electron": "^1.6.6"
   },
   "scripts": {
     "build": "gulp",
     "start": "node server.js",
     "rundev": "nodemon server.js",
     "watchjs": "gulp watch-js",
-    "watchcss": "gulp watch-css"
+    "watchcss": "gulp watch-css",
+    "runelectron": "electron index_electron.js"
   }
 }

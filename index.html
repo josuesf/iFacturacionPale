@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width-->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7-->
+    <link rel="stylesheet" href="public/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="public/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons-->
+    <link rel="stylesheet" href="public/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style-->
+    <link rel="stylesheet" href="public/dist/css/AdminLTE.min.css">
+    <link href="public/dist/css/loading.css" rel="stylesheet">
+    <link rel="stylesheet" href="public/bower_components/select2/dist/css/select2.min.css">
+    <link rel="stylesheet" href="public/dist/css/skins/_all-skins.min.css">
+    <!-- Morris chart-->
+    <link rel="stylesheet" href="public/bower_components/morris.js/morris.css">
+    <!-- Date Picker-->
+    <link rel="stylesheet" href="public/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <!-- bootstrap wysihtml5 - text editor-->
+    <link rel="stylesheet" href="public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <title></title>
+  </head>
+  <body class="hold-transition sidebar-mini fixed skin-black">
+    <section id="H5_loading" style="background-color: rgba(0, 0, 0, 0.2);" class="H5_loading">
+      <div class="H5_loading_process">
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+        <div style="background: rgb(102, 102, 102);"></div>
+      </div>
+    </section>
+    <div class="wrapper">
+      <header class="main-header">
+        <!-- Logo--><a href="/" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels--><span class="logo-mini"><b>P</b>ale</span>
+          <!-- logo for regular state and mobile devices--><span class="logo-lg"><b>Pal</b>ERP</span></a>
+        <!-- Header Navbar: style can be found in header.less-->
+        <nav class="navbar navbar-static-top">
+          <!-- Sidebar toggle button--><a href="#" data-toggle="push-menu" role="button" class="sidebar-toggle"><span class="sr-only">Toggle navigation</span></a>
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+              <!-- User Account: style can be found in dropdown.less-->
+              <li class="dropdown user user-menu"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><img src="public/images/default_profile_image.png" alt="User Image" class="user-image"><span class="hidden-xs">Josue Farfan</span></a>
+                <ul class="dropdown-menu">
+                  <!-- Menu Footer-->
+                  <li class="user-footer"><a href="#">Cerrar Sesion</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar-->
+      <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less-->
+        <section class="sidebar">
+          <!-- Sidebar user panel-->
+          <div class="user-panel">
+            <div class="pull-left image"><img src="public/images/default_profile_image.png" alt="User Image" class="img-circle"></div>
+            <div class="pull-left info">
+              <p>Josue Farfan Lazo</p>
+            </div>
+          </div>
+          <!-- sidebar menu: : style can be found in sidebar.less-->
+          <div id="nav-container"></div>
+        </section>
+        <!-- /.sidebar-->
+      </aside>
+      <!-- Content Wrapper. Contains page content-->
+      <div class="content-wrapper">
+        <div id="main-contenido"></div>
+      </div>
+      <!-- /.content-wrapper-->
+      <footer class="main-footer">
+        <div class="pull-right hidden-xs"><b>Version</b> 1.0.0</div><strong>© 2018 <a href="https://www.palerp.com">PalERP Constructores. </a></strong>Derechos reservados
+      </footer>
+    </div>
+    <script>window.$ = window.jQuery = require('./public/bower_components/jquery/dist/jquery.min.js');</script>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <!-- jQuery UI 1.11.4-->
+    <script src="public/bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Bootstrap 3.3.7-->
+    <script src="public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Morris.js charts-->
+    <script src="public/bower_components/raphael/raphael.min.js"></script>
+    <script src="public/bower_components/morris.js/morris.min.js"></script>
+    <!-- datepicker-->
+    <script src="public/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <!-- Bootstrap WYSIHTML5-->
+    <script src="public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+    <!-- Slimscroll-->
+    <script src="public/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <!--Select 2-->
+    <script src="public/bower_components/select2/dist/js/select2.full.min.js"></script>
+    <!-- AdminLTE App-->
+    <script src="public/dist/js/adminlte.min.js"></script>
+    <script src="public/dist/js/demo.js"></script>
+    <script src="public/dist/js/loading.js"></script>
+    <script src="public/app.js"></script>
+  </body>
+</html>

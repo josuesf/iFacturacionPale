@@ -36,7 +36,18 @@ app.use('/sucursales_api', sucursales_api);
 app.use('/perfiles_api', perfiles_api);
 app.use('/parametros_api', parametros_api);
 //Listen Server
-app.listen(3000, function (err) {
+var server = app.listen(3000, function (err) {
   if (err) return console.log('Hubo un error'), process.exit(1);
   console.log('Escuchando en el puerto 3000');
 })
+
+
+// var reportingApp = express();
+// app.use('/reporting', reportingApp);
+// var jsreport = require('jsreport')({
+//   express: { app :reportingApp, server: server },
+//   appPath: "/reporting"
+// });
+// jsreport.init().catch(function (e) {
+//   console.error(e);
+// });

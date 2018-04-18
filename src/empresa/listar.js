@@ -1,16 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-var NuevoUsuario = require('./agregar.js')
 import {URL} from '../constantes_entorno/constantes'
 
-function Controles(escritura) {
-    var controles = yo`<div><button class="btn btn-xs btn-success">Editar</button>
-    <button class="btn btn-xs btn-danger">Borrar</button></div>`
-    if (escritura)
-        return controles
-    else
-        return yo`<div></div>`
-}
 
 function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
     var el = yo`
@@ -22,14 +13,14 @@ function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span></button>
-              <h4 class="modal-title">¿Esta seguro que desea eliminar este usuario?</h4>
+              <h4 class="modal-title">¿Esta seguro que desea guardar esta informacion?</h4>
             </div>
             <div class="modal-body">
-              <p>Al eliminar el usuario se perderan todos los datos.</p>
+              <p>Continuar de todas maneras?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Eliminar</button>
+              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si, Guardar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -37,68 +28,25 @@ function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
         <!-- /.modal-dialog -->
       </div>
             <h1>
-                Usuarios
-                <small>Control usuarios</small>
+                Empresa
+                <small>Control de empresa</small>
             </h1>
             <ol class="breadcrumb">
                 <li>
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li class="active">Usuarios</li>
+                <li class="active">Empresa</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Usuarios</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevoUsuario(_escritura, _estados, _perfiles)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nuevo Usuario</a>`: yo``}
+                    <h3 class="box-title">Datos de Empresa</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="table-responsive">
-                    <table id="example1" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Codigo</th>
-                                <th>Pregunta</th>
-                                <th>Perfil</th>
-                                <th>Conectada</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${usuarios.map(u => yo`
-                            <tr>
-                                <td>${u.Cod_Usuarios}</td>
-                                <td>${u.Pregunta}</td>
-                                <td>${u.Cod_Perfil}</td>
-                                <td>${u.Cod_Estado}</td>
-                                <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
-                                    
-                                </td>
-                            </tr>`)}
-                        </tbody>
-    
-                    </table>
-                    </div>
-                    <div class="box-footer clearfix">
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <li>
-                                <a href="#">«</a>
-                            </li>
-                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li>
-                            <a href="#">${i + 1}</a>
-                            </li>`)}
-                        
-                            <li>
-                                <a href="#">»</a>
-                            </li>
-                        </ul>
-                    </div>
+                    
                 </div>
             </div>
         </section>
@@ -107,7 +55,7 @@ function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
     empty(main).appendChild(el);
 }
 
-function EliminarUsuario(_escritura, usuario){
+function GuardarEmpresa(_escritura, usuario){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
@@ -141,7 +89,7 @@ function EliminarUsuario(_escritura, usuario){
     })
 }
 
-function ListarUsuarios(escritura) {
+function ListarEmpresa(escritura) {
     H5_loading.show();
     var _escritura=escritura;
     const parametros = {
@@ -177,4 +125,4 @@ function ListarUsuarios(escritura) {
 }
 
 
-export {ListarUsuarios}
+export {ListarEmpresa}
