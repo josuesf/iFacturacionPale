@@ -155,7 +155,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab_1">
                                                             <div class="box-header">
-                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento()}">
+                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
                                                                 <i class="fa fa-plus"></i> Agregar</a>
                                                             </div>
                                                             <div class="table-responsive">
@@ -185,7 +185,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                                             <td>${u.Flag_FacRapida}</td>
                                                                             <td>${u.Nro_SerieTicketera}</td>
                                                                             <td>
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                                                                 ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                                                                 
                                                                             </td>
@@ -256,7 +256,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
     // $('.select2').select2();
 }
 
-function VerAgregarDocumento(comprobantes, documento){
+function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
     var el = yo`<div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -277,19 +277,15 @@ function VerAgregarDocumento(comprobantes, documento){
                                         <div class="col-sm-6">
                                         <div class="form-group">
                                             <label>Comprobante</label>
-                                            <select class="form-control">
-                                                <option>option 1</option>
-                                                <option>option 2</option>
-                                                <option>option 3</option>
-                                                <option>option 4</option>
-                                                <option>option 5</option>
+                                            <select class="form-control" id="Cod_TipoComprobante">
+                                                ${comprobantes.map(u => yo`<option value="${u.Cod_TipoComprobante}" ${documento?documento.Cod_TipoComprobante==u.Cod_TipoComprobante?'selected':'':''}>${u.Nom_TipoComprobante}</option>`)}
                                             </select>
                                         </div>                
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Serie</label>
-                                                <input type="email" class="form-control" id="Ingrese la serie" placeholder="Serie">
+                                                <label for="Serie">Serie</label>
+                                                <input type="text" class="form-control" id="Serie" placeholder="Serie" value="${documento?documento.Serie:''}">
                                             </div>
                                         </div>
                                     </div>
@@ -297,14 +293,14 @@ function VerAgregarDocumento(comprobantes, documento){
                                         <div class="col-sm-6"> 
                                             <div class="checkbox form-group">
                                                 <label>
-                                                <input type="checkbox"><b> Se imprime?</b>
+                                                <input type="checkbox" id="Flag_Imprimir"><b> Se imprime?</b>
                                                 </label>
-                                                <select class="form-control">
-                                                    <option>option 1</option>
-                                                    <option>option 2</option>
-                                                    <option>option 3</option>
-                                                    <option>option 4</option>
-                                                    <option>option 5</option>
+                                                <select class="form-control" id="Impresora">
+                                                    <option>Microsoft XSP Document Writer</option>
+                                                    <option>Microsoft Print to PDF</option>
+                                                    <option>Fax</option>
+                                                    <option>Enviar a OneNote 2013</option>
+                                                    <option>BIXOLON SPP R310</option>
                                                 </select>
                                             </div>       
                                         </div>
@@ -313,24 +309,24 @@ function VerAgregarDocumento(comprobantes, documento){
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="exampleInputFile">Documento *.rpt</label>
-                                                <input type="file" id="exampleInputFile">
+                                                <label for="Nom_Archivo">Documento *.rpt</label>
+                                                <input type="file" id="Nom_Archivo">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label for="exampleInputFile">Publicar Web *.rpt</label>
-                                                <input type="file" id="exampleInputFile">
+                                                <label for="Nom_ArchivoPublicar">Publicar Web *.rpt</label>
+                                                <input type="file" id="Nom_ArchivoPublicar">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">  
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Nro. de Serie</label>
-                                                <input type="email" class="form-control" id="Ingrese la serie" placeholder="Nro. de Serie">
+                                                <label for="Nro_SerieTicketera">Nro. de Serie</label>
+                                                <input type="email" class="form-control" id="Nro_SerieTicketera" placeholder="Nro. de Serie" value="${documento?documento.Nro_SerieTicketera:''}">
                                                 <p class="help-block">Solo en caso de tener un Tiketera</p>
                                             </div>
                                         </div>
@@ -338,14 +334,16 @@ function VerAgregarDocumento(comprobantes, documento){
                                         <label for="Flag_Activo"></label>
                                             <div class="checkbox">
                                                 <label>
-                                                <input type="checkbox"><b> Documento de facturacion rapida</b>
+                                                <input type="checkbox" id="Flag_FacRapida" checked="${documento?document.Flag_FacRapida?1:0:0}"><b> Documento de facturacion rapida</b>
                                                 </label>
                                             </div>  
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                            
+                            <div class="box-footer">
+                                <button onclick="${() => GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja)}" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+                            </div>
                         </div>
                     </div>
                     
@@ -359,7 +357,56 @@ function VerAgregarDocumento(comprobantes, documento){
     empty(modal_nuevo_editar_documento).appendChild(el)
 }
 
-function AgregarDocumento(documento){
+function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja){
+    var Cod_Caja = caja.Cod_Caja
+    var Item = 0
+    var Cod_TipoComprobante = document.getElementById('Cod_TipoComprobante').value
+    var Serie = document.getElementById('Serie').value
+    var Impresora = document.getElementById('Impresora').value
+    var Flag_Imprimir = document.getElementById('Flag_Imprimir').checked?'1':'0'
+    var Flag_FacRapida = document.getElementById('Flag_FacRapida').checked?'1':'0'
+    var Nom_Archivo = document.getElementById('Nom_Archivo').files[0]!=undefined? document.getElementById('Nom_Archivo').files[0].name: ''
+    var Nro_SerieTicketera = document.getElementById('Nro_SerieTicketera').value
+    var Nom_ArchivoPublicar = document.getElementById('Nom_ArchivoPublicar').files[0]!=undefined? document.getElementById('Nom_ArchivoPublicar').files[0].name:''
+    var Limite = 0
+    var Cod_Usuario = "ADMINISTRADOR"
+
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Caja,
+            Item,
+            Cod_TipoComprobante,
+            Serie,
+            Impresora,
+            Flag_Imprimir,
+            Flag_FacRapida,
+            Nom_Archivo,
+            Nro_SerieTicketera,
+            Nom_ArchivoPublicar,
+            Limite,
+            Cod_Usuario
+        })
+    }
+    fetch('/cajas_api/guardar_documento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables,caja)
+            }
+            else{
+                console.log('Error')
+            }
+        })
+}
+
+function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento){
+
     const parametros = {
         method: 'POST',
         headers: {
@@ -375,12 +422,11 @@ function AgregarDocumento(documento){
             var comprobantes = res.data.comprobantes
             
             if(documento == undefined) 
-                VerAgregarDocumento(comprobantes)
+                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes)
             else
-                VerAgregarDocumento(comprobantes, document)
+                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes)
+
         }
-        else
-            VerAgregarDocumento({})
     })
 }
 
