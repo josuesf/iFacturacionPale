@@ -1,9 +1,9 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-var NuevaSucursal = require('./agregar.js')
+var NuevoPerfil = require('./agregar.js')
 
 
-function Ver(sucursales, paginas,pagina_actual, _escritura) {
+function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
     var el = yo`
     <div>
         <section class="content-header">
@@ -13,14 +13,14 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span></button>
-              <h4 class="modal-title">¿Esta seguro que desea eliminar esta sucursal?</h4>
+              <h4 class="modal-title">¿Esta seguro que desea eliminar este perfil?</h4>
             </div>
             <div class="modal-body">
-              <p>Al eliminar la sucursal no podra recuperarlo. Desea continuar de todas maneras?</p>
+              <p>Al eliminar el perfil no podra recuperarlo. Desea continuar de todas maneras?</p>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
+              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si, Eliminar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -28,23 +28,23 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
         <!-- /.modal-dialog -->
       </div>
             <h1>
-                Sucursales
-                <small>Control sucursales</small>
+                Perfiles
+                <small>Control perfiles</small>
             </h1>
             <ol class="breadcrumb">
                 <li>
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li class="active">Sucursales</li>
+                <li class="active">Perfiles</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Sucursales</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevaSucursal(_escritura)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nueva Sucursal</a>`: yo``}
+                    <h3 class="box-title">Lista de Perfiles</h3>
+                    ${_escritura ? yo`<a onclick=${()=>NuevoPerfil(_escritura,modulos)} class="btn btn-info pull-right">
+                        <i class="fa fa-plus"></i> Nuevo Perfil</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -53,25 +53,21 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                <th>Sucursal</th>
-                                <th>Direccion</th>
-                                <th>Administrador</th>
-                                <th>Util. Max</th>
-                                <th>Util. Min</th>
+                                <th>Descripcion</th>
+                                <th>Creado</th>
+                                <th>Fecha</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${sucursales.map(u => yo`
+                            ${perfiles.map(u => yo`
                             <tr>
-                                <td>${u.Cod_Sucursal}</td>
-                                <td>${u.Nom_Sucursal}</td>
-                                <td>${u.Dir_Sucursal}</td>
-                                <td>${u.Cod_UsuarioAdmin}</td>
-                                <td>${u.Por_UtilidadMax.toFixed(2)}</td>
-                                <td>${u.Por_UtilidadMin.toFixed(2)}</td>
+                                <td>${u.Cod_Perfil}</td>
+                                <td>${u.Des_Perfil}</td>
+                                <td>${u.Cod_UsuarioReg}</td>
+                                <td>${u.Fecha_Reg}</td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaSucursal(_escritura, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaSucursal(_escritura,modulos, u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                     ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
@@ -83,14 +79,14 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="" onclick=${()=>(pagina_actual>0)?ListarSucursales(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="" onclick=${()=>(pagina_actual>0)?ListarPerfiles(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="" onclick=${()=>ListarSucursales(_escritura,i)} >${i + 1}</a>
+                            <a href="" onclick=${()=>ListarPerfiles(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="" onclick=${()=>(pagina_actual+1<paginas)?ListarSucursales(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="" onclick=${()=>(pagina_actual+1<paginas)?ListarPerfiles(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
@@ -135,7 +131,7 @@ function Eliminar(_escritura, sucursal){
     })
 }
 
-function ListarSucursales(escritura,NumeroPagina) {
+function ListarPerfiles(escritura,NumeroPagina) {
     H5_loading.show();
     var _escritura=escritura;
     const parametros = {
@@ -147,19 +143,19 @@ function ListarSucursales(escritura,NumeroPagina) {
         body: JSON.stringify({
             TamanoPagina: '20',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Sucursal desc',
+            ScripOrden: ' ORDER BY Cod_Perfil desc',
             ScripWhere: ''
         })
     }
-    fetch('/sucursales_api/get_sucursales', parametros)
+    fetch('/perfiles_api/get_perfiles', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
                 paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
-
-                Ver(res.data.sucursales, paginas,NumeroPagina||0, _escritura)
+                var modulos = res.data.modulos
+                Ver(res.data.perfiles, paginas,NumeroPagina||0, _escritura,modulos)
             }
             else
                 Ver([])
@@ -167,4 +163,4 @@ function ListarSucursales(escritura,NumeroPagina) {
         })
 }
 
-export {ListarSucursales}
+export {ListarPerfiles}

@@ -6,6 +6,7 @@ import {ListarUsuarios} from '../usuarios/listar'
 import {ListarCajas} from '../cajas/listar'
 import {ListarModulos} from '../modulos/listar'
 import {ListarSucursales} from '../sucursales/listar'
+import {ListarPerfiles} from '../perfiles/listar'
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
@@ -22,6 +23,7 @@ var el = yo`
             <li class=""><a href="" onclick=${()=>ListarCajas(true)}><i class="fa fa-circle-o"></i> Cajas</a></li>
             <li class=""><a href="" onclick=${()=>ListarModulos(true)}><i class="fa fa-circle-o"></i> Modulos</a></li>
             <li class=""><a href="" onclick=${()=>ListarSucursales(true)}><i class="fa fa-circle-o"></i> Sucursales</a></li>
+            <li class=""><a href="" onclick=${()=>ListarPerfiles(true)}><i class="fa fa-circle-o"></i> Perfiles</a></li>
         </ul>
     </li>
 </ul>`;
