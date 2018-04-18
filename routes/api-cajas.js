@@ -55,4 +55,26 @@ router.post('/get_comprobantes', function (req, res){
     Ejecutar_Procedimientos(res,procedimientos)
 })
 
+router.post('/guardar_documento', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja', valor_parametro: input.Cod_Caja},
+        {nom_parametro:'Item', valor_parametro: input.Item},
+        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro:'Serie', valor_parametro: input.Serie},
+        {nom_parametro:'Impresora', valor_parametro: input.Impresora},
+        {nom_parametro:'Flag_Imprimir', valor_parametro: input.Flag_Imprimir},
+        {nom_parametro:'Flag_FacRapida', valor_parametro: input.Flag_FacRapida},
+        {nom_parametro:'Nom_Archivo', valor_parametro: input.Nom_Archivo},
+        {nom_parametro:'Nro_SerieTicketera', valor_parametro: input.Nro_SerieTicketera},
+        {nom_parametro:'Nom_ArchivoPublicar', valor_parametro: input.Nom_ArchivoPublicar},
+        {nom_parametro:'Limite', valor_parametro: input.Limite},
+        {nom_parametro:'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'documento', sp_name: 'USP_CAJ_CAJAS_DOC_G', parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
 module.exports = router;
