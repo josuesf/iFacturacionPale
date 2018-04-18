@@ -79,14 +79,14 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarModulos(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="" onclick=${()=>(pagina_actual>0)?ListarModulos(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="#" onclick=${()=>ListarModulos(_escritura,i)} >${i + 1}</a>
+                            <a href="" onclick=${()=>ListarModulos(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarModulos(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="" onclick=${()=>(pagina_actual+1<paginas)?ListarModulos(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>

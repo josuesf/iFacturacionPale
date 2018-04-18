@@ -81,14 +81,14 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarParametros(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="" onclick=${()=>(pagina_actual>0)?ListarParametros(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="#" onclick=${()=>ListarParametros(_escritura,i)} >${i + 1}</a>
+                            <a href="" onclick=${()=>ListarParametros(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarParametros(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="" onclick=${()=>(pagina_actual+1<paginas)?ListarParametros(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
