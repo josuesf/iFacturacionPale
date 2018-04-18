@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
-import {Listar} from './listar';
+import {ListarUsuarios} from './listar';
 
 var preguntas_seguridad = [
     '¿Cómo se llamaba tu mejor amigo de la infancia?',
@@ -28,7 +28,7 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li><a  onclick=${()=>Listar(_escritura)} href="#">
+                <li><a  onclick=${()=>ListarUsuarios(_escritura)} href="#">
                 Usuarios</a></li>
                 <li class="active">${usuario?'Editar':'Nuevo'}</li>
             </ol>
@@ -36,7 +36,7 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <a onclick=${()=>Listar(_escritura)}
+                    <a onclick=${()=>ListarUsuarios(_escritura)}
                     class="btn btn-xs btn-warning">
                         <i class="fa fa-arrow-left"></i> Atras</a>
                     
@@ -176,7 +176,7 @@ function Guardar(_escritura, usuario){
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                Listar(_escritura)
+                ListarUsuarios(_escritura)
                 
             }
             else{
