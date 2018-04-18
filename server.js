@@ -29,12 +29,14 @@ var modulos_api = require('./routes/api-modulos')
 var sucursales_api = require('./routes/api-sucursales')
 var perfiles_api = require('./routes/api-perfiles')
 var parametros_api = require('./routes/api-parametros')
+var empresa_api = require('./routes/api-empresa')
 app.use('/usuarios_api', usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
 app.use('/sucursales_api', sucursales_api);
 app.use('/perfiles_api', perfiles_api);
 app.use('/parametros_api', parametros_api);
+app.use('/empresa_api', empresa_api);
 //Listen Server
 var server = app.listen(3000, function (err) {
   if (err) return console.log('Hubo un error'), process.exit(1);
