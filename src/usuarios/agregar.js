@@ -14,7 +14,6 @@ var preguntas_seguridad = [
 
 
 module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
-    console.log(usuario)
 
     var el = yo`
     <div>

@@ -77,4 +77,16 @@ router.post('/guardar_documento', function (req, res){
     Ejecutar_Procedimientos(res,procedimientos)
 })
 
+router.post('/eliminar_documento', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja', valor_parametro: input.Cod_Caja},
+        {nom_parametro:'Item', valor_parametro: input.Item}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'documento', sp_name: 'usp_CAJ_CAJAS_DOC_E', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 module.exports = router;
