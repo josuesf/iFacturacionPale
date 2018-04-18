@@ -133,7 +133,6 @@ function EliminarUsuario(_escritura, usuario){
                 }
                 else{
 
-                    console.log('Error')
                     this.removeEventListener('click', Eliminar)
                 }
                 H5_loading.hide()

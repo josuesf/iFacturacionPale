@@ -6,6 +6,26 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
 
     var el = yo`
     <div>
+            <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">¿Esta seguro que desea eliminar este usuario?</h4>
+                </div>
+                <div class="modal-body">
+                <p>Al eliminar el usuario se perderan todos los datos.</p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Eliminar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
         <div class="modal fade" id="modal-buscar-responsable" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -82,7 +102,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                             <h3 class="box-title">Nueva Caja</h3>
                         </div>
                         <!-- form start -->
-                        <form role="form">
+                        <div role="form">
                             <div class="box-body">
                                 <div class="row">
                                     ${caja ? yo`` : yo`<div class="col-sm-6">
@@ -185,8 +205,8 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                                             <td>${u.Flag_FacRapida}</td>
                                                                             <td>${u.Nro_SerieTicketera}</td>
                                                                             <td>
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                                                                 
                                                                             </td>
                                                                         </tr>`)}
@@ -242,7 +262,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                             <!-- /.box-body -->
                 
                             
-                        </form>
+                        </div>
                         <div class="box-footer">
                                 <button onclick="${() => Guardar(_escritura, caja)}" class="btn btn-primary">Guardar</button>
                             </div>
@@ -256,7 +276,17 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
     // $('.select2').select2();
 }
 
+var impresoras = [
+    'Microsoft XSP Document Writer',
+    'Microsoft Print to PDF',
+    'Fax',
+    'Enviar a OneNote 2013',
+    'BIXOLON SPP R310',
+    'EPSON TM-T20II'
+]
+
 function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
+    console.log(documento)
     var el = yo`<div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -293,14 +323,10 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                                         <div class="col-sm-6"> 
                                             <div class="checkbox form-group">
                                                 <label>
-                                                <input type="checkbox" id="Flag_Imprimir"><b> Se imprime?</b>
+                                                <input type="checkbox" id="Flag_Imprimir" ${documento?documento.Flag_Imprimir?'checked':'':''}><b> Se imprime?</b>
                                                 </label>
                                                 <select class="form-control" id="Impresora">
-                                                    <option>Microsoft XSP Document Writer</option>
-                                                    <option>Microsoft Print to PDF</option>
-                                                    <option>Fax</option>
-                                                    <option>Enviar a OneNote 2013</option>
-                                                    <option>BIXOLON SPP R310</option>
+                                                    ${impresoras.map(u=>yo`<option value="${u}" ${documento? u==documento.Impresora?'selected':'':''}>${u}</option>`)}
                                                 </select>
                                             </div>       
                                         </div>
@@ -334,7 +360,7 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                                         <label for="Flag_Activo"></label>
                                             <div class="checkbox">
                                                 <label>
-                                                <input type="checkbox" id="Flag_FacRapida" checked="${documento?document.Flag_FacRapida?1:0:0}"><b> Documento de facturacion rapida</b>
+                                                <input type="checkbox" id="Flag_FacRapida" ${documento?documento.Flag_FacRapida?'checked':'':''}><b> Documento de facturacion rapida</b>
                                                 </label>
                                             </div>  
                                         </div>
@@ -342,7 +368,7 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                                 </div>
                             </form>
                             <div class="box-footer">
-                                <button onclick="${() => GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja)}" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+                                <button onclick="${() => GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento)}" data-dismiss="modal" class="btn btn-primary">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -357,9 +383,42 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
     empty(modal_nuevo_editar_documento).appendChild(el)
 }
 
-function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja){
+function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u){
+    var btnEliminar = document.getElementById('btnEliminar')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        H5_loading.show();
+        var Cod_Caja = caja.Cod_Caja
+        var Item = u.Item
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Caja,
+                Item,
+            })
+        }
+        fetch('/cajas_api/eliminar_documento', parametros)
+            .then(req => req.json())
+            .then(res => {
+                
+                if (res.respuesta == 'ok') {
+                    NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables,caja)
+                    this.removeEventListener('click', Eliminar)
+                }
+                else{
+                    this.removeEventListener('click', Eliminar)
+                }
+                H5_loading.hide()
+            })
+    })
+}
+
+function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento){
     var Cod_Caja = caja.Cod_Caja
-    var Item = 0
+    var Item = documento?documento.Item:0
     var Cod_TipoComprobante = document.getElementById('Cod_TipoComprobante').value
     var Serie = document.getElementById('Serie').value
     var Impresora = document.getElementById('Impresora').value
@@ -424,8 +483,10 @@ function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
             if(documento == undefined) 
                 VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes)
             else
-                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes)
+                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes, documento)
 
+        }else{
+            console.log("ERR")
         }
     })
 }
