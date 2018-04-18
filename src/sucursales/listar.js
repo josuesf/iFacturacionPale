@@ -2,6 +2,8 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 var NuevaSucursal = require('./agregar.js')
 
+import {URL} from '../constantes_entorno/constantes'
+
 
 function Ver(sucursales, paginas,pagina_actual, _escritura) {
     var el = yo`
@@ -118,7 +120,7 @@ function Eliminar(_escritura, sucursal){
                 Cod_Sucursal,
             })
         }
-        fetch('/sucursales_api/eliminar_sucursal', parametros)
+        fetch(URL+'/sucursales_api/eliminar_sucursal', parametros)
             .then(req => req.json())
             .then(res => {
                 
@@ -151,7 +153,7 @@ function ListarSucursales(escritura,NumeroPagina) {
             ScripWhere: ''
         })
     }
-    fetch('/sucursales_api/get_sucursales', parametros)
+    fetch(URL+'/sucursales_api/get_sucursales', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

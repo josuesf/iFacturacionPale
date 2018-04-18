@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {NuevaCaja} from './agregar'
+import {URL} from '../constantes_entorno/constantes'
 
 
 function Controles(escritura) {
@@ -53,8 +54,6 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de Cajas</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevaCaja(_escritura, _sucursales)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -80,7 +79,6 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
                                 <td>${u.Cod_CuentaContable}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaCaja(_escritura, _sucursales, [], [], u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" ><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -125,7 +123,7 @@ function ListarCajas(escritura){
             ScripWhere: ''
         })
     }
-    fetch('/cajas_api/get_cajas', parametros)
+    fetch(URL+'/cajas_api/get_cajas', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

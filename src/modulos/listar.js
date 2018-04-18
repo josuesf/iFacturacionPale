@@ -2,6 +2,8 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 var NuevoModulo = require('./agregar.js')
 
+import {URL} from '../constantes_entorno/constantes'
+
 
 function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
     var el = yo`
@@ -112,7 +114,7 @@ function Eliminar(_escritura, modulo){
                 Cod_Modulo,
             })
         }
-        fetch('/modulos_api/eliminar_modulo', parametros)
+        fetch(URL+'/modulos_api/eliminar_modulo', parametros)
             .then(req => req.json())
             .then(res => {
                 
@@ -145,7 +147,7 @@ function ListarModulos(escritura,NumeroPagina) {
             ScripWhere: ''
         })
     }
-    fetch('/modulos_api/get_modulos', parametros)
+    fetch(URL+'/modulos_api/get_modulos', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

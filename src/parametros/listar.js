@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 var NuevoPerfil = require('./agregar.js')
+import {URL} from '../constantes_entorno/constantes'
 
 
 function Ver(parametros, paginas,pagina_actual, _escritura) {
@@ -115,7 +116,7 @@ function Eliminar(_escritura, sucursal){
                 Cod_Sucursal,
             })
         }
-        fetch('/sucursales_api/eliminar_sucursal', parametros)
+        fetch(URL+'/sucursales_api/eliminar_sucursal', parametros)
             .then(req => req.json())
             .then(res => {
                 
@@ -148,7 +149,7 @@ function ListarParametros(escritura,NumeroPagina) {
             ScripWhere: ''
         })
     }
-    fetch('/parametros_api/get_parametros', parametros)
+    fetch(URL+'/parametros_api/get_parametros', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

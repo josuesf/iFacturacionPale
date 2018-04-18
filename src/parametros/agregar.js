@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarPerfiles} from './listar';
+import {URL} from '../constantes_entorno/constantes'
 
 
 module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
@@ -75,7 +76,7 @@ function BusquedaDeUsuario(){
                 ScripWhere: txtBuscarUsuario
             })
         }
-        fetch('/cajas_api/buscar_usuarios', parametros)
+        fetch(URL+'/cajas_api/buscar_usuarios', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
@@ -155,7 +156,7 @@ function Guardar(_escritura, sucursal){
             Cod_Usuario
         })
     }
-    fetch('/sucursales_api/guardar_sucursal', parametros)
+    fetch(URL+'/sucursales_api/guardar_sucursal', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

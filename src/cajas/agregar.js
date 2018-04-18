@@ -1,30 +1,50 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { ListarCajas } from './listar'
+import {URL} from '../constantes_entorno/constantes'
 
 function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, documentos, productos) {
+    
 
     var el = yo`
     <div>
-            <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+        <div class="modal modal-danger fade" id="modal-danger-documento" style="display: none;">
             <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">¿Esta seguro que desea eliminar este usuario?</h4>
-                </div>
-                <div class="modal-body">
-                <p>Al eliminar el usuario se perderan todos los datos.</p>
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Eliminar</button>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">¿Esta seguro que desea eliminar este documento?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Al eliminar el documento se perderan todos los datos.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline" id="btnEliminar-documento" data-dismiss="modal">Si, eliminar</button>
+                    </div>
                 </div>
             </div>
-            <!-- /.modal-content -->
+        </div>
+        <div class="modal modal-danger fade" id="modal-danger-favorito" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">¿Esta seguro que desea eliminar este producto?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Al eliminar el producto dejara de estar en la lista de favoritos.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline" id="btnEliminar-favorito" data-dismiss="modal">Si, eliminar</button>
+                    </div>
+                </div>
             </div>
-            <!-- /.modal-dialog -->
         </div>
         <div class="modal fade" id="modal-buscar-responsable" style="display: none;">
             <div class="modal-dialog">
@@ -54,7 +74,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                     </div>
                                     <br>
                                     <div class="table-responsive" id="contenedorTablaUsuarios">
-                                        
+
                                     </div>
                                 </div>
                             </form>
@@ -69,6 +89,9 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
             </div>
         </div>
         <div class="modal fade" id="modal-nuevo-editar-documento" style="display: none;">
+            
+        </div>
+        <div class="modal fade" id="modal-nuevo-favorito" style="display: none;">
             
         </div>
         <section class="content-header">
@@ -134,7 +157,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         <div class="form-group">
                                             <label for="Cod_Sucursal">Sucursal a la que pertence</label>
                                             <select id="Cod_Sucursal" class="form-control">
-                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
+                                                ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Sucursal}" ${caja ? caja.Cod_Sucursal == e.Cod_Sucursal ? 'selected' : '' : ''}>${e.Nom_Sucursal}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -146,13 +169,14 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable">Buscar responsable</button>
                                             </div>
-                                            <input type="text" class="form-control" id="Cod_Usuario" disabled>
+                                            <input type="text" class="form-control" id="Cod_Usuario" value="${caja? caja.Cod_UsuarioCajero:''}" disabled>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_CuentaContable">Cuenta Contable</label>
                                             <select id="Cod_CuentaContable" class="form-control select2">
+                                                <option style="text-transform:uppercase" value="10102" selected>10102</option>
                                                 ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaContable}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
@@ -206,7 +230,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                                             <td>${u.Nro_SerieTicketera}</td>
                                                                             <td>
                                                                                 ${_escritura ? yo`<button class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-documento" onclick="${()=>EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                                                                 
                                                                             </td>
                                                                         </tr>`)}
@@ -217,10 +241,10 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_2">
                                                             <div class="box-header">
-                                                                <a class="btn btn-info pull-right">
+                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-favorito" onclick="${()=>AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
                                                                 <i class="fa fa-plus"></i> Agregar</a>
                                                             </div>
-                                                            <div class="table-responsive">
+                                                            <div class="table-responsive" id="contenedorTablaFavoritos">
                                                                 <table class="table table-bordered table-striped">
                                                                     <thead>
                                                                         <tr>
@@ -241,8 +265,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                                             <td>${u.Valor}</td>
                                                                             <td>${u.Stock_Act}</td>
                                                                             <td>
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                                                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-favorito" onclick="${()=>EliminarFavorito(_escritura, caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                                                                 
                                                                             </td>
                                                                         </tr>`)}
@@ -259,13 +282,8 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                     `: yo``}
                                 
                             </div>
-                            <!-- /.box-body -->
-                
                             
                         </div>
-                        <div class="box-footer">
-                                <button onclick="${() => Guardar(_escritura, caja)}" class="btn btn-primary">Guardar</button>
-                            </div>
                     </div>
                 </div>
             </div>
@@ -286,7 +304,7 @@ var impresoras = [
 ]
 
 function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
-    console.log(documento)
+
     var el = yo`<div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -384,7 +402,7 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
 }
 
 function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u){
-    var btnEliminar = document.getElementById('btnEliminar')
+    var btnEliminar = document.getElementById('btnEliminar-documento')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
         H5_loading.show();
         var Cod_Caja = caja.Cod_Caja
@@ -400,7 +418,7 @@ function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,c
                 Item,
             })
         }
-        fetch('/cajas_api/eliminar_documento', parametros)
+        fetch(URL+'/cajas_api/eliminar_documento', parametros)
             .then(req => req.json())
             .then(res => {
                 
@@ -452,7 +470,7 @@ function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
             Cod_Usuario
         })
     }
-    fetch('/cajas_api/guardar_documento', parametros)
+    fetch(URL+'/cajas_api/guardar_documento', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
@@ -465,7 +483,7 @@ function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
 }
 
 function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento){
-
+    H5_loading.show()
     const parametros = {
         method: 'POST',
         headers: {
@@ -474,7 +492,7 @@ function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
         },
         body: JSON.stringify({})
     }
-    fetch('/cajas_api/get_comprobantes', parametros)
+    fetch(URL+'/cajas_api/get_comprobantes', parametros)
     .then(req => req.json())
     .then(res => {
         if (res.respuesta == 'ok') {
@@ -488,6 +506,7 @@ function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
         }else{
             console.log("ERR")
         }
+        H5_loading.hide()
     })
 }
 
@@ -507,7 +526,7 @@ function BusquedaDeUsuario(){
                 ScripWhere: txtBuscarUsuario
             })
         }
-        fetch('/cajas_api/buscar_usuarios', parametros)
+        fetch(URL+'/cajas_api/buscar_usuarios', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
@@ -552,6 +571,298 @@ function SeleccionarUsuario(usuario){
     Cod_Usuario.value = usuario.Cod_Usuarios + " - " + usuario.Nick
 }
 
+function AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja){
+    H5_loading.show()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    }
+    fetch(URL+'/cajas_api/opciones_buscar_producto', parametros)
+    .then(req => req.json())
+    .then(res => {
+        if (res.respuesta == 'ok') {
+            var categorias = res.data.categorias
+            var tipoprecio = res.data.tipoprecio
+            VerAgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja, categorias, tipoprecio)
+
+        }else{
+            console.log("ERR")
+        }
+        H5_loading.hide()
+    })
+}
+
+function  VerAgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja, categorias, tipoprecio){
+    var el = yo`<div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">Buscar producto</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                            <h3 class="box-title">Productos</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <!-- form start -->
+                            <div role="form">
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Categoria</label>
+                                            <select class="form-control" id="Cod_Categoria">
+                                                ${categorias.map(u => yo`<option value="${u.Cod_Categoria}">${u.Des_Categoria}</option>`)}
+                                            </select>
+                                        </div>                
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Serie">Tipo de Precio</label>
+                                                <select class="form-control" id="Cod_Precio">
+                                                ${tipoprecio.map(u => yo`<option value="${u.Cod_Precio}">${u.Nom_Precio}</option>`)}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="textobuscar">Texto a buscar</label>
+                                                <input type="text" class="form-control" id="Buscar" placeholder="Helado">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6"> 
+                                            <label for="Flag_Activo"></label>
+                                            <div class="checkbox form-group">
+                                                <label>
+                                                <input type="checkbox" id="Flag_RequiereStock" ><b> Solo productos con stock?</b>
+                                                </label>
+                                            </div>       
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <button onclick="${() => BuscarProductos(_escritura, caja)}"class="btn btn-primary">Buscar</button>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="table-responsive" id="contenedorTablaProductos">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>`
+
+    var modal_nuevo_editar_documento = document.getElementById('modal-nuevo-favorito')
+    empty(modal_nuevo_editar_documento).appendChild(el)
+}
+
+function BuscarProductos(_escritura, caja){
+    var Cod_Caja = caja.Cod_Caja
+    var Buscar = document.getElementById('Buscar').value
+    var Cod_Categoria = document.getElementById('Cod_Categoria').value
+    var Cod_Precio = document.getElementById('Cod_Precio').value
+    var Flag_RequiereStock = document.getElementById('Flag_RequiereStock').checked?'1':'0'
+    H5_loading.show()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            Cod_Caja,
+            Buscar,
+            Cod_Categoria,
+            Cod_Precio,
+            Flag_RequiereStock
+        })
+    }
+    fetch(URL+'/cajas_api/buscar_producto', parametros)
+        .then(req => req.json())
+        .then(res => {
+            var productos = res.data.productos
+            console.log(productos)
+            if (res.respuesta == 'ok') {
+                AgregarTablaProductos(_escritura, caja, productos)
+            }
+            else {
+                console.log('Error')
+            }
+            H5_loading.hide();
+        })
+}
+
+function AgregarTablaProductos(_escritura, caja, productos){
+    var el = yo`<table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Accion</th>
+                            <th>Codigo</th>
+                            <th>Almacen</th>
+                            <th>Producto</th>
+                            <th>Stock</th>
+                            <th>Moneda</th>
+                            <th>PU</th>
+                            <th>UM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${productos.map(u => yo`<tr>
+                                                    <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>GuardarFavorito(_escritura, caja, u)}"><i class="fa fa-check"></i> Agregar</button></td>
+                                                    <td>${u.Cod_Producto}</td>
+                                                    <td>${u.Des_Almacen}</td>
+                                                    <td>${u.Nom_Producto}</td>
+                                                    <td>${u.Stock_Act}</td>
+                                                    <td>${u.Nom_Moneda}</td>
+                                                    <td>${u.Precio}</td>
+                                                    <td>${u.Nom_UnidadMedida}</td>
+                                                    
+                                                </tr>`)}
+                    </tbody>
+
+                </table>`
+    
+    empty(document.getElementById('contenedorTablaProductos')).appendChild(el);
+    
+}
+
+function GuardarFavorito(_escritura, caja, producto){
+    var Cod_Caja = caja.Cod_Caja
+    var Id_Producto = producto.Id_Producto
+    var Cod_Almacen = producto.Cod_Almacen
+    var Cod_UnidadMedida = producto.Cod_UnidadMedida          
+    var Cod_Precio = document.getElementById('Cod_Precio').value
+    H5_loading.show()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            Cod_Caja,
+            Id_Producto,
+            Cod_Almacen,
+            Cod_UnidadMedida,
+            Cod_Precio
+        })
+    }
+    fetch(URL+'/cajas_api/guardar_favorito', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var productos = res.data.productos
+                var el = yo`<table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Almacen</th>
+                                        <th>Unidad Medida</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${productos.map(u => yo`
+                                    <tr>
+                                        <td>${u.Nom_Producto}</td>
+                                        <td>${u.Des_Almacen}</td>
+                                        <td>${u.Nom_UnidadMedida}</td>
+                                        <td>${u.Valor}</td>
+                                        <td>${u.Stock_Act}</td>
+                                        <td>
+                                            ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-favorito" onclick="${()=>EliminarFavorito(_escritura, caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                            
+                                        </td>
+                                    </tr>`)}
+                                </tbody>
+                            </table>`
+                empty(document.getElementById('contenedorTablaFavoritos')).appendChild(el)
+            }
+            else {
+                console.log('Error')
+            }
+            H5_loading.hide();
+        })
+    
+}
+
+function EliminarFavorito(_escritura, caja, producto){
+    var btnEliminar = document.getElementById('btnEliminar-favorito')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        var Cod_Caja = caja.Cod_Caja
+    var Id_Producto = producto.Id_Producto
+    H5_loading.show();
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            Cod_Caja,
+            Id_Producto
+        })
+    }
+    fetch(URL+'/cajas_api/eliminar_favorito', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var productos = res.data.productos
+                var el = yo`<table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Almacen</th>
+                                        <th>Unidad Medida</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${productos.map(u => yo`
+                                    <tr>
+                                        <td>${u.Nom_Producto}</td>
+                                        <td>${u.Des_Almacen}</td>
+                                        <td>${u.Nom_UnidadMedida}</td>
+                                        <td>${u.Valor}</td>
+                                        <td>${u.Stock_Act}</td>
+                                        <td>
+                                            ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-favorito" onclick="${()=>EliminarFavorito(_escritura, caja, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                            
+                                        </td>
+                                    </tr>`)}
+                                </tbody>
+                            </table>`
+                empty(document.getElementById('contenedorTablaFavoritos')).appendChild(el)
+            }
+            else {
+                console.log('Error')
+            }
+            H5_loading.hide();
+        })
+    })
+    
+}
+
 
 
 function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
@@ -565,7 +876,7 @@ function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
             },
             body: JSON.stringify({ Cod_Caja:caja.Cod_Caja })
         }
-        fetch('/cajas_api/get_documents_by_caja', parametros)
+        fetch(URL+'/cajas_api/get_documents_by_caja', parametros)
             .then(req => req.json())
             .then(res => {
                 if (res.respuesta == 'ok') {

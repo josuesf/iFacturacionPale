@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarModulos} from './listar';
+import {URL} from '../constantes_entorno/constantes'
 
 
 module.exports = function NuevoModulo(_escritura, raices, modulo) {
@@ -105,7 +106,7 @@ function Guardar(_escritura, modulo){
             Cod_Usuario
         })
     }
-    fetch('/modulos_api/guardar_modulo', parametros)
+    fetch(URL+'/modulos_api/guardar_modulo', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

@@ -89,4 +89,66 @@ router.post('/eliminar_documento', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+router.post('/opciones_buscar_producto', function (req, res){
+    input = req.body 
+    procedimientos = [
+        {nom_respuesta: 'categorias', sp_name: 'USP_PRI_CATEGORIA_TArbol ', parametros: []},
+        {nom_respuesta: 'tipoprecio', sp_name: 'USP_VIS_PRECIOS_TT', parametros: []}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/buscar_producto', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja},
+        {nom_parametro: 'Buscar', valor_parametro: input.Buscar},
+        {nom_parametro: 'Cod_Categoria', valor_parametro: input.Cod_Categoria},
+        {nom_parametro: 'Cod_Precio', valor_parametro: input.Cod_Precio},
+        {nom_parametro: 'Flag_RequiereStock', valor_parametro: input.Flag_RequiereStock},
+
+    ]
+    procedimientos = [
+        {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_Buscar', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/guardar_favorito', function (req, res){
+    input = req.body
+    parametros1 = [
+        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
+    ]
+    parametros2 = [
+        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
+        {nom_parametro:'Id_Producto',valor_parametro:input.Id_Producto},
+        {nom_parametro:'Cod_Almacen',valor_parametro:input.Cod_Almacen},
+        {nom_parametro:'Cod_UnidadMedida',valor_parametro:input.Cod_UnidadMedida},
+        {nom_parametro:'Cod_Precio',valor_parametro:input.Cod_Precio}
+    ]
+    procedimientos =[
+        {nom_respuesta:'guardar', sp_name: 'USP_VIS_CAJA_PRODUCTOS_G',parametros:parametros2},
+        {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros:parametros1}
+        
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
+router.post('/eliminar_favorito', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja', valor_parametro:input.Cod_Caja},
+        {nom_parametro:'Id_Producto', valor_parametro:input.Id_Producto}
+    ]
+    parametros1 = [
+        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
+    ]
+    procedimientos = [
+        {nom_respuesta:'eliminar', sp_name: 'USP_VIS_CAJA_PRODUCTO_E',parametros},
+        {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros:parametros1}
+        
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
 module.exports = router;
