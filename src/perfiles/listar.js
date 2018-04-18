@@ -80,14 +80,14 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="" onclick=${()=>(pagina_actual>0)?ListarPerfiles(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarPerfiles(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="" onclick=${()=>ListarPerfiles(_escritura,i)} >${i + 1}</a>
+                            <a href="#" onclick=${()=>ListarPerfiles(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="" onclick=${()=>(pagina_actual+1<paginas)?ListarPerfiles(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarPerfiles(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
