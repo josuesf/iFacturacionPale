@@ -12,7 +12,7 @@ function Controles(escritura) {
         return yo`<div></div>`
 }
 
-function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
+function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) {
     var el = yo`
     <div>
         <section class="content-header">
@@ -88,14 +88,14 @@ function Ver(usuarios, paginas, _escritura, _estados, _perfiles) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#">«</a>
+                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarUsuarios(_escritura,pagina_actual-1):null}>«</a>
                             </li>
-                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li>
-                            <a href="#">${i + 1}</a>
+                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
+                            <a href="#" onclick=${()=>ListarUsuarios(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#">»</a>
+                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarUsuarios(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
@@ -140,7 +140,7 @@ function EliminarUsuario(_escritura, usuario){
     })
 }
 
-function ListarUsuarios(escritura) {
+function ListarUsuarios(escritura, NumeroPagina) {
     H5_loading.show();
     var _escritura=escritura;
     const parametros = {
@@ -151,7 +151,7 @@ function ListarUsuarios(escritura) {
         },
         body: JSON.stringify({
             TamanoPagina: '20',
-            NumeroPagina: '0',
+            NumeroPagina: NumeroPagina||'0',
             ScripOrden: ' ORDER BY Cod_Usuarios asc',
             ScripWhere: ''
         })
@@ -167,7 +167,7 @@ function ListarUsuarios(escritura) {
                 var _perfiles = res.data.perfiles
                 var _estados = res.data.estados
 
-                Ver(res.data.usuarios, paginas, _escritura, _estados, _perfiles)
+                Ver(res.data.usuarios, paginas, NumeroPagina||0, _escritura, _estados, _perfiles)
             }
             else
                 Ver([])

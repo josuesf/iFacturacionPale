@@ -14,7 +14,7 @@ function Controles(escritura) {
         return yo`<div></div>`
 }
 
-function Ver(cajas, paginas, _escritura, _sucursales) {
+function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
     var el = yo`
     <div>
         <section class="content-header">
@@ -88,14 +88,14 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#">«</a>
+                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarCajas(_escritura,pagina_actual-1):null}>«</a>
                             </li>
-                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li>
-                            <a href="#">${i + 1}</a>
+                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
+                            <a href="#" onclick=${()=>ListarCajas(_escritura,i)}>${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#">»</a>
+                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarCajas(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
@@ -107,7 +107,7 @@ function Ver(cajas, paginas, _escritura, _sucursales) {
     empty(main).appendChild(el);
 }
 
-function ListarCajas(escritura){
+function ListarCajas(escritura, NumeroPagina){
     H5_loading.show();
     var _escritura=escritura;
     const parametros = {
@@ -118,7 +118,7 @@ function ListarCajas(escritura){
         },
         body: JSON.stringify({
             TamanoPagina: '20',
-            NumeroPagina: '0',
+            NumeroPagina: NumeroPagina||'0',
             ScripOrden: ' ORDER BY Cod_Caja desc',
             ScripWhere: ''
         })
@@ -134,7 +134,7 @@ function ListarCajas(escritura){
 
                 var _sucursales = res.data.sucursales
 
-                Ver(res.data.cajas, paginas, _escritura, _sucursales)
+                Ver(res.data.cajas, paginas, NumeroPagina|| 0, _escritura, _sucursales)
             }
             else
                 Ver([])
