@@ -29,15 +29,20 @@
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
-            <p class="login-box-msg">Ingresa tus datos correctamente</p>
-
+            <!-- <p class="login-box-msg">Ingresa tus datos</p> -->
+            <% if(typeof err != 'undefined') { %>
+            <div class="callout callout-danger">
+                <h4>Hubo un error!</h4>
+                <p><%=err%></p>
+            </div>
+            <% } %>
             <form action="login" method="post">
                 <div class="form-group has-feedback">
-                    <input type="text" name="usuario" class="form-control" placeholder="Usuario">
+                    <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" class="form-control" required placeholder="Password">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
@@ -52,7 +57,7 @@
         </div>
         <!-- /.login-box-body -->
     </div>
-    <script src ='/bower_components/jquery/dist/jquery.min.js'></script>
+    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/dist/js/loading.js"></script>
 </body>
