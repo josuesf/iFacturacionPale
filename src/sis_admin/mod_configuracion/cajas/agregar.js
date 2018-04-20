@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { ListarCajas } from './listar'
-import {URL} from '../constantes_entorno/constantes'
+import {URL} from '../../../constantes_entorno/constantes'
 
 function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, documentos, productos) {
     

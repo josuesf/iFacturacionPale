@@ -1,9 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-
-import {NuevaCaja} from './agregar'
-import {URL} from '../constantes_entorno/constantes'
-
+var NuevoUsuario = require('./agregar.js')
+import {URL} from '../../../constantes_entorno/constantes'
 
 function Controles(escritura) {
     var controles = yo`<div><button class="btn btn-xs btn-success">Editar</button>
@@ -14,7 +12,7 @@ function Controles(escritura) {
         return yo`<div></div>`
 }
 
-function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
+function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) {
     var el = yo`
     <div>
         <section class="content-header">
@@ -39,21 +37,23 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
         <!-- /.modal-dialog -->
       </div>
             <h1>
-                Cajas
-                <small>Control cajas</small>
+                Usuarios
+                <small>Control usuarios</small>
             </h1>
             <ol class="breadcrumb">
                 <li>
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li class="active">Cajas</li>
+                <li class="active">Usuarios</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Lista de Cajas</h3>
+                    <h3 class="box-title">Lista de Usuarios</h3>
+                    ${_escritura ? yo`<a onclick=${()=>NuevoUsuario(_escritura, _estados, _perfiles)} class="btn btn-info pull-right">
+                        <i class="fa fa-plus"></i> Nuevo Usuario</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -62,40 +62,40 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
                         <thead>
                             <tr>
                                 <th>Codigo</th>
-                                <th>Caja</th>
-                                <th>Sucursal</th>
-                                <th>Responsable</th>
-                                <th>Cuenta Contable</th>
+                                <th>Pregunta</th>
+                                <th>Perfil</th>
+                                <th>Conectada</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${cajas.map(u => yo`
+                            ${usuarios.map(u => yo`
                             <tr>
-                                <td>${u.Cod_Caja}</td>
-                                <td>${u.Des_Caja}</td>
-                                <td>${u.Cod_Sucursal}</td>
-                                <td>${u.Cod_UsuarioCajero}</td>
-                                <td>${u.Cod_CuentaContable}</td>
+                                <td>${u.Cod_Usuarios}</td>
+                                <td>${u.Pregunta}</td>
+                                <td>${u.Cod_Perfil}</td>
+                                <td>${u.Cod_Estado}</td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaCaja(_escritura, _sucursales, [], [], u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoUsuario(_escritura, _estados, _perfiles, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarUsuario(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
                         </tbody>
+    
                     </table>
                     </div>
                     <div class="box-footer clearfix">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarCajas(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarUsuarios(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="#" onclick=${()=>ListarCajas(_escritura,i)}>${i + 1}</a>
+                            <a href="#" onclick=${()=>ListarUsuarios(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarCajas(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarUsuarios(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>
@@ -107,7 +107,40 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
     empty(main).appendChild(el);
 }
 
-function ListarCajas(escritura, NumeroPagina){
+function EliminarUsuario(_escritura, usuario){
+    
+    var btnEliminar = document.getElementById('btnEliminar')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        H5_loading.show();
+        var Cod_Usuarios = usuario.Cod_Usuarios
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Usuarios,
+            })
+        }
+        fetch(URL+'/usuarios_api/eliminar_usuario', parametros)
+            .then(req => req.json())
+            .then(res => {
+                
+                if (res.respuesta == 'ok') {
+                    Listar(_escritura)
+                    this.removeEventListener('click', Eliminar)
+                }
+                else{
+
+                    this.removeEventListener('click', Eliminar)
+                }
+                H5_loading.hide()
+            })
+    })
+}
+
+function ListarUsuarios(escritura, NumeroPagina) {
     H5_loading.show();
     var _escritura=escritura;
     const parametros = {
@@ -119,22 +152,22 @@ function ListarCajas(escritura, NumeroPagina){
         body: JSON.stringify({
             TamanoPagina: '20',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Caja desc',
+            ScripOrden: ' ORDER BY Cod_Usuarios asc',
             ScripWhere: ''
         })
     }
-    fetch(URL+'/cajas_api/get_cajas', parametros)
+    fetch(URL+'/usuarios_api/get_usuarios', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
                 paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
 
-                var _sucursales = res.data.sucursales
+                var _perfiles = res.data.perfiles
+                var _estados = res.data.estados
 
-                Ver(res.data.cajas, paginas, NumeroPagina|| 0, _escritura, _sucursales)
+                Ver(res.data.usuarios, paginas, NumeroPagina||0, _escritura, _estados, _perfiles)
             }
             else
                 Ver([])
@@ -142,4 +175,5 @@ function ListarCajas(escritura, NumeroPagina){
         })
 }
 
-export {ListarCajas}
+
+export {ListarUsuarios}

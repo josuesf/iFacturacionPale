@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarModulos} from './listar';
-import {URL} from '../constantes_entorno/constantes'
+import {URL} from '../../../constantes_entorno/constantes'
 
 
 module.exports = function NuevoModulo(_escritura, raices, modulo) {

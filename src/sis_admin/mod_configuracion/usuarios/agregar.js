@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarUsuarios} from './listar';
-import {URL} from '../constantes_entorno/constantes'
+import {URL} from '../../../constantes_entorno/constantes'
 var preguntas_seguridad = [
     '¿Cómo se llamaba tu mejor amigo de la infancia?',
     '¿Cómo se llamaba tu primer profesor o tu primera profesora?',

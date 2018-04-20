@@ -1,6 +1,6 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import { URL } from '../constantes_entorno/constantes'
+import { URL } from '../../../constantes_entorno/constantes'
 
 
 function Ver(empresa, _escritura) {

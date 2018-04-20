@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarSucursales} from './listar';
-import {URL} from '../constantes_entorno/constantes'
+import {URL} from '../../../constantes_entorno/constantes'
 
 
 module.exports = function NuevaSucursal(_escritura, sucursal) {

@@ -2,13 +2,13 @@ var yo = require('yo-yo')
 var empty = require('empty-element');
 
 
-import { ListarUsuarios } from '../usuarios/listar'
-import { ListarCajas } from '../cajas/listar'
-import { ListarModulos } from '../modulos/listar'
-import { ListarSucursales } from '../sucursales/listar'
-import { ListarPerfiles } from '../perfiles/listar'
-import { ListarParametros } from '../parametros/listar';
-import { ListarEmpresa } from '../empresa/listar'
+import { ListarUsuarios } from '../sis_admin/mod_configuracion/usuarios/listar'
+import { ListarCajas } from '../sis_admin/mod_configuracion/cajas/listar'
+import { ListarModulos } from '../sis_admin/mod_configuracion/modulos/listar'
+import { ListarSucursales } from '../sis_admin/mod_configuracion/sucursales/listar'
+import { ListarPerfiles } from '../sis_admin/mod_configuracion/perfiles/listar'
+import { ListarParametros } from '../sis_admin/mod_configuracion/parametros/listar';
+import { ListarEmpresa } from '../sis_admin/mod_configuracion/empresa/listar'
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>

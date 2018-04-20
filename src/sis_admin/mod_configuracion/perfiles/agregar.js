@@ -2,8 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import {ListarPerfiles} from './listar';
-import {URL} from '../constantes_entorno/constantes'
-
+import {URL} from '../../../constantes_entorno/constantes'
 
 module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
 
