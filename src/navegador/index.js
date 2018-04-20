@@ -9,6 +9,12 @@ import { ListarSucursales } from '../sis_admin/mod_configuracion/sucursales/list
 import { ListarPerfiles } from '../sis_admin/mod_configuracion/perfiles/listar'
 import { ListarParametros } from '../sis_admin/mod_configuracion/parametros/listar';
 import { ListarEmpresa } from '../sis_admin/mod_configuracion/empresa/listar'
+
+//views de logistica
+import { ListarCategorias } from '../sis_admin/mod_logistica/categorias/listar'
+import { ListarTurnos } from '../sis_admin/mod_logistica/turnos/listar'
+
+
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -42,7 +48,8 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+            <li class=""><a href="#" onclick=${() => ListarCategorias(true)}><i class="fa fa-circle-o"></i> Categorias</a></li>
+            <li class=""><a href="#" onclick=${() => ListarTurnos(true)}><i class="fa fa-circle-o"></i> Turnos de Atencion</a></li>
         </ul>
     </li>
     <li class="treeview">
