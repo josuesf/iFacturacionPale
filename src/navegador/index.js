@@ -9,6 +9,8 @@ import { ListarSucursales } from '../sis_admin/mod_configuracion/sucursales/list
 import { ListarPerfiles } from '../sis_admin/mod_configuracion/perfiles/listar'
 import { ListarParametros } from '../sis_admin/mod_configuracion/parametros/listar';
 import { ListarEmpresa } from '../sis_admin/mod_configuracion/empresa/listar'
+import { ListarAlmacenes } from '../sis_admin/mod_logistica/almacenes/listar'
+import { ListarConceptos } from '../sis_admin/mod_logistica/conceptos/listar'
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -42,7 +44,8 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+            <li class=""><a href="#" onclick=${() => ListarAlmacenes(true)}><i class="fa fa-circle-o"></i> Almacenes</a></li>
+            <li class=""><a href="#" onclick=${() => ListarConceptos(true)}><i class="fa fa-circle-o"></i> Conceptos</a></li>
         </ul>
     </li>
     <li class="treeview">

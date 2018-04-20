@@ -30,6 +30,8 @@ var sucursales_api = require('./routes/api-sucursales')
 var perfiles_api = require('./routes/api-perfiles')
 var parametros_api = require('./routes/api-parametros')
 var empresa_api = require('./routes/api-empresa')
+var almacenes_api = require('./routes/api-almacenes')
+var conceptos_api = require('./routes/api-conceptos')
 app.use('/usuarios_api', usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
@@ -37,6 +39,9 @@ app.use('/sucursales_api', sucursales_api);
 app.use('/perfiles_api', perfiles_api);
 app.use('/parametros_api', parametros_api);
 app.use('/empresa_api', empresa_api);
+app.use('/almacenes_api', almacenes_api);
+app.use('/conceptos_api', conceptos_api);
+
 //Listen Server
 var server = app.listen(3000, function (err) {
   if (err) return console.log('Hubo un error'), process.exit(1);
