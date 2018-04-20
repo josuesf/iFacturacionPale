@@ -9,8 +9,17 @@ import { ListarSucursales } from '../sis_admin/mod_configuracion/sucursales/list
 import { ListarPerfiles } from '../sis_admin/mod_configuracion/perfiles/listar'
 import { ListarParametros } from '../sis_admin/mod_configuracion/parametros/listar';
 import { ListarEmpresa } from '../sis_admin/mod_configuracion/empresa/listar'
+<<<<<<< HEAD
+
+//views de logistica
+import { ListarCategorias } from '../sis_admin/mod_logistica/categorias/listar'
+import { ListarTurnos } from '../sis_admin/mod_logistica/turnos/listar'
+
+
+=======
 import { ListarAlmacenes } from '../sis_admin/mod_logistica/almacenes/listar'
 import { ListarConceptos } from '../sis_admin/mod_logistica/conceptos/listar'
+>>>>>>> bba51c327875d2a53611775e43f659522a50880d
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -44,8 +53,13 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
+<<<<<<< HEAD
+            <li class=""><a href="#" onclick=${() => ListarCategorias(true)}><i class="fa fa-circle-o"></i> Categorias</a></li>
+            <li class=""><a href="#" onclick=${() => ListarTurnos(true)}><i class="fa fa-circle-o"></i> Turnos de Atencion</a></li>
+=======
             <li class=""><a href="#" onclick=${() => ListarAlmacenes(true)}><i class="fa fa-circle-o"></i> Almacenes</a></li>
             <li class=""><a href="#" onclick=${() => ListarConceptos(true)}><i class="fa fa-circle-o"></i> Conceptos</a></li>
+>>>>>>> bba51c327875d2a53611775e43f659522a50880d
         </ul>
     </li>
     <li class="treeview">
