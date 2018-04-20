@@ -1,7 +1,8 @@
 var express = require('express');
-var multer  = require('multer');
+var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
+var session = require('express-session');
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads')
@@ -16,12 +17,34 @@ app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.disable('x-powered-by');
+app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
 app.get('/', function (req, res) {
-  res.render('index', { title: 'iFacturacion' });
+  if (!req.session || !req.session.authenticated) {
+    res.redirect('/login');
+  } else
+    res.render('index', { title: 'iFacturacion',Cod_Usuarios:req.session.username,Nick:req.session.nick });
 })
-app.get('/usuarios', function (req, res) {  
-  res.render('index', { title: 'iFacturacion - Usuarios' });
+app.get('/login', function (req, res) {
+  if (req.session && req.session.authenticated) {
+    return res.redirect('/');
+  }
+  res.render('login.ejs', { title: 'iFacturacion - Usuarios' });
 })
+var { LOGIN_SQL } = require('./utility/exec_sp_sql')
+app.post('/login', function (req, res) {
+  LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
+    if (e.err) return res.redirect('/login')
+    req.session.authenticated = true;
+    req.session.username = e.Cod_Usuarios
+    req.session.nick = e.Nick
+    return res.redirect('/');
+  })
+})
+app.get('/logout', function (req, res) {
+  delete req.session.authenticated;
+  res.redirect('/');
+});
 //Routes
 var usuarios_api = require('./routes/api-usuarios')
 var cajas_api = require('./routes/api-cajas')
