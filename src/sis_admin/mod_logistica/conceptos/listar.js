@@ -70,7 +70,7 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
                                 <td>${u.Nom_TipoConcepto}</td>
                                 <td>${u.Flag_Activo ? 'Si' : 'No'}</td>
                                 <td>${u.Cod_UsuarioReg}</td>
-                                <td>${u.Fecha_Reg}</td>
+                                <td>${getFechaHora(u.Fecha_Reg, true, false)}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => NuevoConcepto(_escritura, tipos_conceptos, u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                     ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
@@ -101,6 +101,14 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
     </div>`
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
+}
+function getFechaHora(str, flagfecha, flaghora){
+    var spl = str.split('T')
+    var fecha = spl[0].split('-')
+    var hora = spl[1].split(':')
+    var fechastr = fecha[2]+'/'+fecha[1]+'/'+fecha[0]
+    var horastr = hora[0]+':'+hora[1]
+    return flagfecha?fechastr+(flaghora?' '+horastr:''):flaghora?horastr:''
 }
 
 function Eliminar(_escritura, concepto) {
