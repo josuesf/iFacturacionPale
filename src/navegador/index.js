@@ -14,6 +14,39 @@ var el = yo`
     <li class="header">Mantenimientos</li>
     <li class="treeview">
         <a href="#"W>
+            <i class="fa fa-home"></i> <span>Inicio</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#"W>
+            <i class="fa fa-table"></i> <span>Contabilidad</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#"W>
+            <i class="fa fa-bus"></i> <span>Logistica</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+        </ul>
+    </li>
+    <li class="treeview">
+        <a href="#"W>
             <i class="fa fa-cog"></i> <span>Configuracion</span>
             <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
