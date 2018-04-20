@@ -34,7 +34,7 @@ app.get('/login', function (req, res) {
 var { LOGIN_SQL } = require('./utility/exec_sp_sql')
 app.post('/login', function (req, res) {
   LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
-    if (e.err) return res.redirect('/login')
+    if (e.err) return res.render('login.ejs', { title: 'iFacturacion - Usuarios',err:e.err });
     req.session.authenticated = true;
     req.session.username = e.Cod_Usuarios
     req.session.nick = e.Nick
