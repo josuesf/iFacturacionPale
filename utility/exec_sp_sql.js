@@ -1,4 +1,5 @@
 var sql = require("mssql");
+var md5 = require("md5")
 var dbConfig = require('./conexion_sql').dbConfig
 //Procedimientos Almacenados
 var Ejecutar_Procedimientos = function (res, procedimientos) {
@@ -39,6 +40,28 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion) {
 
     });
 }
+var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
+    var dbConn = new sql.Connection(dbConfig);
+    dbConn.connect(function (err) {
+        if (err) {
+            return next({err})
+        }
+        var request = new sql.Request(dbConn);
+        request.input('Cod_Usuarios',Cod_Usuarios.toUpperCase())
+        request.execute('usp_PRI_USUARIO_TXPK', function (err, result) {
+            dbConn.close()
+            if (err) {
+                return next({err})
+            }
+            Contrasena = md5(Contrasena)
+            usuario =  result[0]
+            if(usuario.length==0) return next({err:'Revise sus datos ingresados'})
+            if(usuario.length>0 && usuario[0].Contrasena!=Contrasena) return next({err:'Revise sus datos ingresados'})
+            next({Cod_Usuarios:usuario[0].Cod_Usuarios,Nick:usuario[0].Nick})
+        });
+
+    });
+}
 // var Ejecutar_SP_SQL = function (res, store_procedure, param) {
 //     var dbConn = new sql.Connection(dbConfig);
 //     dbConn.connect(function (err) {
@@ -66,4 +89,4 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion) {
 //     });
 // }
 
-module.exports = { Ejecutar_Procedimientos }
+module.exports = { Ejecutar_Procedimientos,LOGIN_SQL }
