@@ -18,6 +18,8 @@ import { ListarConceptos } from '../sis_admin/mod_logistica/conceptos/listar'
 
 //views de inicio
 import { ListarProductosServ } from '../sis_admin/mod_inicio/productos_serv/listar'
+//Views Inicio
+import { ListarClientes } from '../sis_admin/mod_inicio/clientes_prov/listar'
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
@@ -31,6 +33,7 @@ var el = yo`
         </a>
         <ul class="treeview-menu">
             <li class=""><a href="#" onclick=${() => ListarProductosServ(true)}><i class="fa fa-circle-o"></i> Productos y servicios</a></li>
+            <li class=""><a href="#" onclick=${() => ListarClientes(true)}><i class="fa fa-circle-o"></i> Cliente/Proveedor</a></li>
         </ul>
     </li>
     <li class="treeview">
