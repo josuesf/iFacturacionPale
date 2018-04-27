@@ -13,10 +13,12 @@ import { ListarEmpresa } from '../sis_admin/mod_configuracion/empresa/listar'
 //views de logistica
 import { ListarCategorias } from '../sis_admin/mod_logistica/categorias/listar'
 import { ListarTurnos } from '../sis_admin/mod_logistica/turnos/listar'
-
-
 import { ListarAlmacenes } from '../sis_admin/mod_logistica/almacenes/listar'
 import { ListarConceptos } from '../sis_admin/mod_logistica/conceptos/listar'
+
+//views de inicio
+import { ListarProductosServ } from '../sis_admin/mod_inicio/productos_serv/listar'
+
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -28,7 +30,7 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+            <li class=""><a href="#" onclick=${() => ListarProductosServ(true)}><i class="fa fa-circle-o"></i> Productos y servicios</a></li>
         </ul>
     </li>
     <li class="treeview">

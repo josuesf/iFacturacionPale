@@ -70,7 +70,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary" onclick="${()=> BusquedaDeUsuario()}">Buscar</button>
                                         </div>
-                                        <input type="text" class="form-control" id="txtBuscarUsuario" onkeypress="${()=> BusquedaDeUsuario()}">
+                                        <input type="text" class="form-control" id="txtBuscarUsuario" onkeydown="${()=> BusquedaDeUsuario()}">
                                     </div>
                                     <br>
                                     <div class="table-responsive" id="contenedorTablaUsuarios">

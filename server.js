@@ -57,6 +57,7 @@ var categorias_api = require('./routes/api-categorias')
 var turnos_api = require('./routes/api-turnos')
 var almacenes_api = require('./routes/api-almacenes')
 var conceptos_api = require('./routes/api-conceptos')
+var productos_serv_api = require('./routes/api-productos_serv')
 app.use('/usuarios_api', usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
@@ -68,6 +69,7 @@ app.use('/categorias_api', categorias_api)
 app.use('/turnos_api', turnos_api)
 app.use('/almacenes_api', almacenes_api);
 app.use('/conceptos_api', conceptos_api);
+app.use('/productos_serv_api', productos_serv_api);
 
 //Listen Server
 var server = app.listen(3000, function (err) {
