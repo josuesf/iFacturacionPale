@@ -42,7 +42,20 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
                         <!-- form start -->
                         <form role="form">
                             <div class="box-body">
-                                
+                                <div class="row">
+                            
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            ${modulos.map(e=>yo`
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" id="${e.Cod_Modulo}" checked="1">${e.Cod_Modulo+' '+e.Des_Modulo} </label>
+                                            </div>
+                                            `)}
+                                        </div>
+                                    </div>
+                                </div>
+                            
                             </div>
                             <!-- /.box-body -->
                 

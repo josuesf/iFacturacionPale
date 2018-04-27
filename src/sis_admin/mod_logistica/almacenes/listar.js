@@ -10,25 +10,26 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
     <div>
         <section class="content-header">
         <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-              <h4 class="modal-title">¿Esta seguro que desea eliminar este almacen?</h4>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">¿Esta seguro que desea eliminar este almacen?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Al eliminar el almacen no podra recuperarlo. Desea continuar de todas maneras?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            <div class="modal-body">
-              <p>Al eliminar el almacen no podra recuperarlo. Desea continuar de todas maneras?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
             <h1>
                 Almacenes
                 <small>Control almacenes</small>

@@ -1,4 +1,4 @@
-const ENV_WEB = false
+const ENV_WEB = true
 
 var URL=ENV_WEB?'':'http://localhost:3000'
 
