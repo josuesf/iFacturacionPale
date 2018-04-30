@@ -5,6 +5,12 @@ import { ListarClientes } from './listar';
 import { URL } from '../../../constantes_entorno/constantes'
 import { CuentasBancarias } from './cuentas_bancarias'
 import {Contactos} from './contactos'
+import {Establecimientos} from './establecimientos'
+import {PrecioProducto} from './precio_productos'
+import {Vehiculos} from './vehiculos'
+import {Licitaciones} from './licitaciones'
+import {ActividadEconomica} from './actividad_eco'
+import {Padrones} from './padrones'
 
 function NuevoCliente(_escritura, mas_variables, cliente) {
 
@@ -53,31 +59,31 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         Cuentas Bancarias</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente.Id_ClienteProveedor,mas_variables.documentos)}" aria-expanded="true">
                                                         Contactos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Establecimientos(_escritura,cliente)}" aria-expanded="true">
                                                         Establecimientos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>PrecioProducto(_escritura,cliente)}" aria-expanded="true">
                                                         Precio de Productos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Vehiculos(_escritura,cliente)}" aria-expanded="true">
                                                         Vehiculos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Licitaciones(_escritura,cliente)}" aria-expanded="true">
                                                         Licitaciones</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>ActividadEconomica(_escritura,cliente)}" aria-expanded="true">
                                                         Actividad Economica</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Padrones(_escritura,cliente)}" aria-expanded="true">
                                                         Padrones</a>
                                                 </li>
                                             </ul>`
@@ -192,15 +198,15 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                     <ul class="nav nav-tabs">
                                                                         <li class="">
                                                                             <a href="#tab_de_1" data-toggle="tab" aria-expanded="true">
-                                                                                <i class="fa fa-file"></i> Datos Especificos</a>
+                                                                                <i class="fa fa-building"></i> Datos Especificos</a>
                                                                         </li>
                                                                         <li class="active">
                                                                             <a href="#tab_de_2" data-toggle="tab" aria-expanded="true">
-                                                                                <i class="fa fa-file"></i> Ubicacion y Forma Pago</a>
+                                                                                <i class="fa fa-location-arrow"></i> Ubicacion y Forma Pago</a>
                                                                         </li>
                                                                         <li class="">
                                                                             <a href="#tab_de_3" data-toggle="tab" aria-expanded="true">
-                                                                                <i class="fa fa-file"></i> Datos Adicionales</a>
+                                                                                <i class="fa fa-ellipsis-h"></i> Datos Adicionales</a>
                                                                         </li>
                                                                     </ul>
                                                                     <div class="tab-content">
@@ -333,13 +339,13 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                 <div class="col-sm-4">
                                                                                     <div class="form-group">
                                                                                         <label for="Limite_Credito">Limite de Credito</label>
-                                                                                        <input type="number" class="form-control" id="Limite_Credito" value="${cliente ? cliente.Limite_Credito : ''}">
+                                                                                        <input type="number" class="form-control" id="Limite_Credito" value="${cliente ? cliente.Limite_Credito : '0'}">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-sm-4">
                                                                                     <div class="form-group">
                                                                                         <label for="Num_DiaCredito">Nro Dias de Credito</label>
-                                                                                        <input type="number" class="form-control" id="Num_DiaCredito" value="${cliente ? cliente.Num_DiaCredito : ''}">
+                                                                                        <input type="number" class="form-control" id="Num_DiaCredito" value="${cliente ? cliente.Num_DiaCredito : '0'}">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>

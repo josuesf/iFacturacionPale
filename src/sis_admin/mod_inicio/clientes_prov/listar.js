@@ -103,12 +103,12 @@ function Ver(clientes, paginas,pagina_actual, _escritura,mas_variables) {
     empty(main).appendChild(el);
 }
 
-function Eliminar(_escritura, almacen){
+function Eliminar(_escritura, cliente){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
         H5_loading.show();
-        var Cod_Almacen = almacen.Cod_Almacen
+        var Id_ClienteProveedor = cliente.Id_ClienteProveedor
         const parametros = {
             method: 'POST',
             headers: {
@@ -116,15 +116,15 @@ function Eliminar(_escritura, almacen){
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                Cod_Almacen,
+                Id_ClienteProveedor,
             })
         }
-        fetch(URL+'/almacenes_api/eliminar_almacen', parametros)
+        fetch(URL+'/clientes_api/eliminar_cliente', parametros)
             .then(req => req.json())
             .then(res => {
                 
                 if (res.respuesta == 'ok') {
-                    ListarAlmacenes(_escritura)
+                    ListarClientes(_escritura)
                     this.removeEventListener('click', Eliminar)
                 }
                 else{
