@@ -74,28 +74,39 @@ router.post('/guardar_producto', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
-router.post('/eliminar_categoria', function (req, res){
+router.post('/editar_producto', function (req, res){
     input = req.body
     parametros = [
-        {nom_parametro: 'Cod_Categoria', valor_parametro: input.Cod_Categoria}
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto}
     ]
     procedimientos = [
-        {nom_respuesta: 'categoria', sp_name: 'usp_PRI_CATEGORIA_E', parametros}
+        {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_TXPK', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/get_presentacion_ubicacion', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'presentacionubicacion', sp_name: 'USP_PRI_PRODUCTO_STOCK_TXIdProducto', parametros}
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
-router.post('/buscar_cuenta_contable', function (req, res){
+router.post('/eliminar_presentacion_ubicacion', function (req, res){
     input = req.body
     parametros = [
-        {nom_parametro: 'TextoBuscar', valor_parametro: input.TextoBuscar}
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto},
+        {nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.Cod_UnidadMedida},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen}
     ]
     procedimientos = [
-        {nom_respuesta: 'cuentas', sp_name: 'USP_PRI_CUENTA_CONTABLE_Buscar', parametros}
+        {nom_respuesta: 'presentacionubicacion', sp_name: 'usp_PRI_PRODUCTO_STOCK_E', parametros}
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
-
 
 
 module.exports = router;

@@ -74,7 +74,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
                                 <td>${u.Nom_Marca}</td>
                                 <td>${u.Flag_Activo?"Si":"No"}</td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoProductoServ(_escritura, variables, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoProductoServ(_escritura, variables, u.Id_Producto)}"><i class="fa fa-edit"></i></button>` : yo``}
                                     ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>console.log('Eliminar producto')}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
