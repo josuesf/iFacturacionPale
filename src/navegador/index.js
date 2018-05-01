@@ -20,7 +20,8 @@ import { ListarConceptos } from '../sis_admin/mod_logistica/conceptos/listar'
 import { ListarProductosServ } from '../sis_admin/mod_inicio/productos_serv/listar'
 //Views Inicio
 import { ListarClientes } from '../sis_admin/mod_inicio/clientes_prov/listar'
-
+//View Contabilidad
+import {ListarCuentasBancarias} from '../sis_admin/mod_contabilidad/cuentas_bancarias/listar'
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Mantenimientos</li>
@@ -44,7 +45,7 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
+            <li class=""><a href="#" onclick=${() => ListarCuentasBancarias(true)}><i class="fa fa-circle-o"></i> Cuentas Bancarias</a></li>
         </ul>
     </li>
     <li class="treeview">

@@ -59,6 +59,7 @@ var almacenes_api = require('./routes/api-almacenes')
 var conceptos_api = require('./routes/api-conceptos')
 var productos_serv_api = require('./routes/api-productos_serv')
 var clientes_api = require('./routes/api-clientes')
+var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
 app.use('/usuarios_api', usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
@@ -72,6 +73,7 @@ app.use('/almacenes_api', almacenes_api);
 app.use('/conceptos_api', conceptos_api);
 app.use('/productos_serv_api', productos_serv_api);
 app.use('/clientes_api', clientes_api);
+app.use('/cuentas_bancarias_api', cuentas_bancarias_api);
 
 
 //Listen Server
