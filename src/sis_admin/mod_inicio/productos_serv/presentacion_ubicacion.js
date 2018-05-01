@@ -46,7 +46,7 @@ function Ver(variables, _escritura, producto){
                                     <td>${u.Nom_UnidadMedidaMin}</td>
                                     <td>${u.Cantidad_Min}</td>
                                     <td>
-                                        ${_escritura ? yo`<button class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${()=>AgregarPresentacion(variables, _escritura, producto, u)}"></i></button>` : yo``}
+                                        ${_escritura ? yo`<button class="btn btn-xs btn-success" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${()=>AgregarPresentacion(variables, _escritura, producto, u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                         ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-presentacion-ubicacion" onclick="${()=>EliminarPresentacionUbicacion(variables, _escritura, producto, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                         
                                     </td>

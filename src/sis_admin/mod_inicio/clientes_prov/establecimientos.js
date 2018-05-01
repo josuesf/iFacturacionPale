@@ -49,7 +49,7 @@ function Ver(_escritura,establecimientos,Id_ClienteProveedor){
                 </div>
             </div>
             <div class="box-header">
-                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo">
+                <a class="btn btn-info pull-right" data-toggle="modal" onclick="${() => AbrirEstablecimiento(_escritura, Id_ClienteProveedor)}" data-target="#modal-nuevo">
                 <i class="fa fa-plus"></i> Agregar Establecimiento</a>
             </div>
             <div class="col-md-12">
@@ -66,7 +66,19 @@ function Ver(_escritura,establecimientos,Id_ClienteProveedor){
                         </tr>
                     </thead>
                     <tbody>
-
+                        ${establecimientos.map(u => yo`
+                        <tr>
+                            <td>${u.Cod_Establecimientos}</td>
+                            <td>${u.Des_Establecimiento}</td>
+                            <td>${u.Nom_TipoEstablecimiento}</td>
+                            <td>${u.Direccion}</td>
+                            <td>${u.Telefono}</td>
+                            <td>${u.Obs_Establecimiento}</td>
+                            <td>
+                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => AbrirEstablecimiento(_escritura, Id_ClienteProveedor, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                            </td>
+                        </tr>`)}
                     </tbody>
                 </table>
             </div>
@@ -75,9 +87,167 @@ function Ver(_escritura,establecimientos,Id_ClienteProveedor){
     var main = document.getElementById('tab_current');
     empty(main).appendChild(el);
 }
+function CargarFormulario(_escritura, tipos_establecimientos, Id_ClienteProveedor, e) {
+    const el = yo`
+    <div class="box-body" id="form_modal">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Tipo Establecimiento</label>
+                    <select class="form-control" id="E_Cod_TipoEstablecimiento"> 
+                        ${tipos_establecimientos.map(u => yo`<option 
+                            value=${u.Cod_TipoEstablecimiento} 
+                            ${(e) ? (e.Cod_TipoEstablecimiento == u.Cod_TipoEstablecimiento ? 'selected' : '') : ''}>
+                            ${u.Nom_TipoEstablecimiento}</option>`)}                                        
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Codigo Establecimiento</label>
+                    <input style="text-transform:uppercase;" class="form-control" id="E_Cod_Establecimientos" value="${e ? e.Cod_Establecimientos : ''}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Descripcion Establecimiento</label>
+                    <input style="text-transform:uppercase;" class="form-control" id="E_Des_Establecimiento" value="${e ? e.Des_Establecimiento : ''}">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Direccion</label>
+                    <input style="text-transform:uppercase;" class="form-control" id="E_Direccion" value="${e ? e.Direccion : ''}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Telefono</label>
+                    <input class="form-control" id="E_Telefono" value="${e ? e.Telefono : ''}">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="">Observaciones</label>
+                    <textarea id="E_Obs_Establecimiento" class="form-control">${e ? e.Obs_Establecimiento : ''}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn pull-left" data-dismiss="modal">Cancelar</button>
+            <button type="button" onclick=${() => GuardarEstablecimiento(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" data-dismiss="modal">Guardar</button>
+        </div>
+    </div>
+    `
+    var form = document.getElementById('form_modal');
+    empty(form).appendChild(el);
+}
+function AbrirEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) {
 
-function Establecimientos(_escritura,cliente){
-    Ver(_escritura,cliente)
+    H5_loading.show();
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+    }
+    fetch(URL + 'clientes_api/get_tipos_establecimientos', parametros)
+        .then(r => r.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                CargarFormulario(_escritura, res.data.tipos_establecimientos, Id_ClienteProveedor, establecimiento)
+            } else {
+                CargarFormulario(_escritura, [], Id_ClienteProveedor, establecimiento)
+            }
+            H5_loading.hide();
+            $('#modal-abrir').modal()
+        })
+
+}
+function GuardarEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) {
+    H5_loading.show();
+    const Cod_Establecimientos = establecimiento ? establecimiento.Cod_Establecimientos : document.getElementById('E_Cod_Establecimientos').value.toUpperCase()
+    const Des_Establecimiento = document.getElementById('E_Des_Establecimiento').value.toUpperCase()
+    const Cod_TipoEstablecimiento = document.getElementById('E_Cod_TipoEstablecimiento').value
+    const Direccion = document.getElementById('E_Direccion').value.toUpperCase()
+    const Telefono = document.getElementById('E_Telefono').value
+    const Obs_Establecimiento = document.getElementById('E_Obs_Establecimiento').value
+    const Cod_Ubigeo = null
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Id_ClienteProveedor, Cod_Establecimientos,Des_Establecimiento,Cod_TipoEstablecimiento,
+            Direccion,Telefono,Obs_Establecimiento,Cod_Ubigeo
+        })
+    }
+    fetch(URL + 'clientes_api/guardar_establecimiento_cliente', parametros)
+        .then(r => r.json())
+        .then(res => {
+            Establecimientos(_escritura, Id_ClienteProveedor)
+            H5_loading.hide();
+        })
+
+}
+function Eliminar(_escritura, establecimiento) {
+    var btnEliminar = document.getElementById('btnEliminar')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        H5_loading.show();
+        const Id_ClienteProveedor = establecimiento.Id_ClienteProveedor
+        const Cod_Establecimientos = establecimiento.Cod_Establecimientos
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id_ClienteProveedor, Cod_Establecimientos
+            })
+        }
+        fetch(URL + 'clientes_api/eliminar_establecimiento_cliente', parametros)
+            .then(r => r.json())
+            .then(res => {
+                Establecimientos(_escritura, establecimiento.Id_ClienteProveedor)
+                H5_loading.hide();
+            })
+    })
+
+}
+function Establecimientos(_escritura,Id_ClienteProveedor){
+    H5_loading.show();
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_ClienteProveedor
+        })
+    }
+    fetch(URL + 'clientes_api/get_establecimientos_cliente', parametros)
+        .then(r => r.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                Ver(_escritura, res.data.establecimientos, Id_ClienteProveedor)
+            } else {
+                Ver(_escritura, [], Id_ClienteProveedor)
+            }
+            H5_loading.hide();
+        })
 }
 
 export {Establecimientos}

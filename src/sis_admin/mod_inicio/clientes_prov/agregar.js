@@ -63,27 +63,27 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         Contactos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Establecimientos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Establecimientos(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Establecimientos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>PrecioProducto(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>PrecioProducto(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Precio de Productos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Vehiculos(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Vehiculos(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Vehiculos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Licitaciones(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Licitaciones(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Licitaciones</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>ActividadEconomica(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>ActividadEconomica(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Actividad Economica</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Padrones(_escritura,cliente)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Padrones(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Padrones</a>
                                                 </li>
                                             </ul>`
@@ -478,8 +478,8 @@ function Guardar(_escritura, cliente) {
     var Cliente = document.getElementById('Cliente').value.toUpperCase()
     var Ap_Paterno = document.getElementById('Ap_Paterno').value.toUpperCase()
     var Ap_Materno = document.getElementById('Ap_Materno').value.toUpperCase()
-    var Nombres = document.getElementById('Nombres').value
-    var Direccion = document.getElementById('Direccion').value
+    var Nombres = document.getElementById('Nombres').value.toUpperCase()
+    var Direccion = document.getElementById('Direccion').value.toUpperCase()
     var Cod_EstadoCliente = document.getElementById('Cod_EstadoCliente').value
     var Cod_CondicionCliente = document.getElementById('Cod_CondicionCliente').value
     var Cod_TipoCliente = document.getElementById('Cod_TipoCliente').value

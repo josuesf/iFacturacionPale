@@ -175,7 +175,7 @@ router.post('/get_tiposRelaciones_codTelefonos', function (req, res) {
 
     parametros = []
     var procedimientos = []
-    if (typeof input.Id_ClienteContacto!=undefined) {
+    if (typeof input.Id_ClienteContacto != undefined) {
         procedimientos = [
             { nom_respuesta: 'tipos_relaciones', sp_name: 'USP_VIS_TIPO_RELACION_TT', parametros },
             { nom_respuesta: 'cod_telefonos', sp_name: 'USP_VIS_CODIGO_TELEFONO_TT', parametros },
@@ -228,6 +228,142 @@ router.post('/eliminar_contacto_cliente', function (req, res) {
     ]
     procedimientos = [
         { nom_respuesta: 'contacto', sp_name: 'usp_PRI_CLIENTE_CONTACTO_E', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+//Establecimiento por cliente
+router.post('/get_establecimientos_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'establecimientos', sp_name: 'USP_PRI_ESTABLECIMIENTOS_TXId_ClienteProveedor', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/get_tipos_establecimientos', function (req, res) {
+    input = req.body
+    parametros = []
+    procedimientos = [
+        { nom_respuesta: 'tipos_establecimientos', sp_name: 'USP_VIS_TIPO_ESTABLECIMIENTOS_TT', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/guardar_establecimiento_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Establecimientos', valor_parametro: input.Cod_Establecimientos },
+        { nom_parametro: 'Des_Establecimiento', valor_parametro: input.Des_Establecimiento },
+        { nom_parametro: 'Cod_TipoEstablecimiento', valor_parametro: input.Cod_TipoEstablecimiento },
+        { nom_parametro: 'Direccion', valor_parametro: input.Direccion },
+        { nom_parametro: 'Telefono', valor_parametro: input.Telefono },
+        { nom_parametro: 'Obs_Establecimiento', valor_parametro: input.Obs_Establecimiento },
+        { nom_parametro: 'Cod_Ubigeo', valor_parametro: input.Cod_Ubigeo },
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
+    ]
+    procedimientos = [
+        { nom_respuesta: 'establecimiento', sp_name: 'USP_PRI_ESTABLECIMIENTOS_G', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/eliminar_establecimiento_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Establecimientos', valor_parametro: input.Cod_Establecimientos }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'establecimiento', sp_name: 'usp_PRI_ESTABLECIMIENTOS_E', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+//ProductosxCliente falta informacion
+//Vehiculos por cliente
+router.post('/get_vehiculos_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'vehiculos', sp_name: 'USP_PRI_CLIENTE_VEHICULOS_TXId_ClienteProveedor', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/guardar_vehiculo_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Placa', valor_parametro: input.Cod_Placa },
+        { nom_parametro: 'Color', valor_parametro: input.Color },
+        { nom_parametro: 'Marca', valor_parametro: input.Marca },
+        { nom_parametro: 'Modelo', valor_parametro: input.Modelo },
+        { nom_parametro: 'Propiestarios', valor_parametro: input.Propiestarios },
+        { nom_parametro: 'Sede', valor_parametro: input.Sede },
+        { nom_parametro: 'Placa_Vigente', valor_parametro: input.Placa_Vigente },
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
+    ]
+    procedimientos = [
+        { nom_respuesta: 'vehiculo', sp_name: 'USP_PRI_CLIENTE_VEHICULOS_G', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/eliminar_vehiculo_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Placa', valor_parametro: input.Cod_Placa }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'vehiculo', sp_name: 'usp_PRI_CLIENTE_VEHICULOS_E', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+// Padrones X Cliente
+router.post('/get_padrones_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'padrones', sp_name: 'USP_PRI_PADRONES_TxId_ClienteProveedor', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/get_tipos_padrones', function (req, res) {
+    input = req.body
+    parametros = []
+    procedimientos = [
+        { nom_respuesta: 'tipos_padrones', sp_name: 'USP_VIS_TIPO_PADRON_TT', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/guardar_padron_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Padron', valor_parametro: input.Cod_Padron },
+        { nom_parametro: 'Des_Padron', valor_parametro: input.Des_Padron },
+        { nom_parametro: 'Cod_TipoPadron', valor_parametro: input.Cod_TipoPadron },
+        { nom_parametro: 'Fecha_Inicio', valor_parametro: input.Fecha_Inicio },
+        { nom_parametro: 'Fecha_Fin', valor_parametro: input.Fecha_Fin },
+        { nom_parametro: 'Nro_Resolucion', valor_parametro: input.Nro_Resolucion },
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
+    ]
+    procedimientos = [
+        { nom_respuesta: 'padron', sp_name: 'USP_PRI_PADRONES_G', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+router.post('/eliminar_padron_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Padron', valor_parametro: input.Cod_Padron },
+    ]
+    procedimientos = [
+        { nom_respuesta: 'padron', sp_name: 'USP_PRI_PADRONES_E', parametros },
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
