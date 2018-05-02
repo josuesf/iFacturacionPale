@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
-import {ListarUsuarios} from './listar';
-import {URL} from '../../../constantes_entorno/constantes'
+import { ListarUsuarios } from './listar';
+import { URL } from '../../../constantes_entorno/constantes'
 var preguntas_seguridad = [
     '¿Cómo se llamaba tu mejor amigo de la infancia?',
     '¿Cómo se llamaba tu primer profesor o tu primera profesora?',
@@ -13,7 +13,7 @@ var preguntas_seguridad = [
 ]
 
 
-module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
+function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
 
     var el = yo`
     <div>
@@ -27,15 +27,15 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li><a  onclick=${()=>ListarUsuarios(_escritura)} href="#">
+                <li><a  onclick=${() => ListarUsuarios(_escritura)} href="#">
                 Usuarios</a></li>
-                <li class="active">${usuario?'Editar':'Nuevo'}</li>
+                <li class="active">${usuario ? 'Editar' : 'Nuevo'}</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <a onclick=${()=>ListarUsuarios(_escritura)}
+                    <a onclick=${() => ListarUsuarios(_escritura)}
                     class="btn btn-xs btn-warning">
                         <i class="fa fa-arrow-left"></i> Atras</a>
                     
@@ -52,46 +52,48 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
-                                    ${usuario? yo``:yo`<div class="col-sm-6">
+                                    ${usuario ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">Codigo Usuario</label>
+                                        <label for="exampleInputEmail1">Codigo Usuario *</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Usuarios" placeholder="Ingrese codigo usuario" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Nombres y Apellidos</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Nick" placeholder="Ingrese Nombres" value="${usuario?usuario.Nick:''}">
+                                            <label for="exampleInputEmail1">Nombres y Apellidos *</label>
+                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Nick" placeholder="Ingrese Nombres" value="${usuario ? usuario.Nick : ''}">
                                         </div>
                                     </div>
                                 </div>
+                                ${!usuario ? yo`
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Elegir Contrasena *</label>
+                                                <input type="password" class="form-control" id="Contrasena" placeholder="Ingrese Contrasena">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Repetir Contrasena *</label>
+                                                <input type="password" class="form-control" id="Contrasena2" placeholder="Repita Contrasena">
+                                            </div>
+                                        </div>
+                                    </div>`:yo``}
+                                
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Elegir Contrasena</label>
-                                            <input type="password" class="form-control" id="Contrasena" placeholder="Ingrese Contrasena">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Repetir Contrasena</label>
-                                            <input type="password" class="form-control" id="Contrasena2" placeholder="Repita Contrasena">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Pregunta de Seguridad</label>
+                                            <label for="exampleInputEmail1">Pregunta de Seguridad *</label>
                                             <select id="Pregunta" class="form-control">
-                                                ${preguntas_seguridad.map(e=>yo`<option style="text-transform:uppercase" value="${e}" ${usuario?usuario.Pregunta == e?'selected':'':''}>${e}</option>`)}
+                                                ${preguntas_seguridad.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${usuario ? usuario.Pregunta == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="exampleInputEmail1">Respuesta</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Respuesta" placeholder="Respuesta" value="${usuario?usuario.Respuesta:''}">
+                                            <label for="exampleInputEmail1">Respuesta *</label>
+                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Respuesta" placeholder="Respuesta" value="${usuario ? usuario.Respuesta : ''}">
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +102,7 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Estado</label>
                                             <select id="Cod_Estado" class="form-control">
-                                                ${_estados.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Estado}" ${usuario?usuario.Cod_Estado == e.Cod_Estado?'selected':'':''}>${e.Nom_Estado}</option>`)}
+                                                ${_estados.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Estado}" ${usuario ? usuario.Cod_Estado == e.Cod_Estado ? 'selected' : '' : ''}>${e.Nom_Estado}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -108,13 +110,26 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Perfil</label>
                                             <select id="Cod_Perfil" class="form-control">
-                                                ${_perfiles.map(e=>yo`
-                                                <option style="text-transform:uppercase" value="${e.Cod_Perfil}" ${usuario? usuario.Cod_Perfil == e.Cod_Perfil?'selected':'':''}>${e.Des_Perfil}</option>`)}
+                                                ${_perfiles.map(e => yo`
+                                                <option style="text-transform:uppercase" value="${e.Cod_Perfil}" ${usuario ? usuario.Cod_Perfil == e.Cod_Perfil ? 'selected' : '' : ''}>${e.Des_Perfil}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-                                    
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="">Cajas</label>
+                                            ${cajas.map(c=>yo`
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="${c.Cod_Caja}" checked="${c.Relacion}" > ${c.Des_Caja}
+                                                    </label>
+                                                </div>
+                                            `)}
+                                        </div>
+                                    </div>
+                                </div>        
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -124,13 +139,14 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
                                     </div>
                                 
                                 </div>
+                                
                             </div>
                             <!-- /.box-body -->
                 
                             
                         </form>
                         <div class="box-footer">
-                                <button onclick="${() => Guardar(_escritura, usuario)}" class="btn btn-primary">Guardar</button>
+                                <button onclick="${() => Guardar(_escritura,cajas, usuario)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>
                 </div>
@@ -141,12 +157,15 @@ module.exports = function NuevoUsuario(_escritura, _estados, _perfiles, usuario)
     empty(main).appendChild(el);
 }
 
-function Guardar(_escritura, usuario){
+function Guardar(_escritura,Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
     H5_loading.show();
-    var Cod_Usuarios = usuario?usuario.Cod_Usuarios:document.getElementById('Cod_Usuarios').value.toUpperCase()
+    for(var j = 0;j<Cajas.length;j++){
+        Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
+    }
+    var Cod_Usuarios = usuario ? usuario.Cod_Usuarios : document.getElementById('Cod_Usuarios').value.toUpperCase()
     var Nick = document.getElementById('Nick').value.toUpperCase()
-    var Contrasena = document.getElementById('Contrasena').value
+    var Contrasena = usuario ? usuario.Contrasena:document.getElementById('Contrasena').value
     var Pregunta = document.getElementById('Pregunta').value.toUpperCase()
     var Respuesta = document.getElementById('Respuesta').value.toUpperCase()
     var Cod_Estado = document.getElementById('Cod_Estado').value.toUpperCase()
@@ -168,19 +187,48 @@ function Guardar(_escritura, usuario){
             Respuesta,
             Cod_Estado,
             Cod_Perfil,
-            Cod_Usuario
+            Cod_Usuario,
+            Cajas
         })
     }
-    fetch(URL+'/usuarios_api/guardar_usuario', parametros)
+    fetch(URL + '/usuarios_api/guardar_usuario', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
                 ListarUsuarios(_escritura)
-                
+
             }
-            else{
+            else {
                 console.log('Error')
             }
             H5_loading.hide()
         })
 }
+
+function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Usuarios: usuario?usuario.Cod_Usuarios:'',
+        })
+    }
+    fetch(URL + '/usuarios_api/get_cajas_usuario', parametros)
+        .then(req => req.json())
+        .then(res => {
+            var cajas = []
+            if (res.respuesta == 'ok') {
+                cajas = res.data.cajas
+            }
+            Ver(_escritura, _estados, _perfiles,cajas, usuario)
+            H5_loading.hide()
+        })
+
+
+}
+
+export { NuevoUsuario }

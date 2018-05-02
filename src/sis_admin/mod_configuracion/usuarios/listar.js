@@ -1,6 +1,6 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-var NuevoUsuario = require('./agregar.js')
+import {NuevoUsuario} from './agregar.js'
 import {URL} from '../../../constantes_entorno/constantes'
 
 function Controles(escritura) {

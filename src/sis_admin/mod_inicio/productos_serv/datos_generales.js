@@ -59,7 +59,7 @@ function Ver(_escritura, variables, producto){
                         ${producto? yo``:yo`
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Cod_Producto">Codigo de producto</label>
+                                <label for="Cod_Producto">Codigo de producto *</label>
                                 <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Producto" placeholder="Codigo producto">
                             </div>
                         </div>`}
@@ -83,13 +83,13 @@ function Ver(_escritura, variables, producto){
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Nom_Producto">Producto</label>
+                                <label for="Nom_Producto">Producto *</label>
                                 <input type="text" style="text-transform:uppercase" class="form-control" id="Nom_Producto" placeholder="Nombre producto" value="${producto? producto.Nom_Producto:''}">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Des_LargaProducto">SUNAT</label>
+                                <label for="Des_LargaProducto">SUNAT *</label>
                                 <input type="text" style="text-transform:uppercase" class="form-control" id="Des_LargaProducto" placeholder="Codigo producto" value="${producto? producto.Des_LargaProducto:''}">
                             </div>
                         </div>
@@ -97,7 +97,7 @@ function Ver(_escritura, variables, producto){
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Des_CortaProducto">Interno</label>
+                                <label for="Des_CortaProducto">Interno *</label>
                                 <input type="text" style="text-transform:uppercase" class="form-control" id="Des_CortaProducto" placeholder="Codigo producto" value="${producto? producto.Des_CortaProducto:''}">
                             </div>
                         </div>
@@ -115,7 +115,7 @@ function Ver(_escritura, variables, producto){
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Cod_TipoProducto">Tipo</label>
+                                <label for="Cod_TipoProducto">Tipo *</label>
                                 <select id="Cod_TipoProducto" class="form-control">
                                     ${variables.tipo_producto.map(e => yo`
                                     <option style="text-transform:uppercase" value="${e.Cod_TipoProducto}" ${producto ? producto.Cod_TipoProducto==e .Cod_TipoProducto
@@ -125,7 +125,7 @@ function Ver(_escritura, variables, producto){
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Cod_Marca">Marca</label>
+                                <label for="Cod_Marca">Marca *</label>
                                 <select id="Cod_Marca" class="form-control">
                                     ${variables.marca.map(e => yo`
                                     <option style="text-transform:uppercase" value="${e.Cod_Marca}" ${producto ? producto.Cod_Marca==e .Cod_Marca ?
@@ -137,7 +137,7 @@ function Ver(_escritura, variables, producto){
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Cod_Categoria">Categoria</label>
+                                <label for="Cod_Categoria">Categoria *</label>
                                 <select id="Cod_Categoria" class="form-control">
                                     ${variables.categoria_arbol.map(e => yo`
                                     <option style="text-transform:uppercase" value="${e.Cod_Categoria}" ${producto ? producto.Cod_Categoria==e .Cod_Categoria

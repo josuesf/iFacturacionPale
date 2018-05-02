@@ -4,13 +4,13 @@ var yo = require('yo-yo');
 import { ListarClientes } from './listar';
 import { URL } from '../../../constantes_entorno/constantes'
 import { CuentasBancarias } from './cuentas_bancarias'
-import {Contactos} from './contactos'
-import {Establecimientos} from './establecimientos'
-import {PrecioProducto} from './precio_productos'
-import {Vehiculos} from './vehiculos'
-import {Licitaciones} from './licitaciones'
-import {ActividadEconomica} from './actividad_eco'
-import {Padrones} from './padrones'
+import { Contactos } from './contactos'
+import { Establecimientos } from './establecimientos'
+import { PrecioProducto } from './precio_productos'
+import { Vehiculos } from './vehiculos'
+import { Licitaciones } from './licitaciones'
+import { ActividadEconomica } from './actividad_eco'
+import { Padrones } from './padrones'
 
 function NuevoCliente(_escritura, mas_variables, cliente) {
 
@@ -55,39 +55,39 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         <i class="fa fa-file"></i> Datos Generales</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>CuentasBancarias(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => CuentasBancarias(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Cuentas Bancarias</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Contactos(_escritura,cliente.Id_ClienteProveedor,mas_variables.documentos)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Contactos(_escritura, cliente.Id_ClienteProveedor, mas_variables.documentos)}" aria-expanded="true">
                                                         Contactos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Establecimientos(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Establecimientos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Establecimientos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>PrecioProducto(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => PrecioProducto(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Precio de Productos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Vehiculos(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Vehiculos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Vehiculos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Licitaciones(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Licitaciones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Licitaciones</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>ActividadEconomica(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => ActividadEconomica(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Actividad Economica</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${()=>Padrones(_escritura,cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Padrones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Padrones</a>
                                                 </li>
                                             </ul>`
-                                            :yo`
+            : yo`
                                             <ul class="nav nav-tabs">
                                                 <li class="active">
                                                     <a href="#tab_1" data-toggle="tab" aria-expanded="true">
@@ -110,7 +110,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                             <label for="Cod_TipoDocumento">Tipo de documento *</label>
                                                             <select id="Cod_TipoDocumento" onchange="${() => CambioTipoDoc()}" class="form-control">
                                                                 ${mas_variables.documentos.map(e => yo`
-                                                                <option value="${e.Cod_TipoDoc}" ${cliente ? cliente.Cod_TipoDocumento == e.Cod_TipoDoc ?'selected' : '' : ''}>${e.Nom_TipoDoc}</option>`)}
+                                                                <option value="${e.Cod_TipoDoc}" ${cliente ? cliente.Cod_TipoDocumento == e.Cod_TipoDoc ? 'selected' : '' : ''}>${e.Nom_TipoDoc}</option>`)}
                                                             </select>
                                                         </div>
                                                     </div>
@@ -121,7 +121,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row" id="formDNI" style="display:${cliente?((cliente.Cod_TipoDocumento!='6')?'block':'none'):'block'};">
+                                                <div class="row" id="formDNI" style="display:${cliente ? ((cliente.Cod_TipoDocumento != '6') ? 'block' : 'none') : 'block'};">
                                                     <div class="col-sm-3">
                                                         <div class="form-group">
                                                             <label for="Ap_Paterno">Apellido Paterno *</label>
@@ -141,7 +141,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row" id="formRUC" style="display:${(cliente && cliente.Cod_TipoDocumento=='6')?'block':'none'};">
+                                                <div class="row" id="formRUC" style="display:${(cliente && cliente.Cod_TipoDocumento == '6') ? 'block' : 'none'};">
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label for="Cliente">Razon Social *</label>
@@ -217,8 +217,8 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <label for="Cod_EstadoCliente">Estado del Cliente *</label>
                                                                                         <select id="Cod_EstadoCliente" class="form-control">
                                                                                             ${mas_variables.estados.map(e => yo`
-                                                                                            <option value="${e.Cod_EstadoCliente}" ${cliente ? (cliente.Cod_EstadoCliente)==e .Cod_EstadoCliente ? 'selected' : '' :
-                                                                                                ''}>${e.Nom_EstadoCliente}</option>`)}
+                                                                                            <option value="${e.Cod_EstadoCliente}" ${cliente ? (cliente.Cod_EstadoCliente) == e.Cod_EstadoCliente ? 'selected' : '' :
+                ''}>${e.Nom_EstadoCliente}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -235,8 +235,8 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <label for="Cod_CondicionCliente">Condicion del Cliente *</label>
                                                                                         <select id="Cod_CondicionCliente" class="form-control">
                                                                                             ${mas_variables.condiciones.map(e => yo`
-                                                                                            <option value="${e.Cod_CondicionCliente}" ${cliente ? (cliente.Cod_CondicionCliente)==e .Cod_CondicionCliente ?
-                                                                                                'selected' : '' : ''}>${e.Nom_CondicionCliente}</option>`)}
+                                                                                            <option value="${e.Cod_CondicionCliente}" ${cliente ? (cliente.Cod_CondicionCliente) == e.Cod_CondicionCliente ?
+                'selected' : '' : ''}>${e.Nom_CondicionCliente}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -253,7 +253,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <label for="Cod_Nacionalidad">Nacionalidad</label>
                                                                                         <select id="Cod_Nacionalidad" class="form-control">
                                                                                             ${mas_variables.paises.map(e => yo`
-                                                                                            <option value="${e.Cod_Pais}" ${cliente ? (cliente.Cod_Nacionalidad)==e .Cod_Pais ? 'selected' : '' : ''}>${e.Nom_Pais}</option>`)}
+                                                                                            <option value="${e.Cod_Pais}" ${cliente ? (cliente.Cod_Nacionalidad) == e.Cod_Pais ? 'selected' : '' : ''}>${e.Nom_Pais}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -270,7 +270,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <label for="Cod_Sexo">Sexo</label>
                                                                                         <select id="Cod_Sexo" class="form-control">
                                                                                             ${mas_variables.sexos.map(e => yo`
-                                                                                            <option value="${e.Cod_Sexo}" ${cliente ? (cliente.Cod_Sexo)==e .Cod_Sexo ? 'selected' : '' : ''}>${e.Nom_Sexo}</option>`)}
+                                                                                            <option value="${e.Cod_Sexo}" ${cliente ? (cliente.Cod_Sexo) == e.Cod_Sexo ? 'selected' : '' : ''}>${e.Nom_Sexo}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -285,7 +285,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                 <div class="col-sm-6">
                                                                                     <div class="form-group">
                                                                                         <label for="Fecha_Nacimiento">Fecha de Nacimiento</label>
-                                                                                        <input type="date" class="form-control" id="Fecha_Nacimiento" placeholder='dd/mm/aaaa' value="${cliente ? cliente.Fecha_Nacimiento.split('T')[0 ] : ''}">
+                                                                                        <input type="date" class="form-control" id="Fecha_Nacimiento" placeholder='dd/mm/aaaa' value="${cliente ? cliente.Fecha_Nacimiento.split('T')[0] : ''}">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
@@ -304,8 +304,8 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <select id="Cod_Departamento" class="form-control" onchange="${() => CambioDepartamento()}">
                                                                                             <option value=null>Seleccione Departamento</option>
                                                                                             ${mas_variables.departamentos.map(e => yo`
-                                                                                            <option value="${e.Cod_Departamento}" ${cliente ? (cliente.Cod_Ubigeo[0] + cliente.Cod_Ubigeo[1])==e .Cod_Departamento ?
-                                                                                                'selected' : '' : ''}>${e.Nom_Departamento}</option>`)}
+                                                                                            <option value="${e.Cod_Departamento}" ${cliente ? (cliente.Cod_Ubigeo[0] + cliente.Cod_Ubigeo[1]) == e.Cod_Departamento ?
+                'selected' : '' : ''}>${e.Nom_Departamento}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -332,7 +332,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                         <label for="Cod_FormaPago">Formas de Pago *</label>
                                                                                         <select id="Cod_FormaPago" class="form-control">
                                                                                             ${mas_variables.formas_pago.map(e => yo`
-                                                                                            <option value="${e.Cod_FormaPago}" ${cliente ? cliente.Cod_FormaPago==e .Cod_FormaPago ? 'selected' : '' : ''}>${e.Nom_FormaPago}</option>`)}
+                                                                                            <option value="${e.Cod_FormaPago}" ${cliente ? cliente.Cod_FormaPago == e.Cod_FormaPago ? 'selected' : '' : ''}>${e.Nom_FormaPago}</option>`)}
                                                                                         </select>
                                                                                     </div>
                                                                                 </div>
@@ -351,15 +351,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                             </div>
                                                                         </div>
                                                                         <div class="tab-pane" id="tab_de_3">
-                                                                            <div class="row">
-                                                                                <div class="col-sm-12">
-                                                                                    <div class="form-group">
-                                                                                        <label for="Obs_Cliente">Observaciones</label>
-                                                                                        <textarea id="Obs_Cliente" class="form-control">${cliente ? cliente.Obs_Cliente : ''}</textarea>
-                                                                                    </div>
-                                                                                </div>
-                                                
-                                                                            </div>
+                                                                            ${MostrarXMLDatos(mas_variables.diagramas, cliente)}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -368,7 +360,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                     </div>
                                                 </div>
                                                 <div class="box-footer">
-                                                    <button onclick="${() => Guardar(_escritura, cliente)}" class="btn btn-primary">Guardar</button>
+                                                    <button onclick="${() => Guardar(_escritura,mas_variables.diagramas, cliente)}" class="btn btn-primary">Guardar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -385,13 +377,40 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
     </div>`
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
-    if(cliente){
+    if (cliente) {
         CambioDepartamento(cliente.Cod_Ubigeo)
     }
 }
+function getValueXML(xmlDoc, TAG) {
+    if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
+        return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
+    } else {
+        return ''
+    }
+}
+function MostrarXMLDatos(diagramas, cliente) {
+    var xml = cliente?cliente.Obs_Cliente:''
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(xml, "text/xml");
+    return yo`<div>
+        ${diagramas.map(e => yo`
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">${e.Nom_Elemento}</label>
+                    <input id="${e.Cod_Elemento}"
+                    value=${cliente ?getValueXML(xmlDoc,e.Cod_Elemento): ''}
+                     class="form-control" />
+                </div>
+            </div>
+        </div>`)}
+        </div>`;
+    var main = document.getElementById('tab_de_3');
+    empty(main).appendChild(campos);
+}
 function VerificarDoc() {
     var Nro_Documento = $('#Nro_Documento').val()
-    var Max_Caracteres = $('#Cod_TipoDocumento').val() == '6'?11:8
+    var Max_Caracteres = $('#Cod_TipoDocumento').val() == '6' ? 11 : 8
     if (Nro_Documento.length != Max_Caracteres || isNaN(parseInt(Nro_Documento))) {
         $('#error_text').text('Ingrese un numero correcto de documento')
         $('#form_error').show()
@@ -404,7 +423,7 @@ function CambioTipoDoc() {
     if ($('#Cod_TipoDocumento').val() == '6') {
         $('#formRUC').show()
         $('#formDNI').hide()
-        
+
     } else {
         $('#formRUC').hide()
         $('#formDNI').show()
@@ -412,9 +431,9 @@ function CambioTipoDoc() {
     $('#Nro_Documento').select()
 }
 function CambioDepartamento(Cod_Ubigeo) {
-    var Cod_Provincia=''
-    if(Cod_Ubigeo)
-        Cod_Provincia = Cod_Ubigeo[2]+Cod_Ubigeo[3]
+    var Cod_Provincia = ''
+    if (Cod_Ubigeo)
+        Cod_Provincia = Cod_Ubigeo[2] + Cod_Ubigeo[3]
     $('#Cod_Provincia').html('<option value=null>Seleccione Provincia</option>')
     const Cod_Departamento = $('#Cod_Departamento').val()
     const parametros = {
@@ -434,7 +453,7 @@ function CambioDepartamento(Cod_Ubigeo) {
                 const provincias = res.data.provincias
                 var provincias_items = ''
                 for (var i = 0; i < provincias.length; i++) {
-                    provincias_items += '<option value=' + provincias[i].Cod_Provincia +(provincias[i].Cod_Provincia==Cod_Provincia?' selected':'')+ ' >' + provincias[i].Nom_Provincia + '</option>'
+                    provincias_items += '<option value=' + provincias[i].Cod_Provincia + (provincias[i].Cod_Provincia == Cod_Provincia ? ' selected' : '') + ' >' + provincias[i].Nom_Provincia + '</option>'
                 }
                 $('#Cod_Provincia').append(provincias_items)
                 CambioProvincia(Cod_Ubigeo)
@@ -462,14 +481,14 @@ function CambioProvincia(Cod_Ubigeo) {
                 const distritos = res.data.distritos
                 var distritos_items = ''
                 for (var i = 0; i < distritos.length; i++) {
-                    distritos_items += '<option value=' + distritos[i].Cod_Ubigeo +(distritos[i].Cod_Ubigeo==Cod_Ubigeo?' selected':'')+ '>' + distritos[i].Nom_Distrito + '</option>'
+                    distritos_items += '<option value=' + distritos[i].Cod_Ubigeo + (distritos[i].Cod_Ubigeo == Cod_Ubigeo ? ' selected' : '') + '>' + distritos[i].Nom_Distrito + '</option>'
                 }
                 $('#Cod_Distrito').append(distritos_items)
             }
         })
 }
 
-function Guardar(_escritura, cliente) {
+function Guardar(_escritura,diagramas, cliente) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
     H5_loading.show();
     var Id_ClienteProveedor = cliente ? cliente.Id_ClienteProveedor : '-1'
@@ -497,24 +516,27 @@ function Guardar(_escritura, cliente) {
     var Cod_Ubigeo = document.getElementById('Cod_Distrito').value
     var Cod_FormaPago = document.getElementById('Cod_FormaPago').value
     var Limite_Credito = document.getElementById('Limite_Credito').value
-    var Obs_Cliente = document.getElementById('Obs_Cliente').value
+    // var Obs_Cliente = document.getElementById('Obs_Cliente').value
     var Num_DiaCredito = document.getElementById('Num_DiaCredito').value
-
+    var Obs_Cliente = ''
+    for(var i=0;i<diagramas.length;i++){
+        Obs_Cliente+='<'+diagramas[i].Cod_Elemento+'>'+document.getElementById(diagramas[i].Cod_Elemento).value+'</'+diagramas[i].Cod_Elemento+'>'
+    }
     const parametros = {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        credentials:'same-origin',
+        credentials: 'same-origin',
         body: JSON.stringify({
-            Id_ClienteProveedor,Cod_TipoDocumento,Nro_Documento,Cliente,
-            Ap_Paterno,Ap_Materno,Nombres,Direccion,Cod_EstadoCliente,
-            Cod_CondicionCliente,Cod_TipoCliente,RUC_Natural,Cod_TipoCliente,
-            RUC_Natural,Cod_TipoComprobante,Cod_Nacionalidad,Fecha_Nacimiento,
-            Fecha_Nacimiento,Cod_Sexo,Email1,Email2,Telefono1,Telefono2,
-            Fax,PaginaWeb,Cod_Ubigeo,Cod_FormaPago,
-            Limite_Credito,Obs_Cliente,Num_DiaCredito
+            Id_ClienteProveedor, Cod_TipoDocumento, Nro_Documento, Cliente,
+            Ap_Paterno, Ap_Materno, Nombres, Direccion, Cod_EstadoCliente,
+            Cod_CondicionCliente, Cod_TipoCliente, RUC_Natural, Cod_TipoCliente,
+            RUC_Natural, Cod_TipoComprobante, Cod_Nacionalidad, Fecha_Nacimiento,
+            Fecha_Nacimiento, Cod_Sexo, Email1, Email2, Telefono1, Telefono2,
+            Fax, PaginaWeb, Cod_Ubigeo, Cod_FormaPago,
+            Limite_Credito, Obs_Cliente, Num_DiaCredito
         })
     }
     fetch(URL + '/clientes_api/guardar_cliente', parametros)

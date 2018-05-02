@@ -82,7 +82,6 @@ var el = yo`
 </ul>`;
 
 module.exports = function navegador(ctx, next) {
-    console.log()
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     // next();

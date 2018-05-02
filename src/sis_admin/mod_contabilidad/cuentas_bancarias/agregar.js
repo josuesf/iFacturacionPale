@@ -44,7 +44,7 @@ function Ver(_escritura, variables, cuenta) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Sucursal Responsable</label>
+                                            <label for="">Sucursal Responsable *</label>
                                             <select id="Cod_Sucursal" class="form-control">
                                                 ${variables.sucursales.map(e => yo`<option value="${e.Cod_Sucursal}" ${cuenta? cuenta.Cod_Sucursal == e.Cod_Sucursal ? 'selected' : '' : ''}>${e.Nom_Sucursal}</option>`)}
                                             </select>
@@ -52,7 +52,7 @@ function Ver(_escritura, variables, cuenta) {
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Entidad Financiera</label>
+                                            <label for="">Entidad Financiera *</label>
                                             <select id="Cod_EntidadFinanciera" class="form-control">
                                                 ${variables.entidades.map(e => yo`<option value="${e.Cod_EntidadFinanciera}" ${cuenta? cuenta.Cod_EntidadFinanciera == e.Cod_EntidadFinanciera ? 'selected' : '' : ''}>${e.Nom_EntidadFinanciera}</option>`)}
                                             </select>
@@ -68,7 +68,7 @@ function Ver(_escritura, variables, cuenta) {
                                     </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Moneda</label>
+                                            <label for="">Moneda *</label>
                                             <select id="Cod_Moneda" class="form-control">
                                                 ${variables.monedas.map(e => yo`<option value="${e.Cod_Moneda}" ${cuenta? cuenta.Cod_Moneda == e.Cod_Moneda ? 'selected' : '' : ''}>${e.Nom_Moneda}</option>`)}
                                             </select>
@@ -78,7 +78,7 @@ function Ver(_escritura, variables, cuenta) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Tipo de Cuenta</label>
+                                            <label for="">Tipo de Cuenta *</label>
                                             <select id="Cod_TipoCuentaBancaria" class="form-control">
                                                 ${variables.tipos_cuentas.map(e => yo`<option value="${e.Cod_TipoCuentaBancaria}" ${cuenta? cuenta.Cod_TipoCuentaBancaria == e.Cod_TipoCuentaBancaria ? 'selected' : '' : ''}>${e.Nom_TipoCuentaBancaria}</option>`)}
                                             </select>
@@ -86,7 +86,7 @@ function Ver(_escritura, variables, cuenta) {
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Descripcion de la cuenta</label>
+                                            <label for="">Descripcion de la cuenta *</label>
                                             <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_CuentaBancaria" value="${cuenta ? cuenta.Des_CuentaBancaria : ''}">
                                         </div>
                                     </div>

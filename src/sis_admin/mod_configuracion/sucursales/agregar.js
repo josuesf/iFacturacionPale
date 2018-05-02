@@ -87,7 +87,7 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                                 <div class="row">
                                     ${sucursal? yo``:yo`<div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="Cod_Sucursal">Codigo de Sucursal</label>
+                                        <label for="Cod_Sucursal">Codigo de Sucursal *</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Sucursal" placeholder="Codigo sucursal" >
                                     </div>
                                 </div>`}
@@ -105,13 +105,13 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Nom_Sucursal">Nombre de la Sucursal</label>
+                                            <label for="Nom_Sucursal">Nombre de la Sucursal *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control" id="Nom_Sucursal" placeholder="Nombre de la sucursal" value="${sucursal?sucursal.Nom_Sucursal:''}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Dir_Sucursal">Direccion fiscal de sucursal</label>
+                                            <label for="Dir_Sucursal">Direccion fiscal de sucursal *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control" id="Dir_Sucursal" placeholder="Ejem: Calle..." value="${sucursal?sucursal.Dir_Sucursal:''}">
                                         </div>
                                     </div>

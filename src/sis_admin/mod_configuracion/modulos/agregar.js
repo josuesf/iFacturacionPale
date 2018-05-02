@@ -46,13 +46,13 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
                                 <div class="row">
                                     ${modulo? yo``:yo`<div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="Cod_Modulo">Codigo de Modulo</label>
+                                        <label for="Cod_Modulo">Codigo de Modulo *</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Modulo" placeholder="Ejem: 01.01.001" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Des_Modulo">Descripcion del modulo</label>
+                                            <label for="Des_Modulo">Descripcion del modulo *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control" id="Des_Modulo" placeholder="Ejem: Modulo de Personal" value="${modulo?modulo.Des_Modulo:''}">
                                         </div>
                                     </div>
