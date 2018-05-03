@@ -41,17 +41,22 @@ function Ver(_escritura, turno){
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${turno? yo``:yo`
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_Turno">Codigo de Turno</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Turno" placeholder="Codigo turno" >
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Turno" placeholder="Codigo turno" >
                                         </div>
                                     </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Des_Turno">Concepto</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Des_Turno" placeholder="Concepto" value="${turno?turno.Des_Turno:''}">
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_Turno" placeholder="Concepto" value="${turno?turno.Des_Turno:''}">
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +69,7 @@ function Ver(_escritura, turno){
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type="text" class="form-control pull-right" id="Fecha_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,true,false):''}">
+                                                <input type="text" class="form-control pull-right required" id="Fecha_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,true,false):''}">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -76,7 +81,7 @@ function Ver(_escritura, turno){
                                                 <label>Hora inicio:</label>
 
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control timepicker" id="Hora_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,false,true):''}">
+                                                    <input type="text" class="form-control timepicker required" id="Hora_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,false,true):''}">
 
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
@@ -95,7 +100,7 @@ function Ver(_escritura, turno){
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type="text" class="form-control pull-right" id="Fecha_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,true,false):''}">
+                                                <input type="text" class="form-control pull-right required" id="Fecha_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,true,false):''}">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -106,7 +111,7 @@ function Ver(_escritura, turno){
                                                 <label>Hora finaliza:</label>
 
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control timepicker" id="Hora_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,false,true):''}">
+                                                    <input type="text" class="form-control timepicker required" id="Hora_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,false,true):''}">
 
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
@@ -168,38 +173,40 @@ function toFechaSQL(fecha, hora){
 }
 
 function Guardar(_escritura, turno){
-    var Cod_Turno = turno?turno.Cod_Turno:document.getElementById('Cod_Turno').value.toUpperCase()
-    var Des_Turno = document.getElementById('Des_Turno').value.toUpperCase()
-    var Fecha_Inicio =  toFechaSQL(document.getElementById('Fecha_Inicio').value,document.getElementById('Hora_Inicio').value)
-    var Fecha_Fin = toFechaSQL(document.getElementById('Fecha_Fin').value,document.getElementById('Hora_Fin').value)
-    var Flag_Cerrado = document.getElementById('Flag_Cerrado').checked?'1':'0'
-    var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
-    H5_loading.show();
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Turno,
-            Des_Turno,
-            Fecha_Inicio,
-            Fecha_Fin,
-            Flag_Cerrado,
-            Cod_Usuario
-        })
+    if(ValidacionCampos()){
+        var Cod_Turno = turno?turno.Cod_Turno:document.getElementById('Cod_Turno').value.toUpperCase()
+        var Des_Turno = document.getElementById('Des_Turno').value.toUpperCase()
+        var Fecha_Inicio =  toFechaSQL(document.getElementById('Fecha_Inicio').value,document.getElementById('Hora_Inicio').value)
+        var Fecha_Fin = toFechaSQL(document.getElementById('Fecha_Fin').value,document.getElementById('Hora_Fin').value)
+        var Flag_Cerrado = document.getElementById('Flag_Cerrado').checked?'1':'0'
+        var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
+        H5_loading.show();
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Turno,
+                Des_Turno,
+                Fecha_Inicio,
+                Fecha_Fin,
+                Flag_Cerrado,
+                Cod_Usuario
+            })
+        }
+        fetch(URL+'/turnos_api/guardar_turno', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta == 'ok'){
+                    ListarTurnos(_escritura)
+                }else{
+                    NuevoTurno(_escritura, turno)
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL+'/turnos_api/guardar_turno', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if(res.respuesta == 'ok'){
-                ListarTurnos(_escritura)
-            }else{
-                NuevoTurno(_escritura, turno)
-            }
-            H5_loading.hide()
-        })
 
 }
 

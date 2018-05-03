@@ -52,6 +52,11 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${usuario ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group" id="frm_Cod_Usuarios">
                                         <label for="exampleInputEmail1">Codigo Usuario *</label>
@@ -102,7 +107,8 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Estado</label>
-                                            <select id="Cod_Estado" class="form-control">
+                                            <select id="Cod_Estado" class="form-control required">
+                                                <option style="text-transform:uppercase"></option>
                                                 ${_estados.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Estado}" ${usuario ? usuario.Cod_Estado == e.Cod_Estado ? 'selected' : '' : ''}>${e.Nom_Estado}</option>`)}
                                             </select>
                                         </div>
@@ -110,7 +116,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Perfil</label>
-                                            <select id="Cod_Perfil" class="form-control">
+                                            <select id="Cod_Perfil" class="form-control required">
                                                 ${_perfiles.map(e => yo`
                                                 <option style="text-transform:uppercase" value="${e.Cod_Perfil}" ${usuario ? usuario.Cod_Perfil == e.Cod_Perfil ? 'selected' : '' : ''}>${e.Des_Perfil}</option>`)}
                                             </select>
@@ -157,64 +163,10 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
 }
-function SonCamposValidos(usuario) {
-    const Cod_Usuario = usuario ? usuario.Cod_Usuarios : document.getElementById('Cod_Usuarios').value
-    const Nick = document.getElementById('Nick').value
-    const Contrasena = usuario ? usuario.Contrasena : document.getElementById('Contrasena').value
-    const Contrasena2 = usuario ? usuario.Contrasena : document.getElementById('Contrasena2').value
-    const Pregunta = document.getElementById('Pregunta').value
-    const Respuesta = document.getElementById('Respuesta').value
-
-    if (!usuario) {
-        if (Cod_Usuario.length == 0) {
-            document.getElementById('frm_Cod_Usuarios').classList.add('has-error')
-            document.getElementById('Cod_Usuarios').focus()
-        }
-        else
-            document.getElementById('frm_Cod_Usuarios').classList.remove('has-error')
-
-        if (Contrasena.length == 0 || Contrasena2.length == 0 || Contrasena != Contrasena2) {
-            document.getElementById('frm_Contrasena').classList.add('has-error')
-            document.getElementById('frm_Contrasena2').classList.add('has-error')
-            document.getElementById('Contrasena').focus()
-        } else {
-            document.getElementById('frm_Contrasena').classList.remove('has-error')
-            document.getElementById('frm_Contrasena2').classList.remove('has-error')
-        }
-    }
-
-
-    if (Nick.length == 0) {
-        document.getElementById('frm_Nick').classList.add('has-error')
-        document.getElementById('Nick').focus()
-    }
-    else
-        document.getElementById('frm_Nick').classList.remove('has-error')
-    if (Pregunta.length == 0) {
-        document.getElementById('frm_Pregunta').classList.add('has-error')
-        document.getElementById('Pregunta').focus()
-    }
-    else
-        document.getElementById('frm_Pregunta').classList.remove('has-error')
-    if (Respuesta.length == 0) {
-        document.getElementById('frm_Respuesta').classList.add('has-error')
-        document.getElementById('Respuesta').focus()
-    }
-    else
-        document.getElementById('frm_Respuesta').classList.remove('has-error')
-
-    if (Cod_Usuario.length == 0 || Nick.length == 0 || Contrasena.length == 0 || Contrasena2.length == 0
-        || Pregunta.length == 0 || Respuesta.length == 0 || (Contrasena != Contrasena2)) {
-
-        return false
-    }
-    else
-        return true
-
-}
+  
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    if (SonCamposValidos(usuario)) {
+    if(ValidacionCampos()){
         H5_loading.show();
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
