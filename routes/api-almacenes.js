@@ -38,7 +38,7 @@ router.post('/guardar_almacen', function (req, res) {
         {nom_parametro:'Des_CortaAlmacen',valor_parametro:input.Des_CortaAlmacen},
         {nom_parametro:'Cod_TipoAlmacen',valor_parametro:input.Cod_TipoAlmacen},
         {nom_parametro:'Flag_Principal',valor_parametro:input.Flag_Principal},
-        {nom_parametro:'Cod_Usuario',valor_parametro:input.Cod_Usuario},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
     ]
     procedimientos =[
         {nom_respuesta:'almacen',sp_name:'USP_ALM_ALMACEN_G',parametros}

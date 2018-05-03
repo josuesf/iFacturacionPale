@@ -25,7 +25,7 @@ router.post('/guardar_modulo', function (req, res) {
         {nom_parametro:'Cod_Modulo',valor_parametro:input.Cod_Modulo},
         {nom_parametro:'Des_Modulo',valor_parametro:input.Des_Modulo},
         {nom_parametro:'Padre_Modulo',valor_parametro:input.Padre_Modulo},
-        {nom_parametro:'Cod_Usuario',valor_parametro:input.Cod_Usuario}
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
     ]
     procedimientos =[
         {nom_respuesta:'modulo',sp_name:'USP_PRI_MODULO_G',parametros},

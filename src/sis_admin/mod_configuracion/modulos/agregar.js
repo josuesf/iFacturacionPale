@@ -104,6 +104,7 @@ function Guardar(_escritura, modulo) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Modulo,
                 Des_Modulo,

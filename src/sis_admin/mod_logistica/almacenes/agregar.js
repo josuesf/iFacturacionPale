@@ -353,6 +353,7 @@ function GuardarAlmacen(_escritura, almacen) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Almacen,
                 Des_Almacen,

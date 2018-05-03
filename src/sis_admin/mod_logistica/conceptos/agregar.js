@@ -136,6 +136,7 @@ function Guardar(_escritura, concepto) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Id_Concepto,
                 Des_Concepto,
