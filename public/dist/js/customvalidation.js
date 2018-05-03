@@ -7,6 +7,8 @@ function ValidacionCampos(){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;
                 $(this).css("border-color","red");
+            }else{
+                $(this).css("border-color","");
             }
         }
     });

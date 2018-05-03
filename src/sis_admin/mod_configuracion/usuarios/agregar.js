@@ -55,13 +55,13 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     ${usuario ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group" id="frm_Cod_Usuarios">
                                         <label for="exampleInputEmail1">Codigo Usuario *</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Usuarios" placeholder="Ingrese codigo usuario" >
+                                        <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Usuarios" placeholder="Ingrese codigo usuario" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group" id="frm_Nick">
                                             <label for="exampleInputEmail1">Nombres y Apellidos *</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Nick" placeholder="Ingrese Nombres" value="${usuario ? usuario.Nick : ''}">
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Nick" placeholder="Ingrese Nombres" value="${usuario ? usuario.Nick : ''}">
                                         </div>
                                     </div>
                                 </div>
@@ -70,13 +70,13 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                         <div class="col-sm-6">
                                             <div class="form-group" id="frm_Contrasena">
                                                 <label for="exampleInputEmail1">Elegir Contrasena *</label>
-                                                <input type="password" class="form-control" id="Contrasena" placeholder="Ingrese Contrasena">
+                                                <input type="password" class="form-control required" id="Contrasena" placeholder="Ingrese Contrasena">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group" id="frm_Contrasena2">
                                                 <label for="exampleInputEmail1">Repetir Contrasena *</label>
-                                                <input type="password" class="form-control" id="Contrasena2" placeholder="Repita Contrasena">
+                                                <input type="password" class="form-control required" id="Contrasena2" placeholder="Repita Contrasena">
                                             </div>
                                         </div>
                                     </div>`: yo``}
@@ -85,7 +85,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group" id="frm_Pregunta">
                                             <label for="exampleInputEmail1">Pregunta de Seguridad *</label>
-                                            <select id="Pregunta" class="form-control">
+                                            <select id="Pregunta" class="form-control required">
                                                 <option value=""></option>
                                                 ${preguntas_seguridad.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${usuario ? usuario.Pregunta.toUpperCase() == e.toUpperCase() ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
@@ -94,7 +94,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group" id="frm_Respuesta">
                                             <label for="exampleInputEmail1">Respuesta *</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Respuesta" placeholder="Respuesta" value="${usuario ? usuario.Respuesta : ''}">
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Respuesta" placeholder="Respuesta" value="${usuario ? usuario.Respuesta : ''}">
                                         </div>
                                     </div>
                                 </div>
@@ -214,7 +214,7 @@ function SonCamposValidos(usuario) {
 }
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    if (SonCamposValidos(usuario)) {
+    if (ValidacionCampos()) {
         H5_loading.show();
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked

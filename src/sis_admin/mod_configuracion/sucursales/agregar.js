@@ -176,7 +176,7 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
 } 
-
+ 
 function BusquedaDeUsuario() {
     var txtBuscarUsuario = document.getElementById("txtBuscarUsuario").value
     if (txtBuscarUsuario.length >= 4) {
