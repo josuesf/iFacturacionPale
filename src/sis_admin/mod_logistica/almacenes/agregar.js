@@ -310,6 +310,7 @@ function GuardarCajaAlmacen(_escritura, tipo_almacenes, almacen) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
             Cod_Almacen,
             Cod_Caja,

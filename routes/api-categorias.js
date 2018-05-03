@@ -36,7 +36,7 @@ router.post('/guardar_categoria', function (req, res){
         {nom_parametro: 'Des_Categoria', valor_parametro: input.Des_Categoria},
         {nom_parametro: 'Foto', tipo_parametro: sql.Binary, valor_parametro: input.Foto},
         {nom_parametro: 'Cod_CategoriaPadre', valor_parametro: input.Cod_CategoriaPadre},
-        {nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
     ]
     procedimientos = [
         {nom_respuesta: 'categoria', sp_name: 'USP_PRI_CATEGORIA_G', parametros}

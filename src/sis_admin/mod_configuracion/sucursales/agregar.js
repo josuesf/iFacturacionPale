@@ -260,6 +260,7 @@ function Guardar(_escritura, sucursal) {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Sucursal,
                 Nom_Sucursal,

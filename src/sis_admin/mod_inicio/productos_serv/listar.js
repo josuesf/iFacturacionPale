@@ -75,7 +75,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
                                 <td>${u.Flag_Activo?"Si":"No"}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoProductoServ(_escritura, variables, u.Id_Producto)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>console.log('Eliminar producto')}"><i class="fa fa-trash"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarProductoServ(_escritura, u.Id_Producto)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -114,30 +114,29 @@ function Ver(variables, paginas, pagina_actual, _escritura){
 //     return flagfecha?fechastr+(flaghora?' '+horastr:''):flaghora?horastr:''
 // }
 
-// function Eliminar(_escritura, categoria){
-//     var btnEliminar = document.getElementById('btnEliminar')
-//     btnEliminar.addEventListener('click', function del(ev){
-//         var Cod_Categoria = categoria.Cod_Categoria
-//         H5_loading.show();
-//         const parametros = {
-//             method: 'POST',
-//             headers: {
-//                 Accept: 'application/json',
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify({
-//                 Cod_Categoria
-//             })
-//         }
-//         fetch(URL+'/categorias_api/eliminar_categoria', parametros)
-//             .then(req => req.json())
-//             .then(res => {
-//                 ListarProductosServ(_escritura,0)
-//                 this.removeEventListener('click', del)
-//                 H5_loading.hide()
-//             })
-//     })
-// }
+ function EliminarProductoServ(_escritura, Id_Producto){
+     var btnEliminar = document.getElementById('btnEliminar')
+     btnEliminar.addEventListener('click', function del(ev){ 
+         H5_loading.show();
+         const parametros = {
+             method: 'POST',
+             headers: {
+                 Accept: 'application/json',
+                 'Content-Type': 'application/json',
+             },
+             body: JSON.stringify({
+                Id_Producto
+             })
+         }
+         fetch(URL+'/productos_serv_api/eliminar_producto', parametros)
+             .then(req => req.json())
+             .then(res => {
+                 ListarProductosServ(_escritura,0)
+                 this.removeEventListener('click', del)
+                 H5_loading.hide()
+             })
+     })
+}
 
 function ListarProductosServ(escritura,NumeroPagina) {
     H5_loading.show();

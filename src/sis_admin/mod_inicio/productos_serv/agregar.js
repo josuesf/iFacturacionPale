@@ -11,7 +11,6 @@ function Ver(_escritura, variables, producto){
     var el = yo`
     <div>
         <div class="modal fade" id="modal-nuevo-general" style="display: none;">
-                
         </div>
         <div class="modal modal-danger fade" id="modal-danger-presentacion-ubicacion" style="display: none;">
             <div class="modal-dialog">

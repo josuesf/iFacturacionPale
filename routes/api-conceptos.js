@@ -27,7 +27,7 @@ router.post('/guardar_concepto', function (req, res) {
         {nom_parametro:'Cod_ClaseConcepto',valor_parametro:input.Cod_ClaseConcepto},
         {nom_parametro:'Id_ConceptoPadre',valor_parametro:input.Id_ConceptoPadre},
         {nom_parametro:'Flag_Activo',valor_parametro:input.Flag_Activo},
-        {nom_parametro:'Cod_Usuario',valor_parametro:input.Cod_Usuario}
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
     ]
     procedimientos =[
         {nom_respuesta:'concepto',sp_name:'USP_CAJ_CONCEPTO_G',parametros},

@@ -31,7 +31,7 @@ router.post('/guardar_usuario', function (req, res) {
         { nom_parametro: 'Respuesta', valor_parametro: input.Respuesta },
         { nom_parametro: 'Cod_Estado', valor_parametro: input.Cod_Estado },
         { nom_parametro: 'Cod_Perfil', valor_parametro: input.Cod_Perfil },
-        { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario }
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username }
     ]
     procedimientos = [
         { nom_respuesta: 'usuario', sp_name: 'USP_PRI_USUARIO_G', parametros },

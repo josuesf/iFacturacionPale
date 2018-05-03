@@ -14,7 +14,7 @@ router.post('/guardar_caja', function (req, res){
         {nom_parametro:'Cod_UsuarioCajero', valor_parametro: input.Cod_UsuarioCajero},
         {nom_parametro:'Cod_CuentaContable', valor_parametro: input.Cod_CuentaContable},
         {nom_parametro:'Flag_Activo', valor_parametro: input.Flag_Activo},
-        {nom_parametro:'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+        {nom_parametro:'Cod_Usuario', valor_parametro: req.session.username}
     ]
     procedimientos = [
         {nom_respuesta: 'caja', sp_name: 'USP_CAJ_CAJAS_G', parametros}
@@ -98,7 +98,7 @@ router.post('/guardar_documento', function (req, res){
         {nom_parametro:'Nro_SerieTicketera', valor_parametro: input.Nro_SerieTicketera},
         {nom_parametro:'Nom_ArchivoPublicar', valor_parametro: input.Nom_ArchivoPublicar},
         {nom_parametro:'Limite', valor_parametro: input.Limite},
-        {nom_parametro:'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+        {nom_parametro:'Cod_Usuario', valor_parametro: req.session.username}
     ]
     procedimientos = [
         {nom_respuesta: 'documento', sp_name: 'USP_CAJ_CAJAS_DOC_G', parametros}

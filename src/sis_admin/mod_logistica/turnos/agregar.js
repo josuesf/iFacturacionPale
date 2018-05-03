@@ -187,6 +187,7 @@ function Guardar(_escritura, turno){
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Turno,
                 Des_Turno,

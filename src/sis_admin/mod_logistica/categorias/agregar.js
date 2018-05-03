@@ -109,6 +109,7 @@ function Guardar(_escritura, categoriasPadre, categoria){
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Categoria,
                 Des_Categoria,
