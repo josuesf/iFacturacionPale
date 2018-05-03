@@ -42,19 +42,26 @@ function Ver(_escritura, variables, cuenta) {
                         <div role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Sucursal Responsable *</label>
-                                            <select id="Cod_Sucursal" class="form-control">
-                                                ${variables.sucursales.map(e => yo`<option value="${e.Cod_Sucursal}" ${cuenta? cuenta.Cod_Sucursal == e.Cod_Sucursal ? 'selected' : '' : ''}>${e.Nom_Sucursal}</option>`)}
+                                            <select id="Cod_Sucursal" class="form-control required">
+                                                <option value=""></option>
+                                                ${variables.sucursales.map(e => yo`<option value="${e.Cod_Sucursal}" ${cuenta ? cuenta.Cod_Sucursal == e.Cod_Sucursal ? 'selected' : '' : ''}>${e.Nom_Sucursal}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Entidad Financiera *</label>
-                                            <select id="Cod_EntidadFinanciera" class="form-control">
-                                                ${variables.entidades.map(e => yo`<option value="${e.Cod_EntidadFinanciera}" ${cuenta? cuenta.Cod_EntidadFinanciera == e.Cod_EntidadFinanciera ? 'selected' : '' : ''}>${e.Nom_EntidadFinanciera}</option>`)}
+                                            <select id="Cod_EntidadFinanciera" class="form-control required">
+                                                <option value=""></option>
+                                                ${variables.entidades.map(e => yo`<option value="${e.Cod_EntidadFinanciera}" ${cuenta ? cuenta.Cod_EntidadFinanciera == e.Cod_EntidadFinanciera ? 'selected' : '' : ''}>${e.Nom_EntidadFinanciera}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -63,14 +70,15 @@ function Ver(_escritura, variables, cuenta) {
                                     ${cuenta ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
                                         <label >Cuenta Bancaria *</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_CuentaBancaria">
+                                        <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_CuentaBancaria">
                                     </div>
                                     </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Moneda *</label>
-                                            <select id="Cod_Moneda" class="form-control">
-                                                ${variables.monedas.map(e => yo`<option value="${e.Cod_Moneda}" ${cuenta? cuenta.Cod_Moneda == e.Cod_Moneda ? 'selected' : '' : ''}>${e.Nom_Moneda}</option>`)}
+                                            <select id="Cod_Moneda" class="form-control required">
+                                                <option value=""></option>
+                                                ${variables.monedas.map(e => yo`<option value="${e.Cod_Moneda}" ${cuenta ? cuenta.Cod_Moneda == e.Cod_Moneda ? 'selected' : '' : ''}>${e.Nom_Moneda}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -79,15 +87,16 @@ function Ver(_escritura, variables, cuenta) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Tipo de Cuenta *</label>
-                                            <select id="Cod_TipoCuentaBancaria" class="form-control">
-                                                ${variables.tipos_cuentas.map(e => yo`<option value="${e.Cod_TipoCuentaBancaria}" ${cuenta? cuenta.Cod_TipoCuentaBancaria == e.Cod_TipoCuentaBancaria ? 'selected' : '' : ''}>${e.Nom_TipoCuentaBancaria}</option>`)}
+                                            <select id="Cod_TipoCuentaBancaria" class="form-control required">
+                                                <option value=""></option>
+                                                ${variables.tipos_cuentas.map(e => yo`<option value="${e.Cod_TipoCuentaBancaria}" ${cuenta ? cuenta.Cod_TipoCuentaBancaria == e.Cod_TipoCuentaBancaria ? 'selected' : '' : ''}>${e.Nom_TipoCuentaBancaria}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Descripcion de la cuenta *</label>
-                                            <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_CuentaBancaria" value="${cuenta ? cuenta.Des_CuentaBancaria : ''}">
+                                            <input type="text"  style="text-transform:uppercase" class="form-control required" id="Des_CuentaBancaria" value="${cuenta ? cuenta.Des_CuentaBancaria : ''}">
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +134,7 @@ function Ver(_escritura, variables, cuenta) {
                     </div>
                 </div>
                 <div class="box-footer">
-                        <button onclick="${() => GuardarCuentaBancaria(_escritura,cuenta)}" class="btn btn-primary">Guardar</button>
+                        <button onclick="${() => GuardarCuentaBancaria(_escritura, cuenta)}" class="btn btn-primary">Guardar</button>
                     </div>
             </div>
         </section>
@@ -137,43 +146,44 @@ function Ver(_escritura, variables, cuenta) {
 
 
 
-function GuardarCuentaBancaria(_escritura, cuenta){
-    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
-    var Cod_CuentaBancaria = cuenta?cuenta.Cod_CuentaBancaria:document.getElementById('Cod_CuentaBancaria').value.toUpperCase()
-    var Cod_Sucursal = document.getElementById('Cod_Sucursal').value
-    var Cod_EntidadFinanciera = document.getElementById('Cod_EntidadFinanciera').value
-    var Des_CuentaBancaria = document.getElementById('Des_CuentaBancaria').value.toUpperCase()
-    var Cod_Moneda = document.getElementById('Cod_Moneda').value
-    var Saldo_Disponible = document.getElementById('Saldo_Disponible').value
-    var Cod_CuentaContable = document.getElementById('Cod_CuentaContable').value
-    var Cod_TipoCuentaBancaria = document.getElementById('Cod_TipoCuentaBancaria').value
-    var Flag_Activo = document.getElementById('Flag_Activo').checked
+function GuardarCuentaBancaria(_escritura, cuenta) {
+    if (ValidacionCampos()) {
+        H5_loading.show();
+        var Cod_CuentaBancaria = cuenta ? cuenta.Cod_CuentaBancaria : document.getElementById('Cod_CuentaBancaria').value.toUpperCase()
+        var Cod_Sucursal = document.getElementById('Cod_Sucursal').value
+        var Cod_EntidadFinanciera = document.getElementById('Cod_EntidadFinanciera').value
+        var Des_CuentaBancaria = document.getElementById('Des_CuentaBancaria').value.toUpperCase()
+        var Cod_Moneda = document.getElementById('Cod_Moneda').value
+        var Saldo_Disponible = document.getElementById('Saldo_Disponible').value
+        var Cod_CuentaContable = document.getElementById('Cod_CuentaContable').value
+        var Cod_TipoCuentaBancaria = document.getElementById('Cod_TipoCuentaBancaria').value
+        var Flag_Activo = document.getElementById('Flag_Activo').checked
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Cod_CuentaBancaria,Cod_Sucursal,Cod_EntidadFinanciera,
-            Des_CuentaBancaria,Cod_Moneda,Saldo_Disponible,Cod_CuentaContable,
-            Cod_TipoCuentaBancaria,Flag_Activo
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Cod_CuentaBancaria, Cod_Sucursal, Cod_EntidadFinanciera,
+                Des_CuentaBancaria, Cod_Moneda, Saldo_Disponible, Cod_CuentaContable,
+                Cod_TipoCuentaBancaria, Flag_Activo
+            })
+        }
+        fetch(URL + '/cuentas_bancarias_api/guardar_cuenta', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarCuentasBancarias(_escritura)
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL+'/cuentas_bancarias_api/guardar_cuenta', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                ListarCuentasBancarias(_escritura)
-            }
-            else{
-                console.log('Error')
-            }
-            H5_loading.hide()
-        })
 }
 
 function NuevaCuentaBancaria(_escritura, variables, cuenta) {
@@ -191,7 +201,7 @@ function NuevaCuentaBancaria(_escritura, variables, cuenta) {
             .then(req => req.json())
             .then(res => {
                 if (res.respuesta == 'ok') {
-                    Ver(_escritura, variables,res.data.cuenta[0])
+                    Ver(_escritura, variables, res.data.cuenta[0])
                 }
                 else {
                     console.log('Error')

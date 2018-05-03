@@ -64,10 +64,15 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                         <div role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${almacen ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
-                                        <label for="Cod_Almacen">Codigo de Almacen</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Almacen" placeholder="Ingrese codigo almacen" >
+                                        <label for="Cod_Almacen">Codigo de Almacen *</label>
+                                        <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Almacen" placeholder="Ingrese codigo almacen" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
@@ -85,8 +90,8 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Des_Almacen">Descripcion</label>
-                                            <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_Almacen" placeholder="Ingrese descripcion de almacen" value="${almacen ? almacen.Des_Almacen : ''}">
+                                            <label for="Des_Almacen">Descripcion *</label>
+                                            <input type="text"  style="text-transform:uppercase" class="form-control required" id="Des_Almacen" placeholder="Ingrese descripcion de almacen" value="${almacen ? almacen.Des_Almacen : ''}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -99,10 +104,10 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Cod_TipoAlmacen">Tipo de Almacen</label>
-                                            <select id="Cod_TipoAlmacen" class="form-control">
+                                            <label for="Cod_TipoAlmacen">Tipo de Almacen *</label>
+                                            <select id="Cod_TipoAlmacen" class="form-control required">
                                                 <option style="text-transform:uppercase" value=null></option>
-                                                ${tipo_almacenes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoAlmacen}" ${almacen? almacen.Cod_TipoAlmacen == e.Cod_TipoAlmacen ? 'selected' : '' : ''}>${e.Nom_TipoAlmacen}</option>`)}
+                                                ${tipo_almacenes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoAlmacen}" ${almacen ? almacen.Cod_TipoAlmacen == e.Cod_TipoAlmacen ? 'selected' : '' : ''}>${e.Nom_TipoAlmacen}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -140,7 +145,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                                                                     <tr>
                                                                         <td>${u.Des_Caja}</td>
                                                                         <td>${u.Cod_Almacen}</td>
-                                                                        <td>${u.Flag_Principal?'Si':'No'}</td>
+                                                                        <td>${u.Flag_Principal ? 'Si' : 'No'}</td>
                                                                         <td>${u.Cod_UsuarioReg}</td>
                                                                         <td>${u.Fecha_Reg}</td>
                                                                         <td>
@@ -150,7 +155,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                                                                                 <i class="fa fa-edit"></i>
                                                                             </button>` : yo``} ${_escritura ? yo`
                                                                             <button class="btn btn-xs btn-danger" data-toggle="modal"
-                                                                                data-target="#modal-danger-caja_almacen" onclick="${() => EliminarCajaAlmacen(_escritura, tipo_almacenes,almacen, u)}">
+                                                                                data-target="#modal-danger-caja_almacen" onclick="${() => EliminarCajaAlmacen(_escritura, tipo_almacenes, almacen, u)}">
                                                                                 <i class="fa fa-trash"></i>
                                                                             </button>` : yo``}
                                     
@@ -173,7 +178,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                     </div>
                 </div>
                 <div class="box-footer">
-                        <button onclick="${() => GuardarAlmacen(_escritura,almacen)}" class="btn btn-primary">Guardar</button>
+                        <button onclick="${() => GuardarAlmacen(_escritura, almacen)}" class="btn btn-primary">Guardar</button>
                     </div>
             </div>
         </section>
@@ -185,7 +190,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
 
 
 
-function EliminarCajaAlmacen(_escritura, tipo_almacenes,almacen, u) {
+function EliminarCajaAlmacen(_escritura, tipo_almacenes, almacen, u) {
     var btnEliminar = document.getElementById('btnEliminar-caja_almacen')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
         H5_loading.show();
@@ -207,7 +212,7 @@ function EliminarCajaAlmacen(_escritura, tipo_almacenes,almacen, u) {
             .then(res => {
 
                 if (res.respuesta == 'ok') {
-                    NuevoAlmacen(_escritura, tipo_almacenes,almacen)
+                    NuevoAlmacen(_escritura, tipo_almacenes, almacen)
                     this.removeEventListener('click', Eliminar)
                 }
                 else {
@@ -234,7 +239,7 @@ function AgregarCaja(_escritura, tipo_almacenes, almacen, caja_almacen) {
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cajas_activas = res.data.cajas_activas
-                FormularioAgregaCaja(_escritura, tipo_almacenes, almacen, cajas_activas,caja_almacen)
+                FormularioAgregaCaja(_escritura, tipo_almacenes, almacen, cajas_activas, caja_almacen)
 
             } else {
                 console.log("ERR")
@@ -331,42 +336,44 @@ function GuardarCajaAlmacen(_escritura, tipo_almacenes, almacen) {
 
 }
 
-function GuardarAlmacen(_escritura, almacen){
-    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
-    var Cod_Almacen = almacen?almacen.Cod_Almacen:document.getElementById('Cod_Almacen').value.toUpperCase()
-    var Des_Almacen = document.getElementById('Des_Almacen').value.toUpperCase()
-    var Des_CortaAlmacen = document.getElementById('Des_CortaAlmacen').value.toUpperCase()
-    var Cod_TipoAlmacen = document.getElementById('Cod_TipoAlmacen').value
-    var Flag_Principal = document.getElementById('Flag_Principal').checked
-    var Cod_Usuario = 'ADMINISTRADOR'
+function GuardarAlmacen(_escritura, almacen) {
+    if (ValidacionCampos()) {
+        //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
+        H5_loading.show();
+        var Cod_Almacen = almacen ? almacen.Cod_Almacen : document.getElementById('Cod_Almacen').value.toUpperCase()
+        var Des_Almacen = document.getElementById('Des_Almacen').value.toUpperCase()
+        var Des_CortaAlmacen = document.getElementById('Des_CortaAlmacen').value.toUpperCase()
+        var Cod_TipoAlmacen = document.getElementById('Cod_TipoAlmacen').value
+        var Flag_Principal = document.getElementById('Flag_Principal').checked
+        var Cod_Usuario = 'ADMINISTRADOR'
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Almacen,
-            Des_Almacen,
-            Des_CortaAlmacen,
-            Cod_TipoAlmacen,
-            Flag_Principal,
-            Cod_Usuario
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Almacen,
+                Des_Almacen,
+                Des_CortaAlmacen,
+                Cod_TipoAlmacen,
+                Flag_Principal,
+                Cod_Usuario
+            })
+        }
+        fetch(URL + '/almacenes_api/guardar_almacen', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarAlmacenes(_escritura)
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL+'/almacenes_api/guardar_almacen', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                ListarAlmacenes(_escritura)
-            }
-            else{
-                console.log('Error')
-            }
-            H5_loading.hide()
-        })
 }
 
 function NuevoAlmacen(_escritura, tipo_almacenes, almacen) {

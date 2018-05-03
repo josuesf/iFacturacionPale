@@ -25,7 +25,7 @@ router.post('/guardar_usuario', function (req, res) {
     parametros = [
         { nom_parametro: 'Cod_Usuarios', valor_parametro: input.Cod_Usuarios },
         { nom_parametro: 'Nick', valor_parametro: input.Nick },
-        { nom_parametro: 'Contrasena', valor_parametro: md5(input.Contrasena) },
+        { nom_parametro: 'Contrasena', valor_parametro: input.EsNuevo?md5(input.Contrasena):input.Contrasena },
         { nom_parametro: 'Foto', tipo_parametro: sql.Binary, valor_parametro: null },
         { nom_parametro: 'Pregunta', valor_parametro: input.Pregunta },
         { nom_parametro: 'Respuesta', valor_parametro: input.Respuesta },

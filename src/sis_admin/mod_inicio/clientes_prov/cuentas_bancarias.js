@@ -91,10 +91,16 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
     const el = yo`
     <div class="box-body" id="form_modal">
         <div class="row">
+            <div class="callout callout-danger hidden" id="divErrors_CB">
+                <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Entidad Financiera</label>
-                    <select class="form-control" id="CB_Cod_EntidadFinanciera"> 
+                    <label>Entidad Financiera *</label>
+                    <select class="form-control required" id="CB_Cod_EntidadFinanciera">
+                        <option value=""></option>
                         ${entidades.map(u => yo`<option 
                             value=${u.Cod_EntidadFinanciera} 
                             ${(e) ? (e.Cod_EntidadFinanciera == u.Cod_EntidadFinanciera ? 'selected' : '') : ''}>
@@ -104,8 +110,8 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Numero de Cuenta</label>
-                    <input class="form-control" id="CB_NroCuenta_Bancaria" value="${e ? e.NroCuenta_Bancaria : ''}">
+                    <label>Numero de Cuenta *</label>
+                    <input class="form-control required" id="CB_NroCuenta_Bancaria" value="${e ? e.NroCuenta_Bancaria : ''}">
                 </div>
             </div>
         </div>
@@ -118,8 +124,9 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Tipo de Cuenta</label>
-                    <select class="form-control" id="CB_Cod_TipoCuentaBancaria">
+                    <label>Tipo de Cuenta *</label>
+                    <select class="form-control required" id="CB_Cod_TipoCuentaBancaria">
+                        <option value=""></option>
                         ${tipos_cuenta.map(u => yo`<option 
                             value=${u.Cod_TipoCuentaBancaria} 
                             ${(e) ? (e.Cod_TipoCuentaBancaria == u.Cod_TipoCuentaBancaria ? 'selected' : '') : ''}>
@@ -156,7 +163,7 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
         </div>
         <div class="modal-footer">
             <button type="button" class="btn pull-left" data-dismiss="modal">Cancelar</button>
-            <button type="button" onclick=${() => GuardarCuenta(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" data-dismiss="modal">Guardar</button>
+            <button type="button" onclick=${() => GuardarCuenta(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary">Guardar</button>
         </div>
     </div>
     `
@@ -188,34 +195,37 @@ function AbrirCuenta(_escritura, Id_ClienteProveedor, cuenta) {
 
 }
 function GuardarCuenta(_escritura, Id_ClienteProveedor, cuenta) {
-    H5_loading.show();
-    const NroCuenta_Bancaria = cuenta ? cuenta.NroCuenta_Bancaria : document.getElementById('CB_NroCuenta_Bancaria').value
-    const Cod_EntidadFinanciera = document.getElementById('CB_Cod_EntidadFinanciera').value
-    const Cod_TipoCuentaBancaria = document.getElementById('CB_Cod_TipoCuentaBancaria').value
-    const Des_CuentaBancaria = document.getElementById('CB_Des_CuentaBancaria').value
-    const Flag_Principal = document.getElementById('CB_Flag_Principal').checked
-    const Cuenta_Interbancaria = document.getElementById('CB_Cuenta_Interbancaria').value
-    const Obs_CuentaBancaria = document.getElementById('CB_Obs_CuentaBancaria').value
+    if (ValidacionCampos('divErrors_CB')) {
+        $('#modal-abrir').modal("hide")
+        H5_loading.show();
+        const NroCuenta_Bancaria = cuenta ? cuenta.NroCuenta_Bancaria : document.getElementById('CB_NroCuenta_Bancaria').value
+        const Cod_EntidadFinanciera = document.getElementById('CB_Cod_EntidadFinanciera').value
+        const Cod_TipoCuentaBancaria = document.getElementById('CB_Cod_TipoCuentaBancaria').value
+        const Des_CuentaBancaria = document.getElementById('CB_Des_CuentaBancaria').value
+        const Flag_Principal = document.getElementById('CB_Flag_Principal').checked
+        const Cuenta_Interbancaria = document.getElementById('CB_Cuenta_Interbancaria').value
+        const Obs_CuentaBancaria = document.getElementById('CB_Obs_CuentaBancaria').value
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Id_ClienteProveedor, NroCuenta_Bancaria, Cod_EntidadFinanciera,
-            Cod_TipoCuentaBancaria, Des_CuentaBancaria, Flag_Principal,
-            Cuenta_Interbancaria, Obs_CuentaBancaria
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Id_ClienteProveedor, NroCuenta_Bancaria, Cod_EntidadFinanciera,
+                Cod_TipoCuentaBancaria, Des_CuentaBancaria, Flag_Principal,
+                Cuenta_Interbancaria, Obs_CuentaBancaria
+            })
+        }
+        fetch(URL + 'clientes_api/guardar_cuenta_bancaria_cliente', parametros)
+            .then(r => r.json())
+            .then(res => {
+                CuentasBancarias(_escritura, Id_ClienteProveedor)
+                H5_loading.hide();
+            })
     }
-    fetch(URL + 'clientes_api/guardar_cuenta_bancaria_cliente', parametros)
-        .then(r => r.json())
-        .then(res => {
-            CuentasBancarias(_escritura, Id_ClienteProveedor)
-            H5_loading.hide();
-        })
 
 }
 function Eliminar(_escritura, cuenta) {

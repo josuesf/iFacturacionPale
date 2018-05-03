@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
-import {ListarModulos} from './listar';
-import {URL} from '../../../constantes_entorno/constantes'
+import { ListarModulos } from './listar';
+import { URL } from '../../../constantes_entorno/constantes'
 
 
 module.exports = function NuevoModulo(_escritura, raices, modulo) {
@@ -19,15 +19,15 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li><a  onclick=${()=>ListarModulos(_escritura)} href="#">
+                <li><a  onclick=${() => ListarModulos(_escritura)} href="#">
                 Modulos</a></li>
-                <li class="active">${modulo?'Editar':'Nuevo'}</li>
+                <li class="active">${modulo ? 'Editar' : 'Nuevo'}</li>
             </ol>
         </section>
         <section class="content">
             <div class="box">
                 <div class="box-header">
-                    <a onclick=${()=>ListarModulos(_escritura)}
+                    <a onclick=${() => ListarModulos(_escritura)}
                     class="btn btn-xs btn-warning">
                         <i class="fa fa-arrow-left"></i> Atras</a>
                     
@@ -37,23 +37,28 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
                 <div class="box-body">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">${modulo?'Editar':'Nuevo'} Modulo</h3>
+                            <h3 class="box-title">${modulo ? 'Editar' : 'Nuevo'} Modulo</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
-                                    ${modulo? yo``:yo`<div class="col-sm-6">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    ${modulo ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="Cod_Modulo">Codigo de Modulo *</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Modulo" placeholder="Ejem: 01.01.001" >
+                                        <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Modulo" placeholder="Ejem: 01.01.001" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Des_Modulo">Descripcion del modulo *</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Des_Modulo" placeholder="Ejem: Modulo de Personal" value="${modulo?modulo.Des_Modulo:''}">
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_Modulo" placeholder="Ejem: Modulo de Personal" value="${modulo ? modulo.Des_Modulo : ''}">
                                         </div>
                                     </div>
                                 </div>
@@ -63,7 +68,7 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
                                             <label for="Padre_Modulo">Modulo Padre</label>
                                             <select id="Padre_Modulo" class="form-control"><option value=null ></option>
 
-                                                ${raices.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Modulo}" ${modulo?modulo.Padre_Modulo == e.Cod_Modulo?'selected':'':''}>${e.Cod_Modulo+' '+e.Des_Modulo}</option>`)}
+                                                ${raices.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Modulo}" ${modulo ? modulo.Padre_Modulo == e.Cod_Modulo ? 'selected' : '' : ''}>${e.Cod_Modulo + ' ' + e.Des_Modulo}</option>`)}
                                             </select>
                                         </div>
                                     </div>
@@ -85,37 +90,38 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
     empty(main).appendChild(el);
 }
 
-function Guardar(_escritura, modulo){
-    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
-    var Cod_Modulo = modulo?modulo.Cod_Modulo:document.getElementById('Cod_Modulo').value.toUpperCase()
-    var Des_Modulo = document.getElementById('Des_Modulo').value.toUpperCase()
-    var Padre_Modulo = document.getElementById('Padre_Modulo').value
-    var Cod_Usuario = 'ADMINISTRADOR'
+function Guardar(_escritura, modulo) {
+    if (ValidacionCampos()) {
+        H5_loading.show();
+        var Cod_Modulo = modulo ? modulo.Cod_Modulo : document.getElementById('Cod_Modulo').value.toUpperCase()
+        var Des_Modulo = document.getElementById('Des_Modulo').value.toUpperCase()
+        var Padre_Modulo = document.getElementById('Padre_Modulo').value
+        var Cod_Usuario = 'ADMINISTRADOR'
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Modulo,
-            Des_Modulo,
-            Padre_Modulo,
-            Cod_Usuario
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Modulo,
+                Des_Modulo,
+                Padre_Modulo,
+                Cod_Usuario
+            })
+        }
+        fetch(URL + '/modulos_api/guardar_modulo', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarModulos(_escritura)
+
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL+'/modulos_api/guardar_modulo', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                ListarModulos(_escritura)
-                
-            }
-            else{
-                console.log('Error')
-            }
-            H5_loading.hide()
-        })
 }

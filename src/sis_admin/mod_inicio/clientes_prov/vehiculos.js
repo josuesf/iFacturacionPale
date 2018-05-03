@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import {URL} from '../../../constantes_entorno/constantes'
+import { URL } from '../../../constantes_entorno/constantes'
 
-function Ver(_escritura,vehiculos,Id_ClienteProveedor){
+function Ver(_escritura, vehiculos, Id_ClienteProveedor) {
     var el = yo`
         <div class="table-responsive">
             <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
@@ -89,16 +89,21 @@ function CargarFormulario(_escritura, Id_ClienteProveedor, e) {
     const el = yo`
     <div class="box-body" id="form_modal">
         <div class="row">
+            <div class="callout callout-danger hidden" id="divErrors_V">
+                <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Placa</label>
-                    <input style="text-transform:uppercase;" placeholder="Ejem: X1S303 sin (-) guion" class="form-control" id="V_Cod_Placa" value="${e ? e.Cod_Placa : ''}">
+                    <label>Placa *</label>
+                    <input style="text-transform:uppercase;" placeholder="Ejem: X1S303 sin (-) guion" class="form-control required" id="V_Cod_Placa" value="${e ? e.Cod_Placa : ''}">
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Color</label>
-                    <input style="text-transform:uppercase;" class="form-control" id="V_Color" value="${e ? e.Color : ''}">
+                    <label>Color *</label>
+                    <input style="text-transform:uppercase;" class="form-control required" id="V_Color" value="${e ? e.Color : ''}">
                 </div>
             </div>
         </div>
@@ -140,7 +145,7 @@ function CargarFormulario(_escritura, Id_ClienteProveedor, e) {
         </div>
         <div class="modal-footer">
             <button type="button" class="btn pull-left" data-dismiss="modal">Cancelar</button>
-            <button type="button" onclick=${() => GuardarVehiculo(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" data-dismiss="modal">Guardar</button>
+            <button type="button" onclick=${() => GuardarVehiculo(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" >Guardar</button>
         </div>
     </div>
     `
@@ -153,34 +158,36 @@ function AbrirVehiculo(_escritura, Id_ClienteProveedor, vehiculo) {
     $('#modal-abrir').modal()
 }
 function GuardarVehiculo(_escritura, Id_ClienteProveedor, vehiculo) {
-    H5_loading.show();
-    const Cod_Placa = vehiculo ? vehiculo.Cod_Placa : document.getElementById('V_Cod_Placa').value.toUpperCase()
-    const Color = document.getElementById('V_Color').value.toUpperCase()
-    const Marca = document.getElementById('V_Marca').value.toUpperCase()
-    const Modelo = document.getElementById('V_Modelo').value.toUpperCase()
-    const Propiestarios = document.getElementById('V_Propiestarios').value
-    const Sede = document.getElementById('V_Sede').value.toUpperCase()
-    const Placa_Vigente = document.getElementById('V_Placa_Vigente').value.toUpperCase()
+    if (ValidacionCampos('divErrors_V')) {
+        $('#modal-abrir').modal("hide")
+        H5_loading.show();
+        const Cod_Placa = vehiculo ? vehiculo.Cod_Placa : document.getElementById('V_Cod_Placa').value.toUpperCase()
+        const Color = document.getElementById('V_Color').value.toUpperCase()
+        const Marca = document.getElementById('V_Marca').value.toUpperCase()
+        const Modelo = document.getElementById('V_Modelo').value.toUpperCase()
+        const Propiestarios = document.getElementById('V_Propiestarios').value
+        const Sede = document.getElementById('V_Sede').value.toUpperCase()
+        const Placa_Vigente = document.getElementById('V_Placa_Vigente').value.toUpperCase()
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Id_ClienteProveedor, Cod_Placa,Color,Marca,
-            Modelo,Propiestarios,Sede,Placa_Vigente
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Id_ClienteProveedor, Cod_Placa, Color, Marca,
+                Modelo, Propiestarios, Sede, Placa_Vigente
+            })
+        }
+        fetch(URL + 'clientes_api/guardar_vehiculo_cliente', parametros)
+            .then(r => r.json())
+            .then(res => {
+                Vehiculos(_escritura, Id_ClienteProveedor)
+                H5_loading.hide();
+            })
     }
-    fetch(URL + 'clientes_api/guardar_vehiculo_cliente', parametros)
-        .then(r => r.json())
-        .then(res => {
-            Vehiculos(_escritura, Id_ClienteProveedor)
-            H5_loading.hide();
-        })
-
 }
 function Eliminar(_escritura, vehiculo) {
     var btnEliminar = document.getElementById('btnEliminar')
@@ -209,7 +216,7 @@ function Eliminar(_escritura, vehiculo) {
 
 }
 
-function Vehiculos(_escritura,Id_ClienteProveedor){
+function Vehiculos(_escritura, Id_ClienteProveedor) {
     H5_loading.show();
     const parametros = {
         method: 'POST',
@@ -233,4 +240,4 @@ function Vehiculos(_escritura,Id_ClienteProveedor){
         })
 }
 
-export {Vehiculos}
+export { Vehiculos }

@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import {URL} from '../../../constantes_entorno/constantes'
+import { URL } from '../../../constantes_entorno/constantes'
 
-function Ver(_escritura,contactos,Id_ClienteProveedor,documentos){
+function Ver(_escritura, contactos, Id_ClienteProveedor, documentos) {
     var el = yo`
         <div class="table-responsive">
             <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
@@ -49,7 +49,7 @@ function Ver(_escritura,contactos,Id_ClienteProveedor,documentos){
                 </div>
             </div>
             <div class="box-header">
-                <a class="btn btn-info pull-right" onclick="${() => AbrirContacto(_escritura, Id_ClienteProveedor,documentos)}" data-toggle="modal" data-target="#modal-nuevo">
+                <a class="btn btn-info pull-right" onclick="${() => AbrirContacto(_escritura, Id_ClienteProveedor, documentos)}" data-toggle="modal" data-target="#modal-nuevo">
                 <i class="fa fa-plus"></i> Agregar Contacto</a>
             </div>
             <div class="col-md-12">
@@ -79,8 +79,8 @@ function Ver(_escritura,contactos,Id_ClienteProveedor,documentos){
                             <td>${u.Email_Personal}</td>
                             <td>${u.Celular}</td>
                             <td>
-                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => AbrirContacto(_escritura, Id_ClienteProveedor,documentos, u.Id_ClienteContacto)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura,u,documentos)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => AbrirContacto(_escritura, Id_ClienteProveedor, documentos, u.Id_ClienteContacto)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u, documentos)}"><i class="fa fa-trash"></i></button>` : yo``}
                             </td>
                         </tr>`)}
                     </tbody>
@@ -92,14 +92,19 @@ function Ver(_escritura,contactos,Id_ClienteProveedor,documentos){
     empty(main).appendChild(el);
 }
 
-function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos,documentos, Id_ClienteProveedor, e) {
+function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos, documentos, Id_ClienteProveedor, e) {
     const el = yo`
     <div class="box-body" id="form_modal">
         <div class="row">
+            <div class="callout callout-danger hidden" id="divErrors_C">
+                <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Tipo de Relacion</label>
-                    <select class="form-control" id="C_Cod_TipoRelacion"> 
+                    <label>Tipo de Relacion *</label>
+                    <select class="form-control required" id="C_Cod_TipoRelacion"> 
                         ${tipos_relaciones.map(u => yo`<option 
                             value=${u.Cod_TipoRelacion} 
                             ${(e) ? (u.Cod_TipoRelacion == e.Cod_TipoRelacion ? 'selected' : '') : ''}>
@@ -109,8 +114,8 @@ function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos,documentos
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Tipo de Documento</label>
-                    <select class="form-control" id="C_Cod_TipoDocumento"> 
+                    <label>Tipo de Documento *</label>
+                    <select class="form-control required" id="C_Cod_TipoDocumento"> 
                         ${documentos.map(u => yo`<option 
                             value=${u.Cod_TipoDoc} 
                             ${(e) ? (u.Cod_TipoDoc == e.Cod_TipoDocumento ? 'selected' : '') : ''}>
@@ -120,28 +125,28 @@ function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos,documentos
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Numero de Documento</label>
-                    <input class="form-control" id="C_Nro_Documento" value="${e ? e.Nro_Documento : ''}">
+                    <label>Numero de Documento *</label>
+                    <input class="form-control required" id="C_Nro_Documento" value="${e ? e.Nro_Documento : ''}">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Apellido Paterno</label>
-                    <input class="form-control" style="text-transform:uppercase" id="C_Ap_Paterno" value="${e ? e.Ap_Paterno : ''}">
+                    <label>Apellido Paterno *</label>
+                    <input class="form-control required" style="text-transform:uppercase" id="C_Ap_Paterno" value="${e ? e.Ap_Paterno : ''}">
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Apellido Materno</label>
-                    <input class="form-control" style="text-transform:uppercase" id="C_Ap_Materno" value="${e ? e.Ap_Materno : ''}">
+                    <label>Apellido Materno *</label>
+                    <input class="form-control required" style="text-transform:uppercase" id="C_Ap_Materno" value="${e ? e.Ap_Materno : ''}">
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label>Nombres</label>
-                    <input class="form-control" style="text-transform:uppercase" id="C_Nombres" value="${e ? e.Nombres : ''}">
+                    <label>Nombres *</label>
+                    <input class="form-control required" style="text-transform:uppercase" id="C_Nombres" value="${e ? e.Nombres : ''}">
                 </div>
             </div>
         </div>
@@ -194,20 +199,20 @@ function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos,documentos
             <div class="col-sm-4">
                 <div class="form-group">
                     <label for="">Fecha de Incorporacion</label>
-                    <input type="date" class="form-control" id="C_Fecha_Incorporacion" value="${e?e.Fecha_Incorporacion.split('T')[0]:''}" >
+                    <input type="date" class="form-control" id="C_Fecha_Incorporacion" value="${e ? e.Fecha_Incorporacion.split('T')[0] : ''}" >
                 </div>
             </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn pull-left" data-dismiss="modal">Cancelar</button>
-            <button type="button" onclick=${() => GuardarContacto(_escritura, Id_ClienteProveedor,documentos, e)} class="btn btn-primary" data-dismiss="modal">Guardar</button>
+            <button type="button" onclick=${() => GuardarContacto(_escritura, Id_ClienteProveedor, documentos, e)} class="btn btn-primary" >Guardar</button>
         </div>
     </div>
     `
     var form = document.getElementById('form_modal');
     empty(form).appendChild(el);
 }
-function AbrirContacto(_escritura, Id_ClienteProveedor,documentos, Id_ClienteContacto) {
+function AbrirContacto(_escritura, Id_ClienteProveedor, documentos, Id_ClienteContacto) {
 
     H5_loading.show();
     const parametros = {
@@ -216,63 +221,66 @@ function AbrirContacto(_escritura, Id_ClienteProveedor,documentos, Id_ClienteCon
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({Id_ClienteProveedor,Id_ClienteContacto})
+        body: JSON.stringify({ Id_ClienteProveedor, Id_ClienteContacto })
     }
     fetch(URL + 'clientes_api/get_tiposRelaciones_codTelefonos', parametros)
         .then(r => r.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                CargarFormulario(_escritura, res.data.tipos_relaciones, 
-                    res.data.cod_telefonos,documentos, Id_ClienteProveedor,
+                CargarFormulario(_escritura, res.data.tipos_relaciones,
+                    res.data.cod_telefonos, documentos, Id_ClienteProveedor,
                     res.data.contacto[0])
             } else {
-                CargarFormulario(_escritura, [], [],documentos, Id_ClienteProveedor)
+                CargarFormulario(_escritura, [], [], documentos, Id_ClienteProveedor)
             }
             H5_loading.hide();
             $('#modal-abrir').modal()
         })
 
 }
-function GuardarContacto(_escritura, Id_ClienteProveedor,documentos, contacto) {
-    H5_loading.show();
-    const Id_ClienteContacto = contacto?contacto.Id_ClienteContacto:'-1'
-    const Cod_TipoRelacion = document.getElementById('C_Cod_TipoRelacion').value
-    const Cod_TipoDocumento = document.getElementById('C_Cod_TipoDocumento').value
-    const Nro_Documento = document.getElementById('C_Nro_Documento').value
-    const Ap_Paterno = document.getElementById('C_Ap_Paterno').value.toUpperCase()
-    const Ap_Materno = document.getElementById('C_Ap_Materno').value.toUpperCase()
-    const Nombres = document.getElementById('C_Nombres').value.toUpperCase()
-    const Cod_Telefono = document.getElementById('C_Cod_Telefono').value
-    const Nro_Telefono = document.getElementById('C_Nro_Telefono').value
-    const Anexo = document.getElementById('C_Anexo').value
-    const Email_Empresarial = document.getElementById('C_Email_Empresarial').value
-    const Email_Personal = document.getElementById('C_Email_Personal').value
-    const Celular = document.getElementById('C_Celular').value
-    const Fecha_Incorporacion = document.getElementById('C_Fecha_Incorporacion').value
+function GuardarContacto(_escritura, Id_ClienteProveedor, documentos, contacto) {
+    if (ValidacionCampos('divErrors_C')) {
+        $('#modal-abrir').modal("hide")
+        H5_loading.show();
+        const Id_ClienteContacto = contacto ? contacto.Id_ClienteContacto : '-1'
+        const Cod_TipoRelacion = document.getElementById('C_Cod_TipoRelacion').value
+        const Cod_TipoDocumento = document.getElementById('C_Cod_TipoDocumento').value
+        const Nro_Documento = document.getElementById('C_Nro_Documento').value
+        const Ap_Paterno = document.getElementById('C_Ap_Paterno').value.toUpperCase()
+        const Ap_Materno = document.getElementById('C_Ap_Materno').value.toUpperCase()
+        const Nombres = document.getElementById('C_Nombres').value.toUpperCase()
+        const Cod_Telefono = document.getElementById('C_Cod_Telefono').value
+        const Nro_Telefono = document.getElementById('C_Nro_Telefono').value
+        const Anexo = document.getElementById('C_Anexo').value
+        const Email_Empresarial = document.getElementById('C_Email_Empresarial').value
+        const Email_Personal = document.getElementById('C_Email_Personal').value
+        const Celular = document.getElementById('C_Celular').value
+        const Fecha_Incorporacion = document.getElementById('C_Fecha_Incorporacion').value
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Id_ClienteProveedor, Id_ClienteContacto, Cod_TipoRelacion,
-            Cod_TipoDocumento, Nro_Documento, Ap_Paterno,Ap_Materno,Nombres,
-            Cod_Telefono, Nro_Telefono,Anexo, Email_Empresarial,Email_Personal,
-            Celular,Fecha_Incorporacion
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Id_ClienteProveedor, Id_ClienteContacto, Cod_TipoRelacion,
+                Cod_TipoDocumento, Nro_Documento, Ap_Paterno, Ap_Materno, Nombres,
+                Cod_Telefono, Nro_Telefono, Anexo, Email_Empresarial, Email_Personal,
+                Celular, Fecha_Incorporacion
+            })
+        }
+        fetch(URL + 'clientes_api/guardar_contacto_cliente', parametros)
+            .then(r => r.json())
+            .then(res => {
+                Contactos(_escritura, Id_ClienteProveedor, documentos)
+                H5_loading.hide();
+            })
     }
-    fetch(URL + 'clientes_api/guardar_contacto_cliente', parametros)
-        .then(r => r.json())
-        .then(res => {
-            Contactos(_escritura, Id_ClienteProveedor,documentos)
-            H5_loading.hide();
-        })
 
 }
-function Eliminar(_escritura, contacto,documentos) {
+function Eliminar(_escritura, contacto, documentos) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
         H5_loading.show();
@@ -292,13 +300,13 @@ function Eliminar(_escritura, contacto,documentos) {
         fetch(URL + 'clientes_api/eliminar_contacto_cliente', parametros)
             .then(r => r.json())
             .then(res => {
-                Contactos(_escritura, contacto.Id_ClienteProveedor,documentos)
+                Contactos(_escritura, contacto.Id_ClienteProveedor, documentos)
                 H5_loading.hide();
             })
     })
 
 }
-function Contactos(_escritura,Id_ClienteProveedor,documentos){
+function Contactos(_escritura, Id_ClienteProveedor, documentos) {
     H5_loading.show();
     const parametros = {
         method: 'POST',
@@ -314,12 +322,12 @@ function Contactos(_escritura,Id_ClienteProveedor,documentos){
         .then(r => r.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                Ver(_escritura, res.data.contactos, Id_ClienteProveedor,documentos)
+                Ver(_escritura, res.data.contactos, Id_ClienteProveedor, documentos)
             } else {
-                Ver(_escritura, [], Id_ClienteProveedor,documentos)
+                Ver(_escritura, [], Id_ClienteProveedor, documentos)
             }
             H5_loading.hide();
         })
 }
 
-export {Contactos}
+export { Contactos }

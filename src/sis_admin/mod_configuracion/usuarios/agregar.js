@@ -107,8 +107,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Estado</label>
-                                            <select id="Cod_Estado" class="form-control required">
-                                                <option style="text-transform:uppercase"></option>
+                                            <select id="Cod_Estado" class="form-control">
                                                 ${_estados.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Estado}" ${usuario ? usuario.Cod_Estado == e.Cod_Estado ? 'selected' : '' : ''}>${e.Nom_Estado}</option>`)}
                                             </select>
                                         </div>
@@ -163,14 +162,27 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
 }
-  
+function ValidacionesExtras(usuario){
+    if(!usuario){
+        if(document.getElementById('Contrasena').value!=document.getElementById('Contrasena2').value){
+            $("#divErrors").removeClass("hidden")
+            $('#divErrors').html('<p>Las contrasenas deben ser iguales</p>')
+            $('#Contrasena').css('border-color','red')
+            $('#Contrasena2').css('border-color','red')
+            return false
+        }else{
+            $("#divErrors").addClass("hidden")
+            $('#divErrors').html('<p>Es necesario llenar todos los campos requeridos marcados con rojo</p>')
+            $('#Contrasena').css('border-color','')
+            $('#Contrasena2').css('border-color','')
+            return true
+        }
+    }else
+        return true
+} 
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-<<<<<<< HEAD
-    if (ValidacionCampos()) {
-=======
-    if(ValidacionCampos()){
->>>>>>> e3912a624d24f14ea2d67d2d3a59e571dbd8b426
+    if(ValidacionCampos() && ValidacionesExtras(usuario)){
         H5_loading.show();
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
@@ -183,6 +195,7 @@ function Guardar(_escritura, Cajas, usuario) {
         var Cod_Estado = document.getElementById('Cod_Estado').value.toUpperCase()
         var Cod_Perfil = document.getElementById('Cod_Perfil').value.toUpperCase()
         var Imagen = document.getElementById('Imagen').value
+        var EsNuevo = usuario?false:true
         var Cod_Usuario = 'ADMINISTRADOR'
 
         const parametros = {
@@ -201,6 +214,7 @@ function Guardar(_escritura, Cajas, usuario) {
                 Cod_Estado,
                 Cod_Perfil,
                 Cod_Usuario,
+                EsNuevo,
                 Cajas
             })
         }

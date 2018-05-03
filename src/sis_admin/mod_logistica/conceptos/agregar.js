@@ -44,17 +44,22 @@ function NuevoConcepto(_escritura, tipos_conceptos, concepto) {
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${concepto ? yo`` : yo`
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Id_Concepto">Codigo de Concepto</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Id_Concepto" placeholder="">
+                                            <label for="Id_Concepto">Codigo de Concepto *</label>
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Id_Concepto" placeholder="">
                                         </div>
                                     </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Des_Concepto">Concepto</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Des_Concepto" placeholder="Descripcion concepto"
+                                            <label for="Des_Concepto">Concepto *</label>
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_Concepto" placeholder="Descripcion concepto"
                                                 value="${concepto ? concepto.Des_Concepto : ''}">
                                         </div>
                                     </div>
@@ -62,9 +67,9 @@ function NuevoConcepto(_escritura, tipos_conceptos, concepto) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="Cod_ClaseConcepto">Clase o Tipo</label>
-                                            <select id="Cod_ClaseConcepto" class="form-control">
-                                                <option value=null></option>
+                                            <label for="Cod_ClaseConcepto">Clase o Tipo *</label>
+                                            <select id="Cod_ClaseConcepto" class="form-control required">
+                                                <option value=''></option>
                         
                                                 ${tipos_conceptos.map(e => yo`
                                                 <option style="text-transform:uppercase" value="${e.Cod_TipoConcepto}"
@@ -99,43 +104,59 @@ function NuevoConcepto(_escritura, tipos_conceptos, concepto) {
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
 }
-
+function ValidacionesExtras(concepto) {
+    if (!concepto) {
+        if (isNaN(parseInt(document.getElementById('Id_Concepto').value))) {
+            $("#divErrors").removeClass("hidden")
+            $('#divErrors').html('<p>El codigo debe esta conformado por numeros</p>')
+            $('#Id_Concepto').css('border-color', 'red')
+            return false
+        } else {
+            $("#divErrors").addClass("hidden")
+            $('#divErrors').html('<p>Es necesario llenar todos los campos requeridos marcados con rojo</p>')
+            $('#Id_Concepto').css('border-color', '')
+            return true
+        }
+    } else
+        return true
+}
 function Guardar(_escritura, concepto) {
-    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
-    var Id_Concepto = concepto ? concepto.Id_Concepto : document.getElementById('Id_Concepto').value.toUpperCase()
-    var Des_Concepto = document.getElementById('Des_Concepto').value.toUpperCase()
-    var Cod_ClaseConcepto = document.getElementById('Cod_ClaseConcepto').value
-    var Id_ConceptoPadre = '0'
-    var Flag_Activo = document.getElementById('Flag_Activo').checked
-    var Cod_Usuario = 'ADMINISTRADOR'
+    if (ValidacionCampos() && ValidacionesExtras(concepto)) {
+        H5_loading.show();
+        var Id_Concepto = concepto ? concepto.Id_Concepto : document.getElementById('Id_Concepto').value.toUpperCase()
+        var Des_Concepto = document.getElementById('Des_Concepto').value.toUpperCase()
+        var Cod_ClaseConcepto = document.getElementById('Cod_ClaseConcepto').value
+        var Id_ConceptoPadre = '0'
+        var Flag_Activo = document.getElementById('Flag_Activo').checked
+        var Cod_Usuario = 'ADMINISTRADOR'
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Id_Concepto,
-            Des_Concepto,
-            Cod_ClaseConcepto,
-            Id_ConceptoPadre,
-            Flag_Activo,
-            Cod_Usuario
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id_Concepto,
+                Des_Concepto,
+                Cod_ClaseConcepto,
+                Id_ConceptoPadre,
+                Flag_Activo,
+                Cod_Usuario
+            })
+        }
+        fetch(URL + '/conceptos_api/guardar_concepto', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarConceptos(_escritura)
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL + '/conceptos_api/guardar_concepto', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                ListarConceptos(_escritura)
-            }
-            else {
-                console.log('Error')
-            }
-            H5_loading.hide()
-        })
 }
 
 export { NuevoConcepto }
