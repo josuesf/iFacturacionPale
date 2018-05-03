@@ -86,7 +86,7 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                             <div class="box-body">
                                 <div class="row">
                                     <div class="callout callout-danger hidden" id="divErrors">
-                                        <p>Es necesario llenar todos los campos requeridos</p>
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -186,7 +186,7 @@ function ValidacionCampos()
         if ($(this).hasClass("required")){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;
-                $(this).focus();
+                $(this).css("border-color","red");
             }
         }
     });
