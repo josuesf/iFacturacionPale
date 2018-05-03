@@ -4,6 +4,35 @@ var sql = require("mssql");
 var md5 = require('md5')
 var {Ejecutar_Procedimientos} = require('../utility/exec_sp_sql')
 // define the home page route
+
+router.post('/guardar_caja', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja', valor_parametro: input.Cod_Caja},
+        {nom_parametro:'Des_Caja', valor_parametro: input.Des_Caja},
+        {nom_parametro:'Cod_Sucursal', valor_parametro: input.Cod_Sucursal},
+        {nom_parametro:'Cod_UsuarioCajero', valor_parametro: input.Cod_UsuarioCajero},
+        {nom_parametro:'Cod_CuentaContable', valor_parametro: input.Cod_CuentaContable},
+        {nom_parametro:'Flag_Activo', valor_parametro: input.Flag_Activo},
+        {nom_parametro:'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'caja', sp_name: 'USP_CAJ_CAJAS_G', parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
+router.post('/eliminar_caja', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'caja', sp_name: 'USP_CAJ_CAJAS_E', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 router.post('/get_cajas', function (req, res) {
     input = req.body
     parametros = [

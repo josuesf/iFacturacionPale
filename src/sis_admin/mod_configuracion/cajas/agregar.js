@@ -122,16 +122,21 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                 <div class="box-body">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Nueva Caja</h3>
+                            <h3 class="box-title">${caja ? 'Editar' : 'Nueva'} Caja</h3>
                         </div>
                         <!-- form start -->
                         <div role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${caja ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="Cod_Caja">Codigo Caja</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Caja" placeholder="Ingrese codigo caja" >
+                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Caja" placeholder="Ingrese codigo caja">
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
@@ -182,6 +187,12 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <button onclick="${() => GuardarCaja(_escritura,caja)}" class="btn btn-primary">Guardar</button>
+                                    </div>
+                                </div>
+                                <p></p>
                                 ${caja != undefined ? yo`
                                     <div class="row">
                                             <div class="col-sm-12">
@@ -302,6 +313,17 @@ var impresoras = [
     'BIXOLON SPP R310',
     'EPSON TM-T20II'
 ]
+ 
+function ValidacionCampos(){
+    if(!$("#Cod_Caja").empty() && !$("#Des_Caja").empty() && !$("#Cod_Usuario").empty()){
+        $("#divErrors").addClass("hidden")
+        return true
+    }
+    else{
+        $("#divErrors").removeClass("hidden")
+        return false
+    }
+}
 
 function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
 
@@ -400,6 +422,55 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
     var modal_nuevo_editar_documento = document.getElementById('modal-nuevo-editar-documento')
     empty(modal_nuevo_editar_documento).appendChild(el)
 }
+
+function GuardarCaja(_escritura,caja) {
+    //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
+    if(ValidacionCampos()){
+        H5_loading.show();
+        var Cod_Caja = null
+        if (caja != undefined)
+            Cod_Caja = caja.Cod_Caja
+        else
+            Cod_Caja = document.getElementById('Cod_Caja').value.toUpperCase() 
+        
+        var Des_Caja = document.getElementById('Des_Caja').value.toUpperCase()
+        var Cod_Sucursal = document.getElementById('Cod_Sucursal').value.toUpperCase()
+        var Cod_UsuarioCajero = document.getElementById('Cod_Usuario').value.toUpperCase()
+        var Cod_CuentaContable = document.getElementById('Cod_CuentaContable').value.toUpperCase()
+        var Flag_Activo = document.getElementById('Flag_Activo').checked?'1':'0'
+        var Cod_Usuario = 'ADMINISTRADOR'
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Caja,
+                Des_Caja,
+                Cod_Sucursal,
+                Cod_UsuarioCajero,
+                Cod_CuentaContable,
+                Flag_Activo,
+                Cod_Usuario
+            })
+        }
+        fetch(URL + '/cajas_api/guardar_caja', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarCajas(_escritura)
+
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
+    }
+}
+
 
 function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u){
     var btnEliminar = document.getElementById('btnEliminar-documento')

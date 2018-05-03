@@ -54,6 +54,8 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de Cajas</h3>
+                    ${_escritura ? yo`<a onclick=${()=>NuevaCaja(_escritura, _sucursales, [], [])} class="btn btn-info pull-right">
+                    <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -79,6 +81,7 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
                                 <td>${u.Cod_CuentaContable}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaCaja(_escritura, _sucursales, [], [], u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarCaja(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -105,6 +108,39 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
     </div>`
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
+}
+
+function EliminarCaja(_escritura, caja){
+    
+    var btnEliminar = document.getElementById('btnEliminar')
+    btnEliminar.addEventListener('click', function Eliminar(ev) {
+        H5_loading.show();
+        var Cod_Caja = caja.Cod_Caja
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Caja,
+            })
+        }
+        fetch(URL+'/cajas_api/eliminar_caja', parametros)
+            .then(req => req.json())
+            .then(res => {
+                
+                if (res.respuesta == 'ok') {
+                    ListarCajas(_escritura)
+                    this.removeEventListener('click', EliminarCaja)
+                }
+                else{
+
+                    this.removeEventListener('click', EliminarCaja)
+                }
+                H5_loading.hide()
+            })
+    })
 }
 
 function ListarCajas(escritura, NumeroPagina){
