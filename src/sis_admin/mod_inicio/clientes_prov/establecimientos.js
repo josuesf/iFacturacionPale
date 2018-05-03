@@ -1,8 +1,8 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import {URL} from '../../../constantes_entorno/constantes'
+import { URL } from '../../../constantes_entorno/constantes'
 
-function Ver(_escritura,establecimientos,Id_ClienteProveedor){
+function Ver(_escritura, establecimientos, Id_ClienteProveedor) {
     var el = yo`
         <div class="table-responsive">
             <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
@@ -89,12 +89,17 @@ function Ver(_escritura,establecimientos,Id_ClienteProveedor){
 }
 function CargarFormulario(_escritura, tipos_establecimientos, Id_ClienteProveedor, e) {
     const el = yo`
-    <div class="box-body" id="form_modal">
+    <div class="box-body" id="form_modal">\
+        <div class="row">
+            <div class="callout callout-danger hidden" id="divErrors_E">
+                <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Tipo Establecimiento</label>
-                    <select class="form-control" id="E_Cod_TipoEstablecimiento"> 
+                    <label>Tipo Establecimiento *</label>
+                    <select class="form-control required" id="E_Cod_TipoEstablecimiento"> 
                         ${tipos_establecimientos.map(u => yo`<option 
                             value=${u.Cod_TipoEstablecimiento} 
                             ${(e) ? (e.Cod_TipoEstablecimiento == u.Cod_TipoEstablecimiento ? 'selected' : '') : ''}>
@@ -104,16 +109,16 @@ function CargarFormulario(_escritura, tipos_establecimientos, Id_ClienteProveedo
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Codigo Establecimiento</label>
-                    <input style="text-transform:uppercase;" class="form-control" id="E_Cod_Establecimientos" value="${e ? e.Cod_Establecimientos : ''}">
+                    <label>Codigo Establecimiento *</label>
+                    <input style="text-transform:uppercase;" class="form-control required" id="E_Cod_Establecimientos" value="${e ? e.Cod_Establecimientos : ''}">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label>Descripcion Establecimiento</label>
-                    <input style="text-transform:uppercase;" class="form-control" id="E_Des_Establecimiento" value="${e ? e.Des_Establecimiento : ''}">
+                    <label>Descripcion Establecimiento *</label>
+                    <input style="text-transform:uppercase;" class="form-control required" id="E_Des_Establecimiento" value="${e ? e.Des_Establecimiento : ''}">
                 </div>
             </div>
             <div class="col-sm-6">
@@ -139,7 +144,7 @@ function CargarFormulario(_escritura, tipos_establecimientos, Id_ClienteProveedo
         </div>
         <div class="modal-footer">
             <button type="button" class="btn pull-left" data-dismiss="modal">Cancelar</button>
-            <button type="button" onclick=${() => GuardarEstablecimiento(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" data-dismiss="modal">Guardar</button>
+            <button type="button" onclick=${() => GuardarEstablecimiento(_escritura, Id_ClienteProveedor, e)} class="btn btn-primary" >Guardar</button>
         </div>
     </div>
     `
@@ -171,34 +176,36 @@ function AbrirEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) 
 
 }
 function GuardarEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) {
-    H5_loading.show();
-    const Cod_Establecimientos = establecimiento ? establecimiento.Cod_Establecimientos : document.getElementById('E_Cod_Establecimientos').value.toUpperCase()
-    const Des_Establecimiento = document.getElementById('E_Des_Establecimiento').value.toUpperCase()
-    const Cod_TipoEstablecimiento = document.getElementById('E_Cod_TipoEstablecimiento').value
-    const Direccion = document.getElementById('E_Direccion').value.toUpperCase()
-    const Telefono = document.getElementById('E_Telefono').value
-    const Obs_Establecimiento = document.getElementById('E_Obs_Establecimiento').value
-    const Cod_Ubigeo = null
+    if (ValidacionCampos('divErrors_E')) {
+        $('#modal-abrir').modal("hide")
+        H5_loading.show();
+        const Cod_Establecimientos = establecimiento ? establecimiento.Cod_Establecimientos : document.getElementById('E_Cod_Establecimientos').value.toUpperCase()
+        const Des_Establecimiento = document.getElementById('E_Des_Establecimiento').value.toUpperCase()
+        const Cod_TipoEstablecimiento = document.getElementById('E_Cod_TipoEstablecimiento').value
+        const Direccion = document.getElementById('E_Direccion').value.toUpperCase()
+        const Telefono = document.getElementById('E_Telefono').value
+        const Obs_Establecimiento = document.getElementById('E_Obs_Establecimiento').value
+        const Cod_Ubigeo = null
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Id_ClienteProveedor, Cod_Establecimientos,Des_Establecimiento,Cod_TipoEstablecimiento,
-            Direccion,Telefono,Obs_Establecimiento,Cod_Ubigeo
-        })
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Id_ClienteProveedor, Cod_Establecimientos, Des_Establecimiento, Cod_TipoEstablecimiento,
+                Direccion, Telefono, Obs_Establecimiento, Cod_Ubigeo
+            })
+        }
+        fetch(URL + 'clientes_api/guardar_establecimiento_cliente', parametros)
+            .then(r => r.json())
+            .then(res => {
+                Establecimientos(_escritura, Id_ClienteProveedor)
+                H5_loading.hide();
+            })
     }
-    fetch(URL + 'clientes_api/guardar_establecimiento_cliente', parametros)
-        .then(r => r.json())
-        .then(res => {
-            Establecimientos(_escritura, Id_ClienteProveedor)
-            H5_loading.hide();
-        })
-
 }
 function Eliminar(_escritura, establecimiento) {
     var btnEliminar = document.getElementById('btnEliminar')
@@ -226,7 +233,7 @@ function Eliminar(_escritura, establecimiento) {
     })
 
 }
-function Establecimientos(_escritura,Id_ClienteProveedor){
+function Establecimientos(_escritura, Id_ClienteProveedor) {
     H5_loading.show();
     const parametros = {
         method: 'POST',
@@ -250,4 +257,4 @@ function Establecimientos(_escritura,Id_ClienteProveedor){
         })
 }
 
-export {Establecimientos}
+export { Establecimientos }

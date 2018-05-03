@@ -129,7 +129,7 @@ function EliminarUsuario(_escritura, usuario){
             .then(res => {
                 
                 if (res.respuesta == 'ok') {
-                    Listar(_escritura)
+                    ListarUsuarios(_escritura)
                     this.removeEventListener('click', Eliminar)
                 }
                 else{

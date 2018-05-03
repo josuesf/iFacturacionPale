@@ -1,4 +1,4 @@
-function ValidacionCampos(){
+function ValidacionCampos(id_divError){
     var estaValidado = true;
 
     // validar campos de texto requeridos
@@ -32,12 +32,15 @@ function ValidacionCampos(){
                 estaValidado = false;
                 $(this).focus();
                 $(this).css("border-color","red");
+            }else{
+                $(this).css("border-color","");
             }
         }
     });
 
     if (!estaValidado) { 
-        $("#divErrors").removeClass("hidden")
+        $('#'+(id_divError||'divErrors')).html('<p>Es necesario llenar todos los campos requeridos marcados con rojo</p>')
+        $('#'+(id_divError||'divErrors')).removeClass("hidden")
     }else{
         $("#divErrors").addClass("hidden") 
     }
