@@ -13,7 +13,7 @@ var preguntas_seguridad = [
 ]
 
 
-function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
+function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
 
     var el = yo`
     <div>
@@ -53,13 +53,13 @@ function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
                             <div class="box-body">
                                 <div class="row">
                                     ${usuario ? yo`` : yo`<div class="col-sm-6">
-                                    <div class="form-group">
+                                    <div class="form-group" id="frm_Cod_Usuarios">
                                         <label for="exampleInputEmail1">Codigo Usuario *</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Usuarios" placeholder="Ingrese codigo usuario" >
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="frm_Nick">
                                             <label for="exampleInputEmail1">Nombres y Apellidos *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control" id="Nick" placeholder="Ingrese Nombres" value="${usuario ? usuario.Nick : ''}">
                                         </div>
@@ -68,30 +68,31 @@ function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
                                 ${!usuario ? yo`
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group" id="frm_Contrasena">
                                                 <label for="exampleInputEmail1">Elegir Contrasena *</label>
                                                 <input type="password" class="form-control" id="Contrasena" placeholder="Ingrese Contrasena">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group" id="frm_Contrasena2">
                                                 <label for="exampleInputEmail1">Repetir Contrasena *</label>
                                                 <input type="password" class="form-control" id="Contrasena2" placeholder="Repita Contrasena">
                                             </div>
                                         </div>
-                                    </div>`:yo``}
+                                    </div>`: yo``}
                                 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="frm_Pregunta">
                                             <label for="exampleInputEmail1">Pregunta de Seguridad *</label>
                                             <select id="Pregunta" class="form-control">
-                                                ${preguntas_seguridad.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${usuario ? usuario.Pregunta == e ? 'selected' : '' : ''}>${e}</option>`)}
+                                                <option value=""></option>
+                                                ${preguntas_seguridad.map(e => yo`<option style="text-transform:uppercase" value="${e}" ${usuario ? usuario.Pregunta.toUpperCase() == e.toUpperCase() ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group">
+                                        <div class="form-group" id="frm_Respuesta">
                                             <label for="exampleInputEmail1">Respuesta *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control" id="Respuesta" placeholder="Respuesta" value="${usuario ? usuario.Respuesta : ''}">
                                         </div>
@@ -120,7 +121,7 @@ function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Cajas</label>
-                                            ${cajas.map(c=>yo`
+                                            ${cajas.map(c => yo`
                                                 <div class="checkbox">
                                                     <label>
                                                         <input type="checkbox" id="${c.Cod_Caja}" checked="${c.Relacion}" > ${c.Des_Caja}
@@ -146,7 +147,7 @@ function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
                             
                         </form>
                         <div class="box-footer">
-                                <button onclick="${() => Guardar(_escritura,cajas, usuario)}" class="btn btn-primary">Guardar</button>
+                                <button onclick="${() => Guardar(_escritura, cajas, usuario)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>
                 </div>
@@ -156,53 +157,110 @@ function Ver(_escritura, _estados, _perfiles,cajas, usuario) {
     var main = document.getElementById('main-contenido');
     empty(main).appendChild(el);
 }
+function SonCamposValidos(usuario) {
+    const Cod_Usuario = usuario ? usuario.Cod_Usuarios : document.getElementById('Cod_Usuarios').value
+    const Nick = document.getElementById('Nick').value
+    const Contrasena = usuario ? usuario.Contrasena : document.getElementById('Contrasena').value
+    const Contrasena2 = usuario ? usuario.Contrasena : document.getElementById('Contrasena2').value
+    const Pregunta = document.getElementById('Pregunta').value
+    const Respuesta = document.getElementById('Respuesta').value
 
-function Guardar(_escritura,Cajas, usuario) {
+    if (!usuario) {
+        if (Cod_Usuario.length == 0) {
+            document.getElementById('frm_Cod_Usuarios').classList.add('has-error')
+            document.getElementById('Cod_Usuarios').focus()
+        }
+        else
+            document.getElementById('frm_Cod_Usuarios').classList.remove('has-error')
+
+        if (Contrasena.length == 0 || Contrasena2.length == 0 || Contrasena != Contrasena2) {
+            document.getElementById('frm_Contrasena').classList.add('has-error')
+            document.getElementById('frm_Contrasena2').classList.add('has-error')
+            document.getElementById('Contrasena').focus()
+        } else {
+            document.getElementById('frm_Contrasena').classList.remove('has-error')
+            document.getElementById('frm_Contrasena2').classList.remove('has-error')
+        }
+    }
+
+
+    if (Nick.length == 0) {
+        document.getElementById('frm_Nick').classList.add('has-error')
+        document.getElementById('Nick').focus()
+    }
+    else
+        document.getElementById('frm_Nick').classList.remove('has-error')
+    if (Pregunta.length == 0) {
+        document.getElementById('frm_Pregunta').classList.add('has-error')
+        document.getElementById('Pregunta').focus()
+    }
+    else
+        document.getElementById('frm_Pregunta').classList.remove('has-error')
+    if (Respuesta.length == 0) {
+        document.getElementById('frm_Respuesta').classList.add('has-error')
+        document.getElementById('Respuesta').focus()
+    }
+    else
+        document.getElementById('frm_Respuesta').classList.remove('has-error')
+
+    if (Cod_Usuario.length == 0 || Nick.length == 0 || Contrasena.length == 0 || Contrasena2.length == 0
+        || Pregunta.length == 0 || Respuesta.length == 0 || (Contrasena != Contrasena2)) {
+
+        return false
+    }
+    else
+        return true
+
+}
+function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
-    for(var j = 0;j<Cajas.length;j++){
-        Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
-    }
-    var Cod_Usuarios = usuario ? usuario.Cod_Usuarios : document.getElementById('Cod_Usuarios').value.toUpperCase()
-    var Nick = document.getElementById('Nick').value.toUpperCase()
-    var Contrasena = usuario ? usuario.Contrasena:document.getElementById('Contrasena').value
-    var Pregunta = document.getElementById('Pregunta').value.toUpperCase()
-    var Respuesta = document.getElementById('Respuesta').value.toUpperCase()
-    var Cod_Estado = document.getElementById('Cod_Estado').value.toUpperCase()
-    var Cod_Perfil = document.getElementById('Cod_Perfil').value.toUpperCase()
-    var Imagen = document.getElementById('Imagen').value
-    var Cod_Usuario = 'ADMINISTRADOR'
+    if (SonCamposValidos(usuario)) {
+        H5_loading.show();
+        for (var j = 0; j < Cajas.length; j++) {
+            Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
+        }
+        var Cod_Usuarios = usuario ? usuario.Cod_Usuarios : document.getElementById('Cod_Usuarios').value.toUpperCase()
+        var Nick = document.getElementById('Nick').value.toUpperCase()
+        var Contrasena = usuario ? usuario.Contrasena : document.getElementById('Contrasena').value
+        var Pregunta = document.getElementById('Pregunta').value.toUpperCase()
+        var Respuesta = document.getElementById('Respuesta').value.toUpperCase()
+        var Cod_Estado = document.getElementById('Cod_Estado').value.toUpperCase()
+        var Cod_Perfil = document.getElementById('Cod_Perfil').value.toUpperCase()
+        var Imagen = document.getElementById('Imagen').value
+        var Cod_Usuario = 'ADMINISTRADOR'
 
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Usuarios,
-            Nick,
-            Contrasena,
-            Pregunta,
-            Respuesta,
-            Cod_Estado,
-            Cod_Perfil,
-            Cod_Usuario,
-            Cajas
-        })
-    }
-    fetch(URL + '/usuarios_api/guardar_usuario', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                ListarUsuarios(_escritura)
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Cod_Usuarios,
+                Nick,
+                Contrasena,
+                Pregunta,
+                Respuesta,
+                Cod_Estado,
+                Cod_Perfil,
+                Cod_Usuario,
+                Cajas
+            })
+        }
+        fetch(URL + '/usuarios_api/guardar_usuario', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    ListarUsuarios(_escritura)
 
-            }
-            else {
-                console.log('Error')
-            }
-            H5_loading.hide()
-        })
+                }
+                else {
+                    console.log('Error')
+                }
+                H5_loading.hide()
+            })
+    }
 }
 
 function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
@@ -213,8 +271,9 @@ function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
-            Cod_Usuarios: usuario?usuario.Cod_Usuarios:'',
+            Cod_Usuarios: usuario ? usuario.Cod_Usuarios : '',
         })
     }
     fetch(URL + '/usuarios_api/get_cajas_usuario', parametros)
@@ -224,7 +283,7 @@ function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
             if (res.respuesta == 'ok') {
                 cajas = res.data.cajas
             }
-            Ver(_escritura, _estados, _perfiles,cajas, usuario)
+            Ver(_escritura, _estados, _perfiles, cajas, usuario)
             H5_loading.hide()
         })
 

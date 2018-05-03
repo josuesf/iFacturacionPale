@@ -19,6 +19,8 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
+// app.use(authChecker);
+
 app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
@@ -60,7 +62,15 @@ var conceptos_api = require('./routes/api-conceptos')
 var productos_serv_api = require('./routes/api-productos_serv')
 var clientes_api = require('./routes/api-clientes')
 var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
-app.use('/usuarios_api', usuarios_api);
+
+function authChecker(req, res, next) {
+  if ((req.session && req.session.authenticated)||req.path==='/login') {
+      next();
+  } else {
+      res.render('login.ejs', { title: 'iFacturacion - Usuarios' });
+  }
+}
+app.use('/usuarios_api',usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
 app.use('/sucursales_api', sucursales_api);

@@ -119,6 +119,7 @@ function EliminarUsuario(_escritura, usuario){
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 Cod_Usuarios,
             })
@@ -149,6 +150,7 @@ function ListarUsuarios(escritura, NumeroPagina) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
             TamanoPagina: '20',
             NumeroPagina: NumeroPagina||'0',
