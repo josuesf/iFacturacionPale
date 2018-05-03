@@ -314,16 +314,6 @@ var impresoras = [
     'EPSON TM-T20II'
 ]
  
-function ValidacionCampos(){
-    if(!$("#Cod_Caja").empty() && !$("#Des_Caja").empty() && !$("#Cod_Usuario").empty()){
-        $("#divErrors").addClass("hidden")
-        return true
-    }
-    else{
-        $("#divErrors").removeClass("hidden")
-        return false
-    }
-}
 
 function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
 
