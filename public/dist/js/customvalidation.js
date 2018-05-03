@@ -19,6 +19,7 @@ function ValidacionCampos(){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;
                 $(this).focus();
+                $(this).css("border-color","red");
             }
         }
     });

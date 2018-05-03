@@ -129,14 +129,14 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                             <div class="box-body">
                                 <div class="row">
                                     <div class="callout callout-danger hidden" id="divErrors">
-                                        <p>Es necesario llenar todos los campos requeridos</p>
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     ${caja ? yo`` : yo`<div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="Cod_Caja">Codigo Caja</label>
-                                        <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Caja" placeholder="Ingrese codigo caja">
+                                        <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Caja" placeholder="Ingrese codigo caja">
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
@@ -145,7 +145,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                             
                                             <div class="checkbox">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Activo" checked="${caja ? caja.Flag_Activo : 0}"> Es Activo?
+                                                    <input type="checkbox" id="Flag_Activo" class="required" checked="${caja ? caja.Flag_Activo : 0}"> Es Activo?
                                                 </label>
                                             </div>
                                         </div>
@@ -155,13 +155,13 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Des_Caja">Nombre de la Caja</label>
-                                            <input type="text"  style="text-transform:uppercase" class="form-control" id="Des_Caja" placeholder="Ingrese Nombre de caja" value="${caja ? caja.Des_Caja : ''}">
+                                            <input type="text"  style="text-transform:uppercase" class="form-control required" id="Des_Caja" placeholder="Ingrese Nombre de caja" value="${caja ? caja.Des_Caja : ''}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_Sucursal">Sucursal a la que pertence</label>
-                                            <select id="Cod_Sucursal" class="form-control">
+                                            <select id="Cod_Sucursal" class="form-control required">
                                                 ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Sucursal}" ${caja ? caja.Cod_Sucursal == e.Cod_Sucursal ? 'selected' : '' : ''}>${e.Nom_Sucursal}</option>`)}
                                             </select>
                                         </div>
@@ -174,13 +174,13 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable">Buscar responsable</button>
                                             </div>
-                                            <input type="text" class="form-control" id="Cod_Usuario" value="${caja? caja.Cod_UsuarioCajero:''}" disabled>
+                                            <input type="text" class="form-control required" id="Cod_Usuario" value="${caja? caja.Cod_UsuarioCajero:''}" disabled>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_CuentaContable">Cuenta Contable</label>
-                                            <select id="Cod_CuentaContable" class="form-control select2">
+                                            <select id="Cod_CuentaContable" class="form-control select2 required">
                                                 <option style="text-transform:uppercase" value="10102" selected>10102</option>
                                                 ${sucursales.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaContable}" ${caja ? caja.Cod_Sucursal == e ? 'selected' : '' : ''}>${e}</option>`)}
                                             </select>

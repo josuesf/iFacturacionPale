@@ -41,17 +41,22 @@ function Ver(_escritura, categoriasPadre, categoria){
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
+                                    <div class="callout callout-danger hidden" id="divErrors">
+                                        <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     ${categoria? yo``:yo`
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Cod_Categoria">Codigo de Categoria</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Cod_Categoria" placeholder="Codigo categoria" >
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Categoria" placeholder="Codigo categoria" >
                                         </div>
                                     </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Des_Categoria">Categoria</label>
-                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Des_Categoria" placeholder="Descripcion de categoria" value="${categoria?categoria.Des_Categoria:''}">
+                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_Categoria" placeholder="Descripcion de categoria" value="${categoria?categoria.Des_Categoria:''}">
                                         </div>
                                     </div>
                                 </div>
@@ -91,36 +96,37 @@ function Ver(_escritura, categoriasPadre, categoria){
 }
 
 function Guardar(_escritura, categoriasPadre, categoria){
-    var Cod_Categoria = categoria?categoria.Cod_Categoria:document.getElementById('Cod_Categoria').value.toUpperCase()
-    var Des_Categoria = document.getElementById('Des_Categoria').value.toUpperCase()
-    var Foto = null
-    var Cod_CategoriaPadre = document.getElementById('Cod_CategoriaPadre').value.toUpperCase()
-    var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
-    H5_loading.show();
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Cod_Categoria,
-            Des_Categoria,
-            Cod_CategoriaPadre,
-            Cod_Usuario
-        })
+    if(ValidacionCampos()){
+        var Cod_Categoria = categoria?categoria.Cod_Categoria:document.getElementById('Cod_Categoria').value.toUpperCase()
+        var Des_Categoria = document.getElementById('Des_Categoria').value.toUpperCase()
+        var Foto = null
+        var Cod_CategoriaPadre = document.getElementById('Cod_CategoriaPadre').value.toUpperCase()
+        var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
+        H5_loading.show();
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Categoria,
+                Des_Categoria,
+                Cod_CategoriaPadre,
+                Cod_Usuario
+            })
+        }
+        fetch(URL+'/categorias_api/guardar_categoria', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta == 'ok'){
+                    ListarCategorias(_escritura)
+                }else{
+                    Ver(_escritura, categoriasPadre, categoria)
+                }
+                H5_loading.hide()
+            })
     }
-    fetch(URL+'/categorias_api/guardar_categoria', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if(res.respuesta == 'ok'){
-                ListarCategorias(_escritura)
-            }else{
-                Ver(_escritura, categoriasPadre, categoria)
-            }
-            H5_loading.hide()
-        })
-
 }
 
 function NuevaCategoria(_escritura, categoria){
