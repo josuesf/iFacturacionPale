@@ -13,6 +13,18 @@ function ValidacionCampos(){
         }
     });
 
+     // validar areas de textos requeridos
+     $("textarea").each(function(){
+        if ($(this).hasClass("required")){
+            if($.trim($(this).val()).length == 0){ 
+                estaValidado = false;
+                $(this).css("border-color","red");
+            }else{
+                $(this).css("border-color","");
+            }
+        }
+    });
+
     // validar combos requeridos
     $("select").each(function(){
         if ($(this).hasClass("required")){

@@ -166,11 +166,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
   
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-<<<<<<< HEAD
-    if (ValidacionCampos()) {
-=======
     if(ValidacionCampos()){
->>>>>>> e3912a624d24f14ea2d67d2d3a59e571dbd8b426
         H5_loading.show();
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
