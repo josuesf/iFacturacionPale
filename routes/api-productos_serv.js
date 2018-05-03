@@ -35,6 +35,57 @@ router.post('/get_productos_serv', function (req, res) {
     Ejecutar_Procedimientos(res,procedimientos)
 });
 
+router.post('/get_lista_stock', function (req, res) {
+    input = req.body
+    parametros1 = [
+        {nom_parametro:'Tipo',valor_parametro:'BASICO'} 
+    ]
+    parametros2 = [
+        {nom_parametro:'Id_Producto',valor_parametro:input.Id_Producto}, 
+        {nom_parametro:'Cod_Categoria',valor_parametro:input.Cod_Categoria}
+    ]
+    parametros = []
+    procedimientos =[
+        {nom_respuesta:'almacenes',sp_name:'usp_ALM_ALMACEN_TT ',parametros},
+        {nom_respuesta:'unidades_medida',sp_name:'USP_VIS_UNIDADES_DE_MEDIDA_TT',parametros},
+        {nom_respuesta:'unidades_medida_tipo', sp_name:'USP_VIS_UNIDADES_DE_MEDIDA_TXTipo', parametros:parametros1},
+        {nom_respuesta:'monedas',sp_name:'USP_VIS_MONEDAS_TT', parametros},
+        {nom_respuesta:'precio_categoria',sp_name:'USP_PRI_PRODUCTO_PRECIO_TXCategoria', parametros:parametros2},
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+router.post('/guardar_presentacion_ubicacion', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto},
+        {nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.Cod_UnidadMedida},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro: 'Cod_Moneda', valor_parametro: input.Cod_Moneda},
+        {nom_parametro: 'Precio_Compra', valor_parametro: input.Precio_Compra},
+        {nom_parametro: 'Precio_Venta', valor_parametro: input.Precio_Venta},
+        {nom_parametro: 'Stock_Min', valor_parametro: input.Stock_Min},
+        {nom_parametro: 'Stock_Max', valor_parametro: input.Stock_Max},
+        {nom_parametro: 'Stock_Act', valor_parametro: input.Stock_Act},
+        {nom_parametro: 'Cod_UnidadMedidaMin', valor_parametro: input.Cod_UnidadMedidaMin},
+        {nom_parametro: 'Cantidad_Min', tipo_parametro: sql.Numeric(5,2), valor_parametro: input.Cantidad_Min},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+    ]
+    parametros1 = [
+        {nom_parametro:'Id_Producto',valor_parametro:input.Id_Producto},
+        {nom_parametro:'Cod_UnidadMedida',valor_parametro:input.Cod_UnidadMedida},
+        {nom_parametro:'Cod_Almacen',valor_parametro:input.Cod_Almacen},
+        {nom_parametro:'Cod_TipoPrecio',valor_parametro:input.Cod_TipoPrecio},
+        {nom_parametro:'Valor',valor_parametro:input.Valor},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'presentacion_ubicacion_stock', sp_name: 'USP_PRI_PRODUCTO_STOCK_G', parametros},
+        {nom_respuesta:'presentacion_ubicacion_precio',sp_name:'USP_PRI_PRODUCTO_PRECIO_G',parametros:parametros1}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 router.post('/get_categoriaspadre', function (req, res){
     input = req.body
     parametros = []
@@ -74,6 +125,7 @@ router.post('/guardar_producto', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+
 router.post('/editar_producto', function (req, res){
     input = req.body
     parametros = [
@@ -84,6 +136,18 @@ router.post('/editar_producto', function (req, res){
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
+
+router.post('/eliminar_producto', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_E', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 router.post('/get_presentacion_ubicacion', function (req, res){
     input = req.body
     parametros = [
