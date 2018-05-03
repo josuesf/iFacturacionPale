@@ -125,13 +125,13 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Por_UtilidadMax">% Utilidad Maxima</label>
-                                            <input type="number" class="form-control" id="Por_UtilidadMax" placeholder="0,5,10,20" value="${sucursal ? sucursal.Por_UtilidadMax : ''}">
+                                            <input type="number" class="form-control required" id="Por_UtilidadMax" placeholder="0,5,10,20" value="${sucursal ? sucursal.Por_UtilidadMax : ''}">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Por_UtilidadMin">% Utilidad Minima </label>
-                                            <input type="number" class="form-control" id="Por_UtilidadMin" placeholder="Ejem: 0,5,10,20" value="${sucursal ? sucursal.Por_UtilidadMin : ''}">
+                                            <input type="number" class="form-control required" id="Por_UtilidadMin" placeholder="Ejem: 0,5,10,20" value="${sucursal ? sucursal.Por_UtilidadMin : ''}">
                                         </div>
                                     </div>
                                 </div>

@@ -182,7 +182,11 @@ function ValidacionesExtras(usuario){
 } 
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
+<<<<<<< HEAD
     if(ValidacionCampos() && ValidacionesExtras(usuario)){
+=======
+    if(ValidacionCampos()){
+>>>>>>> 5880d14576172d4cc05c4a896742ec887fea3e12
         H5_loading.show();
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
