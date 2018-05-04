@@ -17,7 +17,7 @@ var el = yo`
         </a>
         <ul class="treeview-menu">
             <li class=""><a href="#" onclick=${() => console.log('hola')}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
-            <li class=""><a href="#" onclick=${() => NuevoCompraVentaDolar(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolar</a></li>
+            <li class=""><a  onclick=${() => NuevoCompraVentaDolar(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolar</a></li>
             <li class=""><a  onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
             <li class=""><a href="#" onclick=${() => console.log('hola')}><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
         </ul>

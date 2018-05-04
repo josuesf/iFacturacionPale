@@ -5,7 +5,6 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 function Ver(_escritura, Serie, variables) {
     var el = yo`
-    <div> 
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -189,12 +188,11 @@ function Ver(_escritura, Serie, variables) {
                     <button type="button" class="btn btn-info" id="btnGuardar" data-dismiss="modal">Aceptar</button>
                 </div>
             </div>
-        </div> 
-    </div>`
+        </div>`
 
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
-
+    var modal_proceso = document.getElementById('modal-proceso');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-proceso').modal()
 }
 
 
