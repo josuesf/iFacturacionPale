@@ -68,6 +68,7 @@ var conceptos_api = require('./routes/api-conceptos')
 var productos_serv_api = require('./routes/api-productos_serv')
 var clientes_api = require('./routes/api-clientes')
 var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
+var movimientos_caja_api = require('./routes/api-movimientos_caja')
 
 function authChecker(req, res, next) {
   if ((req.session && req.session.authenticated)||req.path==='/login') {
@@ -90,6 +91,7 @@ app.use('/conceptos_api', conceptos_api);
 app.use('/productos_serv_api', productos_serv_api);
 app.use('/clientes_api', clientes_api);
 app.use('/cuentas_bancarias_api', cuentas_bancarias_api);
+app.use('/movimientos_caja_api',movimientos_caja_api)
 
 
 //Listen Server
