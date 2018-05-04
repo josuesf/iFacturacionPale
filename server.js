@@ -69,6 +69,9 @@ var productos_serv_api = require('./routes/api-productos_serv')
 var clientes_api = require('./routes/api-clientes')
 var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
 
+// Routes Procesos
+var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
+
 function authChecker(req, res, next) {
   if ((req.session && req.session.authenticated)||req.path==='/login') {
       next();
@@ -90,6 +93,8 @@ app.use('/conceptos_api', conceptos_api);
 app.use('/productos_serv_api', productos_serv_api);
 app.use('/clientes_api', clientes_api);
 app.use('/cuentas_bancarias_api', cuentas_bancarias_api);
+
+app.use('/compra_venta_moneda_extranjera_api', compra_venta_moneda_extranjera_api);
 
 
 //Listen Server

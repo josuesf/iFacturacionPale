@@ -10,7 +10,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
         <div class="box-header">
             <h3 class="box-title">Lista de Elementos Relacionados</h3>
             ${_escritura ? yo`
-            <a class="btn btn-info pull-right">
+            <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${() => AgregarElementosRelacionados(variables, _escritura, producto)}">
                 <i class="fa fa-plus"></i> Nuevo</a>`: yo``}
         </div>
         <!-- /.box-header -->

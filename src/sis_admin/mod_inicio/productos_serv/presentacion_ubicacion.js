@@ -55,6 +55,7 @@ function Ver(variables, _escritura, producto) {
 
                 </table>
             </div>
+             
         </div>
     </div>`
 
@@ -151,34 +152,35 @@ function VerAgregarPresentacionUbicacion(variables, _escritura, producto,present
                                             </div>
                                         </div>
                                     </div>
-
+                                ${!producto.Flag_Stock ? yo``:yo`
                                     <div class="row">
-                                        <div class="col-sm-12">
-                                            <label for="Flag_Convertir"></label>
-                                            <div class="checkbox form-group">
-                                                <label>
-                                                <input type="checkbox" id="Flag_Convertir" ><b> Es posible convertir?</b>
-                                                </label>
-                                            </div>       
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label for="Flag_Convertir"></label>
+                                                <div class="checkbox form-group">
+                                                    <label>
+                                                    <input type="checkbox" id="Flag_Convertir" ><b> Es posible convertir?</b>
+                                                    </label>
+                                                </div>       
+                                            </div> 
                                         </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="Cod_UnidadMedidaMin">Unidad de Medida</label>
-                                                <select class="form-control" id="Cod_UnidadMedidaMin">
-                                                    ${variables.unidades_medida.map(u => yo`<option value="${u.Cod_UnidadMedida}" ${presentacion?presentacion.Cod_UnidadMedidaMin==u.Cod_UnidadMedida?'selected':'':''}">${u.Nom_UnidadMedida}</option>`)}
-                                                </select>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Cod_UnidadMedidaMin">Unidad de Medida</label>
+                                                    <select class="form-control" id="Cod_UnidadMedidaMin">
+                                                        ${variables.unidades_medida.map(u => yo`<option value="${u.Cod_UnidadMedida}" ${presentacion?presentacion.Cod_UnidadMedidaMin==u.Cod_UnidadMedida?'selected':'':''}">${u.Nom_UnidadMedida}</option>`)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="Cantidad_Min">Cantidad</label>
+                                                    <input type="number" class="form-control" id="Cantidad_Min" placeholder="0.00" value="${presentacion?presentacion.Cantidad_Min:''}">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group">
-                                                <label for="Cantidad_Min">Cantidad</label>
-                                                <input type="number" class="form-control" id="Cantidad_Min" placeholder="0.00" value="${presentacion?presentacion.Cantidad_Min:''}">
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </div>`}
                                 </div>
                             </div>
                         </div>

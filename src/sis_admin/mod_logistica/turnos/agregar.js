@@ -62,7 +62,7 @@ function Ver(_escritura, turno){
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-3">
-                                         <div class="form-group">
+                                        <div class="form-group">
                                             <label>Fecha inicio:</label>
                             
                                             <div class="input-group date">
