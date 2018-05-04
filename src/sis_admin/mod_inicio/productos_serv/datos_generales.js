@@ -306,7 +306,7 @@ function GuardarProducto(_escritura, producto){
         var Id_Producto='-1'
         if(producto != undefined)
             Id_Producto = producto.Id_Producto
-        var Cod_Producto = document.getElementById('Cod_Producto').value.toUpperCase() 
+        var Cod_Producto = document.getElementById('Cod_Producto')==null?producto.Cod_Producto:document.getElementById('Cod_Producto').value.toUpperCase() 
         var Cod_Categoria = document.getElementById('Cod_Categoria').value.toUpperCase()
         var Cod_Marca = document.getElementById('Cod_Marca').value.toUpperCase()
         var Cod_TipoProducto = document.getElementById('Cod_TipoProducto').value.toUpperCase()
