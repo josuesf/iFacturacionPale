@@ -25,6 +25,12 @@ app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
   } else
+    res.render('index_procesos', { title: 'iFacturacion - Procesos',Cod_Usuarios:req.session.username,Nick:req.session.nick });
+})
+app.get('/administracion', function (req, res) {
+  if (!req.session || !req.session.authenticated) {
+    res.redirect('/login');
+  } else
     res.render('index', { title: 'iFacturacion',Cod_Usuarios:req.session.username,Nick:req.session.nick });
 })
 app.get('/login', function (req, res) {

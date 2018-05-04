@@ -45,6 +45,29 @@ function compile(watch) {
 
     rebundle();
 }
+function compile_procesos(watch) {
+    var bundle = browserify(['./src/index_procesos.js'], { debug: true });
+
+    if (watch) {
+        bundle = watchify(bundle);
+        bundle.on('update', function () {
+            console.log('--> Bundling...');
+            rebundle();
+        });
+    }
+
+    function rebundle() {
+        bundle
+            .transform(babel, { presets: ['es2015'], plugins: ['syntax-async-functions', 'transform-regenerator'] })
+            .bundle()
+            .on('error', function (err) { console.log(err); this.emit('end') })
+            .pipe(source('index_procesos.js'))
+            .pipe(rename('app_proc.js'))
+            .pipe(gulp.dest('public'));
+    }
+
+    rebundle();
+}
 
 
 
@@ -66,5 +89,6 @@ gulp.task('watch-css', function () {
   });
 
 gulp.task('watch-js', function () { return compile(true); });
+gulp.task('watch-procesos', function () { return compile_procesos(true); });
 
 gulp.task('default', ['styles', 'build']);
