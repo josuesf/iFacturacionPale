@@ -145,21 +145,17 @@ function Ver(_escritura, Serie, variables) {
                                         <label>Tipo de Operacion</label>
                                         <div class="col-sm-12">
                                             <div class="col-sm-6">
-                                                <div class="checkbox">
-                                                    <label>
+                                                    <label class="radio-inline">
                                                         <input type="radio" id="TipoME" name="optionCV"> Compra ME
-                                                    </label>
-                                                </div>
+                                                    </label> 
                                             </div>
                                             <div class="col-sm-6">
-                                                <label></label>
-                                                <div class="checkbox">
-                                                    <label>
+                                                    <label class="radio-inline">
                                                         <input type="radio" id="TipoME" name="optionCV"> Venta ME
                                                     </label>
-                                                </div>
                                             </div>
-                                        </div>
+                                        </div> 
+                                        <br><br><br>
                                         <div class="form-group">
                                             <label for="Cod_Producto">Moneda</label>
                                             <select class="form-control">
