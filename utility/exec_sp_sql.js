@@ -2,10 +2,10 @@ var sql = require("mssql");
 var md5 = require("md5")
 var dbConfig = require('./conexion_sql').dbConfig
 //Procedimientos Almacenados
-var Ejecutar_Procedimientos = function (res, procedimientos) {
-    Ejecutar_SP_SQL(res,procedimientos,0)
+var Ejecutar_Procedimientos = function (res, procedimientos,respuesta_previa) {
+    Ejecutar_SP_SQL(res,procedimientos,0,respuesta_previa)
 }
-var Ejecutar_SP_SQL = function (res,procedimientos, posicion) {
+var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
     var dbConn = new sql.Connection(dbConfig);
     dbConn.connect(function (err) {
         if (err) {
@@ -28,11 +28,16 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion) {
             }
             procedimientos[posicion].data =  result[0]
             if(posicion+1<procedimientos.length)
-                Ejecutar_SP_SQL(res,procedimientos,posicion+1)
+                Ejecutar_SP_SQL(res,procedimientos,posicion+1,respuesta_previa)
             else{
                 data = {}
                 for(j=0;j<procedimientos.length;j++){
                     data[procedimientos[j].nom_respuesta] = procedimientos[j].data
+                }
+                if(respuesta_previa){
+                    for(i=0;i<respuesta_previa.length;i++){
+                        data[respuesta_previa[i].nombre] = respuesta_previa[i].valor
+                    }
                 }
                 res.json({ respuesta: 'ok', data }
             )}
@@ -58,6 +63,27 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
             if(usuario.length==0) return next({err:'Revise sus datos ingresados'})
             if(usuario.length>0 && usuario[0].Contrasena!=Contrasena) return next({err:'Revise sus datos ingresados'})
             next({Cod_Usuarios:usuario[0].Cod_Usuarios,Nick:usuario[0].Nick})
+        });
+
+    });
+}
+var EXEC_SQL = function (sp_name, parametros, next) {
+    var dbConn = new sql.Connection(dbConfig);
+    dbConn.connect(function (err) {
+        if (err) {
+            return next({err})
+        }
+        var request = new sql.Request(dbConn);
+        const param = parametros
+        for (i = 0; i < param.length; i++) {
+            request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
+        }
+        request.execute(sp_name, function (err, result) {
+            dbConn.close()
+            if (err) {
+                return next({err})
+            }
+            next({result:result[0]})
         });
 
     });
@@ -89,4 +115,4 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
 //     });
 // }
 
-module.exports = { Ejecutar_Procedimientos,LOGIN_SQL }
+module.exports = { Ejecutar_Procedimientos,LOGIN_SQL,EXEC_SQL }
