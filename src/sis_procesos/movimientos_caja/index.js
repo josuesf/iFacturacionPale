@@ -26,6 +26,9 @@ function Ver(movimientos,saldos) {
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
+                <div class="modal fade" id="modal-superior" style="display: none;z-index: 1051;" >
+                     
+                </div>
                 <div class="modal fade" id="modal-proceso">
                     
                 </div>

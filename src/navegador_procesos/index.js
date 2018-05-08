@@ -2,7 +2,9 @@ var yo = require('yo-yo')
 var empty = require('empty-element');
 
 //Views CompraVenta
-import { NuevoCompraVentaDolar } from '../sis_procesos/mod_ventas/mod_compra_venta_moneda_extranjera/agregar'
+import { NuevoCompraVentaME } from '../sis_procesos/mod_ventas/recibo_compra_venta_me'
+//Views Envio Efectivo
+import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
 var el = yo`
@@ -16,10 +18,10 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a href="#" onclick=${() => console.log('hola')}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
-            <li class=""><a  onclick=${() => NuevoCompraVentaDolar(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolar</a></li>
+            <li class=""><a  onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Moneda Extranjera</a></li>
+            <li class=""><a  onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
             <li class=""><a  onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
-            <li class=""><a href="#" onclick=${() => console.log('hola')}><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
+            
         </ul>
     </li>
     

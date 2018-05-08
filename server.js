@@ -70,6 +70,7 @@ var clientes_api = require('./routes/api-clientes')
 var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
 var movimientos_caja_api = require('./routes/api-movimientos_caja')
 var recibo_iegreso_api = require('./routes/api-recibo_iegreso')
+var envios_api = require('./routes/api-envios')
 
 // Routes Procesos
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
@@ -99,6 +100,7 @@ app.use('/movimientos_caja_api',movimientos_caja_api)
 
 app.use('/compra_venta_moneda_extranjera_api', compra_venta_moneda_extranjera_api);
 app.use('/recibo_iegreso_api',recibo_iegreso_api)
+app.use('/envios_api', envios_api)
 
 
 //Listen Server

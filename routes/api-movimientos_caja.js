@@ -8,12 +8,12 @@ router.post('/get_movimientos', function (req, res) {
     input = req.body
     parametros = [
         {nom_parametro:'Cod_Caja',valor_parametro:'100'},
-        {nom_parametro:'Cod_Turno',valor_parametro:'D02/05/2018'},
+        {nom_parametro:'Cod_Turno',valor_parametro:'T0002'},
         {nom_parametro:'Flag_Resumen',valor_parametro:'0'},
     ]
     parametros2 = [
         {nom_parametro:'Cod_Caja',valor_parametro:'100'},
-        {nom_parametro:'Cod_Turno',valor_parametro:'D02/05/2018'},
+        {nom_parametro:'Cod_Turno',valor_parametro:'T0002'},
     ]
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},

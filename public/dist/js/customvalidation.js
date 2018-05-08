@@ -1,8 +1,8 @@
-function ValidacionCampos(id_divError){
+function ValidacionCampos(id_divError,id_divParent){
     var estaValidado = true;
 
     // validar campos de texto requeridos
-    $("input").each(function(){
+    $((id_divParent!= undefined?"#"+id_divParent:'')+" input").each(function(){
         if ($(this).hasClass("required")){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;
@@ -14,7 +14,7 @@ function ValidacionCampos(id_divError){
     });
 
      // validar areas de textos requeridos
-     $("textarea").each(function(){
+     $((id_divParent!= undefined?"#"+id_divParent:'')+" textarea").each(function(){
         if ($(this).hasClass("required")){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;
@@ -26,7 +26,7 @@ function ValidacionCampos(id_divError){
     });
 
     // validar combos requeridos
-    $("select").each(function(){
+    $((id_divParent!= undefined?"#"+id_divParent:'')+" select").each(function(){
         if ($(this).hasClass("required")){
             if($.trim($(this).val()).length == 0){ 
                 estaValidado = false;

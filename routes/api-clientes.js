@@ -67,6 +67,32 @@ router.post('/guardar_cliente', function (req, res) {
     Ejecutar_Procedimientos(res, procedimientos)
 });
 
+router.post('/get_cliente_by_documento', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Cod_TipoCliente'},
+        { nom_parametro: 'Nro_Documento', valor_parametro: input.Nro_Documento },
+        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDocumento },
+        { nom_parametro: 'Cod_TipoComprobante'}
+    ]
+    procedimientos = [
+        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXDocumento', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+router.post('/get_cliente_by_nombre', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Cod_TipoCliente'},
+        { nom_parametro: 'Cliente', valor_parametro: input.Cliente }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXCliente', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
 router.post('/eliminar_cliente', function (req, res) {
     input = req.body
     parametros = [
