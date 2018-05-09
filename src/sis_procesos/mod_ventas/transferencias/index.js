@@ -5,7 +5,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 function Ver(_escritura, variables,fecha_actual) {
     var el = yo`
-        <div class="modal-dialog">
+        <div class="modal-dialog ">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -15,128 +15,131 @@ function Ver(_escritura, variables,fecha_actual) {
                 </div>
                 <div class="modal-body"  id="modal_form">
                     <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
-                            <p> Es necesario llenar los campos marcados con rojo</p>
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="Cod_Cajero">Cajero</label>
-                                <input type="text" class="form-control required" id="Cod_Cajero" value="ADMINISTRADOR">
+                            <div class="row">
+                                <div id="modal_error" class="callout callout-danger hidden">
+                                    <p> Es necesario llenar los campos marcados con rojo</p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="Cod_Caja">Caja</label>
-                                <select class="form-control" id="Cod_CajaOrigen">
-                                   
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="Fecha">Fecha</label>
-                                <input type="date" class="form-control required" id="Fecha" placeholder='dd/mm/aaaa' value=${fecha_actual}>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Destino y Monto</div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" value="b" id="optEnvios" name="optEnvios" onclick=${()=>CambioRadios()}> Banco
-                                            </label>
-                                        </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Cod_Cajero">Cajero</label>
+                                        <input type="text" class="form-control required" id="Cod_Cajero" value="ADMINISTRADOR">
                                     </div>
+                                </div>
+                            </div>
 
-                                    <div class="col-md-9" id="formBanco" style="display:none"> 
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <select class="form-control" id="Cod_Cuenta_Bancaria">
-                                                    ${variables.cuentas_bancarias.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaBancaria}">${e.Des_CuentaBancaria}</option>`)}
-                                                </select>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Cod_Caja">Caja</label>
+                                        <select class="form-control" id="Cod_CajaOrigen">
+                                        
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Fecha">Fecha</label>
+                                        <input type="date" class="form-control required" id="Fecha" placeholder='dd/mm/aaaa' value=${fecha_actual}>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Destino y Monto</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" value="b" id="optEnvios" name="optEnvios" onclick=${()=>CambioRadios()}> Banco
+                                                    </label>
+                                                </div>
                                             </div>
+
+                                            <div class="col-md-9" id="formBanco" style="display:none"> 
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <select class="form-control" id="Cod_Cuenta_Bancaria">
+                                                            ${variables.cuentas_bancarias.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaBancaria}">${e.Des_CuentaBancaria}</option>`)}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="NroOperacion">Nro Op.</label>
+                                                        <input type="text" class="form-control" id="NroOperacion">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" value="c" id="optEnvios" name="optEnvios" checked onclick=${()=>CambioRadios()}> Caja
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9" id="formCaja">
+                                                <div class="form-group">
+                                                    <select class="form-control required" id="Cod_CajaDestino">
+                                                        ${variables.cajas_diferentes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Caja}">${e.Des_Caja}</option>`)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                            
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Cod_Producto">Moneda</label>
+                                                    <select class="form-control" id="Cod_Moneda">\
+                                                        ${variables.monedas.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="Cod_Producto">Monto</label>
+                                                    <input type="number" class="form-control required" id="Monto" onkeypress=${()=>CalcularITF()}>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 text-center" id="formBancoITF" style="display:none">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="optITF" name="optITF" onclick=${()=>CalcularITF()}> Con ITF? 0.005%
+                                                    </label>
+                                                </div>
+                                            </div>
+
                                         </div>
                                         
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="sr-only" for="NroOperacion">Nro Op.</label>
-                                                <input type="text" class="form-control" id="NroOperacion">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="Comentario">Comentario</label>
+                                                    <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario" placeholder="Ingrese un comentario"></textarea>
+                                                </div>
                                             </div>
                                         </div>
+
+
                                     </div>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" value="c" id="optEnvios" name="optEnvios" checked onclick=${()=>CambioRadios()}> Caja
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9" id="formCaja">
-                                        <div class="form-group">
-                                            <select class="form-control required" id="Cod_CajaDestino">
-                                                ${variables.cajas_diferentes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Caja}">${e.Des_Caja}</option>`)}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                    
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label for="Cod_Producto">Moneda</label>
-                                            <select class="form-control" id="Cod_Moneda">\
-                                                ${variables.monedas.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="Cod_Producto">Monto</label>
-                                            <input type="number" class="form-control required" id="Monto" onkeypress=${()=>CalcularITF()}>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 text-center" id="formBancoITF" style="display:none">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" id="optITF" name="optITF" onclick=${()=>CalcularITF()}> Con ITF? 0.005%
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="Comentario">Comentario</label>
-                                            <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario" placeholder="Ingrese un comentario"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -197,10 +200,10 @@ function GuardarEnvio(variables){
         var ClienteMov = null
         if($('input[name=optEnvios]:checked').val()=="b"){
             Cliente = $("#Cod_Cuenta_Bancaria").text()
-            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria").text() + " : " + $("#NroOperacion").val() + " , " + $("#Comentario").val()
+            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria").val() + " : " + $("#NroOperacion").val() + " , " + $("#Comentario").val()
         }else{
             Cliente = $("#Cod_CajaDestino").text()
-            ClienteMov = "PARA : " + $("#Cod_CajaDestino").text() + " , " + $("#Comentario").val()
+            ClienteMov = "PARA : " + $("#Cod_CajaDestino").val() + " , " + $("#Comentario").val()
         }
         var Des_Movimiento = ClienteMov
         var Fecha = $("#Fecha").val()
@@ -245,6 +248,7 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
             Cliente,
             Des_Movimiento,
             Fecha,
+            Cod_MonedaIng,
             Cod_MonedaEgr,
             Fecha_Aut,
             Serie,
@@ -269,7 +273,7 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
 
 function GuardarMovCuentaBancaria(variables){
     var Id_MovimientoCuenta = -1
-    var Cod_Cuenta_Bancaria=$("#Cod_Cuenta_Bancaria").text()
+    var Cod_CuentaBancaria=$("#Cod_Cuenta_Bancaria").val()
     var Nro_Operacion = $("#NroOperacion").val()
     var Des_Movimiento='DEPOSITO EN EFECTIVO'
     var Cod_TipoOperacionBancaria='001'
@@ -292,7 +296,7 @@ function GuardarMovCuentaBancaria(variables){
         credentials: 'same-origin',
         body: JSON.stringify({
             Id_MovimientoCuenta,
-            Cod_Cuenta_Bancaria,
+            Cod_CuentaBancaria,
             Nro_Operacion,
             Des_Movimiento,
             Cod_TipoOperacionBancaria,
@@ -329,7 +333,7 @@ function GuardarMovCuentaBancaria(variables){
                         credentials: 'same-origin',
                         body: JSON.stringify({
                             Id_MovimientoCuenta,
-                            Cod_Cuenta_Bancaria,
+                            Cod_CuentaBancaria,
                             Nro_Operacion,
                             Des_Movimiento,
                             Cod_TipoOperacionBancaria,
@@ -351,7 +355,7 @@ function GuardarMovCuentaBancaria(variables){
                     .then(res => { 
                         if (res.respuesta == 'ok') {
                             $('#modal-proceso').modal('hide')
-                            H5_loading.hide()
+                            H5_loading.hide() 
                         }
                         else {  
                             H5_loading.hide() 
@@ -360,7 +364,7 @@ function GuardarMovCuentaBancaria(variables){
 
                 }else{
                     $('#modal-proceso').modal('hide')
-                    H5_loading.hide()
+                    H5_loading.hide() 
                 } 
             }
             else {  
@@ -387,6 +391,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                 Cliente,
                 Des_Movimiento,
                 Fecha,
+                Cod_MonedaIng,
                 Cod_MonedaEgr,
                 Fecha_Aut,
                 Serie,
@@ -440,6 +445,7 @@ function GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
             Cliente,
             Des_Movimiento,
             Fecha,
+            Cod_MonedaIng,
             Cod_MonedaEgr,
             Fecha_Aut,
             Serie,

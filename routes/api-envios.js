@@ -52,9 +52,8 @@ router.post('/get_cajas_envios', function (req, res) {
 });
 
 router.post('/guardar_movimientos', function (req, res) {
-    input = req.body
-    parametros=[]
-    parametros1 = [
+    input = req.body 
+    parametros = [
         { nom_parametro: 'id_Movimiento', valor_parametro: -1},
         { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja },
         { nom_parametro: 'Cod_Turno', valor_parametro: input.Cod_Turno },
@@ -78,19 +77,9 @@ router.post('/guardar_movimientos', function (req, res) {
         { nom_parametro: 'Id_MovimientoRef', valor_parametro:  input.Id_MovimientoRef },
         { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username }
     ]
-
-    parametros2 = [
-        { nom_parametro: 'Cod_Sucursal', valor_parametro: input.Cod_Sucursal }
-    ]
-
-    parametros3 = [
-        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja },
-        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'RT' }
-    ]
-
-
+ 
     procedimientos = [
-        { nom_respuesta: 'cajas', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G ', parametros : parametros1 },
+        { nom_respuesta: 'cajas', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G ', parametros }
     ]
     /*parametros = [
         { nom_parametro: 'TamañoPagina', valor_parametro: input.TamanoPagina },
@@ -119,7 +108,7 @@ router.post('/guardar_movimientos_cuenta_bancaria', function (req, res) {
     input = req.body
     parametros = [
         { nom_parametro: 'Id_MovimientoCuenta', valor_parametro: input.Id_MovimientoCuenta},
-        { nom_parametro: 'Cod_Cuenta_Bancaria', valor_parametro: input.Cod_Cuenta_Bancaria },
+        { nom_parametro: 'Cod_CuentaBancaria', valor_parametro: input.Cod_CuentaBancaria },
         { nom_parametro: 'Nro_Operacion', valor_parametro: input.Nro_Operacion },
         { nom_parametro: 'Des_Movimiento', valor_parametro: input.Des_Movimiento },
         { nom_parametro: 'Cod_TipoOperacionBancaria', valor_parametro: input.Cod_TipoOperacionBancaria },

@@ -38,6 +38,14 @@
             <% } %>
             <form action="login" method="post">
                 <div class="form-group has-feedback">
+                    <label>Empresa</label>
+                    <select id="empresa" class="form-control"> 
+                        <% empresa.forEach(function(e){ %>
+                            <option value="<%=e.CadenaConexion%>"><%=e.Nom_Comercial%></option> 
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-group has-feedback">
                     <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>

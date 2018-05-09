@@ -20,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
 // app.use(authChecker);
+ 
 
 app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
@@ -33,11 +34,24 @@ app.get('/administracion', function (req, res) {
   } else
     res.render('index', { title: 'iFacturacion',Cod_Usuarios:req.session.username,Nick:req.session.nick });
 })
+
+var { Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster } = require('./utility/exec_sp_sql')
 app.get('/login', function (req, res) {
   if (req.session && req.session.authenticated) {
     return res.redirect('/');
-  }
-  res.render('login.ejs', { title: 'iFacturacion - Usuarios' });
+  }  
+  
+  EXEC_QUERY_DBMaster('SELECT * FROM PRI_EMPRESA', [], function (o) {
+    if (o.error) return null 
+    p = [
+        { nom_parametro: 'RUC', valor_parametro: o.result.RUC }
+    ]
+
+    EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', p, function (m) {
+      res.render('login.ejs', { title: 'iFacturacion - Usuarios' , empresa : m.result });
+        return m.result
+    })
+  }) 
 })
 var { LOGIN_SQL } = require('./utility/exec_sp_sql')
 app.post('/login', function (req, res) {

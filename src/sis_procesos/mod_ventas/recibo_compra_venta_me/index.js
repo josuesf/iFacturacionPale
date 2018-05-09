@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 
-function Ver(_escritura, Serie, variables) {
+function Ver(_escritura, Serie, variables,fecha_actual) {
     var el = yo`
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -11,9 +11,14 @@ function Ver(_escritura, Serie, variables) {
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                    <h4 class="modal-title"><strong>Compra ME</strong></h4>
+                    <h4 class="modal-title"><strong id="tituloModal">Compra ME</strong></h4>
                 </div>
                 <div class="modal-body">
+                    <div class="row">
+                        <div class="callout callout-danger hidden" id="divErrors">
+                            <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-8">
                             <div class="panel panel-default">
@@ -31,7 +36,7 @@ function Ver(_escritura, Serie, variables) {
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="Nro_DocumentoBuscar" onkeypress=${()=>BusquedaClientePorNroDoc(variables,event)} onblur=${()=>BusquedaClientePorNroDoc(variables)}>
+                                                <input type="text" class="form-control" id="Nro_DocumentoBuscar" onblur=${()=>BusquedaClientePorNroDoc(variables)}>
                                                 <div class="input-group-btn">
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc"
                                                     ><i class="fa fa-globe"></i></button>
@@ -43,11 +48,11 @@ function Ver(_escritura, Serie, variables) {
                                         <div class="col-md-12">
                                             <div class="input-group">
                                                 <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>NuevoCliente(variables)}><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>VerNuevoCliente(variables)}><i class="fa fa-plus"></i></button>
                                                 </div>
-                                                <input type="text" class="form-control" id="txtNombreCliente" onblur=${()=>RecuperarDatosClientePorNombre(variables)}>
+                                                <input type="text" class="form-control" id="txtNombreCliente">
                                                 <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>BuscarCliente(variables)}><i class="fa fa-search"></i></button>
+                                                    <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>VerBuscarCliente(variables)}><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -75,7 +80,7 @@ function Ver(_escritura, Serie, variables) {
                                         </div>
                                         <div class="col-md-7">
                                             <div class="form-group">
-                                                <input type="text" class="form-control"  value="00000000${variables.siguiente_numero_comprobante[0].Numero}">
+                                                <input type="text" class="form-control" id="Numero" value="00000000${variables.siguiente_numero_comprobante[0].Numero}">
                                             </div>
                                         </div>
                                     </div> 
@@ -107,7 +112,7 @@ function Ver(_escritura, Serie, variables) {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Fecha">Fecha</label>
-                                <input type="date" class="form-control" id="Fecha" placeholder='dd/mm/aaaa'>
+                                <input type="date" class="form-control" id="Fecha" placeholder='dd/mm/aaaa' value="${fecha_actual}">
                             </div>
                         </div>
                     </div>
@@ -121,60 +126,70 @@ function Ver(_escritura, Serie, variables) {
                             <div class="panel-body">
                                 <div class="row"> 
                                     <div class="col-md-12"> 
-                                        <div class="col-md-6" id="formBanco" style="display:none">
-                                            <div class="form-group">
-                                                <label for="Cod_Producto">Banco</label>
-                                                <select class="form-control" id="SelectEntidadFinanciera">
-                                                    ${variables.entidades_financieras.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_EntidadFinaciera}">${e.Nom_EntidadFinanciera}</option>`)}
-                                                </select>
+                                        <div class="col-md-6"> 
+                                             
+                                            <div class="col-md-12" id="formBanco" style="display:none">
+                                                <div class="form-group">
+                                                    <label for="Cod_Producto">Banco</label>
+                                                    <select class="form-control" id="SelectEntidadFinanciera" onchange=${()=>TraerCuentaBancariaEntidadFinanciera()}>
+                                                        ${variables.entidades_financieras.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_EntidadFinanciera}">${e.Nom_EntidadFinanciera}</option>`)}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Cod_CuentaSoles">Cuenta Soles</label>
+                                                    <select class="form-control" id="Cod_CuentaSoles">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Cod_CuentaME">Cuenta ME</label>
+                                                    <select class="form-control" id="Cod_CuentaME">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Operacion">Operacion</label>
+                                                    <input type="text" class="form-control" id="Operacion">
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="Cod_Producto">Cuenta Soles</label>
-                                                <select class="form-control">
-                                                </select>
+                                            
+                                            <div class="col-md-12"> 
+                                                <div class="form-group" id="obs_body_xml">
+                                                  
+                                                </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="Cod_Producto">Cuenta ME</label>
-                                                <select class="form-control">
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Cod_Producto">Operacion</label>
-                                                <input type="text" class="form-control" >
-                                            </div>
+
                                         </div>
-                                        <div class="col-md-6 col-md-offset-3" id="formVentaCompraME">
+                                        <div class="col-md-6" id="formVentaCompraME">
                                             <label>Tipo de Operacion</label>
                                             <div class="col-sm-12">
                                                 <div class="col-sm-6">
                                                         <label class="radio-inline">
-                                                            <input type="radio" id="TipoME" name="optionCV"> Compra ME
+                                                            <input type="radio" id="optionCV" name="optionCV" value="c"  onclick="${() => CambioCompraVentaME()}" checked> Compra ME
                                                         </label> 
                                                 </div>
                                                 <div class="col-sm-6">
                                                         <label class="radio-inline">
-                                                            <input type="radio" id="TipoME" name="optionCV"> Venta ME
+                                                            <input type="radio" id="optionCV" name="optionCV" value="v" onclick="${() => CambioCompraVentaME()}"> Venta ME
                                                         </label>
                                                 </div>
                                             </div> 
                                             <br><br><br>
                                             <div class="form-group">
-                                                <label for="Cod_Producto">Moneda</label>
-                                                <select class="form-control">
+                                                <label for="Cod_Moneda">Moneda</label>
+                                                <select class="form-control" id="Cod_Moneda">
                                                     ${variables.monedas_sinsoles.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="Cod_Producto">Monto</label>
-                                                <input type="number" class="form-control" >
+                                                <label for="Monto">Monto</label>
+                                                <input type="number" class="form-control required" id="Monto" onkeypress=${()=>CambioSoles()}>
                                             </div>
                                             <div class="form-group">
-                                                <label for="Cod_Producto">Tipo de Cambio</label>
-                                                <input type="number" class="form-control" >
+                                                <label for="TipoCambio">Tipo de Cambio</label>
+                                                <input type="number" class="form-control required" id="TipoCambio" onkeypress=${()=>CambioSoles()}>
                                             </div>
                                             <div class="form-group">
-                                                <label for="Cod_Producto">Soles</label>
-                                                <input type="number" class="form-control" >
+                                                <label for="Soles">Soles</label>
+                                                <input type="number" class="form-control required" id="Soles" onkeypress=${()=>CambioMonto()}>
                                             </div>
                                         </div>
                                     </div>
@@ -185,14 +200,16 @@ function Ver(_escritura, Serie, variables) {
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME()}>Guardar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual)}>Guardar</button>
                 </div>
             </div>
         </div>`
 
-    var modal_proceso = document.getElementById('modal-proceso');
-    empty(modal_proceso).appendChild(el);
+    var modal_proceso = document.getElementById('modal-proceso')
+    empty(modal_proceso).appendChild(el)
     $('#modal-proceso').modal()
+    TraerCuentaBancariaEntidadFinanciera()
+    ObservacionesXML(variables.diagramas)
 }
 
  
@@ -233,8 +250,8 @@ function VerNuevoCliente(variables) {
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Cliente">Nombre Completo *</label>
-                                <input type="text"  class="form-control required" id="Cliente">
+                                <label for="Cliente_NC">Nombre Completo *</label>
+                                <input type="text"  class="form-control required" id="Cliente_NC">
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -352,16 +369,59 @@ function AgregarTabla(clientes){
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
 }
 
+function LlenarCuenta(cuenta,idSelect){
+    var el = yo`
+        ${cuenta.map(e => yo`
+             <option value="${e.Cod_CuentaBancaria}">${e.Des_CuentaBancaria}</option>
+        `)}`   
+    $("#"+idSelect).html('')
+    $("#"+idSelect).html(el)
+}
+
+
+var Id_ClienteProveedor = null
+
+function CambioSoles(){ 
+    $("#Soles").val(parseFloat($("#Monto").val())*parseFloat($("#TipoCambio").val()))
+}
+
+function CambioMonto(){
+    $("#Monto").val(parseFloat($("#Soles").val())/parseFloat($("#TipoCambio").val()))
+}
 
 function BusquedaClientePorNroDoc(variables,event) { 
-    if(event!=undefined){
-        if(event.which == 13) {
-            RecuperarDatosClientePorNroDoc(variables)
-        }
-    }else{
-        RecuperarDatosClientePorNroDoc(variables)
+   RecuperarDatosClientePorNroDoc(variables) 
+}
+
+function getValueXML(xmlDoc, TAG) {
+    if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
+        return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
+    } else {
+        return ''
     }
 }
+
+function ObservacionesXML(diagrama) {
+    var xml = ''
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(xml, "text/xml");
+    var el = yo`<div> 
+        ${diagrama.map(e => yo`
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">${e.Nom_Elemento}</label>
+                    <input id="${e.Cod_Elemento}"
+                    value=${getValueXML(xmlDoc, e.Cod_Elemento)}
+                    class="form-control" />
+                </div>
+            </div>
+        </div>`)}
+    </div>`;
+    var obs_xml = document.getElementById('obs_body_xml')
+    empty(obs_xml).appendChild(el) 
+}
+
 
 function RecuperarDatosClientePorNroDoc(variables){
     H5_loading.show(); 
@@ -386,6 +446,7 @@ function RecuperarDatosClientePorNroDoc(variables){
         if (res.respuesta == 'ok') {
             $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
             $("#txtNombreCliente").focus()
+            Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
         }
         else{
             VerBuscarCliente(variables)
@@ -421,13 +482,17 @@ function RecuperarDatosClientePorNombre(variables){
 
 function CambioTipoDestino() {
     if ($('input[name=TipoDestino]:checked').val() == 'c') {
-        $('#formBanco').hide()
-        $('#formVentaCompraME').removeClass()
-        $('#formVentaCompraME').addClass("col-md-6 col-md-offset-3") 
+        $('#formBanco').hide() 
     } else {
         $('#formBanco').show()
-        $('#formVentaCompraME').removeClass()
-        $('#formVentaCompraME').addClass("col-md-6") 
+    }
+}
+
+function CambioCompraVentaME() {
+    if ($('input[name=optionCV]:checked').val() == 'c') {
+        $('#tituloModal').text("Compra ME") 
+    } else {
+        $('#tituloModal').text("Venta ME")
     }
 }
 
@@ -435,11 +500,212 @@ function CambioTipoDestino() {
 function SeleccionarCliente(cliente){
     $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
     $("#txtNombreCliente").val(cliente.Cliente)
-    $("#txtNombreCliente").attr("data-id",cliente.Id_ClienteProveedor)
+    Id_ClienteProveedor =  cliente.Id_ClienteProveedor
 }
 
-function GuardarCompraVentaME(){
-    
+function GuardarCompraVentaME(variables,fecha_actual){
+    if(ValidacionCampos()){
+        H5_loading.show()
+        if ($('input[name=TipoDestino]:checked').val() == 'c') {
+            var OBS = '<Registro>'
+            for (var i = 0; i < variables.diagramas.length; i++) {
+                OBS += '<' + variables.diagramas[i].Cod_Elemento + '>' + document.getElementById(variables.diagramas[i].Cod_Elemento).value + '</' + variables.diagramas[i].Cod_Elemento + '>'
+            }
+            var Obs_Movimiento = OBS+'</Registro>'
+            var Des_Movimiento = null         
+            var id_Movimiento = -1
+            var Cod_Caja = '100'
+            var Cod_Turno = 'T0002'
+            var Id_Concepto = 3000 
+            var Cliente = $("#txtNombreCliente").val()
+            var _nom_moneda = $("#Cod_Moneda").val() == "USD" ? "DOLARES" : "EUROS";
+            
+            var Cod_TipoComprobante = 'CV'
+            var Serie = $("#Serie").val()
+            var Numero = $("#Numero").val()
+            var Fecha = fecha_actual
+            var Tipo_Cambio = $("#TipoCambio").val()
+            var Ingreso = null
+            var Cod_MonedaIng = null
+            var Egreso = null
+            var Cod_MonedaEgr = null
+            var Flag_Extornado = 0
+            var Fecha_Aut = fecha_actual
+            var Id_MovimientoRef=0
+
+            if ($('input[name=optionCV]:checked').val() == 'c') {
+                Des_Movimiento = "Compra ME " +_nom_moneda + " : " +
+                parseFloat($("#Monto").val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio").val()).toFixed(3) + " SOLES: " + parseFloat($("#Soles").val()).toFixed(3);
+                Ingreso = parseFloat($("#Monto").val()).toFixed(3)
+                Cod_MonedaIng = $("#Cod_Moneda").val()
+                Egreso = $("#Soles").val()
+                Cod_MonedaEgr = 'PEN'
+            }else{
+                Des_Movimiento = "Venta ME " +_nom_moneda + " : " +
+                parseFloat($("#Monto").val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio").val()).toFixed(2) + " SOLES: " + parseFloat($("#Soles").val()).toFixed(2);
+                Ingreso = parseFloat($("#Soles").val()).toFixed(3)
+                Cod_MonedaIng = 'PEN'
+                Egreso = $("#Monto").val()
+                Cod_MonedaEgr = $("#Cod_Moneda").val()
+            }
+
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    id_Movimiento,
+                    Cod_Caja,
+                    Cod_Turno,
+                    Id_Concepto,
+                    Id_ClienteProveedor,
+                    Cliente,
+                    Des_Movimiento,
+                    Cod_TipoComprobante,
+                    Serie,
+                    Numero,
+                    Fecha,
+                    Tipo_Cambio,
+                    Ingreso,
+                    Cod_MonedaIng,
+                    Egreso,
+                    Cod_MonedaEgr,
+                    Flag_Extornado,
+                    Fecha_Aut,
+                    Obs_Movimiento,
+                    Id_MovimientoRef
+                })
+            }
+            fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
+            .then(req => req.json())
+            .then(res => {
+                console.log(res)
+                if (res.respuesta == 'ok') {               
+                    $('#modal-superior').modal('hide')
+                }
+                else{
+
+                }
+                H5_loading.hide()
+            })
+        }else{
+            var OBS = '<Registro>'
+            for (var i = 0; i < variables.diagramas.length; i++) {
+                OBS += '<' + variables.diagramas[i].Cod_Elemento + '>' + document.getElementById(variables.diagramas[i].Cod_Elemento).value + '</' + variables.diagramas[i].Cod_Elemento + '>'
+            }
+            var Obs_Movimiento = OBS+'</Registro>'
+            var Id_MovimientoCuenta = -1
+            var Cod_CuentaBancaria = null
+            var Nro_Operacion = $("#Operacion").val()
+            var Des_Movimiento='SALIDA: COMPRA/VENTA DE MONEDA EXTRANJERA BANCOS'
+            var Cod_TipoOperacionBancaria='010'
+            var Fecha = $("#Fecha").val()
+            var Monto = null
+            var TipoCambio = $("#TipoCambio").val()
+            var Cod_Caja = '100'
+            var Cod_Turno = 'T0002'
+            var Cod_Plantilla=''
+            var Nro_Cheque=''
+            var Beneficiario=''
+            var Id_ComprobantePago=0
+            if ($('input[name=optionCV]:checked').val() == 'c') {
+                Cod_CuentaBancaria = $("#Cod_CuentaSoles").val()
+                Monto = -1 * parseFloat($("#Soles").val())
+            }else{
+                Cod_CuentaBancaria = $("#Cod_CuentaME").val()
+                Monto = -1 * parseFloat($("#Monto").val())
+            }
+
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    Id_MovimientoCuenta,
+                    Cod_CuentaBancaria,
+                    Nro_Operacion,
+                    Des_Movimiento,
+                    Cod_TipoOperacionBancaria,
+                    Fecha,
+                    Monto,
+                    TipoCambio,
+                    Cod_Caja,
+                    Cod_Turno,
+                    Cod_Plantilla,
+                    Nro_Cheque,
+                    Beneficiario,
+                    Id_ComprobantePago,
+                    Obs_Movimiento,
+                })
+            }
+            fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_cuenta_bancaria_compra_venta_me', parametros)
+            .then(req => req.json())
+            .then(res => {
+                console.log(res)
+                if (res.respuesta == 'ok') {               
+                    //$('#modal-superior').modal('hide')
+                    if ($('input[name=optionCV]:checked').val() == 'c') {
+                        Cod_CuentaBancaria = $("#Cod_CuentaME").val()
+                        Monto = -1 * parseFloat($("#Monto").val())
+                    }else{
+                        Cod_CuentaBancaria = $("#Cod_CuentaSoles").val()
+                        Monto = -1 * parseFloat($("#Soles").val())
+                    }
+
+
+                    const parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            Id_MovimientoCuenta,
+                            Cod_CuentaBancaria,
+                            Nro_Operacion,
+                            Des_Movimiento,
+                            Cod_TipoOperacionBancaria,
+                            Fecha,
+                            Monto,
+                            TipoCambio,
+                            Cod_Caja,
+                            Cod_Turno,
+                            Cod_Plantilla,
+                            Nro_Cheque,
+                            Beneficiario,
+                            Id_ComprobantePago,
+                            Obs_Movimiento,
+                        })
+                    }
+                    fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_cuenta_bancaria_compra_venta_me', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        console.log(res)
+                        if (res.respuesta == 'ok') {               
+                            $('#modal-superior').modal('hide')
+                        }
+                        else{
+                        }
+                        H5_loading.hide()
+                    })
+        
+
+                }
+                else{
+                    
+                }
+                H5_loading.hide()
+            })
+
+        }
+    }
 }
 
 function GuardarNuevoCliente(){
@@ -447,7 +713,7 @@ function GuardarNuevoCliente(){
         H5_loading.show();
         var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
         var Nro_Documento = $("#Nro_Documento").val()
-        var Cliente = $("#Cliente").val()
+        var Cliente = $("#Cliente_NC").val()
         var DireccioN = $("#DireccioN").val()
         var Email1 = $("#Email1").val()
         var Telefono1 = $("#Telefono1").val()
@@ -542,16 +808,7 @@ function BusquedaClienteModal(e){
     }
 }
 
-
-
-function NuevoCliente(variables){
-    VerNuevoCliente(variables)
-}
-
-function BuscarCliente(variables){
-    VerBuscarCliente(variables)
-}
-
+ 
 function NuevoCompraVentaME(_escritura, caja) {
     H5_loading.show();
     var Cod_Caja = '100'//caja.Cod_Caja
@@ -593,9 +850,13 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
         .then(res => {
             if (res.respuesta == 'ok') {
                 var variables = res.data
-                //var entidad_financiera = res.data.entidades_financieras[0]
-                Ver(_escritura, Serie,variables) 
-                //TraerCuentaBancariaEntidadFinanciera(_escritura, Serie, variables)
+
+                const fecha = new Date()
+                const mes = fecha.getMonth() + 1
+                const dia = fecha.getDate()
+                var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+
+                Ver(_escritura, Serie,variables,fecha_format)  
             }
             else { 
             }
@@ -603,8 +864,10 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
         })
 }
 
-function TraerCuentaBancariaEntidadFinanciera(Cod_EntidadFinaciera) {
-    var Cod_EntidadFinaciera = Cod_EntidadFinaciera
+
+
+function TraerCuentaBancariaEntidadFinanciera() {
+    var Cod_EntidadFinanciera = $("#SelectEntidadFinanciera").val() 
     const parametros = {
         method: 'POST',
         headers: {
@@ -612,18 +875,15 @@ function TraerCuentaBancariaEntidadFinanciera(Cod_EntidadFinaciera) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Cod_EntidadFinaciera
+            Cod_EntidadFinanciera
         })
     }
     fetch(URL + '/compra_venta_moneda_extranjera_api/get_cuenta_bancaria_by_entidad_financiera', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                variables['cuenta_bancaria_pen'] = res.data.cuenta_bancaria_pen
-                variables['cuenta_bancaria_usd'] = res.data.cuenta_bancaria_usd
-
-                console.log(variables);
-                Ver(_escritura, Serie,variables)
+                LlenarCuenta(res.data.cuenta_bancaria_pen,"Cod_CuentaSoles")
+                LlenarCuenta(res.data.cuenta_bancaria_usd,"Cod_CuentaME")
             }
             else {
             }

@@ -37,6 +37,45 @@ router.post('/guardar_turno', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+router.post('/cambiar_comprobante_by_turno', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'id_ComprobantePago', valor_parametro: input.id_ComprobantePago},
+        {nom_parametro: 'Cod_Turno', valor_parametro: input.Cod_Turno},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
+    ]
+    procedimientos = [
+        {nom_respuesta: 'turno', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_CambiarTurno', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/cambiar_movimientos_by_turno', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_MovimientoCaja', valor_parametro: input.Id_MovimientoCaja},
+        {nom_parametro: 'Cod_TurnoActual', valor_parametro: input.Cod_TurnoActual},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
+    ]
+    procedimientos = [
+        {nom_respuesta: 'turno', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_CambiarTurno', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/cambiar_almacen_by_turno', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_AlmacenMov', valor_parametro: input.Id_AlmacenMov},
+        {nom_parametro: 'Cod_TurnoActual', valor_parametro: input.Cod_TurnoActual},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
+    ]
+    procedimientos = [
+        {nom_respuesta: 'turno', sp_name: 'USP_ALM_ALMACEN_MOV_CambiarTurno', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 router.post('/eliminar_turno', function (req, res){
     input = req.body
     parametros = [

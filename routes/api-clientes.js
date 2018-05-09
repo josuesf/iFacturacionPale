@@ -67,6 +67,47 @@ router.post('/guardar_cliente', function (req, res) {
     Ejecutar_Procedimientos(res, procedimientos)
 });
 
+router.post('/guardar_cliente_2', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: '-1' },
+        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDocumento },
+        { nom_parametro: 'Nro_Documento', valor_parametro: input.Nro_Documento },
+        { nom_parametro: 'Cliente', valor_parametro: input.Cliente },
+        { nom_parametro: 'Ap_Paterno', valor_parametro: '' },
+        { nom_parametro: 'Ap_Materno', valor_parametro: '' },
+        { nom_parametro: 'Nombres', valor_parametro: input.Cliente },
+        { nom_parametro: 'DireccioN', valor_parametro: input.DireccioN },
+        { nom_parametro: 'Cod_EstadoCliente', valor_parametro: '001' },
+        { nom_parametro: 'Cod_CondicionCliente', valor_parametro: '01' },
+        { nom_parametro: 'Cod_TipoCliente', valor_parametro: '003' },
+        { nom_parametro: 'RUC_Natural', valor_parametro: '' },
+        { nom_parametro: 'Foto', tipo_parametro: sql.VarBinary,valor_parametro: null },
+        { nom_parametro: 'Firma', tipo_parametro: sql.VarBinary,valor_parametro: null },
+        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'TKB' },
+        { nom_parametro: 'Cod_Nacionalidad', valor_parametro: '156' },
+        { nom_parametro: 'Fecha_Nacimiento', valor_parametro: input.Fecha_Nacimiento },
+        { nom_parametro: 'Cod_Sexo', valor_parametro: '01' },
+        { nom_parametro: 'Email1', valor_parametro: input.Email1 },
+        { nom_parametro: 'Email2', valor_parametro: '' },
+        { nom_parametro: 'Telefono1', valor_parametro: input.Telefono1 },
+        { nom_parametro: 'Telefono2', valor_parametro: ''},
+        { nom_parametro: 'Fax', valor_parametro: '' },
+        { nom_parametro: 'PaginaWeb', valor_parametro: '' },
+        { nom_parametro: 'Cod_Ubigeo', valor_parametro: '080101' },
+        { nom_parametro: 'Cod_FormaPago', valor_parametro: '008' },
+        { nom_parametro: 'Limite_Credito', valor_parametro: 0 },
+        { nom_parametro: 'Obs_Cliente', valor_parametro: null},
+        { nom_parametro: 'Num_DiaCredito', valor_parametro: 0 },
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username }
+
+    ]
+    procedimientos = [
+        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G', parametros },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
 router.post('/get_cliente_by_documento', function (req, res) {
     input = req.body
     parametros = [

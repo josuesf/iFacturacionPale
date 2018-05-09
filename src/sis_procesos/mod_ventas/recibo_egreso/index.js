@@ -11,7 +11,7 @@ function CargarFormulario(variables, fecha_actual) {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title"><b>RECIBO DE INGRESO</b></h4>
+                <h4 class="modal-title"><b>RECIBO DE EGRESO</b></h4>
             </div>
             <div class="modal-body">
                 <div class="modal fade" id="modal_observaciones">
@@ -67,7 +67,7 @@ function CargarFormulario(variables, fecha_actual) {
                                             </div>
                                             <input type="text" id="Cliente" class="form-control required">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>VerBuscarCliente(variables)}>
+                                                <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>VerBuscarCliente(variables)}">
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>
@@ -89,7 +89,7 @@ function CargarFormulario(variables, fecha_actual) {
                                     <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. 20442625256 </strong></h4>
                                 </div>
                                 <div class="row">
-                                    <h4><strong>RECIBO DE INGRESO</strong></h4>
+                                    <h4><strong>RECIBO DE EGRESO</strong></h4>
                                 </div> 
                                 
                                 <div class="row">
@@ -102,7 +102,7 @@ function CargarFormulario(variables, fecha_actual) {
                                     </div>
                                     <div class="col-md-7">
                                         <div class="form-group">
-                                            <input type="text" class="form-control required" id="Numero"  value="00000000${variables.Numero}">
+                                            <input type="text" class="form-control required"  id="Numero" value="00000000${variables.Numero}">
                                         </div>
                                     </div>
                                 </div> 
@@ -318,6 +318,18 @@ function VerBuscarCliente(variables) {
     $("#txtBuscarCliente").val($("#Cliente").val())
 }
 
+
+
+var Id_ClienteProveedor = null
+var Obs_Recibo = null
+
+function SeleccionarCliente(cliente){
+    $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
+    $("#Cliente").val(cliente.Cliente)
+    Id_ClienteProveedor = cliente.Id_ClienteProveedor
+}
+
+
 function AgregarTabla(clientes){
     var el = yo`<table id="example1" class="table table-bordered table-striped">
     <thead>
@@ -338,50 +350,6 @@ function AgregarTabla(clientes){
 
 </table>`
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
-}
-
-
-var Id_ClienteProveedor = null
-var Obs_Recibo = null
-
-function SeleccionarCliente(cliente){
-    $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
-    $("#Cliente").val(cliente.Cliente)
-    Id_ClienteProveedor = cliente.Id_ClienteProveedor
-}
-
-
-function BuscarCliente() { 
-    var Nro_Documento = document.getElementById('Nro_Documento').value
-    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Nro_Documento, Cod_TipoDocumento
-        })
-    }
-    fetch(URL + '/recibo_iegreso_api/get_cliente_by_nro_documento', parametros)
-        .then(req => req.json())
-        .then(res => {
-            console.log(res)
-            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                $("#Cliente").val(res.data.cliente[0].Cliente)
-                $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
-                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
-            }
-            H5_loading.hide()
-        })
-}
-function getValueXML(xmlDoc, TAG) {
-    if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
-        return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
-    } else {
-        return ''
-    }
 }
 
 
@@ -486,6 +454,38 @@ function BusquedaClienteModal(e){
 }
 
 
+
+function BuscarCliente() {
+    var Nro_Documento = document.getElementById('Nro_Documento').value
+    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Nro_Documento, Cod_TipoDocumento
+        })
+    }
+    fetch(URL + '/recibo_iegreso_api/get_cliente_by_nro_documento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
+                $("#Cliente").val(res.data.cliente[0].Cliente)
+                $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
+                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+            }
+            H5_loading.hide()
+        })
+}
+function getValueXML(xmlDoc, TAG) {
+    if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
+        return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
+    } else {
+        return ''
+    }
+}
 function AbrirModalObs(diagrama) {
     var xml = Obs_Recibo!=null?Obs_Recibo:''
     var parser = new DOMParser();
@@ -524,12 +524,12 @@ function Guardar() {
     const Id_Concepto = document.getElementById('Id_Concepto').value
     const Cliente = document.getElementById('Cliente').value
     const Des_Movimiento = document.getElementById('Des_Movimiento').value
-    const Cod_TipoComprobante = 'RI'
+    const Cod_TipoComprobante = 'RE'
     const Serie = document.getElementById('Serie').value
     const Numero = document.getElementById('Numero').value
     const Fecha = document.getElementById('Fecha').value
-    const MontoIngreso = document.getElementById('Monto').value
-    const MontoEgreso = 0
+    const MontoEgreso = document.getElementById('Monto').value
+    const MontoIngreso = 0
     const Cod_Moneda = document.getElementById('Cod_Moneda').value
     const Obs_Movimiento = Obs_Recibo
     H5_loading.show()
@@ -543,7 +543,7 @@ function Guardar() {
         body: JSON.stringify({
             Id_Concepto, Id_ClienteProveedor, Cliente,
             Des_Movimiento, Cod_TipoComprobante, Serie,
-            Numero, Fecha, MontoIngreso,MontoEgreso, Cod_Moneda, Obs_Movimiento
+            Numero, Fecha, MontoEgreso,MontoIngreso, Cod_Moneda, Obs_Movimiento
         })
     }
     fetch(URL + '/recibo_iegreso_api/guardar_recibo', parametros)
@@ -557,10 +557,10 @@ function Guardar() {
         })
     }
 }
-function NuevoIngreso() {
+function NuevoEgreso() {
     H5_loading.show();
-    var Cod_TipoComprobante = 'RI'
-    var Cod_ClaseConcepto = '007'
+    var Cod_TipoComprobante = 'RE'
+    var Cod_ClaseConcepto = '006'
     const parametros = {
         method: 'POST',
         headers: {
@@ -589,4 +589,4 @@ function NuevoIngreso() {
 
 }
 
-export { NuevoIngreso }
+export { NuevoEgreso }

@@ -4,12 +4,12 @@ var sql = require("mssql");
 var md5 = require('md5')
 var { Ejecutar_Procedimientos, EXEC_SQL } = require('../utility/exec_sp_sql')
 // define the home page route
-router.post('/get_variables_recibo_ingreso', function (req, res) {
+router.post('/get_variables_recibo_iegreso', function (req, res) {
     input = req.body
 
     parametros = [
         { nom_parametro: 'Cod_Caja', valor_parametro: '100' },
-        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'RI' },
+        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
     ]
     EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCajaComprobante', parametros, function (o) {
         if (o.error) return res.json({ respuesta: 'error', detalle_error: o.error })
@@ -19,7 +19,7 @@ router.post('/get_variables_recibo_ingreso', function (req, res) {
         ]
         EXEC_SQL('USP_CAJ_MOVIMIENTOS_NumeroXTipoSerie', p, function (m) {
             parametros2 = [
-                { nom_parametro: 'Cod_ClaseConcepto', valor_parametro: '007' },
+                { nom_parametro: 'Cod_ClaseConcepto', valor_parametro: input.Cod_ClaseConcepto },
                 { nom_parametro: 'Flag_Activo', valor_parametro: '1' },
             ]
             procedimientos = [
@@ -53,7 +53,7 @@ router.post('/guardar_recibo',function(req,res){
     parametros = [
         { nom_parametro: 'id_Movimiento', valor_parametro: '-1' },
         { nom_parametro: 'Cod_Caja', valor_parametro: '100' },
-        { nom_parametro: 'Cod_Turno', valor_parametro: 'D02/05/2018' },
+        { nom_parametro: 'Cod_Turno', valor_parametro: 'T0002' },
         { nom_parametro: 'Id_Concepto', valor_parametro: input.Id_Concepto },
         { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
         { nom_parametro: 'Cliente', valor_parametro: input.Cliente },
@@ -63,9 +63,9 @@ router.post('/guardar_recibo',function(req,res){
         { nom_parametro: 'Numero', valor_parametro: input.Numero },
         { nom_parametro: 'Fecha', valor_parametro: input.Fecha },
         { nom_parametro: 'Tipo_Cambio', valor_parametro: '1' },
-        { nom_parametro: 'Ingreso', valor_parametro: input.Monto },
+        { nom_parametro: 'Ingreso', valor_parametro: input.MontoIngreso },
         { nom_parametro: 'Cod_MonedaIng', valor_parametro: input.Cod_Moneda },
-        { nom_parametro: 'Egreso', valor_parametro: '0' },
+        { nom_parametro: 'Egreso', valor_parametro:  input.MontoEgreso },
         { nom_parametro: 'Cod_MonedaEgr', valor_parametro: input.Cod_Moneda},
         { nom_parametro: 'Flag_Extornado', valor_parametro: '0' },
         { nom_parametro: 'Cod_UsuarioAut', valor_parametro: req.session.username },

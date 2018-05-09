@@ -34,5 +34,28 @@ router.post('/guardar_modulo', function (req, res) {
     Ejecutar_Procedimientos(res,procedimientos)
 });
 
+router.post('/get_periodos_by_gestion', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Gestion', valor_parametro:input.Gestion}
+    ]
+    procedimientos =[
+        {nom_respuesta:'periodos',sp_name:'USP_VIS_PERIODOS_TraerPorGestion',parametros},
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+router.post('/get_turnos_by_periodo', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Periodo', valor_parametro:input.Cod_Periodo}
+    ]
+    procedimientos =[
+        {nom_respuesta:'turnos',sp_name:'USP_CAJ_TURNO_ATENCION_TXCodPeriodo',parametros},
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
 
 module.exports = router;

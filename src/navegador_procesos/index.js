@@ -7,6 +7,8 @@ import { NuevoCompraVentaME } from '../sis_procesos/mod_ventas/recibo_compra_ven
 import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
+import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
+
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
     <li class="header">Ventas</li>
@@ -18,9 +20,10 @@ var el = yo`
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a  onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Moneda Extranjera</a></li>
-            <li class=""><a  onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
-            <li class=""><a  onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
+            <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a></li>
+            <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
+            <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
+            <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEgreso()}><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
             
         </ul>
     </li>
