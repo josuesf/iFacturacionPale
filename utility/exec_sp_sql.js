@@ -161,6 +161,8 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
 
     });
 }
+
+
 var EXEC_SQL = function (sp_name, parametros, next) {
     var dbConn = new sql.Connection(dbConfig);
     dbConn.connect(function (err) {

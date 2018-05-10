@@ -1,3 +1,4 @@
+var { LOGIN_SQL,Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster ,EXEC_SQL} = require('./utility/exec_sp_sql')
 var express = require('express');
 var multer = require('multer');
 var ext = require('file-extension');
@@ -13,6 +14,7 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
+var errores = '';
 app.set('view engine', 'pug');
 app.use(express.static('public'));
 app.use(bodyParser.json()); // support json encoded bodies
@@ -20,27 +22,107 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
 // app.use(authChecker);
- 
+
+app.locals.isla=false
 
 app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
-  } else
-    res.render('index_procesos', { title: 'iFacturacion - Procesos',Cod_Usuarios:req.session.username,Nick:req.session.nick });
+  } else{
+    if (req.session.caja) {
+      p = [
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.session.caja }
+      ]
+      EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
+        app.locals.caja = dataCaja.result
+        p = [
+          { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
+        ] 
+        EXEC_SQL('usp_PRI_SUCURSAL_TXPK', p , function (dataSucursal) {
+          app.locals.sucursal = dataSucursal.result
+          p = [
+            { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
+            { nom_parametro: 'CodTurno', valor_parametro:  req.session.turno }
+          ] 
+          EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+            app.locals.arqueo = dataArqueoFisico.result
+            if(dataArqueoFisico.result.length<=0){
+
+              p = [
+                { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
+              ] 
+
+              EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
+                p = [
+                  { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
+                  { nom_parametro: 'Cod_Turno', valor_parametro:  req.session.turno }
+                ]
+                EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
+                  
+                  if(dataSaldoAnterior.result.length==0){
+
+                    EXEC_SQL('USP_VIS_MONEDAS_TT', [] , function (dataMonedas) {
+                        res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+                                                          caja: app.locals.caja, 
+                                                          turno:req.session.turno,
+                                                          numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                          apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
+                                                          monedas: dataMonedas.result});                      
+                    })
+
+                    /*res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+                                                      caja: app.locals.caja, 
+                                                      turno:req.session.turno,
+                                                      numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                      apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno});*/
+                  }else{
+                    res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+                                                      caja: app.locals.caja, 
+                                                      turno:req.session.turno,
+                                                      numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                      apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno})
+                  }
+                 
+                })
+              })
+
+             // res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', caja: app.locals.caja, turno:req.session.turno,apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno});
+            }else{
+              res.render('index_procesos', {  title: 'iFacturacion - Procesos',
+                                              Cod_Usuarios:req.session.username,
+                                              Nick:req.session.nick });
+            }
+             
+          })
+        })
+      })
+      //res.render('index_procesos', { title: 'iFacturacion - Procesos',Cod_Usuarios:req.session.username,Nick:req.session.nick });
+    }else{
+      errores = "No tiene asignada ninguna caja. No puede iniciar sesion en el sistema"
+      res.redirect('/logout');
+    }
+  }
 })
 app.get('/administracion', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
-  } else
-    res.render('index', { title: 'iFacturacion',Cod_Usuarios:req.session.username,Nick:req.session.nick });
-})
+  } else{
+    if (req.session.caja) {
+      res.render('index', { title: 'iFacturacion',
+                            Cod_Usuarios:req.session.username,
+                            Nick:req.session.nick });
+    }else{
+      res.redirect('/logout');
+    }
+  }
+}) 
 
-var { Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster } = require('./utility/exec_sp_sql')
 app.get('/login', function (req, res) {
   if (req.session && req.session.authenticated) {
     return res.redirect('/');
   }  
-  
+  const fecha = new Date()
+  var anio = fecha.getFullYear() 
   EXEC_QUERY_DBMaster('SELECT * FROM PRI_EMPRESA', [], function (o) {
     if (o.error) return null 
     p = [
@@ -48,22 +130,75 @@ app.get('/login', function (req, res) {
     ]
 
     EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', p, function (m) {
-      res.render('login.ejs', { title: 'iFacturacion - Usuarios' , empresa : m.result });
-        return m.result
+      res.render('login.ejs', { title: 'iFacturacion - Usuarios' , empresa : m.result , gestion: anio , err:errores});
+      return m.result
     })
   }) 
 })
-var { LOGIN_SQL } = require('./utility/exec_sp_sql')
+
 app.post('/login', function (req, res) {
-  LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
-    if (e.err) return res.render('login.ejs', { title: 'iFacturacion - Usuarios',err:e.err });
-    req.session.authenticated = true;
-    req.session.username = e.Cod_Usuarios
-    req.session.nick = e.Nick
-    return res.redirect('/');
-  })
+  if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
+    LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
+      if (e.err) {
+        errores = e.err
+        return res.redirect('/login');
+      }
+      req.session.authenticated = true;
+      req.session.username = e.Cod_Usuarios
+      req.session.nick = e.Nick
+      req.session.turno = req.body.Turno
+      req.session.periodo = req.body.Periodo
+      req.session.gestion = req.body.Gestion
+
+      p = [
+        { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
+      ]
+
+      EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
+        if(e.result.length>0){
+          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result ,mensaje:'Seleccione una de las cajas asignadas a este usuario'});
+        }else{
+
+          EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
+            if(m.result.length>0){
+              res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result ,mensaje:'El usuario no tiene ninguna caja asignada. Seleccione una caja activa de la lista e inicie sesion'});
+            }else{
+              errores = 'No existen cajas activas'
+              return res.redirect('/logout');
+            }                     
+          })
+
+        }                
+      })
+ 
+    })
+  }else{
+    errores = "Todos los campos son necesarios"
+    return res.redirect('/login');
+  }
 })
+ 
+
+app.post('/logincajas', function (req, res) {
+  if (!req.session || !req.session.authenticated) {
+    return res.redirect('/');
+  }else{
+    req.session.caja = req.body.Caja
+    return res.redirect('/');
+  } 
+})
+
+app.post('/loginarqueo', function (req, res) {
+  if (!req.session || !req.session.authenticated) {
+    return res.redirect('/');
+  }else{
+    req.session.caja = req.body.Caja
+    return res.redirect('/');
+  } 
+})
+ 
 app.get('/logout', function (req, res) {
+  errores = ''
   delete req.session.authenticated;
   res.redirect('/');
 });

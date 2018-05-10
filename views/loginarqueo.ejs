@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width-->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.7-->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- Font Awesome-->
+    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons-->
+    <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style-->
+    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+    <link href="/dist/css/loading.css" rel="stylesheet">
+    <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <title>iFacturacion Pale</title>
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="javascript:void(0)">
+                <b>Pal</b>ERP</a>
+        </div>
+
+        <div class="login-box-body">
+           
+            <form action="loginarqueo" method="post">
+
+                <div class="form-group row">
+                    <h4 class="col-sm-12 col-form-label">Aperturar Caja</h4>
+                </div>
+               
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Caja">Caja</label>
+                    <div class="col-sm-9">
+                        <select id="Caja" name="Caja" class="form-control"> 
+                            <% if(typeof caja != 'undefined') { %>
+                                <% caja.forEach(function(e){ %>
+                                    <option value="<%=e.Cod_Caja%>"><%=e.Des_Caja%></option> 
+                                <% }) %>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+                 
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Turno">Turno</label>
+                    <div class="col-sm-9">
+                        <select id="Turno" name="Turno" class="form-control">  
+                            <option value="<%=turno%>"><%=turno%></option>                              
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Numero">Numero</label>
+                    <div class="col-sm-9">
+                        <input type="number" name="Numero" id="Numero" class="form-control" value="<%=numero%>">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Apertura">Apertura</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="Apertura" id="Apertura" class="form-control" value="<%=apertura%>">
+                    </div>
+                </div>
+                <div class="form-group row table-responsive">
+                    <label>Saldo Inicial</label>
+                    <table class="table">
+                        <% if(typeof monedas != 'undefined') { %>
+                            <tbody>
+                                <% monedas.forEach(function(e){ %>
+                                    <tr>
+                                        <td class="hidden"><%=e.Cod_Moneda%></td>
+                                        <td><input type="text"  value="<%=e.Nom_Moneda%>" class="form-control"></td>
+                                        <td><input type="number" value="0" class="form-control"></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        <% } %>                    
+                    </table>
+                </div>
+
+                <div class="form-group row table-responsive">
+                        <label>Tipo de Cambio</label>
+                        <table class="table">             
+                        </table>
+                    </div>
+
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-xs-12">
+                        <div class="col-xs-6">
+                            <a class="btn btn-danger btn-block btn-flat" href="logout">Cerrar</a>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="submit" class="btn btn-block btn-warning  btn-flat">Aperturar</button>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+            </form>
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    
+    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/dist/js/loading.js"></script>
+    
+    
+</body>
+
+</html>

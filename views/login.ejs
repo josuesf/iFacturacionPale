@@ -28,31 +28,70 @@
                 <b>Pal</b>ERP</a>
         </div>
         <!-- /.login-logo -->
+         
         <div class="login-box-body">
-            <!-- <p class="login-box-msg">Ingresa tus datos</p> -->
-            <% if(typeof err != 'undefined') { %>
+            
+            <% if(typeof err != 'undefined' && err!='') { %>
             <div class="callout callout-danger">
                 <h4>Hubo un error!</h4>
                 <p><%=err%></p>
             </div>
             <% } %>
             <form action="login" method="post">
-                <div class="form-group has-feedback">
-                    <label>Empresa</label>
-                    <select id="empresa" class="form-control"> 
-                        <% empresa.forEach(function(e){ %>
-                            <option value="<%=e.CadenaConexion%>"><%=e.Nom_Comercial%></option> 
-                        <% }) %>
-                    </select>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="empresa">Empresa</label>
+                    <div class="col-sm-9">
+                        <select id="empresa" class="form-control"> 
+                        <% if(typeof empresa != 'undefined') { %>
+                            <% empresa.forEach(function(e){ %>
+                                <option value="<%=e.CadenaConexion%>"><%=e.Nom_Comercial%></option> 
+                            <% }) %>
+                        <% } %>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group has-feedback">
-                    <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="usuario">Usuario</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
+                    </div>
                 </div>
-                <div class="form-group has-feedback">
-                    <input type="password" name="password" class="form-control" required placeholder="Password">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="usuario">Password</label>
+                    <div class="col-sm-9">
+                        <input type="password" name="password" class="form-control" required placeholder="Password">
+                    </div>
                 </div>
+  
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
+                    <div class="col-sm-9">
+                        <% if(typeof gestion != 'undefined') { %>
+                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion" onkeyup="TraerPeriodos()" onchange="TraerPeriodos()">
+                        <% } %>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
+                    <div class="col-sm-9">
+                        <select id="Periodo" name="Periodo" class="form-control" onchange="TraerTurnos()"> 
+                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="turno">Turno</label>
+                    <div class="col-sm-9">
+                        <select id="Turno" name="Turno" class="form-control"> 
+                            
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row">
                     <!-- /.col -->
                     <div class="col-xs-12">
@@ -65,9 +104,13 @@
         </div>
         <!-- /.login-box-body -->
     </div>
+    
     <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/dist/js/loading.js"></script>
+    <script src="/dist/js/loadingData.js"></script>
+    
+    
 </body>
 
 </html>
