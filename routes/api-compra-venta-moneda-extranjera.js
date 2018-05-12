@@ -8,8 +8,8 @@ router.post('/guardar_compra_venta_me', function (req, res) {
     input = req.body
     parametros = [
         {nom_parametro:'id_Movimiento',valor_parametro:input.id_Movimiento},
-        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
-        {nom_parametro:'Cod_Turno',valor_parametro:input.Cod_Turno},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Id_Concepto',valor_parametro:input.Id_Concepto},
         {nom_parametro:'Id_ClienteProveedor',valor_parametro:input.Id_ClienteProveedor},
         {nom_parametro:'Cliente',valor_parametro:input.Cliente},
@@ -48,8 +48,8 @@ router.post('/guardar_cuenta_bancaria_compra_venta_me', function (req, res) {
         {nom_parametro:'Fecha',valor_parametro:input.Fecha},
         {nom_parametro:'Monto',valor_parametro:input.Monto},
         {nom_parametro:'TipoCambio',valor_parametro:input.TipoCambio},
-        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
-        {nom_parametro:'Cod_Turno',valor_parametro:input.Cod_Turno},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_Plantilla',valor_parametro:input.Cod_Plantilla},
         {nom_parametro:'Nro_Cheque',valor_parametro:input.Nro_Cheque},
         {nom_parametro:'Beneficiario',valor_parametro:input.Beneficiario},
@@ -66,7 +66,7 @@ router.post('/guardar_cuenta_bancaria_compra_venta_me', function (req, res) {
 router.post('/get_comprobante_by_caja', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'Cod_Caja',valor_parametro:input.Cod_Caja},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
         {nom_parametro:'Cod_TipoComprobante',valor_parametro:'CV'}
     ]
     procedimientos =[

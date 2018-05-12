@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-
 import { URL } from '../../../constantes_entorno/constantes'
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 function Ver(_escritura, variables,fecha_actual) {
     var el = yo`
@@ -353,12 +353,14 @@ function GuardarMovCuentaBancaria(variables){
                     fetch(URL + '/envios_api/guardar_movimientos_cuenta_bancaria', parametros)
                     .then(req => req.json())
                     .then(res => { 
+                        $('#modal-proceso').modal('hide')
+                        H5_loading.hide() 
                         if (res.respuesta == 'ok') {
-                            $('#modal-proceso').modal('hide')
-                            H5_loading.hide() 
+                            toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000})
+                            refrescar_movimientos()
                         }
-                        else {  
-                            H5_loading.hide() 
+                        else {
+                            toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
                         }
                     })
 
@@ -367,7 +369,8 @@ function GuardarMovCuentaBancaria(variables){
                     H5_loading.hide() 
                 } 
             }
-            else {  
+            else {
+                toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
                 H5_loading.hide() 
             }
         })
@@ -422,7 +425,8 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                     Flag_Extornado = 0
                     GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientosRef, variables)
                 }
-                else {  
+                else {
+                    toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
                     H5_loading.hide() 
                 }
             })
@@ -459,12 +463,14 @@ function GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
         .then(req => req.json())
         .then(res => {
             console.log(res)
+            $('#modal-proceso').modal('hide')
+            H5_loading.hide() 
             if (res.respuesta == 'ok') {
-                $('#modal-proceso').modal('hide')
-                H5_loading.hide() 
+                toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
+                refrescar_movimientos()
             }
-            else {  
-                H5_loading.hide() 
+            else {
+                toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
             }
         })
 }
@@ -481,7 +487,6 @@ function NuevoEnvioEfectivo(_escritura, caja) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        credentials: 'same-origin',
         body: JSON.stringify({
             Cod_Caja,
             Cod_Sucursal
@@ -500,6 +505,7 @@ function NuevoEnvioEfectivo(_escritura, caja) {
                 Ver(_escritura, variables,fecha_format)
             }
             else { 
+                
             }
             H5_loading.hide()
         })

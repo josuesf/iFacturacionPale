@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 function CargarFormulario(variables, fecha_actual) {
     var el = yo`
@@ -550,7 +550,10 @@ function Guardar() {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                 
+                toastr.success('Se registro correctamente el egreso','Confirmacion',{timeOut: 5000})
+                refrescar_movimientos()
+            }else{
+                toastr.error('No se pudo registrar correctamente el egreso','Error',{timeOut: 5000})
             }
             $('#modal-proceso').modal('hide')
             H5_loading.hide()

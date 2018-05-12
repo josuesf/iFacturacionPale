@@ -8,7 +8,7 @@ router.post('/get_variables_recibo_iegreso', function (req, res) {
     input = req.body
 
     parametros = [
-        { nom_parametro: 'Cod_Caja', valor_parametro: '100' },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
     ]
     EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCajaComprobante', parametros, function (o) {
@@ -52,8 +52,8 @@ router.post('/guardar_recibo',function(req,res){
     input =req.body
     parametros = [
         { nom_parametro: 'id_Movimiento', valor_parametro: '-1' },
-        { nom_parametro: 'Cod_Caja', valor_parametro: '100' },
-        { nom_parametro: 'Cod_Turno', valor_parametro: 'T0002' },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
+        { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Id_Concepto', valor_parametro: input.Id_Concepto },
         { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
         { nom_parametro: 'Cliente', valor_parametro: input.Cliente },

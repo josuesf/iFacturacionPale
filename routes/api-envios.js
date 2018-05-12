@@ -5,18 +5,22 @@ var md5 = require('md5')
 var { Ejecutar_Procedimientos } = require('../utility/exec_sp_sql')
 
 router.post('/get_cajas_envios', function (req, res) {
+    console.log("entre")
+    console.log(req.app.locals.caja)
+    console.log(req.app.locals.sucursal)
+
     input = req.body
     parametros=[]
     parametros1 = [
-        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja }
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja }
     ]
 
     parametros2 = [
-        { nom_parametro: 'Cod_Sucursal', valor_parametro: input.Cod_Sucursal }
+        { nom_parametro: 'Cod_Sucursal', valor_parametro: req.app.locals.sucursal[0].Cod_Sucursal }
     ]
 
     parametros3 = [
-        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'RT' }
     ]
 
@@ -55,8 +59,8 @@ router.post('/guardar_movimientos', function (req, res) {
     input = req.body 
     parametros = [
         { nom_parametro: 'id_Movimiento', valor_parametro: -1},
-        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja },
-        { nom_parametro: 'Cod_Turno', valor_parametro: input.Cod_Turno },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
+        { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Id_Concepto', valor_parametro: input.Id_Concepto },
         { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
         { nom_parametro: 'Cliente', valor_parametro: input.Cliente },
@@ -115,8 +119,8 @@ router.post('/guardar_movimientos_cuenta_bancaria', function (req, res) {
         { nom_parametro: 'Fecha', valor_parametro: input.Fecha },
         { nom_parametro: 'Monto', valor_parametro: input.Monto },
         { nom_parametro: 'TipoCambio', valor_parametro: input.TipoCambio },
-        { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja },
-        { nom_parametro: 'Cod_Turno', valor_parametro: input.Cod_Turno  },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
+        { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Cod_Plantilla', valor_parametro: input.Cod_Plantilla },
         { nom_parametro: 'Nro_Cheque', valor_parametro: input.Nro_Cheque },
         { nom_parametro: 'Beneficiario', valor_parametro: input.Beneficiario },

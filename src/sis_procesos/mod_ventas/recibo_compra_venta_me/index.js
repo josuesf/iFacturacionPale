@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 function Ver(_escritura, Serie, variables,fecha_actual) {
     var el = yo`
@@ -424,7 +425,6 @@ function ObservacionesXML(diagrama) {
 
 
 function RecuperarDatosClientePorNroDoc(variables){
-    H5_loading.show(); 
     var Nro_Documento = $("#Nro_DocumentoBuscar").val()
     var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar").val()
     const parametros = {
@@ -442,7 +442,6 @@ function RecuperarDatosClientePorNroDoc(variables){
     fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
     .then(req => req.json())
     .then(res => {
-        console.log(res)
         if (res.respuesta == 'ok') {
             $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
             $("#txtNombreCliente").focus()
@@ -452,12 +451,10 @@ function RecuperarDatosClientePorNroDoc(variables){
             VerBuscarCliente(variables)
             $("#txtBuscarCliente").val($("#txtNombreCliente").val())
         }
-        H5_loading.hide()
     })
 }
 
 function RecuperarDatosClientePorNombre(variables){
-    H5_loading.show(); 
     var Cliente = $("#txtNombreCliente").val()
     const parametros = {
         method: 'POST',
@@ -475,7 +472,6 @@ function RecuperarDatosClientePorNombre(variables){
     .then(res => { 
         VerBuscarCliente(variables)
         AgregarTabla(res.data.cliente)
-        H5_loading.hide()
     })
 }
 
@@ -582,14 +578,15 @@ function GuardarCompraVentaME(variables,fecha_actual){
             fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
             .then(req => req.json())
             .then(res => {
-                console.log(res)
+                $('#modal-proceso').modal('hide')
+                H5_loading.hide()
                 if (res.respuesta == 'ok') {               
-                    $('#modal-superior').modal('hide')
+                    toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
+                    refrescar_movimientos()
                 }
                 else{
-
+                    toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
                 }
-                H5_loading.hide()
             })
         }else{
             var OBS = '<Registro>'
@@ -647,7 +644,6 @@ function GuardarCompraVentaME(variables,fecha_actual){
             fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_cuenta_bancaria_compra_venta_me', parametros)
             .then(req => req.json())
             .then(res => {
-                console.log(res)
                 if (res.respuesta == 'ok') {               
                     //$('#modal-superior').modal('hide')
                     if ($('input[name=optionCV]:checked').val() == 'c') {
@@ -687,19 +683,21 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_cuenta_bancaria_compra_venta_me', parametros)
                     .then(req => req.json())
                     .then(res => {
-                        console.log(res)
-                        if (res.respuesta == 'ok') {               
-                            $('#modal-superior').modal('hide')
+                        $('#modal-proceso').modal('hide')
+                        H5_loading.hide()
+                        if (res.respuesta == 'ok') {             
+                            toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
+                            refrescar_movimientos()
                         }
                         else{
+                            toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
                         }
-                        H5_loading.hide()
                     })
         
 
                 }
                 else{
-                    
+                    toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
                 }
                 H5_loading.hide()
             })
@@ -736,7 +734,6 @@ function GuardarNuevoCliente(){
         fetch(URL+'/clientes_api/guardar_cliente_2', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log(res)
             if (res.respuesta == 'ok') {               
                 $('#modal-superior').modal('hide')
             }
@@ -766,7 +763,6 @@ function BusquedaClienteModal(e){
             fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
             .then(req => req.json())
             .then(res => {
-                console.log(res)
                 if (res.respuesta == 'ok') {
                     var clientes = res.data.cliente
                     if(clientes.length > 0)
@@ -809,7 +805,7 @@ function BusquedaClienteModal(e){
 }
 
  
-function NuevoCompraVentaME(_escritura, caja) {
+function NuevoCompraVentaME(_escritura, caja) { 
     H5_loading.show();
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {
@@ -826,7 +822,7 @@ function NuevoCompraVentaME(_escritura, caja) {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie)
+                TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie==undefined?0:res.data.comprobante_caja[0].Serie)
             }
             else {
                 H5_loading.hide()

@@ -4,7 +4,7 @@ function ValidacionCampos(id_divError,id_divParent){
     // validar campos de texto requeridos
     $((id_divParent!= undefined?"#"+id_divParent:'')+" input").each(function(){
         if ($(this).hasClass("required")){
-            if($.trim($(this).val()).length == 0){ 
+            if($.trim($(this).val()).length == 0){
                 estaValidado = false;
                 $(this).css("border-color","red");
             }else{

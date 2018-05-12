@@ -28,9 +28,39 @@
                 <b>Pal</b>ERP</a>
         </div>
 
+        <div class="modal modal-warning fade" id="modal-confirmacion" style="display: none;">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" >Mensaje de confirmacion </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <h5>¿Esta seguro que desea aperturar caja?</h5>
+                                </div>
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">NO</button>
+                        <button type="submit" class="btn btn-outline" id="btnConfirmacionApertura" >SI</button>
+                    </div>
+                </div> 
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+
         <div class="login-box-body">
            
-            <form action="loginarqueo" method="post">
+            <form action="loginarqueo" method="post" id="formApertura">
 
                 <div class="form-group row">
                     <h4 class="col-sm-12 col-form-label">Aperturar Caja</h4>
@@ -77,11 +107,13 @@
                         <% if(typeof monedas != 'undefined') { %>
                             <tbody>
                                 <% monedas.forEach(function(e){ %>
-                                    <tr>
-                                        <td class="hidden"><%=e.Cod_Moneda%></td>
-                                        <td><input type="text"  value="<%=e.Nom_Moneda%>" class="form-control"></td>
-                                        <td><input type="number" value="0" class="form-control"></td>
-                                    </tr>
+                                    <% if(e.Nom_Moneda!='OTROS'){ %>
+                                        <tr>
+                                            <td class="hidden"><input type="text"  value="<%=e.Cod_Moneda%>" class="form-control" name="Cod_Moneda[]"></td>
+                                            <td><input type="text"  value="<%=e.Nom_Moneda%>" class="form-control" disabled></td>
+                                            <td><input type="number" value="0" class="form-control" name="Monto_Moneda[]"></td>
+                                        </tr>
+                                    <% } %>
                                 <% }) %>
                             </tbody>
                         <% } %>                    
@@ -101,7 +133,7 @@
                             <a class="btn btn-danger btn-block btn-flat" href="logout">Cerrar</a>
                         </div>
                         <div class="col-xs-6">
-                            <button type="submit" class="btn btn-block btn-warning  btn-flat">Aperturar</button>
+                            <button type="button" class="btn btn-block btn-warning  btn-flat" data-toggle="modal" data-target="#modal-confirmacion">Aperturar</button>
                         </div>
                     </div>
                     <!-- /.col -->
@@ -116,7 +148,11 @@
     <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/dist/js/loading.js"></script>
-    
+    <script>
+        $("#btnConfirmacionApertura").click(function(){
+            $("#formApertura").submit()    
+        });
+    </script>
     
 </body>
 

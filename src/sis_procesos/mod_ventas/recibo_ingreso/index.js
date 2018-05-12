@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 
 function CargarFormulario(variables, fecha_actual) {
@@ -549,11 +550,14 @@ function Guardar() {
     fetch(URL + '/recibo_iegreso_api/guardar_recibo', parametros)
         .then(req => req.json())
         .then(res => {
-            if (res.respuesta == 'ok') {
-                 
-            }
             $('#modal-proceso').modal('hide')
             H5_loading.hide()
+            if (res.respuesta == 'ok') {
+                toastr.success('Se registro correctamente el ingreso','Confirmacion',{timeOut: 5000})
+                refrescar_movimientos()
+            }else{
+                toastr.error('No se pudo registrar correctamente el ingreso','Error',{timeOut: 5000})
+            }
         })
     }
 }
