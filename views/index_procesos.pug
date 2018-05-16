@@ -30,6 +30,7 @@ html
 
     // Notify
     link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css') 
+    link(rel='stylesheet', href='dist/css/custom.css')
 
     // bootstrap wysihtml5 - text editor
     link(rel='stylesheet', href='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')
@@ -90,7 +91,7 @@ html
             .pull-left.image
               img.img-circle(src='images/default_profile_image.png', alt='User Image')
             .pull-left.info
-              p #{Nick}
+              p#nick #{Nick}
           // sidebar menu: : style can be found in sidebar.less
           div#nav-container
         // /.sidebar

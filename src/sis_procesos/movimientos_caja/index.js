@@ -521,6 +521,7 @@ function VerTabCaja(movimientos,saldos) {
     empty(sectionModalsElement).appendChild(sectionModals);
     var container = document.getElementById('tab_1')
     empty(container).appendChild(el);
+    $("#tab_1").click()
     $('#content_footer').html(sectionFooter);
 }
 

@@ -8,8 +8,12 @@ import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
 import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
-
 import { NuevaVenta } from '../sis_procesos/mod_ventas/ventas'
+
+
+import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
+import { RegistroCompras } from '../sis_procesos/mod_compras/comprobante_pago'
+
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
@@ -32,6 +36,15 @@ var el = yo`
     <li class="treeview">
         <a href="javascript:void(0);" onclick=${() => NuevaVenta(true)}>
             <i class="fa fa-cart-plus"></i> <span> Nueva Venta</span>
+        </a>
+    </li>
+    <li class="header">Compras</li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>NuevaRecepcion()}>
+            <i class="fa fa-arrow-circle-down"></i> <span>Recepcion de Transferencias</span>
+        </a>
+        <a href="javascript:void(0);" onclick=${()=>RegistroCompras()}>
+            <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
         </a>
     </li>
 </li>

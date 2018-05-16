@@ -95,7 +95,6 @@ var EXEC_QUERY_DBMaster = function (query, parametros, next) {
 }
 
 
-
 var Ejecutar_Procedimientos = function (res, procedimientos,respuesta_previa) {
     Ejecutar_SP_SQL(res,procedimientos,0,respuesta_previa)
 }

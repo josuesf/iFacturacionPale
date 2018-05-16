@@ -3,6 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
+import { NuevoCliente } from '../../modales'
 
 function Ver(_escritura, Serie, variables,fecha_actual) {
     var el = yo`
@@ -14,9 +15,9 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                     </button>
                     <h4 class="modal-title"><strong id="tituloModal">Compra ME</strong></h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modal_form">
                     <div class="row">
-                        <div class="callout callout-danger hidden" id="divErrors">
+                        <div id="modal_error" class="callout callout-danger hidden">
                             <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                         </div>
                     </div>
@@ -49,7 +50,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                         <div class="col-md-12">
                                             <div class="input-group">
                                                 <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>VerNuevoCliente(variables)}><i class="fa fa-plus"></i></button>
+                                                    <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></button>
                                                 </div>
                                                 <input type="text" class="form-control" id="txtNombreCliente">
                                                 <div class="input-group-btn">
@@ -176,7 +177,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                             <br><br><br>
                                             <div class="form-group">
                                                 <label for="Cod_Moneda">Moneda</label>
-                                                <select class="form-control" id="Cod_Moneda">
+                                                <select class="form-control required" id="Cod_Moneda">
                                                     ${variables.monedas_sinsoles.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                 </select>
                                             </div>
@@ -213,82 +214,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
     ObservacionesXML(variables.diagramas)
 }
 
- 
 
-function VerNuevoCliente(variables) {
-    var el = yo`
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Nuevo Cliente</strong></h4>
-                </div>
-                <div class="modal-body" id="modal_form">
-                    <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
-                            <p> Es necesario llenar los campos marcados con rojo</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
-                                    ${variables.tipos_documento.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Nro_Documento">Numero de Documento *</label>
-                                <input type="number"  class="form-control required" id="Nro_Documento">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Cliente_NC">Nombre Completo *</label>
-                                <input type="text"  class="form-control required" id="Cliente_NC">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="DireccioN">Direccion *</label>
-                                <input type="text"  class="form-control required" id="DireccioN">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Email1">Correo Electronico</label>
-                                <input type="email"  class="form-control" id="Email1">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Telefono1">Telefono</label>
-                                <input type="text"  class="form-control" id="Telefono1">
-                            </div>
-                        </div>
-                    </div>
-                     
-                </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarNuevoCliente()}>Aceptar</button>
-                </div>
-            </div>
-        </div>`
-
-    var modal_proceso = document.getElementById('modal-superior');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()
-}
 
 function VerBuscarCliente(variables) {
     var el = yo`
@@ -500,7 +426,7 @@ function SeleccionarCliente(cliente){
 }
 
 function GuardarCompraVentaME(variables,fecha_actual){
-    if(ValidacionCampos()){
+    if(ValidacionCampos("modal_error","modal_form")){
         H5_loading.show()
         if ($('input[name=TipoDestino]:checked').val() == 'c') {
             var OBS = '<Registro>'
@@ -575,6 +501,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     Id_MovimientoRef
                 })
             }
+            console.log(parametros)
             fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
             .then(req => req.json())
             .then(res => {
@@ -705,46 +632,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
         }
     }
 }
-
-function GuardarNuevoCliente(){
-    if(ValidacionCampos("modal_error","modal_form")){
-        H5_loading.show();
-        var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
-        var Nro_Documento = $("#Nro_Documento").val()
-        var Cliente = $("#Cliente_NC").val()
-        var DireccioN = $("#DireccioN").val()
-        var Email1 = $("#Email1").val()
-        var Telefono1 = $("#Telefono1").val()
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                Cod_TipoDocumento,
-                Nro_Documento,
-                Cliente,
-                DireccioN,
-                Email1,
-                Telefono1
-            })
-        }
-        fetch(URL+'/clientes_api/guardar_cliente_2', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {               
-                $('#modal-superior').modal('hide')
-            }
-            else{
-
-            }
-            H5_loading.hide()
-        })
-    }
-}
-
+ 
 function BusquedaClienteModal(e){
     var txtBuscarCliente = $("#txtBuscarCliente").val()
     if(txtBuscarCliente.length>4){

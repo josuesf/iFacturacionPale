@@ -25,8 +25,8 @@ function Ver(_escritura, variables,fecha_actual) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="Cod_Cajero">Cajero</label>
-                                        <input type="text" class="form-control required" id="Cod_Cajero" value="ADMINISTRADOR">
+                                        <label for="Cajero">Cajero</label>
+                                        <h4 type="text" class="form-control" id="Cajero"></h4>
                                     </div>
                                 </div>
                             </div>
@@ -34,9 +34,11 @@ function Ver(_escritura, variables,fecha_actual) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="Cod_Caja">Caja</label>
-                                        <select class="form-control" id="Cod_CajaOrigen">
-                                        
+                                        <label for="Cod_CajaOrigen">Caja</label>
+                                        <select class="form-control" id="Cod_CajaOrigen" disabled>
+                                            ${variables.cajas.map(e => yo`
+                                                <option value="${e.Cod_Caja}" ${e.Cod_Caja == variables.Cod_Caja ? 'selected' : ''}>${e.Des_Caja}</option>
+                                            `)}
                                         </select>
                                     </div>
                                 </div>
@@ -151,6 +153,7 @@ function Ver(_escritura, variables,fecha_actual) {
     var modal_proceso = document.getElementById('modal-proceso');
     empty(modal_proceso).appendChild(el);
     $('#modal-proceso').modal()
+    $('#Cajero').text($('p#nick').text())
 }
 
 function CalcularITF(){
@@ -199,11 +202,11 @@ function GuardarEnvio(variables){
         var Cliente = null
         var ClienteMov = null
         if($('input[name=optEnvios]:checked').val()=="b"){
-            Cliente = $("#Cod_Cuenta_Bancaria").text()
-            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria").val() + " : " + $("#NroOperacion").val() + " , " + $("#Comentario").val()
+            Cliente = $("#Cod_Cuenta_Bancaria option:selected").text()
+            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria option:selected").val() + " : " + $("#NroOperacion").val() + " , " + $("#Comentario").val()
         }else{
-            Cliente = $("#Cod_CajaDestino").text()
-            ClienteMov = "PARA : " + $("#Cod_CajaDestino").val() + " , " + $("#Comentario").val()
+            Cliente = $("#Cod_CajaDestino option:selected").text()
+            ClienteMov = "PARA : " + $("#Cod_CajaDestino option:selected").text() + " , " + $("#Comentario").val()
         }
         var Des_Movimiento = ClienteMov
         var Fecha = $("#Fecha").val()
@@ -215,7 +218,7 @@ function GuardarEnvio(variables){
         var Ingreso = 0
         var Egreso = $("#Monto").val()
         var Flag_Extornado = 0
-        var Id_MovimientoRef = 14
+        var Id_MovimientoRef = 0
 
         if ($('input[name=optEnvios]:checked').val() == 'c') {
             
@@ -231,7 +234,7 @@ function GuardarEnvio(variables){
 }
 
 
-function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientosRef, variables){
+function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
        
     const parametros = {
         method: 'POST',
@@ -258,7 +261,7 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
             Flag_Extornado
         })
     }
-    fetch(URL + '/envios_api/guardar_movimientos', parametros)
+    fetch(URL + '/envios_api/guardar_movimientos_egreso_caja', parametros)
         .then(req => req.json())
         .then(res => { 
             if (res.respuesta == 'ok') {
@@ -315,7 +318,6 @@ function GuardarMovCuentaBancaria(variables){
     fetch(URL + '/envios_api/guardar_movimientos_cuenta_bancaria', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log(res)
             if (res.respuesta == 'ok') {
                 if($("#optITF").is(":checked")){
                     Id_MovimientoCuenta = 0
@@ -377,7 +379,7 @@ function GuardarMovCuentaBancaria(variables){
 }
 
 
-function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientosRef, variables){
+function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
        
         const parametros = {
             method: 'POST',
@@ -401,19 +403,20 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                 Tipo_Cambio,
                 Ingreso,
                 Egreso,
-                Flag_Extornado
+                Flag_Extornado,
+                Obs_Movimiento:null
             })
         }
-        fetch(URL + '/envios_api/guardar_movimientos', parametros)
+        fetch(URL + '/envios_api/guardar_movimientos_egreso_caja', parametros)
             .then(req => req.json())
             .then(res => { 
                 if (res.respuesta == 'ok') {
                     Cod_Caja = $("#Cod_CajaDestino").val()
-                    Cod_Turno = 'T0002'
+                    Cod_Turno = null
                     Id_Concepto = 11000
                     Id_ClienteProveedor = 0
-                    Cliente =  $("#Cod_CajaOrigen").text() 
-                    Des_Movimiento = "DE : "+$("#Cod_CajaOrigen").text()+","+$("#Comentario").val()
+                    Cliente =  $("#Cod_CajaOrigen option:selected").text() 
+                    Des_Movimiento = "DE : "+$("#Cod_CajaOrigen option:selected").text()+","+$("#Comentario").val()
                     Fecha = $("#Fecha").val()
                     Cod_MonedaEgr = $("#Cod_Moneda").val()
                     Cod_MonedaIng = $("#Cod_Moneda").val()
@@ -423,7 +426,8 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                     Ingreso = $("#Monto").val()
                     Egreso = 0
                     Flag_Extornado = 0
-                    GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientosRef, variables)
+                    Id_MovimientoRef = res.data.result
+                    GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables)
                 }
                 else {
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
@@ -432,7 +436,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
             })
 }
 
-function GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientosRef, variables){
+function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
        
     const parametros = {
         method: 'POST',
@@ -456,13 +460,13 @@ function GuardarMovIngresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
             Tipo_Cambio,
             Ingreso,
             Egreso,
-            Flag_Extornado
+            Flag_Extornado,
+            Id_MovimientoRef
         })
-    }
-    fetch(URL + '/envios_api/guardar_movimientos', parametros)
+    } 
+    fetch(URL + '/envios_api/guardar_movimientos_ingreso_otra_caja', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log(res)
             $('#modal-proceso').modal('hide')
             H5_loading.hide() 
             if (res.respuesta == 'ok') {
@@ -496,7 +500,6 @@ function NuevoEnvioEfectivo(_escritura, caja) {
         .then(req => req.json())
         .then(res => {
             var variables = res.data
-            console.log(variables)
             if (res.respuesta == 'ok') {
                 const fecha = new Date()
                 const mes = fecha.getMonth() + 1

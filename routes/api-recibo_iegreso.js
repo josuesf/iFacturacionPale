@@ -51,7 +51,7 @@ router.post('/get_cliente_by_nro_documento',function(req,res){
 router.post('/guardar_recibo',function(req,res){
     input =req.body
     parametros = [
-        { nom_parametro: 'id_Movimiento', valor_parametro: '-1' },
+        { nom_parametro: 'id_Movimiento', valor_parametro: -1 },
         { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
         { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Id_Concepto', valor_parametro: input.Id_Concepto },

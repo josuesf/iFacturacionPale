@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
+import { NuevoCliente } from '../../modales'
 
 function CargarFormulario(variables, fecha_actual) {
     var el = yo`
@@ -13,14 +14,14 @@ function CargarFormulario(variables, fecha_actual) {
                 </button>
                 <h4 class="modal-title"><b>RECIBO DE EGRESO</b></h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="modal_form_egreso">
                 <div class="modal fade" id="modal_observaciones">
                     <div class="modal-dialog modal-sm" > 
                         <div class="modal-content" id="modal_obs_body"></div>
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="callout callout-danger hidden" id="divErrors">
+                    <div class="callout callout-danger hidden" id="modal_error_egreso">
                         <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                     </div>
                 </div>
@@ -61,7 +62,7 @@ function CargarFormulario(variables, fecha_actual) {
                                     <div class="col-md-12">
                                         <div class="input-group">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>VerNuevoCliente(variables)}>
+                                                <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>NuevoCliente(variables.documentos)}>
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -185,80 +186,7 @@ function CargarFormulario(variables, fecha_actual) {
 }
 
 
-function VerNuevoCliente(variables) {
-    var el = yo`
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Nuevo Cliente</strong></h4>
-                </div>
-                <div class="modal-body" id="modal_form">
-                    <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
-                            <p> Es necesario llenar los campos marcados con rojo</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
-                                    ${variables.documentos.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Nro_Documento_NC">Numero de Documento *</label>
-                                <input type="number"  class="form-control required" id="Nro_Documento_NC">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Cliente_NC">Nombre Completo *</label>
-                                <input type="text"  class="form-control required" id="Cliente_NC">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="DireccioN">Direccion *</label>
-                                <input type="text"  class="form-control required" id="DireccioN">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Email1">Correo Electronico</label>
-                                <input type="email"  class="form-control" id="Email1">
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Telefono1">Telefono</label>
-                                <input type="text"  class="form-control" id="Telefono1">
-                            </div>
-                        </div>
-                    </div>
-                     
-                </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarNuevoCliente()}>Aceptar</button>
-                </div>
-            </div>
-        </div>`
-
-    var modal_proceso = document.getElementById('modal-superior');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()
-}
+ 
 
 function VerBuscarCliente(variables) {
     var el = yo`
@@ -351,47 +279,7 @@ function AgregarTabla(clientes){
 </table>`
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
 }
-
-
-function GuardarNuevoCliente(){
-    if(ValidacionCampos("modal_error","modal_form")){
-        H5_loading.show();
-        var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
-        var Nro_Documento = $("#Nro_Documento_NC").val()
-        var Cliente = $("#Cliente_NC").val()
-        var DireccioN = $("#DireccioN").val()
-        var Email1 = $("#Email1").val()
-        var Telefono1 = $("#Telefono1").val()
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                Cod_TipoDocumento,
-                Nro_Documento,
-                Cliente,
-                DireccioN,
-                Email1,
-                Telefono1
-            })
-        }
-        fetch(URL+'/clientes_api/guardar_cliente_2', parametros)
-        .then(req => req.json())
-        .then(res => {
-            console.log(res)
-            if (res.respuesta == 'ok') {               
-                $('#modal-superior').modal('hide')
-            }
-            else{
-
-            }
-            H5_loading.hide()
-        })
-    }
-}
+ 
 
 function BusquedaClienteModal(e){
     var txtBuscarCliente = $("#txtBuscarCliente").val()
@@ -520,7 +408,7 @@ function GuardarObs_Recibo(diagramas) {
     $('#modal_observaciones').modal('hide')
 }
 function Guardar() {
-    if (ValidacionCampos() && !isNaN(parseInt(document.getElementById('Monto').value)) && parseInt(document.getElementById('Monto').value)>0) {
+    if (ValidacionCampos("modal_error_egreso","modal_form_egreso") && !isNaN(parseInt(document.getElementById('Monto').value)) && parseInt(document.getElementById('Monto').value)>0) {
     const Id_Concepto = document.getElementById('Id_Concepto').value
     const Cliente = document.getElementById('Cliente').value
     const Des_Movimiento = document.getElementById('Des_Movimiento').value
@@ -546,6 +434,7 @@ function Guardar() {
             Numero, Fecha, MontoEgreso,MontoIngreso, Cod_Moneda, Obs_Movimiento
         })
     }
+    console.log(parametros)
     fetch(URL + '/recibo_iegreso_api/guardar_recibo', parametros)
         .then(req => req.json())
         .then(res => {

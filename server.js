@@ -250,38 +250,8 @@ app.post('/loginarqueo', function (req, res) {
       }
       app.locals.apertura = true
       res.redirect('/')
-      /*p = [
-        { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
-        { nom_parametro: 'Cod_Moneda', valor_parametro: Cod_Caja},
-        { nom_parametro: 'Tipo', valor_parametro: Cod_Turno},
-        { nom_parametro: 'Monto', valor_parametro: Numero},
-        { nom_parametro: 'Cod_Usuario', valor_parametro: Des_ArqueoFisico}
-      ]
-
-      EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', p , function (dataArqueoFisico) {
-        
-      })*/
-
-      //app.locals.apertura = true
-      /*p = [
-        { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1},
-        { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
-        { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
-        { nom_parametro: 'Numero', valor_parametro: Numero},
-        { nom_parametro: 'Des_ArqueoFisico', valor_parametro: Des_ArqueoFisico},
-        { nom_parametro: 'Obs_ArqueoFisico', valor_parametro: Obs_ArqueoFisico},
-        { nom_parametro: 'Fecha', valor_parametro: Fecha},
-        { nom_parametro: 'Flag_Cerrado', valor_parametro: Flag_Cerrado},
-        { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
-      ]
-
-      EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', p , function (dataSaldoArqueoFisico) {
-                    
-      })*/              
+     
     })
- 
-    //req.session.caja = req.body.Caja
-    //res.redirect('/');
   } 
 })
  
@@ -308,6 +278,9 @@ var cuentas_bancarias_api = require('./routes/api-cuentas_bancarias')
 var movimientos_caja_api = require('./routes/api-movimientos_caja')
 var recibo_iegreso_api = require('./routes/api-recibo_iegreso')
 var envios_api = require('./routes/api-envios')
+var ventas_api = require('./routes/api-ventas')
+var compras_api = require('./routes/api-compras')
+var recepciones_api = require('./routes/api-recepciones')
 
 // Routes Procesos
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
@@ -338,7 +311,9 @@ app.use('/movimientos_caja_api',movimientos_caja_api)
 app.use('/compra_venta_moneda_extranjera_api', compra_venta_moneda_extranjera_api);
 app.use('/recibo_iegreso_api',recibo_iegreso_api)
 app.use('/envios_api', envios_api)
-
+app.use('/ventas_api', ventas_api)
+app.use('/compras_api', compras_api)
+app.use('/recepciones_api', recepciones_api)
 
 //Listen Server
 var server = app.listen(3000, function (err) {
