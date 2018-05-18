@@ -33,6 +33,30 @@ router.post('/get_cuenta', function (req, res) {
     ]
     Ejecutar_Procedimientos(res,procedimientos)
 });
+
+router.post('/get_cuenta_by_sucursal', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Sucursal',valor_parametro:req.app.locals.sucursal[0].Cod_Sucursal},
+    ]
+    procedimientos =[
+        {nom_respuesta:'cuentas',sp_name:'USP_BAN_CUENTA_BANCARIA_TXSucursal',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+router.post('/get_cuenta_by_id_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_ClienteProveedor',valor_parametro:input.Id_ClienteProveedor},
+    ]
+    procedimientos =[
+        {nom_respuesta:'cuentas',sp_name:'USP_PRI_CLIENTE_CUENTABANCARIA_TXId_ClienteProveedor',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
 router.post('/guardar_cuenta', function (req, res) {
     input = req.body
     parametros = [

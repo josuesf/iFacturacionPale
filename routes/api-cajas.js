@@ -84,6 +84,31 @@ router.post('/get_comprobantes', function (req, res){
     Ejecutar_Procedimientos(res,procedimientos)
 })
 
+router.post('/get_series_by_cod_caja_comprobante', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Caja',valor_parametro:req.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_TipoComprobante',valor_parametro:input.Cod_TipoComprobante}
+    ]
+    procedimientos = [
+        {nom_respuesta:'series',sp_name:'USP_CAJ_CAJAS_DOC_TXCodCajaComprobante',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
+router.post('/get_next_comprobante_by_tipo_serie_libro', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_TipoComprobante',valor_parametro:input.Cod_TipoComprobante},
+        {nom_parametro:'Serie',valor_parametro:input.Serie},
+        {nom_parametro:'CodLibro',valor_parametro:input.CodLibro}
+    ]
+    procedimientos = [
+        {nom_respuesta:'comprobante',sp_name:'USP_CAJ_COMPROBANTE_PAGO_NumeroXTipoSerieLibro',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+})
+
 router.post('/guardar_documento', function (req, res){
     input = req.body
     parametros = [
@@ -179,5 +204,13 @@ router.post('/eliminar_favorito', function (req, res){
     ]
     Ejecutar_Procedimientos(res,procedimientos)
 })
+
+
+
+router.post('/get_caja_actual', function (req, res) {
+    input = req.body
+    res.json({caja:req.app.locals.caja[0]})
+})
+
 
 module.exports = router;

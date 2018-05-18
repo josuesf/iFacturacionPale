@@ -111,7 +111,7 @@ router.post('/guardar_cliente_2', function (req, res) {
 router.post('/get_cliente_by_documento', function (req, res) {
     input = req.body
     parametros = [
-        { nom_parametro: 'Cod_TipoCliente'},
+        { nom_parametro: 'Cod_TipoCliente' , valor_parametro: input.Cod_TipoCliente },
         { nom_parametro: 'Nro_Documento', valor_parametro: input.Nro_Documento },
         { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDocumento },
         { nom_parametro: 'Cod_TipoComprobante'}
@@ -125,7 +125,7 @@ router.post('/get_cliente_by_documento', function (req, res) {
 router.post('/get_cliente_by_nombre', function (req, res) {
     input = req.body
     parametros = [
-        { nom_parametro: 'Cod_TipoCliente'},
+        { nom_parametro: 'Cod_TipoCliente', valor_parametro: input.Cod_TipoCliente },
         { nom_parametro: 'Cliente', valor_parametro: input.Cliente }
     ]
     procedimientos = [
@@ -177,7 +177,7 @@ router.post('/get_one_cliente', function (req, res) {
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
-//CUENTAS BANCARIAS POR CLIENTE
+ 
 router.post('/get_cuentas_cliente', function (req, res) {
     input = req.body
     parametros = [
@@ -197,6 +197,29 @@ router.post('/get_entidades_tiposcuentas', function (req, res) {
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
+
+
+router.post('/get_licitaciones_by_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor }
+    ]
+    procedimientos = [
+        { nom_respuesta: 'licitaciones', sp_name: 'USP_PRI_LICITACIONES_TXIdClienteProveedor', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/get_entidades_tiposcuentas', function (req, res) {
+    input = req.body
+    parametros = []
+    procedimientos = [
+        { nom_respuesta: 'entidades', sp_name: 'USP_VIS_ENTIDADES_FINANCIERAS_TT', parametros },
+        { nom_respuesta: 'tipos_cuenta', sp_name: 'USP_VIS_TIPO_CUENTA_BANCARIA_TT', parametros }
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 router.post('/guardar_cuenta_bancaria_cliente', function (req, res) {
     input = req.body
     parametros = [
@@ -215,6 +238,8 @@ router.post('/guardar_cuenta_bancaria_cliente', function (req, res) {
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
+
+
 router.post('/eliminar_cuenta_bancaria_cliente', function (req, res) {
     input = req.body
     parametros = [
@@ -434,4 +459,6 @@ router.post('/eliminar_padron_cliente', function (req, res) {
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
+ 
+
 module.exports = router;

@@ -3,8 +3,8 @@ var yo = require('yo-yo');
 import { URL } from '../../constantes_entorno/constantes'
  
 
- 
-function BuscarCliente(idInputCliente,idInputDoc,idClienteOutPut) {
+function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
+    //objCliente = null
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -38,7 +38,7 @@ function BuscarCliente(idInputCliente,idInputDoc,idClienteOutPut) {
                             <div class="input-group">
                                 <input type="text" class="form-control" id="txtBuscarCliente">
                                 <div class="input-group-btn">
-                                    <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut)}><i class="fa fa-search"></i> Buscar</button>
+                                    <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)}><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -138,7 +138,7 @@ function NuevoCliente(documentos) {
     $('#modal-superior').modal()
 }
 
-function AgregarTabla(clientes,idInputCliente,idInputDoc,idClienteOutPut){
+function AgregarTabla(clientes,idInputCliente,idInputDoc){
     var el = yo`<table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -152,7 +152,7 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc,idClienteOutPut){
         <tr>
             <td>${u.Nro_Documento}</td>
             <td>${u.Cliente}</td> 
-            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarCliente(u,idInputCliente,idInputDoc,idClienteOutPut)}"><i class="fa fa-check"></i> Elegir</button></td>
+            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarCliente(u,idInputCliente,idInputDoc)}"><i class="fa fa-check"></i> Elegir</button></td>
         </tr>`)}
     </tbody>
 
@@ -160,20 +160,63 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc,idClienteOutPut){
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
 }
 
-function SeleccionarCliente(cliente,idInputCliente,idInputDoc,idClienteOutPut){
-    //$("#"+idInputDoc).val(cliente.Nro_Documento)
+function AbrirModalObs(diagrama,obs_global_xml,id_modal,id_modal_body) {
+    var xml = obs_global_xml!=null?obs_global_xml:''
+    var parser = new DOMParser();
+    var xmlDoc = parser.parseFromString(xml, "text/xml");
+    var el = yo`<div>
+    <div class="modal-body">
+        ${diagrama.map(e => yo`
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="">${e.Nom_Elemento}</label>
+                    <input id="${e.Cod_Elemento}"
+                    value=${getValueXML(xmlDoc, e.Cod_Elemento)}
+                    class="form-control" />
+                </div>
+            </div>
+        </div>`)}
+    </div>
+    <div class="modal-footer">
+        <button onclick="${() => GuardarObs_Recibo(diagrama,obs_global_xml,id_modal)}" class="btn btn-primary">Guardar</button>
+    </div></div>`;
+    var obs_xml = document.getElementById(id_modal_body)
+    empty(obs_xml).appendChild(el)
+    $('#'+id_modal).modal()
+}
+
+function GuardarObs_Recibo(diagramas,obs_global_xml,id_modal) {
+    var OBS = '<Registro>'
+    for (var i = 0; i < diagramas.length; i++) {
+        OBS += '<' + diagramas[i].Cod_Elemento + '>' + document.getElementById(diagramas[i].Cod_Elemento).value + '</' + diagramas[i].Cod_Elemento + '>'
+    }
+    obs_global_xml = OBS+'</Registro>'
+    $('#'+id_modal).modal('hide')
+}
+
+
+function getValueXML(xmlDoc, TAG) {
+    if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
+        return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
+    } else {
+        return ''
+    }
+}
+
+function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
     if (idInputCliente!=null)
         $("#"+idInputCliente).val(cliente.Cliente)
     
     if (idInputDoc!=null)
         $("#"+idInputDoc).val(cliente.Nro_Documento)
+
     
-    if(idClienteOutPut!=null)
-        idClienteOutPut = cliente.Id_ClienteProveedor
-    else
+    global.objCliente = cliente
+    
+    if (idInputCliente!=null)
         $("#"+idInputCliente).attr("data-id",cliente.Id_ClienteProveedor)
-    //$("#"+idInputCliente).val(cliente.Cliente)
-    //idClienteOutPut = cliente.Id_ClienteProveedor
+    $("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
 }
 
 function GuardarNuevoCliente(){
@@ -219,7 +262,7 @@ function GuardarNuevoCliente(){
 
 
 
-function BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut){
+function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
     var txtBuscarCliente = $("#txtBuscarCliente").val()
     if(txtBuscarCliente.length>=4){
         if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
@@ -231,7 +274,8 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    Cliente
+                    Cliente,
+                    Cod_TipoCliente
                 })
             }
             fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
@@ -241,7 +285,7 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut){
                 if (res.respuesta == 'ok') {
                     var clientes = res.data.cliente
                     if(clientes.length > 0)
-                        AgregarTabla(clientes,idInputCliente,idInputDoc,idClienteOutPut)
+                        AgregarTabla(clientes,idInputCliente,idInputDoc)
                     else  
                         empty(document.getElementById('contenedorTablaClientes'));
                 }
@@ -259,7 +303,8 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut){
                 },
                 body: JSON.stringify({
                     Nro_Documento,
-                    Cod_TipoDocumento
+                    Cod_TipoDocumento,
+                    Cod_TipoCliente
                 })
             }
             fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
@@ -280,4 +325,4 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,idClienteOutPut){
 }
 
   
-export { NuevoCliente , BuscarCliente }
+export { NuevoCliente , BuscarCliente , AbrirModalObs }

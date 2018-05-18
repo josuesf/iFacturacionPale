@@ -1,9 +1,11 @@
-var empty = require('empty-element');
+ var empty = require('empty-element');
 var yo = require('yo-yo');
+
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 
-function Ver(_escritura, variables,fecha_actual) {
+
+function Ver(_escritura, variables,fecha_actual,caja_actual) {
     var el = yo`
         <div class="modal-dialog ">
             <div class="modal-content">
@@ -37,7 +39,7 @@ function Ver(_escritura, variables,fecha_actual) {
                                         <label for="Cod_CajaOrigen">Caja</label>
                                         <select class="form-control" id="Cod_CajaOrigen" disabled>
                                             ${variables.cajas.map(e => yo`
-                                                <option value="${e.Cod_Caja}" ${e.Cod_Caja == variables.Cod_Caja ? 'selected' : ''}>${e.Des_Caja}</option>
+                                                <option value="${e.Cod_Caja}" ${e.Cod_Caja == caja_actual.Cod_Caja ? 'selected' : ''}>${e.Des_Caja}</option>
                                             `)}
                                         </select>
                                     </div>
@@ -505,7 +507,23 @@ function NuevoEnvioEfectivo(_escritura, caja) {
                 const mes = fecha.getMonth() + 1
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-                Ver(_escritura, variables,fecha_format)
+
+
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                    })
+                }
+                fetch(URL + '/cajas_api/get_caja_actual', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        Ver(_escritura, variables,fecha_format,res.caja)
+                    })
+
             }
             else { 
                 

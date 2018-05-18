@@ -46,4 +46,7 @@ function ValidacionCampos(id_divError,id_divParent){
     }
 
     return estaValidado;
- } 
+ }
+  
+
+ 

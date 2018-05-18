@@ -254,6 +254,7 @@ var Obs_Recibo = null
 function SeleccionarCliente(cliente){
     $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
     $("#Cliente").val(cliente.Cliente)
+    $("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
     Id_ClienteProveedor = cliente.Id_ClienteProveedor
 }
 

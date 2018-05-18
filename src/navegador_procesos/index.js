@@ -12,7 +12,7 @@ import { NuevaVenta } from '../sis_procesos/mod_ventas/ventas'
 
 
 import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
-import { RegistroCompras } from '../sis_procesos/mod_compras/comprobante_pago'
+import { ComprobantePago } from '../sis_procesos/mod_compras/comprobante_pago'
 
 
 var el = yo`
@@ -41,14 +41,14 @@ var el = yo`
     <li class="header">Compras</li>
     <li class="treeview">
         <a href="javascript:void(0);" onclick=${()=>NuevaRecepcion()}>
-            <i class="fa fa-arrow-circle-down"></i> <span>Recepcion de Transferencias</span>
+            <i class="fa fa-arrow-circle-down"></i> <span>Recepcion de Transferencias</span>   
         </a>
-        <a href="javascript:void(0);" onclick=${()=>RegistroCompras()}>
+    </li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>ComprobantePago('08')}>
             <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
         </a>
     </li>
-</li>
-    
 </ul>`;
 
 module.exports = function navegador(ctx, next) {

@@ -4,7 +4,6 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente } from '../../modales'
 
 var cantidad_tabs = 1
-var idClienteProveedor = null
 
 function VerNuevaVenta(variables) {
     cantidad_tabs++
@@ -48,7 +47,7 @@ function VerNuevaVenta(variables) {
                                             </div>
                                             <input type="text" id="Cliente" class="form-control">
                                             <div class="input-group-btn">
-                                                <button type="button" id="BuscarCliente" class="btn btn-info" onclick=${()=>BuscarCliente("Cliente","Doc",idClienteProveedor)}>
+                                                <button type="button" id="BuscarCliente" class="btn btn-info" onclick=${()=>BuscarCliente("Cliente","Doc",null)}>
                                                     <i class="fa fa-search"></i>
                                                 </button>
                                             </div>

@@ -138,6 +138,7 @@ app.get('/login', function (req, res) {
   var anio = fecha.getFullYear() 
   EXEC_QUERY_DBMaster('SELECT * FROM PRI_EMPRESA', [], function (o) {
     if (o.error) return null 
+    app.locals.empresa = o.result
     p = [
         { nom_parametro: 'RUC', valor_parametro: o.result.RUC }
     ]
@@ -162,7 +163,6 @@ app.post('/login', function (req, res) {
       req.session.turno = req.body.Turno
       req.session.periodo = req.body.Periodo
       req.session.gestion = req.body.Gestion
-
       p = [
         { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
       ]
