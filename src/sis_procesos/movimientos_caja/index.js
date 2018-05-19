@@ -135,6 +135,11 @@ function Ver(movimientos,saldos) {
                 <div class="modal fade" id="modal-superior" style="display: none;z-index: 1051;" >
                      
                 </div>
+
+                <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;" >
+                     
+                </div>
+
                 <div class="modal fade" id="modal-proceso" style="overflow: auto;">
                     
                 </div>

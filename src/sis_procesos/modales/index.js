@@ -1,10 +1,88 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../constantes_entorno/constantes'
+
+var aRequiereStock = true
+var aIdClienteProveedor = 0
+var aCodTipoProducto = null
+
+function BuscarProducto(_RequiereStock,text_busqueda) {
+    H5_loading.show()
+    aRequiereStock = _RequiereStock
+    var el = yo`
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title"><strong>Buscar Producto </strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="Cod_Categoria">Categoria</label>
+                                <select id="Cod_Categoria"  class="form-control">
+                                   
+                                </select>
+                            </div>
+                        </div>
+                        <div  class="col-md-4">
+                            <div class="form-group">
+                                <label for="Cod_Precio">Tipo Precio</label>
+                                <select id="Cod_Precio"  class="form-control">
+                                
+                                </select>
+                            </div>
+                        </div>
+                        <div  class="col-md-4">
+                            <div class="form-group">
+                                <label></label>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" checked="checked"> Solo productos con stock?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="${text_busqueda}" id="txtBusquedaProducto">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-success" onclick="${()=>Buscar()}"><i class="fa fa-search"></i> Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="table-responsive" id="contenedorTablaProductos">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="btnSeleccionarProducto">Seleccionar</button>
+                </div>
+            </div>
+        </div>`
+
+    var modal_proceso = document.getElementById('modal-superior');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-superior').modal()
+    CargarTipoPrecio()
+    CargarCategoria()
+    Buscar()
+    H5_loading.hide()
+}
+
+
  
 
 function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
-    //objCliente = null
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -160,6 +238,60 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc){
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
 }
 
+function AgregarTablaProductos(productos){
+    var el = yo`<tabla class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Almacen</th> 
+            <th>Producto</th>
+            <th>Stock</th>
+            <th>Moneda</th>
+            <th>PU</th>
+            <th>UM</th> 
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${productos.map(u => yo`
+        <tr>
+            <td>${u.Cod_Producto}</td>
+            <td>${u.Des_Almacen}</td>
+            <td>${u.Nom_Producto}</td>  
+            <td>${u.Stock_Act}</td>  
+            <td>${u.Nom_UnidadMoneda}</td>  
+            <td>${u.Precio_Compra}</td>  
+            <td>${u.Nom_UnidadMedida}</td>
+            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarProducto(u)}"><i class="fa fa-check"></i> Elegir</button></td>
+        </tr>`)}
+    </tbody>
+
+</table>`
+    empty(document.getElementById('contenedorTablaProductos')).appendChild(el);
+}
+
+function LlenarCategorias(categorias){
+    var html = ''
+    for(var i=0; i<categorias.length; i++){
+        html = html+'<option value="'+categorias[i].Cod_Categoria+'">'+categorias[i].Des_Categoria+'</option>'
+    }
+     
+    $("#Cod_Categoria").html('')
+    $("#Cod_Categoria").html(html) 
+    $("#Cod_Categoria").val(null)
+}
+
+
+function LlenarPrecios(precios){
+    var html = ''
+    for(var i=0; i<precios.length; i++){
+        html = html+'<option value="'+precios[i].Cod_Precio+'">'+precios[i].Nom_Precio+'</option>'
+    }
+     
+    $("#Cod_Precio").html('')
+    $("#Cod_Precio").html(html)
+}
+
 function AbrirModalObs(diagrama,obs_global_xml,id_modal,id_modal_body) {
     var xml = obs_global_xml!=null?obs_global_xml:''
     var parser = new DOMParser();
@@ -202,6 +334,11 @@ function getValueXML(xmlDoc, TAG) {
     } else {
         return ''
     }
+}
+
+
+function SeleccionarProducto(producto){    
+    global.objProducto = producto
 }
 
 function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
@@ -261,6 +398,129 @@ function GuardarNuevoCliente(){
 }
 
 
+function CargarCategoria(){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        })
+    }
+    fetch(URL+'/categorias_api/get_categoriaspadre', parametros)
+    .then(req => req.json())
+    .then(res => {
+        if (res.respuesta == 'ok') 
+            LlenarCategorias(res.data.categoriaspadre)
+        else
+            LlenarCategorias([])
+    })
+}
+
+function CargarTipoPrecio(){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        })
+    }
+    fetch(URL+'/productos_serv_api/get_precios', parametros)
+    .then(req => req.json())
+    .then(res => {
+        if (res.respuesta == 'ok') 
+            LlenarPrecios(res.data.precios)
+        else
+            LlenarPrecios([])
+    })
+}
+
+
+function Buscar(){
+    if (aIdClienteProveedor==0){
+        BusquedaProducto() 
+    }else{
+        BusquedaXIdClienteProveedor()
+    }
+}
+
+function BusquedaProducto(){
+    if($("#txtBusquedaProducto").val().trim().length>=2){
+        var Buscar = $("#txtBusquedaProducto").val().replace(/" "/g ,"%")
+        var Cod_Precio = $("#Cod_Precio").val()
+        var Cod_Categoria = $("#Cod_Categoria").val()
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Buscar,
+                CodTipoProducto:aCodTipoProducto,
+                Cod_Categoria,
+                Cod_Precio,
+                Flag_RequiereStock:aRequiereStock
+            })
+        }
+        fetch(URL+'/productos_serv_api/buscar_producto_caja_actual', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log("busqueda de producto")
+            console.log(res)
+            if (res.respuesta == 'ok') {
+                var productos = res.data.productos
+                if(productos.length > 0)
+                    AgregarTablaProductos(productos)
+                else  
+                    empty(document.getElementById('contenedorTablaProductos'));
+            }
+            else
+                empty(document.getElementById('contenedorTablaProductos'));
+        })
+    }else{
+        console.log("busqueda de producto con lenght mayor a 2")
+    }
+}
+
+
+function BusquedaXIdClienteProveedor(){
+    if($("#txtBusquedaProducto").val().trim().length>=2){
+        var Buscar = $("#txtBusquedaProducto").val().replace(/" "/g ,"%")
+        var Cod_Categoria = $("#Cod_Categoria").val()
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Buscar,
+                CodTipoProducto:aCodTipoProducto,
+                Cod_Categoria
+            })
+        }
+        fetch(URL+'/productos_serv_api/buscar_producto_by_id_cliente_caja_actual', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log(res)
+            if (res.respuesta == 'ok') {
+                var productos = res.data.productos
+                if(productos.length > 0)
+                    AgregarTablaProductos(productos)
+                else  
+                    empty(document.getElementById('contenedorTablaProductos'));
+            }
+            else
+                empty(document.getElementById('contenedorTablaProductos'));
+        })
+    }
+}
 
 function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
     var txtBuscarCliente = $("#txtBuscarCliente").val()
@@ -324,5 +584,6 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
     }
 }
 
+
   
-export { NuevoCliente , BuscarCliente , AbrirModalObs }
+export { NuevoCliente , BuscarCliente , AbrirModalObs , BuscarProducto }

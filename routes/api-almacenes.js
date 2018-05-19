@@ -87,4 +87,15 @@ router.post('/get_cajas_activas', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+router.post('/get_almacen_by_producto', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_Producto', valor_parametro: input.Id_Producto}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'almacenes', sp_name: 'USP_PRI_PRODUCTO_TAlamcenXProducto', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 module.exports = router;

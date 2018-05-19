@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import { NuevoCliente, BuscarCliente , AbrirModalObs } from '../../modales'
+import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 
 var listaFormaPago = []
 var obs_xml = null
@@ -9,6 +9,7 @@ var aSaldo
 
 function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     global.objCliente = ''
+    global.objProducto = ''
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -122,7 +123,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                     </div>
                                     <div class="col-md-7" id="divNumero">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-sm required" id="Numero"   >
+                                            <input type="text" class="form-control input-sm required" id="Numero" onblur="${()=>CambioNumero()}">
                                         </div>
                                     </div>
                                 </div> 
@@ -191,10 +192,10 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4" id="divLicitacion">
+                                            <div class="col-md-4" id="divLicitacion" style="display:none">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" id="optLicitacion" name="optLicitacion"> Licitacion
+                                                        <input type="checkbox" id="optLicitacion" name="optLicitacion" onchange=${()=>CambioLicitacion()}> Licitacion
                                                     </label>
                                                 </div>
                                             </div>
@@ -210,7 +211,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                         <div class="row">
                                             <div class="col-sm-2" id="divEsGastos" style="display: ${CodLibro=='08'?'block':'none'}">
                                                 <div class="checkbox"> 
-                                                    <input type="checkbox" id="optEsGasto" name="optEsGasto"> Es Gastos?
+                                                    <input type="checkbox" id="optEsGasto" name="optEsGasto" onchange="${()=>CambioGastos()}"> Es Gastos?
                                                 </div>
                                             </div>
                                             <div class="col-sm-3" id="divMoneda">
@@ -268,7 +269,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <div class="row" id="divDescargarProducto">
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input type="checkbox" id="optDescargar" name="optDescargar"> ${CodLibro=='08'?'Descargar Producto':'Descargar de Almacen(es)'}
+                                                            <input type="checkbox" id="optDescargar" name="optDescargar" checked="checked" onchange=${()=>CambioDespachado()}> ${CodLibro=='08'?'Descargar Producto':'Descargar de Almacen(es)'}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -301,7 +302,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                     <div class="input-group">
                                                         <label>Codigo/Producto/Servicio</label>
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-xs"><i class="fa fa-search"></i></button>
+                                                            <button type="button" class="btn btn-default btn-xs" onclick=${()=>BuscarProductoCP(CodLibro)}><i class="fa fa-search"></i></button>
                                                         </span>
                                                     </div>
                                                 </th>
@@ -320,13 +321,13 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <th>Importe</th>
                                             </tr>
                                             <tr style="background:bisque"> 
-                                                <th><input type="text" class="form-control input-sm"></th>
-                                                <th><select class="form-control input-sm"> </select></th>
-                                                <th><select class="form-control input-sm"> </select></th>
-                                                <th><input type="number" class="form-control input-sm" value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" value="0.00"></th>
+                                                <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro)}></th>
+                                                <th><select class="form-control input-sm" id="Cod_Almacen"> </select></th>
+                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida"> </select><select class="form-control input-sm hidden" id="Cod_TipoPrecio"> </select></th>
+                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00"></th>
+                                                <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00"></th>
+                                                <th><input type="number" class="form-control input-sm" id="Descuento" value="0.00"></th>
+                                                <th><input type="number" class="form-control input-sm" id="Importe" value="0.00"></th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -345,7 +346,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="subtotal" class="col-sm-5 control-label">SUB TOTAL</label>
+                                            <label for="subtotal" class="col-sm-5 control-label" value="0.00">SUB TOTAL</label>
                         
                                             <div class="col-sm-7">
                                                 <input type="number" class="form-control input-sm" id="subtotal">
@@ -391,18 +392,18 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <label>Stock actual:</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control input-sm">
+                                                <input type="text" class="form-control input-sm" id="Stock">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <button type="button" class="btn btn-default btn-sm">Percepcion</button>
+                                                <button type="button" class="btn btn-default btn-sm" onclick="${()=>AbrirModalPercepcion()}">Percepcion</button>
                                             </div>
                                             <div class="col-md-4">
                                                 <button type="button" class="btn btn-default btn-sm">Asignar Series</button>
                                             </div>
                                             <div class="col-md-4">
-                                                <button type="button" class="btn btn-default btn-sm">Buscar Series</button>
+                                                <button type="button" class="btn btn-default btn-sm" id="btnBuscarSeries">Buscar Series</button>
                                             </div>
                                         </div>  
                                     </div>
@@ -447,16 +448,19 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             <label>
                                                 <input type="checkbox"> DESCUENTO GLOBAL
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global">
                                         </div>
                                         <div class="form-group">
                                             <strong>GRAN TOTAL</strong>
-                                            <input type="number" class="form-control input-sm" id="Gran_Total" value="0.00">
+                                            <input type="number" class="form-control input-sm" id="Gran_Total" value="0.00" disabled>
                                         </div>
                                     </div>
                                 </div>
-
-
+                                <div class="row text-center">
+                                    <div class="col-md-12">
+                                        <h4><strong id="DescripcionDespachado"></strong></h4>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -481,37 +485,57 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     CargarConfiguracionDefault(CodLibro)
     $("input[name=optCredito][value='contado']").prop("checked",true)
     $('#modal-superior').on('hidden.bs.modal', function () {
-            //console.log(global.objCliente)
-            if(global.objCliente !=''){
-                $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-                $("#Cliente").val(global.objCliente.Cliente)
-                $("#Nro_Documento").val(global.objCliente.Nro_Documento)
-                $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
-                if(parseFloat(global.objCliente.Limite_Credito) > 0 )
-                    $("#divCredito").css("display","block")
-                
-                if($("#divCredito").css("display")=="block"){
-                    $("input[name=optCredito][value='credito']").prop("checked",true);
-                    $("#Nro_Dias").val(30)
-                }else{
-                    $("input[name=optCredito][value='credito']").prop("checked",false);
-                    $("#Nro_Dias").val(0)
-                }
 
-                if(CodLibro=="14"){
-                    $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
-                    CargarSeries(CodLibro)
-                    CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
-                }
+        if(global.objCliente !='' && global.objCliente){
+            $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente").val(global.objCliente.Cliente)
+            $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+            if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
+                $("input[name=optCredito][value='credito']").prop("checked",true);
+                $("#divCredito").css("display","block")
             }
-            CambioCreditoContado()
+            else{
+                $("input[name=optCredito][value='contado']").prop("checked",true);
+                $("#divCredito").css("display","none")
+            }
+            
+            if($("#divCredito").css("display")=="block"){
+                $("input[name=optCredito][value='credito']").prop("checked",true);
+                $("#Nro_Dias").val(30)
+            }else{
+                $("input[name=optCredito][value='credito']").prop("checked",false);
+                $("#Nro_Dias").val(0)
+            }
+
+            if(CodLibro=="14"){
+                $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
+                CargarSeries(CodLibro)
+                CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+            }
+        }
+        CambioLicitacion()
+        CambioCreditoContado()
+
+        if(global.objProducto!='' && global.objProducto){
+            $("#Nom_Producto").val("data-id",global.objProducto.Id_Producto)
+            $("#Nom_Producto").val(global.objProducto.Nom_Producto)
+            CargarAlmacenes(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
+            $("#Cod_UnidadMedida").val(global.objProducto.Cod_UnidadMedida)
+            $("#Cod_TipoPrecio").val('001')
+            $("#Stock").val(parseFloat(global.objProducto.Stock_Act)+".00")
+            $("#Precio_Unitario").val(parseFloat(global.objProducto.Precio_Venta))
+            $("#Cantidad").val(1)
+            $("#Cantidad").focus()
+        }
     })
+    CambioLicitacion()
 }
 
 
 function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
     var el = yo`
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -534,25 +558,39 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                 <div class="panel-heading">
                                     <h4> Monedas </h4>
                                 </div>
-                                <div class="panel-body">
-                                    ${variables.formaspago.map(e=>yo`
-                                        ${e.Cod_FormaPago=="008"?
-                                            variables.monedas.map(m=>
-                                                m.Cod_Moneda!="PEN"?
-                                                m.Cod_Moneda!="USD"?
-                                                m.Cod_Moneda!="EUR"?
+                                <div class="panel-body"> 
+                                        <div class="cc-selector-2 text-center row" id="divMonedas" >
+                                            ${variables.formaspago.map(e=>yo`
+                                                ${e.Cod_FormaPago=="008"?
+                                                    variables.monedas.map(m=>
+                                                        m.Cod_Moneda!="PEN"?
+                                                        m.Cod_Moneda!="USD"?
+                                                        m.Cod_Moneda!="EUR"?
+                                                        yo``
+                                                        :
+                                                        yo`
+                                                            <div class="col-md-4">
+                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="euros" />
+                                                                <label class="drinkcard-cc euros" for="Cod_Moneda"></label>
+                                                            </div>`
+                                                        :
+                                                        yo`
+                                                            <div class="col-md-4">
+                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="dolares" />
+                                                                <label class="drinkcard-cc dolares" for="Cod_Moneda"></label>
+                                                            </div>`
+                                                        :
+                                                        yo`
+                                                            <div class="col-md-4">
+                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="soles" checked="checked"/>
+                                                                <label class="drinkcard-cc soles" for="Cod_Moneda"></label>
+                                                            </div>`
+                                                    )
+                                                :
                                                 yo``
-                                                :
-                                                yo`<div class="col-md-4"><div class="radio"><label><input type="radio" name="Cod_Moneda" value="euros"><i class="fa fa-euro fa-3x"></i></label></div></div>`
-                                                :
-                                                yo`<div class="col-md-4"><div class="radio"><label><input type="radio" name="Cod_Moneda" value="dolares"><i class="fa fa-dollar fa-3x"></i></label></div></div>`
-                                                :
-                                                yo`<div class="col-md-4"><div class="radio"><label><input type="radio" name="Cod_Moneda" value="soles"> <strong style="font-size:3em">S/</strong></label></div></div>`
-                                            )
-                                        :
-                                        yo``
-                                        }
-                                    `)}
+                                                }
+                                            `)}
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -562,18 +600,26 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                     <h4> Tarjetas </h4>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="row" id="divTarjetas">
-                                        ${variables.formaspago.map(e=>yo`
-                                            ${  e.Cod_FormaPago!="005"?
-                                                e.Cod_FormaPago!="006"?
-                                                yo``
-                                                :
-                                                yo`<div class="col-md-6"><div class="radio"><label><input type="radio" id="Cod_FormaPago" name="Cod_FormaPago"> <i class="fa fa-cc-mastercard  fa-3x"></i></label></div></div>`
-                                                :
-                                                yo`<div class="col-md-6"><div class="radio"><label><input type="radio" id="Cod_FormaPago" name="Cod_FormaPago"> <i class="fa fa-cc-visa fa-3x"></i></label></div></div>`
-                                            }
-                                        `)}
-                                    </div>
+                                        <div class="cc-selector-2 text-center row" id="divTarjetas"> 
+                                            ${variables.formaspago.map(e=>yo`
+                                                ${  e.Cod_FormaPago!="005"?
+                                                    e.Cod_FormaPago!="006"?
+                                                    yo``
+                                                    :
+                                                    yo`
+                                                        <div class="col-md-6">
+                                                            <input  checked="checked" id="Cod_FormaPago" type="radio" name="Cod_FormaPago" value="mastercard" />
+                                                            <label class="drinkcard-cc mastercard"for="Cod_FormaPago"></label>
+                                                        </div>`
+                                                    :
+                                                    yo`
+                                                        <div class="col-md-6">
+                                                            <input  checked="checked" id="Cod_FormaPago" type="radio" name="Cod_FormaPago" value="visa" />
+                                                            <label class="drinkcard-cc visa"for="Cod_FormaPago"></label>
+                                                        </div>`
+                                                }
+                                            `)}
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -698,52 +744,104 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
             </div>
         </div>`
 
-    var modal_proceso = document.getElementById('modal-superior');
+    var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()   
+    $('#modal-otros-procesos').modal()   
     
     CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cambio)
-    /*switch (amodo) {
-        case 0:
-            $("#divCredito").css("display","none")
 
-            if(Cod_Moneda!="PEN"){
-                $("#divTipoCambioGlobal").css("display","block")
-            }else{
-                $("#divTipoCambioGlobal").css("display","none")
-                $("#Tipo_Cambio_Global").val(1)
-            }
+    $('#modal-otros-procesos').on('hidden.bs.modal', function () {
+        
+    })
+     
+}
 
-            CalcularSaldo(Cod_Moneda,Tipo_Cambio)
-            $("#btnAceptar").css("display","none")
-            OcultarCompletarSaldo(Cod_Moneda)
-            $("#Cod_MonedaGlobal").text(Cod_Moneda)
-            $("#divReferencia").css("display","none")
-            $("#divTipoCambio").css("display","none")
-            RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio)
-            if(aSaldo==0)
-                $("#btnAceptar").css("display","none")
-            else    
-                $("#btnAceptar").css("display","block")
-            break
-        case 1:
-            break
-    }*/
+
+
+function AbrirModalPercepcion(){
+    var el = yo`
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button> 
+                    <h4 class="modal-title"><strong>Percepcion</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <b>Ingrese el porcentaje a aplicar: </b>
+                                <input type="number" class="form-control input-sm" id="PorcentajePercepcion">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="btnAceptar" onclick="${()=>AplicarPercepcion()}">Aceptar</button>
+                </div>
+            </div>
+        </div>`
+
+    var modal_proceso = document.getElementById('modal-otros-procesos');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-otros-procesos').modal()    
 }
  
 
 function AgregarFilaTabla(){
     var fila = yo`
-                <tr> 
-                    <td><input type="text" class="form-control input-sm"></td>
-                    <td><input type="text" class="form-control input-sm"></td>
-                    <td><input type="text" class="form-control input-sm"></td>
-                    <td><input type="number" class="form-control input-sm"></td>
-                    <td><input type="number" class="form-control input-sm"></td>
-                    <td><input type="number" class="form-control input-sm"></td>
-                    <td><label>0.00</label></td>
+                <tr>
+                    <td class="id_ComprobantePago hidden"></td>
+                    <td class="id_Detalle hidden"></td> 
+                    <td class="Id_Producto hidden"></td> 
+                    <td class="Codigo"></td>
+                    <td class="Descripcion"><input type="text" class="form-control input-sm"></td>
+                    <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
+                    <td class="UM"><input type="text" class="form-control input-sm"></td>
+                    <td class="Stock hidden"><input type="number" class="form-control input-sm"></td> 
+                    <td class="Cantidad"><input type="number" class="form-control input-sm"></td> 
+                    <td class="Despachado hidden"></td> 
+                    <td class="PU"><input type="number" class="form-control input-sm"></td> 
+                    <td class="Descuento"><input type="number" class="form-control input-sm"></td> 
+                    <td class="Importe"><input type="number" class="form-control input-sm"></td>
+                    <td class="Cod_Manguera hidden"></td>  
+                    <td class="Tipo hidden"></td> 
+                    <td class="Obs_ComprobanteD hidden"></td> 
                 </tr>`
     $("#tablaBody").append(fila)
+}
+
+
+function AplicarPercepcion(){
+    var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
+    var Serie = $("#Serie").val()
+    var Numero = $("#Numero").val()
+    var Calculo = ((parseFloat($("#Gran_Total").val())*parseFloat($("#PorcentajePercepcion").val()))/100).toFixed(2)
+    var fila = yo`
+            <tr>
+                <td class="id_ComprobantePago hidden">0</td>
+                <td class="id_Detalle hidden">0</td> 
+                <td class="Id_Producto hidden">0</td> 
+                <td class="Codigo"></td>
+                <td class="Descripcion"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
+                <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
+                <td class="UM"><input type="text" class="form-control input-sm"></td>
+                <td class="Stock hidden"><input type="number" class="form-control input-sm" value="1"></td> 
+                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1"></td> 
+                <td class="Despachado hidden">1</td> 
+                <td class="PU"><input type="number" class="form-control input-sm" value="${Calculo}"></td> 
+                <td class="Descuento"><input type="number" class="form-control input-sm" value="0.00"></td> 
+                <td class="Importe"><input type="number" class="form-control input-sm" value="${Calculo}"></td>
+                <td class="Cod_Manguera hidden"></td>  
+                <td class="Tipo hidden">PER</td> 
+                <td class="Obs_ComprobanteD hidden"></td> 
+            </tr>`
+    $("#tablaBody").append(fila)
+    CalcularTotal()
+    $("#modal-otros-procesos").modal('hide')
 }
 
 function LlenarCuentaBancaria(cuentas){
@@ -786,6 +884,20 @@ function LlenarSeries(series){
     $("#Serie").html(html) 
 }
 
+function LlenarAlmacenes(almacenes,Cod_Almacen){
+    var html = ''
+    for(var i=0; i<almacenes.length; i++){
+        if(Cod_Almacen==almacenes[i].Cod_Almacen)
+            html = html+'<option value="'+almacenes[i].Cod_Almacen+'" selected>'+almacenes[i].Des_Almacen+'</option>'
+        else    
+            html = html+'<option value="'+almacenes[i].Cod_Almacen+'">'+almacenes[i].Des_Almacen+'</option>'
+    }
+     
+    $("#Cod_Almacen").html('')
+    $("#Cod_Almacen").html(html) 
+}
+
+
 function LlenarLicitaciones(licitaciones){
     var html = ''
     for(var i=0; i<licitaciones.length; i++){
@@ -824,6 +936,15 @@ function AbrirModalFormasPago(variables,fecha_actual){
             H5_loading.hide();
         })
 }
+ 
+function CalcularTotal(){
+    var Suma = 0
+    var SumaExoneracion = 0
+    var SumaPercepcion = 0
+    var SumaDescuento = 0
+    var SumaGratuitas = 0
+    var DescuentosGlobales = $("#Descuento_Global").val() 
+}
 
 function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
     if($("#divCredito").css("display")=="block"){
@@ -843,8 +964,7 @@ function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
     }
 }
 
-function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){
-    console.log(variables)
+function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){ 
     if($("#Tipo_Cambio_FormaPago").attr("data-value")==null){
         var _Tipo_Cambio = 1
         _Tipo_Cambio = variables.tipos_cambios.length==0?"1":variables.tipos_cambios[0].Venta
@@ -935,7 +1055,7 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                var licitaciones = res.data.licitaciones
+                var licitaciones = res.data.licitaciones 
                 if(licitaciones.length>0){
                     $("#divCodigoLicitacion").css("display","block")
                     $("#divLicitacion").css("display","block")
@@ -981,9 +1101,66 @@ function CargarSeries(CodLibro){
     }
 }
 
+function CargarAlmacenes(Id_Producto,Cod_Almacen){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Producto
+        })
+    }
+    fetch(URL + '/almacenes_api/get_almacen_by_producto', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') { 
+                LlenarAlmacenes(res.data.almacenes,Cod_Almacen)
+            }else{
+                LlenarAlmacenes([])
+            }
+        })
+
+    CambioComprobantes()    
+}
+
+function CambioGastos(){
+    var visible = "block"
+    if($("#optEsGasto").is(":checked")){
+        visible = "none"
+    }
+    $("#Cod_Almacen").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Cod_UnidadMedida").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Stock").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Cod_TipoPrecio").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Cantidad").val(1)
+    $("#Cantidad").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Descuento").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#Precio_Unitario").attr("disabled",$("#optEsGasto").is(":checked"))
+    $("#btnBuscarSeries").css("display",visible)
+}
+
+function CambioNumero(){
+    if($("#Numero").val().length<8){
+      var cadenaCeros=""
+      var cantidadCeros = 8 - $("#Numero").val().length
+      for(var i=0;i<cantidadCeros;i++)
+        cadenaCeros=cadenaCeros+"0"
+      $("#Numero").val(cadenaCeros+$("#Numero").val())
+    }
+}
+
+function CambioDespachado(){
+    if(!$("#optDescargar").is(":checked")){
+        $("#DescripcionDespachado").text("No se Aplicara la descarga de los Productos en el almacen selecionado.")
+    }else{
+        $("#DescripcionDespachado").text("")
+    }
+}
 
 function CambioCreditoContado(){
-    $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val());
+    $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val())
     if($("#Cod_FormaPago").val()!="" && $("#Cod_FormaPago").val()!=null){
         if($("#Cod_FormaPago").val()!="008" || $('input[name=optCredito]:checked').val()=="credito"){
             $("#divOperacion").css("display","block")
@@ -1007,18 +1184,14 @@ function CambioCreditoContado(){
         $("#divCuentaCajaBancos").css("display","none")
     }
 }
- 
-/*function CambioContado(){
-    if($("#Cod_FormaPago").val()!="" && $("#Cod_FormaPago").val()!=null){
-        if($("#Cod_FormaPago").val()!="008" || $('input[name=optCredito]:checked').val()=="credito"){
-            $("#lbCuentaCajaBanco").css("display","block")
-            $("#divCuentaCajaBancos").css("display","block")
-        }else{
-            $("#lbCuentaCajaBanco").css("display","none")
-            $("#divCuentaCajaBancos").css("display","none")
-        }
+
+function CambioLicitacion(){
+    var visible = "none"
+    if($("#optLicitacion").is(":checked")){
+        visible = "block"
     }
-}*/
+    $("#divCodigoLicitacion").css("display",visible)
+}
 
 function CambioComprobantes(){
     if($("#Cod_TipoComprobante").val()=="TKB" || $("#Cod_TipoComprobante").val()=="TKF" || $("#Cod_TipoComprobante").val()=="BE" || $("#Cod_TipoComprobante").val()=="FE"){
@@ -1208,6 +1381,14 @@ function TraerCuentasBancariasXIdClienteProveedor(){
         })
 }
 
+
+function BuscarProductoCP(CodLibro) {
+    if($("#Nom_Producto").val().trim().length>=2){
+        BuscarProducto(CodLibro=="14",$("#Nom_Producto").val())
+    }
+}
+
+
 function BuscarClienteDoc(CodLibro) {
     var Nro_Documento = document.getElementById('Nro_Documento').value
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
@@ -1226,9 +1407,39 @@ function BuscarClienteDoc(CodLibro) {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                $("#Cliente").val(res.data.cliente[0].Cliente)
-                $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
-                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+                global.objCliente = res.data.cliente[0]
+
+                if(global.objCliente !='' && global.objCliente){
+                    $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+                    $("#Cliente").val(global.objCliente.Cliente)
+                    $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                    $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+                    if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
+                        $("input[name=optCredito][value='credito']").prop("checked",true);
+                        $("#divCredito").css("display","block")
+                    }
+                    else{
+                        $("input[name=optCredito][value='contado']").prop("checked",true);
+                        $("#divCredito").css("display","none")
+                    }
+                    
+                    if($("#divCredito").css("display")=="block"){
+                        $("input[name=optCredito][value='credito']").prop("checked",true);
+                        $("#Nro_Dias").val(30)
+                    }else{
+                        $("input[name=optCredito][value='credito']").prop("checked",false);
+                        $("#Nro_Dias").val(0)
+                    }
+        
+                    if(CodLibro=="14"){
+                        $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
+                        CargarSeries(CodLibro)
+                        CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                    }
+                }
+                CambioCreditoContado()
+                CambioLicitacion()
+
             }
             H5_loading.hide()
         })

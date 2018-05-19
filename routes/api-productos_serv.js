@@ -148,6 +148,50 @@ router.post('/eliminar_producto', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+router.post('/buscar_producto_caja_actual', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro: 'Buscar', valor_parametro: input.Buscar},
+        {nom_parametro: 'CodTipoProducto', valor_parametro: input.CodTipoProducto},
+        {nom_parametro: 'Cod_Categoria', valor_parametro: input.Cod_Categoria},
+        {nom_parametro: 'Cod_Precio', valor_parametro: input.Cod_Precio},
+        {nom_parametro: 'Flag_RequiereStock', valor_parametro: input.Flag_RequiereStock},
+
+    ]
+    procedimientos = [
+        {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_Buscar', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/buscar_producto_by_id_cliente_caja_actual', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro: 'Buscar', valor_parametro: input.Buscar},
+        {nom_parametro: 'IdClienteProveedor', valor_parametro: input.CodTipoProducto},
+        {nom_parametro: 'Cod_Categoria', valor_parametro: input.Cod_Categoria}
+
+    ]
+    procedimientos = [
+        {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_BuscarXIdClienteProveedor', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/get_precios', function (req, res){
+    input = req.body
+    parametros = []
+    procedimientos = [
+        {nom_respuesta: 'precios', sp_name: 'USP_VIS_PRECIOS_TT', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+
+
+
 router.post('/get_presentacion_ubicacion', function (req, res){
     input = req.body
     parametros = [
