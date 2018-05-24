@@ -1,15 +1,18 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
+import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto, AbrirModalAsignarSeries } from '../../modales'
+import { ConvertirCadena } from '../../../../utility/tools'
 
 var listaFormaPago = []
 var obs_xml = null
-var aSaldo
+var aSaldo = 0
+var contador = 0
 
 function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     global.objCliente = ''
     global.objProducto = ''
+    contador = 0
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -100,7 +103,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                         <div class="panel panel-default">
                             <div class="panel-heading text-center">
                                 <div class="row">
-                                    <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. 20442625256 </strong></h4>
+                                    <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC}</strong></h4>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -217,7 +220,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-3" id="divMoneda">
                                                 <div class="form-group">
                                                     <b>Moneda: </b>
-                                                    <select id="Cod_Moneda" id="" class="form-control input-sm" onchange=${()=>CambioMoneda()}>
+                                                    <select id="Cod_Moneda" class="form-control input-sm" onchange=${()=>CambioMoneda()}>
                                                         ${variables.monedas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                     </select>
                                                 </div>
@@ -231,7 +234,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-4" id="divFecha">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}">
+                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onchange=${()=>CambioFecha(CodLibro)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -293,6 +296,11 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                     <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12"> 
+                                        <button type="button" class="btn btn-success btn-sm" onclick="${()=>AgregarFilaTabla(CodLibro,variables)}"><i class="fa fa-plus"></i> Agregar Item</button>
+                                    </div>
+                                </div>
 
                                 <div class="table-responsive">
                                     <table id="tablaProductos" class="table table-bordered table-hover">
@@ -321,8 +329,10 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <th>Importe</th>
                                             </tr>
                                             <tr style="background:bisque"> 
+                                                <input class="hidden" id="Cod_Producto" value=null>
+                                                <input class="hidden" id="Cod_TipoOperatividad" value=null>
                                                 <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro)}></th>
-                                                <th><select class="form-control input-sm" id="Cod_Almacen"> </select></th>
+                                                <th><select class="form-control input-sm" id="Cod_Almacen" onchange="${()=>CargarUnidadMedida()}"> </select></th>
                                                 <th><select class="form-control input-sm" id="Cod_UnidadMedida"> </select><select class="form-control input-sm hidden" id="Cod_TipoPrecio"> </select></th>
                                                 <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00"></th>
                                                 <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00"></th>
@@ -342,7 +352,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                             <div class="panel-footer">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <label>SON : </label>
+                                        <label id="laSON">SON : </label>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -357,19 +367,11 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox">Precio Unitario Incluye IGV?
+                                                        <input type="checkbox" id="ckbIncluyeIGB" checked="checked" onchange="${()=>CalcularTotal(CodLibro,variables)}">Precio Unitario Incluye IGV?
                                                     </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="col-md-6"> 
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="${()=>AgregarFilaTabla()}"><i class="fa fa-plus"></i> Item</button>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-close"></i> Item</button>
                                                 </div>
                                             </div>
                                         </div>  
@@ -392,62 +394,60 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <label>Stock actual:</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control input-sm" id="Stock">
+                                                <input type="text" class="form-control input-sm" id="Stock" disabled>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <button type="button" class="btn btn-default btn-sm" onclick="${()=>AbrirModalPercepcion()}">Percepcion</button>
+                                                <button type="button" class="btn btn-success btn-sm" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
                                             </div>
                                             <div class="col-md-4">
-                                                <button type="button" class="btn btn-default btn-sm">Asignar Series</button>
+                                                <button type="button" class="btn btn-danger btn-sm" >Asignar Series</button>
                                             </div>
                                             <div class="col-md-4">
-                                                <button type="button" class="btn btn-default btn-sm" id="btnBuscarSeries">Buscar Series</button>
+                                                <button type="button" class="btn btn-warning btn-sm" id="btnBuscarSeries">Buscar Series</button>
                                             </div>
                                         </div>  
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <b>DESC. TOTAL : </b>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <b id="laDescuento" style="display:none">DESC. TOTAL : </b>
+                                            <input type="number"  style="display:none" class="form-control input-sm" value="0.00" id="DescuentoTotal">
                                         </div>
                                         <div class="form-group">
-                                            <b>EXONERADO </b>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <b id="laExonerado"  style="display:none">EXONERADO </b>
+                                            <input type="number" class="form-control input-sm" style="display:none"alue="0.00" id="Exonerado">
                                         </div>
                                         <div class="form-group">
-                                            <b>GRATUITAS: </b>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <b id="laGratuitas"  style="display:none">GRATUITAS: </b>
+                                            <input type="number" class="form-control input-sm" style="display:none" value="0.00" id="Gratuitas">
                                         </div>
                                         <div class="form-group">
-                                            <b>PERCEPCION: </b>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <b id="laPercepcion"  style="display:none">PERCEPCION: </b>
+                                            <input type="number"  style="display:none" class="form-control input-sm" value="0.00" id="Percepcion">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
-                                                <input type="checkbox"> I.G.V 18%
+                                                <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}> I.G.V 18%
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="Impuesto">
                                         </div>
                                         <div class="form-group">
                                             <label>
-                                                <input type="checkbox"> SERVICIOS
+                                                <input type="checkbox" id="cbAplicaServicios"  checked="checked"> SERVICIOS
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos">
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            <label>
+                                                <input type="checkbox"  checked="checked"> I.S.C 3%
+                                            </label>
+                                            <input type="number" class="form-control input-sm" value="0.00" id="Servicios">
                                         </div>
                                         <div class="form-group">
-                                            <label>
-                                                <input type="checkbox"> I.S.C 3%
-                                            </label>
-                                            <input type="number" class="form-control input-sm" value="0.00">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <input type="checkbox"> DESCUENTO GLOBAL
-                                            </label>
+                                            <strong>DESCUENTO GLOBAL</strong>
                                             <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global">
                                         </div>
                                         <div class="form-group">
@@ -482,12 +482,13 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     CambioCreditoContado()
     if(global.objCliente =='')
         BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")
-    CargarConfiguracionDefault(CodLibro)
+    CargarConfiguracionDefault(CodLibro,variables)
     $("input[name=optCredito][value='contado']").prop("checked",true)
     $('#modal-superior').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cod_TipoOperatividad").val(global.objCliente.Cod_TipoOperatividad)
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
@@ -518,15 +519,18 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
         CambioCreditoContado()
 
         if(global.objProducto!='' && global.objProducto){
-            $("#Nom_Producto").val("data-id",global.objProducto.Id_Producto)
+            $("#Nom_Producto").attr("data-id",global.objProducto.Id_Producto)
             $("#Nom_Producto").val(global.objProducto.Nom_Producto)
+            $("#Cod_Producto").val(global.objProducto.Cod_Producto)
             CargarAlmacenes(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
+            CargarUnidadMedida(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
             $("#Cod_UnidadMedida").val(global.objProducto.Cod_UnidadMedida)
             $("#Cod_TipoPrecio").val('001')
             $("#Stock").val(parseFloat(global.objProducto.Stock_Act)+".00")
             $("#Precio_Unitario").val(parseFloat(global.objProducto.Precio_Venta))
             $("#Cantidad").val(1)
             $("#Cantidad").focus()
+            $("#Descuento").val(global.objProducto.Descuento)
         }
     })
     CambioLicitacion()
@@ -554,11 +558,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                     <p></p>
                     <div class="row">
                         <div class="col-sm-7">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="box box-default">
+                                <div class="box-header">
                                     <h4> Monedas </h4>
                                 </div>
-                                <div class="panel-body"> 
+                                <div class="box-body"> 
                                         <div class="cc-selector-2 text-center row" id="divMonedas" >
                                             ${variables.formaspago.map(e=>yo`
                                                 ${e.Cod_FormaPago=="008"?
@@ -570,20 +574,20 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="euros" />
-                                                                <label class="drinkcard-cc euros" for="Cod_Moneda"></label>
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="euros" />
+                                                                <label class="drinkcard-cc euros" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="dolares" />
-                                                                <label class="drinkcard-cc dolares" for="Cod_Moneda"></label>
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="dolares" />
+                                                                <label class="drinkcard-cc dolares" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input id="Cod_Moneda" type="radio" name="Cod_Moneda" value="soles" checked="checked"/>
-                                                                <label class="drinkcard-cc soles" for="Cod_Moneda"></label>
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="soles" checked="checked"/>
+                                                                <label class="drinkcard-cc soles" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                     )
                                                 :
@@ -595,11 +599,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                             </div>
                         </div>
                         <div class="col-sm-5">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="box box-default">
+                                <div class="box-header">
                                     <h4> Tarjetas </h4>
                                 </div>
-                                <div class="panel-body">
+                                <div class="box-body">
                                         <div class="cc-selector-2 text-center row" id="divTarjetas"> 
                                             ${variables.formaspago.map(e=>yo`
                                                 ${  e.Cod_FormaPago!="005"?
@@ -626,11 +630,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                     </div>
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="box box-default">
+                                <div class="box-header">
                                     <h4>Agregar Formas de Pago</h4>
                                 </div>
-                                <div class="panel-body">
+                                <div class="box-body">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Monto</label>
@@ -670,11 +674,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
+                            <div class="box box-default">
+                                <div class="box-header">
                                     <h4>Datos del Comprobante</h4>
                                 </div>
-                                <div class="panel-body"> 
+                                <div class="box-body"> 
                                     <div class="col-md-12"> 
                                         <div class="row" id="divCodMonedaGlobal">
                                             <div class="col-md-12">
@@ -698,8 +702,8 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                         </div> 
                     </div>
                     <div class="row">
-                        <div class="panel panel-default">
-                            <div class="panel-body"> 
+                        <div class="box box-default">
+                            <div class="box-body"> 
                                 <div class="table-responsive" id="contenedorPagosMultiples">
                                 <table id="tablaPagosMultiples" class="table table-bordered table-striped">
                                     <thead>
@@ -720,7 +724,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                 </table>
                                 </div>
                             </div>
-                            <div class="panel-footer">
+                            <div class="box-footer">
                                 <div class="row">
                                     <div class="col-md-4 col-md-offset-8">
                                         <div class="col-md-6">
@@ -756,9 +760,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
      
 }
 
-
-
-function AbrirModalPercepcion(){
+function AbrirModalPercepcion(CodLibro,variables){
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -780,7 +782,7 @@ function AbrirModalPercepcion(){
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnAceptar" onclick="${()=>AplicarPercepcion()}">Aceptar</button>
+                    <button type="button" class="btn btn-info" id="btnAceptar" onclick="${()=>AplicarPercepcion(CodLibro,variables)}">Aceptar</button>
                 </div>
             </div>
         </div>`
@@ -791,31 +793,67 @@ function AbrirModalPercepcion(){
 }
  
 
-function AgregarFilaTabla(){
-    var fila = yo`
-                <tr>
-                    <td class="id_ComprobantePago hidden"></td>
-                    <td class="id_Detalle hidden"></td> 
-                    <td class="Id_Producto hidden"></td> 
-                    <td class="Codigo"></td>
-                    <td class="Descripcion"><input type="text" class="form-control input-sm"></td>
-                    <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
-                    <td class="UM"><input type="text" class="form-control input-sm"></td>
-                    <td class="Stock hidden"><input type="number" class="form-control input-sm"></td> 
-                    <td class="Cantidad"><input type="number" class="form-control input-sm"></td> 
-                    <td class="Despachado hidden"></td> 
-                    <td class="PU"><input type="number" class="form-control input-sm"></td> 
-                    <td class="Descuento"><input type="number" class="form-control input-sm"></td> 
-                    <td class="Importe"><input type="number" class="form-control input-sm"></td>
-                    <td class="Cod_Manguera hidden"></td>  
-                    <td class="Tipo hidden"></td> 
-                    <td class="Obs_ComprobanteD hidden"></td> 
-                </tr>`
-    $("#tablaBody").append(fila)
+function AgregarFilaTabla(CodLibro,variables){
+    if($("#Nom_Producto").val().trim()!=""){
+        if($("#Nom_Producto").attr("data-id")!=null){
+
+            var Id_Producto = $("#Nom_Producto").attr("data-id")
+            var Cod_Producto = $("#Cod_Producto").val()==null?"": $("#Cod_Producto").val()
+            var Cod_Almacen = $("#Cod_Almacen").val()
+            var Cod_UnidadMedida = $("#Cod_UnidadMedida").text()
+            var Stock = $("#Stock").val()
+            var Cantidad = $("#Cantidad").val()
+            var Nom_Producto = $("#Nom_Producto").val()
+            var Importe = $("#Importe").val()
+            var Precio_Unitario = $("#Precio_Unitario").val()
+            var Descuento = $("#Descuento").val()
+            var Cod_TipoPrecio = $("#Cod_TipoPrecio").val()==null?"":$("#Cod_TipoPrecio").val()
+            var Cod_TipoOperatividad = $("#Cod_TipoOperatividad").val()
+
+            var flagGasto = $("#optEsGasto").is(":checked")
+            var rows = $("#tablaBody > tr").length
+            var idFila = contador+$("#Nom_Producto").attr("data-id")
+            var fila = yo`
+            <tr id="${idFila}">
+                <td class="id_ComprobantePago hidden">0</td>
+                <td class="id_Detalle hidden">${rows}</td> 
+                <td class="Id_Producto hidden">${flagGasto?'0':Id_Producto}</td> 
+                <td class="Codigo">${flagGasto?'':Cod_Producto}</td>
+                <td class="Descripcion"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
+                <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
+                <td class="UM"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_UnidadMedida}></td>
+                <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
+                <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+                <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
+                <td class="PU"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+                <td class="Descuento"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)}></td> 
+                <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
+                <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
+                <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
+                <td class="Obs_ComprobanteD hidden"></td> 
+                <td><button type="button" class="btn btn-danger btn-sm" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i></button></td>
+            </tr>`
+            $("#tablaBody").append(fila)
+            contador++
+
+            CalcularTotal(CodLibro,variables)
+            $("#Nom_Producto").attr("data-id",null)
+            $("#Stock").val("")
+            $("#Precio_Unitario").val(0)
+            $("#Cantidad").val(0)
+            $("#Importe").val(0)
+            $("#Nom_Producto").focus()
+        }else{
+            BuscarProductoCP(CodLibro)
+        }
+    }else{
+        $("#Nom_Producto").focus()
+    }
+   
 }
 
 
-function AplicarPercepcion(){
+function AplicarPercepcion(CodLibro,variables){
     var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
     var Serie = $("#Serie").val()
     var Numero = $("#Numero").val()
@@ -838,9 +876,10 @@ function AplicarPercepcion(){
                 <td class="Cod_Manguera hidden"></td>  
                 <td class="Tipo hidden">PER</td> 
                 <td class="Obs_ComprobanteD hidden"></td> 
+                <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button></td>
             </tr>`
     $("#tablaBody").append(fila)
-    CalcularTotal()
+    CalcularTotal(CodLibro,variables)
     $("#modal-otros-procesos").modal('hide')
 }
 
@@ -908,6 +947,16 @@ function LlenarLicitaciones(licitaciones){
     $("#Cod_Licitacion").html(html) 
 }
 
+function LlenarUnidadMedida(unidades_medidas){
+    var html = ''
+    for(var i=0; i<unidades_medidas.length; i++){
+        html = html+'<option value="'+unidades_medidas[i].Cod_UnidadMedida+'">'+unidades_medidas[i].Nom_UnidadMedida+'</option>'
+    }
+     
+    $("#Cod_UnidadMedida").html('')
+    $("#Cod_UnidadMedida").html(html) 
+}
+
 function AbrirModalFormasPago(variables,fecha_actual){
     H5_loading.show();
     var FechaHora = $("#Fecha").val()
@@ -936,14 +985,147 @@ function AbrirModalFormasPago(variables,fecha_actual){
             H5_loading.hide();
         })
 }
- 
-function CalcularTotal(){
+
+
+function EditarCantidad(idFila,CodLibro,variables){
+    $("#"+idFila).find("td.Despachado").text($("#"+idFila).find("td.Cantidad").find('input').val())
+    $("#"+idFila).find("td.Importe").find('input').val(parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))
+    CalcularTotal(CodLibro,variables)
+}
+
+function EditarPrecioUnitario(idFila,CodLibro,variables){
+    $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
+    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
+    $("#"+idFila).find("td.Importe").find('input').val(parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))
+    CalcularTotal(CodLibro,variables)
+}
+
+
+function EditarDescuento(idFila,CodLibro,variables){
+    $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
+    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
+    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val()) - parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())))
+    CalcularTotal(CodLibro,variables)
+}
+
+function EliminarFila(idFila,CodLibro,variables){
+    $("#"+idFila).remove()
+    CalcularTotal(CodLibro,variables)
+}
+
+function CalcularTotal(CodLibro,variables){
     var Suma = 0
     var SumaExoneracion = 0
     var SumaPercepcion = 0
     var SumaDescuento = 0
     var SumaGratuitas = 0
     var DescuentosGlobales = $("#Descuento_Global").val() 
+ 
+    $('#tablaBody tr').each(function () {
+
+        var tipo = $(this).find("td").eq(14).text()
+        var sub_total = $(this).find("td").eq(12).find("input").val()
+        var descuento = $(this).find("td").eq(11).find("input").val()
+        var cantidad = $(this).find("td").eq(8).find("input").val()
+        var DescuentosGlobales = parseFloat($("#Descuento_Global").val())
+
+        switch(tipo){
+            case "GRT": // GRATUITAS
+                SumaGratuitas += parseFloat(sub_total)
+                break
+            case "GRA": // GRAVADAS
+                Suma += parseFloat(sub_total)
+                break
+            case "INA": // INAFECTAS
+                SumaExoneracion += parseFloat(sub_total)
+                break
+            case "EXO": // EXONERADAS
+                SumaExoneracion +=  parseFloat(sub_total)
+                break
+            case "PER": // PERCEPCION
+                SumaPercepcion +=  parseFloat(sub_total)
+                break
+            case "OTR": // OTROS
+                SumaExoneracion +=  parseFloat(sub_total)
+                break
+            case "NGR": // NO GRAVADAS
+                Suma +=  parseFloat(sub_total)
+                break
+            default:
+                Suma +=  parseFloat(sub_total)
+                break
+        }
+
+        if(CodLibro=="14" && parseFloat(descuento)!=0)
+            SumaDescuento+= parseFloat(cantidad) * parseFloat(descuento)
+    
+    });
+
+    if(SumaExoneracion>0){
+        $("#laExonerado").css("display","block")
+        $("#Exonerado").css("display","block")
+        $("#Exonerado").val(SumaExoneracion)
+    }else{
+        $("#laExonerado").css("display","none")
+        $("#Exonerado").css("display","none")
+        $("#Exonerado").val(0)
+    }
+
+    if(SumaPercepcion>0){
+        $("#laPercepcion").css("display","block")
+        $("#Percepcion").css("display","block")
+        $("#Percepcion").val(SumaPercepcion)
+    }else{
+        $("#laPercepcion").css("display","none")
+        $("#Percepcion").css("display","none")
+        $("#Percepcion").val(0)
+    }
+
+    if(SumaGratuitas>0){
+        $("#laGratuitas").css("display","block")
+        $("#Gratuitas").css("display","block")
+        $("#Gratuitas").val(SumaGratuitas)
+    }else{
+        $("#laGratuitas").css("display","none")
+        $("#Gratuitas").css("display","none")
+        $("#Gratuitas").val(0)
+    }
+
+    if(SumaDescuento>0){
+        $("#laDescuento").css("display","block")
+        $("#DescuentoTotal").css("display","block")
+        $("#DescuentoTotal").val(SumaDescuento.toFixed(2))
+    }else{
+        $("#laDescuento").css("display","none")
+        $("#DescuentoTotal").css("display","none")
+        $("#DescuentoTotal").val(0)
+    }
+
+    if($("#ckbAplicaImpuesto").is(":checked")){
+        if($("#ckbIncluyeIGB").is(":checked")){
+            $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
+            var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
+            Suma = Suma - Suma * porcDescuentoglobal
+
+            $("#subtotal").val(Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100))
+            $("#Impuesto").val(parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+        }else{
+            $("#subtotal").val(Suma)
+            $("#Impuesto").val(parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+            $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion+parseFloat($("#Impuesto").val())-parseFloat(DescuentosGlobales))
+            if(parseFloat($("#Descuento_Global").val())>0){
+                $("#Impuesto").val(parseFloat($("#Gran_Total").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+                $("#subtotal").val(parseFloat($("#Gran_Total").val())-parseFloat($("#Impuesto").val()))
+            }
+        }
+    }else{
+        $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
+        $("#subtotal").val(Suma)
+        $("#Impuesto").val(0)
+    }
+ 
+
+    $("#laSON").text(ConvertirCadena(parseFloat($("#Gran_Total").val()),$("#Cod_Moneda option:selected").text()))
 }
 
 function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
@@ -963,6 +1145,7 @@ function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
         $("#btnSaldo").attr("data-value",parseFloat(aSaldo).toFixed(2))
     }
 }
+
 
 function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){ 
     if($("#Tipo_Cambio_FormaPago").attr("data-value")==null){
@@ -1030,14 +1213,37 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
 }
 
 
-function CargarConfiguracionDefault(CodLibro){
+function CargarConfiguracionDefault(CodLibro,variables){
     CargarSeries(CodLibro)
     $("#divExportacion").css("display","none")
+    CalcularTotal(CodLibro,variables)
 }
  
 
 function GenerarComprobante(){
     console.log(global.objCliente)
+}
+
+function CargarUnidadMedida(Id_Producto,Cod_Almacen){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Producto,
+            Cod_Almacen
+        })
+    }
+    fetch(URL + '/productos_serv_api/get_unidad_medida_by_producto_almacen', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var unidades_medidas = res.data.unidades_medidas
+                LlenarUnidadMedida(unidades_medidas)
+            } 
+        })
 }
 
 function CargarLicitacionesCliente(Id_ClienteProveedor){
@@ -1150,6 +1356,7 @@ function CambioNumero(){
       $("#Numero").val(cadenaCeros+$("#Numero").val())
     }
 }
+ 
 
 function CambioDespachado(){
     if(!$("#optDescargar").is(":checked")){
@@ -1281,6 +1488,42 @@ function CambioMoneda(){
         }else{
             $("#divTC").css("display","none")
             $("#Tipo_Cambio").val("1")
+        }
+    }
+}
+
+function CambioFecha(CodLibro){
+    if($("#Cod_Moneda").val()=="PEN"){
+        try{
+            var Cod_Moneda = $("#Cod_Moneda").val()
+            var FechaHora = $("#Fecha").val()
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Cod_Moneda,
+                    FechaHora
+                })
+            }
+            fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {
+                        if(CodLibro=="08"){
+                            $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+                        }else{
+                            $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                        }
+                    } 
+                })
+
+
+            $("#Tipo_Cambio").val()
+        }catch(e){
+            $("#Tipo_Cambio").val(1)
         }
     }
 }
@@ -1468,37 +1711,45 @@ function AbrirModalObsComprobantePago(){
  
 
 function ComprobantePago(Cod_Libro) {
-    H5_loading.show();
-    if(Cod_Libro == "08"){
-        const fecha = new Date()
-        const mes = fecha.getMonth() + 1
-        const dia = fecha.getDate()
-        var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Cod_Libro
-            })
-        }
-        fetch(URL + '/compras_api/get_variable_registro_compra', parametros)
-            .then(req => req.json())
-            .then(res => {
-                var variables = res.data
-                if (res.respuesta == 'ok') {
-                    VerRegistroCompra(variables,fecha_format,Cod_Libro)
-                }
-                else { 
-                    VerRegistroCompra([])
-                }
-                H5_loading.hide()
-            })
-    }else{
-
+    H5_loading.show(); 
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Libro
+        })
     }
+    fetch(URL + '/compras_api/get_variable_registro_compra', parametros)
+        .then(req => req.json())
+        .then(res => {
+            var variables = res.data
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                })
+            }
+            fetch(URL + '/cajas_api/get_empresa', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    var data_empresa = res.empresa
+                    variables['empresa'] = data_empresa
+                    VerRegistroCompra(variables,fecha_format,Cod_Libro)
+                    H5_loading.hide()
+    
+                })
+
+        }) 
 }
 
 export { ComprobantePago }

@@ -190,6 +190,18 @@ router.post('/get_precios', function (req, res){
 })
 
 
+router.post('/get_unidad_medida_by_producto_almacen', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto,tipo_parametro:sql.Int},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen}
+
+    ]
+    procedimientos = [
+        {nom_respuesta: 'unidades_medidas', sp_name: 'USP_PRI_PRODUCTO_TUnidadMedidaXProductoAlmacen', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
 
 
 router.post('/get_presentacion_ubicacion', function (req, res){
@@ -212,6 +224,18 @@ router.post('/eliminar_presentacion_ubicacion', function (req, res){
     ]
     procedimientos = [
         {nom_respuesta: 'presentacionubicacion', sp_name: 'usp_PRI_PRODUCTO_STOCK_E', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+
+router.post('/get_producto_by_almacen', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTO_TXCodAlmacen', parametros}
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })

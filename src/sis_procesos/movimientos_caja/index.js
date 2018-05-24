@@ -106,7 +106,7 @@ function Ver(movimientos,saldos) {
                     <!-- /.modal-dialog -->
                 </div>
 
-                <div class="modal fade" id="modal-confirmacion">
+                <div class="modal fade" id="modal-confirmacion" style="z-index: 999999;">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -126,6 +126,10 @@ function Ver(movimientos,saldos) {
                         <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
+                </div>
+
+                <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
+                     
                 </div>
 
                 <div class="modal modal-default fade" id="modal-justificacion" style="display: none;">

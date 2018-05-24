@@ -6,6 +6,7 @@ var aRequiereStock = true
 var aIdClienteProveedor = 0
 var aCodTipoProducto = null
 
+
 function BuscarProducto(_RequiereStock,text_busqueda) {
     H5_loading.show()
     aRequiereStock = _RequiereStock
@@ -215,6 +216,7 @@ function NuevoCliente(documentos) {
     empty(modal_proceso).appendChild(el);
     $('#modal-superior').modal()
 }
+
 
 function AgregarTabla(clientes,idInputCliente,idInputDoc){
     var el = yo`<table id="example1" class="table table-bordered table-striped">
@@ -470,8 +472,6 @@ function BusquedaProducto(){
         fetch(URL+'/productos_serv_api/buscar_producto_caja_actual', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log("busqueda de producto")
-            console.log(res)
             if (res.respuesta == 'ok') {
                 var productos = res.data.productos
                 if(productos.length > 0)

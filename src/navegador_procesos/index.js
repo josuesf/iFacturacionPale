@@ -9,11 +9,12 @@ import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
 import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
 import { NuevaVenta } from '../sis_procesos/mod_ventas/ventas'
+import { NuevoArqueoCaja } from '../sis_procesos/mod_ventas/arqueo_caja'
 
 
 import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
 import { ComprobantePago } from '../sis_procesos/mod_compras/comprobante_pago'
-
+import { EntradasSalidas } from '../sis_procesos/mod_almacen/entradas_salidas'
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
@@ -38,6 +39,11 @@ var el = yo`
             <i class="fa fa-cart-plus"></i> <span> Nueva Venta</span>
         </a>
     </li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}>
+            <i class="fa fa-circle-o"></i> <span> Nuevo Arqueo</span>
+        </a>
+    </li>
     <li class="header">Compras</li>
     <li class="treeview">
         <a href="javascript:void(0);" onclick=${()=>NuevaRecepcion()}>
@@ -47,6 +53,12 @@ var el = yo`
     <li class="treeview">
         <a href="javascript:void(0);" onclick=${()=>ComprobantePago('08')}>
             <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
+        </a>
+    </li>
+    <li class="header">Almacen</li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>EntradasSalidas('NE')}>
+            <i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span>   
         </a>
     </li>
 </ul>`;

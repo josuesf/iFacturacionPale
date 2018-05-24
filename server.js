@@ -23,8 +23,99 @@ app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
 // app.use(authChecker);
 
+
+// configuration default
 app.locals.isla = false
 app.locals.apertura = false
+app.locals.CierreCompleto = true
+app.locals.caja = { Cod_Caja : null }
+app.locals.turno = null
+app.locals.sucursal = null
+app.locals.arqueo = null
+
+function CargarVariables(req,res){
+  p = [
+    { nom_parametro: 'Cod_Turno', valor_parametro: req.session.turno }
+  ]
+  EXEC_SQL('usp_CAJ_TURNO_ATENCION_TXPK', p , function (dataTurno) {
+    if(dataTurno.result.length>0){
+      app.locals.turno = dataTurno.result
+      p = [
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.session.caja }
+      ]
+
+      EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
+        app.locals.caja = dataCaja.result
+        p = [
+          { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
+        ] 
+        EXEC_SQL('usp_PRI_SUCURSAL_TXPK', p , function (dataSucursal) {
+          app.locals.sucursal = dataSucursal.result
+          p = [
+            { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
+            { nom_parametro: 'CodTurno', valor_parametro:  req.session.turno }
+          ] 
+          EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+            if(dataArqueoFisico.result.length<=0){
+              app.locals.arqueo = dataArqueoFisico.result
+              p = [
+                { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
+              ] 
+
+              EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
+                p = [
+                  { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
+                  { nom_parametro: 'Cod_Turno', valor_parametro:  req.session.turno }
+                ]
+                EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
+                  
+                  if(dataSaldoAnterior.result.length==0){
+
+                    EXEC_SQL('USP_VIS_MONEDAS_TT', [] , function (dataMonedas) {
+                        res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+                                                          caja: app.locals.caja, 
+                                                          turno:req.session.turno,
+                                                          numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                          apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
+                                                          monedas: dataMonedas.result});                      
+                    }) 
+                  }else{
+                    res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+                                                      caja: app.locals.caja, 
+                                                      turno:req.session.turno,
+                                                      numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                      apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno})
+                  }
+                
+                })
+              })
+
+            // res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', caja: app.locals.caja, turno:req.session.turno,apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno});
+            }else{
+              
+              p = [
+                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].id_ArqueoFisico }
+              ] 
+              
+              EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
+                  app.locals.arqueo = dataArqueo.result
+                  res.render('index_procesos', {  title: 'iFacturacion - Procesos',
+                                              Cod_Usuarios:req.session.username,
+                                              Nick:req.session.nick });
+              })
+            }
+            
+          })
+        })
+      })
+    }else{
+      errores = "No existe el turno seleccionado"
+      res.redirect('/logout');
+    }                  
+  })
+
+}
+
 
 app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
@@ -32,78 +123,7 @@ app.get('/', function (req, res) {
   } else{
     if(!app.locals.apertura){
       if (req.session.caja) {
-        p = [
-          { nom_parametro: 'Cod_Turno', valor_parametro: req.session.turno }
-        ]
-        EXEC_SQL('usp_CAJ_TURNO_ATENCION_TXPK', p , function (dataTurno) {
-          if(dataTurno.result.length>0){
-            app.locals.turno = dataTurno.result
-            p = [
-              { nom_parametro: 'Cod_Caja', valor_parametro: req.session.caja }
-            ]
-            EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
-              app.locals.caja = dataCaja.result
-              p = [
-                { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
-              ] 
-              EXEC_SQL('usp_PRI_SUCURSAL_TXPK', p , function (dataSucursal) {
-                app.locals.sucursal = dataSucursal.result
-                p = [
-                  { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
-                  { nom_parametro: 'CodTurno', valor_parametro:  req.session.turno }
-                ] 
-                EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
-                  app.locals.arqueo = dataArqueoFisico.result
-                  if(dataArqueoFisico.result.length<=0){
-    
-                    p = [
-                      { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
-                    ] 
-    
-                    EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
-                      p = [
-                        { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
-                        { nom_parametro: 'Cod_Turno', valor_parametro:  req.session.turno }
-                      ]
-                      EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
-                        
-                        if(dataSaldoAnterior.result.length==0){
-    
-                          EXEC_SQL('USP_VIS_MONEDAS_TT', [] , function (dataMonedas) {
-                              res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
-                                                                caja: app.locals.caja, 
-                                                                turno:req.session.turno,
-                                                                numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                                apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
-                                                                monedas: dataMonedas.result});                      
-                          }) 
-                        }else{
-                          res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
-                                                            caja: app.locals.caja, 
-                                                            turno:req.session.turno,
-                                                            numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                            apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno})
-                        }
-                      
-                      })
-                    })
-    
-                  // res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', caja: app.locals.caja, turno:req.session.turno,apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno});
-                  }else{
-                    res.render('index_procesos', {  title: 'iFacturacion - Procesos',
-                                                    Cod_Usuarios:req.session.username,
-                                                    Nick:req.session.nick });
-                  }
-                  
-                })
-              })
-            })
-          }else{
-            errores = "No existe el turno seleccionado"
-            res.redirect('/logout');
-          }                  
-        })
- 
+        CargarVariables(req,res)
         //res.render('index_procesos', { title: 'iFacturacion - Procesos',Cod_Usuarios:req.session.username,Nick:req.session.nick });
       }else{
         errores = "No tiene asignada ninguna caja. No puede iniciar sesion en el sistema"
@@ -138,14 +158,31 @@ app.get('/login', function (req, res) {
   var anio = fecha.getFullYear() 
   EXEC_QUERY_DBMaster('SELECT * FROM PRI_EMPRESA', [], function (o) {
     if (o.error) return null 
-    app.locals.empresa = o.result
     p = [
         { nom_parametro: 'RUC', valor_parametro: o.result.RUC }
     ]
 
     EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', p, function (m) {
-      res.render('login.ejs', { title: 'iFacturacion - Usuarios' , empresa : m.result , gestion: anio , err:errores});
-      return m.result
+      
+      if (m.error) return null 
+
+      EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
+
+        var Cod_Empresa=e.result[0].Cod_Empresa
+        p = [
+          { nom_parametro: 'Cod_Empresa', valor_parametro: Cod_Empresa }
+        ]
+
+        EXEC_SQL('usp_PRI_EMPRESA_TXPK', p, function (e) {
+          
+          app.locals.empresa = e.result
+          
+          res.render('login.ejs', { title: 'iFacturacion - Usuarios' , empresa : m.result , gestion: anio , err:errores});
+          
+          return e.result
+       
+        })
+      })
     })
   }) 
 })
@@ -157,32 +194,84 @@ app.post('/login', function (req, res) {
         errores = e.err
         return res.redirect('/login');
       }
-      req.session.authenticated = true;
-      req.session.username = e.Cod_Usuarios
-      req.session.nick = e.Nick
-      req.session.turno = req.body.Turno
-      req.session.periodo = req.body.Periodo
-      req.session.gestion = req.body.Gestion
-      p = [
-        { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
-      ]
+ 
+      if (app.locals.isla){
 
-      EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
-        if(e.result.length>0){
-          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result ,mensaje:'Seleccione una de las cajas asignadas a este usuario'});
-        }else{
+        pIsla = [
+          { nom_parametro: 'Cod_Usuario', valor_parametro: e.Cod_Usuarios },
+          { nom_parametro: 'Cod_Caja', valor_parametro: app.locals.caja.Cod_Caja }
+        ]
 
-          EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
-            if(m.result.length>0){
-              res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result ,mensaje:'El usuario no tiene ninguna caja asignada. Seleccione una caja activa de la lista e inicie sesion'});
-            }else{
-              errores = 'No existen cajas activas'
-              return res.redirect('/logout');
-            }                     
-          })
+        EXEC_SQL('USP_CAJ_CAJAS_TXUsuario', pIsla , function (dataCajaIsla) {
+          if (e.err) {
+            errores = dataCajaIsla.err
+            return res.redirect('/login'); 
+          }
 
-        }                
-      })
+          if(dataCajaIsla.result.length>=1){
+
+            req.session.authenticated = true;
+            req.session.username = e.Cod_Usuarios
+            req.session.nick = e.Nick
+            req.session.turno = req.body.Turno
+            req.session.periodo = req.body.Periodo
+            req.session.gestion = req.body.Gestion
+            req.session.caja = app.locals.caja.Cod_Caja 
+            
+            CargarVariables(req,res)
+
+          }else{
+            app.locals.isla = false
+            app.locals.apertura = false
+            app.locals.CierreCompleto = true
+            app.locals.caja = { Cod_Caja : null }
+            app.locals.turno = null
+            app.locals.sucursal = null
+            app.locals.arqueo = null
+            delete req.session.authenticated;
+            errores = "No existe Relación de esta caja con el usuario Asignado.\n\n En caso que Desea agregarlo comuniquese con el administrador de sistemas."
+            return res.redirect('/login');
+          }
+        })
+      }else{
+
+        req.session.authenticated = true;
+        req.session.username = e.Cod_Usuarios
+        req.session.nick = e.Nick
+        req.session.turno = req.body.Turno
+        req.session.periodo = req.body.Periodo
+        req.session.gestion = req.body.Gestion
+        
+        p = [
+          { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
+        ]  
+
+        EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
+          if(e.result.length>0){
+            res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result ,mensaje:'Seleccione una de las cajas asignadas a este usuario'});
+          }else{
+
+            EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
+              if(m.result.length>0){
+                res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result ,mensaje:'El usuario no tiene ninguna caja asignada. Seleccione una caja activa de la lista e inicie sesion'});
+              }else{
+                errores = 'No existen cajas activas'
+                app.locals.isla = false
+                app.locals.apertura = false
+                app.locals.CierreCompleto = true
+                app.locals.caja = { Cod_Caja : null }
+                app.locals.turno = null
+                app.locals.sucursal = null
+                app.locals.arqueo = null
+                delete req.session.authenticated;
+                return res.redirect('/login');
+              }                     
+            })
+
+          }                
+        })
+        
+      }
  
     })
   }else{
@@ -197,7 +286,6 @@ app.post('/logincajas', function (req, res) {
     return res.redirect('/');
   }else{
     req.session.caja = req.body.Caja
-    console.log(req.session.caja)
     return res.redirect('/');
   } 
 })
@@ -205,8 +293,7 @@ app.post('/logincajas', function (req, res) {
 app.post('/loginarqueo', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     return res.redirect('/');
-  }else{
-    //app.locals.apertura = true
+  }else{ 
 
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -246,17 +333,31 @@ app.post('/loginarqueo', function (req, res) {
 
         EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros, function (dataSaldoArqueo) {
            
+          p = [
+            { nom_parametro: 'CodCaja', valor_parametro: Cod_Caja },
+            { nom_parametro: 'CodTurno', valor_parametro:  Cod_Turno}
+          ] 
+          EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+              app.locals.arqueo = dataArqueoFisico.result
+          })
+
         })
       }
       app.locals.apertura = true
       res.redirect('/')
-     
     })
   } 
 })
  
 app.get('/logout', function (req, res) {
   errores = ''
+  app.locals.isla = false
+  app.locals.apertura = false
+  app.locals.CierreCompleto = true
+  app.locals.caja = { Cod_Caja : null }
+  app.locals.turno = null
+  app.locals.sucursal = null
+  app.locals.arqueo = null
   delete req.session.authenticated;
   res.redirect('/');
 });
