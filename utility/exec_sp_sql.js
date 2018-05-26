@@ -132,7 +132,7 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
                         data[respuesta_previa[i].nombre] = respuesta_previa[i].valor
                     }
                 }
-                res.json({ respuesta: 'ok', data }
+                return res.json({ respuesta: 'ok', data }
             )}
         });
 
@@ -202,12 +202,13 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
             else
                 request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
         }
+      
         request.execute(sp_name, function (err, result) {
-            dbConn.close()
+            dbConn.close() 
             if (err) {
                 return next({err})
             }
-            next({result:request.parameters[paramOutPut].value})
+            return next({result:request.parameters[paramOutPut].value})
         });
 
     });

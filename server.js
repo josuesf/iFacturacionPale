@@ -382,6 +382,7 @@ var envios_api = require('./routes/api-envios')
 var ventas_api = require('./routes/api-ventas')
 var compras_api = require('./routes/api-compras')
 var recepciones_api = require('./routes/api-recepciones')
+var series_api = require('./routes/api-series')
 
 // Routes Procesos
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
@@ -415,6 +416,7 @@ app.use('/envios_api', envios_api)
 app.use('/ventas_api', ventas_api)
 app.use('/compras_api', compras_api)
 app.use('/recepciones_api', recepciones_api)
+app.use('/series_api', series_api)
 
 //Listen Server
 var server = app.listen(3000, function (err) {

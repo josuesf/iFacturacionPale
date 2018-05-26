@@ -83,6 +83,40 @@ router.post('/get_variables_formas_pago', function (req, res) {
          
 });
 
+router.post('/get_tipos_comprobantes', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Cod_Liro', valor_parametro: input.CodLibro}
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'tipos_comprobantes', sp_name: 'USP_VIS_TIPO_COMPROBANTES_TXLibro', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+
+router.post('/get_comprobante_by_cliente', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente},
+        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro: 'Serie', valor_parametro: input.Serie},
+        {nom_parametro: 'Numero', valor_parametro: input.Numero},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXClienteTipoSerieNumero', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
  
  
 module.exports = router;

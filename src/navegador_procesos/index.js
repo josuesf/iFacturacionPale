@@ -61,6 +61,12 @@ var el = yo`
             <i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span>   
         </a>
     </li>
+
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>EntradasSalidas('NS')}>
+            <i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span>   
+        </a>
+    </li>
 </ul>`;
 
 module.exports = function navegador(ctx, next) {

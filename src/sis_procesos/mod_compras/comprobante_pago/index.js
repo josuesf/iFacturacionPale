@@ -1,18 +1,23 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto, AbrirModalAsignarSeries } from '../../modales'
+import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
+import { AsignarSeriesModal } from '../../modales/series'
 import { ConvertirCadena } from '../../../../utility/tools'
 
 var listaFormaPago = []
 var obs_xml = null
 var aSaldo = 0
 var contador = 0
+var contadorPercepcion = 0
+var idFilaSeleccionadaSerie = 0
 
 function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     global.objCliente = ''
     global.objProducto = ''
+    global.arraySeries = ''
     contador = 0
+    contadorPercepcion = 0
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -398,14 +403,11 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-success btn-sm" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
                                             </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-danger btn-sm" >Asignar Series</button>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <button type="button" class="btn btn-warning btn-sm" id="btnBuscarSeries">Buscar Series</button>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-warning btn-sm btn-block" id="btnBuscarSeries">Buscar Series</button>
                                             </div>
                                         </div>  
                                     </div>
@@ -533,6 +535,14 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
             $("#Descuento").val(global.objProducto.Descuento)
         }
     })
+
+
+    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+        if(global.arraySeries!='' && global.arraySeries){ 
+            $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
+        }
+    })
+
     CambioLicitacion()
 }
 
@@ -815,9 +825,9 @@ function AgregarFilaTabla(CodLibro,variables){
             var idFila = contador+$("#Nom_Producto").attr("data-id")
             var fila = yo`
             <tr id="${idFila}">
-                <td class="id_ComprobantePago hidden">0</td>
-                <td class="id_Detalle hidden">${rows}</td> 
-                <td class="Id_Producto hidden">${flagGasto?'0':Id_Producto}</td> 
+                <td class="id_ComprobantePago hidden"><input value="0"></td>
+                <td class="id_Detalle hidden"><input value="${rows}"></td> 
+                <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
                 <td class="Codigo">${flagGasto?'':Cod_Producto}</td>
                 <td class="Descripcion"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
                 <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
@@ -831,7 +841,18 @@ function AgregarFilaTabla(CodLibro,variables){
                 <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
                 <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
                 <td class="Obs_ComprobanteD hidden"></td> 
-                <td><button type="button" class="btn btn-danger btn-sm" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i></button></td>
+                <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+                <td>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Elegir una accion <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu"> 
+                        <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
+                        <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
+                    </ul>
+                </div>
+                </td>
             </tr>`
             $("#tablaBody").append(fila)
             contador++
@@ -858,11 +879,12 @@ function AplicarPercepcion(CodLibro,variables){
     var Serie = $("#Serie").val()
     var Numero = $("#Numero").val()
     var Calculo = ((parseFloat($("#Gran_Total").val())*parseFloat($("#PorcentajePercepcion").val()))/100).toFixed(2)
+    var idFila = "P"+contadorPercepcion
     var fila = yo`
-            <tr>
-                <td class="id_ComprobantePago hidden">0</td>
-                <td class="id_Detalle hidden">0</td> 
-                <td class="Id_Producto hidden">0</td> 
+            <tr id="${idFila}">
+                <td class="id_ComprobantePago hidden"><input value="0"></td>
+                <td class="id_Detalle hidden"><input value="0"></td> 
+                <td class="Id_Producto hidden"><input value="0"></td> 
                 <td class="Codigo"></td>
                 <td class="Descripcion"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
                 <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
@@ -876,9 +898,14 @@ function AplicarPercepcion(CodLibro,variables){
                 <td class="Cod_Manguera hidden"></td>  
                 <td class="Tipo hidden">PER</td> 
                 <td class="Obs_ComprobanteD hidden"></td> 
-                <td><button type="button" class="btn btn-danger btn-sm"><i class="fa fa-close"></i></button></td>
+                <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+                <ul class="dropdown-menu"> 
+                    <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
+                    <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
+                </ul>
             </tr>`
     $("#tablaBody").append(fila)
+    contadorPercepcion++
     CalcularTotal(CodLibro,variables)
     $("#modal-otros-procesos").modal('hide')
 }
@@ -1146,6 +1173,20 @@ function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
     }
 }
 
+function AsignarSeries(idFila,CodTipoComprobante){
+    idFilaSeleccionadaSerie = idFila
+    var Cod_Almacen = $("tr#"+idFila).find("td.Almacen").find('input').val()
+    var Id_Producto =$("tr#"+idFila).find("td.Id_Producto").find("input").val()
+    var Cantidad = parseFloat($("tr#"+idFila).find("td.Cantidad").find("input").val())
+    var Series = JSON.parse($("tr#"+idFila).find("td.Series").find("input").val())
+    var NroDias = CodTipoComprobante=="14"?60:0
+    var Stock = CodTipoComprobante=="14"?0:1
+    /*var Cantidad = parseFloat($("#"+idFila).find("td.Cantidad").find("input").val())
+    var Series = JSON.parse($("#"+idFila).find("td.Series").find("input").val())
+    var NroDias = CodTipoComprobante=="NE"?30:0
+    var Stock = CodTipoComprobante=="NE"?0:1*/
+    AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,null,Stock)
+}
 
 function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){ 
     if($("#Tipo_Cambio_FormaPago").attr("data-value")==null){

@@ -240,5 +240,13 @@ router.post('/get_producto_by_almacen', function (req, res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+router.post('/update_producto_stock', function (req, res){
+    input = req.body 
+    procedimientos = [
+        {nom_respuesta: 'stock', sp_name: 'USP_PRI_PRODUCTO_STOCK_ActualizarStockGeneral', parametros:[]}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
 
 module.exports = router;

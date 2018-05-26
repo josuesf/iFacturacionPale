@@ -261,7 +261,7 @@ router.post('/get_detalle_arqueo', function (req, res){
 
 router.post('/guardar_arqueo', function (req, res){
     input = req.body 
-    //console.log(input.dataFormTS)
+    console.log(input.dataFormTS)
     console.log(input.dataBS)
     p = [
         { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},

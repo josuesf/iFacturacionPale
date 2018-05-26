@@ -21,5 +21,25 @@ router.post('/get_variables_ventas', function (req, res) {
     Ejecutar_Procedimientos(res, procedimientos)
          
 });
+
+router.post('/get_comprobante_by_tipo', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro: 'Serie', valor_parametro: input.Serie},
+        {nom_parametro: 'Numero', valor_parametro: input.Numero},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXTipoSerieNumero', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+ 
+ 
  
 module.exports = router;
