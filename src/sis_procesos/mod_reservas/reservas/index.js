@@ -3,39 +3,185 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja' 
-import { SSL_OP_SSLREF2_REUSE_CERT_TYPE_BUG } from 'constants';
 
+var dp = null
+ 
 function Ver() {
-    var el = yo`
-        <div class="modal-dialog modal-full">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Libro de Reservas</strong></h4>
-                </div>
-                <div class="modal-body"> 
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div id="dp"></div>
+    
+    console.log($("ul#tabs").find("li > a#idReservas").length)
+    if ($("ul#tabs").find("li > a#idReservas").length<=0){
+        var tab = yo`
+        <li class=""><a href="#tabReservas" data-toggle="tab" aria-expanded="false" id="idReservas">Reservas</a></li>`
+
+        var tabContent = yo`
+            <div class="tab-pane" id="tabReservas">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box">
+                            <div class="box-header">
+                                <h4>Libro de Reservas</h4>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div id="nav"></div>
+                                    </div>
+                                </div>
+                                <div class="row"> 
+                                    <div class="col-sm-12">
+                                        <div id="dp"></div>
+                                    </div>  
+                                </div>
+                            </div>
+                        
                         </div>
-                    </div> 
-                 
+                    </div>
                 </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>`
+            </div>`
+        
+        $("#tabs").append(tab)
+        $("#tabs_contents").append(tabContent)
+        $("#idReservas").click()
+    }else{
+        $("#idReservas").click()
+    }
 
-    var modal_proceso = document.getElementById('modal-proceso');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-proceso').modal()
+    dp = new DayPilot.Scheduler("dp")
+    
+    dp.locale = "es-es";
+    dp.allowEventOverlap = false
+    dp.days = dp.startDate.daysInMonth()
+    loadTimeline(DayPilot.Date.today().firstDayOfMonth())
 
-    // div book calendar
+    dp.eventDeleteHandling = "Update"
+    dp.timeHeaders = [
+        { groupBy: "Month", format: "MMMM yyyy" },
+        { groupBy: "Day", format: "d" }
+    ]
 
-    var dp = new DayPilot.Scheduler("dp");
+    dp.eventHeight = 60
+    dp.bubble = new DayPilot.Bubble({})
+
+    dp.rowHeaderColumns = [
+        {title: "Habitacion", width: 80},
+        {title: "Capacidad", width: 80},
+        {title: "Estado", width: 80}
+    ];
+
+    dp.separators = [
+        { location: new DayPilot.Date(), color: "red" }
+    ]
+
+    dp.onBeforeResHeaderRender = function(args) {
+        var beds = function(count) {
+            return count + " bed" + (count > 1 ? "s" : "");
+        };
+
+        args.resource.columns[0].html = beds(args.resource.capacity);
+        args.resource.columns[1].html = args.resource.status;
+        switch (args.resource.status) {
+            case "Dirty":
+                args.resource.cssClass = "status_dirty";
+                break;
+            case "Cleanup":
+                args.resource.cssClass = "status_cleanup";
+                break;
+        }
+
+        args.resource.areas = [{
+                    top:3,
+                    right:4,
+                    height:14,
+                    width:14,
+                    action:"JavaScript",
+                    js: function(r) {
+                        /*var modal = new DayPilot.Modal();
+                        modal.onClosed = function(args) {
+                            loadResources();
+                        };
+                        modal.showUrl("room_edit.php?id=" + r.id);*/
+                    },
+                    v:"Hover",
+                    css:"icon icon-edit",
+                }];
+    };
+
+    dp.onBeforeEventRender = function(args) {
+        var start = new DayPilot.Date(args.e.start);
+        var end = new DayPilot.Date(args.e.end);
+
+        var today = DayPilot.Date.today();
+        var now = new DayPilot.Date();
+
+        args.e.html = args.e.text + " (" + start.toString("M/d/yyyy") + " - " + end.toString("M/d/yyyy") + ")";
+
+        switch (args.e.status) {
+            case "New":
+                var in2days = today.addDays(1);
+
+                if (start < in2days) {
+                    args.e.barColor = 'red';
+                    args.e.toolTip = 'Expired (not confirmed in time)';
+                }
+                else {
+                    args.e.barColor = 'orange';
+                    args.e.toolTip = 'New';
+                }
+                break;
+            case "Confirmed":
+                var arrivalDeadline = today.addHours(18);
+
+                if (start < today || (start.getDatePart() === today.getDatePart() && now > arrivalDeadline)) { // must arrive before 6 pm
+                    args.e.barColor = "#f41616";  // red
+                    args.e.toolTip = 'Late arrival';
+                }
+                else {
+                    args.e.barColor = "green";
+                    args.e.toolTip = "Confirmed";
+                }
+                break;
+            case 'Arrived': // arrived
+                var checkoutDeadline = today.addHours(10);
+
+                if (end < today || (end.getDatePart() === today.getDatePart() && now > checkoutDeadline)) { // must checkout before 10 am
+                    args.e.barColor = "#f41616";  // red
+                    args.e.toolTip = "Late checkout";
+                }
+                else
+                {
+                    args.e.barColor = "#1691f4";  // blue
+                    args.e.toolTip = "Arrived";
+                }
+                break;
+            case 'CheckedOut': // checked out
+                args.e.barColor = "gray";
+                args.e.toolTip = "Checked out";
+                break;
+            default:
+                args.e.toolTip = "Unexpected state";
+                break;
+        }
+
+        args.e.html = args.e.html + "<br /><span style='color:gray'>" + args.e.toolTip + "</span>";
+
+        var paid = args.e.paid;
+        var paidColor = "#aaaaaa";
+
+        args.e.areas = [
+            { bottom: 10, right: 4, html: "<div style='color:" + paidColor + "; font-size: 8pt;'>Paid: " + paid + "%</div>", v: "Visible"},
+            { left: 4, bottom: 8, right: 4, height: 2, html: "<div style='background-color:" + paidColor + "; height: 100%; width:" + paid + "%'></div>", v: "Visible" }
+        ];
+
+    };
+
+
+    dp.init();
+
+    loadResources();
+    loadEvents();
+
+   
+    /*var dp = new DayPilot.Scheduler("dp");
 
     dp.startDate = "2018-01-01";
     dp.days = 365;
@@ -48,30 +194,37 @@ function Ver() {
     dp.eventHeight = 30;
 
     dp.contextMenu = new DayPilot.Menu({items: [
-        {text:"Edit", onClick: function(args) { dp.events.edit(args.source); } },
-        {text:"Delete", onClick: function(args) { dp.events.remove(args.source); } },
-        {text:"-"},
-        {text:"Select", onClick: function(args) { dp.multiselect.add(args.source); } },
+        {text:"Editar", onClick: function(args) { 
+                console.log(args.source)
+                //dp.events.edit(args.source); 
+            } 
+        },
+        {text:"Eliminar", onClick: function(args) { 
+                //dp.events.remove(args.source); 
+            } 
+        },
+
     ]});
 
     dp.treeEnabled = true;
     dp.treePreventParentUsage = true;
+    
     dp.resources = [
-                 { name: "Locations", id: "G1", expanded: true, children:[
+                 { name: "standard", id: "G1", expanded: true, children:[
                          { name : "Room 1", id : "A" },
                          { name : "Room 2", id : "B" },
                          { name : "Room 3", id : "C" },
                          { name : "Room 4", id : "D" }
                          ]
                  },
-                 { name: "People", id: "G2", expanded: true, children:[
+                 { name: "doble cama", id: "G2", expanded: true, children:[
                          { name : "Person 1", id : "E" },
                          { name : "Person 2", id : "F" },
                          { name : "Person 3", id : "G" },
                          { name : "Person 4", id : "H" }
                          ]
                  },
-                 { name: "Tools", id: "G3", expanded: false, children:[
+                 { name: "simple", id: "G3", expanded: false, children:[
                          { name : "Tool 1", id : "I" },
                          { name : "Tool 2", id : "J" },
                          { name : "Tool 3", id : "K" },
@@ -168,6 +321,9 @@ function Ver() {
 
     // event creating
     dp.onTimeRangeSelected = function (args) {
+        
+        ModalRegistroReserva(args)
+
         DayPilot.Modal.prompt("New event name:", "New Event").then(function(modal) {
              
             dp.clearSelection();
@@ -182,7 +338,7 @@ function Ver() {
             });
             dp.events.add(e);
             dp.message("Created");
-        });
+        }); 
     };
 
     dp.onEventMove = function(args) {
@@ -204,9 +360,113 @@ function Ver() {
 
     dp.init();
 
-    dp.scrollTo("2018-01-01");
+    dp.scrollTo("2018-01-01");*/
 
 }
+
+
+
+function ModalRegistroReserva(args) {
+    var el = yo`
+        <div class="modal-dialog modal-full">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title"><strong>Nueva Reserva</strong></h4>
+                </div>
+                <div class="modal-body" id="modal_form">
+                    <div class="row">
+                        <div id="modal_error" class="callout callout-danger hidden">
+                            <p> Es necesario llenar los campos marcados con rojo</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
+                                <select id="Cod_TipoDocumento"  class="form-control required">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
+                                <select id="Cod_TipoDocumento"  class="form-control required">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
+                                <select id="Cod_TipoDocumento"  class="form-control required">
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        
+                    </div>
+  
+                     
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
+                </div>
+            </div>
+        </div>`
+
+    var modal_proceso = document.getElementById('modal-superior');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-superior').modal()
+}
+
+function loadResources() {
+
+    var data = [{
+        id : '1',
+        name : 'PRUEBA DE HABITACION',
+        capacity : '20',
+        status : 'Dirty'
+    }]
+ 
+    dp.resources = data;
+    dp.update(); 
+}
+
+function loadTimeline(date) {
+    dp.scale = "Manual";
+    dp.timeline = [];
+    var start = date.getDatePart().addHours(12);
+
+    for (var i = 0; i < dp.days; i++) {
+        dp.timeline.push({start: start.addDays(i), end: start.addDays(i+1)});
+    }
+    dp.update();
+}
+
+function loadEvents() {
+    var start = dp.visibleStart();
+    var end = dp.visibleEnd();
+
+    var data = [{
+        id : '1',
+        text : 'PRUEBA DE HABITACION',
+        start : '2018-06-01',
+        end : '2018-06-12',
+        resource : '1',
+        bubbleHtml : "Reservation details: <br/>",
+        status : 'New',
+        paid : '90%',
+    }]  
+    dp.events.list = data;
+    dp.update(); 
+    
+}
+
+
 
 function barColor(i) {
     var colors = ["#3c78d8", "#6aa84f", "#f1c232", "#cc0000"];
@@ -216,6 +476,7 @@ function barBackColor(i) {
     var colors = ["#a4c2f4", "#b6d7a8", "#ffe599", "#ea9999"];
     return colors[i % 4];
 }
+ 
  
 
 function LibroReservas(pCargarEfectivo) {

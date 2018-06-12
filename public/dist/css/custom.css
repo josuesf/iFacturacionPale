@@ -86,3 +86,39 @@ table.dataTable.no-footer {
         width: 90%;
     }
 }
+
+
+.icon {
+    font-size: 14px;
+    text-align: center;
+    line-height: 14px;
+    vertical-align: middle;
+
+    cursor: pointer;
+}
+
+.scheduler_default_rowheader_inner
+{
+    border-right: 1px solid #ccc;
+}
+.scheduler_default_rowheadercol2
+{
+    background: White;
+}
+.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    background-color: transparent;
+    border-left: 5px solid #38761d; /* green */
+    border-right: 0px none;
+}
+.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #cc0000; /* red */
+}
+.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #e69138; /* orange */
+}
