@@ -80,13 +80,41 @@ function CargarVariables(req,res){
                                                           monedas: dataMonedas.result});                      
                     }) 
                   }else{
-                    res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
+
+                    app.locals.CierreCompleto = app.locals.isla
+
+                    if(app.locals.CierreCompleto){
+
+                      res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
                                                       caja: app.locals.caja, 
                                                       turno:req.session.turno,
                                                       numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                      apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno})
+                                                      apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
+                                                      dataCierre: dataSaldoAnterior.result})
+                    }else{
+                      if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
+
+                        res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
+                                                        caja: app.locals.caja, 
+                                                        turno:req.session.turno,
+                                                        numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                                        apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
+                                                        dataCierre: dataSaldoAnterior.result})
+
+                      }else{
+                        errores = "No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"
+                        app.locals.isla = false
+                        app.locals.apertura = false
+                        app.locals.CierreCompleto = true
+                        app.locals.caja = { Cod_Caja : null }
+                        app.locals.turno = null
+                        app.locals.sucursal = null
+                        app.locals.arqueo = null
+                        delete req.session.authenticated;
+                        res.redirect('/login');
+                      }
+                    }
                   }
-                
                 })
               })
 

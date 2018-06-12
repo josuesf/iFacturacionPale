@@ -468,7 +468,7 @@ function VerTabCaja(movimientos,saldos) {
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="context-menu-one">
                             ${movimientos.map(u => yo`
                             <tr>
                                 <td>${u.ID}</td>

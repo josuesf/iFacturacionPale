@@ -15,9 +15,19 @@ import { NuevoArqueoCaja } from '../sis_procesos/mod_ventas/arqueo_caja'
 import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
 import { ComprobantePago } from '../sis_procesos/mod_compras/comprobante_pago'
 import { EntradasSalidas } from '../sis_procesos/mod_almacen/entradas_salidas'
+import { Cuentas } from '../sis_procesos/mod_administracion/cuentas_pagar_compra'
+import { LibroReservas } from '../sis_procesos/mod_reservas/reservas'
+
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
+    <li class="header">Reservas</li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>LibroReservas()}>
+            <i class="fa fa-circle-o"></i> <span>Libro de Reservas</span>   
+        </a>
+    </li>
+
     <li class="header">Ventas</li>
     <li class="treeview">
         <a href="javascript:void(0);">
@@ -67,6 +77,13 @@ var el = yo`
             <i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span>   
         </a>
     </li>
+    <li class="header">Administracion</li>
+    <li class="treeview">
+        <a href="javascript:void(0);" onclick=${()=>Cuentas('08')}>
+           <span> Cuentas por Cobrar</span>   
+        </a>
+    </li>
+
 </ul>`;
 
 module.exports = function navegador(ctx, next) {

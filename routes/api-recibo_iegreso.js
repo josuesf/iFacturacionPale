@@ -80,4 +80,105 @@ router.post('/guardar_recibo',function(req,res){
     Ejecutar_Procedimientos(res, procedimientos)
 })
 
+
+router.post('/get_comprobante_by_cliente', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente},
+        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro: 'Serie', valor_parametro: input.Serie},
+        {nom_parametro: 'Numero', valor_parametro: input.Numero},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXClienteTipoSerieNumero', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+
+router.post('/get_cuentas_by_cobrar_pagar', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Id_Cliente', valor_parametro:  input.Id_Cliente},
+        {nom_parametro: 'Cod_Libro', valor_parametro:  input.Cod_Libro},
+        {nom_parametro: 'FechaInicio', valor_parametro:  input.FechaInicio},
+        {nom_parametro: 'FechaFin', valor_parametro:  input.FechaFin},
+        {nom_parametro: 'Cod_Moneda', valor_parametro: input.Cod_Moneda},
+        {nom_parametro: 'Vencimiento', valor_parametro: input.Vencimiento},
+        {nom_parametro: 'Cod_Licitacion', valor_parametro: input.Cod_Licitacion},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'cuentas_pendientes', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXPagarCobrar', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+
+
+router.post('/get_variables_cuentas_cobrar_pagar', function (req, res) {
+    
+    var data = {}
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante}
+    ]
+
+     
+    EXEC_SQL('USP_VIS_TIPO_DOCUMENTOS_TT', [], function (dataDocumentos) {
+        if (dataDocumentos.error) return res.json({ respuesta: 'error', detalle_error: dataDocumentos.error })
+        data['dataDocumentos'] = dataDocumentos.result
+        EXEC_SQL('USP_VIS_FORMAS_PAGO_TT', [], function (dataFormasPago) {
+            if (dataFormasPago.error) return res.json({ respuesta: 'error', detalle_error: dataFormasPago.error })
+            data['dataFormasPago'] = dataFormasPago.result            
+            EXEC_SQL('USP_VIS_MONEDAS_TT', [], function (dataMonedas) {
+                if (dataMonedas.error) return res.json({ respuesta: 'error', detalle_error: dataMonedas.error })
+                data['dataMonedas'] = dataMonedas.result
+                EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCajaComprobante', parametros, function (dataComprobante) {
+                    if (dataComprobante.error) return res.json({ respuesta: 'error', detalle_error: dataComprobante.error })
+                    data['dataComprobante'] = dataComprobante.result
+                    var parametros1 = [
+                        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+                        {nom_parametro: 'Serie', valor_parametro: dataComprobante.result[0].Serie},
+                    ] 
+
+                    EXEC_SQL('USP_CAJ_MOVIMIENTOS_NumeroXTipoSerie', parametros1, function (dataMov) {
+                        if (dataMov.error) return res.json({ respuesta: 'error', detalle_error: dataMov.error })
+                        
+                        /*parametros2 = [
+                            {nom_parametro: 'Id_Cliente', valor_parametro:  input.Id_Cliente},
+                            {nom_parametro: 'Cod_Libro', valor_parametro:  input.Cod_Libro},
+                            {nom_parametro: 'FechaInicio', valor_parametro:  input.FechaInicio},
+                            {nom_parametro: 'FechaFin', valor_parametro:  input.FechaFin},
+                            {nom_parametro: 'Cod_Moneda', valor_parametro: input.Cod_Moneda},
+                            {nom_parametro: 'Vencimiento', valor_parametro: input.Vencimiento},
+                            {nom_parametro: 'Cod_Licitacion', valor_parametro: input.Cod_Licitacion},
+                        ]*/
+
+                        data['dataMov'] = dataMov.result
+                        return res.json({ respuesta: 'ok', data })
+                        /*EXEC_SQL('USP_CAJ_COMPROBANTE_PAGO_TXPagarCobrar', parametros2, function (dataPagarCobrar) {
+                            if (dataPagarCobrar.error) return res.json({ respuesta: 'error', detalle_error: dataPagarCobrar.error })
+                            data['dataPagarCobrar'] = dataPagarCobrar.result
+                            return res.json({ respuesta: 'ok', data })
+                        })*/
+                    })
+                })
+            })
+        })
+    })
+
+    
+});
+
 module.exports = router;

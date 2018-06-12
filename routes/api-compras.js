@@ -116,7 +116,6 @@ router.post('/get_comprobante_by_cliente', function (req, res) {
     ]  
     Ejecutar_Procedimientos(res, procedimientos)
 });
-
  
  
 module.exports = router;

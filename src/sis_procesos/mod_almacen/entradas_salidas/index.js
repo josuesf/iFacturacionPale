@@ -172,9 +172,6 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                         <div class="col-md-4">
                                             <button class="btn btn-sm btn-danger btn-block">Agregar por serie</button>
                                         </div>
-                                        <div class="col-md-4">
-                                            <button class="btn btn-sm btn-warning btn-block">Pegar Codigo x Cantidad</button>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -287,7 +284,19 @@ function AgregarFilaTabla(CodTipoComprobante,fecha_actual){
 
 function LlenarProductos(productos,CodTipoComprobante,fecha_actual){
     var i=0
-    var el = yo`  
+    var el = yo`
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>PU</th> 
+                    <th>UM</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaBody">  
             ${productos.map(u => 
                     yo`
                     <tr id="${u.Id_Producto}">
@@ -313,10 +322,13 @@ function LlenarProductos(productos,CodTipoComprobante,fecha_actual){
                             </div> 
                         </td>
                     </tr>`
-                )}`
-    $("#tablaBody").append(el)
-    //var tabla = document.getElementById('divTablaProductos')
-    //empty(tabla).appendChild(el)
+                )}
+                </tbody>
+        </table>`
+    //$("#tablaBody").html()
+    //$("#tablaBody").append(el)
+    var tabla = document.getElementById('divTablaProductos')
+    empty(tabla).appendChild(el)
 }
 
 
@@ -712,7 +724,8 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante){
     var Series = JSON.parse($("#"+idFila).find("td.Series").find("input").val())
     var NroDias = CodTipoComprobante=="NE"?30:0
     var Stock = CodTipoComprobante=="NE"?0:1
-    AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,fecha_actual,Stock)
+    if(Id_Producto!=null && Id_Producto!="")
+        AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,fecha_actual,Stock)
 }
 
 function EntradasSalidas(Cod_TipoComprobante) {

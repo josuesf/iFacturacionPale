@@ -1185,7 +1185,8 @@ function AsignarSeries(idFila,CodTipoComprobante){
     var Series = JSON.parse($("#"+idFila).find("td.Series").find("input").val())
     var NroDias = CodTipoComprobante=="NE"?30:0
     var Stock = CodTipoComprobante=="NE"?0:1*/
-    AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,null,Stock)
+    if(Id_Producto!=null && Id_Producto!="")
+        AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,null,Stock)
 }
 
 function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){ 
@@ -1604,7 +1605,7 @@ function TraerSaldoPagoAdelantado(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Id_ClienteProveedor
+            Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
         })
     }
     fetch(URL + '/compras_api/get_pago_adelantado', parametros)
@@ -1652,7 +1653,7 @@ function TraerCuentasBancariasXIdClienteProveedor(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Id_ClienteProveedor
+            Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
         })
     }
     fetch(URL + '/cuentas_bancarias_api/get_cuenta_by_id_cliente', parametros)

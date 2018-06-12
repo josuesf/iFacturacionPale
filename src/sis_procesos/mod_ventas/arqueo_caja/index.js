@@ -194,16 +194,16 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                                 <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <label id="laCantidadBilletesSoles">Total en Soles S/</label>
-                                                                                        <input class="form-control" type="number" id="CantidadBilletesSoles" value="0.00">
+                                                                                        <input class="form-control" type="number" id="CantidadBilletesSoles" value="0.00" onkeyup=${()=>CambioBilletesSoles()}>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-md-6">
-                                                                                    <a href="javascript:void(0)">Distribuir Automaticamente</a>
+                                                                                    <a href="javascript:void(0)" onclick=${()=>DistribuirSoles()}>Distribuir Automaticamente</a>
                                                                                 </div>
                                                                             </div>
                                                                             <form id="formBilletesSoles">
                                                                                 <div class="table-responsive" id="divTablaSoles">
-                                                                                    <table class="table table-bordered table-striped">
+                                                                                    <table class="table table-bordered table-striped" id="tablaSoles">
                                                                                         <thead>
                                                                                             <tr>
                                                                                                 <th>Codigo</th>
@@ -229,17 +229,17 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label id="laCantidadBilletesDolares">Total en Dolares USD</label>
-                                                                                    <input class="form-control" type="number" id="CantidadBilletesDolares" value="0.00">
+                                                                                    <input class="form-control" type="number" id="CantidadBilletesDolares" value="0.00" onkeyup=${()=>CambioBilletesDolares()}>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
-                                                                                <a href="javascript:void(0)">Distribuir Automaticamente</a>
+                                                                                <a href="javascript:void(0)" onclick=${()=>DistribuirDolares()}>Distribuir Automaticamente</a>
                                                                             </div>
                                                                         </div>
 
                                                                         <form id="formBilletesDolares">
                                                                             <div class="table-responsive" id="divTablaDolares">
-                                                                                <table class="table table-bordered table-striped">
+                                                                                <table class="table table-bordered table-striped" id="tablaDolares">
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th>Billete</th>
@@ -313,7 +313,7 @@ function CargarModalConfirmacionArqueo(){
 }
 
 function LlenarTabla(billetes){
-    var elsoles = yo`<table class="table table-bordered table-striped">
+    var elsoles = yo`<table class="table table-bordered table-striped" id="tablaSoles">
         <thead>
             <tr>
                 <th class="hidden">Codigo</th>
@@ -327,12 +327,12 @@ function LlenarTabla(billetes){
             ${billetes.map(u => 
                 u.Cod_Moneda=="PEN"?
                     yo`
-                    <tr>
+                    <tr id="${u.Cod_Billete}">
                         <td class="hidden"><input class="form-control" type="text" value="${u.Cod_Billete}" name="Cod_Billete"></td>
-                        <td name="Nom_Billete"> ${u.Nom_Billete}</td>
-                        <td class="hidden"><input class="form-control" type="text" value="${u.Valor_Billete}" name="Valor_Billete"></td>
-                        <td name="Cantidad"><input class="form-control" type="number" value="0.00" name="Cantidad"></td>
-                        <td name="Total"><input class="form-control" type="number" value="0.00" name="Total"></td>
+                        <td name="Nom_Billete" class="Nom_Billete"> ${u.Nom_Billete}</td>
+                        <td class="hidden Valor"><input class="form-control" type="text" value="${u.Valor_Billete}" name="Valor_Billete"></td>
+                        <td name="Cantidad" class="Cantidad"><input class="form-control" type="number" value="0.00" name="Cantidad" onkeypress=${()=>CambioCantidadSoles(u.Cod_Billete)}></td>
+                        <td name="Total" class="Total"><input class="form-control" type="number" value="0.00" name="Total"></td>
                     </tr>`:yo``
                 )}
             
@@ -340,7 +340,7 @@ function LlenarTabla(billetes){
 
     </table>`
     
-    var eldolares = yo`<table class="table table-bordered table-striped">
+    var eldolares = yo`<table class="table table-bordered table-striped" id="tablaDolares">
         <thead>
             <tr>
                 <th class="hidden">Codigo</th>
@@ -354,12 +354,12 @@ function LlenarTabla(billetes){
             ${billetes.map(u => 
                 u.Cod_Moneda=="USD"?
                     yo`
-                    <tr>
+                    <tr id="${u.Cod_Billete}">
                         <td class="hidden"><input class="form-control" type="text" value="${u.Cod_Billete}" name="Cod_Billete"></td>
-                        <td name="Nom_Billete"> ${u.Nom_Billete} </td>
-                        <td class="hidden"><input class="form-control" type="text" value="${u.Valor_Billete}" name="Valor_Billete"></td>
-                        <td name="Cantidad"><input class="form-control" type="number" value="0.00" name="Cantidad"></td>
-                        <td name="Total"><input class="form-control" type="number" value="0.00" name="Total"></td>
+                        <td name="Nom_Billete" class="Nom_Billete"> ${u.Nom_Billete} </td>
+                        <td class="hidden Valor"><input class="form-control" type="text" value="${u.Valor_Billete}" name="Valor_Billete"></td>
+                        <td name="Cantidad" class="Cantidad"><input class="form-control" type="number" value="0.00" name="Cantidad" onkeypress=${()=>CambioCantidadDolares(u.Cod_Billete)}></td>
+                        <td name="Total" class="Total"><input class="form-control" type="number" value="0.00" name="Total"></td>
                     </tr>`:yo``
                 )}
             
@@ -384,6 +384,35 @@ function LlenarTabla(billetes){
             toastr.error('No puede realizar aun el Cierre verifique no tenga saldo final Menor a Cero y vuelta a intentarlo.\n\n','Error',{timeOut: 5000})
         }
     }
+}
+
+function CambioBilletesSoles(){
+    $("#DiferenciaSoles").val(parseFloat($("#CantidadBilletesSoles").val())-parseFloat($("#SaldoTotalSoles").val()))
+}
+
+function CambioBilletesDolares(){
+    $("#DiferenciaDolares").val(parseFloat($("#CantidadBilletesDolares").val())-parseFloat($("#SaldoTotalDolares").val()))
+}
+
+function CambioCantidadSoles(idInput){
+    var total = 0
+    $("tr#"+idInput).find("td.Total").find("input").val(parseFloat($("tr#"+idInput).find("td.Valor").find("input").val())*parseFloat($("tr#"+idInput).find("td.Cantidad").find("input").val()))   
+    $('#tablaSoles > tbody  > tr').each(function(){
+        total = total + parseFloat($(this).find("td.Total").find("input").val())
+    })
+    $("#CantidadBilletesSoles").val(total)
+    $("#DiferenciaSoles").val(parseFloat($("#CantidadBilletesSoles").val())-parseFloat($("#SaldoTotalSoles").val()))
+
+}
+
+function CambioCantidadDolares(idInput){
+    var total = 0
+    $("tr#"+idInput).find("td.Total").find("input").val(parseFloat($("tr#"+idInput).find("td.Valor").find("input").val())*parseFloat($("tr#"+idInput).find("td.Cantidad").find("input").val()))
+    $('#tablaDolares > tbody  > tr').each(function(){
+        total = total + parseFloat($(this).find("td.Total").find("input").val())
+    })
+    $("#CantidadBilletesDolares").val(total)
+    $("#DiferenciaDolares").val(parseFloat($("#CantidadBilletesDolares").val())-parseFloat($("#SaldoTotalDolares").val()))
 }
  
 
@@ -417,7 +446,37 @@ function CalcularSumaTotalDolares(resumen){
     //$("#tbDolares").click()
 }
 
+function DistribuirSoles(){
+    var pSumaTotal = 0
+    var pDiferencia = $("#CantidadBilletesSoles").val()
+    $('#tablaSoles > tbody  > tr').each(function(){
+        if(pDiferencia!=0){
+            $(this).find("td.Cantidad").find("input").val(Math.trunc(pDiferencia/parseFloat($(this).find("td.Valor").find("input").val())))
+            pSumaTotal+=parseFloat($(this).find("td.Valor").find("input").val())*parseFloat($(this).find("td.Cantidad").find("input").val())
+            $(this).find("td.Total").find("input").val(parseFloat($(this).find("td.Valor").find("input").val())*parseFloat($(this).find("td.Cantidad").find("input").val()))
+            if(pSumaTotal==parseFloat($("#CantidadBilletesSoles").val()))
+                return false
+            else
+                pDiferencia = parseFloat($("#CantidadBilletesSoles").val()) - pSumaTotal
+        }
+    })
+}
 
+function DistribuirDolares(){
+    var pSumaTotal = 0
+    var pDiferencia = $("#CantidadBilletesDolares").val()
+    $('#tablaDolares > tbody  > tr').each(function(){
+        if(pDiferencia!=0){
+            $(this).find("td.Cantidad").find("input").val(Math.trunc(pDiferencia/parseFloat($(this).find("td.Valor").find("input").val())))
+            pSumaTotal+=parseFloat($(this).find("td.Valor").find("input").val())*parseFloat($(this).find("td.Cantidad").find("input").val())
+            $(this).find("td.Total").find("input").val(parseFloat($(this).find("td.Valor").find("input").val())*parseFloat($(this).find("td.Cantidad").find("input").val()))
+            if(pSumaTotal==parseFloat($("#CantidadBilletesDolares").val()))
+                return false
+            else
+                pDiferencia = parseFloat($("#CantidadBilletesDolares").val()) - pSumaTotal
+        }
+    })
+}
 
 function CargarBilletes(arqueo){
     if(!arqueo.FlagCerrado){

@@ -29,7 +29,7 @@ html
     link(rel='stylesheet', href='/plugins/timepicker/bootstrap-timepicker.min.css')
 
     // Notify
-    link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css') 
+    link(rel='stylesheet', href='dist/css/toastr.min.css') 
     link(rel='stylesheet', href='dist/css/custom.css')
 
     // bootstrap wysihtml5 - text editor
@@ -38,6 +38,8 @@ html
     // WARNING: Respond.js doesn't work if you view the page via file://
 
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic')
+
+    link(rel='stylesheet', href='dist/css/jquery.dataTables.min.css')
 
     title=title
   body.hold-transition.sidebar-mini.fixed.skin-red
@@ -139,9 +141,13 @@ html
     script(src='dist/js/loading.js')
 
     // Notify
-    script(src='//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js') 
+    script(src='dist/js/toastr.min.js')
 
     // Custom Validacion
     script(src='dist/js/customvalidation.js')
+
+    script(src='dist/js/jquery.dataTables.min.js')
+
+    script(src='dist/js/daypilot-all.min.js')
 
     script(type='application/javascript' src='/app_proc.js')
