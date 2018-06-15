@@ -39,7 +39,7 @@ var el = yo`
             <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check in</a></li> 
             <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check out</a></li>
             <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Reservas</a></li>
-            
+            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Housekeeping</a></li> 
         </ul>
     </li>
     

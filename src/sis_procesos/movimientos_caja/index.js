@@ -158,7 +158,7 @@ function Ver(movimientos,saldos) {
                             <div class="tab-content" id="tabs_contents">
                                 <div class="tab-pane active" id="tab_1">
                                     
-                                    <div class="box">
+                                    <div class="box box-primary">
                                         <div class="box-header">
                                             <h3 class="box-title">Movimientos de Caja</h3>
                                         </div>
@@ -444,7 +444,7 @@ function VerTabCaja(movimientos,saldos) {
                     </div>
                 </div>`
 
-    var el = yo`<div class="box">
+    var el = yo`<div class="box box-primary">
                     <div class="box-header">
                         <h3 class="box-title">Movimientos de Caja</h3>
                     </div>

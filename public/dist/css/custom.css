@@ -111,14 +111,75 @@ table.dataTable.no-footer {
     bottom: 2px;
     left: 2px;
     background-color: transparent;
-    border-left: 5px solid #38761d; /* green */
+    border-left: 5px solid green; /* green */
     border-right: 0px none;
 }
 .status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
 {
-    border-left: 5px solid #cc0000; /* red */
+    border-left:  5px solid red;
 }
 .status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
 {
-    border-left: 5px solid #e69138; /* orange */
+    border-left: 5px solid orange; /* orange */
+}
+
+.text-white{
+    color: white;
+}
+
+@media only screen and (max-width: 1950px) {
+    .divDP {
+       width: 90%; 
+    }
+    .divNav{
+        width: 10%;
+    }
+}
+
+@media only screen and (min-width: 1350px) and (max-width: 1750px) {
+    .divDP {
+       width: 85%; 
+    }
+    .divNav{
+        width: 14%;
+        padding-bottom: 10px;
+        margin: auto;
+    }
+}
+ 
+
+@media only screen and (min-width: 1050px) and (max-width: 1349px) {
+    .divDP {
+        width: 100%;
+        padding-bottom: 10px;
+        margin: auto;
+        text-align: -webkit-center; 
+    }
+    .divNav{
+        width: 100%;
+        padding-bottom: 10px;
+        margin: auto;
+        text-align: -webkit-center; 
+    }
+}
+
+@media only screen and (max-width: 1050px) {
+    .divDP {
+       width: 100%; 
+    }
+    .divNav{
+        width: 100%;
+        padding-bottom: 10px;
+        margin: auto;
+        text-align: -webkit-center; 
+    }
+}
+
+@media only screen and (max-width: 997px) {
+    .divAcciones {
+       display: none; 
+    } 
+    .divBuscar {
+        width: 100%; 
+    } 
 }

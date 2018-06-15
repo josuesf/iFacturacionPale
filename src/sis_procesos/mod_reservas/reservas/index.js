@@ -5,6 +5,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja' 
 
 var dp = null
+var nav = null
  
 function Ver() { 
     if ($("ul#tabs").find("li > a#idReservas").length<=0){
@@ -15,16 +16,46 @@ function Ver() {
             <div class="tab-pane" id="tabReservas">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="box">
+                        <div class="box box-primary">
                             <div class="box-header">
-                                <h4>Front Desk</h4>
+                                <div class="row">
+                                    
+                                    <div class="col-md-9 col-sm-9">
+                                        <div class="btn-group pull-right divAcciones" data-toggle="buttons">
+                                            <label class="btn btn-primary btn-sm">
+                                            <input type="radio" name="options" id="option1" onchange=${()=>MostrarPorDias(1)}> Mostrar un solo dia
+                                            </label>
+                                            <label class="btn btn-primary btn-sm">
+                                            <input type="radio" name="options" id="option2" onchange=${()=>MostrarPorDias(3)}> Mostrar 3 dias
+                                            </label>
+                                            <label class="btn btn-primary btn-sm">
+                                            <input type="radio" name="options" id="option3" onchange=${()=>MostrarPorDias(7)}> Mostrar semana
+                                            </label>
+                                            <label class="btn btn-primary btn-sm">
+                                            <input type="radio" name="options" id="option3" onchange=${()=>MostrarPorDias(15)}> Mostrar 15 dias
+                                            </label>
+                                            <label class="btn btn-primary btn-sm">
+                                            <input type="radio" name="options" id="option3" onchange=${()=>MostrarMes()}> Mostrar Mes
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <div class="input-group divBuscar">
+                                            <input type="txtBuscarReserva" class="form-control input-sm">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-primary btn-sm">Buscar</button>
+                                            </div> 
+                                        </div> 
+                                    </div>
+                                </div>
+                                
                             </div>
                             <div class="box-body">  
                                 <div class="row"> 
-                                    <div class="col-sm-1" style="margin-right:  12px;">
+                                    <div class="col-sm-1 divNav" >
                                         <div id="nav"></div>
                                     </div>
-                                    <div class="col-sm-10" style="width: 90%;">
+                                    <div class="col-sm-10 divDP">
                                         <div id="dp"></div>
                                     </div>  
                                 </div>
@@ -38,187 +69,214 @@ function Ver() {
         $("#tabs").append(tab)
         $("#tabs_contents").append(tabContent)
         $("#idReservas").click()
+
+
+        nav = new DayPilot.Navigator("nav");
+        nav.locale = "es-es";
+        nav.selectMode = "day";
+        nav.showMonths = 1;
+        nav.skipMonths = 1;
+        nav.onTimeRangeSelected = function(args) {
+            dp.startDate = args.day.value
+            dp.days = nav.startDate.daysInMonth()
+            dp.update();
+        };
+        nav.init(); 
+        dp = new DayPilot.Scheduler("dp")
+        dp.locale = "es-es";
+        dp.startDate = nav.selectionDay.value
+        dp.days = nav.startDate.daysInMonth() 
+        dp.cellDuration = 1440
+        if ($(window).width() < 1350) {  
+            dp.cellWidthSpec = 'Fixed'; 
+        }else{
+            dp.cellWidthSpec = 'Auto';
+        }   
+        dp.eventDeleteHandling = "Update"
+        dp.timeHeaders = [
+            { groupBy: "Month", format: "MMMM yyyy" },
+            { groupBy: "Day", format: "d" }
+        ]
+    
+        dp.eventHeight = 60
+        dp.bubble = new DayPilot.Bubble({})
+    
+        dp.rowHeaderColumns = [
+            {title: "Habitacion", width: 30},
+            {title: "Capacidad", width: 80},
+            {title: "Estado", width: 80}
+        ];
+    
+        dp.separators = [
+            { location: new DayPilot.Date(), color: "red" }
+        ]
+    
+        dp.contextMenuResource = new DayPilot.Menu({items: [
+            {text:'Open', onclick:function() { var e = this.source; var command = this.item.command; console.log(e); }}
+        ]})
+
+        dp.contextMenu = new DayPilot.Menu({items: [
+            {text:"Check out", onClick: function(args) { 
+                    console.log(args.source)
+                    //dp.events.edit(args.source); 
+                } 
+            },
+            {text:"Eliminar", onClick: function(args) { 
+                    //dp.events.remove(args.source); 
+                } 
+            },
+    
+        ]})
+    
+        dp.onEventClick = function(args) {
+            /*var modal = new DayPilot.Modal();
+            modal.closed = function() {
+                // reload all events
+                var data = this.result;
+                if (data && data.result === "OK") {
+                    loadEvents();
+                }
+            };
+            modal.showUrl("edit.php?id=" + args.e.id());*/
+        }
+    
+        dp.onTimeRangeSelected = function (args) {
+            ModalRegistroReserva(args)
+    
+    
+            /*var modal = new DayPilot.Modal();
+            modal.closed = function() {
+                dp.clearSelection();
+    
+                // reload all events
+                var data = this.result;
+                if (data && data.result === "OK") {
+                    loadEvents();
+                }
+            };
+            modal.showUrl("new.php?start=" + args.start + "&end=" + args.end + "&resource=" + args.resource);*/
+    
+        }
+    
+    
+        dp.onBeforeResHeaderRender = function(args) {
+            var beds = function(count) {
+                return count + " cama" + (count > 1 ? "s" : "");
+            };
+    
+            args.resource.columns[0].html = beds(args.resource.capacity);
+            args.resource.columns[1].html = args.resource.status;
+            switch (args.resource.status) {
+                case "Dirty":
+                    args.resource.cssClass = "status_dirty";
+                    break;
+                case "Cleanup":
+                    args.resource.cssClass = "status_cleanup";
+                    break;
+            }
+    
+            args.resource.areas = [{
+                        top:3,
+                        right:4,
+                        height:14,
+                        width:14,
+                        action:"JavaScript",
+                        js: function(r) {
+                            /*var modal = new DayPilot.Modal();
+                            modal.onClosed = function(args) {
+                                loadResources();
+                            };
+                            modal.showUrl("room_edit.php?id=" + r.id);*/
+                        },
+                        v:"Hover",
+                        css:"icon icon-edit",
+                    }];
+        }
+    
+        dp.onBeforeEventRender = function(args) {
+            var start = new DayPilot.Date(args.e.start);
+            var end = new DayPilot.Date(args.e.end);
+    
+            var today = DayPilot.Date.today();
+            var now = new DayPilot.Date();
+
+            args.e.cssClass = 'text-white'
+            args.e.html ="<span style='color:white;font-weight: bold;'>"+ args.e.text + " (" + start.toString("M/d/yyyy") + " - " + end.toString("M/d/yyyy") + ")" + "</span>";
+            args.e.barHidden = true
+            switch (args.e.status) {
+                case "New":
+                    var in2days = today.addDays(1);
+    
+                    if (start < in2days) { 
+                        args.e.backColor = '#dd4b39'
+                        args.e.toolTip = 'Expired (not confirmed in time)'
+                    }
+                    else {
+                        args.e.backColor = '#e08e0b'
+                        args.e.toolTip = 'New';
+                    }
+                    break;
+                case "Confirmed":
+                    var arrivalDeadline = today.addHours(18);
+    
+                    if (start < today || (start.getDatePart() === today.getDatePart() && now > arrivalDeadline)) { // must arrive before 6 pm
+                        args.e.backColor = '#dd4b39'
+                        args.e.toolTip = 'Late arrival'
+                    }
+                    else {
+                        args.e.backColor = '#008d4c'
+                        args.e.toolTip = "Confirmed"
+                    }
+                    break;
+                case 'Arrived': // arrived
+                    var checkoutDeadline = today.addHours(10);
+    
+                    if (end < today || (end.getDatePart() === today.getDatePart() && now > checkoutDeadline)) { // must checkout before 10 am
+                        args.e.backColor = '#dd4b39';  // red
+                        args.e.toolTip = "Late checkout";
+                    }
+                    else
+                    {
+                        args.e.backColor = "#367fa9";  // blue
+                        args.e.toolTip = "Arrived";
+                    }
+                    break;
+                case 'CheckedOut': // checked out
+                    args.e.backColor = "#cbccce";
+                    args.e.toolTip = "Checked out";
+                    break;
+                default:
+                    args.e.toolTip = "Unexpected state";
+                    break;
+            }
+    
+            args.e.html = args.e.html + "<br /><span style='color:white'>" + args.e.toolTip + "</span>";
+    
+            var paid = args.e.paid;
+            var paidColor = "white";
+     
+            args.e.areas = [
+                { bottom: 10, right: 4, html: "<div style='color:" + paidColor + "; font-size: 8pt;'>Paid: " + paid + "%</div>", v: "Visible"},
+                { left: 4, bottom: 8, right: 4, height: 2, html: "<div style='background-color:" + paidColor + "; height: 100%; width:" + paid + "%'></div>", v: "Visible" }
+            ]
+    
+        }
+    
+    
+        dp.init()
+    
+        loadResources()
+        loadEvents()
+         
     }else{
         $("#idReservas").click()
+        AjustarTamanio()
     }
+     
 
-    var nav = new DayPilot.Navigator("nav");
-    nav.locale = "es-es";
-    nav.selectMode = "month";
-    nav.showMonths = 1;
-    nav.skipMonths = 1;
-    nav.init();
-
-    dp = new DayPilot.Scheduler("dp")
-    
-    dp.locale = "es-es";
-    //dp.allowEventOverlap = false
-    //dp.headerDateFormat = "dddd"
-    dp.startDate = DayPilot.Date.today().firstDayOfMonth()
-    dp.days = dp.startDate.daysInMonth()
-    loadTimeline(DayPilot.Date.today().firstDayOfMonth())
-
-    dp.eventDeleteHandling = "Update"
-    dp.timeHeaders = [
-        { groupBy: "Month", format: "MMMM yyyy" },
-        { groupBy: "Day", format: "d" }
-    ]
-
-    dp.eventHeight = 60
-    dp.bubble = new DayPilot.Bubble({})
-
-    dp.rowHeaderColumns = [
-        {title: "Habitacion", width: 30},
-        {title: "Capacidad", width: 80},
-        {title: "Estado", width: 80}
-    ];
-
-    dp.separators = [
-        { location: new DayPilot.Date(), color: "red" }
-    ]
-
-    dp.contextMenuResource = new DayPilot.Menu({items: [
-        {text:'Open', onclick:function() { var e = this.source; var command = this.item.command; console.log(e); }}
-    ]});
-
-    dp.onEventClick = function(args) {
-        /*var modal = new DayPilot.Modal();
-        modal.closed = function() {
-            // reload all events
-            var data = this.result;
-            if (data && data.result === "OK") {
-                loadEvents();
-            }
-        };
-        modal.showUrl("edit.php?id=" + args.e.id());*/
-    };
-
-    dp.onTimeRangeSelected = function (args) {
-        ModalRegistroReserva(args)
-
-
-        /*var modal = new DayPilot.Modal();
-        modal.closed = function() {
-            dp.clearSelection();
-
-            // reload all events
-            var data = this.result;
-            if (data && data.result === "OK") {
-                loadEvents();
-            }
-        };
-        modal.showUrl("new.php?start=" + args.start + "&end=" + args.end + "&resource=" + args.resource);*/
-
-    };
-
-
-    dp.onBeforeResHeaderRender = function(args) {
-        var beds = function(count) {
-            return count + " cama" + (count > 1 ? "s" : "");
-        };
-
-        args.resource.columns[0].html = beds(args.resource.capacity);
-        args.resource.columns[1].html = args.resource.status;
-        switch (args.resource.status) {
-            case "Dirty":
-                args.resource.cssClass = "status_dirty";
-                break;
-            case "Cleanup":
-                args.resource.cssClass = "status_cleanup";
-                break;
-        }
-
-        args.resource.areas = [{
-                    top:3,
-                    right:4,
-                    height:14,
-                    width:14,
-                    action:"JavaScript",
-                    js: function(r) {
-                        /*var modal = new DayPilot.Modal();
-                        modal.onClosed = function(args) {
-                            loadResources();
-                        };
-                        modal.showUrl("room_edit.php?id=" + r.id);*/
-                    },
-                    v:"Hover",
-                    css:"icon icon-edit",
-                }];
-    };
-
-    dp.onBeforeEventRender = function(args) {
-        var start = new DayPilot.Date(args.e.start);
-        var end = new DayPilot.Date(args.e.end);
-
-        var today = DayPilot.Date.today();
-        var now = new DayPilot.Date();
-
-        args.e.html = args.e.text + " (" + start.toString("M/d/yyyy") + " - " + end.toString("M/d/yyyy") + ")";
-
-        switch (args.e.status) {
-            case "New":
-                var in2days = today.addDays(1);
-
-                if (start < in2days) {
-                    args.e.barColor = 'red';
-                    args.e.toolTip = 'Expired (not confirmed in time)';
-                }
-                else {
-                    args.e.barColor = 'orange';
-                    args.e.toolTip = 'New';
-                }
-                break;
-            case "Confirmed":
-                var arrivalDeadline = today.addHours(18);
-
-                if (start < today || (start.getDatePart() === today.getDatePart() && now > arrivalDeadline)) { // must arrive before 6 pm
-                    args.e.barColor = "#f41616";  // red
-                    args.e.toolTip = 'Late arrival';
-                }
-                else {
-                    args.e.barColor = "green";
-                    args.e.toolTip = "Confirmed";
-                }
-                break;
-            case 'Arrived': // arrived
-                var checkoutDeadline = today.addHours(10);
-
-                if (end < today || (end.getDatePart() === today.getDatePart() && now > checkoutDeadline)) { // must checkout before 10 am
-                    args.e.barColor = "#f41616";  // red
-                    args.e.toolTip = "Late checkout";
-                }
-                else
-                {
-                    args.e.barColor = "#1691f4";  // blue
-                    args.e.toolTip = "Arrived";
-                }
-                break;
-            case 'CheckedOut': // checked out
-                args.e.barColor = "gray";
-                args.e.toolTip = "Checked out";
-                break;
-            default:
-                args.e.toolTip = "Unexpected state";
-                break;
-        }
-
-        args.e.html = args.e.html + "<br /><span style='color:gray'>" + args.e.toolTip + "</span>";
-
-        var paid = args.e.paid;
-        var paidColor = "#aaaaaa";
-
-        args.e.areas = [
-            { bottom: 10, right: 4, html: "<div style='color:" + paidColor + "; font-size: 8pt;'>Paid: " + paid + "%</div>", v: "Visible"},
-            { left: 4, bottom: 8, right: 4, height: 2, html: "<div style='background-color:" + paidColor + "; height: 100%; width:" + paid + "%'></div>", v: "Visible" }
-        ];
-
-    };
-
-
-    dp.init();
-
-    loadResources();
-    loadEvents();
+    $(window).resize(function(){
+        AjustarTamanio()
+    });
  
    
     /*var dp = new DayPilot.Scheduler("dp");
@@ -557,18 +615,7 @@ function loadResources() {
     dp.resources = data;
     dp.update(); 
 }
-
-function loadTimeline(date) {
-    dp.scale = "Day";
-    /*dp.timeline = [];
-    var start = date.getDatePart().addHours(12);
-
-    for (var i = 0; i < dp.days; i++) {
-        dp.timeline.push({start: start.addDays(i), end: start.addDays(i+1)});
-    }
-    dp.update();*/
-}
-
+ 
 function loadEvents() {
     var start = dp.visibleStart();
     var end = dp.visibleEnd();
@@ -581,25 +628,32 @@ function loadEvents() {
         resource : 'AHHHHH',
         bubbleHtml : "Reservation details: <br/>",
         status : 'New',
-        paid : '90%',
+        paid : '40',
     }]  
     dp.events.list = data;
-    dp.update(); 
-    
+    dp.update();    
 }
 
 
+function MostrarPorDias(dia){
+    dp.startDate = nav.selectionDay.value
+    dp.days = dia  
+    dp.update()
+}
 
-function barColor(i) {
-    var colors = ["#3c78d8", "#6aa84f", "#f1c232", "#cc0000"];
-    return colors[i % 4];
+function MostrarMes(){
+    dp.startDate = nav.selectionDay.value
+    dp.days = nav.startDate.daysInMonth()  
+    dp.update()
 }
-function barBackColor(i) {
-    var colors = ["#a4c2f4", "#b6d7a8", "#ffe599", "#ea9999"];
-    return colors[i % 4];
-}
- 
- 
+
+function AjustarTamanio(){
+    if ($(window).width() < 1350) {  
+        dp.cellWidthSpec = 'Fixed'; 
+    }else{
+        dp.cellWidthSpec = 'Auto';
+    }    
+} 
 
 function LibroReservas(pCargarEfectivo) {
     H5_loading.show();
