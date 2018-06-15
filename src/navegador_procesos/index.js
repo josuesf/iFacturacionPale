@@ -21,12 +21,28 @@ import { LibroReservas } from '../sis_procesos/mod_reservas/reservas'
 
 var el = yo`
 <ul class="sidebar-menu" data-widget="tree">
-    <li class="header">Reservas</li>
-    <li class="treeview">
+    <li class="header">Front Desk</li>
+    <li>
         <a href="javascript:void(0);" onclick=${()=>LibroReservas()}>
             <i class="fa fa-circle-o"></i> <span>Libro de Reservas</span>   
         </a>
     </li>
+    <li class="treeview">
+        <a href="javascript:void(0);">
+            <i class="fa fa-home"></i> <span>Operaciones</span>
+            <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+            </span>
+        </a>
+        <ul class="treeview-menu">
+            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Nueva Habitacion</a></li>
+            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check in</a></li> 
+            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check out</a></li>
+            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Reservas</a></li>
+            
+        </ul>
+    </li>
+    
 
     <li class="header">Ventas</li>
     <li class="treeview">
@@ -44,41 +60,41 @@ var el = yo`
             
         </ul>
     </li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${() => NuevaVenta(true)}>
             <i class="fa fa-cart-plus"></i> <span> Nueva Venta</span>
         </a>
     </li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}>
             <i class="fa fa-circle-o"></i> <span> Nuevo Arqueo</span>
         </a>
     </li>
     <li class="header">Compras</li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${()=>NuevaRecepcion()}>
             <i class="fa fa-arrow-circle-down"></i> <span>Recepcion de Transferencias</span>   
         </a>
     </li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${()=>ComprobantePago('08')}>
             <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
         </a>
     </li>
     <li class="header">Almacen</li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${()=>EntradasSalidas('NE')}>
             <i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span>   
         </a>
     </li>
 
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${()=>EntradasSalidas('NS')}>
             <i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span>   
         </a>
     </li>
     <li class="header">Administracion</li>
-    <li class="treeview">
+    <li>
         <a href="javascript:void(0);" onclick=${()=>Cuentas('08')}>
            <span> Cuentas por Cobrar</span>   
         </a>

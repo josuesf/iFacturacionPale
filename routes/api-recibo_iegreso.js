@@ -115,7 +115,7 @@ router.post('/get_cuentas_by_cobrar_pagar', function (req, res) {
     ]
      
     procedimientos = [
-        { nom_respuesta: 'cuentas_pendientes', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXPagarCobrar', parametros}
+        { nom_respuesta: 'cuentas', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXPagarCobrar', parametros}
         
     ]  
     Ejecutar_Procedimientos(res, procedimientos)

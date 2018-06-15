@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 import { BuscarCliente } from './index'
 import { URL } from '../../constantes_entorno/constantes'
 
-function VerBuscarCuentasPendientes(CodLibro,cuentas_pendientes){ 
+function VerBuscarCuentasPendientes(CodLibro,cuentas){ 
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -33,7 +33,7 @@ function VerBuscarCuentasPendientes(CodLibro,cuentas_pendientes){
     var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
     $('#modal-otros-procesos').modal()   
-    AgregarTabla(cuentas_pendientes,CodLibro)
+    AgregarTabla(cuentas,CodLibro)
 }
 
 function AgregarTabla(cuentas,CodLibro){
@@ -74,6 +74,10 @@ function AgregarTabla(cuentas,CodLibro){
             "sSearch": "Buscar:"
         }
     });
+
+    $("#example_filter").find("input").keyup(function(){
+        console.log("cambio de searcgh")
+    })
 }
 
 function SeleccionarCuenta(cuenta){
@@ -99,8 +103,8 @@ function BuscarCuentasPendientes(Cod_Libro,Id_Cliente,FechaInicio,FechaFin){
     .then(req => req.json())
     .then(res => {
         if (res.respuesta == 'ok') {
-            var cuentas_pendientes = res.data.cuentas_pendientes
-            VerBuscarCuentasPendientes(Cod_Libro,cuentas_pendientes)
+            var cuentas = res.data.cuentas
+            VerBuscarCuentasPendientes(Cod_Libro,cuentas)
         }
     })
     //VerBuscarCuentasPendientes(CodLibro)

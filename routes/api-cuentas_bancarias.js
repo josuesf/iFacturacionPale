@@ -57,6 +57,20 @@ router.post('/get_cuenta_by_id_cliente', function (req, res) {
 });
 
 
+router.post('/get_cheques_by_cuenta_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_CuentaBancaria',valor_parametro:input.Cod_CuentaBancaria},
+        {nom_parametro:'Beneficiario',valor_parametro:input.Beneficiario},
+        {nom_parametro:'Cod_Libro',valor_parametro:input.Cod_Libro},
+    ]
+    procedimientos =[
+        {nom_respuesta:'cheques',sp_name:'USP_BAN_CUENTA_CHEQUESxCuentaCliente',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
 router.post('/guardar_cuenta', function (req, res) {
     input = req.body
     parametros = [

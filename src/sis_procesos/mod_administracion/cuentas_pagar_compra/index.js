@@ -138,7 +138,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                 <div class="col-sm-8" id="divOperacion">
                                                     <label id="lbCuentaCajaBanco">#Operacion</label>
                                                     <div class="form-group">
-                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria"> 
+                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria" onchange=${()=>CambioCodCuentaBancaria(CodLibro)}> 
                                                         </select>
                                                     </div>
                                                 </div>
@@ -203,7 +203,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                     <div class="col-md-8 col-sm-8">
                                                         <div class="checkbox">
                                                             <label> 
-                                                                <input type="checkbox" id="optFechas" checked> Todo 
+                                                                <input type="checkbox" id="optTodoFechas" checked onchange=${()=>CambioTodoFechas()}> Todo 
                                                             </label>
                                                         </div>
                                                     </div>
@@ -215,13 +215,13 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                     <div class="col-md-6 col-md-6">
                                                         <div class="form-group">
                                                             <b>Desde: </b>
-                                                            <input type="date" id="Fecha" value="2018-06-06" class="form-control input-sm">
+                                                            <input type="date" id="FechaInicio" value="${fecha_actual}" class="form-control input-sm">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-md-6">
                                                         <div class="form-group">
                                                             <b>Hasta: </b>
-                                                            <input type="date" id="Fecha" value="2018-06-06" class="form-control input-sm">
+                                                            <input type="date" id="FechaFin" value="${fecha_actual}" class="form-control input-sm">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -235,7 +235,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                     <div class="col-md-8 col-sm-8">
                                                         <div class="checkbox">
                                                             <label> 
-                                                                <input type="checkbox" id="optFechas" checked> Todo 
+                                                                <input type="checkbox" id="optTodoVencimiento" checked onchange=${()=>CambioTodoVencimiento()}> Todo 
                                                             </label>
                                                         </div>
                                                     </div>
@@ -247,14 +247,14 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                     <div class="col-md-6 col-sm-6">
                                                         <div class="radio">
                                                             <label> 
-                                                                <input type="radio" name="optRadios" id="optRadios" value="PorVencer"> Por vencer 
+                                                                <input type="radio" name="optRadios" id="optRadiosPorVencer" value="PorVencer"> Por vencer 
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-sm-6">
                                                         <div class="radio">
                                                             <label> 
-                                                                <input type="radio" name="optRadios" id="optRadios" value="Vencidos"> Vencidos 
+                                                                <input type="radio" name="optRadios" id="optRadiosVencidos" value="Vencidos"> Vencidos 
                                                             </label>
                                                         </div>
                                                     </div>
@@ -269,7 +269,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                     <div class="col-md-4 col-sm-4">
                                                         <div class="checkbox">
                                                             <label> 
-                                                                <input type="checkbox" id="optFechas" checked> Todo 
+                                                                <input type="checkbox" id="optTodoLicitacion" checked onchange=${()=>CambioTodoLicitacion()}> Todo 
                                                             </label>
                                                         </div>
                                                     </div>
@@ -284,7 +284,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                 <div class="row">
                                                     <div class="col-sm-8 col-md-8">
                                                         <div class="form-group"> 
-                                                            <select class="form-control input-sm"></select>
+                                                            <select class="form-control input-sm" id="Cod_Licitacion"></select>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4 col-md-4">
@@ -303,7 +303,26 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                     <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                               
+                                <div class="row">
+                                    <div class="table-responsive" id="divTablaComprobantes">
+
+                                        <table id="tablaComprobantes" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Vencimiento</th> 
+                                                    <th>Documento</th>
+                                                    <th>Total Faltante</th>
+                                                    <th>Amortizar</th>
+                                                    <th>Saldo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
                             </div>
                             <div class="panel-footer">
                                 <div class="row">
@@ -321,13 +340,13 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <label class="col-sm-1 col-form-label">Total</label>
                                             <div class="col-sm-10"> 
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" id="Total" class="form-control">
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" id="TotalAmortizar" class="form-control">
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <input type="number" class="form-control">
+                                                    <input type="number" id="TotalSaldo" class="form-control">
                                                 </div>
                                             </div>  
                                         </div>
@@ -359,7 +378,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
         $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
         $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
         CargarLicitacionesCliente(global.objCliente.Id_Cliente)
-        BuscarPorFecha()
+        BuscarPorFecha(CodLibro)
     }
 
     
@@ -371,62 +390,187 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
             $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
             CargarLicitacionesCliente(global.objCliente.Id_Cliente)
-            BuscarPorFecha()
+            BuscarPorFecha(CodLibro)
         }
     }) 
+
+    CambioTodoFechas()
+    CambioTodoVencimiento()
+    CambioTodoLicitacion()
 }
 
-function LlenarCuentaBancaria(cuentas){
+function AgregarTabla(comprobantes){
+    var el = yo`<table id="tablaComprobantes" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Vencimiento</th> 
+            <th>Documento</th>
+            <th>Total Faltante</th>
+            <th>Amortizar</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${comprobantes.map((c,index) => yo`
+        <tr>
+            <td class="hidden idComprobante">${c.id_ComprobantePago}</td>
+            <td class="FechaEmision">${c.FechaEmision}</td>
+            <td class="FechaVencimiento">${c.FechaVencimiento}</td> 
+            <td class="hidden Dias">${c.Dias}</td> 
+            <td class="Documento">${c.Documento}</td> 
+            <td class="TotalFaltante">${c.TotalFaltante}</td> 
+            <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeypress=${()=>CambioAmortizar()}></td> 
+            <td class="Saldo">${c.TotalFaltante}</td> 
+        </tr>`)}
+    </tbody>
+
+</table>`
+    empty(document.getElementById('divTablaComprobantes')).appendChild(el);
+}
+
+function LlenarCuentaBancaria(cuentas,CodLibro){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].Cod_CuentaBancaria+'">'+cuentas[i].Des_CuentaBancaria+'</option>'
     }
      
     $("#Cod_CuentaBancaria").html('')
-    $("#Cod_CuentaBancaria").html(html) 
+    $("#Cod_CuentaBancaria").html(html)
+    CambioCodCuentaBancaria(CodLibro)
 }
 
-function LlenarCuentaBancaria_(cuentas){
+function LlenarCuentaBancaria_(cuentas,CodLibro){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].NroCuenta_Bancaria+'">'+cuentas[i].CuentaBancaria+'</option>'
     }
      
     $("#Cod_CuentaBancaria").html('')
-    $("#Cod_CuentaBancaria").html(html) 
+    $("#Cod_CuentaBancaria").html(html)
+    CambioCodCuentaBancaria(CodLibro) 
 }
 
-function BuscarPorFecha(){
+function LlenarCheques(cheques){
+    var html = ''
+    for(var i=0; i<cheques.length; i++){
+        html = html+'<option value="'+cheques[i].Id_MovimientoCuenta+'">'+cheques[i].Des_Movimiento+'</option>'
+    }
      
-    /*
+    $("#Cuenta_CajaBancos").html('')
+    $("#Cuenta_CajaBancos").html(html) 
+}
 
-    try
-            {
-                dgvComprobanteD.Rows.Clear();
-                DataTable dtXFormalizar = (cbTodoVencimiento.Checked ? aComprobante_pago.TraerCuentasPorPagarCobrar(int.Parse(tbNomCliente.Tag.ToString()),
-                    aComprobante_pago.CodLibro,
-                    (cbTodoFechas.Checked ? new DateTime(1753, 1, 1) : dtpFechaInicio.Value),
-                    (cbTodoFechas.Checked ? DateTime.MaxValue : dtpFechaFinal.Value),
-                    cbCodMoneda.SelectedValue.ToString(),
-                    (cbTodoLicitacion.Checked ? null : cbCodLicitacion.SelectedValue.ToString())) :
-                    aComprobante_pago.TraerCuentasPorPagarCobrar(int.Parse(tbNomCliente.Tag.ToString()),
-                    aComprobante_pago.CodLibro,
-                    (cbTodoFechas.Checked ? new DateTime(1753, 1, 1) : dtpFechaInicio.Value),
-                    (cbTodoFechas.Checked ? DateTime.MaxValue : dtpFechaFinal.Value),
-                    cbCodMoneda.SelectedValue.ToString(),
-                    rbPorVencer.Checked,
-                    (cbTodoLicitacion.Checked ? null : cbCodLicitacion.SelectedValue.ToString())));
-                foreach (DataRow fila in dtXFormalizar.Rows)
-                {
-                    dgvComprobanteD.Rows.Add(fila[0], fila[1], fila[2], fila[3], fila[4], fila[5], 0.00, fila[5]);
-                }
-            }
-            catch
-            {
-                KryptonMessageBox.Show("Debe de Selecionar un Cliente Proveedor", Principal.aTitulo, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+function CalcularTotal(){
+    try{
+        var SumaTotal = 0
+        var SumaAmortiza = 0
+        $('#tablaComprobantes > tbody tr').each(function () {
 
-    */
+            SumaAmortiza += parseFloat($(this).find("td").eq(6).find("input").val())
+            if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val()))>0)
+                $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val())))
+            else
+                $(this).find("td").eq(7).text("0.00")
+            
+            SumaTotal += parseFloat($(this).find("td").eq(5).text())            
+        });
+
+        $("#Total").val(SumaTotal)
+        $("#TotalAmortizar").val(SumaAmortiza)
+        $("#TotalFaltante").val(SumaTotal-SumaAmortiza)
+
+    }catch(e){
+
+    }
+
+
+}
+
+function BuscarPorFecha(CodLibro){
+    var Id_Cliente = $("#Cliente").attr("data-id")
+    var Cod_Libro = CodLibro
+    var FechaInicio = $("#optTodoFechas").is(":checked")?'1753-01-01 00:00:00':$("#FechaInicio").val()
+    var FechaFin = $("#optTodoFechas").is(":checked")?'9999-12-31 23:59:59.997':$("#FechaFin").val()
+    var Cod_Moneda = $("#Cod_Moneda").val()
+    var Vencimiento = $("#optTodoVencimiento").is(":checked")?null:(($('input[name=optRadios]:checked').val()=="PorVencer")?true:false)
+    var Cod_Licitacion = $("#optTodoLicitacion").is(":checked")?null:$("#Cod_Licitacion").val()
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Cliente,
+            Cod_Libro,
+            FechaInicio,
+            FechaFin,
+            Cod_Moneda,
+            Vencimiento,
+            Cod_Licitacion
+        })
+    }
+    fetch(URL + '/recibo_iegreso_api/get_cuentas_by_cobrar_pagar', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            if (res.respuesta == 'ok') {
+                AgregarTabla(res.data.cuentas)
+            } 
+        })
+    
+}
+
+function CambioTodoFechas(){
+    $("#FechaFin").attr("disabled",($("#optTodoFechas").is(":checked")))
+    $("#FechaInicio").attr("disabled",($("#optTodoFechas").is(":checked")))
+}
+
+function CambioTodoLicitacion(){
+    $("#Cod_Licitacion").attr("disabled",($("#optTodoFechas").is(":checked")))
+}
+
+function CambioTodoVencimiento(){
+    if($("#optTodoVencimiento").is(":checked")){
+        $('input[name=optRadios]').attr("checked",false)
+        $('input[name=optRadios]').attr("disabled",true)
+    }else{        
+        $('#optRadiosPorVencer').attr("checked",true)
+        $('#optRadiosVencidos').attr("checked",false)
+        $('input[name=optRadios]').attr("disabled",false)
+    }
+}
+
+function CambioCodCuentaBancaria(CodLibro){
+    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria").val()
+    var Beneficiario = $("#Cliente").val()
+    var Cod_Libro = CodLibro
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_CuentaBancaria,
+            Beneficiario,
+            Cod_Libro
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/get_cheques_by_cuenta_cliente', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var cheques = res.data.cheques 
+                LlenarCheques(cheques)
+            } 
+        })
+}
+
+function CambioAmortizar(){
+    CalcularTotal()
 }
 
 function CambioFormasPago(CodLibro){
@@ -444,7 +588,7 @@ function CambioFormasPago(CodLibro){
                 case "007":
                     if(CodLibro=="08"){
                         $("#lbCuentaCajaBanco").text("# de Cheque: ")
-                        TraerCuentaBancariaPorSucursal()
+                        TraerCuentaBancariaPorSucursal(CodLibro)
                     }else{
                         toastr.error('No Existe la Operacion de CHEQUE para ventas.\nSe debe de Depositar el Cheque eh ingresarlo como Deposito en Cuenta.','Error',{timeOut: 5000})
                         $("#Cod_FormaPago").val(null)
@@ -454,9 +598,9 @@ function CambioFormasPago(CodLibro){
                     $("#Cod_CuentaBancaria").css("display","block")
                     $("#lbCuentaCajaBanco").text("# de Operacion")
                     if(CodLibro=="08"){
-                        TraerCuentasBancariasXIdClienteProveedor()
+                        TraerCuentasBancariasXIdClienteProveedor(CodLibro)
                     }else{
-                        TraerCuentaBancariaPorSucursal()
+                        TraerCuentaBancariaPorSucursal(CodLibro)
                     }
                     break
                 case "001":
@@ -521,7 +665,7 @@ function TraerSaldoPagoAdelantado(){
         })
 }
 
-function TraerCuentasBancariasXIdClienteProveedor(){
+function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
     const parametros = {
         method: 'POST',
         headers: {
@@ -537,13 +681,13 @@ function TraerCuentasBancariasXIdClienteProveedor(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria_(cuentas)
+                LlenarCuentaBancaria_(cuentas,CodLibro)
             } 
         })
 }
 
 
-function TraerCuentaBancariaPorSucursal(){
+function TraerCuentaBancariaPorSucursal(CodLibro){
     const parametros = {
         method: 'POST',
         headers: {
@@ -558,7 +702,7 @@ function TraerCuentaBancariaPorSucursal(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria(cuentas)
+                LlenarCuentaBancaria(cuentas,CodLibro)
             } 
         })
 }

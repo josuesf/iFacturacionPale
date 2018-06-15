@@ -6,12 +6,10 @@ import { refrescar_movimientos } from '../../movimientos_caja'
 
 var dp = null
  
-function Ver() {
-    
-    console.log($("ul#tabs").find("li > a#idReservas").length)
+function Ver() { 
     if ($("ul#tabs").find("li > a#idReservas").length<=0){
         var tab = yo`
-        <li class=""><a href="#tabReservas" data-toggle="tab" aria-expanded="false" id="idReservas">Reservas</a></li>`
+        <li class=""><a href="#tabReservas" data-toggle="tab" aria-expanded="false" id="idReservas">Front Desk</a></li>`
 
         var tabContent = yo`
             <div class="tab-pane" id="tabReservas">
@@ -19,16 +17,14 @@ function Ver() {
                     <div class="col-md-12">
                         <div class="box">
                             <div class="box-header">
-                                <h4>Libro de Reservas</h4>
+                                <h4>Front Desk</h4>
                             </div>
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
+                            <div class="box-body">  
+                                <div class="row"> 
+                                    <div class="col-sm-1" style="margin-right:  12px;">
                                         <div id="nav"></div>
                                     </div>
-                                </div>
-                                <div class="row"> 
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-10" style="width: 90%;">
                                         <div id="dp"></div>
                                     </div>  
                                 </div>
@@ -46,10 +42,19 @@ function Ver() {
         $("#idReservas").click()
     }
 
+    var nav = new DayPilot.Navigator("nav");
+    nav.locale = "es-es";
+    nav.selectMode = "month";
+    nav.showMonths = 1;
+    nav.skipMonths = 1;
+    nav.init();
+
     dp = new DayPilot.Scheduler("dp")
     
     dp.locale = "es-es";
-    dp.allowEventOverlap = false
+    //dp.allowEventOverlap = false
+    //dp.headerDateFormat = "dddd"
+    dp.startDate = DayPilot.Date.today().firstDayOfMonth()
     dp.days = dp.startDate.daysInMonth()
     loadTimeline(DayPilot.Date.today().firstDayOfMonth())
 
@@ -63,7 +68,7 @@ function Ver() {
     dp.bubble = new DayPilot.Bubble({})
 
     dp.rowHeaderColumns = [
-        {title: "Habitacion", width: 80},
+        {title: "Habitacion", width: 30},
         {title: "Capacidad", width: 80},
         {title: "Estado", width: 80}
     ];
@@ -72,9 +77,44 @@ function Ver() {
         { location: new DayPilot.Date(), color: "red" }
     ]
 
+    dp.contextMenuResource = new DayPilot.Menu({items: [
+        {text:'Open', onclick:function() { var e = this.source; var command = this.item.command; console.log(e); }}
+    ]});
+
+    dp.onEventClick = function(args) {
+        /*var modal = new DayPilot.Modal();
+        modal.closed = function() {
+            // reload all events
+            var data = this.result;
+            if (data && data.result === "OK") {
+                loadEvents();
+            }
+        };
+        modal.showUrl("edit.php?id=" + args.e.id());*/
+    };
+
+    dp.onTimeRangeSelected = function (args) {
+        ModalRegistroReserva(args)
+
+
+        /*var modal = new DayPilot.Modal();
+        modal.closed = function() {
+            dp.clearSelection();
+
+            // reload all events
+            var data = this.result;
+            if (data && data.result === "OK") {
+                loadEvents();
+            }
+        };
+        modal.showUrl("new.php?start=" + args.start + "&end=" + args.end + "&resource=" + args.resource);*/
+
+    };
+
+
     dp.onBeforeResHeaderRender = function(args) {
         var beds = function(count) {
-            return count + " bed" + (count > 1 ? "s" : "");
+            return count + " cama" + (count > 1 ? "s" : "");
         };
 
         args.resource.columns[0].html = beds(args.resource.capacity);
@@ -179,7 +219,7 @@ function Ver() {
 
     loadResources();
     loadEvents();
-
+ 
    
     /*var dp = new DayPilot.Scheduler("dp");
 
@@ -365,10 +405,9 @@ function Ver() {
 }
 
 
-
-function ModalRegistroReserva(args) {
+function ModalRegistroReserva(datos) {
     var el = yo`
-        <div class="modal-dialog modal-full">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -382,29 +421,110 @@ function ModalRegistroReserva(args) {
                             <p> Es necesario llenar los campos marcados con rojo</p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
+                    <div class="row"> 
+                        <div class="col-sm-6">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4>Datos de la Reserva</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laDuracion">Duracion : ${new DayPilot.Date(datos.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(datos.end.value).toString("dddd d MMMM yyyy", "es-es")}</label> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laCliente">Cliente</label>
+                                                <input type="text" class="form-control" id="Cliente">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laTelefono">Telefono</label>
+                                                <input type="text" class="form-control" id="Telefono">
+                                            </div>
+                                        </div>
+                                    </div>
                                     
-                                </select>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laEmail">Email</label>
+                                                <input type="email" class="form-control" id="Email">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laDes_Reserva">Descripcion Reserva</label>
+                                                <textarea type="text" class="form-control" id="Des_Reserva">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label id="laNroAdultos">Nro Adultos</label>
+                                                <input type="number" class="form-control" id="NroAdultos">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label id="laNroNinios">Nro Niños</label>
+                                                <input type="number" class="form-control" id="NroNinios">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label id="laNroInfantes">Nro Infantes</label>
+                                                <input type="number" class="form-control" id="NroInfantes">
+                                            </div>
+                                        </div>
+                                    </div>
+                                     
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
-                                    
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
-                                    
-                                </select>
+                        <div class="col-sm-6">
+                            <div class="box">
+                                <div class="box-header">
+                                    <h4>Datos de la Habitacion</h4>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laTipoHabitacion">Tipo de Habitacion</label>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laCantidad">Cantidad</label>
+                                                <select class="form-control" id="Cantidad">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laPrecio">Precio</label>
+                                                <input type="text" class="form-control" id="Precio">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -413,6 +533,8 @@ function ModalRegistroReserva(args) {
                      
                 </div>
                 <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Reservar</button> 
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Reservar temporalmente</button> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
@@ -426,7 +548,7 @@ function ModalRegistroReserva(args) {
 function loadResources() {
 
     var data = [{
-        id : '1',
+        id : 'AHHHHH',
         name : 'PRUEBA DE HABITACION',
         capacity : '20',
         status : 'Dirty'
@@ -437,14 +559,14 @@ function loadResources() {
 }
 
 function loadTimeline(date) {
-    dp.scale = "Manual";
-    dp.timeline = [];
+    dp.scale = "Day";
+    /*dp.timeline = [];
     var start = date.getDatePart().addHours(12);
 
     for (var i = 0; i < dp.days; i++) {
         dp.timeline.push({start: start.addDays(i), end: start.addDays(i+1)});
     }
-    dp.update();
+    dp.update();*/
 }
 
 function loadEvents() {
@@ -456,7 +578,7 @@ function loadEvents() {
         text : 'PRUEBA DE HABITACION',
         start : '2018-06-01',
         end : '2018-06-12',
-        resource : '1',
+        resource : 'AHHHHH',
         bubbleHtml : "Reservation details: <br/>",
         status : 'New',
         paid : '90%',
@@ -483,6 +605,7 @@ function LibroReservas(pCargarEfectivo) {
     H5_loading.show();
     Ver()
     H5_loading.hide();
+    
     /*aCargarEfectivo = true
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

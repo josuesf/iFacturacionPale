@@ -172,7 +172,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <div class="col-sm-4" id="divOperacion">
                                                     <label id="lbCuentaCajaBanco">#Operacion</label>
                                                     <div class="form-group">
-                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria"> 
+                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria" onchange=${()=>CambioCodCuentaBancaria(CodLibro)}> 
                                                         </select>
                                                     </div>
                                                 </div>
@@ -910,7 +910,7 @@ function AplicarPercepcion(CodLibro,variables){
     $("#modal-otros-procesos").modal('hide')
 }
 
-function LlenarCuentaBancaria(cuentas){
+function LlenarCuentaBancaria(cuentas,CodLibro){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].Cod_CuentaBancaria+'">'+cuentas[i].Des_CuentaBancaria+'</option>'
@@ -918,9 +918,10 @@ function LlenarCuentaBancaria(cuentas){
      
     $("#Cod_CuentaBancaria").html('')
     $("#Cod_CuentaBancaria").html(html) 
+    CambioCodCuentaBancaria(CodLibro)
 }
 
-function LlenarCuentaBancaria_(cuentas){
+function LlenarCuentaBancaria_(cuentas,CodLibro){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].NroCuenta_Bancaria+'">'+cuentas[i].CuentaBancaria+'</option>'
@@ -928,6 +929,7 @@ function LlenarCuentaBancaria_(cuentas){
      
     $("#Cod_CuentaBancaria").html('')
     $("#Cod_CuentaBancaria").html(html) 
+    CambioCodCuentaBancaria(CodLibro)
 }
 
 function LlenarPagosAdelantados(cuentas){
@@ -961,6 +963,16 @@ function LlenarAlmacenes(almacenes,Cod_Almacen){
      
     $("#Cod_Almacen").html('')
     $("#Cod_Almacen").html(html) 
+}
+
+function LlenarCheques(cheques){
+    var html = ''
+    for(var i=0; i<cheques.length; i++){
+        html = html+'<option value="'+cheques[i].Id_MovimientoCuenta+'">'+cheques[i].Des_Movimiento+'</option>'
+    }
+     
+    $("#Cuenta_CajaBancos").html('')
+    $("#Cuenta_CajaBancos").html(html) 
 }
 
 
@@ -1373,6 +1385,33 @@ function CargarAlmacenes(Id_Producto,Cod_Almacen){
     CambioComprobantes()    
 }
 
+function CambioCodCuentaBancaria(CodLibro){
+    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria").val()
+    var Beneficiario = $("#Cliente").val()
+    var Cod_Libro = CodLibro
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_CuentaBancaria,
+            Beneficiario,
+            Cod_Libro
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/get_cheques_by_cuenta_cliente', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var cheques = res.data.cheques 
+                LlenarCheques(cheques)
+            } 
+        })
+}
+
 function CambioGastos(){
     var visible = "block"
     if($("#optEsGasto").is(":checked")){
@@ -1467,7 +1506,7 @@ function CambioFormasPago(CodLibro){
                 case "007":
                     if(CodLibro=="08"){
                         $("#lbCuentaCajaBanco").text("# de Cheque: ")
-                        TraerCuentaBancariaPorSucursal()
+                        TraerCuentaBancariaPorSucursal(CodLibro)
                     }else{
                         toastr.error('No Existe la Operacion de CHEQUE para ventas.\nSe debe de Depositar el Cheque eh ingresarlo como Deposito en Cuenta.','Error',{timeOut: 5000})
                         $("#Cod_FormaPago").val(null)
@@ -1477,9 +1516,9 @@ function CambioFormasPago(CodLibro){
                     $("#Cod_CuentaBancaria").css("display","block")
                     $("#lbCuentaCajaBanco").text("# de Operacion")
                     if(CodLibro=="08"){
-                        TraerCuentasBancariasXIdClienteProveedor()
+                        TraerCuentasBancariasXIdClienteProveedor(CodLibro)
                     }else{
-                        TraerCuentaBancariaPorSucursal()
+                        TraerCuentaBancariaPorSucursal(CodLibro)
                     }
                     break
                 case "001":
@@ -1497,7 +1536,7 @@ function CambioFormasPago(CodLibro){
                 case "003":
                     $("#Cod_CuentaBancaria").css("display","block")
                     $("#lbCuentaCajaBanco").text("Seleccione Transferencia: ")
-                    TraerCuentaBancariaPorSucursal()
+                    TraerCuentaBancariaPorSucursal(CodLibro)
                     break
                 case "008":
                     $("#divOperacion").css("display","none")
@@ -1625,7 +1664,7 @@ function TraerSaldoPagoAdelantado(){
 }
 
 
-function TraerCuentaBancariaPorSucursal(){
+function TraerCuentaBancariaPorSucursal(CodLibro){
     const parametros = {
         method: 'POST',
         headers: {
@@ -1640,12 +1679,12 @@ function TraerCuentaBancariaPorSucursal(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria(cuentas)
+                LlenarCuentaBancaria(cuentas,CodLibro)
             } 
         })
 }
 
-function TraerCuentasBancariasXIdClienteProveedor(){
+function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
     const parametros = {
         method: 'POST',
         headers: {
@@ -1661,7 +1700,7 @@ function TraerCuentasBancariasXIdClienteProveedor(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria_(cuentas)
+                LlenarCuentaBancaria_(cuentas,CodLibro)
             } 
         })
 }
