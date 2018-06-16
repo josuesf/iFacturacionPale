@@ -145,7 +145,7 @@ function Ver() {
     
         dp.onTimeRangeSelected = function (args) {
             ModalRegistroReserva(args)
-    
+             
     
             /*var modal = new DayPilot.Modal();
             modal.closed = function() {
@@ -279,6 +279,10 @@ function Ver() {
     $(window).resize(function(){
         AjustarTamanio()
     });
+
+    $('#modal-superior').on('hidden.bs.modal', function () { 
+        dp.clearSelection();
+    })  
  
    
     /*var dp = new DayPilot.Scheduler("dp");
