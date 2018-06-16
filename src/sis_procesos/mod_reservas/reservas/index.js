@@ -84,6 +84,8 @@ function Ver() {
         nav.init(); 
         dp = new DayPilot.Scheduler("dp")
         dp.locale = "es-es";
+        dp.timeRangeSelectingStartEndEnabled = true
+        dp.eventMovingStartEndFormat = "MMMM d, yyyy";
         dp.startDate = nav.selectionDay.value
         dp.days = nav.startDate.daysInMonth() 
         dp.cellDuration = 1440
@@ -91,7 +93,8 @@ function Ver() {
             dp.cellWidthSpec = 'Fixed'; 
         }else{
             dp.cellWidthSpec = 'Auto';
-        }   
+        }  
+        
         dp.eventDeleteHandling = "Update"
         dp.timeHeaders = [
             { groupBy: "Month", format: "MMMM yyyy" },
@@ -261,7 +264,6 @@ function Ver() {
             ]
     
         }
-    
     
         dp.init()
     
@@ -501,6 +503,16 @@ function ModalRegistroReserva(datos) {
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laNacionalidad">Nacionalidad</label>
+                                                <select class="form-control" id="Nacionalidad">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div> 
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
