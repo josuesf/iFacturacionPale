@@ -187,7 +187,7 @@ function Ver() {
                         js: function(r) {
                             /*var modal = new DayPilot.Modal();
                             modal.onClosed = function(args) {
-                                loadResources();
+                                cargarResources();
                             };
                             modal.showUrl("room_edit.php?id=" + r.id);*/
                         },
@@ -267,7 +267,7 @@ function Ver() {
     
         dp.init()
     
-        loadResources()
+        cargarResources()
         loadEvents()
          
     }else{
@@ -619,7 +619,7 @@ function ModalRegistroReserva(datos) {
     $('#modal-superior').modal()
 }
 
-function loadResources() {
+function cargarResources() {
 
     var data = [{
         id : 'AHHHHH',
@@ -632,7 +632,7 @@ function loadResources() {
     dp.update(); 
 }
  
-function loadEvents() {
+function cargarEvents() {
     var start = dp.visibleStart();
     var end = dp.visibleEnd();
 
@@ -710,4 +710,4 @@ function LibroReservas(pCargarEfectivo) {
 
 
 
-export { LibroReservas }
+export { LibroReservas, cargarResources }

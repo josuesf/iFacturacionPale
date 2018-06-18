@@ -17,6 +17,7 @@ import { ComprobantePago } from '../sis_procesos/mod_compras/comprobante_pago'
 import { EntradasSalidas } from '../sis_procesos/mod_almacen/entradas_salidas'
 import { Cuentas } from '../sis_procesos/mod_administracion/cuentas_pagar_compra'
 import { LibroReservas } from '../sis_procesos/mod_reservas/reservas'
+import { NuevaHabitacion } from '../sis_procesos/mod_reservas/habitaciones'
 
 
 var el = yo`
@@ -29,15 +30,13 @@ var el = yo`
     </li>
     <li class="treeview">
         <a href="javascript:void(0);">
-            <i class="fa fa-home"></i> <span>Operaciones</span>
+            <span>Operaciones</span>
             <span class="pull-right-container">
             <i class="fa fa-angle-left pull-right"></i>
             </span>
         </a>
         <ul class="treeview-menu">
-            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Nueva Habitacion</a></li>
-            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check in</a></li> 
-            <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Check out</a></li>
+            <li class=""><a  href="javascript:void(0)" onclick=${() => NuevaHabitacion()}><i class="fa fa-circle-o"></i> Nueva Habitacion</a></li>
             <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Reservas</a></li>
             <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Housekeeping</a></li> 
         </ul>
