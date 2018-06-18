@@ -766,55 +766,187 @@ function AceptarConfirmacion(){
 
 function ExtornarAnular() {
     var id_Movimiento = movimiento_elegido.ID
+    var entidad = movimiento_elegido.Entidad
+    var parametros = {}
     if(ValidacionCampos('modal_error','modal_form')){ 
-        if(flagOpciones=="extornar"){
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    id_Movimiento
-                })
-            }
-            fetch(URL + '/movimientos_caja_api/extornar_movimiento', parametros)
-                .then(req => req.json())
-                .then(res => {
-                    $("#modal-justificacion").modal("hide") 
-                    //refrescar_movimientos_caja()
-                    if (res.respuesta == 'ok') { 
-                        refrescar_movimientos_caja()
-                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                    }else{
-                        toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+        if(flagOpciones=="extornar"){ 
+            switch (entidad){
+                case "CAJ_CAJA_MOVIMIENTOS":
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            id_Movimiento
+                        })
                     }
-                })
-        }else{
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    id_Movimiento
-                })
+                    fetch(URL + '/movimientos_caja_api/extornar_movimiento', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide") 
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                            }
+                        })
+                    break;
+                case "CAJ_COMPROBANTE_PAGO":
+                    break;
+                case "ALM_ALMACEN_MOV":
+                    var Id_Almacen_Mov = id_Movimiento 
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            Id_Almacen_Mov
+                        })
+                    }
+                    fetch(URL + '/movimientos_caja_api/extornar_movimiento_almacen', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide") 
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                            }
+                        })
+                    break;
+                case "CAJ_FORMA_PAGO":
+                    var id_ComprobantePago = id_Movimiento 
+                    var Item = movimiento_elegido.Item
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            id_ComprobantePago,
+                            Item
+                        })
+                    }
+                    fetch(URL + '/movimientos_caja_api/extornar_movimiento_almacen', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide") 
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                            }
+                        })
+                    break;
+
+
             }
-            fetch(URL + '/movimientos_caja_api/eliminar_movimiento', parametros)
-                .then(req => req.json())
-                .then(res => {
-                    $("#modal-justificacion").modal("hide")
-                    //refrescar_movimientos_caja()
-                    if (res.respuesta == 'ok') { 
-                        refrescar_movimientos_caja()
-                        toastr.success('Se elimino correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                    }else{
-                        toastr.error('No se pudo eliminar correctamente el comprobante','Error',{timeOut: 5000})
-                    } 
-                })
+
+
+
+            
+        }else{
+
+            switch (entidad){
+                case "CAJ_CAJA_MOVIMIENTOS":
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            id_Movimiento
+
+                        })
+                    }
+                    fetch(URL + '/movimientos_caja_api/eliminar_movimiento', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide")
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se elimino correctamente el movimiento','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo eliminar correctamente el movimiento','Error',{timeOut: 5000})
+                            } 
+                        })
+                    break;
+                case "CAJ_COMPROBANTE_PAGO":
+                    var Justificacion = $("#txtJustificacion").val() 
+                    var id_ComprobantePago = id_Movimiento
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            id_ComprobantePago,
+                            Justificacion
+                        })
+                    }
+                    fetch(URL + '/movimientos_caja_api/eliminar_movimiento', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide")
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se elimino correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo eliminar correctamente el comprobante','Error',{timeOut: 5000})
+                            } 
+                        })
+                    break;
+                case "ALM_ALMACEN_MOV": 
+                    var Id_AlmacenMov = id_Movimiento
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            Id_AlmacenMov
+                        })
+                    }
+                    fetch(URL + '/movimientos_caja_api/eliminar_movimiento_almacen', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            $("#modal-justificacion").modal("hide")
+                            //refrescar_movimientos_caja()
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se elimino correctamente el movimiento','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo eliminar correctamente el movimiento','Error',{timeOut: 5000})
+                            } 
+                        })
+                    break;
+
+            }
+
+
+            
         }
     }
 }

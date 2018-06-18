@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var {Ejecutar_Procedimientos} = require('../utility/exec_sp_sql')
+var {Ejecutar_Procedimientos, EXEC_SQL} = require('../utility/exec_sp_sql')
 // define the home page route
 router.post('/get_movimientos', function (req, res) {
     input = req.body
@@ -25,7 +25,7 @@ router.post('/get_movimientos', function (req, res) {
 router.post('/extornar_movimiento', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'id_Movimiento',valor_parametro:input.id_Movimiento},
+        {nom_parametro:'id_Movimiento',valor_parametro:parseInt(input.id_Movimiento)},
         {nom_parametro:'Cod_Caja',valor_parametro: req.app.locals.caja[0].Cod_Caja},
         {nom_parametro:'Cod_Turno',valor_parametro: req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_Usuario',valor_parametro: req.session.username}
@@ -38,16 +38,79 @@ router.post('/extornar_movimiento', function (req, res) {
 });
 
 
+router.post('/extornar_movimiento_almacen', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_AlmacenMov',valor_parametro:parseInt(input.Id_Almacen_Mov)}, 
+        {nom_parametro:'Cod_Usuario',valor_parametro: req.session.username}
+    ]
+    
+    procedimientos =[
+        {nom_respuesta:'movimientos',sp_name:'USP_ALM_ALMACEN_MOV_EXTORNAR',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+router.post('/extornar_movimiento_forma_pago', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'id_ComprobantePago',valor_parametro:parseInt(input.id_ComprobantePago)}, 
+        {nom_parametro:'Item',valor_parametro: parseInt(input.Item)}
+    ]
+    
+    procedimientos =[
+        {nom_respuesta:'movimientos',sp_name:'USP_CAJ_FORMA_PAGO_E',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
 router.post('/eliminar_movimiento', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'id_Movimiento',valor_parametro:input.id_Movimiento}
+        {nom_parametro:'id_Movimiento',valor_parametro:parseInt(input.id_Movimiento)}
     ]
     
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'usp_CAJ_CAJA_MOVIMIENTOS_E',parametros}
     ]
     Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
+router.post('/eliminar_comprobante_pago', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'id_ComprobantePago',valor_parametro:parseInt(input.id_Movimiento)},
+        {nom_parametro:'Cod_Usuario',valor_parametro: req.session.username},
+        {nom_parametro:'Justificacion',valor_parametro: input.Justificacion}
+    ]
+    
+    procedimientos =[
+        {nom_respuesta:'movimientos',sp_name:'USP_CAJ_COMPROBANTE_PAGO_E',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
+
+router.post('/eliminar_movimiento_almacen', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_AlmacenMov',valor_parametro:parseInt(input.Id_AlmacenMov)}
+    ]
+
+    EXEC_SQL('usp_ALM_ALMACEN_MOV_TXPK', parametros , function (dataMovimiento) {
+        if (dataMovimiento.error) return res.json({ respuesta: 'error' }) 
+        if (dataMovimiento.result.length>0){
+            procedimientos =[
+                {nom_respuesta:'movimientos',sp_name:'usp_ALM_ALMACEN_MOV_E',parametros}
+            ]
+            Ejecutar_Procedimientos(res,procedimientos)
+        }else{
+            return res.json({ respuesta: 'error' })
+        }
+    })
+     
 });
 
 

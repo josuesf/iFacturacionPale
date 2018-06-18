@@ -105,22 +105,25 @@ table.dataTable.no-footer {
 {
     background: White;
 }
-.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+ 
+.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left:  5px solid #d73925;
+}
+.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
+{
+    border-left: 5px solid #e08e0b; /* orange */
+}
+ 
+
+.status_clean.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
 {
     top: 2px;
     bottom: 2px;
     left: 2px;
     background-color: transparent;
-    border-left: 5px solid green; /* green */
+    border-left: 5px solid #008d4c; /* green */
     border-right: 0px none;
-}
-.status_dirty.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
-{
-    border-left:  5px solid red;
-}
-.status_cleanup.scheduler_default_rowheadercol2 .scheduler_default_rowheader_inner
-{
-    border-left: 5px solid orange; /* orange */
 }
 
 .text-white{

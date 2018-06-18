@@ -2,6 +2,12 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
+import { LibroReservas, CargarResources } from '../../mod_reservas/reservas'
+
+const fecha = new Date()
+const mes = fecha.getMonth() + 1
+const dia = fecha.getDate()
+var fecha_actual = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
 function Ver() {
     var el = yo`
@@ -28,7 +34,7 @@ function Ver() {
                     </div> 
                     <div class="col-sm-12">
                         <div class="form-group">
-                            <label id="laCapacidad">Capacidad</label>
+                            <label id="laCapacidad">Capacidad Camas</label>
                             <input type="number" class="form-control required" id="Capacidad" value="1">
                         </div>
                     </div>  
@@ -103,11 +109,23 @@ function Ver() {
 }
  
 function GuardarHabitacion(){
-    console.log($(".select-multiple").val())
+    //console.log($(".select-multiple").val())
 
     if (ValidacionCampos("modal_error_habitacion","modal_form_habitacion")){
-
-        var Cliente = txtBuscarCliente
+        H5_loading.show()
+        var Cod_Habitacion = $("#Cod_Habitacion").val()
+        var Des_Habitacion = $("#Descripcion").val()
+        var Id_Producto = -1
+        var Cod_EstadoHabitacion = "LIMPIO"
+        var Sobre_Booking = 0
+        var Cod_Torre= $("#Cod_Torre").val()
+        var Cod_Piso = $("#Cod_Piso").val()
+        var Flag_Activo = "ACTIVO"
+        var Cod_Tipo = $("#Cod_Tipo_Habitacion").val()
+        var Capacidad = parseInt($("#Capacidad").val())
+        var Obs_Habitacion = $("#Observaciones").val().toString().trim()
+        var Fecha = fecha_actual
+        var Detalles = $(".select-multiple").val()
         const parametros = {
             method: 'POST',
             headers: {
@@ -115,22 +133,33 @@ function GuardarHabitacion(){
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                Cliente
+                Cod_Habitacion,
+                Des_Habitacion,
+                Id_Producto,
+                Cod_EstadoHabitacion,
+                Sobre_Booking,
+                Cod_Torre,
+                Cod_Piso,
+                Flag_Activo,
+                Cod_Tipo,
+                Capacidad,
+                Obs_Habitacion,
+                Fecha,
+                Detalles
             })
         }
+        //console.log(parametros)
         fetch(URL+'/reservas_api/guardar_habitacion', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log(res)
-            if (res.respuesta == 'ok') {
-                var clientes = res.data.cliente
-                if(clientes.length > 0)
-                    AgregarTabla(clientes)
-                else  
-                    empty(document.getElementById('contenedorTablaClientes'));
+            $('#modal-proceso').modal('hide')  
+            if(res.respuesta=="ok"){
+                LibroReservas()
+            }else{
+                toastr.error('No se pudo registrar correctamente la habitacion','Error',{timeOut: 5000})
             }
-            else
-                empty(document.getElementById('contenedorTablaClientes'));
+            H5_loading.hide()
+            
         })
 
 

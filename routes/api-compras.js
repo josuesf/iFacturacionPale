@@ -12,7 +12,7 @@ router.post('/get_variable_registro_compra', function (req, res) {
         {nom_parametro: 'Cod_Liro', valor_parametro: input.Cod_Libro}
     ]
 
-    parametros2 [
+    parametros2 = [
         {nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja}
     ]
     

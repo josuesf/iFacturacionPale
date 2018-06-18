@@ -3,6 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja' 
+import { NuevoCliente, BuscarCliente } from '../../modales'
 
 var dp = null
 var nav = null
@@ -89,6 +90,9 @@ function Ver() {
         dp.startDate = nav.selectionDay.value
         dp.days = nav.startDate.daysInMonth() 
         dp.cellDuration = 1440
+        dp.treeEnabled = true
+        dp.treePreventParentUsage = true
+
         if ($(window).width() < 1350) {  
             dp.cellWidthSpec = 'Fixed'; 
         }else{
@@ -105,9 +109,9 @@ function Ver() {
         dp.bubble = new DayPilot.Bubble({})
     
         dp.rowHeaderColumns = [
-            {title: "Habitacion", width: 30},
-            {title: "Capacidad", width: 80},
-            {title: "Estado", width: 80}
+            {title: "Habitacion", width: 70},
+            {title: "Capacidad", width: 70},
+            {title: "Estado", width: 70}
         ];
     
         dp.separators = [
@@ -137,16 +141,14 @@ function Ver() {
                 // reload all events
                 var data = this.result;
                 if (data && data.result === "OK") {
-                    loadEvents();
+                    cargarEvents();
                 }
             };
             modal.showUrl("edit.php?id=" + args.e.id());*/
         }
     
         dp.onTimeRangeSelected = function (args) {
-            ModalRegistroReserva(args)
-             
-    
+            RegistroReserva(args)
             /*var modal = new DayPilot.Modal();
             modal.closed = function() {
                 dp.clearSelection();
@@ -154,7 +156,7 @@ function Ver() {
                 // reload all events
                 var data = this.result;
                 if (data && data.result === "OK") {
-                    loadEvents();
+                    cargarEvents();
                 }
             };
             modal.showUrl("new.php?start=" + args.start + "&end=" + args.end + "&resource=" + args.resource);*/
@@ -167,15 +169,18 @@ function Ver() {
                 return count + " cama" + (count > 1 ? "s" : "");
             };
     
-            args.resource.columns[0].html = beds(args.resource.capacity);
-            args.resource.columns[1].html = args.resource.status;
+            args.resource.columns[0].html = args.resource.capacity==undefined?"":beds(args.resource.capacity);
+            args.resource.columns[1].html = args.resource.status; 
             switch (args.resource.status) {
-                case "Dirty":
+                case "SUCIO":
                     args.resource.cssClass = "status_dirty";
-                    break;
-                case "Cleanup":
+                    break
+                case "POR LIMPIAR":
                     args.resource.cssClass = "status_cleanup";
-                    break;
+                    break
+                case "LIMPIO":
+                    args.resource.cssClass = "status_clean";
+                    break
             }
     
             args.resource.areas = [{
@@ -211,11 +216,11 @@ function Ver() {
                     var in2days = today.addDays(1);
     
                     if (start < in2days) { 
-                        args.e.backColor = '#dd4b39'
+                        args.e.backColor = '#cc0000'
                         args.e.toolTip = 'Expired (not confirmed in time)'
                     }
                     else {
-                        args.e.backColor = '#e08e0b'
+                        args.e.backColor = '#e69138'
                         args.e.toolTip = 'New';
                     }
                     break;
@@ -223,11 +228,11 @@ function Ver() {
                     var arrivalDeadline = today.addHours(18);
     
                     if (start < today || (start.getDatePart() === today.getDatePart() && now > arrivalDeadline)) { // must arrive before 6 pm
-                        args.e.backColor = '#dd4b39'
+                        args.e.backColor = '#cc0000'
                         args.e.toolTip = 'Late arrival'
                     }
                     else {
-                        args.e.backColor = '#008d4c'
+                        args.e.backColor = '#6aa84f'
                         args.e.toolTip = "Confirmed"
                     }
                     break;
@@ -235,17 +240,17 @@ function Ver() {
                     var checkoutDeadline = today.addHours(10);
     
                     if (end < today || (end.getDatePart() === today.getDatePart() && now > checkoutDeadline)) { // must checkout before 10 am
-                        args.e.backColor = '#dd4b39';  // red
+                        args.e.backColor = '#cc0000';  // red
                         args.e.toolTip = "Late checkout";
                     }
                     else
                     {
-                        args.e.backColor = "#367fa9";  // blue
+                        args.e.backColor = "#3c78d8";  // blue
                         args.e.toolTip = "Arrived";
                     }
                     break;
                 case 'CheckedOut': // checked out
-                    args.e.backColor = "#cbccce";
+                    args.e.backColor = "#1b1c1d";
                     args.e.toolTip = "Checked out";
                     break;
                 default:
@@ -266,9 +271,6 @@ function Ver() {
         }
     
         dp.init()
-    
-        cargarResources()
-        loadEvents()
          
     }else{
         $("#idReservas").click()
@@ -280,9 +282,9 @@ function Ver() {
         AjustarTamanio()
     });
 
-    $('#modal-superior').on('hidden.bs.modal', function () { 
-        dp.clearSelection();
-    })  
+    
+    CargarResources()
+    CargarEvents()
  
    
     /*var dp = new DayPilot.Scheduler("dp");
@@ -469,7 +471,8 @@ function Ver() {
 }
 
 
-function ModalRegistroReserva(datos) {
+function VerRegistroReserva(variables) {
+    global.objCliente = ''
     var el = yo`
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -495,15 +498,43 @@ function ModalRegistroReserva(datos) {
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label id="laDuracion">Duracion : ${new DayPilot.Date(datos.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(datos.end.value).toString("dddd d MMMM yyyy", "es-es")}</label> 
+                                                <label id="laDuracion">Duracion : ${new DayPilot.Date(variables.args.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(variables.args.end.value).toString("dddd d MMMM yyyy", "es-es")}</label> 
                                             </div>
                                         </div>
                                     </div>
+                                   
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <select id="Cod_TipoDoc" class="form-control input-sm">
+                                                    ${variables.documentos.map(e=>
+                                                        (e.Cod_TipoDoc==1 || e.Cod_TipoDoc == 7)?
+                                                            yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`
+                                                        :
+                                                            yo``
+                                                    )}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group"> 
+                                                <input type="text" id="Nro_Documento" class="form-control input-sm required">
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label id="laCliente">Cliente</label>
-                                                <input type="text" class="form-control" id="Cliente">
+                                                <div class="input-group input-group-sm">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-success" id="AgregarCliente"  onclick=${()=>NuevoCliente(variables.documentos)}>
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" id="Cliente" class="form-control required" data-id=null>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -512,7 +543,9 @@ function ModalRegistroReserva(datos) {
                                             <div class="form-group">
                                                 <label id="laNacionalidad">Nacionalidad</label>
                                                 <select class="form-control" id="Nacionalidad">
-
+                                                    ${variables.paises.map(e=> 
+                                                        yo`<option style="text-transform:uppercase" value="${e.Cod_Pais}">${e.Nom_Pais}</option>`
+                                                    )}
                                                 </select>
                                             </div>
                                         </div>
@@ -576,7 +609,7 @@ function ModalRegistroReserva(datos) {
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label id="laTipoHabitacion">Tipo de Habitacion</label>
+                                                <label id="laTipoHabitacion">Tipo de Habitacion : ${variables.datos_habitacion.tipo_habitacion}</label>
                                             </div>
                                         </div>
                                     </div>                                    
@@ -584,8 +617,10 @@ function ModalRegistroReserva(datos) {
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <label id="laCantidad">Cantidad</label>
-                                                <select class="form-control" id="Cantidad">
-
+                                                <select class="form-control" id="Cantidad" onchange=${()=>CambioCantidad(variables.datos_habitacion.precio)}>
+                                                    ${Array(variables.datos_habitacion.cantidad).fill(null).map((u, i) => 
+                                                        yo`<option value="${i+1}">${i+1}</option>`
+                                                    )}
                                                 </select>
                                             </div>
                                         </div>
@@ -593,21 +628,40 @@ function ModalRegistroReserva(datos) {
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
-                                                <label id="laPrecio">Precio</label>
-                                                <input type="text" class="form-control" id="Precio">
+                                                <label>Moneda: </label>
+                                                <select id="Cod_Moneda" class="form-control input-sm">
+                                                    ${variables.monedas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
+                                                </select>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laPrecio">Precio</label>
+                                                <input type="number" class="form-control" id="Precio" value=${variables.datos_habitacion.precio}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 text-right">
+                                            <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
+                                            <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
-  
-                     
+                    <div class="row">
+                        <div class="col-sm-12 text-right">
+                              <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
+                              <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Reservar</button> 
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick=${()=>ConfirmarReserva(variables)}>Reservar</button> 
                     <button type="button" class="btn btn-warning" data-dismiss="modal">Reservar temporalmente</button> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
@@ -617,22 +671,95 @@ function ModalRegistroReserva(datos) {
     var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
     $('#modal-superior').modal()
+    $('#modal-superior').on('hidden.bs.modal', function () {
+        dp.clearSelection();
+    })  
+
 }
 
-function cargarResources() {
 
-    var data = [{
-        id : 'AHHHHH',
-        name : 'PRUEBA DE HABITACION',
-        capacity : '20',
-        status : 'Dirty'
-    }]
+function BuscarClienteDoc() {
+}
+
+function CambioCantidad(precio){
+    try{
+    $("#Precio").val(parseFloat($("#Precio").val())*parseInt($("#Cantidad").val()))
+    }catch(e){
+        $("#Precio").val(precio)
+    }
+}
+
+function ConfirmarReserva(variables){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+        })
+    }
+    fetch(URL + '/reservas_api/guardar_reserva', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            console.log(res)
+        })
+}
+
+function RegistroReserva(args){ 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+        })
+    }
+    fetch(URL + '/reservas_api/get_variables_reserva', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            var variables = res.data
+            var datos_habitacion = {
+                tipo_habitacion: "DOBLE",
+                cantidad : 2,
+                precio : 12
+            }
+           
+            variables['args'] = args
+            variables['datos_habitacion'] = datos_habitacion
+            VerRegistroReserva(variables)
+        })
+}
+
+function CargarResources() {
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+        })
+    }
+    fetch(URL + '/reservas_api/get_habitaciones', parametros)
+        .then(req => req.json())
+        .then(res => {
+            DataHabitaciones(res.data.habitaciones,function(list){
+                dp.resources = [
+                    { name: list[0].tipo, id: list[0].Cod_Tipo, expanded: true,eventHeight:25, children:list[0].list},
+                    { name: list[1].tipo, id: list[1].Cod_Tipo, expanded: true,eventHeight:25, children:list[1].list},
+                    { name: list[2].tipo, id: list[2].Cod_Tipo, expanded: true,eventHeight:25, children:list[2].list},
+                ]
+                dp.update()
+            })
+           
+        })
  
-    dp.resources = data;
-    dp.update(); 
 }
  
-function cargarEvents() {
+function CargarEvents() {
     var start = dp.visibleStart();
     var end = dp.visibleEnd();
 
@@ -670,6 +797,46 @@ function AjustarTamanio(){
         dp.cellWidthSpec = 'Auto';
     }    
 } 
+
+function DataHabitaciones(data,callback){
+    //console.log(data)
+    var listTipos = []
+    var listS = []
+    var listM = []
+    var listD = []
+    for(var i = 0; i < data.length; i++) {
+        var obj = data[i] 
+        if(obj.Cod_Tipo == "TH002")
+            listS.push({
+                id:obj.Cod_Habitacion,
+                name : obj.Cod_Habitacion + " " + obj.Des_Habitacion,
+                capacity:obj.Capacidad,
+                status: obj.Cod_EstadoHabitacion
+            })
+        else{
+            if(obj.Cod_Tipo == "TH001"){
+                listD.push({
+                    id:obj.Cod_Habitacion,
+                    name : obj.Cod_Habitacion + " " + obj.Des_Habitacion,
+                    capacity:obj.Capacidad,
+                    status: obj.Cod_EstadoHabitacion
+                })
+            }else{
+                listM.push({
+                    id:obj.Cod_Habitacion,
+                    name : obj.Cod_Habitacion + " " + obj.Des_Habitacion,
+                    capacity:obj.Capacidad,
+                    status: obj.Cod_EstadoHabitacion
+                })
+            }
+        }
+        
+    }
+    listTipos.push({tipo:'Simple',Cod_Tipo:'TH002',list:listS})
+    listTipos.push({tipo:'Doble',Cod_Tipo:'TH001',list:listD})
+    listTipos.push({tipo:'Matrimonial',Cod_Tipo:'TH003',list:listM})
+    callback(listTipos)
+}
 
 function LibroReservas(pCargarEfectivo) {
     H5_loading.show();
@@ -710,4 +877,4 @@ function LibroReservas(pCargarEfectivo) {
 
 
 
-export { LibroReservas, cargarResources }
+export { LibroReservas }
