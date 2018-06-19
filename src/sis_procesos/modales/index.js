@@ -152,9 +152,9 @@ function NuevoCliente(documentos) {
                     </button>
                     <h4 class="modal-title"><strong>Nuevo Cliente</strong></h4>
                 </div>
-                <div class="modal-body" id="modal_form">
+                <div class="modal-body" id="modal_form_nuevo_cliente">
                     <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
+                        <div id="modal_error_nuevo_cliente" class="callout callout-danger hidden">
                             <p> Es necesario llenar los campos marcados con rojo</p>
                         </div>
                     </div>
@@ -359,7 +359,7 @@ function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
 }
 
 function GuardarNuevoCliente(){
-    if(ValidacionCampos("modal_error","modal_form")){
+    if(ValidacionCampos("modal_error_nuevo_cliente","modal_form_nuevo_cliente")){
         H5_loading.show();
         var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
         var Nro_Documento = $("#Nro_Documento_NC").val()

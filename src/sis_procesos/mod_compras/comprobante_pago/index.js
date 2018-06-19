@@ -8,6 +8,7 @@ import { ConvertirCadena } from '../../../../utility/tools'
 var listaFormaPago = []
 var obs_xml = null
 var aSaldo = 0
+var aMonto = 0 
 var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
@@ -622,14 +623,14 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                                     :
                                                     yo`
                                                         <div class="col-md-6">
-                                                            <input  checked="checked" id="Cod_FormaPago" type="radio" name="Cod_FormaPago" value="mastercard" />
-                                                            <label class="drinkcard-cc mastercard"for="Cod_FormaPago"></label>
+                                                            <input  checked="checked" id="Cod_FormaPago_MasterCard" type="radio" name="Cod_FormaPago_Modal" value="mastercard" />
+                                                            <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal"></label>
                                                         </div>`
                                                     :
                                                     yo`
                                                         <div class="col-md-6">
-                                                            <input  checked="checked" id="Cod_FormaPago" type="radio" name="Cod_FormaPago" value="visa" />
-                                                            <label class="drinkcard-cc visa"for="Cod_FormaPago"></label>
+                                                            <input  checked="checked" id="Cod_FormaPago_Visa" type="radio" name="Cod_FormaPago_Modal" value="visa" />
+                                                            <label class="drinkcard-cc visa"for="Cod_FormaPago_Modal"></label>
                                                         </div>`
                                                 }
                                             `)}
@@ -757,7 +758,8 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                 </div>
             </div>
         </div>`
-
+    
+    aMonto = (parseFloat(Monto)*parseFloat(Tipo_Cambio)).toFixed(2)
     var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
     $('#modal-otros-procesos').modal()   
@@ -1016,7 +1018,7 @@ function AbrirModalFormasPago(variables,fecha_actual){
     fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
         .then(req => req.json())
         .then(res => {
-            console.log(res.data)
+            //console.log(res.data)
             variables['tipos_cambios']=res.data.tipos_cambios
             if (res.respuesta == 'ok') {
                 VerModalFormasPago(variables,0,Tipo_Cambio,parseFloat(Gran_Total)/parseFloat(Tipo_Cambio),Cod_Moneda)
@@ -1146,7 +1148,7 @@ function CalcularTotal(CodLibro,variables){
             var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
             Suma = Suma - Suma * porcDescuentoglobal
 
-            $("#subtotal").val(Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100))
+            $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
             $("#Impuesto").val(parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
         }else{
             $("#subtotal").val(Suma)
@@ -1169,7 +1171,8 @@ function CalcularTotal(CodLibro,variables){
 
 function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
     if($("#divCredito").css("display")=="block"){
-        var SumaTotal = 0 
+        var SumaTotal = 0
+
         /*for (int i = 0; i < dgvFormasPago.Rows.Count; i++)
         {
             SumaTotales += Math.Round(decimal.Parse(dgvFormasPago.Rows[i].Cells["Total"].Tag.ToString()), 2);
@@ -1192,11 +1195,7 @@ function AsignarSeries(idFila,CodTipoComprobante){
     var Cantidad = parseFloat($("tr#"+idFila).find("td.Cantidad").find("input").val())
     var Series = JSON.parse($("tr#"+idFila).find("td.Series").find("input").val())
     var NroDias = CodTipoComprobante=="14"?60:0
-    var Stock = CodTipoComprobante=="14"?0:1
-    /*var Cantidad = parseFloat($("#"+idFila).find("td.Cantidad").find("input").val())
-    var Series = JSON.parse($("#"+idFila).find("td.Series").find("input").val())
-    var NroDias = CodTipoComprobante=="NE"?30:0
-    var Stock = CodTipoComprobante=="NE"?0:1*/
+    var Stock = CodTipoComprobante=="14"?0:1 
     if(Id_Producto!=null && Id_Producto!="")
         AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,null,Stock)
 }
@@ -1222,13 +1221,17 @@ function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){
     }
 }
 
-function OcultarCompletarSaldo(Cod_Moneda){
+function LlenarFormasPago(){
+
+}
+
+function OcultarCompletarSaldo(Cod_Moneda){ 
     var  _Cod_Moneda = ""
-    if($('input[name=Cod_Moneda]:checked').val() == 'soles')
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'soles')
         _Cod_Moneda = "PEN"
-    if($('input[name=Cod_Moneda]:checked').val() == 'dolares')
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'dolares')
         _Cod_Moneda = "USD"
-    if($('input[name=Cod_Moneda]:checked').val() == 'euros')
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'euros')
         _Cod_Moneda = "EUR"
 
     if((_Cod_Moneda==Cod_Moneda || _Cod_Moneda=="PEN") && aSaldo!=0)
@@ -1248,7 +1251,7 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
                 $("#divTipoCambioGlobal").css("display","none")
                 $("#Tipo_Cambio_Global").val(1)
             }
-
+            LlenarFormasPago()
             CalcularSaldo(Cod_Moneda,Tipo_Cambio)
             $("#btnAceptar").css("display","none")
             OcultarCompletarSaldo(Cod_Moneda)

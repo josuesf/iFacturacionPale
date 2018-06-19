@@ -7,6 +7,7 @@ import { NuevoCliente, BuscarCliente } from '../../modales'
 
 var dp = null
 var nav = null
+var _MS_PER_DAY = 1000 * 60 * 60 * 24;
  
 function Ver() { 
     if ($("ul#tabs").find("li > a#idReservas").length<=0){
@@ -518,7 +519,7 @@ function VerRegistroReserva(variables) {
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group"> 
-                                                <input type="text" id="Nro_Documento" class="form-control input-sm required">
+                                                <input type="text" id="Nro_Documento" class="form-control input-sm required" onblur="${() => BuscarClienteDoc()}">
                                             </div>
                                         </div>
                                     </div>
@@ -534,6 +535,11 @@ function VerRegistroReserva(variables) {
                                                         </button>
                                                     </div>
                                                     <input type="text" id="Cliente" class="form-control required" data-id=null>
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-info" id="BuscarCliente"  onclick=${()=>BuscarCliente("Cliente","Nro_Documento","001")}>
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -612,7 +618,17 @@ function VerRegistroReserva(variables) {
                                                 <label id="laTipoHabitacion">Tipo de Habitacion : ${variables.datos_habitacion.tipo_habitacion}</label>
                                             </div>
                                         </div>
-                                    </div>                                    
+                                    </div>  
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label id="laTarifa">Tarifa</label>
+                                                <select class="form-control" id="Tarifa" onchange=${()=>CambioTarifa()}>
+                                                    ${variables.datos_habitacion.tarifas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Tarifa}">${e.Des_Tarifa}</option>`)}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>                                   
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">
@@ -645,8 +661,8 @@ function VerRegistroReserva(variables) {
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-12 text-right">
-                                            <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
-                                            <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
+                                            <a href="javascript:void(0);" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
+                                            <a href="javascript:void(0);" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
                                         </div>
                                     </div>
                                 </div>
@@ -655,30 +671,68 @@ function VerRegistroReserva(variables) {
                     </div>
                     <div class="row">
                         <div class="col-sm-12 text-right">
-                              <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
-                              <a href="!#" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
+                              <a href="javascript:void(0);" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Unica Persona</a>                      
+                              <a href="javascript:void(0);" style="font-style: oblique;border-right: 1px solid;padding-right: 5px;padding-left: 5px;font-size: medium;">Grupo</a>                      
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick=${()=>ConfirmarReserva(variables)}>Reservar</button> 
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Reservar temporalmente</button> 
+                    <button type="button" class="btn btn-success" onclick=${()=>ConfirmarReserva(variables)}>Reservar</button> 
+                    <button type="button" class="btn btn-warning">Reservar temporalmente</button> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`
 
-    var modal_proceso = document.getElementById('modal-superior');
+    var modal_proceso = document.getElementById('modal-proceso');
     empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-proceso').modal()
+    $('#modal-proceso').on('hidden.bs.modal', function () {
         dp.clearSelection();
     })  
 
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente").val(global.objCliente.Cliente)
+            $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+        }
+    })
 }
 
-
 function BuscarClienteDoc() {
+    var Nro_Documento = document.getElementById('Nro_Documento').value
+    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
+    var Cod_TipoCliente =  "001"
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
+        })
+    }
+    fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
+                global.objCliente = res.data.cliente[0]
+
+                if(global.objCliente !='' && global.objCliente){
+                    $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+                    $("#Cliente").val(global.objCliente.Cliente)
+                    $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                    $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+                     
+                } 
+
+            }
+            H5_loading.hide()
+        })
 }
 
 function CambioCantidad(precio){
@@ -689,7 +743,108 @@ function CambioCantidad(precio){
     }
 }
 
+ 
+ 
+function dateDiffInDays(a, b) { 
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
 function ConfirmarReserva(variables){
+    console.log(variables)
+    var Cod_Reserva = "R0001"
+    var Cod_Habitacion = variables.args.resource
+    var Id_Huesped = parseInt($("#Cliente").attr("data-id"))
+    var Cod_TipoHuesped = null
+    var Item = 0
+    var Cod_Tarifa = $("#Tarifa").val()
+    var Monto = $("#Precio").val()
+    var Des_Reserva = $("#Des_Reserva").val()
+    var Cod_Moneda = $("#Cod_Moneda").val()
+    var Cod_TipoReserva = "TR0001"
+    //new DayPilot.Date(variables.args.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(variables.args.end.value).toString("dddd d MMMM yyyy", "es-es")
+    //var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var Fecha_Inicio = new DayPilot.Date(variables.args.start.value).toString("yyyy-mm-d", "es-es")
+    var Fecha_Fin = new DayPilot.Date(variables.args.end.value).toString("yyyy-mm-d", "es-es")
+    var Cod_EstadoReserva = "RESERVADO"
+    var Nro_Adultos = $("#NroAdultos").val()
+    var Nro_ninos = $("#NroNinios").val()
+    var Nro_infantes = $("#NroInfantes").val()
+    var CheckIn = null
+    var CheckedOut = null
+    var timeDiff = Math.abs(newDa.getTime() - date1.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+    var Duracion = dateDiffInDays(new Date(Fecha_Fin), new Date(Fecha_Inicio));
+    var Preferencias = null
+	var ExtraCamas = 0
+	var Proposito = null
+	var Cod_Recurso = "CR001"
+	var Cod_TipoRecurso = "CTR001" 
+	var Cod_TipoLlegada = null
+	var Detalle_Llegada = null
+	var FechaHora_Llegada = null
+	var Cod_TipoPartida = null
+	var Detalle_Partida = null
+	var FechaHora_Partida = null
+	var Numero_Tarjeta = null
+	var Cod_TipoTarjeta = null
+	var Fecha_Vencimiento = null
+	var CVC = null
+	var Cod_EntidadFinanciera = null
+	var Nro_Deposito = null 
+	var Fecha_Cancelacion = null
+	var Motivo_Cancelacion = null
+	var Obs_Reserva = null
+	var Cod_Grupo = null
+	
+    /*
+
+    @Cod_Reserva varchar(32),
+	@Cod_Habitacion varchar(32),
+	@Id_Huesped int,
+	@Cod_TipoHuesped varchar(32),
+	@Item int,
+	@Cod_Tarifa varchar(32),
+	@Monto numeric(38,2),
+	@Des_Reserva varchar(500),
+	@Cod_Moneda varchar(32),
+	@Cod_TipoReserva varchar(32),
+	@Fecha_Inicio datetime,
+	@Fecha_Fin datetime,
+	@Cod_EstadoReserva varchar(32),
+	@Nro_Adultos int,
+	@Nro_ninos int,
+	@Nro_infantes int,
+	@CheckIn datetime,
+	@CheckOut datetime,
+	@Duracion int,
+	@Preferencias varchar(1024),
+	@ExtraCamas int,
+	@Proposito varchar(1024),
+	@Cod_Recurso varchar(32),
+	@Cod_TipoRecurso varchar(32), 
+	@Cod_TipoLlegada varchar(32),
+	@Detalle_Llegada varchar(500),
+	@FechaHora_Llegada datetime,
+	@Cod_TipoPartida varchar(30),
+	@Detalle_Partida varchar(500),
+	@FechaHora_Partida datetime,
+	@Numero_Tarjeta varchar(32),
+	@Cod_TipoTarjeta varchar(32),
+	@Fecha_Vencimiento datetime,
+	@CVC varchar(32),
+	@Cod_EntidadFinanciera varchar(32),
+	@Nro_Deposito varchar(64), 
+	@Fecha_Cancelacion datetime,
+	@Motivo_Cancelacion varchar(512),
+	@Obs_Reserva varchar(1024),
+	@Cod_Grupo varchar(32) NULL,
+	@Cod_UsuarioReg varchar(32),
+	@Fecha_Reg datetime
+
+    */
+
     const parametros = {
         method: 'POST',
         headers: {
@@ -697,6 +852,51 @@ function ConfirmarReserva(variables){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
+            Cod_Reserva,
+            Cod_Habitacion,
+            Id_Huesped,
+            Cod_TipoHuesped = null
+            Item = 0
+            Cod_Tarifa = $("#Tarifa").val()
+            Monto = $("#Precio").val()
+            Des_Reserva = $("#Des_Reserva").val()
+            Cod_Moneda = $("#Cod_Moneda").val()
+            Cod_TipoReserva = "TR0001"
+            //new DayPilot.Date(variables.args.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(variables.args.end.value).toString("dddd d MMMM yyyy", "es-es")
+            //var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+            var Fecha_Inicio = new DayPilot.Date(variables.args.start.value).toString("yyyy-mm-d", "es-es")
+            var Fecha_Fin = new DayPilot.Date(variables.args.end.value).toString("yyyy-mm-d", "es-es")
+            var Cod_EstadoReserva = "RESERVADO"
+            var Nro_Adultos = $("#NroAdultos").val()
+            var Nro_ninos = $("#NroNinios").val()
+            var Nro_infantes = $("#NroInfantes").val()
+            var CheckIn = null
+            var CheckedOut = null
+            var timeDiff = Math.abs(newDa.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            var Duracion = dateDiffInDays(new Date(Fecha_Fin), new Date(Fecha_Inicio));
+            var Preferencias = null
+            var ExtraCamas = 0
+            var Proposito = null
+            var Cod_Recurso = "CR001"
+            var Cod_TipoRecurso = "CTR001" 
+            var Cod_TipoLlegada = null
+            var Detalle_Llegada = null
+            var FechaHora_Llegada = null
+            var Cod_TipoPartida = null
+            var Detalle_Partida = null
+            var FechaHora_Partida = null
+            var Numero_Tarjeta = null
+            var Cod_TipoTarjeta = null
+            var Fecha_Vencimiento = null
+            var CVC = null
+            var Cod_EntidadFinanciera = null
+            var Nro_Deposito = null 
+            var Fecha_Cancelacion = null
+            var Motivo_Cancelacion = null
+            var Obs_Reserva = null
+            var Cod_Grupo = null
+            
         })
     }
     fetch(URL + '/reservas_api/guardar_reserva', parametros)
@@ -723,7 +923,21 @@ function RegistroReserva(args){
             var datos_habitacion = {
                 tipo_habitacion: "DOBLE",
                 cantidad : 2,
-                precio : 12
+                precio : 12,
+                tarifas: [
+                    {   
+                        Cod_Tarifa:'TA0001',
+                        Des_Tarifa:'Premium'
+                    },
+                    {   
+                        Cod_Tarifa:'TA0002',
+                        Des_Tarifa:'Clasica'
+                    },
+                    {   
+                        Cod_Tarifa:'TA0003',
+                        Des_Tarifa:'VIP'
+                    }
+                ]
             }
            
             variables['args'] = args
