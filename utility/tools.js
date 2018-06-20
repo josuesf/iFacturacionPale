@@ -1,6 +1,4 @@
-var sUnidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", 
-"once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve", "veinte", 
-"veintiún", "veintidos", "veintitres", "veinticuatro", "veinticinco", "veintiseis", "veintisiete", "veintiocho", "veintinueve"];
+var sUnidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiún", "veintidos", "veintitres", "veinticuatro", "veinticinco", "veintiseis", "veintisiete", "veintiocho", "veintinueve"];
 
 var sDecenas = [ "", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" ];
 
@@ -169,4 +167,57 @@ function ConvertirCadena(dNumero, TipoMoneda){
     return sResultado
 }
 
-module.exports = { ConvertirCadena }
+function UnObfuscateString(cadena){
+    if(cadena!=null && cadena!=""){ 
+        var sTemp = ""
+        var sEnd = ""
+        var sStart = ""
+        var iLoop = 0
+        var iLen = 0
+        var iMiddle = 0
+        var iRemainder = 0
+
+        var iLen = cadena.length
+        var iRemainder = iLen % 2
+        var iMiddle = parseInt(iLen / 2)
+
+        for (iLoop = iMiddle + iRemainder; iLoop >= 1; iLoop += -1){ 
+            if (iRemainder == 0){
+                sTemp += cadena.substr( (iLoop + iMiddle)-1 ,1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
+            }
+        
+            sTemp += cadena.substr(iLoop-1,1) //Strings.Mid(cadena, iLoop, 1);
+            if (iRemainder == 1 & iLoop != 1){
+                sTemp += cadena.substr((iLoop+iMiddle)-1,1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
+            }
+        }
+        return sTemp;
+    }else{
+        return "";
+    }
+}
+
+function CambiarCadenaConexion(cadena){
+    console.log(cadena)
+    /*
+        user: process.env.user_database || 'sa', // update me
+        password: process.env.password_database || 'paleC0nsult0res', // update me
+        server: process.env.server_database || 'localhost',
+        database: process.env.name_database || 'PALERPmisky'
+    */
+    if(cadena!=null && cadena!=""){
+        global.userDB = 'sa'
+        global.passwordDB = 'paleC0nsult0res'
+        global.serverDB = 'localhost'
+        global.DB = 'PALERPmisky'
+    }else{
+        global.userDB = ''
+        global.passwordDB = ''
+        global.serverDB = ''
+        global.DB = ''
+    }
+    
+}
+
+
+module.exports = { ConvertirCadena , UnObfuscateString, CambiarCadenaConexion }

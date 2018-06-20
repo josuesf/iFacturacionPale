@@ -213,49 +213,49 @@ function Ver() {
             args.e.html ="<span style='color:white;font-weight: bold;'>"+ args.e.text + " (" + start.toString("M/d/yyyy") + " - " + end.toString("M/d/yyyy") + ")" + "</span>";
             args.e.barHidden = true
             switch (args.e.status) {
-                case "New":
+                case "NUEVO":
                     var in2days = today.addDays(1);
     
                     if (start < in2days) { 
                         args.e.backColor = '#cc0000'
-                        args.e.toolTip = 'Expired (not confirmed in time)'
+                        args.e.toolTip = 'EXPIRADO (NO CONFIRMO EN LAS 24 HORAS)'
                     }
                     else {
                         args.e.backColor = '#e69138'
-                        args.e.toolTip = 'New';
+                        args.e.toolTip = 'NUEVO';
                     }
                     break;
-                case "Confirmed":
+                case "CONFIRMADO":
                     var arrivalDeadline = today.addHours(18);
     
                     if (start < today || (start.getDatePart() === today.getDatePart() && now > arrivalDeadline)) { // must arrive before 6 pm
                         args.e.backColor = '#cc0000'
-                        args.e.toolTip = 'Late arrival'
+                        args.e.toolTip = 'LLEGADA TARDIA'
                     }
                     else {
                         args.e.backColor = '#6aa84f'
-                        args.e.toolTip = "Confirmed"
+                        args.e.toolTip = "CONFIRMADO"
                     }
                     break;
-                case 'Arrived': // arrived
+                case 'CHECKIN': // arrived
                     var checkoutDeadline = today.addHours(10);
     
                     if (end < today || (end.getDatePart() === today.getDatePart() && now > checkoutDeadline)) { // must checkout before 10 am
                         args.e.backColor = '#cc0000';  // red
-                        args.e.toolTip = "Late checkout";
+                        args.e.toolTip = "REGISTRO TARDIO";
                     }
                     else
                     {
                         args.e.backColor = "#3c78d8";  // blue
-                        args.e.toolTip = "Arrived";
+                        args.e.toolTip = "CHECKIN";
                     }
                     break;
-                case 'CheckedOut': // checked out
+                case 'CHECKOUT': // checked out
                     args.e.backColor = "#1b1c1d";
-                    args.e.toolTip = "Checked out";
+                    args.e.toolTip = "CHECKOUT";
                     break;
                 default:
-                    args.e.toolTip = "Unexpected state";
+                    args.e.toolTip = "SIN ESTADO";
                     break;
             }
     
@@ -752,30 +752,25 @@ function dateDiffInDays(a, b) {
 }
 
 function ConfirmarReserva(variables){
-    console.log(variables)
-    var Cod_Reserva = "R0001"
+    var Cod_Reserva = "R0002"
     var Cod_Habitacion = variables.args.resource
     var Id_Huesped = parseInt($("#Cliente").attr("data-id"))
     var Cod_TipoHuesped = null
     var Item = 0
     var Cod_Tarifa = $("#Tarifa").val()
     var Monto = $("#Precio").val()
-    var Des_Reserva = $("#Des_Reserva").val()
+    var Des_Reserva = $("#Des_Reserva").val().trim()
     var Cod_Moneda = $("#Cod_Moneda").val()
     var Cod_TipoReserva = "TR0001"
-    //new DayPilot.Date(variables.args.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(variables.args.end.value).toString("dddd d MMMM yyyy", "es-es")
-    //var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-    var Fecha_Inicio = new DayPilot.Date(variables.args.start.value).toString("yyyy-mm-d", "es-es")
-    var Fecha_Fin = new DayPilot.Date(variables.args.end.value).toString("yyyy-mm-d", "es-es")
-    var Cod_EstadoReserva = "RESERVADO"
+    var Fecha_Inicio =  variables.args.start.value 
+    var Fecha_Fin =  variables.args.end.value 
+    var Cod_EstadoReserva = "NUEVO"
     var Nro_Adultos = $("#NroAdultos").val()
     var Nro_ninos = $("#NroNinios").val()
     var Nro_infantes = $("#NroInfantes").val()
     var CheckIn = null
     var CheckedOut = null
-    var timeDiff = Math.abs(newDa.getTime() - date1.getTime());
-    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-    var Duracion = dateDiffInDays(new Date(Fecha_Fin), new Date(Fecha_Inicio));
+    var Duracion = dateDiffInDays(new Date(new DayPilot.Date(Fecha_Inicio).toString("yyyy-MM-d", "es-es")), new Date(new DayPilot.Date(Fecha_Fin).toString("yyyy-MM-d", "es-es")))
     var Preferencias = null
 	var ExtraCamas = 0
 	var Proposito = null
@@ -797,54 +792,7 @@ function ConfirmarReserva(variables){
 	var Motivo_Cancelacion = null
 	var Obs_Reserva = null
 	var Cod_Grupo = null
-	
-    /*
-
-    @Cod_Reserva varchar(32),
-	@Cod_Habitacion varchar(32),
-	@Id_Huesped int,
-	@Cod_TipoHuesped varchar(32),
-	@Item int,
-	@Cod_Tarifa varchar(32),
-	@Monto numeric(38,2),
-	@Des_Reserva varchar(500),
-	@Cod_Moneda varchar(32),
-	@Cod_TipoReserva varchar(32),
-	@Fecha_Inicio datetime,
-	@Fecha_Fin datetime,
-	@Cod_EstadoReserva varchar(32),
-	@Nro_Adultos int,
-	@Nro_ninos int,
-	@Nro_infantes int,
-	@CheckIn datetime,
-	@CheckOut datetime,
-	@Duracion int,
-	@Preferencias varchar(1024),
-	@ExtraCamas int,
-	@Proposito varchar(1024),
-	@Cod_Recurso varchar(32),
-	@Cod_TipoRecurso varchar(32), 
-	@Cod_TipoLlegada varchar(32),
-	@Detalle_Llegada varchar(500),
-	@FechaHora_Llegada datetime,
-	@Cod_TipoPartida varchar(30),
-	@Detalle_Partida varchar(500),
-	@FechaHora_Partida datetime,
-	@Numero_Tarjeta varchar(32),
-	@Cod_TipoTarjeta varchar(32),
-	@Fecha_Vencimiento datetime,
-	@CVC varchar(32),
-	@Cod_EntidadFinanciera varchar(32),
-	@Nro_Deposito varchar(64), 
-	@Fecha_Cancelacion datetime,
-	@Motivo_Cancelacion varchar(512),
-	@Obs_Reserva varchar(1024),
-	@Cod_Grupo varchar(32) NULL,
-	@Cod_UsuarioReg varchar(32),
-	@Fecha_Reg datetime
-
-    */
-
+	 
     const parametros = {
         method: 'POST',
         headers: {
@@ -855,54 +803,54 @@ function ConfirmarReserva(variables){
             Cod_Reserva,
             Cod_Habitacion,
             Id_Huesped,
-            Cod_TipoHuesped = null
-            Item = 0
-            Cod_Tarifa = $("#Tarifa").val()
-            Monto = $("#Precio").val()
-            Des_Reserva = $("#Des_Reserva").val()
-            Cod_Moneda = $("#Cod_Moneda").val()
-            Cod_TipoReserva = "TR0001"
-            //new DayPilot.Date(variables.args.start.value).toString("dddd d MMMM yyyy", "es-es")} - ${new DayPilot.Date(variables.args.end.value).toString("dddd d MMMM yyyy", "es-es")
-            //var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-            var Fecha_Inicio = new DayPilot.Date(variables.args.start.value).toString("yyyy-mm-d", "es-es")
-            var Fecha_Fin = new DayPilot.Date(variables.args.end.value).toString("yyyy-mm-d", "es-es")
-            var Cod_EstadoReserva = "RESERVADO"
-            var Nro_Adultos = $("#NroAdultos").val()
-            var Nro_ninos = $("#NroNinios").val()
-            var Nro_infantes = $("#NroInfantes").val()
-            var CheckIn = null
-            var CheckedOut = null
-            var timeDiff = Math.abs(newDa.getTime() - date1.getTime());
-            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
-            var Duracion = dateDiffInDays(new Date(Fecha_Fin), new Date(Fecha_Inicio));
-            var Preferencias = null
-            var ExtraCamas = 0
-            var Proposito = null
-            var Cod_Recurso = "CR001"
-            var Cod_TipoRecurso = "CTR001" 
-            var Cod_TipoLlegada = null
-            var Detalle_Llegada = null
-            var FechaHora_Llegada = null
-            var Cod_TipoPartida = null
-            var Detalle_Partida = null
-            var FechaHora_Partida = null
-            var Numero_Tarjeta = null
-            var Cod_TipoTarjeta = null
-            var Fecha_Vencimiento = null
-            var CVC = null
-            var Cod_EntidadFinanciera = null
-            var Nro_Deposito = null 
-            var Fecha_Cancelacion = null
-            var Motivo_Cancelacion = null
-            var Obs_Reserva = null
-            var Cod_Grupo = null
-            
+            Cod_TipoHuesped,
+            Item,
+            Cod_Tarifa,
+            Monto,
+            Des_Reserva,
+            Cod_Moneda,
+            Cod_TipoReserva,
+            Fecha_Inicio,
+            Fecha_Fin,
+            Cod_EstadoReserva,
+            Nro_Adultos,
+            Nro_ninos,
+            Nro_infantes,
+            CheckIn,
+            CheckedOut,
+            Duracion,
+            Preferencias,
+            ExtraCamas,
+            Proposito,
+            Cod_Recurso,
+            Cod_TipoRecurso,
+            Cod_TipoLlegada,
+            Detalle_Llegada,
+            FechaHora_Llegada,
+            Cod_TipoPartida,
+            Detalle_Partida,
+            FechaHora_Partida,
+            Numero_Tarjeta,
+            Cod_TipoTarjeta,
+            Fecha_Vencimiento,
+            CVC,
+            Cod_EntidadFinanciera,
+            Nro_Deposito,
+            Fecha_Cancelacion,
+            Motivo_Cancelacion,
+            Obs_Reserva,
+            Cod_Grupo
         })
     }
     fetch(URL + '/reservas_api/guardar_reserva', parametros)
         .then(req => req.json())
         .then(res => { 
-            console.log(res)
+            $('#modal-proceso').modal("hide")
+            if(res.respuesta=="ok"){
+                CargarEvents()
+            }else{
+                toastr.error('No se pudo registrar correctamente la reserva','Error',{timeOut: 5000})
+            } 
         })
 }
 
@@ -970,25 +918,49 @@ function CargarResources() {
             })
            
         })
- 
 }
  
 function CargarEvents() {
-    var start = dp.visibleStart();
+
+    var Fecha_Inicio =  dp.visibleStart()
+    var Fecha_Fin =  dp.visibleEnd() 
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Fecha_Inicio,
+            Fecha_Fin 
+        })
+    }
+    fetch(URL + '/reservas_api/get_reservas', parametros)
+        .then(req => req.json())
+        .then(res => {  
+            DataReservas(res.data.reservas,function(list){
+                console.log(list)
+                dp.events.list = list;
+                dp.update()
+            })
+        })
+
+    /*var start = dp.visibleStart();
     var end = dp.visibleEnd();
 
     var data = [{
-        id : '1',
+        id : '101',
         text : 'PRUEBA DE HABITACION',
         start : '2018-06-01',
         end : '2018-06-12',
-        resource : 'AHHHHH',
+        resource : '101',
         bubbleHtml : "Reservation details: <br/>",
         status : 'New',
         paid : '40',
     }]  
     dp.events.list = data;
-    dp.update();    
+    dp.update();*/    
 }
 
 
@@ -1012,8 +984,25 @@ function AjustarTamanio(){
     }    
 } 
 
-function DataHabitaciones(data,callback){
-    //console.log(data)
+function DataReservas(data,callback){
+    
+    var list = [] 
+    for(var i = 0; i < data.length; i++) {
+       list.push({
+           id: data[i].Cod_Reserva,
+           text: data[i].Id_Huesped,
+           start: data[i].Fecha_Inicio,
+           end: data[i].Fecha_Fin,
+           resource: data[i].Cod_Habitacion,
+           bubbleHtml: "Detalles: <br/>"+data[i].Des_Reserva+"<br/>"+data[i].Cod_Moneda+" "+data[i].Monto,
+           status: data[i].Cod_EstadoReserva,
+           paid: '40'
+       })
+    } 
+    callback(list)
+}
+
+function DataHabitaciones(data,callback){ 
     var listTipos = []
     var listS = []
     var listM = []

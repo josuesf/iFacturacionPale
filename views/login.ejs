@@ -29,22 +29,26 @@
         </div>
         <!-- /.login-logo -->
          
-        <div class="login-box-body">
-            
+        <div class="login-box-body"> 
             <% if(typeof err != 'undefined' && err!='') { %>
-            <div class="callout callout-danger">
-                <h4>Hubo un error!</h4>
-                <p><%=err%></p>
-            </div>
+                <div class="callout callout-danger" id="divError" data-value="0">
+                    <h4>Hubo un error!</h4>
+                    <p id="textError"><%=err%></p>
+                </div>
+            <% }else{ %>
+                <div class="callout callout-danger" id="divError" data-value="1" style="display: none;">
+                    <h4>Hubo un error!</h4>
+                    <p id="textError"></p>
+                </div>
             <% } %>
             <form action="login" method="post">
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="empresa">Empresa</label>
                     <div class="col-sm-9">
-                        <select id="empresa" class="form-control"> 
+                        <select id="empresa" name="RUC" class="form-control" onchange="CambioRUC('1')"> 
                         <% if(typeof empresa != 'undefined') { %>
                             <% empresa.forEach(function(e){ %>
-                                <option value="<%=e.CadenaConexion%>"><%=e.Nom_Comercial%></option> 
+                                <option value="<%=e.RUC%>"><%=e.Nom_Comercial%></option> 
                             <% }) %>
                         <% } %>
                         </select>

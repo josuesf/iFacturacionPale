@@ -1,6 +1,5 @@
  
-
-TraerPeriodos() 
+CambioRUC("0")
 
 function TraerPeriodos(){
     var Gestion = $("#Gestion").val()
@@ -62,6 +61,63 @@ function LlenarTurnos(turnos,idSelect){
     $("#"+idSelect).html('')
     $("#"+idSelect).html(html) 
 }
+
+
+function CambioRUC(flag){
+    if(flag=="1"){
+        var RUC = $("#empresa").val()
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                RUC
+            })
+        }
+        fetch('/empresa_api/change_ruc', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=="ok"){
+                
+                    $("#divError").css("display","none")
+                    $("#textError").text("")
+                    TraerPeriodos()
+                }else{
+                    $("#divError").css("display","block")
+                    $("#textError").text("Ocurrio un error. Es necesario configurar la cadena de conexion para esta empresa, seleccione otra empresa")
+                    $("#Turno").html('')
+                    $("#Periodo").html('') 
+                }
+            })
+    }else{
+        var RUC = $("#empresa").val()
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                RUC
+            })
+        }
+        fetch('/empresa_api/change_ruc', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=="ok"){ 
+                    TraerPeriodos()
+                }else{
+                    $("#Turno").html('')
+                    $("#Periodo").html('') 
+                }
+            })
+    }
+}
+
 
 
  

@@ -11,17 +11,24 @@ router.post('/guardar_reserva',function(req,res){
     input =req.body
     parametros = [
         { nom_parametro: 'Cod_Reserva', valor_parametro: input.Cod_Reserva },
+        { nom_parametro: 'Cod_Habitacion', valor_parametro: input.Cod_Habitacion },
+        { nom_parametro: 'Id_Huesped', valor_parametro: input.Id_Huesped },
+        { nom_parametro: 'Cod_TipoHuesped', valor_parametro: input.Cod_TipoHuesped },
+        { nom_parametro: 'Item', valor_parametro: input.Item },
+        { nom_parametro: 'Cod_Tarifa', valor_parametro: input.Cod_Tarifa },
+        { nom_parametro: 'Monto', valor_parametro: input.Monto },
         { nom_parametro: 'Des_Reserva', valor_parametro: input.Des_Reserva },
         { nom_parametro: 'Cod_Moneda', valor_parametro: input.Cod_Moneda },
         { nom_parametro: 'Cod_TipoReserva', valor_parametro: input.Cod_TipoReserva },
-        { nom_parametro: 'Fecha_Limite', valor_parametro: input.Fecha_Limite },
+        { nom_parametro: 'Fecha_Inicio', valor_parametro: input.Fecha_Inicio },
+        { nom_parametro: 'Fecha_Fin', valor_parametro: input.Fecha_Fin },
         { nom_parametro: 'Cod_EstadoReserva', valor_parametro: input.Cod_EstadoReserva },
         { nom_parametro: 'Nro_Adultos', valor_parametro: input.Nro_Adultos },
         { nom_parametro: 'Nro_ninos', valor_parametro: input.Nro_ninos },
         { nom_parametro: 'Nro_infantes', valor_parametro: input.Nro_infantes },
         { nom_parametro: 'CheckIn', valor_parametro: input.CheckIn },
         { nom_parametro: 'CheckOut', valor_parametro: input.CheckOut },
-        { nom_parametro: 'Duracion', valor_parametro: req.session.username },
+        { nom_parametro: 'Duracion', valor_parametro: input.Duracion },
         { nom_parametro: 'Preferencias', valor_parametro: input.Preferencias },
         { nom_parametro: 'ExtraCamas', valor_parametro: input.ExtraCamas },
         { nom_parametro: 'Proposito', valor_parametro: input.Proposito },
@@ -39,15 +46,18 @@ router.post('/guardar_reserva',function(req,res){
         { nom_parametro: 'CVC', valor_parametro: input.CVC },
         { nom_parametro: 'Cod_EntidadFinanciera', valor_parametro: input.Cod_EntidadFinanciera },
         { nom_parametro: 'Nro_Deposito', valor_parametro: input.Nro_Deposito },
-        { nom_parametro: 'Monto', valor_parametro: input.Monto },
         { nom_parametro: 'Fecha_Cancelacion', valor_parametro: input.Fecha_Cancelacion },
         { nom_parametro: 'Motivo_Cancelacion', valor_parametro: input.Motivo_Cancelacion },
         { nom_parametro: 'Obs_Reserva', valor_parametro: input.Obs_Reserva },
         { nom_parametro: 'Cod_Grupo', valor_parametro: input.Cod_Grupo },
-        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
-        { nom_parametro: 'Fecha', valor_parametro: input.Fecha },
+        { nom_parametro: 'Cod_UsuarioReg', valor_parametro: req.session.username },
+        { nom_parametro: 'Fecha_Reg', valor_parametro: input.Fecha },
     ]
- 
+    
+    procedimientos = [
+        { nom_respuesta: 'reservas', sp_name: 'USP_RESERVA_UNICA_G', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
  
 })
 
@@ -95,6 +105,20 @@ router.post('/get_habitaciones',function(req,res){
     input =req.body
     procedimientos = [
         { nom_respuesta: 'habitaciones', sp_name: 'USP_HABITACION_TT', parametros:[]}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+ 
+
+router.post('/get_reservas',function(req,res){
+    input =req.body
+    parametros = [
+        { nom_parametro: 'Fecha_Inicio', valor_parametro: input.Fecha_Inicio },
+        { nom_parametro: 'Fecha_Fin', valor_parametro: input.Fecha_Fin },
+    ]
+    console.log(parametros)
+    procedimientos = [
+        { nom_respuesta: 'reservas', sp_name: 'USP_RESERVAS_TXFECHAS', parametros}
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
