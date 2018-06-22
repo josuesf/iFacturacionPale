@@ -89,7 +89,7 @@ function CargarVariables(req,res){
                   }else{
 
                     app.locals.CierreCompleto = app.locals.isla
-
+                    console.log(dataSaldoAnterior)
                     if(app.locals.CierreCompleto){
 
                       res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
@@ -100,7 +100,7 @@ function CargarVariables(req,res){
                                                       dataCierre: dataSaldoAnterior.result})
                     }else{
                       if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-
+                        
                         res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
                                                         caja: app.locals.caja, 
                                                         turno:req.session.turno,
@@ -158,7 +158,7 @@ app.get('/', function (req, res) {
   } else{
     if(!app.locals.apertura){
       if (req.session.caja) {
-        CargarVariables(req,res)
+        CargarVariables(req,res) 
       }else{
         errores = "No tiene asignada ninguna caja. No puede iniciar sesion en el sistema"
         res.redirect('/logout');

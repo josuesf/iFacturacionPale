@@ -116,7 +116,6 @@ router.post('/get_reservas',function(req,res){
         { nom_parametro: 'Fecha_Inicio', valor_parametro: input.Fecha_Inicio },
         { nom_parametro: 'Fecha_Fin', valor_parametro: input.Fecha_Fin },
     ]
-    console.log(parametros)
     procedimientos = [
         { nom_respuesta: 'reservas', sp_name: 'USP_RESERVAS_TXFECHAS', parametros}
     ]

@@ -121,11 +121,11 @@
                         <% if(typeof dataCierre != 'undefined') { %>
                             <tbody>
                                 <% dataCierre.forEach(function(e){ %>
-                                    <% if(e.Nom_Moneda!='OTROS'){ %>
+                                    <% if(e.Monto!='OTROS'){ %>
                                         <tr>
                                             <td class="hidden"><input type="text"  value="<%=e.Cod_Moneda%>" class="form-control" name="Cod_Moneda[]"></td>
                                             <td><input type="text"  value="<%=e.Nom_Moneda%>" class="form-control" disabled></td>
-                                            <td><input type="number" value="0" class="form-control" name="Monto_Moneda[]"></td>
+                                            <td><input type="number" value="<%=e.Monto%>" class="form-control" name="Monto_Moneda[]"></td>
                                         </tr>
                                     <% } %>
                                 <% }) %>

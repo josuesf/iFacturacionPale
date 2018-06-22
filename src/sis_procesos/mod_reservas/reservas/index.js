@@ -752,7 +752,7 @@ function dateDiffInDays(a, b) {
 }
 
 function ConfirmarReserva(variables){
-    var Cod_Reserva = "R0002"
+    var Cod_Reserva = "R0003"
     var Cod_Habitacion = variables.args.resource
     var Id_Huesped = parseInt($("#Cliente").attr("data-id"))
     var Cod_TipoHuesped = null
