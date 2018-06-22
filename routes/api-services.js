@@ -215,7 +215,7 @@ function Arquear(req,res){
     var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
     var Numero = req.body.Numero
-    var Des_ArqueoFisico = req.body.Apertura
+    var Des_ArqueoFisico = "Arqueo de "+req.app.locals.caja[0].Des_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
     var Obs_ArqueoFisico = ''
     var Fecha = fecha_format
     var Flag_Cerrado = 0
