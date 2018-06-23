@@ -1,6 +1,7 @@
 function dbConfig(){
  
     return config = {
+        
         user: process.env.user_database || global.userDB, // update me
         password: process.env.password_database || global.passwordDB, // update me
         server: process.env.server_database || global.serverDB,

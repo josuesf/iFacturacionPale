@@ -19,12 +19,6 @@ router.post('/get_by_script_productos_serv', function (req, res) {
 });
 
 
-router.post('/get_all_productos_serv', function (req, res) {
-    procedimientos =[
-        {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
-    ]
-    Ejecutar_Procedimientos(res,procedimientos)
-});
 
 router.post('/get_productos_serv', function (req, res) {
     input = req.body

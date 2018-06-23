@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var { UnObfuscateString, CambiarCadenaConexion } = require('../utility/tools')
-var { Ejecutar_Procedimientos, EXEC_SQL, EXEC_SQL_DBMaster,EXEC_QUERY_DBMaster, LOGIN_SQL } = require('../utility/exec_sp_sql')
+var { UnObfuscateString, TraerConexion } = require('../utility/tools')
+var { Ejecutar_Procedimientos, EXEC_SQL,EXEC_SQL_OUTPUT,EXEC_QUERY_DBMaster, LOGIN_SQL } = require('../utility/exec_sp_sql')
 
  
 router.post('/login_movil', function (req, res) {
@@ -11,18 +11,13 @@ router.post('/login_movil', function (req, res) {
     parametros = [
         { nom_parametro: 'RUC', valor_parametro: input.RUC },
     ] 
-
+   
     if(input.Cod_Caja==null || input.Cod_Caja==''){
-
-        if(global.userDB==''){
-            if(TraerConexion(req,res))
-                VerificarLogin(req,res)
-            else
-                return res.json({respuesta:"error"}) 
-        }else{
+        if(TraerConexion(req,res))
             VerificarLogin(req,res)
-        }
-
+        else
+            return res.json({respuesta:"error"}) 
+       
     }else{
         VerificarArqueoCaja(req,res)
     }
@@ -30,29 +25,36 @@ router.post('/login_movil', function (req, res) {
 
 
 router.post('/checking_caja', function (req, res) { 
-  
-    if(global.userDB==''){
-        if(TraerConexion(req,res))
-            VerificarArqueoCaja(req,res)
-        else
-            return res.json({respuesta:"error"}) 
-    }else{
+   
+    if(TraerConexion(req,res))
         VerificarArqueoCaja(req,res)
-    }
+    else
+        return res.json({respuesta:"error"}) 
+   
 }); 
 
 router.post('/arquear_caja', function (req, res) { 
-  
-    if(global.userDB==''){
-        if(TraerConexion(req,res)){
-            Arquear(req,res)
-        }else
-            return res.json({respuesta:"error"}) 
-    }else{
-       
-    }
+   
+    if(TraerConexion(req,res)){
+        Arquear(req,res)
+    }else
+        return res.json({respuesta:"error"}) 
+    
 }); 
 
+
+router.post('/get_all_productos_serv', function (req, res) {  
+    if(TraerConexion(req,res)){
+        procedimientos =[
+            {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
+        ]
+        Ejecutar_Procedimientos(res,procedimientos)
+          
+    }else{
+        return res.json({respuesta:"error"}) 
+    }
+}); 
+ 
 
 function VerificarArqueoCaja(req,res){
      
@@ -66,7 +68,7 @@ function VerificarArqueoCaja(req,res){
         }
 
         if(dataTurno.result.length>0){
-            req.app.locals.turno = dataTurno.result
+            //req.app.locals.turno = dataTurno.result
             p = [
                 { nom_parametro: 'Cod_Caja', valor_parametro: req.body.Cod_Caja }
             ]
@@ -77,7 +79,7 @@ function VerificarArqueoCaja(req,res){
                     return res.json({respuesta:"error"})
                 }
 
-                req.app.locals.caja = dataCaja.result
+                //req.app.locals.caja = dataCaja.result
                 p = [
                     { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
                 ] 
@@ -88,10 +90,10 @@ function VerificarArqueoCaja(req,res){
                         return res.json({respuesta:"error"})
                     }
 
-                    req.app.locals.sucursal = dataSucursal.result
+                    //req.app.locals.sucursal = dataSucursal.result
                     p = [
                         { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
-                        { nom_parametro: 'CodTurno', valor_parametro:  req.app.locals.turno[0].Cod_Turno }
+                        { nom_parametro: 'CodTurno', valor_parametro:  req.body.Cod_Turno }
                     ] 
                     EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
 
@@ -101,7 +103,7 @@ function VerificarArqueoCaja(req,res){
     
 
                         if(dataArqueoFisico.result.length<=0){
-                            req.app.locals.arqueo = dataArqueoFisico.result
+                            //req.app.locals.arqueo = dataArqueoFisico.result
                             p = [
                                 { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
                             ] 
@@ -114,7 +116,7 @@ function VerificarArqueoCaja(req,res){
 
                                 p = [
                                     { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
-                                    { nom_parametro: 'Cod_Turno', valor_parametro:  req.app.locals.turno[0].Cod_Turno }
+                                    { nom_parametro: 'Cod_Turno', valor_parametro:  req.body.Cod_Turno }
                                 ]
                                 EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
                                     
@@ -126,14 +128,14 @@ function VerificarArqueoCaja(req,res){
                                     if(dataSaldoAnterior.result.length==0){
 
 
-                                        return res.json({respuesta:"ok",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0}}}) 
+                                        return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
  
                                     }else{
  
                                         if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-                                            return res.json({respuesta:"ok",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0}}}) 
+                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
                                         }else{
-                                            return res.json({respuesta:"ok",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0}}}) 
+                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:dataSaldoAnterior.result[0].Cod_Turno}}}) 
                                         } 
                                     }
                                 })
@@ -152,7 +154,7 @@ function VerificarArqueoCaja(req,res){
                                     return res.json({respuesta:"error"})
                                 }else{
                                     req.app.locals.arqueo = dataArqueo.result
-                                    return res.json({respuesta:"ok"})
+                                    return res.json({respuesta:"ok",flag_caja_abierta:"ok"})
                                 }
                                
                             })
@@ -193,14 +195,14 @@ function VerificarLogin(req,res){
                             if (dataTurnos.err) {
                                 return res.json({respuesta:"error"})
                             }else{
-                                return res.json({respuesta:"ok",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
                             }
                         })
                     })
 
                 }else{
                     
-                    return res.json({respuesta:"ok",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:[],periodos:[],turnos:[]}}) 
+                    return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:[],periodos:[],turnos:[]}}) 
                 
                 }             
             }) 
@@ -215,7 +217,7 @@ function Arquear(req,res){
     var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
     var Numero = req.body.Numero
-    var Des_ArqueoFisico = "Arqueo de "+req.app.locals.caja[0].Des_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
+    var Des_ArqueoFisico = "Arqueo de "+req.body.Cod_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
     var Obs_ArqueoFisico = ''
     var Fecha = fecha_format
     var Flag_Cerrado = 0
@@ -236,7 +238,7 @@ function Arquear(req,res){
     ]
 
     EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
-        if(dataArqueoFisico.err) return res.json({respuesta:"error"}) 
+        if(dataArqueoFisico.err) return res.json({respuesta:"error"+dataArqueoFisico.err}) 
          
             var parametros = [
                 { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
@@ -277,28 +279,6 @@ function TraerGestion(){
     return pGestion
 }
  
-function TraerConexion(req, res){
-    parametros = [
-        { nom_parametro: 'RUC', valor_parametro: req.body.RUC },
-    ] 
-
-    EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {
-        if (m.err) {
-            return false
-        }else{
-            if(m.result.length>0){
-                if(m.result[0].CadenaConexion!=null){
-                    CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
-                    return true
-                }else{
-                    return false
-                }
-            }else{
-                return false
-            }
-        }
-    }) 
-}
  
  
 module.exports = router;

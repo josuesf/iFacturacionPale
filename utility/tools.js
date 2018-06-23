@@ -1,3 +1,6 @@
+
+var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
+
 var sUnidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiún", "veintidos", "veintitres", "veinticuatro", "veinticinco", "veintiseis", "veintisiete", "veintiocho", "veintinueve"];
 
 var sDecenas = [ "", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" ];
@@ -219,5 +222,29 @@ function CambiarCadenaConexion(cadena){
     
 }
 
+ 
+function TraerConexion(req, res){
+    parametros = [
+        { nom_parametro: 'RUC', valor_parametro: req.body.RUC },
+    ] 
 
-module.exports = { ConvertirCadena , UnObfuscateString, CambiarCadenaConexion }
+    EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {
+        if (m.err) {
+            return false;
+        }else{
+            if(m.result.length>0){
+                if(m.result[0].CadenaConexion!=null){
+                    CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion));
+                    return true;
+                }else{
+                    return false;
+                }
+            }else{
+                return false;
+            }
+        }
+    }) 
+}
+
+
+module.exports = { ConvertirCadena , UnObfuscateString,TraerConexion }
