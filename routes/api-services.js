@@ -166,25 +166,10 @@ function VerificarArqueoCaja(req,res){
                                 }else{
                                     req.app.locals.arqueo = dataArqueo.result
                                     if(dataArqueo.result[0].Flag_Cerrado){
-
-                                        
-                                        EXEC_SQL('USP_VIS_PERIODOS_TraerPorFechaGestion',TraerGestion(), function (dataPeriodos) {
-                                            if (dataPeriodos.err)
-                                                return res.json({respuesta:"error"})  
-                                            pPeriodo = [
-                                                {nom_parametro: 'Cod_Periodo', valor_parametro:dataPeriodos.result[0].Cod_Periodo},
-                                            ]
-                                            EXEC_SQL('USP_CAJ_TURNO_ATENCION_TXCodPeriodo', pPeriodo, function (dataTurnos) {
-                                                if (dataTurnos.err) {
-                                                    return res.json({respuesta:"error"})
-                                                }else{
-
-                                                    return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'', data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
+ 
+                                        return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'', data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
                                                     //return res.json({respuesta:"ok",flag_caja_abierta:_flag_caja_abierta,data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
-                                                }
-                                            })
-                                        })
-
+                                                 
                                         //VerificarLogin(req,res,"no")
                                     }else{
                                         return res.json({respuesta:"ok",flag_caja_abierta:"ok",data:{numero:'', data_cierre:{flag_apertura:'ABIERTO',saldo:0,Cod_Turno:''}}}) 

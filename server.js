@@ -88,7 +88,7 @@ function CargarVariables(req,res){
                     }) 
                   }else{
 
-                    app.locals.CierreCompleto = app.locals.isla
+                    app.locals.CierreCompleto = app.locals.isla 
                     if(app.locals.CierreCompleto){
 
                       res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
