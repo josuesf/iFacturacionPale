@@ -10,54 +10,65 @@ router.post('/login_movil', function (req, res) {
     input = req.body 
     parametros = [
         { nom_parametro: 'RUC', valor_parametro: input.RUC },
-    ] 
-   
-    if(input.Cod_Caja==null || input.Cod_Caja==''){
-        if(TraerConexion(req,res))
+    ]  
+
+    //if(input.Cod_Caja==null || input.Cod_Caja==''){
+    TraerConexion(req,res,function(flag){
+        console.log(flag)
+        if(flag)
             VerificarLogin(req,res)
         else
             return res.json({respuesta:"error"}) 
-       
-    }else{
-        VerificarArqueoCaja(req,res)
-    }
+    });
+    /*}else{
+        TraerConexion(req,res,function(flag){
+            if(flag)
+                VerificarArqueoCaja(req,res)
+            else
+                return res.json({respuesta:"error"}) 
+        });
+    }*/
 }); 
 
 
-router.post('/checking_caja', function (req, res) { 
-   
-    if(TraerConexion(req,res))
-        VerificarArqueoCaja(req,res)
-    else
-        return res.json({respuesta:"error"}) 
-   
+router.post('/checking_caja', function (req, res) {
+    TraerConexion(req,res,function(flag){
+        if(flag)
+            VerificarArqueoCaja(req,res)
+        else
+            return res.json({respuesta:"error"}) 
+    });
 }); 
 
 router.post('/arquear_caja', function (req, res) { 
    
-    if(TraerConexion(req,res)){
-        Arquear(req,res)
-    }else
-        return res.json({respuesta:"error"}) 
+    TraerConexion(req,res,function(flag){
+        if(flag)
+            Arquear(req,res)
+        else
+            return res.json({respuesta:"error"}) 
+    });
     
 }); 
 
 
-router.post('/get_all_productos_serv', function (req, res) {  
-    if(TraerConexion(req,res)){
-        procedimientos =[
-            {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
-        ]
-        Ejecutar_Procedimientos(res,procedimientos)
-          
-    }else{
-        return res.json({respuesta:"error"}) 
-    }
+router.post('/get_all_productos_serv', function (req, res) {
+    
+    TraerConexion(req,res,function(flag){
+        if(flag){
+            procedimientos =[
+                {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
+            ]
+            Ejecutar_Procedimientos(res,procedimientos)
+        }else
+            return res.json({respuesta:"error"}) 
+    });
+
 }); 
  
 
 function VerificarArqueoCaja(req,res){
-     
+    // console.log(req.body)
     p = [
         { nom_parametro: 'Cod_Turno', valor_parametro: req.body.Cod_Turno }
     ]
@@ -100,7 +111,7 @@ function VerificarArqueoCaja(req,res){
                         if (dataArqueoFisico.err) {
                             return res.json({respuesta:"error"})
                         }
-    
+                         
 
                         if(dataArqueoFisico.result.length<=0){
                             //req.app.locals.arqueo = dataArqueoFisico.result
@@ -154,7 +165,31 @@ function VerificarArqueoCaja(req,res){
                                     return res.json({respuesta:"error"})
                                 }else{
                                     req.app.locals.arqueo = dataArqueo.result
-                                    return res.json({respuesta:"ok",flag_caja_abierta:"ok"})
+                                    if(dataArqueo.result[0].Flag_Cerrado){
+
+                                        
+                                        EXEC_SQL('USP_VIS_PERIODOS_TraerPorFechaGestion',TraerGestion(), function (dataPeriodos) {
+                                            if (dataPeriodos.err)
+                                                return res.json({respuesta:"error"})  
+                                            pPeriodo = [
+                                                {nom_parametro: 'Cod_Periodo', valor_parametro:dataPeriodos.result[0].Cod_Periodo},
+                                            ]
+                                            EXEC_SQL('USP_CAJ_TURNO_ATENCION_TXCodPeriodo', pPeriodo, function (dataTurnos) {
+                                                if (dataTurnos.err) {
+                                                    return res.json({respuesta:"error"})
+                                                }else{
+
+                                                    return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'', data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
+                                                    //return res.json({respuesta:"ok",flag_caja_abierta:_flag_caja_abierta,data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                                }
+                                            })
+                                        })
+
+                                        //VerificarLogin(req,res,"no")
+                                    }else{
+                                        return res.json({respuesta:"ok",flag_caja_abierta:"ok",data:{numero:'', data_cierre:{flag_apertura:'ABIERTO',saldo:0,Cod_Turno:''}}}) 
+                                        //return res.json({respuesta:"ok",flag_caja_abierta:"ok"})
+                                    }
                                 }
                                
                             })
@@ -193,9 +228,154 @@ function VerificarLogin(req,res){
                         ]
                         EXEC_SQL('USP_CAJ_TURNO_ATENCION_TXCodPeriodo', pPeriodo, function (dataTurnos) {
                             if (dataTurnos.err) {
-                                return res.json({respuesta:"error"})
-                            }else{
-                                return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                return res.json({respuesta:"error1"})
+                            }else{ 
+                                if(req.body.Cod_Caja!='' && req.body.Cod_Turno!='' && req.body.Cod_Caja!=undefined && req.body.Cod_Turno!=undefined){
+                                   
+                                    p = [
+                                        { nom_parametro: 'Cod_Turno', valor_parametro: req.body.Cod_Turno }
+                                    ]
+                                    EXEC_SQL('usp_CAJ_TURNO_ATENCION_TXPK', p , function (dataTurno) {
+                                        
+                                        if (dataTurno.err) {
+                                            return res.json({respuesta:"error"})
+                                        }
+                                
+                                        if(dataTurno.result.length>0){ 
+                                            p = [
+                                                { nom_parametro: 'Cod_Caja', valor_parametro: req.body.Cod_Caja }
+                                            ]
+                                
+                                            EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
+                                
+                                                if (dataCaja.err) {
+                                                    return res.json({respuesta:"error"})
+                                                }
+                                
+                                                //req.app.locals.caja = dataCaja.result
+                                                p = [
+                                                    { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
+                                                ] 
+                                
+                                                EXEC_SQL('usp_PRI_SUCURSAL_TXPK', p , function (dataSucursal) {
+                                
+                                                    if (dataSucursal.err) {
+                                                        return res.json({respuesta:"error"})
+                                                    }
+                                
+                                                    //req.app.locals.sucursal = dataSucursal.result
+                                                    p = [
+                                                        { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
+                                                        { nom_parametro: 'CodTurno', valor_parametro:  req.body.Cod_Turno }
+                                                    ] 
+                                                    EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+                                
+                                                        if (dataArqueoFisico.err) {
+                                                            return res.json({respuesta:"error"})
+                                                        }
+                                                        
+                                
+                                                        if(dataArqueoFisico.result.length<=0){
+                                                            //req.app.locals.arqueo = dataArqueoFisico.result
+                                                            p = [
+                                                                { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
+                                                            ] 
+                                
+                                                            EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
+                                
+                                                                if (dataNumero.err) {
+                                                                    return res.json({respuesta:"error"})
+                                                                }
+                                
+                                                                p = [
+                                                                    { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
+                                                                    { nom_parametro: 'Cod_Turno', valor_parametro:  req.body.Cod_Turno }
+                                                                ]
+                                                                EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
+                                                                    
+                                                                    
+                                                                    if (dataSaldoAnterior.err) {
+                                                                        return res.json({respuesta:"error"})
+                                                                    }
+                                
+                                                                    if(dataSaldoAnterior.result.length==0){
+                                
+                                                                        return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
+                                                                        //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
+                                
+                                                                    }else{
+                                
+                                                                        if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
+                                                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
+                                                                            //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
+                                                                        }else{
+                                                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:dataSaldoAnterior.result[0].Cod_Turno}}}) 
+                                                                            //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:dataSaldoAnterior.result[0].Cod_Turno}}}) 
+                                                                        } 
+                                                                    }
+                                                                })
+                                                            })
+                                
+                                                        
+                                                        }else{
+                                                            
+                                                            p = [
+                                                                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].id_ArqueoFisico }
+                                                            ] 
+                                                            
+                                                            EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
+                                                                
+                                                                if (dataArqueo.err) {
+                                                                    return res.json({respuesta:"error"})
+                                                                }else{
+                                                                    req.app.locals.arqueo = dataArqueo.result
+                                                                    if(dataArqueo.result[0].Flag_Cerrado){
+                                
+                                                                        
+                                                                        EXEC_SQL('USP_VIS_PERIODOS_TraerPorFechaGestion',TraerGestion(), function (dataPeriodos) {
+                                                                            if (dataPeriodos.err)
+                                                                                return res.json({respuesta:"error"})  
+                                                                            pPeriodo = [
+                                                                                {nom_parametro: 'Cod_Periodo', valor_parametro:dataPeriodos.result[0].Cod_Periodo},
+                                                                            ]
+                                                                            EXEC_SQL('USP_CAJ_TURNO_ATENCION_TXCodPeriodo', pPeriodo, function (dataTurnos) {
+                                                                                if (dataTurnos.err) {
+                                                                                    return res.json({respuesta:"error"})
+                                                                                }else{
+                                                                                    
+                                                                                    return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'-1',Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
+                                                                                    //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'', data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
+                                                                                    //return res.json({respuesta:"ok",flag_caja_abierta:_flag_caja_abierta,data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                                                                }
+                                                                            })
+                                                                        })
+                                
+                                                                        //VerificarLogin(req,res,"no")
+                                                                    }else{
+                                                                        return res.json({respuesta:"ok",flag_caja_abierta:"ok",data:{numero:'-1',Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'ABIERTO',saldo:0,Cod_Turno:''}}}) 
+                                                                        //return res.json({respuesta:"ok",flag_caja_abierta:"ok",data:{numero:'', data_cierre:{flag_apertura:'ABIERTO',saldo:0,Cod_Turno:''}}}) 
+                                                                        //return res.json({respuesta:"ok",flag_caja_abierta:"ok"})
+                                                                    }
+                                                                }
+                                                            
+                                                            })
+                                                        }
+                                                    
+                                                    })
+                                                })
+                                            })
+                                        }else{
+                                            res.json({respuesta:"error"})
+                                        }                  
+                                    })
+
+
+
+                                }else{
+                                    return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                }
+                                
+                                //return res.json({respuesta:"ok",flag_caja_abierta:_flag_caja_abierta,data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
                             }
                         })
                     })
@@ -209,6 +389,7 @@ function VerificarLogin(req,res){
         }
     })
 }
+
 
 function Arquear(req,res){
     const fecha = new Date()

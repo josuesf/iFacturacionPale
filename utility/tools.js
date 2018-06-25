@@ -91,12 +91,10 @@ function ConvertirCadena(sNumero){
     sResultado += Numeros(dNumAux, 1)
 
 
-    //Enseguida verificamos si contiene punto, si es así, los convertimos a texto.
     sAux = dNumero.toString()
 
     if (sAux.indexOf(".") >= 0)
         sResultado += ObtenerDecimales(sAux)
-        //Las siguientes líneas convierten el primer caracter a mayúscula.
         sAux = sResultado
         x = sResultado[1].toString()
         sResultado = x.toString()
@@ -131,21 +129,6 @@ function ConvertirCadena(dNumero, TipoMoneda){
 
     dNumAux = dNumero % 1000
     sResultado += Numeros(dNumAux, 1)
-
-
-    ////Enseguida verificamos si contiene punto, si es así, los convertimos a texto.
-    //sAux = dNumero.toString();
-
-    //if (sAux.IndexOf(".") >= 0)
-    //    sResultado += ObtenerDecimales(sAux);
-
-    ////Las siguientes líneas convierten el primer caracter a mayúscula.
-    //sAux = sResultado;
-    //x = char.ToUpper(sResultado[1]);
-    //sResultado = x.toString();
-
-    //for (int i = 2; i < sAux.Length; i++)
-    //    sResultado += sAux[i].toString();
     sAux = dNumero.toString()
     var sNumPuntos = []
     var Numero = 0
@@ -223,7 +206,7 @@ function CambiarCadenaConexion(cadena){
 }
 
  
-function TraerConexion(req, res){
+function TraerConexion(req, res, callback){
     parametros = [
         { nom_parametro: 'RUC', valor_parametro: req.body.RUC },
     ] 
@@ -235,16 +218,19 @@ function TraerConexion(req, res){
             if(m.result.length>0){
                 if(m.result[0].CadenaConexion!=null){
                     CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion));
-                    return true;
+                    callback(true)
+                    //return true;
                 }else{
-                    return false;
+                    callback(false)
+                    //return false;
                 }
             }else{
-                return false;
+                callback(false)
+                //return false;
             }
         }
     }) 
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString,TraerConexion }
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion }
