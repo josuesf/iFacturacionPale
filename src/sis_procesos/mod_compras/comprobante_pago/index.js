@@ -496,6 +496,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
             if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
+                console.log(global.objCliente.Limite_Credito)
                 $("input[name=optCredito][value='credito']").prop("checked",true);
                 $("#divCredito").css("display","block")
             }
@@ -559,7 +560,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                     <h4 class="modal-title"><strong>Formas de Pago</strong></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row" id="divCredito">
+                    <div class="row" id="divCreditoFormasPago">
                         <div class="col-md-12 text-right"> 
                             <button type="button" class="btn btn-default btn-sm">
                                 <i class="fa fa-money text-green"></i> Credito
@@ -807,7 +808,7 @@ function AbrirModalPercepcion(CodLibro,variables){
 
 function AgregarFilaTabla(CodLibro,variables){
     if($("#Nom_Producto").val().trim()!=""){
-        if($("#Nom_Producto").attr("data-id")!=null){
+        if($("#Nom_Producto").attr("data-id")!=null && $("#Nom_Producto").attr("data-id")!="null" &&  $("#Nom_Producto").attr("data-id")!=""){
 
             var Id_Producto = $("#Nom_Producto").attr("data-id")
             var Cod_Producto = $("#Cod_Producto").val()==null?"": $("#Cod_Producto").val()
@@ -1243,7 +1244,7 @@ function OcultarCompletarSaldo(Cod_Moneda){
 function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cambio){
     switch (amodo) {
         case 0:
-            $("#divCredito").css("display","none")
+            $("#divCreditoFormasPago").css("display","none")
 
             if(Cod_Moneda!="PEN"){
                 $("#divTipoCambioGlobal").css("display","block")
