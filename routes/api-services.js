@@ -12,7 +12,7 @@ router.post('/login_movil', function (req, res) {
         { nom_parametro: 'RUC', valor_parametro: input.RUC },
     ]  
 
-    //if(input.Cod_Caja==null || input.Cod_Caja==''){
+    
     TraerConexion(req,res,function(flag){
         console.log(flag)
         if(flag)
@@ -20,14 +20,7 @@ router.post('/login_movil', function (req, res) {
         else
             return res.json({respuesta:"error"}) 
     });
-    /*}else{
-        TraerConexion(req,res,function(flag){
-            if(flag)
-                VerificarArqueoCaja(req,res)
-            else
-                return res.json({respuesta:"error"}) 
-        });
-    }*/
+     
 }); 
 
 
@@ -51,6 +44,17 @@ router.post('/arquear_caja', function (req, res) {
     
 }); 
 
+router.post('/venta_simple', function (req, res) { 
+   
+    TraerConexion(req,res,function(flag){
+        if(flag)
+            VentaSimple(req,res)
+        else
+            return res.json({respuesta:"error"}) 
+    });
+    
+}); 
+
 
 router.post('/get_all_productos_serv', function (req, res) {
     
@@ -65,10 +69,13 @@ router.post('/get_all_productos_serv', function (req, res) {
     });
 
 }); 
- 
 
-function VerificarArqueoCaja(req,res){
-    // console.log(req.body)
+
+function VentaSimple(req,res){
+    
+}
+
+function VerificarArqueoCaja(req,res){ 
     p = [
         { nom_parametro: 'Cod_Turno', valor_parametro: req.body.Cod_Turno }
     ]
@@ -78,8 +85,7 @@ function VerificarArqueoCaja(req,res){
             return res.json({respuesta:"error"})
         }
 
-        if(dataTurno.result.length>0){
-            //req.app.locals.turno = dataTurno.result
+        if(dataTurno.result.length>0){ 
             p = [
                 { nom_parametro: 'Cod_Caja', valor_parametro: req.body.Cod_Caja }
             ]
@@ -89,8 +95,7 @@ function VerificarArqueoCaja(req,res){
                 if (dataCaja.err) {
                     return res.json({respuesta:"error"})
                 }
-
-                //req.app.locals.caja = dataCaja.result
+ 
                 p = [
                     { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
                 ] 

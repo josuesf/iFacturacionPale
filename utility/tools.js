@@ -185,17 +185,16 @@ function UnObfuscateString(cadena){
 
 function CambiarCadenaConexion(cadena){
     console.log(cadena)
-    /*
-        user: process.env.user_database || 'sa', // update me
-        password: process.env.password_database || 'paleC0nsult0res', // update me
-        server: process.env.server_database || 'localhost',
-        database: process.env.name_database || 'PALERPmisky'
-    */
+    var posicionDataSource = cadena.search("Data Source=")
+    var posicionInitial = cadena.search(";Initial Catalog=")
+    var posicionUser = cadena.search(";user id=")
+    var posicionPassword = cadena.search("; password=") 
+   
     if(cadena!=null && cadena!=""){
-        global.userDB = 'sa'
-        global.passwordDB = 'paleC0nsult0res'
-        global.serverDB = 'localhost'
-        global.DB = 'PALERPmisky'
+        global.userDB = cadena.substring(posicionUser+";user id=".length,posicionPassword)
+        global.passwordDB = cadena.substring(posicionPassword+"; password=".length,cadena.length-1)
+        global.serverDB = cadena.substring(posicionDataSource+"Data Source=".length,posicionInitial).indexOf('.\\')!=-1?'localhost':cadena.substring(posicionDataSource+"Data Source=".length,posicionInitial)
+        global.DB = cadena.substring(posicionInitial+";Initial Catalog=".length,posicionUser)
     }else{
         global.userDB = ''
         global.passwordDB = ''
@@ -218,15 +217,12 @@ function TraerConexion(req, res, callback){
             if(m.result.length>0){
                 if(m.result[0].CadenaConexion!=null){
                     CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion));
-                    callback(true)
-                    //return true;
+                    callback(true) 
                 }else{
-                    callback(false)
-                    //return false;
+                    callback(false) 
                 }
             }else{
-                callback(false)
-                //return false;
+                callback(false) 
             }
         }
     }) 

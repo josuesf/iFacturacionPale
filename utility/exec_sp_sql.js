@@ -103,7 +103,6 @@ var Ejecutar_Procedimientos = function (res, procedimientos,respuesta_previa) {
     Ejecutar_SP_SQL(res,procedimientos,0,respuesta_previa)
 }
 var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
-    console.log(dbConfig())
     var dbConn = new sql.Connection(dbConfig());
     dbConn.connect(function (err) {
         if (err) {

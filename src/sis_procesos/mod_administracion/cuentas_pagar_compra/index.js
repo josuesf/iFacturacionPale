@@ -360,7 +360,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-primary">${CodLibro=='08'?'Pagar':'Cobrar'}</button>
+                <button class="btn btn-primary" onclick=${()=>VerGuardar(CodLibro)}>${CodLibro=='08'?'Pagar':'Cobrar'}</button>
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -429,6 +429,33 @@ function AgregarTabla(comprobantes){
     empty(document.getElementById('divTablaComprobantes')).appendChild(el);
 }
 
+function CargarModalConfirmacionCuentas(CodLibro){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <p>Esta seguro que desea realizar esta operacion?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick=${()=>AceptarConfirmacionCuenta(CodLibro)}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+
+
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+}
+
 function LlenarCuentaBancaria(cuentas,CodLibro){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
@@ -459,6 +486,48 @@ function LlenarCheques(cheques){
      
     $("#Cuenta_CajaBancos").html('')
     $("#Cuenta_CajaBancos").html(html) 
+}
+
+function EsValido(){
+    var MontoMaximo = 0
+     
+   if($("#divCuentaCajaBancos").css("display")=="block" && $("#Cuenta_CajaBancos").val()!='' && $("#Cuenta_CajaBancos").val()!=null){
+       try{
+            MontoMaximo = parseFloat($("#Cuenta_CajaBancos").val().split('[', ']')[1])
+       }catch(e){
+            MontoMaximo = 0
+       }
+   }
+
+   if( $("#Cliente").attr("data-id")!=null &&  $("#Cliente").attr("data-id")!=''){
+       if($("#tablaComprobantes > tbody tr").length > 0){
+           if(MontoMaximo==0 || parseFloat($("#TotalAmortizar").val())<= MontoMaximo){
+               if(parseFloat($("#TotalAmortizar").val())!=0){
+                    return true
+               }else{
+                    toastr.error('El Monto a Amortizar debe ser Mayor a CERO (0.00).','Error',{timeOut: 5000})
+                    $("#TotalAmortizar").focus()
+               }    
+           }else{
+               if($("#Cod_FormaPago").val().toString()=="998"){
+                    toastr.error('Debe de selecionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante.','Error',{timeOut: 5000})
+               }else{
+                   if($("#Cod_FormaPago").val().toString()=="007"){
+                        toastr.error('Debe de selecionar un Cheque que sea superior o igual al Monto Total de Comprobante.','Error',{timeOut: 5000})
+                   }
+               }
+               $("#Cuenta_CajaBancos").focus()
+           }
+       }else{
+            toastr.error('Debe ingresar como minimo un Detalle en el Comprobante.','Error',{timeOut: 5000})
+       }
+   }else{
+        toastr.error('Debe selecionar un cliente si por defecto dejarlo en CLIENTES VARIOS.','Error',{timeOut: 5000})
+        $("#Cliente").focus()
+   }
+
+   return false
+
 }
 
 function CalcularTotal(){
@@ -768,6 +837,40 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
                 }
             } 
         })
+}
+
+function VerGuardar(CodLibro){
+    try{
+        if(EsValido()){
+            CargarModalConfirmacionCuentas(CodLibro)
+        }
+    }catch(e){
+        toastr.error('Error al agregar nuevo elemento, intentelo mas luego.\n\n','Error',{timeOut: 5000})
+    }
+}
+
+function EstablecerCamposEntidad(CodLibro){
+
+}
+
+function AceptarConfirmacionCuenta(CodLibro){
+    EstablecerCamposEntidad(CodLibro)
+    var i = 0
+    var Facturas = ""
+    $('#tablaComprobantes > tbody tr').each(function () {
+        if(parseFloat($(this).find("td").eq(6).find("input").val())>0){
+            if(parseFloat($(this).find("td").eq(5).text()) == parseFloat($(this).find("td").eq(6).find("input").val()) ){
+                
+            }
+        }
+        /*SumaAmortiza += parseFloat($(this).find("td").eq(6).find("input").val())
+        if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val()))>0)
+            $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val())))
+        else
+            $(this).find("td").eq(7).text("0.00")
+        
+        SumaTotal += parseFloat($(this).find("td").eq(5).text())    */        
+    });
 }
  
 function Cuentas(Cod_Libro) {
