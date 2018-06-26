@@ -386,7 +386,7 @@ function Arquear(req,res){
     var Des_ArqueoFisico = "Arqueo de "+req.body.Cod_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
     var Obs_ArqueoFisico = ''
     var Fecha = fecha_format
-    var Flag_Cerrado = 0
+    var Flag_Cerrado = req.body.Flag_Cerrado
     var Cod_Usuario = req.body.Cod_Usuario
     var Cod_Caja = req.body.Cod_Caja
     var Cod_Turno =  req.body.Cod_Turno
