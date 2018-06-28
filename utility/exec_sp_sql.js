@@ -165,6 +165,28 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
     });
 }
 
+var EXEC_QUERY = function (query, parametros, next) {
+    var dbConn = new sql.Connection(dbConfig());
+    dbConn.connect(function (err) {
+        if (err) {
+            return next({err})
+        }
+        var request = new sql.Request(dbConn);
+        const param = parametros
+        for (i = 0; i < param.length; i++) {
+            request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
+        }
+        request.query(query, function (err, result) {
+            dbConn.close()
+            if (err) {
+                return next({err})
+            }
+            next({result:result})
+        });
+
+    });
+}
+
 
 var EXEC_SQL = function (sp_name, parametros, next) {
     var dbConn = new sql.Connection(dbConfig());
@@ -218,4 +240,4 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
     });
 }
 
-module.exports = { Ejecutar_Procedimientos,LOGIN_SQL,EXEC_SQL,EXEC_SQL_OUTPUT, Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster }
+module.exports = { Ejecutar_Procedimientos,LOGIN_SQL,EXEC_SQL,EXEC_SQL_OUTPUT, Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster, EXEC_QUERY }

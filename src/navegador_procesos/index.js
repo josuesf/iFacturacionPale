@@ -95,7 +95,12 @@ var el = yo`
     <li class="header">Administracion</li>
     <li>
         <a href="javascript:void(0);" onclick=${()=>Cuentas('08')}>
-           <span> Cuentas por Cobrar</span>   
+           <span> Cuentas por Pagar</span>   
+        </a>
+    </li>
+    <li>
+        <a href="javascript:void(0);" onclick=${()=>Cuentas('14')}>
+        <span> Cuentas por Cobrar</span>   
         </a>
     </li>
 

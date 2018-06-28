@@ -847,13 +847,9 @@ function AgregarFilaTabla(CodLibro,variables){
                 <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
                 <td>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Elegir una accion <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu"> 
-                        <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
-                        <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                    </ul>
+                    <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-flat"><i class="fa fa-tasks"></i></a>
+                     
+                    <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 </td>
             </tr>`

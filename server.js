@@ -2,7 +2,9 @@ var { LOGIN_SQL,
       Ejecutar_Procedimientos_DBMaster, 
       EXEC_SQL_DBMaster, 
       EXEC_QUERY_DBMaster,
-      EXEC_SQL,EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
+      EXEC_QUERY,
+      EXEC_SQL,
+      EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
 
 var { UnObfuscateString, CambiarCadenaConexion } = require('./utility/tools')
 
@@ -438,6 +440,8 @@ var recepciones_api = require('./routes/api-recepciones')
 var series_api = require('./routes/api-series')
 var reservas_api = require('./routes/api-reservas')
 var services_api = require('./routes/api-services')
+var formas_pago_api = require('./routes/api-formas-pago')
+var comprobantes_pago_api = require('./routes/api-comprobantes-pago')
 
 // Routes Procesos
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
@@ -474,6 +478,8 @@ app.use('/recepciones_api', recepciones_api)
 app.use('/series_api', series_api)
 app.use('/reservas_api', reservas_api)
 app.use('/ws', services_api)
+app.use('/formas_pago_api', formas_pago_api)
+app.use('/comprobantes_pago_api', comprobantes_pago_api)
 
 //Listen Server
 var server = app.listen(3000, function (err) {

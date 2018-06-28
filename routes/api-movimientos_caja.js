@@ -22,6 +22,44 @@ router.post('/get_movimientos', function (req, res) {
     Ejecutar_Procedimientos(res,procedimientos)
 });
 
+
+router.post('/guardar_movimiento_caja', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'id_Movimiento', valor_parametro:  -1},
+        {nom_parametro: 'Cod_Caja', valor_parametro:  req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro: 'Cod_Turno', valor_parametro:  req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro: 'Id_Concepto', valor_parametro:  input.Id_Concepto},
+        {nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor},
+        {nom_parametro: 'Cliente', valor_parametro: input.Cliente},
+        {nom_parametro: 'Des_Movimiento', valor_parametro: input.Des_Movimiento},
+        {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro: 'Serie', valor_parametro: input.Serie},
+        {nom_parametro: 'Numero', valor_parametro: input.Numero},
+        {nom_parametro: 'Fecha', valor_parametro: input.Fecha},
+        {nom_parametro: 'Tipo_Cambio', valor_parametro: input.Tipo_Cambio},
+        {nom_parametro: 'Ingreso', valor_parametro: input.Ingreso},
+        {nom_parametro: 'Cod_MonedaIng', valor_parametro: input.Cod_MonedaIng},
+        {nom_parametro: 'Egreso', valor_parametro: input.Egreso},
+        {nom_parametro: 'Cod_MonedaEgr', valor_parametro: input.Cod_MonedaEgr},
+        {nom_parametro: 'Flag_Extornado', valor_parametro: input.Flag_Extornado},
+        {nom_parametro: 'Cod_UsuarioAct', valor_parametro: req.session.username},
+        {nom_parametro: 'Fecha_Aut', valor_parametro: new Date()},
+        {nom_parametro: 'Obs_Movimiento', valor_parametro: input.Obs_Movimiento},
+        {nom_parametro: 'Id_MovimientoRef', valor_parametro: input.id_MovimientoRef},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'movimiento', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
+
 router.post('/extornar_movimiento', function (req, res) {
     input = req.body
     parametros = [

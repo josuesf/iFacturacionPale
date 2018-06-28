@@ -330,7 +330,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Comentarios:</label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="comentarios" class="form-control-plaintext input-sm form-control">
+                                                <input type="text" id="Comentarios" class="form-control-plaintext input-sm form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -848,32 +848,290 @@ function VerGuardar(CodLibro){
         toastr.error('Error al agregar nuevo elemento, intentelo mas luego.\n\n','Error',{timeOut: 5000})
     }
 }
+ 
 
-function EstablecerCamposEntidad(CodLibro){
+function GuardarMovimientoBancario(Facturas,CodLibro){
+
+    var Cod_CuentaBancaria =$("#Cod_CuentaBancaria").val()
+    var Nro_Operacion = $("#Cuenta_CajaBancos option:selected").text()
+    var Des_Movimiento = (CodLibro == "08"?"POR PAGO DEL(DE LOS) COMPROBANTE(S): " + Facturas: "POR COBRO DE LO(S) COMPROBANTE(S): " + Facturas)
+    var Cod_TipoOperacionBancaria = ''
+    if($("#Cod_FormaPago").val()=="007"){
+        Cod_TipoOperacionBancaria = "006"
+    }else{
+        Cod_TipoOperacionBancaria = "001"
+    }
+
+    var Fecha = $("#Fecha").val()
+    var Monto = (CodLibro=="08"?-1:1)*parseFloat($("#TotalAmortizar").val())
+    var TipoCambio = $("#Tipo_Cambio").val()
+    var Cod_Plantilla = $("#Tipo_Cambio").val()
+    var Nro_Cheque = 0 
+    if($("#Cod_FormaPago").val()=="007"){
+        Nro_Cheque = "00000000"+ $("#Cuenta_CajaBancos option:selected").text()
+    }
+    var Beneficiario = $("#Cliente").val()
+    var Id_ComprobantePago=-1
+    var Obs_Movimiento = $("#Comentarios").val()
+     
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_CuentaBancaria,
+            Nro_Operacion,
+            Des_Movimiento,
+            Cod_TipoOperacionBancaria,
+            Fecha,
+            Monto,
+            TipoCambio,
+            Cod_Plantilla,
+            Nro_Cheque,
+            Beneficiario,
+            Id_ComprobantePago,
+            Obs_Movimiento,
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/guardar_cuenta_movimiento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log(res)
+        }) 
 
 }
 
+function GuardarMovimientoCaja(Facturas,CodLibro){
+    var Id_Concepto = (CodLibro == "08"?6000:7000)
+    var Id_ClienteProveedor = $("#Cliente").attr("data-id")
+    var Cliente = $("#Cliente").val()
+    var Des_Movimiento = (CodLibro == "08"?"POR PAGO DEL(DE LOS) COMPROBANTE(S): " + Facturas: "POR COBRO DE LO(S) COMPROBANTE(S): " + Facturas)
+    var Cod_TipoComprobante = (CodLibro == "08"?"RE":"RI")
+    var Serie = $("#Serie").val()
+    var Fecha = $("#Fecha").val()
+    var Tipo_Cambio = $("#Tipo_Cambio").val()
+    var Ingreso = 0
+    var Cod_MonedaIng=""
+    var Egreso = 0
+    var Cod_MonedaEgr=""
+    if(CodLibro!="08"){
+        Ingreso = $("#TotalAmortizar").val()
+        Cod_MonedaIng = $("#Cod_Moneda").val()
+        Egreso = 0
+        Cod_MonedaEgr = $("#Cod_Moneda").val()
+    }else{
+        Ingreso = 0
+        Cod_MonedaIng = $("#Cod_Moneda").val()
+        Egreso = $("#TotalAmortizar").val()
+        Cod_MonedaEgr = $("#Cod_Moneda").val()
+    }
+    var Flag_Extornado = '0'
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var Fecha_Aut = fecha_format
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Concepto,
+            Id_ClienteProveedor,
+            Cliente,
+            Des_Movimiento,
+            Cod_TipoComprobante,
+            Serie,
+            Fecha,
+            Tipo_Cambio,
+            Ingreso,
+            Cod_MonedaIng,
+            Egreso,
+            Cod_MonedaEgr,
+            Flag_Extornado,
+            Fecha_Aut
+        })
+    }
+    fetch(URL + '/movimientos_caja_api/guardar_movimiento_caja', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log(res)
+        }) 
+ 
+}
+
 function AceptarConfirmacionCuenta(CodLibro){
-    EstablecerCamposEntidad(CodLibro)
+    
+    var Facturas = ""
+    // ------- Inicio EstablecerCamposEntidad
+
+    var Fecha_FormaPago = $("#Fecha").val()
+    var Cod_TipoFormaPago_FormaPago = $("#Cod_FormaPago").val()
+    var Id_Movimiento_FormaPago = 0
+    var Cuenta_CajaBancos_FormaPago = ''
+    if ($("#Cuenta_CajaBancos").val() != null && $("#Cuenta_CajaBancos").val()!=''){
+        Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos").val());
+        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos option:selected").text().split('(', ')')[1];
+    }
+    else if ($("#divCuentaCajaBancos").css("display")=="display")
+        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos option:selected").text().trim();
+    
+    if ($("#Cod_CuentaBancaria").val() == "003"){
+        Cuenta_CajaBancos_FormaPago =  $("#Cuenta_CajaBancos option:selected").text()
+    }
+    var Des_FormaPago_FormaPago = $("#Comentarios").val().trim(); 
+    var TipoCambio_FormaPago = $("#Tipo_Cambio").val()
+    var Cod_Moneda_FormaPago = $("#Cod_Moneda").val()             
+    
+    // ------- Fin EstablecerCamposEntidad
+
     var i = 0
     var Facturas = ""
     $('#tablaComprobantes > tbody tr').each(function () {
         if(parseFloat($(this).find("td").eq(6).find("input").val())>0){
             if(parseFloat($(this).find("td").eq(5).text()) == parseFloat($(this).find("td").eq(6).find("input").val()) ){
-                
-            }
-        }
-        /*SumaAmortiza += parseFloat($(this).find("td").eq(6).find("input").val())
-        if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val()))>0)
-            $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val())))
-        else
-            $(this).find("td").eq(7).text("0.00")
-        
-        SumaTotal += parseFloat($(this).find("td").eq(5).text())    */        
+
+                const parametrosComprobantePago = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_ComprobantePago:parseInt($(this).find("td").eq(0).text().trim())
+
+                    })
+                }
+                fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametrosFormaPago)
+                    .then(req => req.json())
+                    .then(res => {
+                        if(res.respuesta=="ok"){
+                            
+                            var FechaCancelacion = $("#Fecha").val()
+                        }
+                    }) 
+
+
+                Facturas += $(this).find("td").eq(5).text() + ", "
+                i++
+            }else{
+                Facturas += $(this).find("td").eq(5).text() + ", "
+                i++
+            }     
+        }         
     });
+
+    if(i>0){
+        Facturas = Facturas.substring(0,Facturas.length-2)
+    }
+
+    switch($("#Cod_FormaPago").val()){
+        case "008":
+            GuardarMovimientoCaja(Facturas,CodLibro)
+            break
+        case "007":
+            if(CodLibro=="08"){
+                if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
+                    GuardarMovimientoBancario(Facturas,CodLibro)
+                }
+            }
+            break
+        case "011":
+            if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
+                if(CodLibro=="08"){
+                    GuardarMovimientoCaja(Facturas,CodLibro)
+                }else{
+                    if(CodLibro=="14"){
+                        GuardarMovimientoBancario(Facturas,CodLibro)
+                    }
+                }
+            }
+            break
+        case "003":
+            if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
+                if(CodLibro=="08"){
+                    GuardarMovimientoCaja(Facturas,CodLibro)
+                }else{
+                    GuardarMovimientoBancario(Facturas,CodLibro)
+                }
+            }
+            break
+    }
+
+    $('#tablaComprobantes > tbody tr').each(function () {
+        if(parseFloat($(this).find("td").eq(6).find("input").val())>0){
+            var id_ComprobantePago = parseInt($(this).find("td").eq(0).text());//parseInt()
+            var Monto = parseFloat($(this).find("td").eq(6).find("input").val())
+            Id_Movimiento_FormaPago = 0
+            if($("#Cuenta_CajaBancos").val()!=null || $("#Cuenta_CajaBancos").val()!=""){
+                Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos").val())
+            }
+ 
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_ComprobantePago,
+                })
+            }
+            fetch(URL + '/formas_pago_api/traer_siguiente_item', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if(res.respuesta=="ok"){
+                        var Item = res.data.item[0]['']
+                        var Cod_Plantilla = null
+                        var Obs_FormaPago = ''
+
+                        const parametrosFormaPago = {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id_ComprobantePago,
+                                Item,
+                                Des_FormaPago: Des_FormaPago_FormaPago,
+                                Cod_TipoFormaPago:Cod_TipoFormaPago_FormaPago,
+                                Cuenta_CajaBancos: Cuenta_CajaBancos_FormaPago,
+                                Id_Movimiento: Id_Movimiento_FormaPago,
+                                TipoCambio: TipoCambio_FormaPago,
+                                Cod_Moneda:Cod_Moneda_FormaPago,
+                                Monto,
+                                Cod_Plantilla,
+                                Obs_FormaPago,
+                                Fecha: Fecha_FormaPago,
+
+                            })
+                        }
+                        fetch(URL + '/formas_pago_api/guardar_forma_pago', parametrosFormaPago)
+                            .then(req => req.json())
+                            .then(res => {
+                                if(res.respuesta=="ok"){
+                                    
+                                }
+                            }) 
+                        
+
+                    }
+                }) 
+            
+        }         
+    });
+    $("#modal_proceso").modal('hide')
 }
  
 function Cuentas(Cod_Libro) {
+ 
+
     H5_loading.show(); 
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

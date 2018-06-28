@@ -177,6 +177,15 @@ router.post('/get_one_cliente', function (req, res) {
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })
+
+router.post('/get_clientes_varios', function (req, res) {
+    input = req.body
+    procedimientos = [
+        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_TClientesVarios', parametros:[] },
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+});
+
  
 router.post('/get_cuentas_cliente', function (req, res) {
     input = req.body

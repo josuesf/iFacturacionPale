@@ -90,6 +90,33 @@ router.post('/guardar_cuenta', function (req, res) {
     ]
     Ejecutar_Procedimientos(res,procedimientos)
 });
+
+router.post('/guardar_cuenta_movimiento', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_Movimiento',valor_parametro:-1},
+        {nom_parametro:'Cod_CuentaBancaria',valor_parametro:input.Cod_CuentaBancaria},
+        {nom_parametro:'Nro_Operacion',valor_parametro:input.Nro_Operacion},
+        {nom_parametro:'Des_Movimiento',valor_parametro:input.Des_Movimiento},
+        {nom_parametro:'Cod_TipoOperacionBancaria',valor_parametro:input.Cod_TipoOperacionBancaria},
+        {nom_parametro:'Fecha',valor_parametro:input.Fecha},
+        {nom_parametro:'Monto',valor_parametro:input.Monto},
+        {nom_parametro:'TipoCambio',valor_parametro:input.TipoCambio},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro:'Cod_Plantilla',valor_parametro:input.Cod_Plantilla},
+        {nom_parametro:'Nro_Cheque',valor_parametro:input.Nro_Cheque},
+        {nom_parametro:'Beneficiario',valor_parametro:input.Beneficiario},
+        {nom_parametro:'Id_ComprobantePago',valor_parametro:input.Id_ComprobantePago},
+        {nom_parametro:'Obs_Movimiento',valor_parametro:input.Obs_Movimiento},        
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
+    ]
+    procedimientos =[
+        {nom_respuesta:'cuenta',sp_name:'USP_BAN_CUENTA_M_G',parametros}
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
 router.post('/eliminar_cuenta', function (req, res) {
     input = req.body
     parametros = [
