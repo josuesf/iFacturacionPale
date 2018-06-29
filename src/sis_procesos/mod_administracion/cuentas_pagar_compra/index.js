@@ -1011,79 +1011,60 @@ function AceptarConfirmacionCuenta(CodLibro){
                     .then(req => req.json())
                     .then(res => {
                         if(res.respuesta=="ok"){
-
                             
                             var parametrosComprobante = [
                                 { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output"},
                                 { nom_parametro: 'Cod_Libro', valor_parametro: res.data.comprobante_pago[0].Cod_Libro},
                                 { nom_parametro: 'Cod_Periodo', valor_parametro:res.data.comprobante_pago[0].Cod_Periodo},
                                 { nom_parametro: 'Cod_Caja', valor_parametro: res.data.comprobante_pago[0].Cod_Caja},
-                                { nom_parametro: 'Cod_Turno', valor_parametro: res.data.comprobante_pago[0].id_ComprobantePago},
-                                { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
-                                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
-                                { nom_parametro: 'Serie', valor_parametro: Serie},
-                                { nom_parametro: 'Numero', valor_parametro: Numero},
-                                { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
-                                { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
-                                { nom_parametro: 'Doc_Cliente', valor_parametro: Doc_Cliente},
-                                { nom_parametro: 'Nom_Cliente', valor_parametro: Nom_Cliente},
-                                { nom_parametro: 'Direccion_Cliente', valor_parametro: Direccion_Cliente},
-                                { nom_parametro: 'FechaEmision', valor_parametro: FechaEmision},
-                                { nom_parametro: 'FechaVencimiento', valor_parametro: FechaEmision},
-                                { nom_parametro: 'FechaCancelacion', valor_parametro: FechaEmision},
-                                { nom_parametro: 'Glosa', valor_parametro: Glosa},
-                                { nom_parametro: 'TipoCambio', valor_parametro: TipoCambio},
-                                { nom_parametro: 'Flag_Anulado', valor_parametro: Flag_Anulado},
-                                { nom_parametro: 'Flag_Despachado', valor_parametro: Flag_Despachado},
-                                { nom_parametro: 'Cod_FormaPago', valor_parametro: Cod_FormaPago},
-                                { nom_parametro: 'Descuento_Total', valor_parametro: Descuento_Total},
-                                { nom_parametro: 'Cod_Moneda', valor_parametro: Cod_Moneda},
-                                { nom_parametro: 'Impuesto', valor_parametro: Impuesto},
-                                { nom_parametro: 'Total', valor_parametro: Total},
-                                { nom_parametro: 'Obs_Comprobante', valor_parametro: Obs_Comprobante},
-                                { nom_parametro: 'Id_GuiaRemision', valor_parametro: Id_GuiaRemision},
-                                { nom_parametro: 'GuiaRemision', valor_parametro: GuiaRemision},
-                                { nom_parametro: 'id_ComprobanteRef', valor_parametro: id_ComprobanteRef},
-                                { nom_parametro: 'Cod_Plantilla', valor_parametro: Cod_Plantilla},
-                                { nom_parametro: 'Nro_Ticketera', valor_parametro: Nro_Ticketera},
-                                { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: Cod_UsuarioVendedor},
-                                { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: Cod_RegimenPercepcion},
-                                { nom_parametro: 'Tasa_Percepcion', valor_parametro: Tasa_Percepcion},
-                                { nom_parametro: 'Placa_Vehiculo', valor_parametro: Placa_Vehiculo},
-                                { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: Cod_TipoDocReferencia},
-                                { nom_parametro: 'Nro_DocReferencia', valor_parametro: Nro_DocReferencia},
-                                { nom_parametro: 'Valor_Resumen', valor_parametro: Valor_Resumen},
-                                { nom_parametro: 'Valor_Firma', valor_parametro: Valor_Firma},
-                                { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: Cod_EstadoComprobante},
-                                { nom_parametro: 'MotivoAnulacion', valor_parametro: MotivoAnulacion},
-                                { nom_parametro: 'Otros_Cargos', valor_parametro: Otros_Cargos},
-                                { nom_parametro: 'Otros_Tributos', valor_parametro: Otros_Tributos},
-                                { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario},
+                                { nom_parametro: 'Cod_Turno', valor_parametro: res.data.comprobante_pago[0].Cod_Turno},
+                                { nom_parametro: 'Cod_TipoOperacion', valor_parametro: res.data.comprobante_pago[0].Cod_TipoOperacion},
+                                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: res.data.comprobante_pago[0].Cod_TipoComprobante},
+                                { nom_parametro: 'Serie', valor_parametro: res.data.comprobante_pago[0].Serie},
+                                { nom_parametro: 'Numero', valor_parametro: res.data.comprobante_pago[0].Numero},
+                                { nom_parametro: 'Id_Cliente', valor_parametro: res.data.comprobante_pago[0].Id_Cliente},
+                                { nom_parametro: 'Cod_TipoDoc', valor_parametro: res.data.comprobante_pago[0].Cod_TipoDoc},
+                                { nom_parametro: 'Doc_Cliente', valor_parametro: res.data.comprobante_pago[0].Doc_Cliente},
+                                { nom_parametro: 'Nom_Cliente', valor_parametro: res.data.comprobante_pago[0].Nom_Cliente},
+                                { nom_parametro: 'Direccion_Cliente', valor_parametro: res.data.comprobante_pago[0].Direccion_Cliente},
+                                { nom_parametro: 'FechaEmision', valor_parametro: res.data.comprobante_pago[0].FechaEmision},
+                                { nom_parametro: 'FechaVencimiento', valor_parametro: res.data.comprobante_pago[0].FechaVencimiento},
+                                { nom_parametro: 'FechaCancelacion', valor_parametro: $("#Fecha").val()},
+                                { nom_parametro: 'Glosa', valor_parametro: res.data.comprobante_pago[0].Glosa},
+                                { nom_parametro: 'TipoCambio', valor_parametro: res.data.comprobante_pago[0].TipoCambio},
+                                { nom_parametro: 'Flag_Anulado', valor_parametro: res.data.comprobante_pago[0].Flag_Anulado},
+                                { nom_parametro: 'Flag_Despachado', valor_parametro: res.data.comprobante_pago[0].Falg_Despachado},
+                                { nom_parametro: 'Cod_FormaPago', valor_parametro: res.data.comprobante_pago[0].Cod_FormaPago},
+                                { nom_parametro: 'Descuento_Total', valor_parametro: res.data.comprobante_pago[0].Descuento_Total},
+                                { nom_parametro: 'Cod_Moneda', valor_parametro: res.data.comprobante_pago[0].Cod_Moneda},
+                                { nom_parametro: 'Impuesto', valor_parametro: res.data.comprobante_pago[0].Impuesto},
+                                { nom_parametro: 'Total', valor_parametro: res.data.comprobante_pago[0].Total},
+                                { nom_parametro: 'Obs_Comprobante', valor_parametro: res.data.comprobante_pago[0].Obs_Comprobante},
+                                { nom_parametro: 'Id_GuiaRemision', valor_parametro: res.data.comprobante_pago[0].Id_GuiaRemision},
+                                { nom_parametro: 'GuiaRemision', valor_parametro: res.data.comprobante_pago[0].GuiaRemision},
+                                { nom_parametro: 'id_ComprobanteRef', valor_parametro: res.data.comprobante_pago[0].id_ComprobanteRef},
+                                { nom_parametro: 'Cod_Plantilla', valor_parametro: res.data.comprobante_pago[0].Cod_Plantilla},
+                                { nom_parametro: 'Nro_Ticketera', valor_parametro: res.data.comprobante_pago[0].Nro_Ticketera},
+                                { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: res.data.comprobante_pago[0].Cod_UsuarioVendedor},
+                                { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: res.data.comprobante_pago[0].Cod_RegimenPercepcion},
+                                { nom_parametro: 'Tasa_Percepcion', valor_parametro: res.data.comprobante_pago[0].Tasa_Percepcion},
+                                { nom_parametro: 'Placa_Vehiculo', valor_parametro: res.data.comprobante_pago[0].Placa_Vehiculo},
+                                { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: res.data.comprobante_pago[0].Cod_TipoDocReferencia},
+                                { nom_parametro: 'Nro_DocReferencia', valor_parametro: res.data.comprobante_pago[0].Nro_DocReferencia},
+                                { nom_parametro: 'Valor_Resumen', valor_parametro: res.data.comprobante_pago[0].Valor_Resumen},
+                                { nom_parametro: 'Valor_Firma', valor_parametro: res.data.comprobante_pago[0].Valor_Firma},
+                                { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: res.data.comprobante_pago[0].Cod_EstadoComprobante},
+                                { nom_parametro: 'MotivoAnulacion', valor_parametro: res.data.comprobante_pago[0].MotivoAnulacion},
+                                { nom_parametro: 'Otros_Cargos', valor_parametro: res.data.comprobante_pago[0].Otros_Cargos},
+                                { nom_parametro: 'Otros_Tributos', valor_parametro: res.data.comprobante_pago[0].Otros_Tributos},
+                                { nom_parametro: 'Cod_Usuario', valor_parametro: res.data.comprobante_pago[0].Cod_UsuarioAct},
                             ]
                             
                             EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
                                 if (dataComprobante.err)
                                     return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                             })        
-
-
-                            /*var id_ComprobantePago = res.data.comprobante_pago[0].id_ComprobantePago
-                            var Cod_Libro = res.data.comprobante_pago[0].Cod_Libro
-                            var Cod_Periodo = res.data.comprobante_pago[0].Cod_Periodo
-                            var Cod_Caja = res.data.comprobante_pago[0].Cod_Caja
-                            var Cod_Turno = res.data.comprobante_pago[0].Cod_Turno
-                            var Cod_TipoOperacion = res.data.comprobante_pago[0].Cod_TipoOperacion
-                            var Cod_TipoComprobante = res.data.comprobante_pago[0].Cod_TipoComprobante
-                            var Serie = res.data.comprobante_pago[0].Serie
-                            var Numero = res.data.comprobante_pago[0].Numero
-                            var Id_Cliente = res.data.comprobante_pago[0].Id_Cliente
-                            var Cod_TipoDoc = res.data.comprobante_pago[0].Cod_TipoDoc
-                            var Doc_Cliente = res.data.comprobante_pago[0].Doc_Cliente
-                            var Nom_Cliente = res.data.comprobante_pago[0].Nom_Cliente
-                            var Direccion_Cliente = res.data.comprobante_pago[0].Direccion_Cliente
-
-
-                            var FechaCancelacion = $("#Fecha").val()*/
+ 
                         }
                     }) 
 
@@ -1201,8 +1182,6 @@ function AceptarConfirmacionCuenta(CodLibro){
 }
  
 function Cuentas(Cod_Libro) {
- 
-
     H5_loading.show(); 
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

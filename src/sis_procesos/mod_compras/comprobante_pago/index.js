@@ -12,8 +12,13 @@ var aMonto = 0
 var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
+ 
 
 function VerRegistroCompra(variables,fecha_actual,CodLibro) {
+    listaFormaPago = []
+    obs_xml = null
+    aMonto = 0 
+    idFilaSeleccionadaSerie = 0
     global.objCliente = ''
     global.objProducto = ''
     global.arraySeries = ''
@@ -167,7 +172,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <div class="col-sm-1" id="divMultiplesPagos">
                                                     <label></label>
                                                     <div class="radio">
-                                                        <button type="button" class="btn btn-success btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}"><i class="fa fa-money"></i></button>
+                                                        <button type="button" class="btn btn-success btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}" id="btnMultiplesPagos"><i class="fa fa-money"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4" id="divOperacion">
@@ -339,11 +344,11 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <input class="hidden" id="Cod_TipoOperatividad" value=null>
                                                 <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro)}></th>
                                                 <th><select class="form-control input-sm" id="Cod_Almacen" onchange="${()=>CargarUnidadMedida()}"> </select></th>
-                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida"> </select><select class="form-control input-sm hidden" id="Cod_TipoPrecio"> </select></th>
-                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" id="Descuento" value="0.00"></th>
-                                                <th><input type="number" class="form-control input-sm" id="Importe" value="0.00"></th>
+                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida"> </select><select class="form-control input-sm hidden" id="Cod_TipoPrecio" > </select></th>
+                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad()}></th>
+                                                <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00" onkeypress=${()=>KeyPressPrecioUnitario()}></th>
+                                                <th><input type="number" class="form-control input-sm" id="Descuento" value="0.00" ></th>
+                                                <th><input type="number" class="form-control input-sm" id="Importe" value="0.00" onkeypress=${()=>KeyEnterImporte(event,CodLibro,variables)}></th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -546,6 +551,16 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     })
 
     CambioLicitacion()
+ 
+
+   $(document).on('keypress','input',function(event){                
+       event.stopImmediatePropagation();
+       if( event.which == 13 ){
+            event.preventDefault();
+            var $input = $('input');
+            $input.eq( $input.index( this ) + 1 ).focus()
+       }
+   });
 }
 
 
@@ -561,11 +576,14 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                 </div>
                 <div class="modal-body">
                     <div class="row" id="divCreditoFormasPago">
-                        <div class="col-md-12 text-right"> 
-                            <button type="button" class="btn btn-default btn-sm">
-                                <i class="fa fa-money text-green"></i> Credito
-                            </button>
-                        </div>
+                     
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                     <label class="btn btn-success">
+                       <input type="checkbox" checked autocomplete="off" id="btnCreditoFormaPagoHeader"  onchange=${() => AsignarCredito()}> Credito
+                     </label>
+                    </div>
+
+ 
                     </div>
                     <p></p>
                     <div class="row">
@@ -586,19 +604,19 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="euros" />
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="euros" onchange=${()=>CambioMonedaFormaPagoEuros(Cod_Moneda,variables,Tipo_Cambio)}/>
                                                                 <label class="drinkcard-cc euros" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="dolares" />
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="dolares" onchange=${()=>CambioMonedaFormaPagoDolares(Cod_Moneda,variables,Tipo_Cambio)}/>
                                                                 <label class="drinkcard-cc dolares" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                         :
                                                         yo`
                                                             <div class="col-md-4">
-                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="soles" checked="checked"/>
+                                                                <input type="radio" name="Cod_Moneda_Forma_Pago" value="soles" checked="checked" onchange=${()=>CambioMonedaFormaPagoSoles(Cod_Moneda)}/>
                                                                 <label class="drinkcard-cc soles" for="Cod_Moneda_Forma_Pago"></label>
                                                             </div>`
                                                     )
@@ -624,13 +642,13 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                                     :
                                                     yo`
                                                         <div class="col-md-6">
-                                                            <input  checked="checked" id="Cod_FormaPago_MasterCard" type="radio" name="Cod_FormaPago_Modal" value="mastercard" />
+                                                            <input  checked="checked" id="Cod_FormaPago_MasterCard" type="radio" name="Cod_FormaPago_Modal" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard()}/>
                                                             <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal"></label>
                                                         </div>`
                                                     :
                                                     yo`
                                                         <div class="col-md-6">
-                                                            <input  checked="checked" id="Cod_FormaPago_Visa" type="radio" name="Cod_FormaPago_Modal" value="visa" />
+                                                            <input  checked="checked" id="Cod_FormaPago_Visa" type="radio" name="Cod_FormaPago_Modal" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa()}/>
                                                             <label class="drinkcard-cc visa"for="Cod_FormaPago_Modal"></label>
                                                         </div>`
                                                 }
@@ -650,7 +668,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Monto</label>
-                                            <input type="number" class="form-control">
+                                            <input type="number" class="form-control" value="0.00" id="MontoFormaPago">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -658,12 +676,12 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             <div class="col-md-6" id="divReferencia">
                                                 <div class="form-group">
                                                     <label>Referencia</label>
-                                                    <input type="text" class="form-control">
+                                                    <input type="text" class="form-control" id="ReferenciaFormaPago">
                                                 </div>
                                             </div>
                                             <div class="col-md-6" id="divCompSaldo">
                                                 <div class="form-group">
-                                                    <button class="btn btn-default btn-sm">Comp. Saldo</button>
+                                                    <button class="btn btn-default btn-sm" onclick=${()=>CompletarSaldo()} id="btnCompletarSaldo">Comp. Saldo</button>
                                                 </div>
                                             </div>
                                         </div> 
@@ -676,7 +694,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <button class="btn btn-default btn-sm">Agregar</button>
+                                                    <button class="btn btn-default btn-sm" id="btnAgregarMontoFormaPago" onclick=${()=>AgregarMontoFormaPago(Cod_Moneda,Tipo_Cambio)}>Agregar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -704,7 +722,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>T/C</label>
-                                                    <input type="number" class="form-control" id="Tipo_Cambio_Global">
+                                                    <input type="number" class="form-control" id="Tipo_Cambio_Global" onkeypress=${()=>CambioTipoCambioGlobal(Cod_Moneda,Tipo_Cambio)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -753,9 +771,9 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnAceptar">Aceptar</button>
+                <div class="modal-footer">
+                    <button class="btn btn-info" onclick="${()=>AceptarFormaPago(amodo)}" id="btnAceptarFormaPago">Aceptar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-danger pull-right">Cancelar</button>
                 </div>
             </div>
         </div>`
@@ -767,9 +785,13 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
     
     CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cambio)
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () {
-        
-    })
+    CambioMonedaFormaPagoSoles(Cod_Moneda)
+    CambioMonedaFormaPagoDolares(Cod_Moneda,variables,Tipo_Cambio)
+    CambioMonedaFormaPagoEuros(Cod_Moneda,variables,Tipo_Cambio)
+    
+
+    CambioMonedaFormaPagoMasterCard()
+    CambioMonedaFormaPagoVisa()
      
 }
 
@@ -802,7 +824,7 @@ function AbrirModalPercepcion(CodLibro,variables){
 
     var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
-    $('#modal-otros-procesos').modal()    
+    $('#modal-otros-procesos').modal()     
 }
  
 
@@ -836,20 +858,19 @@ function AgregarFilaTabla(CodLibro,variables){
                 <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
                 <td class="UM"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_UnidadMedida}></td>
                 <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
-                <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+                <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
                 <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
-                <td class="PU"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
-                <td class="Descuento"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)}></td> 
+                <td class="PU"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+                <td class="Descuento"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
                 <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
                 <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
                 <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
                 <td class="Obs_ComprobanteD hidden"></td> 
                 <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
                 <td>
-                <div class="btn-group">
-                    <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-flat"><i class="fa fa-tasks"></i></a>
-                     
-                    <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                <div style="display:flex;">
+                    <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                    <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                 </div>
                 </td>
             </tr>`
@@ -908,6 +929,102 @@ function AplicarPercepcion(CodLibro,variables){
     CalcularTotal(CodLibro,variables)
     $("#modal-otros-procesos").modal('hide')
 }
+
+function AgregarFilaFormaPago(pDescFormaPago,pCodFormaPago,pCodMoneda,pMonto,pTipoCambio,pReferencia,Tipo_Cambio,Cod_Moneda){
+
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_actual = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var index = $("#tablaBodyPagosMultiples > tr").length
+
+
+    var fila = yo`
+    <tr id="FP${index}">
+        <td name="Tipo" data-id="${pCodFormaPago}" class="Tipo">${pDescFormaPago}</td>
+        <td name="Cod_Moneda" class="Cod_Moneda"> ${pCodMoneda} </td>
+        <td class="Monto">${pMonto}</td>
+        <td name="TipoCambio" class="TipoCambio">${pTipoCambio}</td>
+        <td name="TipoCambioEquivalente" class="TipoCambioEquivalente">${parseFloat(pTipoCambio)/parseFloat(Tipo_Cambio)}</td>
+        <td name="Total" class="Total" data-value="${(parseFloat(pMonto)*parseFloat(pTipoCambio)).toFixed(2)}">${((parseFloat((parseFloat(pMonto)*parseFloat(pTipoCambio)).toFixed(2)))*(parseFloat(pTipoCambio)/parseFloat(Tipo_Cambio))).toFixed(2)}</td>
+        <td name="Fecha" class="Fecha"><input type="date" class="form-control input-sm" value="${fecha_actual}"></td>
+        <td name="Referencia" class="Referencia"><input class="form-control input-sm" value="${pReferencia==null?"":pReferencia}"></td>
+        <td><button type="button" class="btn btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
+    </tr>`
+    $("#tablaBodyPagosMultiples").append(fila)
+    $("#MontoFormaPago").val("0.00")
+    $("#MontoFormaPago").focus()
+}
+
+function CargarModalConfirmacionAsignarCredito(){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <p>Esta Seguro que desea asignar el credito</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacionAsignarCredito()}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+
+
+    var modal_alerta = document.getElementById('modal-alerta');
+    empty(modal_alerta).appendChild(el);
+    $('#modal-alerta').modal()
+}
+
+function LlenarFormasPago(Cod_Moneda,Tipo_Cambio){
+
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_actual = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    
+    var tabla = yo`<table id="tablaPagosMultiples" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Moneda</th> 
+                            <th>Monto</th>
+                            <th>T/C en S</th>
+                            <th>T/C Equi</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
+                            <th># Ref.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaBodyPagosMultiples">
+                        ${listaFormaPago.map((u,index) => 
+                                yo`
+                                <tr id="FP${index}">
+                                    <td name="Tipo" data-id="${u.CodTipoFormaPago}" class="Tipo">${u.DesFormaPago}</td>
+                                    <td name="Cod_Moneda" class="Cod_Moneda"> ${u.CodMoneda} </td>
+                                    <td class="Monto">${u.Monto}</td>
+                                    <td name="TipoCambio" class="TipoCambio">${u.TipoCambio}</td>
+                                    <td name="TipoCambioEquivalente" class="TipoCambioEquivalente">${parseFloat(u.TipoCambio)/parseFloat(Tipo_Cambio)}</td>
+                                    <td name="Total" class="Total" data-value="${(parseFloat(u.Monto)*parseFloat(u.TipoCambio)).toFixed(2)}">${((parseFloat((parseFloat(u.Monto)*parseFloat(u.TipoCambio)).toFixed(2)))*(parseFloat(u.TipoCambio)/parseFloat(Tipo_Cambio))).toFixed(2)}</td>
+                                    <td name="Fecha" class="Fecha"><input type="date" class="form-control input-sm" value="${u.Fecha==null?fecha_actual:u.Fecha}"></td>
+                                    <td name="Referencia" class="Referencia"><input  class="form-control input-sm" value="${u.CuentaCajaBanco==null?"":u.CuentaCajaBanco}"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
+                                </tr>`
+                        )}
+                    </tbody>
+                </table>`
+
+    empty(document.getElementById('contenedorPagosMultiples')).appendChild(tabla);
+  
+}
+
 
 function LlenarCuentaBancaria(cuentas,CodLibro){
     var html = ''
@@ -994,6 +1111,71 @@ function LlenarUnidadMedida(unidades_medidas){
     $("#Cod_UnidadMedida").html('')
     $("#Cod_UnidadMedida").html(html) 
 }
+ 
+
+function KeyPressPrecioUnitario(){
+    try{
+        $("#Importe").val((parseFloat($("#Cantidad").val())*parseFloat($("#Precio_Unitario").val())).toFixed(2))
+     }catch(e){
+      $("#Importe").val("0.00")
+     }
+     $("#Importe").focus()
+}
+
+function KeyPressCantidad(){
+    if($("#Stock").val()!=""){
+       if(CodLibro=="14" && parseFloat($("#Cantidad").val())>parseFloat($("#Stock").val())){
+        
+       }else{
+           try{
+              $("#Importe").val((parseFloat($("#Cantidad").val())*parseFloat($("#Precio_Unitario").val())).toFixed(2))
+           }catch(e){
+            $("#Importe").val("0.00")
+           }
+       }
+    }
+    /*
+     if (tbStock.Text != "" && aProducto.FlagStock)
+            {
+                // calcular total
+                if (aComprobante_pago.CodLibro == "14" && nudCantidad.Value > decimal.Parse(tbStock.Text))
+                {
+                    if (KryptonMessageBox.Show("La Cantidad Supera el Stock Actual, Desea Conituar?", Principal.aTitulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                      
+                
+                    }
+                }
+                else
+                    try
+                    {
+                        nudImporte.Value = Math.Round(nudCantidad.Value * nudPrecioUnitario.Value,2);
+                    }
+                    catch
+                    {
+                        nudImporte.Value = 0;
+                    }
+            }
+    */
+}
+
+function KeyEnterImporte(event,CodLibro,variables){
+ 
+    try{
+       $("#Cantidad").val(parseFloat($("#Importe"))/parseFloat($("#Precio_Unitario").val()))
+       CalcularTotal(CodLibro,variables)
+    }catch(e){
+        $("#Cantidad").val("0")
+        CalcularTotal(CodLibro,variables)
+    }
+
+    event.stopImmediatePropagation();
+    if( event.which == 13 ){
+        AgregarFilaTabla(CodLibro,variables)  
+    }
+
+
+}
 
 function AbrirModalFormasPago(variables,fecha_actual){
     H5_loading.show();
@@ -1031,7 +1213,7 @@ function EditarCantidad(idFila,CodLibro,variables){
     CalcularTotal(CodLibro,variables)
 }
 
-function EditarPrecioUnitario(idFila,CodLibro,variables){
+function EditarPrecioUnitario(idFila,CodLibro,variables){ 
     $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
     $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
     $("#"+idFila).find("td.Importe").find('input').val(parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))
@@ -1050,6 +1232,28 @@ function EliminarFila(idFila,CodLibro,variables){
     $("#"+idFila).remove()
     CalcularTotal(CodLibro,variables)
 }
+
+function EliminarFilaPagosMultiples(idFila,Cod_Moneda,Tipo_Cambio){
+  $("#FP"+idFila).remove()
+  CalcularSaldo(Cod_Moneda,Tipo_Cambio)
+  if(aSaldo==0){
+    $("#btnAceptarFormaPago").css("display","inline-block")
+  }else{
+    $("#btnAceptarFormaPago").css("display","none")
+  }
+
+  if(aSaldo==0){
+    $("#btnAgregarMontoFormaPago").css("display","none")
+    $("#divCompSaldo").css("display","none")
+  }else{
+    $("#btnAgregarMontoFormaPago").css("display","block")
+    $("#divCompSaldo").css("display","block")
+  }
+
+  $("#MontoFormaPago").val("0.00")
+  $("#MontoFormaPago").focus()
+}
+
 
 function CalcularTotal(CodLibro,variables){
     var Suma = 0
@@ -1166,22 +1370,167 @@ function CalcularTotal(CodLibro,variables){
     $("#laSON").text(ConvertirCadena(parseFloat($("#Gran_Total").val()),$("#Cod_Moneda option:selected").text()))
 }
 
-function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
-    if($("#divCredito").css("display")=="block"){
-        var SumaTotal = 0
-
-        /*for (int i = 0; i < dgvFormasPago.Rows.Count; i++)
-        {
-            SumaTotales += Math.Round(decimal.Parse(dgvFormasPago.Rows[i].Cells["Total"].Tag.ToString()), 2);
+function AgregarMontoFormaPago(Cod_Moneda,Tipo_Cambio){
+    if(parseFloat($("#MontoFormaPago").val())>0){
+        var _TipoCambio = 0
+        var _CodMoneda = ""
+        var _DesFormaPago = ""
+        var _CodFormaPago = ""
+        if($('input[name=Cod_FormaPago_Modal]:checked').val() == 'mastercard' || $('input[name=Cod_FormaPago_Modal]:checked').val() == 'visa'){
+            if($('input[name=Cod_FormaPago_Modal]:checked').val()=="visa"){
+                _DesFormaPago = "VISA NET"
+                _CodFormaPago = "005"
+            }else{
+                _DesFormaPago = "MASTERCARD"
+                _CodFormaPago = "006"
+            }
+        }else{
+            _DesFormaPago = "EFECTIVO"
+            _CodFormaPago = "008"            
         }
-        aSaldo = aMonto - SumaTotales;
-        btSaldo.ExtraText = aCodMoneda + " " + Math.Round(aSaldo / aTipoCambio, 2).ToString();
-        btSaldo.Tag = Math.Round(aSaldo, 2);*/
-        //for(var i=0;i<)
+
+        if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'soles'){
+            _CodMoneda = "PEN"
+            _TipoCambio = 1
+        }
+
+        if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'dolares'){
+            _CodMoneda = "USD"
+            _TipoCambio = $("#Tipo_Cambio_FormaPago").val()
+        }
+
+        if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'euros'){
+            _CodMoneda = "EUR"
+            _TipoCambio = $("#Tipo_Cambio_FormaPago").val()
+        }
+
+        if(_CodFormaPago=="005" || _CodFormaPago=="006"){
+            
+            if($("#ReferenciaFormaPago").val()!=""){
+                AgregarFilaFormaPago(_DesFormaPago, _CodFormaPago, _CodMoneda, parseFloat($("#MontoFormaPago").val()).toFixed(2),  parseFloat(_TipoCambio).toFixed(3), $("#ReferenciaFormaPago").val(),Tipo_Cambio,Cod_Moneda);
+            }
+            else{
+                toastr.error('Para pagos con tarjeta debe especificar un numero de tarjeta','Error',{timeOut: 5000})
+                $("#RecuperarTipoCambio").focus();
+            }
+
+        }else{
+            AgregarFilaFormaPago(_DesFormaPago, _CodFormaPago, _CodMoneda, parseFloat($("#MontoFormaPago").val()).toFixed(2),  parseFloat(_TipoCambio).toFixed(3), '',Tipo_Cambio,Cod_Moneda);
+        }
+
+    }else{
+        toastr.error('El monto introduciudo debe ser mayor a 0','Error',{timeOut: 5000})  
+        $("#MontoFormaPago").val("0.00")
+        $("#MontoFormaPago").focus()
+    }
+    CalcularSaldo(Cod_Moneda,Tipo_Cambio)
+
+    $("#MontoFormaPago").focus()
+    
+    if(aSaldo == 0)
+        $("#btnAceptarFormaPago").css("display","inline-block")
+    else
+        $("#btnAceptarFormaPago").css("display","none")
+    
+    if(aSaldo == 0){
+        $("#btnAgregarMontoFormaPago").css("display","none")
+        $("#divCompSaldo").css("display","none")
+    }else{
+        $("#btnAgregarMontoFormaPago").css("display","block")
+        $("#divCompSaldo").css("display","block")
+    }
+}
+
+function CompletarSaldo(){
+    try{
+        if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'soles'){
+            $("#MontoFormaPago").val(parseFloat(aSaldo).toFixed(2))
+        }
+        
+        if($('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago]:checked').val() == 'euros'){
+            $("#MontoFormaPago").val((parseFloat(aSaldo)/parseFloat($("#Tipo_Cambio_FormaPago").val())).toFixed(2))
+        }
+    }catch(e){
+        toastr.error('Error, valor no valido: -'+ $("#MontoFormaPago").val()+ ' es menor que 0','Error',{timeOut: 5000})
+    }
+
+}
+
+function CalcularSumaTotales(callback){
+    var SumaTotales = 0
+    $('#tablaBodyPagosMultiples tr').each(function () {
+        SumaTotales += parseFloat(parseFloat($(this).find("td").eq(5).text()).toFixed(2))
+    });
+    callback(SumaTotales)
+}
+
+function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
+    if($('#btnCreditoFormaPagoHeader').attr("disabled") != true ){
+        CalcularSumaTotales(function(SumaTotales){ 
+            aSaldo = aMonto - SumaTotales
+            $("#btnSaldo").text("Saldo: "+Cod_Moneda+" "+(parseFloat(aSaldo)/parseFloat(Tipo_Cambio)).toFixed(2))
+            $("#btnSaldo").attr("data-value",parseFloat(aSaldo).toFixed(2)) 
+        }) 
+       
     }else{
         aSaldo = 0
-        $("#btnSaldo").text(Cod_Moneda+" "+(parseFloat(aSaldo)/parseFloat(Tipo_Cambio)).toFixed(2))
+        $("#btnSaldo").text("Saldo: "+Cod_Moneda+" "+(parseFloat(aSaldo)/parseFloat(Tipo_Cambio)).toFixed(2))
         $("#btnSaldo").attr("data-value",parseFloat(aSaldo).toFixed(2))
+    }
+}
+
+function InicializarCredito(){
+    /*
+    kryptonGroupBox1.Enabled = false;
+            kryptonGroupBox2.Visible = false;
+            gbMonedas.Enabled = false;
+            gbTarjetas.Enabled = false;
+            btsCredito.Enabled = ButtonEnabled.True;
+            dgvFormasPago.Enabled = false;
+            btEliminarFila.Enabled = ButtonEnabled.False;
+            btsCredito.Checked = ButtonCheckState.Checked;
+    */
+   $("#btnCreditoFormaPagoHeader").attr("disabled",false)
+   $("#btnCreditoFormaPagoHeader").attr("checked",true)
+}
+
+function HabilitarBotones(){
+    
+    /*kryptonGroupBox1.Enabled = true;
+    kryptonGroupBox2.Visible = true;
+    gbMonedas.Enabled = true;
+    gbTarjetas.Enabled = true;
+    dgvFormasPago.Enabled = true;
+    btCompletarMonto.Visible = true;
+    btCompletarMonto.Enabled = true;
+    btEliminarFila.Enabled = ButtonEnabled.True;
+    btsCredito.Checked = ButtonCheckState.Unchecked;*/
+
+    $("#divCompSaldo").css("display","block")
+    $("#btnCompletarSaldo").attr("disabled",false)
+    $("#btnCreditoFormaPagoHeader").attr("checked",false)
+}
+
+function AceptarConfirmacionAsignarCredito(){
+       /*
+        InicializarCredito();
+                    aComprobante.CodFormaPago = "999";
+                    aComprobante.Guardar();
+                    (new CForma_pago()).EliminarFormasPagoXIdComprobante(aIdComprobante);
+                    this.Aceptar();
+       */
+
+       InicializarCredito()
+       var Cod_FormaPago = "999"
+       $('#modal-alerta').modal('hide')
+
+}
+
+function AsignarCredito(){
+    if($("#btnCreditoFormaPagoHeader").is(":checked")){
+       CargarModalConfirmacionAsignarCredito()
+    }else{
+      HabilitarBotones()
     }
 }
 
@@ -1218,8 +1567,67 @@ function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){
     }
 }
 
-function LlenarFormasPago(){
+function AceptarFormaPago(amodo){
+   
+    switch(amodo){
+        case 0:
+            $('#tablaBodyPagosMultiples tr').each(function (index) {
+ 
+                listaFormaPago.push({
+                    idComprobantePago:0,
+                    Item:index+1,
+                    IdMovimiento:0,
+                    CodTipoFormaPago:$(this).find("td").eq(0).attr("data-id"),
+                    DesFormaPago:$(this).find("td").eq(0).text(),
+                    CodMoneda:$(this).find("td").eq(1).text(),
+                    Monto:$(this).find("td").eq(2).text(), 
+                    TipoCambio:$(this).find("td").eq(3).text(), 
+                    CuentaCajaBanco:$(this).find("td").eq(7).find("input").val(), 
+                    Fecha:$(this).find("td").eq(6).find("input").val(), 
+                })   
+            });
+            
+            $("input[name=optCredito][value='credito']").prop("checked",true);
+            $("#divContado").css("display","none")
+            $("#divCredito").css("display","none")
+            $("#divNroDias").css("display","none")
+            $("#divMoneda").css("display","none")
+            $("#divFormasPago").css("display","none")
+            $("#divTC").css("display","none")
+            $("#divMultiplesPagos").removeClass()
+            $("#divMultiplesPagos").addClass("col-sm-12")
+            $("#btnMultiplesPagos").addClass("btn-block")
+            $("#btnMultiplesPagos").html('<i class="fa fa-money"></i>'+" PAGOS MULTIPLES")
+            /*
+              rbCredito.Checked = true;
+                rbEfectivo.Visible = false;
+                rbCredito.Visible = false;
+                laCuentaCajaBanco.Visible = false;
+                cbCuenta_CajaBancos.Visible = false;
+                cbCodFormaPago.Visible = false;
+                laDias.Visible = false;
+                nudNroDias.Visible = false;
+                laCodMoneda.Visible = false;
+                cbCodMoneda.Visible = false;
+                laTipoCambio.Visible = false;
+                nudTipoCambio.Visible = false;
 
+                buMultiplesPagos.Size = new Size(200, 25);
+                buMultiplesPagos.Text = "PAGOS MULTIPLES";
+                aListaFormasPago = _FormaPago.aFormasPago;
+            
+
+            */
+
+
+            $('#modal-otros-procesos').modal('hide')   
+            break
+        case 1:
+            $('#modal-otros-procesos').modal('hide')   
+            break
+    }
+
+    
 }
 
 function OcultarCompletarSaldo(Cod_Moneda){ 
@@ -1242,24 +1650,27 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
         case 0:
             $("#divCreditoFormasPago").css("display","none")
 
+            $("#btnTotal").text("Total: "+Cod_Moneda+" "+(parseFloat(aMonto)/parseFloat(Tipo_Cambio)).toFixed(2))
+            $("#btnTotal").attr("data-value",aMonto)
+
             if(Cod_Moneda!="PEN"){
                 $("#divTipoCambioGlobal").css("display","block")
             }else{
                 $("#divTipoCambioGlobal").css("display","none")
                 $("#Tipo_Cambio_Global").val(1)
             }
-            LlenarFormasPago()
+            LlenarFormasPago(Cod_Moneda,Tipo_Cambio)
             CalcularSaldo(Cod_Moneda,Tipo_Cambio)
-            $("#btnAceptar").css("display","none")
+            $("#btnAceptarFormaPago").css("display","none")
             OcultarCompletarSaldo(Cod_Moneda)
             $("#Cod_MonedaGlobal").text(Cod_Moneda)
             $("#divReferencia").css("display","none")
             $("#divTipoCambio").css("display","none")
             RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio)
             if(aSaldo==0)
-                $("#btnAceptar").css("display","none")
+                $("#btnAgregarMontoFormaPago").css("display","none")
             else    
-                $("#btnAceptar").css("display","block")
+                $("#btnAgregarMontoFormaPago").css("display","block")
             break
         case 1:
             break
@@ -1279,25 +1690,50 @@ function GenerarComprobante(){
 }
 
 function CargarUnidadMedida(Id_Producto,Cod_Almacen){
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Id_Producto,
-            Cod_Almacen
-        })
+    if (Id_Producto != undefined && Cod_Almacen != undefined) {
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id_Producto,
+                Cod_Almacen
+            })
+        }
+        fetch(URL + '/productos_serv_api/get_unidad_medida_by_producto_almacen', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    var unidades_medidas = res.data.unidades_medidas
+                    LlenarUnidadMedida(unidades_medidas)
+                }
+            })
+    }else{
+        
+        if($("#Nom_Producto").attr("data-id")!=null && $("#Nom_Producto").attr("data-id")!=""){
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Id_Producto:$("#Nom_Producto").attr("data-id"),
+                    Cod_Almacen:$("#Cod_Almacen").val()
+                })
+            }
+            fetch(URL + '/productos_serv_api/get_unidad_medida_by_producto_almacen', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {
+                        var unidades_medidas = res.data.unidades_medidas
+                        LlenarUnidadMedida(unidades_medidas)
+                    }
+                })
+        }
     }
-    fetch(URL + '/productos_serv_api/get_unidad_medida_by_producto_almacen', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if (res.respuesta == 'ok') {
-                var unidades_medidas = res.data.unidades_medidas
-                LlenarUnidadMedida(unidades_medidas)
-            } 
-        })
 }
 
 function CargarLicitacionesCliente(Id_ClienteProveedor){
@@ -1383,6 +1819,55 @@ function CargarAlmacenes(Id_Producto,Cod_Almacen){
         })
 
     CambioComprobantes()    
+}
+
+function CambioMonedaFormaPagoMasterCard(){
+    if($('input[name=Cod_FormaPago_Modal]:checked').val()=="mastercard"){
+        $("#divReferencia").css("display","block")
+    }else{
+        $("#divReferencia").css("display","none")
+    }
+}
+
+function CambioMonedaFormaPagoVisa(){
+    if($('input[name=Cod_FormaPago_Modal]:checked').val()=="visa"){
+        $("#divReferencia").css("display","block")
+    }else{
+        $("#divReferencia").css("display","none")
+    }
+}
+
+function CambioMonedaFormaPagoSoles(Cod_Moneda){
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val()=="soles"){
+        $("#divTipoCambio").css("display","none")
+    }else{
+        $("#divTipoCambio").css("display","block")
+    }
+    OcultarCompletarSaldo(Cod_Moneda)
+}
+
+function CambioMonedaFormaPagoDolares(Cod_Moneda,variables,Tipo_Cambio){
+    var _CodMoneda = ""
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val()=="dolares"){
+        _CodMoneda = "USD"
+        $("#divTipoCambio").css("display","block")
+    }else{
+        $("#divTipoCambio").css("display","none")
+    }
+    RecuperarTipoCambio(_CodMoneda,variables,Tipo_Cambio)
+    OcultarCompletarSaldo(Cod_Moneda)
+}
+
+function CambioMonedaFormaPagoEuros(Cod_Moneda,variables,Tipo_Cambio){
+    var _CodMoneda = ""
+    if($('input[name=Cod_Moneda_Forma_Pago]:checked').val()=="euros"){
+        _CodMoneda = "EUR"
+        $("#divTipoCambio").css("display","block")
+    }else{
+        $("#divTipoCambio").css("display","none")
+    }
+    RecuperarTipoCambio(_CodMoneda,variables,Tipo_Cambio)
+    OcultarCompletarSaldo(Cod_Moneda)
 }
 
 function CambioCodCuentaBancaria(CodLibro){
@@ -1553,6 +2038,17 @@ function CambioFormasPago(CodLibro){
             }
         }
     }
+}
+
+function CambioTipoCambioGlobal(Cod_Moneda,Tipo_Cambio){
+    $('#tablaBodyPagosMultiples tr').each(function () {
+        if($(this).find("td").eq(1).text()==Cod_Moneda){
+            $(this).find("td").eq(3).text(Tipo_Cambio)
+            var ValorTotal = parseFloat($(this).find("td").eq(5).text()).toFixed(2)
+            $(this).find("td").eq(5).text((parseFloat(ValorTotal)*parseFloat(Tipo_Cambio)).toFixed(2))
+        }
+    });
+    CalcularSaldo(Cod_Moneda,Tipo_Cambio)
 }
 
 function CambioTipoDocumento(){

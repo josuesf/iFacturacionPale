@@ -394,11 +394,11 @@ function VerificarLogin(req,res){
                                 return res.json({respuesta:"error1"})
                             }else{ 
                                 if(req.body.Cod_Caja!='' && req.body.Cod_Turno!='' && req.body.Cod_Caja!=undefined && req.body.Cod_Turno!=undefined){
-                                   
                                     p = [
                                         { nom_parametro: 'Cod_Turno', valor_parametro: req.body.Cod_Turno }
                                     ]
                                     EXEC_SQL('usp_CAJ_TURNO_ATENCION_TXPK', p , function (dataTurno) {
+                                        //console.log("caja diferente")
                                         
                                         if (dataTurno.err) {
                                             return res.json({respuesta:"error"})
@@ -410,6 +410,7 @@ function VerificarLogin(req,res){
                                             ]
                                 
                                             EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
+                                                
                                 
                                                 if (dataCaja.err) {
                                                     return res.json({respuesta:"error"})
@@ -528,7 +529,8 @@ function VerificarLogin(req,res){
                                                 })
                                             })
                                         }else{
-                                            res.json({respuesta:"error"})
+                                            return res.json({respuesta:"ok",flag_caja_abierta:"error",data:{Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result}}) 
+                                            //res.json({respuesta:"error"})
                                         }                  
                                     })
 
