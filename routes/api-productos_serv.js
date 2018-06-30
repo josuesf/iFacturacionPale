@@ -141,13 +141,40 @@ router.post('/guardar_producto', function (req, res){
 })
 
 
-router.post('/editar_producto', function (req, res){
+router.post('/get_producto_by_pk', function (req, res){
     input = req.body
     parametros = [
         {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto}
     ]
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_TXPK', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+router.post('/get_producto_stock', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto},
+        {nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.Cod_UnidadMedida},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTO_STOCK_TXPK', parametros}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+
+router.post('/get_producto_precio', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.Cod_UnidadMedida},
+    ]
+    procedimientos = [
+        {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TXProductoAlmacenUnidad', parametros}
     ]
     Ejecutar_Procedimientos(res, procedimientos)
 })

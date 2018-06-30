@@ -1,0 +1,111 @@
+2018-06-30T16:58:49.332Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: none
+2018-06-30T16:58:49.333Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2018-06-30T16:58:49.351Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-06-30T16:58:49.353Z - info: Extensions location cache not found, crawling directories
+2018-06-30T16:59:10.190Z - info: Found 30 extensions
+2018-06-30T16:59:10.248Z - debug: Writing extension locations cache to C:\Users\DESARR~1\AppData\Local\Temp\jsreport\core\locations.json
+2018-06-30T16:59:10.250Z - debug: Discovered 30 extensions
+2018-06-30T16:59:10.252Z - info: Using extension import-export
+2018-06-30T16:59:11.842Z - info: Using extension tags
+2018-06-30T16:59:11.881Z - info: Using extension templates
+2018-06-30T16:59:11.904Z - info: Using extension jsrender
+2018-06-30T16:59:11.906Z - info: Using extension authentication
+2018-06-30T16:59:13.146Z - debug: Extension authentication was disabled
+2018-06-30T16:59:13.146Z - info: Using extension cli
+2018-06-30T16:59:13.148Z - info: Using extension handlebars
+2018-06-30T16:59:13.164Z - info: Using extension debug
+2018-06-30T16:59:13.174Z - info: Using extension express
+2018-06-30T16:59:13.818Z - info: Using extension fop-pdf
+2018-06-30T16:59:14.213Z - info: Using extension phantom-pdf
+2018-06-30T16:59:14.670Z - info: Using extension fs-store
+2018-06-30T16:59:15.446Z - debug: Extension fs-store was disabled
+2018-06-30T16:59:15.447Z - info: Using extension authorization
+2018-06-30T16:59:15.839Z - debug: Extension authorization was disabled
+2018-06-30T16:59:15.839Z - info: Using extension images
+2018-06-30T16:59:16.246Z - info: Using extension child-templates
+2018-06-30T16:59:16.276Z - info: Using extension browser-client
+2018-06-30T16:59:16.291Z - info: Using extension licensing
+2018-06-30T16:59:16.777Z - info: Using extension data
+2018-06-30T16:59:17.125Z - info: Using extension text
+2018-06-30T16:59:17.141Z - info: Using extension reports
+2018-06-30T16:59:17.454Z - info: Using extension resources
+2018-06-30T16:59:17.725Z - info: Using extension base
+2018-06-30T16:59:17.734Z - info: Using extension studio
+2018-06-30T16:59:18.198Z - info: Using extension html-to-xlsx
+2018-06-30T16:59:19.025Z - info: Using extension scripts
+2018-06-30T16:59:19.396Z - info: Using extension assets
+2018-06-30T16:59:19.415Z - info: Using extension scheduling
+2018-06-30T16:59:19.502Z - info: Using extension xlsx
+2018-06-30T16:59:20.673Z - info: Using extension sample-template
+2018-06-30T16:59:21.206Z - debug: Creating samples is disabled
+2018-06-30T16:59:21.208Z - info: Using extension public-templates
+2018-06-30T16:59:21.491Z - debug: Extension public-templates was disabled
+2018-06-30T16:59:21.708Z - info: Creating memory store
+2018-06-30T16:59:21.731Z - info: Configuring routes for existing express app.
+2018-06-30T16:59:22.229Z - info: Using existing server instance.
+2018-06-30T16:59:22.230Z - info: Verifying license key free
+2018-06-30T16:59:22.232Z - info: Using free license
+2018-06-30T16:59:22.233Z - info: reporter initialized
+2018-06-30T16:59:30.041Z - debug: OData query on templates
+2018-06-30T16:59:30.043Z - debug: OData query on tags
+2018-06-30T16:59:30.044Z - debug: OData query on images
+2018-06-30T16:59:30.046Z - debug: OData query on data
+2018-06-30T16:59:30.048Z - debug: OData query on scripts
+2018-06-30T16:59:30.051Z - debug: OData query on assets
+2018-06-30T16:59:30.055Z - debug: OData query on xlsxTemplates
+2018-06-30T16:59:30.057Z - debug: OData query on schedules
+2018-06-30T16:59:30.060Z - debug: OData query on settings
+2018-06-30T16:59:30.203Z - debug: OData query on templates
+2018-06-30T16:59:30.224Z - debug: OData query on settings
+2018-06-30T16:59:45.604Z - debug: OData query on templates
+2018-06-30T16:59:45.609Z - debug: OData query on settings
+2018-06-30T17:00:03.687Z - debug: OData insert into templates
+2018-06-30T17:00:36.035Z - info: uploading image 1311907610471
+2018-06-30T17:00:36.049Z - info: Uploading done. {"_id":"pa0AEZ9sdMofOK0o","shortid":"ryhVwVrzX","name":"1311907610471","success":true}
+2018-06-30T17:00:36.068Z - debug: OData query on images
+2018-06-30T17:00:49.622Z - debug: OData update on templates
+2018-06-30T17:01:16.040Z - debug: OData update on templates
+2018-06-30T17:01:23.245Z - debug: OData update on templates
+2018-06-30T17:01:25.069Z - info: Starting rendering request 1 (user: null) requestId=1
+2018-06-30T17:01:25.071Z - info: Rendering template {shortid:H1wGPNrMX, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=1
+2018-06-30T17:01:25.072Z - debug: Data item not defined for this template. requestId=1
+2018-06-30T17:01:25.076Z - debug: Resources not defined for this template. requestId=1
+2018-06-30T17:01:25.077Z - debug: Base url not specified, skipping its injection. requestId=1
+2018-06-30T17:01:25.078Z - debug: Rendering engine handlebars requestId=1
+2018-06-30T17:01:25.722Z - debug: Compiled template not found in the cache, compiling timestamp=Sat Jun 30 2018 12:01:25 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=1
+2018-06-30T17:01:25.724Z - debug: Replaced images [] requestId=1
+2018-06-30T17:01:25.725Z - debug: Executing recipe phantom-pdf requestId=1
+2018-06-30T17:01:32.730Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Sat Jun 30 2018 12:01:30 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=1
+2018-06-30T17:01:32.731Z - debug: Request file:///C%3A%5CUsers%5CDESARR~1%5CAppData%5CLocal%5CTemp%5Cjsreport%5C39393600-7c87-11e8-b09f-ade7638d892ehtml.html timestamp=Sat Jun 30 2018 12:01:30 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=1
+2018-06-30T17:01:32.732Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=1
+2018-06-30T17:01:32.733Z - debug: Skipping storing report. requestId=1
+2018-06-30T17:01:32.735Z - info: Rendering request 1 finished in 7667 ms requestId=1
+2018-06-30T17:01:46.920Z - debug: OData update on templates
+2018-06-30T17:01:49.146Z - info: Starting rendering request 2 (user: null) requestId=2
+2018-06-30T17:01:49.148Z - info: Rendering template {shortid:H1wGPNrMX, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=2
+2018-06-30T17:01:49.148Z - debug: Data item not defined for this template. requestId=2
+2018-06-30T17:01:49.149Z - debug: Resources not defined for this template. requestId=2
+2018-06-30T17:01:49.150Z - debug: Base url not specified, skipping its injection. requestId=2
+2018-06-30T17:01:49.151Z - debug: Rendering engine handlebars requestId=2
+2018-06-30T17:01:49.435Z - debug: Compiled template not found in the cache, compiling timestamp=Sat Jun 30 2018 12:01:49 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=2
+2018-06-30T17:01:49.437Z - debug: Replaced images [] requestId=2
+2018-06-30T17:01:49.441Z - debug: Executing recipe phantom-pdf requestId=2
+2018-06-30T17:01:50.201Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Sat Jun 30 2018 12:01:50 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=2
+2018-06-30T17:01:50.202Z - debug: Request file:///C%3A%5CUsers%5CDESARR~1%5CAppData%5CLocal%5CTemp%5Cjsreport%5C475bae20-7c87-11e8-b09f-ade7638d892ehtml.html timestamp=Sat Jun 30 2018 12:01:50 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=2
+2018-06-30T17:01:50.203Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=2
+2018-06-30T17:01:50.203Z - debug: Skipping storing report. requestId=2
+2018-06-30T17:01:50.204Z - info: Rendering request 2 finished in 1060 ms requestId=2
+2018-06-30T17:02:11.761Z - info: Starting rendering request 3 (user: null) requestId=3
+2018-06-30T17:02:11.762Z - info: Rendering template {shortid:H1wGPNrMX, recipe:phantom-pdf, engine:handlebars, preview:true} requestId=3
+2018-06-30T17:02:11.763Z - debug: Data item not defined for this template. requestId=3
+2018-06-30T17:02:11.764Z - debug: Resources not defined for this template. requestId=3
+2018-06-30T17:02:11.764Z - debug: Base url not specified, skipping its injection. requestId=3
+2018-06-30T17:02:11.765Z - debug: Rendering engine handlebars requestId=3
+2018-06-30T17:02:12.078Z - debug: Compiled template not found in the cache, compiling timestamp=Sat Jun 30 2018 12:02:12 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=3
+2018-06-30T17:02:12.080Z - debug: Replaced images [] requestId=3
+2018-06-30T17:02:12.081Z - debug: Executing recipe phantom-pdf requestId=3
+2018-06-30T17:02:12.775Z - debug: Converting in dedicated phantomjs 1.9.8 timestamp=Sat Jun 30 2018 12:02:12 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=3
+2018-06-30T17:02:12.777Z - debug: Request file:///C%3A%5CUsers%5CDESARR~1%5CAppData%5CLocal%5CTemp%5Cjsreport%5C54da1e10-7c87-11e8-b09f-ade7638d892ehtml.html timestamp=Sat Jun 30 2018 12:02:12 GMT-0500 (Hora est. Pacífico, Sudamérica), requestId=3
+2018-06-30T17:02:12.778Z - debug: phantom-pdf recipe finished with 1 pages generated requestId=3
+2018-06-30T17:02:12.779Z - debug: Skipping storing report. requestId=3
+2018-06-30T17:02:12.781Z - info: Rendering request 3 finished in 1021 ms requestId=3

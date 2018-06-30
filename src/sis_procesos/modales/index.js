@@ -24,7 +24,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="Cod_Categoria">Categoria</label>
-                                <select id="Cod_Categoria"  class="form-control">
+                                <select id="Cod_Categoria" class="form-control" onchange=${()=>Buscar()}>
                                    
                                 </select>
                             </div>

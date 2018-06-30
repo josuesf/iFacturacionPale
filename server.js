@@ -13,6 +13,8 @@ var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
 var session = require('express-session');
+var PDFGeneratorAPI = require('pdf-generator-api');
+
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './uploads')
@@ -416,6 +418,33 @@ app.get('/logout', function (req, res) {
   delete req.session.authenticated;
   res.redirect('/');
 });
+
+
+let Client = new PDFGeneratorAPI(
+  'ccb1bb52d7c00998f374a9d4c76438fc1fc915866d3dd01e7afe0dd0adcdd807',
+  'fb8204cfb07eb47f309c23e0a989cca03e71302a4d0e4e120716ff4d257bf43f'
+);
+
+ 
+Client.setWorkspace('{unique_workspace_identifier}');
+ 
+app.get('/get_all_templates', function (req, res) {
+ 
+
+  Client.output('21648', { "Name": "OMARRRRRRRRRRRRRRRR" }).then(function (response) {
+    console.log("data base 764")
+    console.log(response.response)
+    console.log(response.meta)
+    // response.response => base64 document
+    // response.meta => document meta data e.g name, content-type, encoding etc
+  })
+  /*Client.getAll().then(function (response) {
+    console.log(response)
+  });*/
+});
+
+
+
 //Routes
 var usuarios_api = require('./routes/api-usuarios')
 var cajas_api = require('./routes/api-cajas')
@@ -487,6 +516,7 @@ var server = app.listen(3000, function (err) {
   console.log('Escuchando en el puerto 3000');
 })
 
+ 
 
 // var reportingApp = express();
 // app.use('/reporting', reportingApp);

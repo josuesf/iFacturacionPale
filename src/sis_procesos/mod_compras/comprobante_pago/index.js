@@ -321,7 +321,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                     <div class="input-group">
                                                         <label>Codigo/Producto/Servicio</label>
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-xs" onclick=${()=>BuscarProductoCP(CodLibro)}><i class="fa fa-search"></i></button>
+                                                            <button type="button" class="btn btn-default btn-xs" onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-search"></i></button>
                                                         </span>
                                                     </div>
                                                 </th>
@@ -342,11 +342,11 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             <tr style="background:bisque"> 
                                                 <input class="hidden" id="Cod_Producto" value=null>
                                                 <input class="hidden" id="Cod_TipoOperatividad" value=null>
-                                                <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro)}></th>
+                                                <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro,'blur')}></th>
                                                 <th><select class="form-control input-sm" id="Cod_Almacen" onchange="${()=>CargarUnidadMedida()}"> </select></th>
-                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida"> </select><select class="form-control input-sm hidden" id="Cod_TipoPrecio" > </select></th>
-                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad()}></th>
-                                                <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00" onkeypress=${()=>KeyPressPrecioUnitario()}></th>
+                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida" onchange="${()=>CambioUnidadMedida()}"> </select><select class="form-control input-sm" style="display:${CodLibro=='14'? 'block':'none'}" id="Cod_TipoPrecio" > </select></th>
+                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad(CodLibro)} onchange=${()=>KeyPressCantidad(CodLibro)}></th>
+                                                <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00" onkeypress=${()=>KeyPressPrecioUnitario()} onchange=${()=>KeyPressPrecioUnitario()}></th>
                                                 <th><input type="number" class="form-control input-sm" id="Descuento" value="0.00" ></th>
                                                 <th><input type="number" class="form-control input-sm" id="Importe" value="0.00" onkeypress=${()=>KeyEnterImporte(event,CodLibro,variables)}></th>
                                             </tr>
@@ -1111,6 +1111,17 @@ function LlenarUnidadMedida(unidades_medidas){
     $("#Cod_UnidadMedida").html('')
     $("#Cod_UnidadMedida").html(html) 
 }
+
+
+function LlenarTipoPrecio(tipos_precio){
+    var html = ''
+    for(var i=0; i<tipos_precio.length; i++){
+        html = html+'<option value="'+tipos_precio[i].Cod_TipoPrecio+'">'+tipos_precio[i].Nom_Precio+'</option>'
+    }
+     
+    $("#Cod_TipoPrecio").html('')
+    $("#Cod_TipoPrecio").html(html) 
+}
  
 
 function KeyPressPrecioUnitario(){
@@ -1122,7 +1133,7 @@ function KeyPressPrecioUnitario(){
      $("#Importe").focus()
 }
 
-function KeyPressCantidad(){
+function KeyPressCantidad(CodLibro){
     if($("#Stock").val()!=""){
        if(CodLibro=="14" && parseFloat($("#Cantidad").val())>parseFloat($("#Stock").val())){
         
@@ -1134,29 +1145,7 @@ function KeyPressCantidad(){
            }
        }
     }
-    /*
-     if (tbStock.Text != "" && aProducto.FlagStock)
-            {
-                // calcular total
-                if (aComprobante_pago.CodLibro == "14" && nudCantidad.Value > decimal.Parse(tbStock.Text))
-                {
-                    if (KryptonMessageBox.Show("La Cantidad Supera el Stock Actual, Desea Conituar?", Principal.aTitulo, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-                    {
-                      
-                
-                    }
-                }
-                else
-                    try
-                    {
-                        nudImporte.Value = Math.Round(nudCantidad.Value * nudPrecioUnitario.Value,2);
-                    }
-                    catch
-                    {
-                        nudImporte.Value = 0;
-                    }
-            }
-    */
+  
 }
 
 function KeyEnterImporte(event,CodLibro,variables){
@@ -1689,6 +1678,29 @@ function GenerarComprobante(){
     console.log(global.objCliente)
 }
 
+function CargarTipoPrecio(){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Producto:$("#Nom_Producto").attr("data-id"),
+            Cod_Almacen:$("#Cod_Almacen").val(),
+            Cod_UnidadMedida:$("#Cod_UnidadMedida").val()
+        })
+    }
+    fetch(URL + '/productos_serv_api/get_producto_precio', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+               var tipos_precios = res.data.productos
+               LlenarTipoPrecio(tipos_precios)
+            } 
+        })
+}
+
 function CargarUnidadMedida(Id_Producto,Cod_Almacen){
     if (Id_Producto != undefined && Cod_Almacen != undefined) {
         const parametros = {
@@ -1966,6 +1978,34 @@ function CambioLicitacion(){
     $("#divCodigoLicitacion").css("display",visible)
 }
 
+function CambioUnidadMedida() {
+    if ($("#Nom_Producto").attr("data-id") != null && $("#Nom_Producto").attr("data-id") != '' && $("#Cod_Almacen").val()!=null && $("#Cod_Almacen").val()!='') {
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id_Producto: $("#Nom_Producto").attr("data-id"),
+                Cod_UnidadMedida: $("#Cod_UnidadMedida").val(),
+                Cod_Almacen: $("#Cod_Almacen").val()
+            })
+        }
+        fetch(URL + '/productos_serv_api/get_producto_stock', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    var producto = res.data.producto[0]
+                    $("#Stock").val(producto.Stock_Act)
+                    CargarTipoPrecio()
+                }
+            })
+    }
+}
+
+
+
 function CambioComprobantes(){
     if($("#Cod_TipoComprobante").val()=="TKB" || $("#Cod_TipoComprobante").val()=="TKF" || $("#Cod_TipoComprobante").val()=="BE" || $("#Cod_TipoComprobante").val()=="FE"){
         $("#Numero").prop("disabled",true)
@@ -2202,9 +2242,14 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
 }
 
 
-function BuscarProductoCP(CodLibro) {
-    if($("#Nom_Producto").val().trim().length>=2){
-        BuscarProducto(CodLibro=="14",$("#Nom_Producto").val())
+function BuscarProductoCP(CodLibro,tipo) {
+    if(tipo=='blur'){
+        if ($("#Nom_Producto").val().trim().length > 2 && !$("#optEsGasto").is(":checked")) {
+            BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
+        }
+    }else{
+        if(!$("#optEsGasto").is(":checked"))
+            BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
     }
 }
 

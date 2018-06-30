@@ -105,7 +105,7 @@ function NuevoProductoServ(_escritura, variables, Id_Producto){
                 Id_Producto
             })
         }
-        fetch(URL+'/productos_serv_api/editar_producto', parametros)
+        fetch(URL+'/productos_serv_api/get_producto_by_pk', parametros)
             .then(req => req.json())
             .then(res => {
                 if (res.respuesta == 'ok') {
