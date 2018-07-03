@@ -6,7 +6,7 @@ var aCantidad = 0
 var NroDias = 60
 var aStock
 
-function VerAsignarSeries(_Series,fecha,Stock,Cantidad){ 
+function VerAsignarSeries(_Series, fecha, Stock, Cantidad) {
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -21,7 +21,7 @@ function VerAsignarSeries(_Series,fecha,Stock,Cantidad){
                         <div class="col-md-6">
                         </div>
                         <div class="col-md-4 col-md-offset-2"> 
-                            <button class="btn btn-success btn-sm btn-block" onclick=${()=>VerGenerarSeries(_Series,fecha,Stock,Cantidad)}>Generar Series</button>
+                            <button class="btn btn-success btn-sm btn-block" onclick=${() => VerGenerarSeries(_Series, fecha, Stock, Cantidad)}>Generar Series</button>
                         </div>
                     </div>
                     <p></p>
@@ -36,13 +36,13 @@ function VerAsignarSeries(_Series,fecha,Stock,Cantidad){
                                     </thead>
                                     <tbody id="tablaBodySeries">
     
-                                        ${_Series.length==0? yo`
+                                        ${_Series.length == 0 ? yo`
                                         <tr>
                                             <td class="Serie"><input class="form-control" value=""></td>
                                             <td class="Fecha"><input class="form-control" type="date" value="${fecha}"></td>
                                             <td class="Observacion"><input class="form-control" type="text"></td>
                                         </tr>
-                                        `:_Series.map(e=>yo`
+                                        `: _Series.map(e => yo`
                                         <tr>
                                             <td class="Serie"><input class="form-control" value="${e.Serie}"></td>
                                             <td class="Fecha"><input class="form-control" type="date" value="${e.Fecha}"></td>
@@ -57,17 +57,17 @@ function VerAsignarSeries(_Series,fecha,Stock,Cantidad){
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnAceptar" onclick=${()=>AceptarAsignarSerie()}>Aceptar</button>
+                    <button type="button" class="btn btn-info" id="btnAceptar" onclick=${() => AceptarAsignarSerie()}>Aceptar</button>
                 </div>
             </div>
         </div>`
 
     var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
-    $('#modal-otros-procesos').modal()   
+    $('#modal-otros-procesos').modal()
 }
 
-function VerGenerarSeries(_Series,fecha,Stock,Cantidad){ 
+function VerGenerarSeries(_Series, fecha, Stock, Cantidad) {
     var el = yo`
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -78,59 +78,62 @@ function VerGenerarSeries(_Series,fecha,Stock,Cantidad){
                     <h4 class="modal-title"><strong>Generar Series</strong></h4>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12"> 
-                            <label class="col-sm-5 col-form-label">Serie Inicial</label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="SerieInicial">
-                            </div>
-                        </div>
-                    </div> 
-                    <div class="row">
-                        <div class="col-sm-12"> 
-                            <div class="col-sm-5"> 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" id="optionsGenerarSerie" name="optionsGenerarSerie" checked="checked" value="Cantidad" onchange="${()=>CambioGenerarSerie()}">Cantidad
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="number" class="form-control" id="Cantidad">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12"> 
-                            <div class="col-sm-5"> 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" id="optionsGenerarSerie" name="optionsGenerarSerie" value="SerieFinal" onchange="${()=>CambioGenerarSerie()}">Serie Final
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="SerieFinal" onkeypress="${()=>CambioSerieFinal()}" disabled>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12"> 
-                            <div class="col-md-6 col-md-offset-3"> 
 
-                                <div class="form-group row">
-                                    <label class="col-sm-1 col-form-label">a</label>
-                                    <div class="col-sm-7">
-                                    <input type="number" id="Dias" value="30" class="form-control-plaintext">
-                                    </div>
-                                    <label class="col-sm-2 col-form-label"> Dia(s)</label>
-                                </div>
-                            </div>
+
+                <form>
+                    <div class="form-group row">
+                        <label class="col-sm-5 col-form-label">Serie Inicial</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="SerieInicial">
                         </div>
                     </div>
+                    <div class="form-group row"> 
+                        <div class="radio col-sm-5 col-form-label">
+                            <label>
+                                <input type="radio" id="optionsGenerarSerie" name="optionsGenerarSerie" checked="checked" value="Cantidad" onchange="${() => CambioGenerarSerie()}">Cantidad
+                            </label>
+                        </div>
+                         
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" id="Cantidad">
+                        </div>
+                    </div>
+
+                    <div class="form-group row"> 
+                        <div class="radio col-sm-5 col-form-label">
+                            <label>
+                                <input type="radio" id="optionsGenerarSerie" name="optionsGenerarSerie" value="SerieFinal" onchange="${() => CambioGenerarSerie()}">Serie Final
+                            </label>
+                        </div>
+                        
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="SerieFinal" onkeypress="${() => CambioSerieFinal()}" disabled>
+                        </div>
+                    </div>
+ 
+
+                    <div class="form-group row"> 
+                        <div class="radio col-sm-4 col-form-label text-right">
+                            <label>
+                                a
+                            </label>
+                        </div>
+                        
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control" id="Dias" value="0">
+                        </div>
+                        <div class="radio col-sm-4 col-form-label text-left">
+                            <label>
+                                Dia(s)
+                            </label>
+                        </div>
+                    </div>
+                 
+                </form>
+ 
                     <div class="modal-footer text-center"> 
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-info" id="btnAceptar" onclick=${()=>AceptarGenerarSerie()}>Aceptar</button>
+                        <button type="button" class="btn btn-info" id="btnAceptar" onclick=${() => AceptarGenerarSerie()}>Aceptar</button>
                     </div>
                 </div>              
             </div>
@@ -138,34 +141,33 @@ function VerGenerarSeries(_Series,fecha,Stock,Cantidad){
 
     var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()   
+    $('#modal-superior').modal()
 }
 
 
-function CambioGenerarSerie(){
-    if($("input[name=optionsGenerarSerie]:checked").val()=="Cantidad"){
-        $("#SerieFinal").attr("disabled",true)
-        $("#Cantidad").attr("disabled",false)
+function CambioGenerarSerie() {
+    if ($("input[name=optionsGenerarSerie]:checked").val() == "Cantidad") {
+        $("#SerieFinal").attr("disabled", true)
+        $("#Cantidad").attr("disabled", false)
         $("#Cantidad").val("")
         $("#SerieFinal").val("")
-    }else{
-        $("#SerieFinal").attr("disabled",false)
+    } else {
+        $("#SerieFinal").attr("disabled", false)
         $("#Cantidad").val("")
         $("#SerieFinal").val("")
     }
 }
 
-function CambioGenerarSerie(){
-    try{
-        $("#Cantidad").val(parseInt($("#SerieFinal").val())-parseInt($("#SerieInicial").val()))
-    }catch(e){
+function CambioGenerarSerie() {
+    try {
+        $("#Cantidad").val(parseInt($("#SerieFinal").val()) - parseInt($("#SerieInicial").val()))
+    } catch (e) {
         $("#Cantidad").val("0")
     }
 }
 
-function NumeroCeros(pCantidad){
-    switch (pCantidad)
-    {
+function NumeroCeros(pCantidad) {
+    switch (pCantidad) {
         case 1:
             return "0";
         case 2:
@@ -201,28 +203,74 @@ function NumeroCeros(pCantidad){
         case 17:
             return "00000000000000000";
         case 18:
-            return "000000000000000000"; 
+            return "000000000000000000";
         default:
             return "";
 
     }
 }
 
-function AceptarGenerarSerie(){
-    var pSerieInicial = "";
+function AceptarGenerarSerie() {
+    var pSerieInicial = ""
+    var pPreFijo = ""
+    var pNumero = ""
+    if($('input[name=optionsGenerarSerie]:checked').val() == 'SerieFinal'){
+        pSerieInicial = $("#SerieInicial").val()
+        pPreFijo = ExtraerTextoIzquierda(pSerieInicial)
+        pNumero = ExtraerNumeroDerecha(pSerieInicial)
+        $('#tablaBodySeries tr').each(function () {
+            //pPreFijo + (Int64.Parse(pNumero) + j).ToString(NumeroCeros(pNumero.Length));
+            $(this).find("td.Serie").find('input').val(pPreFijo + NumeroCeros(pNumero.length) + (parseInt(pNumero) + 1))
+            Date.prototype.addDays = function (days) {
+                var dat = new Date(this.valueOf());
+                dat.setDate(dat.getDate() + days);
+                return dat;
+            }
+            const _fecha = new Date()
+            _fecha.addDays(parseInt($("#Dias").val()))
+            const mes = _fecha.getMonth() + 1
+            const dia = _fecha.getDate()
+            var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    
+            $(this).find("td.Fecha").find('input').val(fecha_now)
+    
+        })
+    }else{
+        pSerieInicial = $("#SerieInicial").val()
+        pPreFijo = ExtraerTextoIzquierda(pSerieInicial)
+        pNumero = ExtraerNumeroDerecha(pSerieInicial)
+        $('#tablaBodySeries tr').each(function () {
+            //pPreFijo + (Int64.Parse(pNumero) + j).ToString(NumeroCeros(pNumero.Length));
+            $(this).find("td.Serie").find('input').val(pPreFijo + NumeroCeros(pNumero.length) + (parseInt(pNumero) + 1))
+            Date.prototype.addDays = function (days) {
+                var dat = new Date(this.valueOf());
+                dat.setDate(dat.getDate() + days);
+                return dat;
+            }
+            const _fecha = new Date()
+            _fecha.addDays(parseInt($("#Dias").val()))
+            const mes = _fecha.getMonth() + 1
+            const dia = _fecha.getDate()
+            var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    
+            $(this).find("td.Fecha").find('input').val(fecha_now)
+    
+        })
+    }
+    /*var pSerieInicial = "";
     var pPreFijo = "";
     var pNumero = "";
     pSerieInicial = $("#SerieInicial").val()
     pPreFijo = ExtraerTextoIzquierda(pSerieInicial)
     pNumero = ExtraerNumeroDerecha(pSerieInicial)
-    /*$('#tablaBodySeries tr').each(function () {
+    $('#tablaBodySeries tr').each(function () {
         //pPreFijo + (Int64.Parse(pNumero) + j).ToString(NumeroCeros(pNumero.Length));
-        $(this).find("td.Serie").find('input').val(pPreFijo +NumeroCeros(pNumero.length)+(parseInt(pNumero)+1))
-        Date.prototype.addDays = function(days) {
+        $(this).find("td.Serie").find('input').val(pPreFijo + NumeroCeros(pNumero.length) + (parseInt(pNumero) + 1))
+        Date.prototype.addDays = function (days) {
             var dat = new Date(this.valueOf());
             dat.setDate(dat.getDate() + days);
             return dat;
-          }
+        }
         const _fecha = new Date()
         _fecha.addDays(parseInt($("#Dias").val()))
         const mes = _fecha.getMonth() + 1
@@ -230,14 +278,16 @@ function AceptarGenerarSerie(){
         var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
         $(this).find("td.Fecha").find('input').val(fecha_now)
-        
+
     })*/
+
+    $("#modal-superior").modal('hide')
 
 }
 
-function AceptarAsignarSerie(){
+function AceptarAsignarSerie() {
     var arraySeries = []
-    if(EsValido()){
+    if (EsValido()) {
         $('#tablaBodySeries tr').each(function () {
             var data = {}
             data['Serie'] = $(this).find("td.Serie").find('input').val()
@@ -246,43 +296,43 @@ function AceptarAsignarSerie(){
             arraySeries.push(data)
             $('#modal-otros-procesos').modal('hide')
             global.arraySeries = arraySeries
-        }) 
-    }else{
-        toastr.error('Debe de ingresar todas las series antes de salir de esta ventana','Error',{timeOut: 5000})
+        })
+    } else {
+        toastr.error('Debe de ingresar todas las series antes de salir de esta ventana', 'Error', { timeOut: 5000 })
     }
-}   
+}
 
-function ExtraerTextoIzquierda(pSerie){
-    try{
+function ExtraerTextoIzquierda(pSerie) {
+    try {
         var _Serie = parseInt(pSerie);
         return "";
-    }catch(e){
+    } catch (e) {
         return pSerie.substring(0, 1) + ExtraerTextoIzquierda(pSerie.substring(1, pSerie.Length - 1));
     }
 }
 
-function ExtraerNumeroDerecha(pSerie){
-    try{
+function ExtraerNumeroDerecha(pSerie) {
+    try {
         var _Serie = parseInt(pSerie);
         return pSerie;
-    }catch(e){
+    } catch (e) {
         return ExtraerNumeroDerecha(pSerie.substring(1, pSerie.Length - 1));
     }
 }
 
-function EsValido(){
+function EsValido() {
     var _EsValido = false
     $('#tablaBodySeries tr').each(function () {
-        if($(this).find("td.Serie").find('input').val().trim()==""){
+        if ($(this).find("td.Serie").find('input').val().trim() == "") {
             return false
-        }else{
+        } else {
             _EsValido = true
         }
     })
     return _EsValido
 }
 
-function AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,_Series,fecha,Stock){ 
+function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series, fecha, Stock) {
     H5_loading.show()
     const parametros = {
         method: 'POST',
@@ -296,26 +346,26 @@ function AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,_Series,fe
             Cod_Almacen
         })
     }
-    fetch(URL+'/series_api/get_variables_series', parametros)
-    .then(req => req.json())
-    .then(res => {
-        if (res.respuesta == 'ok') {
-            Date.prototype.addDays = function(days) {
-                var dat = new Date(this.valueOf());
-                dat.setDate(dat.getDate() + days);
-                return dat;
-              }
-            const _fecha = new Date()
-            _fecha.addDays(NroDias)
-            const mes = _fecha.getMonth() + 1
-            const dia = _fecha.getDate()
-            var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-            VerAsignarSeries(_Series,fecha_now,Stock,Cantidad)
-            H5_loading.hide()
-        }
-    })
+    fetch(URL + '/series_api/get_variables_series', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                Date.prototype.addDays = function (days) {
+                    var dat = new Date(this.valueOf());
+                    dat.setDate(dat.getDate() + days);
+                    return dat;
+                }
+                const _fecha = new Date()
+                _fecha.addDays(NroDias)
+                const mes = _fecha.getMonth() + 1
+                const dia = _fecha.getDate()
+                var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+                VerAsignarSeries(_Series, fecha_now, Stock, Cantidad)
+                H5_loading.hide()
+            }
+        })
 
     //VerAsignarSeries(CodAlmacen, IdProducto,Cantidad,NroDias)
 }
 
-export {  AsignarSeriesModal }
+export { AsignarSeriesModal }

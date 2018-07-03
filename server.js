@@ -419,7 +419,7 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
 
-
+/*
 let Client = new PDFGeneratorAPI(
   'ccb1bb52d7c00998f374a9d4c76438fc1fc915866d3dd01e7afe0dd0adcdd807',
   'fb8204cfb07eb47f309c23e0a989cca03e71302a4d0e4e120716ff4d257bf43f'
@@ -429,19 +429,23 @@ let Client = new PDFGeneratorAPI(
 Client.setWorkspace('{unique_workspace_identifier}');
  
 app.get('/get_all_templates', function (req, res) {
+  
+  Client.output('21648', { "Name": "hola" }).then(function (response) {
+    //console.log("data base 764")
+    var fs = require('fs');
+    const input = req.body
+    var b64string = response.response
+    var buf = Buffer.from(b64string, 'base64');
+    fs.writeFile('./assets/media/prueba.pdf', buf, function (err) {
+      if (err) {
+        return res.json({ respuesta: err });
+      } else {
+        return res.json({ respuesta: 'ok' })
+      }
+    });
  
-
-  Client.output('21648', { "Name": "OMARRRRRRRRRRRRRRRR" }).then(function (response) {
-    console.log("data base 764")
-    console.log(response.response)
-    console.log(response.meta)
-    // response.response => base64 document
-    // response.meta => document meta data e.g name, content-type, encoding etc
-  })
-  /*Client.getAll().then(function (response) {
-    console.log(response)
-  });*/
-});
+  })  
+});*/
 
 
 
@@ -518,12 +522,71 @@ var server = app.listen(3000, function (err) {
 
  
 
-// var reportingApp = express();
-// app.use('/reporting', reportingApp);
-// var jsreport = require('jsreport')({
-//   express: { app :reportingApp, server: server },
-//   appPath: "/reporting"
-// });
-// jsreport.init().catch(function (e) {
-//   console.error(e);
-// });
+ var reportingApp = express();
+ app.use('/reporting', reportingApp);
+ var jsreport = require('jsreport')({
+   express: { app :reportingApp, server: server },
+   appPath: "/reporting"
+ });
+ jsreport.init().then(() => {
+  console.log('jsreport server started')
+  
+ 
+ /*jsreport.init().catch(function (e) {
+   console.error(e);
+ });*/
+
+ /*jsreport.init().then(() => {
+  jsreport.render({
+    template: {
+      name: 'BOLETA',
+      engine: 'handlebars',
+      recipe: 'chrome-pdf'
+    },
+    data: {
+      number: "123SSSSSSS",
+      seller: {
+          "name": "Next Step WSSSSebs, Inc.",
+          "road": "12345 Sunny SSSSSSRoad",
+          "country": "Sunnyville, TX 12345"
+      },
+      buyer: {
+          "name": "Acme CSSSorp.",
+          "road": "16 Johnson Road",
+          "country": "ParSSSSis, France 8060"
+      },
+      items: [{
+          "name": "WebsSSSSite design",
+          "price": 500
+      }]
+  }
+  }).then((resp) => {
+    // write report buffer to a file
+    fs.writeFileSync('report.pdf', resp.content)    
+  });
+}).catch((e) => {
+  console.log(e)
+});*/
+
+app.use('/reporting/api',function(req,res){
+  //var fs = require('fs'); 
+    //get the html file location first
+                        console.log(html.toString())
+     //console log for making sure if the Html is exists or not
+          jsreport.render({
+            template: {
+              "shortid":"HJh43EuzQ",
+              "engine": "handlebars",
+              "recipe": "phantom-pdf",
+            },
+            data:{
+              "hola":"sssssssssssss"
+            }
+          }).then(function(out) {										
+            
+          }).catch(function(err){
+          //added catch to know why the report is hanging. thanks to this i can know the error i mentioned above
+            console.log(err)
+          });
+        })
+})

@@ -12,9 +12,11 @@ var aMonto = 0
 var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
+var CodTipoOperacion = '01'
  
 
-function VerRegistroCompra(variables,fecha_actual,CodLibro) {
+function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
+    CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
     obs_xml = null
     aMonto = 0 
@@ -290,7 +292,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                                 <div class="row" id="divExportacion">
                                                     <div class="checkbox">
                                                         <label>
-                                                            <input type="checkbox" id="optExportacion" name="optExportacion"> Exportacion ? 
+                                                            <input type="checkbox" id="optExportacion" name="optExportacion" onchange=${()=>CambioExportacion(CodLibro,variables)}> Exportacion ? 
                                                         </label>
                                                     </div>
                                                 </div>
@@ -436,7 +438,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <div class="form-group">
+                                        <div class="form-group" id="divAplicaImpuesto">
                                             <label>
                                                 <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}> I.G.V 18%
                                             </label>
@@ -446,7 +448,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                             <label>
                                                 <input type="checkbox" id="cbAplicaServicios"  checked="checked"> SERVICIOS
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos" onkeypress=${CalcularTotal(CodLibro,variables)} onchange=${CalcularTotal(CodLibro,variables)}>
                                         </div>
                                         <div class="form-group" style="display:none">
                                             <label>
@@ -456,7 +458,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
                                         </div>
                                         <div class="form-group">
                                             <strong>DESCUENTO GLOBAL</strong>
-                                            <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global" onkeypress=${CalcularTotal(CodLibro,variables)} onchange=${CalcularTotal(CodLibro,variables)}>
                                         </div>
                                         <div class="form-group">
                                             <strong>GRAN TOTAL</strong>
@@ -495,8 +497,8 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
     $('#modal-superior').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente)
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-            $("#Cod_TipoOperatividad").val(global.objCliente.Cod_TipoOperatividad)
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
@@ -530,6 +532,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro) {
         if(global.objProducto!='' && global.objProducto){
             $("#Nom_Producto").attr("data-id",global.objProducto.Id_Producto)
             $("#Nom_Producto").val(global.objProducto.Nom_Producto)
+            $("#Cod_TipoOperatividad").val(global.objProducto.Cod_TipoOperatividad)
             $("#Cod_Producto").val(global.objProducto.Cod_Producto)
             CargarAlmacenes(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
             CargarUnidadMedida(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
@@ -880,10 +883,20 @@ function AgregarFilaTabla(CodLibro,variables){
             CalcularTotal(CodLibro,variables)
             $("#Nom_Producto").attr("data-id",null)
             $("#Stock").val("")
-            $("#Precio_Unitario").val(0)
-            $("#Cantidad").val(0)
-            $("#Importe").val(0)
-            $("#Nom_Producto").focus()
+            $("#Precio_Unitario").val("0.00")
+            $("#Cantidad").val("0.00")
+            $("#Importe").val("0.00")
+            $("#Descuento").val("0.00")
+
+            //$("#Nom_Producto").attr("data-id",null)
+            $("#Cod_Producto").val(null)
+            $("#Cod_Almacen").val("")
+            $("#Cod_UnidadMedida").text("")
+            $("#Stock").val("")
+            $("#Nom_Producto").val("") 
+            $("#Cod_TipoPrecio").val(null)
+            $("#Cod_TipoOperatividad").val("")
+
         }else{
             BuscarProductoCP(CodLibro)
         }
@@ -895,39 +908,43 @@ function AgregarFilaTabla(CodLibro,variables){
 
 
 function AplicarPercepcion(CodLibro,variables){
-    var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
-    var Serie = $("#Serie").val()
-    var Numero = $("#Numero").val()
-    var Calculo = ((parseFloat($("#Gran_Total").val())*parseFloat($("#PorcentajePercepcion").val()))/100).toFixed(2)
-    var idFila = "P"+contadorPercepcion
-    var fila = yo`
-            <tr id="${idFila}">
-                <td class="id_ComprobantePago hidden"><input value="0"></td>
-                <td class="id_Detalle hidden"><input value="0"></td> 
-                <td class="Id_Producto hidden"><input value="0"></td> 
-                <td class="Codigo"></td>
-                <td class="Descripcion"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
-                <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
-                <td class="UM"><input type="text" class="form-control input-sm"></td>
-                <td class="Stock hidden"><input type="number" class="form-control input-sm" value="1"></td> 
-                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1"></td> 
-                <td class="Despachado hidden">1</td> 
-                <td class="PU"><input type="number" class="form-control input-sm" value="${Calculo}"></td> 
-                <td class="Descuento"><input type="number" class="form-control input-sm" value="0.00"></td> 
-                <td class="Importe"><input type="number" class="form-control input-sm" value="${Calculo}"></td>
-                <td class="Cod_Manguera hidden"></td>  
-                <td class="Tipo hidden">PER</td> 
-                <td class="Obs_ComprobanteD hidden"></td> 
-                <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
-                <ul class="dropdown-menu"> 
-                    <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
-                    <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                </ul>
-            </tr>`
-    $("#tablaBody").append(fila)
-    contadorPercepcion++
-    CalcularTotal(CodLibro,variables)
-    $("#modal-otros-procesos").modal('hide')
+    if($("#PorcentajePercepcion").val().trim()!=""){
+        var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
+        var Serie = $("#Serie").val()
+        var Numero = $("#Numero").val()
+        var Calculo = ((parseFloat($("#Gran_Total").val())*parseFloat($("#PorcentajePercepcion").val()))/100).toFixed(2)
+        var idFila = "P"+contadorPercepcion
+        var fila = yo`
+                <tr id="${idFila}">
+                    <td class="id_ComprobantePago hidden"><input value="0"></td>
+                    <td class="id_Detalle hidden"><input value="0"></td> 
+                    <td class="Id_Producto hidden"><input value="0"></td> 
+                    <td class="Codigo"></td>
+                    <td class="Descripcion"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
+                    <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
+                    <td class="UM"><input type="text" class="form-control input-sm"></td>
+                    <td class="Stock hidden"><input type="number" class="form-control input-sm" value="1"></td> 
+                    <td class="Cantidad"><input type="number" class="form-control input-sm" value="1"></td> 
+                    <td class="Despachado hidden">1</td> 
+                    <td class="PU"><input type="number" class="form-control input-sm" value="${Calculo}"></td> 
+                    <td class="Descuento"><input type="number" class="form-control input-sm" value="0.00"></td> 
+                    <td class="Importe"><input type="number" class="form-control input-sm" value="${Calculo}"></td>
+                    <td class="Cod_Manguera hidden"></td>  
+                    <td class="Tipo hidden">PER</td> 
+                    <td class="Obs_ComprobanteD hidden"></td> 
+                    <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+                    <ul class="dropdown-menu"> 
+                        <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
+                        <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
+                    </ul>
+                </tr>`
+        $("#tablaBody").append(fila)
+        contadorPercepcion++
+        CalcularTotal(CodLibro,variables)
+        $("#modal-otros-procesos").modal('hide')
+    }else{
+        toastr.error('Error al ingresar el procentaje de Percepcion, intentelo de nuevo.','Error',{timeOut: 5000})
+    }
 }
 
 function AgregarFilaFormaPago(pDescFormaPago,pCodFormaPago,pCodMoneda,pMonto,pTipoCambio,pReferencia,Tipo_Cambio,Cod_Moneda){
@@ -1136,7 +1153,7 @@ function KeyPressPrecioUnitario(){
 function KeyPressCantidad(CodLibro){
     if($("#Stock").val()!=""){
        if(CodLibro=="14" && parseFloat($("#Cantidad").val())>parseFloat($("#Stock").val())){
-        
+
        }else{
            try{
               $("#Importe").val((parseFloat($("#Cantidad").val())*parseFloat($("#Precio_Unitario").val())).toFixed(2))
@@ -1151,7 +1168,7 @@ function KeyPressCantidad(CodLibro){
 function KeyEnterImporte(event,CodLibro,variables){
  
     try{
-       $("#Cantidad").val(parseFloat($("#Importe"))/parseFloat($("#Precio_Unitario").val()))
+       $("#Cantidad").val(parseFloat($("#Importe").val())/parseFloat($("#Precio_Unitario").val()))
        CalcularTotal(CodLibro,variables)
     }catch(e){
         $("#Cantidad").val("0")
@@ -1339,13 +1356,13 @@ function CalcularTotal(CodLibro,variables){
             Suma = Suma - Suma * porcDescuentoglobal
 
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
-            $("#Impuesto").val(parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+            $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
         }else{
             $("#subtotal").val(Suma)
-            $("#Impuesto").val(parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+            $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
             $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion+parseFloat($("#Impuesto").val())-parseFloat(DescuentosGlobales))
             if(parseFloat($("#Descuento_Global").val())>0){
-                $("#Impuesto").val(parseFloat($("#Gran_Total").val())*parseFloat(variables.empresa.Por_Impuesto)/100)
+                $("#Impuesto").val((parseFloat($("#Gran_Total").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
                 $("#subtotal").val(parseFloat($("#Gran_Total").val())-parseFloat($("#Impuesto").val()))
             }
         }
@@ -1944,6 +1961,72 @@ function CambioDespachado(){
     }
 }
 
+function CambioExportacion(CodLibro,variables){
+    if($("#optExportacion").is(":checked")){
+        CodTipoOperacion = '02'
+        $("#ckbAplicaImpuesto").prop("checked",false)
+        $("#divAplicaImpuesto").css("display","none")
+
+        $('#tablaBody tr').each(function () {
+            var Id_Producto = $(this).find("td").eq(2).find("input").val()
+           
+
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Id_Producto
+                })
+            }
+            fetch(URL + '/productos_serv_api/get_producto_by_pk', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {
+                        var producto = res.data.producto[0]
+                        $(this).find("td").eq(4).find("input").val(producto.Nom_Producto+' / '+producto.Des_CortaProducto)
+                    }
+                })
+ 
+        });
+
+        
+    }else{
+        CodTipoOperacion = '01'
+        $("#ckbAplicaImpuesto").prop("checked",true)
+        $("#divAplicaImpuesto").css("display","block")
+
+        $('#tablaBody tr').each(function () {
+           
+            var Id_Producto = $(this).find("td").eq(2).find("input").val()
+           
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Id_Producto
+                })
+            }
+            fetch(URL + '/productos_serv_api/get_producto_by_pk', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {
+                        var producto = res.data.producto[0]
+                        $(this).find("td").eq(4).find("input").val(producto.Nom_Producto)
+                    }
+                })
+           
+     
+        }); 
+    }
+    CalcularTotal(CodLibro,variables)
+}
+
 function CambioCreditoContado(){
     $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val())
     if($("#Cod_FormaPago").val()!="" && $("#Cod_FormaPago").val()!=null){
@@ -1978,6 +2061,7 @@ function CambioLicitacion(){
     $("#divCodigoLicitacion").css("display",visible)
 }
 
+ 
 function CambioUnidadMedida() {
     if ($("#Nom_Producto").attr("data-id") != null && $("#Nom_Producto").attr("data-id") != '' && $("#Cod_Almacen").val()!=null && $("#Cod_Almacen").val()!='') {
         const parametros = {
@@ -2247,9 +2331,13 @@ function BuscarProductoCP(CodLibro,tipo) {
         if ($("#Nom_Producto").val().trim().length > 2 && !$("#optEsGasto").is(":checked")) {
             BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
         }
+        $("#Nom_Producto").focusout()
+
     }else{
         if(!$("#optEsGasto").is(":checked"))
             BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
+        
+        $("#Nom_Producto").focusout()
     }
 }
 
@@ -2366,7 +2454,7 @@ function ComprobantePago(Cod_Libro) {
                 .then(res => {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa
-                    VerRegistroCompra(variables,fecha_format,Cod_Libro)
+                    VerRegistroCompra(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01')
                     H5_loading.hide()
     
                 })
