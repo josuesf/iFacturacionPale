@@ -520,9 +520,102 @@ var server = app.listen(3000, function (err) {
   console.log('Escuchando en el puerto 3000');
 })
 
- 
+var jsreport = require('jsreport')
+var reportingApp = express(),
+    jsreportInstance;
 
- var reportingApp = express();
+app.get('/comprobante', function(req, res) {
+
+
+  jsreport.render({
+    template: {
+      name:'factura',
+      recipe: "phantom-pdf",
+      engine: 'handlebars'
+    },
+    data:{
+      "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+      "FLAG":true,
+      "NOMBRE":"GRIFO MARCELO'S S.R.L.",
+      "DIRECCION":"AV. HUAYRUROPATA NRO. 1700 CUSCO-CUSCO-WANCHAQ",
+      "RUC":"20357768269",
+      "DOCUMENTO": "FACTURA ELECTRONICA",
+      "SERIE": "SERIE   F001",
+      "NUMERO": "Nº   00005591",
+      "CLIENTE": "PALE CONSULTORES E.I.R.L",
+      "DIRECCION_CLIENTE": "MZA. U LOTE.20 ASC. TUPAC AMARU CUSCO - CUSCO - SAN SEBASTIAN",
+      "FECHA_EMISION": "25/04/2018",
+      "NRO_COMPROBANTE": "87140",
+      "OBSERVACIONES": "POR LA VENTA DE MERCADERIA",
+      "CAJERO": "CAJERO",
+      "CONDICION": "EFECTIVO",
+      "PLACA_VEHICULAR":"",
+      "ESCRITURA_MONTO":"SON: NOVENTA Y CINCO CON 11/100 SOLES",
+      "GRAVADAS":"80.62",
+      "EXONERADAS":"0.00",
+      "GRATUITAS":"0.00",
+      "INAFECTAS":"0.00",
+      "IGV":"14.50",
+      "TOTAL":"95.11",
+      "DETALLES": [{
+           "DESCRIPCION": "GASOHOL 84 OCTANOS",
+           "UNIDAD": "GALONES",
+           "CANTIDAD": "2.00",
+           "PRECIO_UNITARIO":"11.78",
+           "DESCUENTO":"0.00",
+           "SUBTOTAL":"23.56"
+       }, {
+           "DESCRIPCION": "GASOHOL 90 OCTANOS",
+           "UNIDAD": "GALONES",
+           "CANTIDAD": "4.50",
+           "PRECIO_UNITARIO":"11.99",
+           "DESCUENTO":"0.00",
+           "SUBTOTAL":"53.96"
+       }]
+   }
+  }).then(function (o) {
+    o.result.pipe(res);
+  }).catch(function (e) {
+    console.error(e)
+  })
+
+    /*jsreport.render({
+      template: {
+        content: "<h1>Test</h1>",
+        recipe: 'html',
+        engine: 'none'
+    }
+    }).then(function (o) {
+      o.result.pipe(res);
+    }).catch(function (e) {
+      console.error(e)
+    })*/ 
+
+
+    /*jsreport.render({
+        template: {
+            content: '<h1>Test</h1>',
+            engine: 'none',
+            recipe: 'phantom-pdf'
+        }
+    }).then(function(resp){
+        resp.stream.pipe(res);
+    })*/
+});
+  
+app.use('/reporting', reportingApp);
+
+
+jsreportInstance = jsreport({
+  express: { app :reportingApp, server: server },
+  appPath: "/reporting"
+});
+
+jsreportInstance.init().catch(function (e) {
+  console.error('error initializing jsreport:', e);
+});
+
+/* var reportingApp = express();
  app.use('/reporting', reportingApp);
  var jsreport = require('jsreport')({
    express: { app :reportingApp, server: server },
@@ -531,48 +624,11 @@ var server = app.listen(3000, function (err) {
  jsreport.init().then(() => {
   console.log('jsreport server started')
   
- 
- /*jsreport.init().catch(function (e) {
-   console.error(e);
- });*/
 
- /*jsreport.init().then(() => {
-  jsreport.render({
-    template: {
-      name: 'BOLETA',
-      engine: 'handlebars',
-      recipe: 'chrome-pdf'
-    },
-    data: {
-      number: "123SSSSSSS",
-      seller: {
-          "name": "Next Step WSSSSebs, Inc.",
-          "road": "12345 Sunny SSSSSSRoad",
-          "country": "Sunnyville, TX 12345"
-      },
-      buyer: {
-          "name": "Acme CSSSorp.",
-          "road": "16 Johnson Road",
-          "country": "ParSSSSis, France 8060"
-      },
-      items: [{
-          "name": "WebsSSSSite design",
-          "price": 500
-      }]
-  }
-  }).then((resp) => {
-    // write report buffer to a file
-    fs.writeFileSync('report.pdf', resp.content)    
-  });
-}).catch((e) => {
-  console.log(e)
-});*/
+})
 
 app.use('/reporting/api',function(req,res){
-  //var fs = require('fs'); 
-    //get the html file location first
-                        console.log(html.toString())
-     //console log for making sure if the Html is exists or not
+  
           jsreport.render({
             template: {
               "shortid":"HJh43EuzQ",
@@ -585,8 +641,7 @@ app.use('/reporting/api',function(req,res){
           }).then(function(out) {										
             
           }).catch(function(err){
-          //added catch to know why the report is hanging. thanks to this i can know the error i mentioned above
+         
             console.log(err)
           });
-        })
-})
+        })*/

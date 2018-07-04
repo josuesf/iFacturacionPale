@@ -68,7 +68,7 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
                                 <td>${u.Cod_UsuarioReg}</td>
                                 <td>${u.Fecha_Reg}</td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevaSucursal(_escritura,modulos, u)}"><i class="fa fa-edit"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoPerfil(_escritura,modulos, u)}"><i class="fa fa-edit"></i></button>` : yo``}
                                     ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>

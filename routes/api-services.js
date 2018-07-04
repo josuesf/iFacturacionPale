@@ -72,9 +72,8 @@ router.post('/get_all_productos_serv', function (req, res) {
 
 
 function VentaSimple(req,res){
-
-    var input = req.body 
- 
+    console.log(req.body)
+    var input = req.body  
     EXEC_SQL('USP_VIS_PERIODOS_TraerPorFechaGestion',TraerGestion(), function (dataPeriodos) {
         if (dataPeriodos.err)
             return res.json({respuesta:"error"})
@@ -87,7 +86,7 @@ function VentaSimple(req,res){
             EXEC_SQL('USP_CAJ_CAJAS_DOC_TXFacRapida',parametros, function (dataFacRapida) {
                 if (dataFacRapida.err)
                     return res.json({respuesta:"error"})  
-                
+                 
                 var Cod_Periodo = dataPeriodos.result[0].Cod_Periodo
                 var Cod_Caja = input.Cod_Caja
                 var Cod_Turno = input.Cod_Turno
@@ -95,9 +94,9 @@ function VentaSimple(req,res){
 
                 if(dataFacRapida.result.length>0){
                     var Serie = dataFacRapida.result[0].Serie
-                    var CodTipoComprobante = dataFacRapida.result[0].Cod_TipoComprobante
+                    var Cod_TipoComprobante = dataFacRapida.result[0].Cod_TipoComprobante
                     var Nro_Ticketera = ""
-                    if(CodTipoComprobante == "TKB" || CodTipoComprobante == "TKF"){
+                    if(Cod_TipoComprobante == "TKB" || Cod_TipoComprobante == "TKF"){
                         Nro_Ticketera = dataFacRapida.result[0].Nro_SerieTicketera   
                     } 
                     var Id_Cliente = input.Id_Cliente
@@ -115,9 +114,9 @@ function VentaSimple(req,res){
                         Direccion_Cliente = input.Direccion_Cliente 
                     }
 
-                    var FechaEmision = input.FechaEmision
-                    var FechaVencimiento = input.FechaVencimiento
-                    var FechaCancelacion = input.FechaCancelacion
+                    var FechaEmision = input.Fecha_Emision
+                    var FechaVencimiento = input.Fecha_Emision
+                    var FechaCancelacion = input.Fecha_Emision
                     var Glosa = 'POR LA VENTA DE MERCADERIA'
                     var TipoCambio = 1
                     var Flag_Anulado = '0'
@@ -200,42 +199,51 @@ function VentaSimple(req,res){
                             return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                         
                         //return res.json({respuesta:"ok"})
+                        var flag_control = true
                         for(var i=0; i<input.productos.length;i++){
-                            var parametrosComprobanteDetalles = [
-                                { nom_parametro: 'id_ComprobantePago', valor_parametro: dataComprobante.result},
-                                { nom_parametro: 'id_Detalle', valor_parametro: i},
-                                { nom_parametro: 'Id_Producto', valor_parametro:input.productos[i].Id_Producto},
-                                { nom_parametro: 'Cod_Almacen', valor_parametro: input.productos[i].Cod_Almacen},
-                                { nom_parametro: 'Cantidad', valor_parametro: input.productos[i].Cantidad},
-                                { nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.productos[i].Cod_UnidadMedida},
-                                { nom_parametro: 'Despachado', valor_parametro: 1},
-                                { nom_parametro: 'Descripcion', valor_parametro: input.productos[i].Descripcion},
-                                { nom_parametro: 'PrecioUnitario', valor_parametro: input.productos[i].PrecioUnitario},
-                                { nom_parametro: 'Descuento', valor_parametro: input.productos[i].Descuento},
-                                { nom_parametro: 'Sub_Total', valor_parametro: input.productos[i].Sub_Total},
-                                { nom_parametro: 'Tipo', valor_parametro: input.productos[i].Tipo},
-                                { nom_parametro: 'Obs_ComprobanteD', valor_parametro: input.productos[i].Obs_ComprobanteD},
-                                { nom_parametro: 'Cod_Manguera', valor_parametro: '001'},
-                                { nom_parametro: 'Flag_AplicaImpuesto', valor_parametro: 1},
-                                { nom_parametro: 'Formalizado', valor_parametro: 1},
-                                { nom_parametro: 'Valor_NoOneroso', valor_parametro: 0},
-                                { nom_parametro: 'Cod_TipoISC', valor_parametro: null},
-                                { nom_parametro: 'Porcentaje_ISC', valor_parametro: 0},
-                                { nom_parametro: 'ISC', valor_parametro: 0},
-                                { nom_parametro: 'Cod_TipoIGV', valor_parametro: input.productos[i].Cod_TipoIGV},
-                                { nom_parametro: 'Porcentaje_IGV', valor_parametro: input.productos[i].Porcentaje_IGV},
-                                { nom_parametro: 'IGV', valor_parametro: input.productos[i].IGV},
-                                { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario}
-                            ]
+                            if(flag_control){
+                                var parametrosComprobanteDetalles = [
+                                    { nom_parametro: 'id_ComprobantePago', valor_parametro: dataComprobante.result},
+                                    { nom_parametro: 'id_Detalle', valor_parametro: i},
+                                    { nom_parametro: 'Id_Producto', valor_parametro:input.productos[i].Id_Producto},
+                                    { nom_parametro: 'Cod_Almacen', valor_parametro: input.productos[i].Cod_Almacen},
+                                    { nom_parametro: 'Cantidad', valor_parametro: input.productos[i].Cantidad},
+                                    { nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.productos[i].Cod_UnidadMedida},
+                                    { nom_parametro: 'Despachado', valor_parametro: 1},
+                                    { nom_parametro: 'Descripcion', valor_parametro: input.productos[i].Descripcion},
+                                    { nom_parametro: 'PrecioUnitario', valor_parametro: input.productos[i].PrecioUnitario},
+                                    { nom_parametro: 'Descuento', valor_parametro: input.productos[i].Descuento},
+                                    { nom_parametro: 'Sub_Total', valor_parametro: input.productos[i].Sub_Total},
+                                    { nom_parametro: 'Tipo', valor_parametro: input.productos[i].Tipo},
+                                    { nom_parametro: 'Obs_ComprobanteD', valor_parametro: input.productos[i].Obs_ComprobanteD},
+                                    { nom_parametro: 'Cod_Manguera', valor_parametro: '001'},
+                                    { nom_parametro: 'Flag_AplicaImpuesto', valor_parametro: 1},
+                                    { nom_parametro: 'Formalizado', valor_parametro: 1},
+                                    { nom_parametro: 'Valor_NoOneroso', valor_parametro: 0},
+                                    { nom_parametro: 'Cod_TipoISC', valor_parametro: null},
+                                    { nom_parametro: 'Porcentaje_ISC', valor_parametro: 0},
+                                    { nom_parametro: 'ISC', valor_parametro: 0},
+                                    { nom_parametro: 'Cod_TipoIGV', valor_parametro: input.productos[i].Cod_TipoIGV},
+                                    { nom_parametro: 'Porcentaje_IGV', valor_parametro: input.productos[i].Porcentaje_IGV},
+                                    { nom_parametro: 'IGV', valor_parametro: input.productos[i].IGV},
+                                    { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+                                ]
 
-                            EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
-                                if (dataComprobanteDetalle.err){
-                                    return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
-                                    break
-                                }   
-                            })
+                                EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
+                                    if (dataComprobanteDetalle.err){
+                                        console.log(dataComprobanteDetalle.err)
+                                        flag_control = false
+                                        //return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
+                                        //break
+                                    }   
+                                })
+                            } 
                         }
-                        return res.json({respuesta:"ok"})
+                        if(flag_control)
+                            return res.json({respuesta:"ok"})
+                        else
+                            return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
+                        //return res.json({respuesta:"ok"})
 
                     })
 
@@ -246,6 +254,7 @@ function VentaSimple(req,res){
             })
         
     }) 
+    
 }
 
 function VerificarArqueoCaja(req,res){ 

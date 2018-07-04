@@ -1,0 +1,64 @@
+{
+  "httpPort": 5488,
+  "httpsPort": 5489,
+  "certificate": {
+    "key": "certificates/server.key",
+    "cert": "certificates/server.cert"
+  },
+  "authentication": {
+    "cookieSession": {
+      "secret": "<your strong secret here>"
+    },
+    "admin": {
+      "username": "admin",
+      "password": "password"
+    },
+    "enabled": false
+  },
+  "connectionString": {
+    "name": "fs"
+  },
+  "logger": {
+    "console": {
+      "transport": "console",
+      "level": "debug"
+    },
+    "file": {
+      "transport": "file",
+      "level": "info",
+      "filename": "logs/reporter.log"
+    },
+    "error": {
+      "transport": "file",
+      "level": "error",
+      "filename": "logs/error.log"
+    }
+  },
+  "blobStorage": "fileSystem",
+  "tasks": {
+    "allowedModules": "*",
+    "strategy": "http-server",
+    "timeout": 10000
+  },
+  "scripts": {
+    "allowedModules": "*",
+    "timeout": 40000
+  },
+  "assets": {
+    "allowedFiles": "*.*",
+    "searchOnDiskIfNotFoundInStore": true
+  },
+  "phantom": {
+    "allowLocalFilesAccess": true,
+    "strategy": "phantom-server",
+    "timeout": 40000
+  },
+  "electron": {
+    "allowLocalFilesAccess": true,
+    "strategy": "electron-ipc",
+    "timeout": 40000
+  },
+  "sample-template": {
+    "createSamples": true
+  }
+}

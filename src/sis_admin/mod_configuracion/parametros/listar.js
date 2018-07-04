@@ -1,6 +1,6 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-var NuevoPerfil = require('./agregar.js')
+var NuevoParametro = require('./agregar.js')
 import {URL} from '../../../constantes_entorno/constantes'
 
 

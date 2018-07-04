@@ -94,7 +94,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <select id="Cod_TipoComprobante" class="form-control selectPalerp">
-                                                ${variables.dataComprobante.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`)}
+                                                 <option style="text-transform:uppercase" value=${CodLibro=='08'?'RI':'RE'}>${CodLibro=='08'?'RECIBO DE EGRESO':'RECIBO DE INGRESO'}</option>
                                             </select>
                                         </div>
                                     </div>
