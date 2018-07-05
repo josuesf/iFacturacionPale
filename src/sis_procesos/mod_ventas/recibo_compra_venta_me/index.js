@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { NuevoCliente } from '../../modales'
+import { NuevoCliente,BuscarCliente } from '../../modales'
 
 function Ver(_escritura, Serie, variables,fecha_actual) {
     var el = yo`
@@ -38,7 +38,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="Nro_DocumentoBuscar" onblur=${()=>BusquedaClientePorNroDoc(variables)}>
+                                                <input type="text" class="form-control" id="Nro_DocumentoBuscar" onblur=${()=>RecuperarDatosClientePorNroDoc()}>
                                                 <div class="input-group-btn">
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc"
                                                     ><i class="fa fa-globe"></i></button>
@@ -54,7 +54,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                                 </div>
                                                 <input type="text" class="form-control" id="txtNombreCliente">
                                                 <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>VerBuscarCliente(variables)}><i class="fa fa-search"></i></button>
+                                                    <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")}><i class="fa fa-search"></i></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -216,85 +216,6 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
 
 
 
-function VerBuscarCliente(variables) {
-    var el = yo`
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Buscar Cliente - Proveedor</strong></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label></label>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" value="nro"> Por Nro. Documento
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label></label>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" checked="checked" value="nombre"> Por Nombre o Cliente
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txtBuscarCliente">
-                                <div class="input-group-btn">
-                                    <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal()}><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="table-responsive" id="contenedorTablaClientes">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" data-dismiss="modal">Aceptar</button>
-                </div>
-            </div>
-        </div>`
-
-    var modal_proceso = document.getElementById('modal-superior');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()
-    $("#txtBuscarCliente").val($("#txtNombreCliente").val())
-}
-
-function AgregarTabla(clientes){
-    var el = yo`<table id="example1" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Documento</th>
-            <th>Cliente</th> 
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        ${clientes.map(u => yo`
-        <tr>
-            <td>${u.Nro_Documento}</td>
-            <td>${u.Cliente}</td> 
-            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarCliente(u)}"><i class="fa fa-check"></i> Elegir</button></td>
-        </tr>`)}
-    </tbody>
-
-</table>`
-    empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
-}
 
 function LlenarCuenta(cuenta,idSelect){
     var el = yo`
@@ -315,10 +236,7 @@ function CambioSoles(){
 function CambioMonto(){
     $("#Monto").val(parseFloat($("#Soles").val())/parseFloat($("#TipoCambio").val()))
 }
-
-function BusquedaClientePorNroDoc(variables,event) { 
-   RecuperarDatosClientePorNroDoc(variables) 
-}
+ 
 
 function getValueXML(xmlDoc, TAG) {
     if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
@@ -350,7 +268,7 @@ function ObservacionesXML(diagrama) {
 }
 
 
-function RecuperarDatosClientePorNroDoc(variables){
+function RecuperarDatosClientePorNroDoc(){
     var Nro_Documento = $("#Nro_DocumentoBuscar").val()
     var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar").val()
     const parametros = {
@@ -374,32 +292,11 @@ function RecuperarDatosClientePorNroDoc(variables){
             Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
         }
         else{
-            VerBuscarCliente(variables)
-            $("#txtBuscarCliente").val($("#txtNombreCliente").val())
+            BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
         }
     })
 }
-
-function RecuperarDatosClientePorNombre(variables){
-    var Cliente = $("#txtNombreCliente").val()
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({ 
-            Cliente
-        })
-    }
-    fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
-    .then(req => req.json())
-    .then(res => { 
-        VerBuscarCliente(variables)
-        AgregarTabla(res.data.cliente)
-    })
-}
+ 
 
 
 function CambioTipoDestino() {
@@ -632,66 +529,6 @@ function GuardarCompraVentaME(variables,fecha_actual){
         }
     }
 }
- 
-function BusquedaClienteModal(e){
-    var txtBuscarCliente = $("#txtBuscarCliente").val()
-    if(txtBuscarCliente.length>4){
-        if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
-            var Cliente = txtBuscarCliente
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Cliente
-                })
-            }
-            fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
-            .then(req => req.json())
-            .then(res => {
-                if (res.respuesta == 'ok') {
-                    var clientes = res.data.cliente
-                    if(clientes.length > 0)
-                        AgregarTabla(clientes)
-                    else  
-                        empty(document.getElementById('contenedorTablaClientes'));
-                }
-                else
-                    empty(document.getElementById('contenedorTablaClientes'));
-            })
-        }else{
-            var Nro_Documento = txtBuscarCliente
-            var Cod_TipoDocumento = ''
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Nro_Documento,
-                    Cod_TipoDocumento
-                })
-            }
-            fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
-            .then(req => req.json())
-            .then(res => {
-                if (res.respuesta == 'ok') {
-                    var clientes = res.data.cliente
-                    if(clientes.length > 0)
-                        AgregarTabla(clientes)
-                    else  
-                        empty(document.getElementById('contenedorTablaClientes'));
-                }
-                else
-                    empty(document.getElementById('contenedorTablaClientes'));
-            })
-        }
-    }
-}
-
  
 function NuevoCompraVentaME(_escritura, caja) { 
     H5_loading.show();

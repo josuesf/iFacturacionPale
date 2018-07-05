@@ -95,7 +95,7 @@ router.post('/get_cliente', function (req, res) {
 
 
 function VentaSimple(req,res){
-    console.log(req.body)
+     
     var input = req.body  
     EXEC_SQL('USP_VIS_PERIODOS_TraerPorFechaGestion',TraerGestion(), function (dataPeriodos) {
         if (dataPeriodos.err)
@@ -107,8 +107,10 @@ function VentaSimple(req,res){
             ]*/
             parametros = [
                 { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDoc },
-                { nom_parametro: 'Cod_Caja', valor_parametro: '14' }
+                { nom_parametro: 'Cod_Caja', valor_parametro: input.Cod_Caja }
             ]
+
+            //console.log(parametros)
         
             EXEC_SQL('USP_CAJ_CAJAS_DOC_TX_DOCCLIENTE',parametros, function (dataFacRapida) {
                 if (dataFacRapida.err)
@@ -128,7 +130,7 @@ function VentaSimple(req,res){
                         Nro_Ticketera = dataFacRapida.result[0].Nro_SerieTicketera   
                     } 
                     var Id_Cliente = input.Id_Cliente
-                    var Cod_TipoDoc = Cod_TipoDoc
+                    var Cod_TipoDoc = input.Cod_TipoDoc
                     var Doc_Cliente = ''
                     var Nom_Cliente = ''
                     var Direccion_Cliente = ''
@@ -390,11 +392,7 @@ function VentaSimple(req,res){
 
 
 function EmisionRapida(input,Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente,Cod_Periodo,Cod_Caja,Cod_Turno,Cod_TipoOperacion,Serie,Cod_TipoComprobante,Nro_Ticketera){
-
-    Cod_TipoDoc = input.Cod_TipoDoc
-    Doc_Cliente = input.Doc_Cliente
-    Nom_Cliente = input.Nom_Cliente
-    Direccion_Cliente = input.Direccion_Cliente 
+ 
 
 
     var FechaEmision = input.Fecha_Emision
@@ -486,6 +484,7 @@ function EmisionRapida(input,Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Dire
         //return res.json({respuesta:"ok"})
         var flag_control = true
         for(var i=0; i<input.productos.length;i++){
+             
             if(flag_control){
                 var parametrosComprobanteDetalles = [
                     { nom_parametro: 'id_ComprobantePago', valor_parametro: dataComprobante.result},
@@ -511,15 +510,15 @@ function EmisionRapida(input,Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Dire
                     { nom_parametro: 'Cod_TipoIGV', valor_parametro: input.productos[i].Cod_TipoIGV},
                     { nom_parametro: 'Porcentaje_IGV', valor_parametro: input.productos[i].Porcentaje_IGV},
                     { nom_parametro: 'IGV', valor_parametro: input.productos[i].IGV},
-                    { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+                    { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
                 ]
 
                 EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
+                    console.log(dataComprobanteDetalle.err)
                     if (dataComprobanteDetalle.err){
-                        console.log(dataComprobanteDetalle.err)
+                        //console.log(dataComprobanteDetalle.err)
                         flag_control = false
-                        //return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
-                        //break
+                        
                     }   
                 })
             } 

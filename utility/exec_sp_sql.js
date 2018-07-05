@@ -189,8 +189,10 @@ var EXEC_QUERY = function (query, parametros, next) {
 
 
 var EXEC_SQL = function (sp_name, parametros, next) {
+    //console.log(dbConfig())
     var dbConn = new sql.Connection(dbConfig());
     dbConn.connect(function (err) {
+        console.log(err)
         if (err) {
             return next({err})
         }
@@ -200,11 +202,13 @@ var EXEC_SQL = function (sp_name, parametros, next) {
             request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
         }
         request.execute(sp_name, function (err, result) {
+            console.log(err)
+            console.log(result)
             dbConn.close()
             if (err) {
                 return next({err})
             } 
-            next({result:result[0]})
+            next({result: result[0]})
         });
 
     });

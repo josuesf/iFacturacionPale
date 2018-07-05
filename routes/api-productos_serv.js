@@ -19,6 +19,18 @@ router.post('/get_by_script_productos_serv', function (req, res) {
 });
 
 
+router.post('/get_producto_by_codalm_codprec_stock', function (req, res) {
+    parametros = [
+        {nom_parametro:'CodCategoria',valor_parametro:input.CodCategoria},
+        {nom_parametro:'CodAlmacen',valor_parametro:input.CodAlmacen},
+        {nom_parametro:'CodPrecio',valor_parametro:input.CodPrecio}
+    ]
+    procedimientos =[
+        {nom_respuesta:'productos',sp_name:'USP_PRODUCTOS_TXCodCat_CodAlm_CodPrec_Stock',parametros} 
+    ]
+    Ejecutar_Procedimientos(res,procedimientos)
+});
+
 
 router.post('/get_productos_serv', function (req, res) {
     input = req.body
