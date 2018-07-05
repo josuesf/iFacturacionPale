@@ -15,8 +15,10 @@ router.post('/get_variables_ventas', function (req, res) {
         { nom_respuesta: 'almacenes', sp_name: 'USP_CAJ_CAJA_ALMACEN_TXCaja', parametros },
         { nom_respuesta: 'precios', sp_name: 'USP_VIS_PRECIOS_TT', parametros: [] },
         { nom_respuesta: 'monedas', sp_name: 'USP_VIS_MONEDAS_TT', parametros: [] },
-        { nom_respuesta: 'documentos', sp_name: 'USP_VIS_TIPO_DOCUMENTOS_TT ',parametros: [] },
-        { nom_respuesta: 'formaspago', sp_name: 'USP_VIS_FORMAS_PAGO_TT ',parametros: [] },
+        { nom_respuesta: 'documentos', sp_name: 'USP_VIS_TIPO_DOCUMENTOS_TT',parametros: [] },
+        { nom_respuesta: 'formaspago', sp_name: 'USP_VIS_FORMAS_PAGO_TT',parametros: [] },
+        { nom_respuesta: 'favoritos', sp_name: 'USP_VIS_FAVORITOS_TXCaja',parametros },
+        { nom_respuesta: 'categorias', sp_name: 'USP_PRI_CATEGORIA_TArbol',parametros:[] },
     ]  
     Ejecutar_Procedimientos(res, procedimientos)
          

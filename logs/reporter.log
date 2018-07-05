@@ -10243,3 +10243,2421 @@ TypeError: Cannot read property 'provider' of undefined
 2018-07-03T23:59:37.832Z - info: Verifying license key free
 2018-07-03T23:59:37.833Z - info: Using free license
 2018-07-03T23:59:37.845Z - info: reporter initialized
+2018-07-04T14:17:13.165Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:17:13.552Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:17:13.556Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:17:14.239Z - info: Found 30 extensions
+2018-07-04T14:17:14.265Z - info: Using extension import-export
+2018-07-04T14:17:14.598Z - info: Using extension tags
+2018-07-04T14:17:14.615Z - info: Using extension templates
+2018-07-04T14:17:14.622Z - info: Using extension jsrender
+2018-07-04T14:17:14.623Z - info: Using extension cli
+2018-07-04T14:17:14.624Z - info: Using extension handlebars
+2018-07-04T14:17:14.626Z - info: Using extension debug
+2018-07-04T14:17:14.628Z - info: Using extension express
+2018-07-04T14:17:14.714Z - info: Using extension fop-pdf
+2018-07-04T14:17:14.774Z - info: Using extension phantom-pdf
+2018-07-04T14:17:14.889Z - info: Using extension fs-store
+2018-07-04T14:17:15.333Z - info: Using extension authorization
+2018-07-04T14:17:15.382Z - info: Using extension images
+2018-07-04T14:17:15.435Z - info: Using extension child-templates
+2018-07-04T14:17:15.439Z - info: Using extension browser-client
+2018-07-04T14:17:15.441Z - info: Using extension licensing
+2018-07-04T14:17:15.571Z - info: Using extension data
+2018-07-04T14:17:15.625Z - info: Using extension text
+2018-07-04T14:17:15.626Z - info: Using extension reports
+2018-07-04T14:17:15.678Z - info: Using extension resources
+2018-07-04T14:17:15.726Z - info: Using extension base
+2018-07-04T14:17:15.727Z - info: Using extension studio
+2018-07-04T14:17:15.812Z - info: Using extension html-to-xlsx
+2018-07-04T14:17:15.960Z - info: Using extension scripts
+2018-07-04T14:17:16.010Z - info: Using extension assets
+2018-07-04T14:17:16.021Z - info: Using extension scheduling
+2018-07-04T14:17:16.050Z - info: Using extension xlsx
+2018-07-04T14:17:16.377Z - info: Using extension sample-template
+2018-07-04T14:17:16.422Z - info: Using extension public-templates
+2018-07-04T14:17:16.469Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:17:17.545Z - info: Configuring routes for existing express app.
+2018-07-04T14:17:17.621Z - info: Using existing server instance.
+2018-07-04T14:17:17.626Z - info: Verifying license key free
+2018-07-04T14:17:17.627Z - info: Using free license
+2018-07-04T14:17:17.629Z - info: reporter initialized
+2018-07-04T14:31:59.614Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:32:00.115Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:32:00.119Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:32:00.779Z - info: Found 30 extensions
+2018-07-04T14:32:00.816Z - info: Using extension import-export
+2018-07-04T14:32:01.237Z - info: Using extension tags
+2018-07-04T14:32:01.325Z - info: Using extension templates
+2018-07-04T14:32:01.355Z - info: Using extension jsrender
+2018-07-04T14:32:01.370Z - info: Using extension cli
+2018-07-04T14:32:01.375Z - info: Using extension handlebars
+2018-07-04T14:32:01.378Z - info: Using extension debug
+2018-07-04T14:32:01.380Z - info: Using extension express
+2018-07-04T14:32:01.480Z - info: Using extension fop-pdf
+2018-07-04T14:32:01.541Z - info: Using extension phantom-pdf
+2018-07-04T14:32:01.661Z - info: Using extension fs-store
+2018-07-04T14:32:02.016Z - info: Using extension authorization
+2018-07-04T14:32:02.064Z - info: Using extension images
+2018-07-04T14:32:02.121Z - info: Using extension child-templates
+2018-07-04T14:32:02.125Z - info: Using extension browser-client
+2018-07-04T14:32:02.127Z - info: Using extension licensing
+2018-07-04T14:32:02.259Z - info: Using extension data
+2018-07-04T14:32:02.309Z - info: Using extension text
+2018-07-04T14:32:02.311Z - info: Using extension reports
+2018-07-04T14:32:02.360Z - info: Using extension resources
+2018-07-04T14:32:02.406Z - info: Using extension base
+2018-07-04T14:32:02.408Z - info: Using extension studio
+2018-07-04T14:32:02.490Z - info: Using extension html-to-xlsx
+2018-07-04T14:32:02.622Z - info: Using extension scripts
+2018-07-04T14:32:02.667Z - info: Using extension assets
+2018-07-04T14:32:02.676Z - info: Using extension scheduling
+2018-07-04T14:32:02.701Z - info: Using extension xlsx
+2018-07-04T14:32:03.065Z - info: Using extension sample-template
+2018-07-04T14:32:03.131Z - info: Using extension public-templates
+2018-07-04T14:32:03.214Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:32:03.455Z - info: Configuring routes for existing express app.
+2018-07-04T14:32:03.528Z - info: Using existing server instance.
+2018-07-04T14:32:03.533Z - info: Verifying license key free
+2018-07-04T14:32:03.534Z - info: Using free license
+2018-07-04T14:32:03.538Z - info: reporter initialized
+2018-07-04T14:32:44.038Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:32:44.662Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:32:44.665Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:32:45.336Z - info: Found 30 extensions
+2018-07-04T14:32:45.398Z - info: Using extension import-export
+2018-07-04T14:32:45.906Z - info: Using extension tags
+2018-07-04T14:32:45.922Z - info: Using extension templates
+2018-07-04T14:32:45.934Z - info: Using extension jsrender
+2018-07-04T14:32:45.936Z - info: Using extension cli
+2018-07-04T14:32:45.937Z - info: Using extension handlebars
+2018-07-04T14:32:45.939Z - info: Using extension debug
+2018-07-04T14:32:45.940Z - info: Using extension express
+2018-07-04T14:32:46.088Z - info: Using extension fop-pdf
+2018-07-04T14:32:46.162Z - info: Using extension phantom-pdf
+2018-07-04T14:32:46.268Z - info: Using extension fs-store
+2018-07-04T14:32:46.591Z - info: Using extension authorization
+2018-07-04T14:32:46.638Z - info: Using extension images
+2018-07-04T14:32:46.691Z - info: Using extension child-templates
+2018-07-04T14:32:46.697Z - info: Using extension browser-client
+2018-07-04T14:32:46.699Z - info: Using extension licensing
+2018-07-04T14:32:46.829Z - info: Using extension data
+2018-07-04T14:32:46.882Z - info: Using extension text
+2018-07-04T14:32:46.883Z - info: Using extension reports
+2018-07-04T14:32:46.932Z - info: Using extension resources
+2018-07-04T14:32:46.978Z - info: Using extension base
+2018-07-04T14:32:46.979Z - info: Using extension studio
+2018-07-04T14:32:47.055Z - info: Using extension html-to-xlsx
+2018-07-04T14:32:47.186Z - info: Using extension scripts
+2018-07-04T14:32:47.233Z - info: Using extension assets
+2018-07-04T14:32:47.243Z - info: Using extension scheduling
+2018-07-04T14:32:47.273Z - info: Using extension xlsx
+2018-07-04T14:32:47.592Z - info: Using extension sample-template
+2018-07-04T14:32:47.643Z - info: Using extension public-templates
+2018-07-04T14:32:47.692Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:32:48.259Z - info: Configuring routes for existing express app.
+2018-07-04T14:32:48.330Z - info: Using existing server instance.
+2018-07-04T14:32:48.335Z - info: Verifying license key free
+2018-07-04T14:32:48.336Z - info: Using free license
+2018-07-04T14:32:48.339Z - info: reporter initialized
+2018-07-04T14:33:05.221Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:33:05.609Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:33:05.613Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:33:06.564Z - info: Found 30 extensions
+2018-07-04T14:33:06.599Z - info: Using extension import-export
+2018-07-04T14:33:06.872Z - info: Using extension tags
+2018-07-04T14:33:06.880Z - info: Using extension templates
+2018-07-04T14:33:06.885Z - info: Using extension jsrender
+2018-07-04T14:33:06.886Z - info: Using extension cli
+2018-07-04T14:33:06.886Z - info: Using extension handlebars
+2018-07-04T14:33:06.888Z - info: Using extension debug
+2018-07-04T14:33:06.889Z - info: Using extension express
+2018-07-04T14:33:06.976Z - info: Using extension fop-pdf
+2018-07-04T14:33:07.035Z - info: Using extension phantom-pdf
+2018-07-04T14:33:07.139Z - info: Using extension fs-store
+2018-07-04T14:33:07.693Z - info: Using extension authorization
+2018-07-04T14:33:07.743Z - info: Using extension images
+2018-07-04T14:33:07.795Z - info: Using extension child-templates
+2018-07-04T14:33:07.800Z - info: Using extension browser-client
+2018-07-04T14:33:07.802Z - info: Using extension licensing
+2018-07-04T14:33:07.924Z - info: Using extension data
+2018-07-04T14:33:07.973Z - info: Using extension text
+2018-07-04T14:33:07.974Z - info: Using extension reports
+2018-07-04T14:33:08.028Z - info: Using extension resources
+2018-07-04T14:33:08.073Z - info: Using extension base
+2018-07-04T14:33:08.074Z - info: Using extension studio
+2018-07-04T14:33:08.156Z - info: Using extension html-to-xlsx
+2018-07-04T14:33:08.290Z - info: Using extension scripts
+2018-07-04T14:33:08.337Z - info: Using extension assets
+2018-07-04T14:33:08.345Z - info: Using extension scheduling
+2018-07-04T14:33:08.383Z - info: Using extension xlsx
+2018-07-04T14:33:08.661Z - info: Using extension sample-template
+2018-07-04T14:33:08.707Z - info: Using extension public-templates
+2018-07-04T14:33:08.762Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:33:08.951Z - info: Configuring routes for existing express app.
+2018-07-04T14:33:09.013Z - info: Using existing server instance.
+2018-07-04T14:33:09.019Z - info: Verifying license key free
+2018-07-04T14:33:09.020Z - info: Using free license
+2018-07-04T14:33:09.023Z - info: reporter initialized
+2018-07-04T14:39:21.288Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:39:21.656Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:39:21.659Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:39:22.298Z - info: Found 30 extensions
+2018-07-04T14:39:22.317Z - info: Using extension import-export
+2018-07-04T14:39:22.571Z - info: Using extension tags
+2018-07-04T14:39:22.579Z - info: Using extension templates
+2018-07-04T14:39:22.584Z - info: Using extension jsrender
+2018-07-04T14:39:22.585Z - info: Using extension cli
+2018-07-04T14:39:22.586Z - info: Using extension handlebars
+2018-07-04T14:39:22.588Z - info: Using extension debug
+2018-07-04T14:39:22.590Z - info: Using extension express
+2018-07-04T14:39:22.672Z - info: Using extension fop-pdf
+2018-07-04T14:39:22.723Z - info: Using extension phantom-pdf
+2018-07-04T14:39:22.835Z - info: Using extension fs-store
+2018-07-04T14:39:23.181Z - info: Using extension authorization
+2018-07-04T14:39:23.227Z - info: Using extension images
+2018-07-04T14:39:23.280Z - info: Using extension child-templates
+2018-07-04T14:39:23.285Z - info: Using extension browser-client
+2018-07-04T14:39:23.288Z - info: Using extension licensing
+2018-07-04T14:39:23.426Z - info: Using extension data
+2018-07-04T14:39:23.475Z - info: Using extension text
+2018-07-04T14:39:23.476Z - info: Using extension reports
+2018-07-04T14:39:23.527Z - info: Using extension resources
+2018-07-04T14:39:23.579Z - info: Using extension base
+2018-07-04T14:39:23.586Z - info: Using extension studio
+2018-07-04T14:39:23.704Z - info: Using extension html-to-xlsx
+2018-07-04T14:39:23.884Z - info: Using extension scripts
+2018-07-04T14:39:23.932Z - info: Using extension assets
+2018-07-04T14:39:23.941Z - info: Using extension scheduling
+2018-07-04T14:39:23.969Z - info: Using extension xlsx
+2018-07-04T14:39:24.261Z - info: Using extension sample-template
+2018-07-04T14:39:24.308Z - info: Using extension public-templates
+2018-07-04T14:39:24.359Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:39:24.532Z - info: Configuring routes for existing express app.
+2018-07-04T14:39:24.593Z - info: Using existing server instance.
+2018-07-04T14:39:24.598Z - info: Verifying license key free
+2018-07-04T14:39:24.599Z - info: Using free license
+2018-07-04T14:39:24.602Z - info: reporter initialized
+2018-07-04T14:41:18.135Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:41:18.485Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:41:18.489Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:41:19.127Z - info: Found 30 extensions
+2018-07-04T14:41:19.161Z - info: Using extension import-export
+2018-07-04T14:41:19.498Z - info: Using extension tags
+2018-07-04T14:41:19.512Z - info: Using extension templates
+2018-07-04T14:41:19.517Z - info: Using extension jsrender
+2018-07-04T14:41:19.519Z - info: Using extension cli
+2018-07-04T14:41:19.523Z - info: Using extension handlebars
+2018-07-04T14:41:19.526Z - info: Using extension debug
+2018-07-04T14:41:19.528Z - info: Using extension express
+2018-07-04T14:41:19.622Z - info: Using extension fop-pdf
+2018-07-04T14:41:19.677Z - info: Using extension phantom-pdf
+2018-07-04T14:41:19.794Z - info: Using extension fs-store
+2018-07-04T14:41:20.148Z - info: Using extension authorization
+2018-07-04T14:41:20.202Z - info: Using extension images
+2018-07-04T14:41:20.257Z - info: Using extension child-templates
+2018-07-04T14:41:20.262Z - info: Using extension browser-client
+2018-07-04T14:41:20.264Z - info: Using extension licensing
+2018-07-04T14:41:20.395Z - info: Using extension data
+2018-07-04T14:41:20.446Z - info: Using extension text
+2018-07-04T14:41:20.447Z - info: Using extension reports
+2018-07-04T14:41:20.497Z - info: Using extension resources
+2018-07-04T14:41:20.545Z - info: Using extension base
+2018-07-04T14:41:20.547Z - info: Using extension studio
+2018-07-04T14:41:20.630Z - info: Using extension html-to-xlsx
+2018-07-04T14:41:20.757Z - info: Using extension scripts
+2018-07-04T14:41:20.806Z - info: Using extension assets
+2018-07-04T14:41:20.815Z - info: Using extension scheduling
+2018-07-04T14:41:20.846Z - info: Using extension xlsx
+2018-07-04T14:41:21.147Z - info: Using extension sample-template
+2018-07-04T14:41:21.199Z - info: Using extension public-templates
+2018-07-04T14:41:21.251Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:41:21.418Z - info: Configuring routes for existing express app.
+2018-07-04T14:41:21.471Z - info: Using existing server instance.
+2018-07-04T14:41:21.476Z - info: Verifying license key free
+2018-07-04T14:41:21.477Z - info: Using free license
+2018-07-04T14:41:21.480Z - info: reporter initialized
+2018-07-04T14:42:26.414Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:42:26.930Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:42:26.933Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:42:27.622Z - info: Found 30 extensions
+2018-07-04T14:42:27.652Z - info: Using extension import-export
+2018-07-04T14:42:27.985Z - info: Using extension tags
+2018-07-04T14:42:27.993Z - info: Using extension templates
+2018-07-04T14:42:27.997Z - info: Using extension jsrender
+2018-07-04T14:42:27.999Z - info: Using extension cli
+2018-07-04T14:42:27.999Z - info: Using extension handlebars
+2018-07-04T14:42:28.001Z - info: Using extension debug
+2018-07-04T14:42:28.002Z - info: Using extension express
+2018-07-04T14:42:28.090Z - info: Using extension fop-pdf
+2018-07-04T14:42:28.144Z - info: Using extension phantom-pdf
+2018-07-04T14:42:28.261Z - info: Using extension fs-store
+2018-07-04T14:42:28.596Z - info: Using extension authorization
+2018-07-04T14:42:28.640Z - info: Using extension images
+2018-07-04T14:42:28.700Z - info: Using extension child-templates
+2018-07-04T14:42:28.704Z - info: Using extension browser-client
+2018-07-04T14:42:28.706Z - info: Using extension licensing
+2018-07-04T14:42:28.845Z - info: Using extension data
+2018-07-04T14:42:28.895Z - info: Using extension text
+2018-07-04T14:42:28.896Z - info: Using extension reports
+2018-07-04T14:42:28.949Z - info: Using extension resources
+2018-07-04T14:42:28.995Z - info: Using extension base
+2018-07-04T14:42:28.996Z - info: Using extension studio
+2018-07-04T14:42:29.085Z - info: Using extension html-to-xlsx
+2018-07-04T14:42:29.217Z - info: Using extension scripts
+2018-07-04T14:42:29.267Z - info: Using extension assets
+2018-07-04T14:42:29.279Z - info: Using extension scheduling
+2018-07-04T14:42:29.312Z - info: Using extension xlsx
+2018-07-04T14:42:29.610Z - info: Using extension sample-template
+2018-07-04T14:42:29.657Z - info: Using extension public-templates
+2018-07-04T14:42:29.713Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:42:29.915Z - info: Configuring routes for existing express app.
+2018-07-04T14:42:29.980Z - info: Using existing server instance.
+2018-07-04T14:42:29.985Z - info: Verifying license key free
+2018-07-04T14:42:29.986Z - info: Using free license
+2018-07-04T14:42:29.989Z - info: reporter initialized
+2018-07-04T14:45:36.822Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T14:45:37.183Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T14:45:37.186Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T14:45:37.813Z - info: Found 30 extensions
+2018-07-04T14:45:37.841Z - info: Using extension import-export
+2018-07-04T14:45:38.121Z - info: Using extension tags
+2018-07-04T14:45:38.130Z - info: Using extension templates
+2018-07-04T14:45:38.135Z - info: Using extension jsrender
+2018-07-04T14:45:38.136Z - info: Using extension cli
+2018-07-04T14:45:38.136Z - info: Using extension handlebars
+2018-07-04T14:45:38.138Z - info: Using extension debug
+2018-07-04T14:45:38.140Z - info: Using extension express
+2018-07-04T14:45:38.231Z - info: Using extension fop-pdf
+2018-07-04T14:45:38.283Z - info: Using extension phantom-pdf
+2018-07-04T14:45:38.391Z - info: Using extension fs-store
+2018-07-04T14:45:38.725Z - info: Using extension authorization
+2018-07-04T14:45:38.776Z - info: Using extension images
+2018-07-04T14:45:38.834Z - info: Using extension child-templates
+2018-07-04T14:45:38.838Z - info: Using extension browser-client
+2018-07-04T14:45:38.840Z - info: Using extension licensing
+2018-07-04T14:45:38.975Z - info: Using extension data
+2018-07-04T14:45:39.024Z - info: Using extension text
+2018-07-04T14:45:39.025Z - info: Using extension reports
+2018-07-04T14:45:39.077Z - info: Using extension resources
+2018-07-04T14:45:39.130Z - info: Using extension base
+2018-07-04T14:45:39.131Z - info: Using extension studio
+2018-07-04T14:45:39.220Z - info: Using extension html-to-xlsx
+2018-07-04T14:45:39.357Z - info: Using extension scripts
+2018-07-04T14:45:39.421Z - info: Using extension assets
+2018-07-04T14:45:39.435Z - info: Using extension scheduling
+2018-07-04T14:45:39.504Z - info: Using extension xlsx
+2018-07-04T14:45:39.873Z - info: Using extension sample-template
+2018-07-04T14:45:39.922Z - info: Using extension public-templates
+2018-07-04T14:45:39.982Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T14:45:40.165Z - info: Configuring routes for existing express app.
+2018-07-04T14:45:40.236Z - info: Using existing server instance.
+2018-07-04T14:45:40.241Z - info: Verifying license key free
+2018-07-04T14:45:40.243Z - info: Using free license
+2018-07-04T14:45:40.245Z - info: reporter initialized
+2018-07-04T15:05:14.344Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:05:15.015Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:05:15.019Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:05:15.725Z - info: Found 30 extensions
+2018-07-04T15:05:15.747Z - info: Using extension import-export
+2018-07-04T15:05:16.489Z - info: Using extension tags
+2018-07-04T15:05:16.511Z - info: Using extension templates
+2018-07-04T15:05:16.529Z - info: Using extension jsrender
+2018-07-04T15:05:16.534Z - info: Using extension cli
+2018-07-04T15:05:16.536Z - info: Using extension handlebars
+2018-07-04T15:05:16.544Z - info: Using extension debug
+2018-07-04T15:05:16.545Z - info: Using extension express
+2018-07-04T15:05:16.677Z - info: Using extension fop-pdf
+2018-07-04T15:05:16.744Z - info: Using extension phantom-pdf
+2018-07-04T15:05:17.001Z - info: Using extension fs-store
+2018-07-04T15:05:17.904Z - info: Using extension authorization
+2018-07-04T15:05:17.982Z - info: Using extension images
+2018-07-04T15:05:18.065Z - info: Using extension child-templates
+2018-07-04T15:05:18.073Z - info: Using extension browser-client
+2018-07-04T15:05:18.078Z - info: Using extension licensing
+2018-07-04T15:05:18.220Z - info: Using extension data
+2018-07-04T15:05:18.273Z - info: Using extension text
+2018-07-04T15:05:18.275Z - info: Using extension reports
+2018-07-04T15:05:18.339Z - info: Using extension resources
+2018-07-04T15:05:18.384Z - info: Using extension base
+2018-07-04T15:05:18.385Z - info: Using extension studio
+2018-07-04T15:05:18.460Z - info: Using extension html-to-xlsx
+2018-07-04T15:05:18.574Z - info: Using extension scripts
+2018-07-04T15:05:18.619Z - info: Using extension assets
+2018-07-04T15:05:18.629Z - info: Using extension scheduling
+2018-07-04T15:05:18.666Z - info: Using extension xlsx
+2018-07-04T15:05:18.984Z - info: Using extension sample-template
+2018-07-04T15:05:19.038Z - info: Using extension public-templates
+2018-07-04T15:05:19.094Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:05:19.396Z - info: Configuring routes for existing express app.
+2018-07-04T15:05:19.461Z - info: Using existing server instance.
+2018-07-04T15:05:19.466Z - info: Verifying license key free
+2018-07-04T15:05:19.504Z - info: Using free license
+2018-07-04T15:05:19.513Z - info: reporter initialized
+2018-07-04T15:12:56.493Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:12:56.876Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:12:56.880Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:12:57.648Z - info: Found 30 extensions
+2018-07-04T15:12:57.668Z - info: Using extension import-export
+2018-07-04T15:12:57.974Z - info: Using extension tags
+2018-07-04T15:12:57.987Z - info: Using extension templates
+2018-07-04T15:12:57.993Z - info: Using extension jsrender
+2018-07-04T15:12:57.994Z - info: Using extension cli
+2018-07-04T15:12:57.995Z - info: Using extension handlebars
+2018-07-04T15:12:58.001Z - info: Using extension debug
+2018-07-04T15:12:58.003Z - info: Using extension express
+2018-07-04T15:12:58.119Z - info: Using extension fop-pdf
+2018-07-04T15:12:58.204Z - info: Using extension phantom-pdf
+2018-07-04T15:12:58.349Z - info: Using extension fs-store
+2018-07-04T15:12:59.330Z - info: Using extension authorization
+2018-07-04T15:12:59.377Z - info: Using extension images
+2018-07-04T15:12:59.436Z - info: Using extension child-templates
+2018-07-04T15:12:59.447Z - info: Using extension browser-client
+2018-07-04T15:12:59.453Z - info: Using extension licensing
+2018-07-04T15:12:59.605Z - info: Using extension data
+2018-07-04T15:12:59.653Z - info: Using extension text
+2018-07-04T15:12:59.655Z - info: Using extension reports
+2018-07-04T15:12:59.719Z - info: Using extension resources
+2018-07-04T15:12:59.770Z - info: Using extension base
+2018-07-04T15:12:59.772Z - info: Using extension studio
+2018-07-04T15:12:59.857Z - info: Using extension html-to-xlsx
+2018-07-04T15:13:00.006Z - info: Using extension scripts
+2018-07-04T15:13:00.056Z - info: Using extension assets
+2018-07-04T15:13:00.065Z - info: Using extension scheduling
+2018-07-04T15:13:00.096Z - info: Using extension xlsx
+2018-07-04T15:13:00.396Z - info: Using extension sample-template
+2018-07-04T15:13:00.445Z - info: Using extension public-templates
+2018-07-04T15:13:00.498Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:13:00.708Z - info: Configuring routes for existing express app.
+2018-07-04T15:13:00.773Z - info: Using existing server instance.
+2018-07-04T15:13:00.777Z - info: Verifying license key free
+2018-07-04T15:13:00.779Z - info: Using free license
+2018-07-04T15:13:00.781Z - info: reporter initialized
+2018-07-04T15:13:10.031Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:13:10.397Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:13:10.400Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:13:11.003Z - info: Found 30 extensions
+2018-07-04T15:13:11.023Z - info: Using extension import-export
+2018-07-04T15:13:11.291Z - info: Using extension tags
+2018-07-04T15:13:11.300Z - info: Using extension templates
+2018-07-04T15:13:11.305Z - info: Using extension jsrender
+2018-07-04T15:13:11.307Z - info: Using extension cli
+2018-07-04T15:13:11.308Z - info: Using extension handlebars
+2018-07-04T15:13:11.311Z - info: Using extension debug
+2018-07-04T15:13:11.316Z - info: Using extension express
+2018-07-04T15:13:11.405Z - info: Using extension fop-pdf
+2018-07-04T15:13:11.459Z - info: Using extension phantom-pdf
+2018-07-04T15:13:11.570Z - info: Using extension fs-store
+2018-07-04T15:13:11.927Z - info: Using extension authorization
+2018-07-04T15:13:11.977Z - info: Using extension images
+2018-07-04T15:13:12.031Z - info: Using extension child-templates
+2018-07-04T15:13:12.036Z - info: Using extension browser-client
+2018-07-04T15:13:12.038Z - info: Using extension licensing
+2018-07-04T15:13:12.163Z - info: Using extension data
+2018-07-04T15:13:12.211Z - info: Using extension text
+2018-07-04T15:13:12.212Z - info: Using extension reports
+2018-07-04T15:13:12.263Z - info: Using extension resources
+2018-07-04T15:13:12.311Z - info: Using extension base
+2018-07-04T15:13:12.313Z - info: Using extension studio
+2018-07-04T15:13:12.393Z - info: Using extension html-to-xlsx
+2018-07-04T15:13:12.523Z - info: Using extension scripts
+2018-07-04T15:13:12.569Z - info: Using extension assets
+2018-07-04T15:13:12.578Z - info: Using extension scheduling
+2018-07-04T15:13:12.605Z - info: Using extension xlsx
+2018-07-04T15:13:12.898Z - info: Using extension sample-template
+2018-07-04T15:13:12.948Z - info: Using extension public-templates
+2018-07-04T15:13:13.005Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:13:13.183Z - info: Configuring routes for existing express app.
+2018-07-04T15:13:13.251Z - info: Using existing server instance.
+2018-07-04T15:13:13.257Z - info: Verifying license key free
+2018-07-04T15:13:13.258Z - info: Using free license
+2018-07-04T15:13:13.261Z - info: reporter initialized
+2018-07-04T15:14:38.566Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:14:38.927Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:14:38.930Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:14:39.639Z - info: Found 30 extensions
+2018-07-04T15:14:39.703Z - info: Using extension import-export
+2018-07-04T15:14:40.007Z - info: Using extension tags
+2018-07-04T15:14:40.015Z - info: Using extension templates
+2018-07-04T15:14:40.022Z - info: Using extension jsrender
+2018-07-04T15:14:40.024Z - info: Using extension cli
+2018-07-04T15:14:40.025Z - info: Using extension handlebars
+2018-07-04T15:14:40.027Z - info: Using extension debug
+2018-07-04T15:14:40.028Z - info: Using extension express
+2018-07-04T15:14:40.145Z - info: Using extension fop-pdf
+2018-07-04T15:14:40.238Z - info: Using extension phantom-pdf
+2018-07-04T15:14:40.407Z - info: Using extension fs-store
+2018-07-04T15:14:40.852Z - info: Using extension authorization
+2018-07-04T15:14:40.956Z - info: Using extension images
+2018-07-04T15:14:41.023Z - info: Using extension child-templates
+2018-07-04T15:14:41.027Z - info: Using extension browser-client
+2018-07-04T15:14:41.029Z - info: Using extension licensing
+2018-07-04T15:14:41.182Z - info: Using extension data
+2018-07-04T15:14:41.237Z - info: Using extension text
+2018-07-04T15:14:41.238Z - info: Using extension reports
+2018-07-04T15:14:41.296Z - info: Using extension resources
+2018-07-04T15:14:41.346Z - info: Using extension base
+2018-07-04T15:14:41.347Z - info: Using extension studio
+2018-07-04T15:14:41.442Z - info: Using extension html-to-xlsx
+2018-07-04T15:14:41.575Z - info: Using extension scripts
+2018-07-04T15:14:41.636Z - info: Using extension assets
+2018-07-04T15:14:41.645Z - info: Using extension scheduling
+2018-07-04T15:14:41.675Z - info: Using extension xlsx
+2018-07-04T15:14:41.982Z - info: Using extension sample-template
+2018-07-04T15:14:42.031Z - info: Using extension public-templates
+2018-07-04T15:14:42.084Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:14:42.262Z - info: Configuring routes for existing express app.
+2018-07-04T15:14:42.322Z - info: Using existing server instance.
+2018-07-04T15:14:42.326Z - info: Verifying license key free
+2018-07-04T15:14:42.327Z - info: Using free license
+2018-07-04T15:14:42.330Z - info: reporter initialized
+2018-07-04T15:15:29.970Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:15:30.410Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:15:30.413Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:15:31.072Z - info: Found 30 extensions
+2018-07-04T15:15:31.103Z - info: Using extension import-export
+2018-07-04T15:15:31.501Z - info: Using extension tags
+2018-07-04T15:15:31.510Z - info: Using extension templates
+2018-07-04T15:15:31.518Z - info: Using extension jsrender
+2018-07-04T15:15:31.519Z - info: Using extension cli
+2018-07-04T15:15:31.520Z - info: Using extension handlebars
+2018-07-04T15:15:31.522Z - info: Using extension debug
+2018-07-04T15:15:31.524Z - info: Using extension express
+2018-07-04T15:15:31.624Z - info: Using extension fop-pdf
+2018-07-04T15:15:31.673Z - info: Using extension phantom-pdf
+2018-07-04T15:15:31.787Z - info: Using extension fs-store
+2018-07-04T15:15:32.163Z - info: Using extension authorization
+2018-07-04T15:15:32.216Z - info: Using extension images
+2018-07-04T15:15:32.274Z - info: Using extension child-templates
+2018-07-04T15:15:32.278Z - info: Using extension browser-client
+2018-07-04T15:15:32.280Z - info: Using extension licensing
+2018-07-04T15:15:32.414Z - info: Using extension data
+2018-07-04T15:15:32.461Z - info: Using extension text
+2018-07-04T15:15:32.462Z - info: Using extension reports
+2018-07-04T15:15:32.515Z - info: Using extension resources
+2018-07-04T15:15:32.560Z - info: Using extension base
+2018-07-04T15:15:32.561Z - info: Using extension studio
+2018-07-04T15:15:32.637Z - info: Using extension html-to-xlsx
+2018-07-04T15:15:32.771Z - info: Using extension scripts
+2018-07-04T15:15:32.822Z - info: Using extension assets
+2018-07-04T15:15:32.831Z - info: Using extension scheduling
+2018-07-04T15:15:32.860Z - info: Using extension xlsx
+2018-07-04T15:15:33.168Z - info: Using extension sample-template
+2018-07-04T15:15:33.225Z - info: Using extension public-templates
+2018-07-04T15:15:33.275Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:15:33.537Z - info: Configuring routes for existing express app.
+2018-07-04T15:15:33.605Z - info: Using existing server instance.
+2018-07-04T15:15:33.612Z - info: Verifying license key free
+2018-07-04T15:15:33.613Z - info: Using free license
+2018-07-04T15:15:33.616Z - info: reporter initialized
+2018-07-04T15:15:44.201Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:15:44.607Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:15:44.609Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:15:45.224Z - info: Found 30 extensions
+2018-07-04T15:15:45.244Z - info: Using extension import-export
+2018-07-04T15:15:45.502Z - info: Using extension tags
+2018-07-04T15:15:45.515Z - info: Using extension templates
+2018-07-04T15:15:45.524Z - info: Using extension jsrender
+2018-07-04T15:15:45.526Z - info: Using extension cli
+2018-07-04T15:15:45.527Z - info: Using extension handlebars
+2018-07-04T15:15:45.529Z - info: Using extension debug
+2018-07-04T15:15:45.531Z - info: Using extension express
+2018-07-04T15:15:45.613Z - info: Using extension fop-pdf
+2018-07-04T15:15:45.669Z - info: Using extension phantom-pdf
+2018-07-04T15:15:45.788Z - info: Using extension fs-store
+2018-07-04T15:15:46.122Z - info: Using extension authorization
+2018-07-04T15:15:46.171Z - info: Using extension images
+2018-07-04T15:15:46.225Z - info: Using extension child-templates
+2018-07-04T15:15:46.229Z - info: Using extension browser-client
+2018-07-04T15:15:46.232Z - info: Using extension licensing
+2018-07-04T15:15:46.358Z - info: Using extension data
+2018-07-04T15:15:46.408Z - info: Using extension text
+2018-07-04T15:15:46.410Z - info: Using extension reports
+2018-07-04T15:15:46.453Z - info: Using extension resources
+2018-07-04T15:15:46.495Z - info: Using extension base
+2018-07-04T15:15:46.496Z - info: Using extension studio
+2018-07-04T15:15:46.570Z - info: Using extension html-to-xlsx
+2018-07-04T15:15:46.691Z - info: Using extension scripts
+2018-07-04T15:15:46.742Z - info: Using extension assets
+2018-07-04T15:15:46.752Z - info: Using extension scheduling
+2018-07-04T15:15:46.779Z - info: Using extension xlsx
+2018-07-04T15:15:47.137Z - info: Using extension sample-template
+2018-07-04T15:15:47.198Z - info: Using extension public-templates
+2018-07-04T15:15:47.280Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:15:47.810Z - info: Configuring routes for existing express app.
+2018-07-04T15:15:47.871Z - info: Using existing server instance.
+2018-07-04T15:15:47.877Z - info: Verifying license key free
+2018-07-04T15:15:47.878Z - info: Using free license
+2018-07-04T15:15:47.881Z - info: reporter initialized
+2018-07-04T15:16:49.475Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:16:50.382Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:16:50.405Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:16:51.150Z - info: Found 30 extensions
+2018-07-04T15:16:51.187Z - info: Using extension import-export
+2018-07-04T15:16:51.565Z - info: Using extension tags
+2018-07-04T15:16:51.592Z - info: Using extension templates
+2018-07-04T15:16:51.603Z - info: Using extension jsrender
+2018-07-04T15:16:51.608Z - info: Using extension cli
+2018-07-04T15:16:51.609Z - info: Using extension handlebars
+2018-07-04T15:16:51.613Z - info: Using extension debug
+2018-07-04T15:16:51.615Z - info: Using extension express
+2018-07-04T15:16:51.914Z - info: Using extension fop-pdf
+2018-07-04T15:16:51.999Z - info: Using extension phantom-pdf
+2018-07-04T15:16:52.091Z - info: Using extension fs-store
+2018-07-04T15:16:52.571Z - info: Using extension authorization
+2018-07-04T15:16:52.629Z - info: Using extension images
+2018-07-04T15:16:52.687Z - info: Using extension child-templates
+2018-07-04T15:16:52.692Z - info: Using extension browser-client
+2018-07-04T15:16:52.694Z - info: Using extension licensing
+2018-07-04T15:16:52.859Z - info: Using extension data
+2018-07-04T15:16:52.907Z - info: Using extension text
+2018-07-04T15:16:52.908Z - info: Using extension reports
+2018-07-04T15:16:52.975Z - info: Using extension resources
+2018-07-04T15:16:53.025Z - info: Using extension base
+2018-07-04T15:16:53.026Z - info: Using extension studio
+2018-07-04T15:16:53.118Z - info: Using extension html-to-xlsx
+2018-07-04T15:16:53.264Z - info: Using extension scripts
+2018-07-04T15:16:53.312Z - info: Using extension assets
+2018-07-04T15:16:53.321Z - info: Using extension scheduling
+2018-07-04T15:16:53.349Z - info: Using extension xlsx
+2018-07-04T15:16:53.708Z - info: Using extension sample-template
+2018-07-04T15:16:53.777Z - info: Using extension public-templates
+2018-07-04T15:16:53.825Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:16:53.989Z - info: Configuring routes for existing express app.
+2018-07-04T15:16:54.042Z - info: Using existing server instance.
+2018-07-04T15:16:54.047Z - info: Verifying license key free
+2018-07-04T15:16:54.050Z - info: Using free license
+2018-07-04T15:16:54.053Z - info: reporter initialized
+2018-07-04T15:20:49.808Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:20:50.200Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:20:50.203Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:20:50.804Z - info: Found 30 extensions
+2018-07-04T15:20:50.839Z - info: Using extension import-export
+2018-07-04T15:20:51.094Z - info: Using extension tags
+2018-07-04T15:20:51.106Z - info: Using extension templates
+2018-07-04T15:20:51.118Z - info: Using extension jsrender
+2018-07-04T15:20:51.121Z - info: Using extension cli
+2018-07-04T15:20:51.122Z - info: Using extension handlebars
+2018-07-04T15:20:51.124Z - info: Using extension debug
+2018-07-04T15:20:51.127Z - info: Using extension express
+2018-07-04T15:20:51.219Z - info: Using extension fop-pdf
+2018-07-04T15:20:51.275Z - info: Using extension phantom-pdf
+2018-07-04T15:20:51.391Z - info: Using extension fs-store
+2018-07-04T15:20:51.756Z - info: Using extension authorization
+2018-07-04T15:20:51.802Z - info: Using extension images
+2018-07-04T15:20:51.857Z - info: Using extension child-templates
+2018-07-04T15:20:51.875Z - info: Using extension browser-client
+2018-07-04T15:20:51.877Z - info: Using extension licensing
+2018-07-04T15:20:52.043Z - info: Using extension data
+2018-07-04T15:20:52.105Z - info: Using extension text
+2018-07-04T15:20:52.107Z - info: Using extension reports
+2018-07-04T15:20:52.168Z - info: Using extension resources
+2018-07-04T15:20:52.219Z - info: Using extension base
+2018-07-04T15:20:52.220Z - info: Using extension studio
+2018-07-04T15:20:52.324Z - info: Using extension html-to-xlsx
+2018-07-04T15:20:52.448Z - info: Using extension scripts
+2018-07-04T15:20:52.499Z - info: Using extension assets
+2018-07-04T15:20:52.510Z - info: Using extension scheduling
+2018-07-04T15:20:52.538Z - info: Using extension xlsx
+2018-07-04T15:20:52.834Z - info: Using extension sample-template
+2018-07-04T15:20:52.892Z - info: Using extension public-templates
+2018-07-04T15:20:52.941Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:20:53.113Z - info: Configuring routes for existing express app.
+2018-07-04T15:20:53.174Z - info: Using existing server instance.
+2018-07-04T15:20:53.180Z - info: Verifying license key free
+2018-07-04T15:20:53.181Z - info: Using free license
+2018-07-04T15:20:53.184Z - info: reporter initialized
+2018-07-04T15:22:34.327Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:22:34.748Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:22:34.752Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:22:35.557Z - info: Found 30 extensions
+2018-07-04T15:22:35.634Z - info: Using extension import-export
+2018-07-04T15:22:36.454Z - info: Using extension tags
+2018-07-04T15:22:36.470Z - info: Using extension templates
+2018-07-04T15:22:36.485Z - info: Using extension jsrender
+2018-07-04T15:22:36.489Z - info: Using extension cli
+2018-07-04T15:22:36.493Z - info: Using extension handlebars
+2018-07-04T15:22:36.496Z - info: Using extension debug
+2018-07-04T15:22:36.500Z - info: Using extension express
+2018-07-04T15:22:36.685Z - info: Using extension fop-pdf
+2018-07-04T15:22:36.753Z - info: Using extension phantom-pdf
+2018-07-04T15:22:36.930Z - info: Using extension fs-store
+2018-07-04T15:22:37.355Z - info: Using extension authorization
+2018-07-04T15:22:37.415Z - info: Using extension images
+2018-07-04T15:22:37.477Z - info: Using extension child-templates
+2018-07-04T15:22:37.481Z - info: Using extension browser-client
+2018-07-04T15:22:37.483Z - info: Using extension licensing
+2018-07-04T15:22:37.648Z - info: Using extension data
+2018-07-04T15:22:37.699Z - info: Using extension text
+2018-07-04T15:22:37.700Z - info: Using extension reports
+2018-07-04T15:22:37.753Z - info: Using extension resources
+2018-07-04T15:22:37.803Z - info: Using extension base
+2018-07-04T15:22:37.804Z - info: Using extension studio
+2018-07-04T15:22:37.895Z - info: Using extension html-to-xlsx
+2018-07-04T15:22:38.048Z - info: Using extension scripts
+2018-07-04T15:22:38.103Z - info: Using extension assets
+2018-07-04T15:22:38.115Z - info: Using extension scheduling
+2018-07-04T15:22:38.147Z - info: Using extension xlsx
+2018-07-04T15:22:38.502Z - info: Using extension sample-template
+2018-07-04T15:22:38.556Z - info: Using extension public-templates
+2018-07-04T15:22:38.618Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:22:39.125Z - info: Configuring routes for existing express app.
+2018-07-04T15:22:39.251Z - info: Using existing server instance.
+2018-07-04T15:22:39.258Z - info: Verifying license key free
+2018-07-04T15:22:39.259Z - info: Using free license
+2018-07-04T15:22:39.265Z - info: reporter initialized
+2018-07-04T15:23:17.815Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T15:23:18.368Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T15:23:18.372Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T15:23:19.090Z - info: Found 30 extensions
+2018-07-04T15:23:19.160Z - info: Using extension import-export
+2018-07-04T15:23:19.648Z - info: Using extension tags
+2018-07-04T15:23:19.659Z - info: Using extension templates
+2018-07-04T15:23:19.665Z - info: Using extension jsrender
+2018-07-04T15:23:19.668Z - info: Using extension cli
+2018-07-04T15:23:19.669Z - info: Using extension handlebars
+2018-07-04T15:23:19.672Z - info: Using extension debug
+2018-07-04T15:23:19.674Z - info: Using extension express
+2018-07-04T15:23:19.804Z - info: Using extension fop-pdf
+2018-07-04T15:23:19.865Z - info: Using extension phantom-pdf
+2018-07-04T15:23:19.992Z - info: Using extension fs-store
+2018-07-04T15:23:20.562Z - info: Using extension authorization
+2018-07-04T15:23:20.608Z - info: Using extension images
+2018-07-04T15:23:20.655Z - info: Using extension child-templates
+2018-07-04T15:23:20.659Z - info: Using extension browser-client
+2018-07-04T15:23:20.662Z - info: Using extension licensing
+2018-07-04T15:23:20.774Z - info: Using extension data
+2018-07-04T15:23:20.830Z - info: Using extension text
+2018-07-04T15:23:20.831Z - info: Using extension reports
+2018-07-04T15:23:20.930Z - info: Using extension resources
+2018-07-04T15:23:20.990Z - info: Using extension base
+2018-07-04T15:23:20.991Z - info: Using extension studio
+2018-07-04T15:23:21.125Z - info: Using extension html-to-xlsx
+2018-07-04T15:23:21.486Z - info: Using extension scripts
+2018-07-04T15:23:21.612Z - info: Using extension assets
+2018-07-04T15:23:21.633Z - info: Using extension scheduling
+2018-07-04T15:23:21.687Z - info: Using extension xlsx
+2018-07-04T15:23:22.128Z - info: Using extension sample-template
+2018-07-04T15:23:22.175Z - info: Using extension public-templates
+2018-07-04T15:23:22.233Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T15:23:22.447Z - info: Configuring routes for existing express app.
+2018-07-04T15:23:22.501Z - info: Using existing server instance.
+2018-07-04T15:23:22.506Z - info: Verifying license key free
+2018-07-04T15:23:22.507Z - info: Using free license
+2018-07-04T15:23:22.510Z - info: reporter initialized
+2018-07-04T16:12:56.962Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:12:57.398Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:12:57.401Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:12:58.423Z - info: Found 30 extensions
+2018-07-04T16:12:58.535Z - info: Using extension import-export
+2018-07-04T16:12:59.054Z - info: Using extension tags
+2018-07-04T16:12:59.068Z - info: Using extension templates
+2018-07-04T16:12:59.076Z - info: Using extension jsrender
+2018-07-04T16:12:59.078Z - info: Using extension cli
+2018-07-04T16:12:59.079Z - info: Using extension handlebars
+2018-07-04T16:12:59.082Z - info: Using extension debug
+2018-07-04T16:12:59.085Z - info: Using extension express
+2018-07-04T16:12:59.204Z - info: Using extension fop-pdf
+2018-07-04T16:12:59.278Z - info: Using extension phantom-pdf
+2018-07-04T16:12:59.453Z - info: Using extension fs-store
+2018-07-04T16:12:59.970Z - info: Using extension authorization
+2018-07-04T16:13:00.051Z - info: Using extension images
+2018-07-04T16:13:00.119Z - info: Using extension child-templates
+2018-07-04T16:13:00.128Z - info: Using extension browser-client
+2018-07-04T16:13:00.133Z - info: Using extension licensing
+2018-07-04T16:13:00.302Z - info: Using extension data
+2018-07-04T16:13:00.360Z - info: Using extension text
+2018-07-04T16:13:00.361Z - info: Using extension reports
+2018-07-04T16:13:00.436Z - info: Using extension resources
+2018-07-04T16:13:00.498Z - info: Using extension base
+2018-07-04T16:13:00.500Z - info: Using extension studio
+2018-07-04T16:13:00.591Z - info: Using extension html-to-xlsx
+2018-07-04T16:13:00.733Z - info: Using extension scripts
+2018-07-04T16:13:00.779Z - info: Using extension assets
+2018-07-04T16:13:00.788Z - info: Using extension scheduling
+2018-07-04T16:13:00.821Z - info: Using extension xlsx
+2018-07-04T16:13:01.162Z - info: Using extension sample-template
+2018-07-04T16:13:01.219Z - info: Using extension public-templates
+2018-07-04T16:13:01.303Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:13:01.657Z - info: Configuring routes for existing express app.
+2018-07-04T16:13:01.716Z - info: Using existing server instance.
+2018-07-04T16:13:01.721Z - info: Verifying license key free
+2018-07-04T16:13:01.754Z - info: Using free license
+2018-07-04T16:13:01.756Z - info: reporter initialized
+2018-07-04T16:24:40.783Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:24:41.180Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:24:41.183Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:24:42.020Z - info: Found 30 extensions
+2018-07-04T16:24:42.054Z - info: Using extension import-export
+2018-07-04T16:24:42.356Z - info: Using extension tags
+2018-07-04T16:24:42.368Z - info: Using extension templates
+2018-07-04T16:24:42.373Z - info: Using extension jsrender
+2018-07-04T16:24:42.376Z - info: Using extension cli
+2018-07-04T16:24:42.377Z - info: Using extension handlebars
+2018-07-04T16:24:42.389Z - info: Using extension debug
+2018-07-04T16:24:42.395Z - info: Using extension express
+2018-07-04T16:24:42.491Z - info: Using extension fop-pdf
+2018-07-04T16:24:42.550Z - info: Using extension phantom-pdf
+2018-07-04T16:24:42.694Z - info: Using extension fs-store
+2018-07-04T16:24:43.181Z - info: Using extension authorization
+2018-07-04T16:24:43.255Z - info: Using extension images
+2018-07-04T16:24:43.345Z - info: Using extension child-templates
+2018-07-04T16:24:43.351Z - info: Using extension browser-client
+2018-07-04T16:24:43.358Z - info: Using extension licensing
+2018-07-04T16:24:43.623Z - info: Using extension data
+2018-07-04T16:24:43.725Z - info: Using extension text
+2018-07-04T16:24:43.730Z - info: Using extension reports
+2018-07-04T16:24:43.851Z - info: Using extension resources
+2018-07-04T16:24:43.938Z - info: Using extension base
+2018-07-04T16:24:43.940Z - info: Using extension studio
+2018-07-04T16:24:44.082Z - info: Using extension html-to-xlsx
+2018-07-04T16:24:44.288Z - info: Using extension scripts
+2018-07-04T16:24:44.357Z - info: Using extension assets
+2018-07-04T16:24:44.382Z - info: Using extension scheduling
+2018-07-04T16:24:44.417Z - info: Using extension xlsx
+2018-07-04T16:24:44.799Z - info: Using extension sample-template
+2018-07-04T16:24:44.857Z - info: Using extension public-templates
+2018-07-04T16:24:44.928Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:24:45.171Z - info: Configuring routes for existing express app.
+2018-07-04T16:24:45.239Z - info: Using existing server instance.
+2018-07-04T16:24:45.245Z - info: Verifying license key free
+2018-07-04T16:24:45.248Z - info: Using free license
+2018-07-04T16:24:45.251Z - info: reporter initialized
+2018-07-04T16:26:09.009Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:26:09.492Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:26:09.499Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:26:10.564Z - info: Found 30 extensions
+2018-07-04T16:26:10.592Z - info: Using extension import-export
+2018-07-04T16:26:11.051Z - info: Using extension tags
+2018-07-04T16:26:11.060Z - info: Using extension templates
+2018-07-04T16:26:11.070Z - info: Using extension jsrender
+2018-07-04T16:26:11.072Z - info: Using extension cli
+2018-07-04T16:26:11.073Z - info: Using extension handlebars
+2018-07-04T16:26:11.075Z - info: Using extension debug
+2018-07-04T16:26:11.077Z - info: Using extension express
+2018-07-04T16:26:11.192Z - info: Using extension fop-pdf
+2018-07-04T16:26:11.243Z - info: Using extension phantom-pdf
+2018-07-04T16:26:11.362Z - info: Using extension fs-store
+2018-07-04T16:26:11.753Z - info: Using extension authorization
+2018-07-04T16:26:11.808Z - info: Using extension images
+2018-07-04T16:26:11.866Z - info: Using extension child-templates
+2018-07-04T16:26:11.871Z - info: Using extension browser-client
+2018-07-04T16:26:11.873Z - info: Using extension licensing
+2018-07-04T16:26:12.021Z - info: Using extension data
+2018-07-04T16:26:12.077Z - info: Using extension text
+2018-07-04T16:26:12.079Z - info: Using extension reports
+2018-07-04T16:26:12.135Z - info: Using extension resources
+2018-07-04T16:26:12.186Z - info: Using extension base
+2018-07-04T16:26:12.187Z - info: Using extension studio
+2018-07-04T16:26:12.290Z - info: Using extension html-to-xlsx
+2018-07-04T16:26:12.431Z - info: Using extension scripts
+2018-07-04T16:26:12.479Z - info: Using extension assets
+2018-07-04T16:26:12.489Z - info: Using extension scheduling
+2018-07-04T16:26:12.516Z - info: Using extension xlsx
+2018-07-04T16:26:12.839Z - info: Using extension sample-template
+2018-07-04T16:26:12.891Z - info: Using extension public-templates
+2018-07-04T16:26:12.954Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:26:13.322Z - info: Configuring routes for existing express app.
+2018-07-04T16:26:13.390Z - info: Using existing server instance.
+2018-07-04T16:26:13.395Z - info: Verifying license key free
+2018-07-04T16:26:13.428Z - info: Using free license
+2018-07-04T16:26:13.435Z - info: reporter initialized
+2018-07-04T16:34:21.047Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:34:21.436Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:34:21.441Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:34:22.213Z - info: Found 30 extensions
+2018-07-04T16:34:22.240Z - info: Using extension import-export
+2018-07-04T16:34:22.896Z - info: Using extension tags
+2018-07-04T16:34:22.908Z - info: Using extension templates
+2018-07-04T16:34:22.914Z - info: Using extension jsrender
+2018-07-04T16:34:22.916Z - info: Using extension cli
+2018-07-04T16:34:22.917Z - info: Using extension handlebars
+2018-07-04T16:34:22.920Z - info: Using extension debug
+2018-07-04T16:34:22.922Z - info: Using extension express
+2018-07-04T16:34:23.099Z - info: Using extension fop-pdf
+2018-07-04T16:34:23.160Z - info: Using extension phantom-pdf
+2018-07-04T16:34:23.276Z - info: Using extension fs-store
+2018-07-04T16:34:23.688Z - info: Using extension authorization
+2018-07-04T16:34:23.741Z - info: Using extension images
+2018-07-04T16:34:23.795Z - info: Using extension child-templates
+2018-07-04T16:34:23.800Z - info: Using extension browser-client
+2018-07-04T16:34:23.802Z - info: Using extension licensing
+2018-07-04T16:34:23.963Z - info: Using extension data
+2018-07-04T16:34:24.015Z - info: Using extension text
+2018-07-04T16:34:24.016Z - info: Using extension reports
+2018-07-04T16:34:24.069Z - info: Using extension resources
+2018-07-04T16:34:24.117Z - info: Using extension base
+2018-07-04T16:34:24.118Z - info: Using extension studio
+2018-07-04T16:34:24.204Z - info: Using extension html-to-xlsx
+2018-07-04T16:34:24.387Z - info: Using extension scripts
+2018-07-04T16:34:24.461Z - info: Using extension assets
+2018-07-04T16:34:24.469Z - info: Using extension scheduling
+2018-07-04T16:34:24.513Z - info: Using extension xlsx
+2018-07-04T16:34:24.861Z - info: Using extension sample-template
+2018-07-04T16:34:24.930Z - info: Using extension public-templates
+2018-07-04T16:34:24.985Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:34:25.182Z - info: Configuring routes for existing express app.
+2018-07-04T16:34:25.245Z - info: Using existing server instance.
+2018-07-04T16:34:25.250Z - info: Verifying license key free
+2018-07-04T16:34:25.251Z - info: Using free license
+2018-07-04T16:34:25.253Z - info: reporter initialized
+2018-07-04T16:47:21.957Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:47:22.301Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:47:22.304Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:47:22.897Z - info: Found 30 extensions
+2018-07-04T16:47:22.919Z - info: Using extension import-export
+2018-07-04T16:47:23.168Z - info: Using extension tags
+2018-07-04T16:47:23.176Z - info: Using extension templates
+2018-07-04T16:47:23.182Z - info: Using extension jsrender
+2018-07-04T16:47:23.183Z - info: Using extension cli
+2018-07-04T16:47:23.184Z - info: Using extension handlebars
+2018-07-04T16:47:23.186Z - info: Using extension debug
+2018-07-04T16:47:23.189Z - info: Using extension express
+2018-07-04T16:47:23.275Z - info: Using extension fop-pdf
+2018-07-04T16:47:23.328Z - info: Using extension phantom-pdf
+2018-07-04T16:47:23.433Z - info: Using extension fs-store
+2018-07-04T16:47:23.740Z - info: Using extension authorization
+2018-07-04T16:47:23.792Z - info: Using extension images
+2018-07-04T16:47:23.845Z - info: Using extension child-templates
+2018-07-04T16:47:23.850Z - info: Using extension browser-client
+2018-07-04T16:47:23.852Z - info: Using extension licensing
+2018-07-04T16:47:23.976Z - info: Using extension data
+2018-07-04T16:47:24.025Z - info: Using extension text
+2018-07-04T16:47:24.026Z - info: Using extension reports
+2018-07-04T16:47:24.070Z - info: Using extension resources
+2018-07-04T16:47:24.113Z - info: Using extension base
+2018-07-04T16:47:24.115Z - info: Using extension studio
+2018-07-04T16:47:24.194Z - info: Using extension html-to-xlsx
+2018-07-04T16:47:24.362Z - info: Using extension scripts
+2018-07-04T16:47:24.419Z - info: Using extension assets
+2018-07-04T16:47:24.430Z - info: Using extension scheduling
+2018-07-04T16:47:24.462Z - info: Using extension xlsx
+2018-07-04T16:47:24.753Z - info: Using extension sample-template
+2018-07-04T16:47:24.797Z - info: Using extension public-templates
+2018-07-04T16:47:24.852Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:47:25.056Z - info: Configuring routes for existing express app.
+2018-07-04T16:47:25.109Z - info: Using existing server instance.
+2018-07-04T16:47:25.114Z - info: Verifying license key free
+2018-07-04T16:47:25.115Z - info: Using free license
+2018-07-04T16:47:25.117Z - info: reporter initialized
+2018-07-04T16:54:32.140Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:54:32.524Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:54:32.527Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:54:33.115Z - info: Found 30 extensions
+2018-07-04T16:54:33.138Z - info: Using extension import-export
+2018-07-04T16:54:33.385Z - info: Using extension tags
+2018-07-04T16:54:33.393Z - info: Using extension templates
+2018-07-04T16:54:33.398Z - info: Using extension jsrender
+2018-07-04T16:54:33.399Z - info: Using extension cli
+2018-07-04T16:54:33.400Z - info: Using extension handlebars
+2018-07-04T16:54:33.402Z - info: Using extension debug
+2018-07-04T16:54:33.404Z - info: Using extension express
+2018-07-04T16:54:33.484Z - info: Using extension fop-pdf
+2018-07-04T16:54:33.534Z - info: Using extension phantom-pdf
+2018-07-04T16:54:33.653Z - info: Using extension fs-store
+2018-07-04T16:54:34.324Z - info: Using extension authorization
+2018-07-04T16:54:34.410Z - info: Using extension images
+2018-07-04T16:54:34.500Z - info: Using extension child-templates
+2018-07-04T16:54:34.509Z - info: Using extension browser-client
+2018-07-04T16:54:34.511Z - info: Using extension licensing
+2018-07-04T16:54:34.685Z - info: Using extension data
+2018-07-04T16:54:34.730Z - info: Using extension text
+2018-07-04T16:54:34.731Z - info: Using extension reports
+2018-07-04T16:54:34.781Z - info: Using extension resources
+2018-07-04T16:54:34.825Z - info: Using extension base
+2018-07-04T16:54:34.826Z - info: Using extension studio
+2018-07-04T16:54:34.911Z - info: Using extension html-to-xlsx
+2018-07-04T16:54:35.036Z - info: Using extension scripts
+2018-07-04T16:54:35.081Z - info: Using extension assets
+2018-07-04T16:54:35.092Z - info: Using extension scheduling
+2018-07-04T16:54:35.120Z - info: Using extension xlsx
+2018-07-04T16:54:35.446Z - info: Using extension sample-template
+2018-07-04T16:54:35.491Z - info: Using extension public-templates
+2018-07-04T16:54:35.541Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:54:35.705Z - info: Configuring routes for existing express app.
+2018-07-04T16:54:35.764Z - info: Using existing server instance.
+2018-07-04T16:54:35.769Z - info: Verifying license key free
+2018-07-04T16:54:35.770Z - info: Using free license
+2018-07-04T16:54:35.773Z - info: reporter initialized
+2018-07-04T16:56:42.400Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:56:42.741Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:56:42.746Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:56:43.383Z - info: Found 30 extensions
+2018-07-04T16:56:43.408Z - info: Using extension import-export
+2018-07-04T16:56:44.041Z - info: Using extension tags
+2018-07-04T16:56:44.073Z - info: Using extension templates
+2018-07-04T16:56:44.108Z - info: Using extension jsrender
+2018-07-04T16:56:44.120Z - info: Using extension cli
+2018-07-04T16:56:44.122Z - info: Using extension handlebars
+2018-07-04T16:56:44.145Z - info: Using extension debug
+2018-07-04T16:56:44.153Z - info: Using extension express
+2018-07-04T16:56:44.433Z - info: Using extension fop-pdf
+2018-07-04T16:56:44.510Z - info: Using extension phantom-pdf
+2018-07-04T16:56:44.626Z - info: Using extension fs-store
+2018-07-04T16:56:45.101Z - info: Using extension authorization
+2018-07-04T16:56:45.144Z - info: Using extension images
+2018-07-04T16:56:45.192Z - info: Using extension child-templates
+2018-07-04T16:56:45.196Z - info: Using extension browser-client
+2018-07-04T16:56:45.198Z - info: Using extension licensing
+2018-07-04T16:56:45.324Z - info: Using extension data
+2018-07-04T16:56:45.371Z - info: Using extension text
+2018-07-04T16:56:45.372Z - info: Using extension reports
+2018-07-04T16:56:45.417Z - info: Using extension resources
+2018-07-04T16:56:45.458Z - info: Using extension base
+2018-07-04T16:56:45.459Z - info: Using extension studio
+2018-07-04T16:56:45.537Z - info: Using extension html-to-xlsx
+2018-07-04T16:56:45.677Z - info: Using extension scripts
+2018-07-04T16:56:45.719Z - info: Using extension assets
+2018-07-04T16:56:45.728Z - info: Using extension scheduling
+2018-07-04T16:56:45.754Z - info: Using extension xlsx
+2018-07-04T16:56:46.044Z - info: Using extension sample-template
+2018-07-04T16:56:46.089Z - info: Using extension public-templates
+2018-07-04T16:56:46.139Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:56:46.482Z - info: Configuring routes for existing express app.
+2018-07-04T16:56:46.567Z - info: Using existing server instance.
+2018-07-04T16:56:46.572Z - info: Verifying license key free
+2018-07-04T16:56:46.574Z - info: Using free license
+2018-07-04T16:56:46.579Z - info: reporter initialized
+2018-07-04T16:58:03.657Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T16:58:04.010Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T16:58:04.012Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T16:58:04.607Z - info: Found 30 extensions
+2018-07-04T16:58:04.630Z - info: Using extension import-export
+2018-07-04T16:58:04.863Z - info: Using extension tags
+2018-07-04T16:58:04.872Z - info: Using extension templates
+2018-07-04T16:58:04.877Z - info: Using extension jsrender
+2018-07-04T16:58:04.878Z - info: Using extension cli
+2018-07-04T16:58:04.880Z - info: Using extension handlebars
+2018-07-04T16:58:04.883Z - info: Using extension debug
+2018-07-04T16:58:04.885Z - info: Using extension express
+2018-07-04T16:58:04.983Z - info: Using extension fop-pdf
+2018-07-04T16:58:05.043Z - info: Using extension phantom-pdf
+2018-07-04T16:58:05.148Z - info: Using extension fs-store
+2018-07-04T16:58:05.467Z - info: Using extension authorization
+2018-07-04T16:58:05.519Z - info: Using extension images
+2018-07-04T16:58:05.627Z - info: Using extension child-templates
+2018-07-04T16:58:05.642Z - info: Using extension browser-client
+2018-07-04T16:58:05.647Z - info: Using extension licensing
+2018-07-04T16:58:05.922Z - info: Using extension data
+2018-07-04T16:58:05.971Z - info: Using extension text
+2018-07-04T16:58:05.973Z - info: Using extension reports
+2018-07-04T16:58:06.025Z - info: Using extension resources
+2018-07-04T16:58:06.074Z - info: Using extension base
+2018-07-04T16:58:06.075Z - info: Using extension studio
+2018-07-04T16:58:06.170Z - info: Using extension html-to-xlsx
+2018-07-04T16:58:06.332Z - info: Using extension scripts
+2018-07-04T16:58:06.373Z - info: Using extension assets
+2018-07-04T16:58:06.381Z - info: Using extension scheduling
+2018-07-04T16:58:06.405Z - info: Using extension xlsx
+2018-07-04T16:58:06.671Z - info: Using extension sample-template
+2018-07-04T16:58:06.713Z - info: Using extension public-templates
+2018-07-04T16:58:06.765Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T16:58:06.922Z - info: Configuring routes for existing express app.
+2018-07-04T16:58:06.989Z - info: Using existing server instance.
+2018-07-04T16:58:06.996Z - info: Verifying license key free
+2018-07-04T16:58:06.998Z - info: Using free license
+2018-07-04T16:58:07.101Z - info: reporter initialized
+2018-07-04T17:01:11.986Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T17:01:12.412Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T17:01:12.416Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T17:01:13.147Z - info: Found 30 extensions
+2018-07-04T17:01:13.191Z - info: Using extension import-export
+2018-07-04T17:01:13.823Z - info: Using extension tags
+2018-07-04T17:01:13.842Z - info: Using extension templates
+2018-07-04T17:01:13.848Z - info: Using extension jsrender
+2018-07-04T17:01:13.850Z - info: Using extension cli
+2018-07-04T17:01:13.853Z - info: Using extension handlebars
+2018-07-04T17:01:13.858Z - info: Using extension debug
+2018-07-04T17:01:13.861Z - info: Using extension express
+2018-07-04T17:01:14.054Z - info: Using extension fop-pdf
+2018-07-04T17:01:14.121Z - info: Using extension phantom-pdf
+2018-07-04T17:01:14.258Z - info: Using extension fs-store
+2018-07-04T17:01:14.591Z - info: Using extension authorization
+2018-07-04T17:01:14.647Z - info: Using extension images
+2018-07-04T17:01:14.699Z - info: Using extension child-templates
+2018-07-04T17:01:14.704Z - info: Using extension browser-client
+2018-07-04T17:01:14.706Z - info: Using extension licensing
+2018-07-04T17:01:14.837Z - info: Using extension data
+2018-07-04T17:01:14.887Z - info: Using extension text
+2018-07-04T17:01:14.888Z - info: Using extension reports
+2018-07-04T17:01:14.929Z - info: Using extension resources
+2018-07-04T17:01:14.971Z - info: Using extension base
+2018-07-04T17:01:14.973Z - info: Using extension studio
+2018-07-04T17:01:15.053Z - info: Using extension html-to-xlsx
+2018-07-04T17:01:15.177Z - info: Using extension scripts
+2018-07-04T17:01:15.232Z - info: Using extension assets
+2018-07-04T17:01:15.242Z - info: Using extension scheduling
+2018-07-04T17:01:15.270Z - info: Using extension xlsx
+2018-07-04T17:01:15.558Z - info: Using extension sample-template
+2018-07-04T17:01:15.605Z - info: Using extension public-templates
+2018-07-04T17:01:15.663Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T17:01:16.016Z - info: Configuring routes for existing express app.
+2018-07-04T17:01:16.086Z - info: Using existing server instance.
+2018-07-04T17:01:16.091Z - info: Verifying license key free
+2018-07-04T17:01:16.092Z - info: Using free license
+2018-07-04T17:01:16.094Z - info: reporter initialized
+2018-07-04T17:04:07.181Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T17:04:07.843Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T17:04:07.861Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T17:04:08.573Z - info: Found 30 extensions
+2018-07-04T17:04:08.722Z - info: Using extension import-export
+2018-07-04T17:04:09.036Z - info: Using extension tags
+2018-07-04T17:04:09.047Z - info: Using extension templates
+2018-07-04T17:04:09.054Z - info: Using extension jsrender
+2018-07-04T17:04:09.060Z - info: Using extension cli
+2018-07-04T17:04:09.061Z - info: Using extension handlebars
+2018-07-04T17:04:09.065Z - info: Using extension debug
+2018-07-04T17:04:09.067Z - info: Using extension express
+2018-07-04T17:04:09.213Z - info: Using extension fop-pdf
+2018-07-04T17:04:09.308Z - info: Using extension phantom-pdf
+2018-07-04T17:04:09.429Z - info: Using extension fs-store
+2018-07-04T17:04:09.867Z - info: Using extension authorization
+2018-07-04T17:04:09.915Z - info: Using extension images
+2018-07-04T17:04:09.977Z - info: Using extension child-templates
+2018-07-04T17:04:09.984Z - info: Using extension browser-client
+2018-07-04T17:04:09.987Z - info: Using extension licensing
+2018-07-04T17:04:10.123Z - info: Using extension data
+2018-07-04T17:04:10.174Z - info: Using extension text
+2018-07-04T17:04:10.175Z - info: Using extension reports
+2018-07-04T17:04:10.228Z - info: Using extension resources
+2018-07-04T17:04:10.282Z - info: Using extension base
+2018-07-04T17:04:10.283Z - info: Using extension studio
+2018-07-04T17:04:10.380Z - info: Using extension html-to-xlsx
+2018-07-04T17:04:10.518Z - info: Using extension scripts
+2018-07-04T17:04:10.565Z - info: Using extension assets
+2018-07-04T17:04:10.577Z - info: Using extension scheduling
+2018-07-04T17:04:10.607Z - info: Using extension xlsx
+2018-07-04T17:04:10.909Z - info: Using extension sample-template
+2018-07-04T17:04:10.959Z - info: Using extension public-templates
+2018-07-04T17:04:11.014Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T17:04:11.276Z - info: Configuring routes for existing express app.
+2018-07-04T17:04:11.350Z - info: Using existing server instance.
+2018-07-04T17:04:11.364Z - info: Verifying license key free
+2018-07-04T17:04:11.365Z - info: Using free license
+2018-07-04T17:04:11.368Z - info: reporter initialized
+2018-07-04T20:50:10.428Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T20:50:10.887Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T20:50:10.896Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T20:50:11.568Z - info: Found 30 extensions
+2018-07-04T20:50:11.584Z - info: Using extension import-export
+2018-07-04T20:50:11.861Z - info: Using extension tags
+2018-07-04T20:50:11.868Z - info: Using extension templates
+2018-07-04T20:50:11.874Z - info: Using extension jsrender
+2018-07-04T20:50:11.877Z - info: Using extension cli
+2018-07-04T20:50:11.878Z - info: Using extension handlebars
+2018-07-04T20:50:11.886Z - info: Using extension debug
+2018-07-04T20:50:11.888Z - info: Using extension express
+2018-07-04T20:50:11.974Z - info: Using extension fop-pdf
+2018-07-04T20:50:12.027Z - info: Using extension phantom-pdf
+2018-07-04T20:50:12.136Z - info: Using extension fs-store
+2018-07-04T20:50:12.533Z - info: Using extension authorization
+2018-07-04T20:50:12.589Z - info: Using extension images
+2018-07-04T20:50:12.648Z - info: Using extension child-templates
+2018-07-04T20:50:12.654Z - info: Using extension browser-client
+2018-07-04T20:50:12.656Z - info: Using extension licensing
+2018-07-04T20:50:12.812Z - info: Using extension data
+2018-07-04T20:50:12.858Z - info: Using extension text
+2018-07-04T20:50:12.859Z - info: Using extension reports
+2018-07-04T20:50:12.905Z - info: Using extension resources
+2018-07-04T20:50:12.949Z - info: Using extension base
+2018-07-04T20:50:12.950Z - info: Using extension studio
+2018-07-04T20:50:13.024Z - info: Using extension html-to-xlsx
+2018-07-04T20:50:13.146Z - info: Using extension scripts
+2018-07-04T20:50:13.189Z - info: Using extension assets
+2018-07-04T20:50:13.198Z - info: Using extension scheduling
+2018-07-04T20:50:13.226Z - info: Using extension xlsx
+2018-07-04T20:50:13.522Z - info: Using extension sample-template
+2018-07-04T20:50:13.582Z - info: Using extension public-templates
+2018-07-04T20:50:13.633Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T20:50:13.853Z - info: Configuring routes for existing express app.
+2018-07-04T20:50:13.914Z - info: Using existing server instance.
+2018-07-04T20:50:13.919Z - info: Verifying license key free
+2018-07-04T20:50:13.920Z - info: Using free license
+2018-07-04T20:50:13.923Z - info: reporter initialized
+2018-07-04T20:50:43.795Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T20:50:44.144Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T20:50:44.148Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T20:50:44.778Z - info: Found 30 extensions
+2018-07-04T20:50:44.812Z - info: Using extension import-export
+2018-07-04T20:50:45.055Z - info: Using extension tags
+2018-07-04T20:50:45.064Z - info: Using extension templates
+2018-07-04T20:50:45.070Z - info: Using extension jsrender
+2018-07-04T20:50:45.072Z - info: Using extension cli
+2018-07-04T20:50:45.073Z - info: Using extension handlebars
+2018-07-04T20:50:45.075Z - info: Using extension debug
+2018-07-04T20:50:45.077Z - info: Using extension express
+2018-07-04T20:50:45.166Z - info: Using extension fop-pdf
+2018-07-04T20:50:45.218Z - info: Using extension phantom-pdf
+2018-07-04T20:50:45.327Z - info: Using extension fs-store
+2018-07-04T20:50:45.646Z - info: Using extension authorization
+2018-07-04T20:50:45.698Z - info: Using extension images
+2018-07-04T20:50:45.745Z - info: Using extension child-templates
+2018-07-04T20:50:45.749Z - info: Using extension browser-client
+2018-07-04T20:50:45.751Z - info: Using extension licensing
+2018-07-04T20:50:45.872Z - info: Using extension data
+2018-07-04T20:50:45.919Z - info: Using extension text
+2018-07-04T20:50:45.921Z - info: Using extension reports
+2018-07-04T20:50:45.967Z - info: Using extension resources
+2018-07-04T20:50:46.013Z - info: Using extension base
+2018-07-04T20:50:46.015Z - info: Using extension studio
+2018-07-04T20:50:46.092Z - info: Using extension html-to-xlsx
+2018-07-04T20:50:46.215Z - info: Using extension scripts
+2018-07-04T20:50:46.261Z - info: Using extension assets
+2018-07-04T20:50:46.271Z - info: Using extension scheduling
+2018-07-04T20:50:46.296Z - info: Using extension xlsx
+2018-07-04T20:50:46.580Z - info: Using extension sample-template
+2018-07-04T20:50:46.624Z - info: Using extension public-templates
+2018-07-04T20:50:46.673Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T20:50:46.849Z - info: Configuring routes for existing express app.
+2018-07-04T20:50:46.909Z - info: Using existing server instance.
+2018-07-04T20:50:46.914Z - info: Verifying license key free
+2018-07-04T20:50:46.915Z - info: Using free license
+2018-07-04T20:50:46.919Z - info: reporter initialized
+2018-07-04T20:57:59.408Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T20:57:59.763Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T20:57:59.766Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T20:58:00.398Z - info: Found 30 extensions
+2018-07-04T20:58:00.434Z - info: Using extension import-export
+2018-07-04T20:58:00.690Z - info: Using extension tags
+2018-07-04T20:58:00.698Z - info: Using extension templates
+2018-07-04T20:58:00.703Z - info: Using extension jsrender
+2018-07-04T20:58:00.704Z - info: Using extension cli
+2018-07-04T20:58:00.705Z - info: Using extension handlebars
+2018-07-04T20:58:00.708Z - info: Using extension debug
+2018-07-04T20:58:00.710Z - info: Using extension express
+2018-07-04T20:58:00.795Z - info: Using extension fop-pdf
+2018-07-04T20:58:00.846Z - info: Using extension phantom-pdf
+2018-07-04T20:58:00.949Z - info: Using extension fs-store
+2018-07-04T20:58:01.265Z - info: Using extension authorization
+2018-07-04T20:58:01.309Z - info: Using extension images
+2018-07-04T20:58:01.357Z - info: Using extension child-templates
+2018-07-04T20:58:01.362Z - info: Using extension browser-client
+2018-07-04T20:58:01.364Z - info: Using extension licensing
+2018-07-04T20:58:01.507Z - info: Using extension data
+2018-07-04T20:58:01.559Z - info: Using extension text
+2018-07-04T20:58:01.561Z - info: Using extension reports
+2018-07-04T20:58:01.610Z - info: Using extension resources
+2018-07-04T20:58:01.651Z - info: Using extension base
+2018-07-04T20:58:01.652Z - info: Using extension studio
+2018-07-04T20:58:01.734Z - info: Using extension html-to-xlsx
+2018-07-04T20:58:01.863Z - info: Using extension scripts
+2018-07-04T20:58:01.909Z - info: Using extension assets
+2018-07-04T20:58:01.918Z - info: Using extension scheduling
+2018-07-04T20:58:01.944Z - info: Using extension xlsx
+2018-07-04T20:58:02.229Z - info: Using extension sample-template
+2018-07-04T20:58:02.274Z - info: Using extension public-templates
+2018-07-04T20:58:02.328Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T20:58:02.524Z - info: Configuring routes for existing express app.
+2018-07-04T20:58:02.582Z - info: Using existing server instance.
+2018-07-04T20:58:02.587Z - info: Verifying license key free
+2018-07-04T20:58:02.588Z - info: Using free license
+2018-07-04T20:58:02.591Z - info: reporter initialized
+2018-07-04T20:59:22.997Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T20:59:23.348Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T20:59:23.353Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T20:59:23.942Z - info: Found 30 extensions
+2018-07-04T20:59:23.969Z - info: Using extension import-export
+2018-07-04T20:59:24.261Z - info: Using extension tags
+2018-07-04T20:59:24.275Z - info: Using extension templates
+2018-07-04T20:59:24.281Z - info: Using extension jsrender
+2018-07-04T20:59:24.283Z - info: Using extension cli
+2018-07-04T20:59:24.283Z - info: Using extension handlebars
+2018-07-04T20:59:24.285Z - info: Using extension debug
+2018-07-04T20:59:24.286Z - info: Using extension express
+2018-07-04T20:59:24.369Z - info: Using extension fop-pdf
+2018-07-04T20:59:24.414Z - info: Using extension phantom-pdf
+2018-07-04T20:59:24.520Z - info: Using extension fs-store
+2018-07-04T20:59:24.849Z - info: Using extension authorization
+2018-07-04T20:59:24.895Z - info: Using extension images
+2018-07-04T20:59:24.948Z - info: Using extension child-templates
+2018-07-04T20:59:24.952Z - info: Using extension browser-client
+2018-07-04T20:59:24.954Z - info: Using extension licensing
+2018-07-04T20:59:25.084Z - info: Using extension data
+2018-07-04T20:59:25.127Z - info: Using extension text
+2018-07-04T20:59:25.129Z - info: Using extension reports
+2018-07-04T20:59:25.178Z - info: Using extension resources
+2018-07-04T20:59:25.222Z - info: Using extension base
+2018-07-04T20:59:25.222Z - info: Using extension studio
+2018-07-04T20:59:25.300Z - info: Using extension html-to-xlsx
+2018-07-04T20:59:25.423Z - info: Using extension scripts
+2018-07-04T20:59:25.469Z - info: Using extension assets
+2018-07-04T20:59:25.478Z - info: Using extension scheduling
+2018-07-04T20:59:25.505Z - info: Using extension xlsx
+2018-07-04T20:59:25.788Z - info: Using extension sample-template
+2018-07-04T20:59:25.833Z - info: Using extension public-templates
+2018-07-04T20:59:25.884Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T20:59:26.043Z - info: Configuring routes for existing express app.
+2018-07-04T20:59:26.103Z - info: Using existing server instance.
+2018-07-04T20:59:26.108Z - info: Verifying license key free
+2018-07-04T20:59:26.109Z - info: Using free license
+2018-07-04T20:59:26.111Z - info: reporter initialized
+2018-07-04T21:01:50.103Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:01:50.486Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:01:50.489Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:01:51.112Z - info: Found 30 extensions
+2018-07-04T21:01:51.138Z - info: Using extension import-export
+2018-07-04T21:01:51.386Z - info: Using extension tags
+2018-07-04T21:01:51.394Z - info: Using extension templates
+2018-07-04T21:01:51.399Z - info: Using extension jsrender
+2018-07-04T21:01:51.401Z - info: Using extension cli
+2018-07-04T21:01:51.402Z - info: Using extension handlebars
+2018-07-04T21:01:51.404Z - info: Using extension debug
+2018-07-04T21:01:51.406Z - info: Using extension express
+2018-07-04T21:01:51.488Z - info: Using extension fop-pdf
+2018-07-04T21:01:51.546Z - info: Using extension phantom-pdf
+2018-07-04T21:01:51.649Z - info: Using extension fs-store
+2018-07-04T21:01:52.004Z - info: Using extension authorization
+2018-07-04T21:01:52.053Z - info: Using extension images
+2018-07-04T21:01:52.104Z - info: Using extension child-templates
+2018-07-04T21:01:52.108Z - info: Using extension browser-client
+2018-07-04T21:01:52.110Z - info: Using extension licensing
+2018-07-04T21:01:52.244Z - info: Using extension data
+2018-07-04T21:01:52.312Z - info: Using extension text
+2018-07-04T21:01:52.314Z - info: Using extension reports
+2018-07-04T21:01:52.382Z - info: Using extension resources
+2018-07-04T21:01:52.436Z - info: Using extension base
+2018-07-04T21:01:52.438Z - info: Using extension studio
+2018-07-04T21:01:52.549Z - info: Using extension html-to-xlsx
+2018-07-04T21:01:52.729Z - info: Using extension scripts
+2018-07-04T21:01:52.788Z - info: Using extension assets
+2018-07-04T21:01:52.800Z - info: Using extension scheduling
+2018-07-04T21:01:52.834Z - info: Using extension xlsx
+2018-07-04T21:01:53.180Z - info: Using extension sample-template
+2018-07-04T21:01:53.227Z - info: Using extension public-templates
+2018-07-04T21:01:53.297Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:01:53.605Z - info: Configuring routes for existing express app.
+2018-07-04T21:01:53.675Z - info: Using existing server instance.
+2018-07-04T21:01:53.683Z - info: Verifying license key free
+2018-07-04T21:01:53.683Z - info: Using free license
+2018-07-04T21:01:53.686Z - info: reporter initialized
+2018-07-04T21:03:37.710Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:03:38.072Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:03:38.076Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:03:38.686Z - info: Found 30 extensions
+2018-07-04T21:03:38.703Z - info: Using extension import-export
+2018-07-04T21:03:38.938Z - info: Using extension tags
+2018-07-04T21:03:38.947Z - info: Using extension templates
+2018-07-04T21:03:38.952Z - info: Using extension jsrender
+2018-07-04T21:03:38.953Z - info: Using extension cli
+2018-07-04T21:03:38.954Z - info: Using extension handlebars
+2018-07-04T21:03:38.957Z - info: Using extension debug
+2018-07-04T21:03:38.959Z - info: Using extension express
+2018-07-04T21:03:39.043Z - info: Using extension fop-pdf
+2018-07-04T21:03:39.093Z - info: Using extension phantom-pdf
+2018-07-04T21:03:39.197Z - info: Using extension fs-store
+2018-07-04T21:03:39.514Z - info: Using extension authorization
+2018-07-04T21:03:39.559Z - info: Using extension images
+2018-07-04T21:03:39.605Z - info: Using extension child-templates
+2018-07-04T21:03:39.609Z - info: Using extension browser-client
+2018-07-04T21:03:39.611Z - info: Using extension licensing
+2018-07-04T21:03:39.735Z - info: Using extension data
+2018-07-04T21:03:39.786Z - info: Using extension text
+2018-07-04T21:03:39.787Z - info: Using extension reports
+2018-07-04T21:03:39.833Z - info: Using extension resources
+2018-07-04T21:03:39.870Z - info: Using extension base
+2018-07-04T21:03:39.872Z - info: Using extension studio
+2018-07-04T21:03:39.953Z - info: Using extension html-to-xlsx
+2018-07-04T21:03:40.075Z - info: Using extension scripts
+2018-07-04T21:03:40.121Z - info: Using extension assets
+2018-07-04T21:03:40.129Z - info: Using extension scheduling
+2018-07-04T21:03:40.157Z - info: Using extension xlsx
+2018-07-04T21:03:40.433Z - info: Using extension sample-template
+2018-07-04T21:03:40.476Z - info: Using extension public-templates
+2018-07-04T21:03:40.526Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:03:40.700Z - info: Configuring routes for existing express app.
+2018-07-04T21:03:40.761Z - info: Using existing server instance.
+2018-07-04T21:03:40.765Z - info: Verifying license key free
+2018-07-04T21:03:40.767Z - info: Using free license
+2018-07-04T21:03:40.769Z - info: reporter initialized
+2018-07-04T21:15:27.369Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:15:27.980Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:15:27.989Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:15:28.879Z - info: Found 30 extensions
+2018-07-04T21:15:28.920Z - info: Using extension import-export
+2018-07-04T21:15:29.409Z - info: Using extension tags
+2018-07-04T21:15:29.420Z - info: Using extension templates
+2018-07-04T21:15:29.431Z - info: Using extension jsrender
+2018-07-04T21:15:29.433Z - info: Using extension cli
+2018-07-04T21:15:29.434Z - info: Using extension handlebars
+2018-07-04T21:15:29.437Z - info: Using extension debug
+2018-07-04T21:15:29.438Z - info: Using extension express
+2018-07-04T21:15:29.543Z - info: Using extension fop-pdf
+2018-07-04T21:15:29.598Z - info: Using extension phantom-pdf
+2018-07-04T21:15:29.776Z - info: Using extension fs-store
+2018-07-04T21:15:30.260Z - info: Using extension authorization
+2018-07-04T21:15:30.305Z - info: Using extension images
+2018-07-04T21:15:30.387Z - info: Using extension child-templates
+2018-07-04T21:15:30.392Z - info: Using extension browser-client
+2018-07-04T21:15:30.398Z - info: Using extension licensing
+2018-07-04T21:15:30.543Z - info: Using extension data
+2018-07-04T21:15:30.612Z - info: Using extension text
+2018-07-04T21:15:30.613Z - info: Using extension reports
+2018-07-04T21:15:30.685Z - info: Using extension resources
+2018-07-04T21:15:30.742Z - info: Using extension base
+2018-07-04T21:15:30.743Z - info: Using extension studio
+2018-07-04T21:15:30.890Z - info: Using extension html-to-xlsx
+2018-07-04T21:15:31.058Z - info: Using extension scripts
+2018-07-04T21:15:31.109Z - info: Using extension assets
+2018-07-04T21:15:31.119Z - info: Using extension scheduling
+2018-07-04T21:15:31.153Z - info: Using extension xlsx
+2018-07-04T21:15:31.461Z - info: Using extension sample-template
+2018-07-04T21:15:31.508Z - info: Using extension public-templates
+2018-07-04T21:15:31.560Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:15:31.727Z - info: Configuring routes for existing express app.
+2018-07-04T21:15:31.795Z - info: Using existing server instance.
+2018-07-04T21:15:31.802Z - info: Verifying license key free
+2018-07-04T21:15:31.803Z - info: Using free license
+2018-07-04T21:15:31.807Z - info: reporter initialized
+2018-07-04T21:19:44.762Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:19:45.645Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:19:45.650Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:19:46.415Z - info: Found 30 extensions
+2018-07-04T21:19:46.462Z - info: Using extension import-export
+2018-07-04T21:19:46.868Z - info: Using extension tags
+2018-07-04T21:19:46.880Z - info: Using extension templates
+2018-07-04T21:19:46.886Z - info: Using extension jsrender
+2018-07-04T21:19:46.888Z - info: Using extension cli
+2018-07-04T21:19:46.890Z - info: Using extension handlebars
+2018-07-04T21:19:46.894Z - info: Using extension debug
+2018-07-04T21:19:46.896Z - info: Using extension express
+2018-07-04T21:19:47.062Z - info: Using extension fop-pdf
+2018-07-04T21:19:47.146Z - info: Using extension phantom-pdf
+2018-07-04T21:19:47.293Z - info: Using extension fs-store
+2018-07-04T21:19:47.826Z - info: Using extension authorization
+2018-07-04T21:19:47.889Z - info: Using extension images
+2018-07-04T21:19:47.950Z - info: Using extension child-templates
+2018-07-04T21:19:47.954Z - info: Using extension browser-client
+2018-07-04T21:19:47.956Z - info: Using extension licensing
+2018-07-04T21:19:48.126Z - info: Using extension data
+2018-07-04T21:19:48.188Z - info: Using extension text
+2018-07-04T21:19:48.189Z - info: Using extension reports
+2018-07-04T21:19:48.238Z - info: Using extension resources
+2018-07-04T21:19:48.288Z - info: Using extension base
+2018-07-04T21:19:48.289Z - info: Using extension studio
+2018-07-04T21:19:48.368Z - info: Using extension html-to-xlsx
+2018-07-04T21:19:48.567Z - info: Using extension scripts
+2018-07-04T21:19:48.619Z - info: Using extension assets
+2018-07-04T21:19:48.628Z - info: Using extension scheduling
+2018-07-04T21:19:48.656Z - info: Using extension xlsx
+2018-07-04T21:19:49.018Z - info: Using extension sample-template
+2018-07-04T21:19:49.071Z - info: Using extension public-templates
+2018-07-04T21:19:49.132Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:19:49.342Z - info: Configuring routes for existing express app.
+2018-07-04T21:19:49.409Z - info: Using existing server instance.
+2018-07-04T21:19:49.415Z - info: Verifying license key free
+2018-07-04T21:19:49.416Z - info: Using free license
+2018-07-04T21:19:49.419Z - info: reporter initialized
+2018-07-04T21:21:21.674Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:21:22.221Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:21:22.225Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:21:22.930Z - info: Found 30 extensions
+2018-07-04T21:21:23.077Z - info: Using extension import-export
+2018-07-04T21:21:23.463Z - info: Using extension tags
+2018-07-04T21:21:23.476Z - info: Using extension templates
+2018-07-04T21:21:23.491Z - info: Using extension jsrender
+2018-07-04T21:21:23.496Z - info: Using extension cli
+2018-07-04T21:21:23.499Z - info: Using extension handlebars
+2018-07-04T21:21:23.502Z - info: Using extension debug
+2018-07-04T21:21:23.507Z - info: Using extension express
+2018-07-04T21:21:23.641Z - info: Using extension fop-pdf
+2018-07-04T21:21:23.733Z - info: Using extension phantom-pdf
+2018-07-04T21:21:23.963Z - info: Using extension fs-store
+2018-07-04T21:21:24.467Z - info: Using extension authorization
+2018-07-04T21:21:24.521Z - info: Using extension images
+2018-07-04T21:21:24.617Z - info: Using extension child-templates
+2018-07-04T21:21:24.630Z - info: Using extension browser-client
+2018-07-04T21:21:24.637Z - info: Using extension licensing
+2018-07-04T21:21:24.822Z - info: Using extension data
+2018-07-04T21:21:24.880Z - info: Using extension text
+2018-07-04T21:21:24.883Z - info: Using extension reports
+2018-07-04T21:21:24.947Z - info: Using extension resources
+2018-07-04T21:21:25.004Z - info: Using extension base
+2018-07-04T21:21:25.007Z - info: Using extension studio
+2018-07-04T21:21:25.107Z - info: Using extension html-to-xlsx
+2018-07-04T21:21:25.249Z - info: Using extension scripts
+2018-07-04T21:21:25.298Z - info: Using extension assets
+2018-07-04T21:21:25.309Z - info: Using extension scheduling
+2018-07-04T21:21:25.340Z - info: Using extension xlsx
+2018-07-04T21:21:25.713Z - info: Using extension sample-template
+2018-07-04T21:21:25.782Z - info: Using extension public-templates
+2018-07-04T21:21:25.833Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:21:26.031Z - info: Configuring routes for existing express app.
+2018-07-04T21:21:26.116Z - info: Using existing server instance.
+2018-07-04T21:21:26.121Z - info: Verifying license key free
+2018-07-04T21:21:26.126Z - info: Using free license
+2018-07-04T21:21:26.137Z - info: reporter initialized
+2018-07-04T21:22:01.389Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:22:02.106Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:22:02.116Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:22:02.915Z - info: Found 30 extensions
+2018-07-04T21:22:03.155Z - info: Using extension import-export
+2018-07-04T21:22:03.507Z - info: Using extension tags
+2018-07-04T21:22:03.516Z - info: Using extension templates
+2018-07-04T21:22:03.521Z - info: Using extension jsrender
+2018-07-04T21:22:03.522Z - info: Using extension cli
+2018-07-04T21:22:03.523Z - info: Using extension handlebars
+2018-07-04T21:22:03.527Z - info: Using extension debug
+2018-07-04T21:22:03.530Z - info: Using extension express
+2018-07-04T21:22:03.682Z - info: Using extension fop-pdf
+2018-07-04T21:22:03.751Z - info: Using extension phantom-pdf
+2018-07-04T21:22:03.897Z - info: Using extension fs-store
+2018-07-04T21:22:04.301Z - info: Using extension authorization
+2018-07-04T21:22:04.350Z - info: Using extension images
+2018-07-04T21:22:04.412Z - info: Using extension child-templates
+2018-07-04T21:22:04.416Z - info: Using extension browser-client
+2018-07-04T21:22:04.418Z - info: Using extension licensing
+2018-07-04T21:22:04.539Z - info: Using extension data
+2018-07-04T21:22:04.589Z - info: Using extension text
+2018-07-04T21:22:04.591Z - info: Using extension reports
+2018-07-04T21:22:04.643Z - info: Using extension resources
+2018-07-04T21:22:04.694Z - info: Using extension base
+2018-07-04T21:22:04.696Z - info: Using extension studio
+2018-07-04T21:22:04.787Z - info: Using extension html-to-xlsx
+2018-07-04T21:22:04.918Z - info: Using extension scripts
+2018-07-04T21:22:04.964Z - info: Using extension assets
+2018-07-04T21:22:04.973Z - info: Using extension scheduling
+2018-07-04T21:22:05.004Z - info: Using extension xlsx
+2018-07-04T21:22:05.316Z - info: Using extension sample-template
+2018-07-04T21:22:05.372Z - info: Using extension public-templates
+2018-07-04T21:22:05.429Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:22:05.719Z - info: Configuring routes for existing express app.
+2018-07-04T21:22:05.856Z - info: Using existing server instance.
+2018-07-04T21:22:05.861Z - info: Verifying license key free
+2018-07-04T21:22:05.871Z - info: Using free license
+2018-07-04T21:22:05.899Z - info: reporter initialized
+2018-07-04T21:26:58.613Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:26:59.068Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:26:59.071Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:26:59.837Z - info: Found 30 extensions
+2018-07-04T21:26:59.883Z - info: Using extension import-export
+2018-07-04T21:27:00.226Z - info: Using extension tags
+2018-07-04T21:27:00.235Z - info: Using extension templates
+2018-07-04T21:27:00.243Z - info: Using extension jsrender
+2018-07-04T21:27:00.246Z - info: Using extension cli
+2018-07-04T21:27:00.247Z - info: Using extension handlebars
+2018-07-04T21:27:00.252Z - info: Using extension debug
+2018-07-04T21:27:00.256Z - info: Using extension express
+2018-07-04T21:27:00.424Z - info: Using extension fop-pdf
+2018-07-04T21:27:00.546Z - info: Using extension phantom-pdf
+2018-07-04T21:27:00.658Z - info: Using extension fs-store
+2018-07-04T21:27:01.161Z - info: Using extension authorization
+2018-07-04T21:27:01.262Z - info: Using extension images
+2018-07-04T21:27:01.321Z - info: Using extension child-templates
+2018-07-04T21:27:01.327Z - info: Using extension browser-client
+2018-07-04T21:27:01.329Z - info: Using extension licensing
+2018-07-04T21:27:01.494Z - info: Using extension data
+2018-07-04T21:27:01.549Z - info: Using extension text
+2018-07-04T21:27:01.551Z - info: Using extension reports
+2018-07-04T21:27:01.608Z - info: Using extension resources
+2018-07-04T21:27:01.664Z - info: Using extension base
+2018-07-04T21:27:01.665Z - info: Using extension studio
+2018-07-04T21:27:01.754Z - info: Using extension html-to-xlsx
+2018-07-04T21:27:01.896Z - info: Using extension scripts
+2018-07-04T21:27:01.957Z - info: Using extension assets
+2018-07-04T21:27:01.966Z - info: Using extension scheduling
+2018-07-04T21:27:01.997Z - info: Using extension xlsx
+2018-07-04T21:27:02.323Z - info: Using extension sample-template
+2018-07-04T21:27:02.381Z - info: Using extension public-templates
+2018-07-04T21:27:02.445Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:27:02.824Z - info: Configuring routes for existing express app.
+2018-07-04T21:27:02.912Z - info: Using existing server instance.
+2018-07-04T21:27:02.917Z - info: Verifying license key free
+2018-07-04T21:27:02.930Z - info: Using free license
+2018-07-04T21:27:02.945Z - info: reporter initialized
+2018-07-04T21:28:12.207Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:28:12.576Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:28:12.579Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:28:13.574Z - info: Found 30 extensions
+2018-07-04T21:28:13.629Z - info: Using extension import-export
+2018-07-04T21:28:14.088Z - info: Using extension tags
+2018-07-04T21:28:14.103Z - info: Using extension templates
+2018-07-04T21:28:14.114Z - info: Using extension jsrender
+2018-07-04T21:28:14.115Z - info: Using extension cli
+2018-07-04T21:28:14.117Z - info: Using extension handlebars
+2018-07-04T21:28:14.126Z - info: Using extension debug
+2018-07-04T21:28:14.129Z - info: Using extension express
+2018-07-04T21:28:14.283Z - info: Using extension fop-pdf
+2018-07-04T21:28:14.342Z - info: Using extension phantom-pdf
+2018-07-04T21:28:14.467Z - info: Using extension fs-store
+2018-07-04T21:28:14.912Z - info: Using extension authorization
+2018-07-04T21:28:14.969Z - info: Using extension images
+2018-07-04T21:28:15.037Z - info: Using extension child-templates
+2018-07-04T21:28:15.041Z - info: Using extension browser-client
+2018-07-04T21:28:15.044Z - info: Using extension licensing
+2018-07-04T21:28:15.210Z - info: Using extension data
+2018-07-04T21:28:15.269Z - info: Using extension text
+2018-07-04T21:28:15.271Z - info: Using extension reports
+2018-07-04T21:28:15.331Z - info: Using extension resources
+2018-07-04T21:28:15.393Z - info: Using extension base
+2018-07-04T21:28:15.395Z - info: Using extension studio
+2018-07-04T21:28:15.503Z - info: Using extension html-to-xlsx
+2018-07-04T21:28:15.645Z - info: Using extension scripts
+2018-07-04T21:28:15.697Z - info: Using extension assets
+2018-07-04T21:28:15.707Z - info: Using extension scheduling
+2018-07-04T21:28:15.738Z - info: Using extension xlsx
+2018-07-04T21:28:16.176Z - info: Using extension sample-template
+2018-07-04T21:28:16.238Z - info: Using extension public-templates
+2018-07-04T21:28:16.295Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:28:16.663Z - info: Configuring routes for existing express app.
+2018-07-04T21:28:16.763Z - info: Using existing server instance.
+2018-07-04T21:28:16.772Z - info: Verifying license key free
+2018-07-04T21:28:16.779Z - info: Using free license
+2018-07-04T21:28:16.791Z - info: reporter initialized
+2018-07-04T21:33:01.609Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:33:02.088Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:33:02.092Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:33:03.088Z - info: Found 30 extensions
+2018-07-04T21:33:03.130Z - info: Using extension import-export
+2018-07-04T21:33:03.615Z - info: Using extension tags
+2018-07-04T21:33:03.655Z - info: Using extension templates
+2018-07-04T21:33:03.721Z - info: Using extension jsrender
+2018-07-04T21:33:03.723Z - info: Using extension cli
+2018-07-04T21:33:03.724Z - info: Using extension handlebars
+2018-07-04T21:33:03.727Z - info: Using extension debug
+2018-07-04T21:33:03.729Z - info: Using extension express
+2018-07-04T21:33:03.832Z - info: Using extension fop-pdf
+2018-07-04T21:33:03.899Z - info: Using extension phantom-pdf
+2018-07-04T21:33:04.100Z - info: Using extension fs-store
+2018-07-04T21:33:04.923Z - info: Using extension authorization
+2018-07-04T21:33:05.018Z - info: Using extension images
+2018-07-04T21:33:05.095Z - info: Using extension child-templates
+2018-07-04T21:33:05.101Z - info: Using extension browser-client
+2018-07-04T21:33:05.106Z - info: Using extension licensing
+2018-07-04T21:33:05.303Z - info: Using extension data
+2018-07-04T21:33:05.359Z - info: Using extension text
+2018-07-04T21:33:05.361Z - info: Using extension reports
+2018-07-04T21:33:05.409Z - info: Using extension resources
+2018-07-04T21:33:05.453Z - info: Using extension base
+2018-07-04T21:33:05.455Z - info: Using extension studio
+2018-07-04T21:33:05.543Z - info: Using extension html-to-xlsx
+2018-07-04T21:33:05.677Z - info: Using extension scripts
+2018-07-04T21:33:05.726Z - info: Using extension assets
+2018-07-04T21:33:05.735Z - info: Using extension scheduling
+2018-07-04T21:33:05.764Z - info: Using extension xlsx
+2018-07-04T21:33:06.069Z - info: Using extension sample-template
+2018-07-04T21:33:06.118Z - info: Using extension public-templates
+2018-07-04T21:33:06.183Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:33:06.358Z - info: Configuring routes for existing express app.
+2018-07-04T21:33:06.428Z - info: Using existing server instance.
+2018-07-04T21:33:06.433Z - info: Verifying license key free
+2018-07-04T21:33:06.434Z - info: Using free license
+2018-07-04T21:33:06.436Z - info: reporter initialized
+2018-07-04T21:33:55.493Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:33:55.859Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:33:55.862Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:33:56.470Z - info: Found 30 extensions
+2018-07-04T21:33:56.497Z - info: Using extension import-export
+2018-07-04T21:33:56.740Z - info: Using extension tags
+2018-07-04T21:33:56.747Z - info: Using extension templates
+2018-07-04T21:33:56.752Z - info: Using extension jsrender
+2018-07-04T21:33:56.754Z - info: Using extension cli
+2018-07-04T21:33:56.756Z - info: Using extension handlebars
+2018-07-04T21:33:56.758Z - info: Using extension debug
+2018-07-04T21:33:56.761Z - info: Using extension express
+2018-07-04T21:33:56.858Z - info: Using extension fop-pdf
+2018-07-04T21:33:56.921Z - info: Using extension phantom-pdf
+2018-07-04T21:33:57.024Z - info: Using extension fs-store
+2018-07-04T21:33:57.357Z - info: Using extension authorization
+2018-07-04T21:33:57.407Z - info: Using extension images
+2018-07-04T21:33:57.459Z - info: Using extension child-templates
+2018-07-04T21:33:57.463Z - info: Using extension browser-client
+2018-07-04T21:33:57.465Z - info: Using extension licensing
+2018-07-04T21:33:57.598Z - info: Using extension data
+2018-07-04T21:33:57.655Z - info: Using extension text
+2018-07-04T21:33:57.658Z - info: Using extension reports
+2018-07-04T21:33:57.708Z - info: Using extension resources
+2018-07-04T21:33:57.752Z - info: Using extension base
+2018-07-04T21:33:57.753Z - info: Using extension studio
+2018-07-04T21:33:57.843Z - info: Using extension html-to-xlsx
+2018-07-04T21:33:57.982Z - info: Using extension scripts
+2018-07-04T21:33:58.029Z - info: Using extension assets
+2018-07-04T21:33:58.038Z - info: Using extension scheduling
+2018-07-04T21:33:58.069Z - info: Using extension xlsx
+2018-07-04T21:33:58.361Z - info: Using extension sample-template
+2018-07-04T21:33:58.404Z - info: Using extension public-templates
+2018-07-04T21:33:58.455Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:33:58.789Z - info: Configuring routes for existing express app.
+2018-07-04T21:33:58.874Z - info: Using existing server instance.
+2018-07-04T21:33:58.884Z - info: Verifying license key free
+2018-07-04T21:33:58.886Z - info: Using free license
+2018-07-04T21:33:58.888Z - info: reporter initialized
+2018-07-04T21:38:41.934Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:38:42.402Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:38:42.405Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:38:43.076Z - info: Found 30 extensions
+2018-07-04T21:38:43.105Z - info: Using extension import-export
+2018-07-04T21:38:43.386Z - info: Using extension tags
+2018-07-04T21:38:43.395Z - info: Using extension templates
+2018-07-04T21:38:43.406Z - info: Using extension jsrender
+2018-07-04T21:38:43.408Z - info: Using extension cli
+2018-07-04T21:38:43.410Z - info: Using extension handlebars
+2018-07-04T21:38:43.413Z - info: Using extension debug
+2018-07-04T21:38:43.415Z - info: Using extension express
+2018-07-04T21:38:43.506Z - info: Using extension fop-pdf
+2018-07-04T21:38:43.562Z - info: Using extension phantom-pdf
+2018-07-04T21:38:43.685Z - info: Using extension fs-store
+2018-07-04T21:38:44.062Z - info: Using extension authorization
+2018-07-04T21:38:44.111Z - info: Using extension images
+2018-07-04T21:38:44.162Z - info: Using extension child-templates
+2018-07-04T21:38:44.166Z - info: Using extension browser-client
+2018-07-04T21:38:44.169Z - info: Using extension licensing
+2018-07-04T21:38:44.352Z - info: Using extension data
+2018-07-04T21:38:44.506Z - info: Using extension text
+2018-07-04T21:38:44.507Z - info: Using extension reports
+2018-07-04T21:38:44.630Z - info: Using extension resources
+2018-07-04T21:38:44.694Z - info: Using extension base
+2018-07-04T21:38:44.697Z - info: Using extension studio
+2018-07-04T21:38:44.822Z - info: Using extension html-to-xlsx
+2018-07-04T21:38:45.048Z - info: Using extension scripts
+2018-07-04T21:38:45.127Z - info: Using extension assets
+2018-07-04T21:38:45.141Z - info: Using extension scheduling
+2018-07-04T21:38:45.187Z - info: Using extension xlsx
+2018-07-04T21:38:45.493Z - info: Using extension sample-template
+2018-07-04T21:38:45.542Z - info: Using extension public-templates
+2018-07-04T21:38:45.592Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:38:45.773Z - info: Configuring routes for existing express app.
+2018-07-04T21:38:45.840Z - info: Using existing server instance.
+2018-07-04T21:38:45.847Z - info: Verifying license key free
+2018-07-04T21:38:45.848Z - info: Using free license
+2018-07-04T21:38:45.851Z - info: reporter initialized
+2018-07-04T21:40:43.001Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:40:43.580Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:40:43.583Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:40:44.558Z - info: Found 30 extensions
+2018-07-04T21:40:44.616Z - info: Using extension import-export
+2018-07-04T21:40:45.186Z - info: Using extension tags
+2018-07-04T21:40:45.200Z - info: Using extension templates
+2018-07-04T21:40:45.210Z - info: Using extension jsrender
+2018-07-04T21:40:45.214Z - info: Using extension cli
+2018-07-04T21:40:45.215Z - info: Using extension handlebars
+2018-07-04T21:40:45.218Z - info: Using extension debug
+2018-07-04T21:40:45.220Z - info: Using extension express
+2018-07-04T21:40:45.320Z - info: Using extension fop-pdf
+2018-07-04T21:40:45.377Z - info: Using extension phantom-pdf
+2018-07-04T21:40:45.511Z - info: Using extension fs-store
+2018-07-04T21:40:46.005Z - info: Using extension authorization
+2018-07-04T21:40:46.063Z - info: Using extension images
+2018-07-04T21:40:46.121Z - info: Using extension child-templates
+2018-07-04T21:40:46.125Z - info: Using extension browser-client
+2018-07-04T21:40:46.127Z - info: Using extension licensing
+2018-07-04T21:40:46.275Z - info: Using extension data
+2018-07-04T21:40:46.327Z - info: Using extension text
+2018-07-04T21:40:46.328Z - info: Using extension reports
+2018-07-04T21:40:46.378Z - info: Using extension resources
+2018-07-04T21:40:46.425Z - info: Using extension base
+2018-07-04T21:40:46.426Z - info: Using extension studio
+2018-07-04T21:40:46.506Z - info: Using extension html-to-xlsx
+2018-07-04T21:40:46.642Z - info: Using extension scripts
+2018-07-04T21:40:46.699Z - info: Using extension assets
+2018-07-04T21:40:46.709Z - info: Using extension scheduling
+2018-07-04T21:40:46.745Z - info: Using extension xlsx
+2018-07-04T21:40:47.094Z - info: Using extension sample-template
+2018-07-04T21:40:47.149Z - info: Using extension public-templates
+2018-07-04T21:40:47.202Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:40:47.579Z - info: Configuring routes for existing express app.
+2018-07-04T21:40:47.688Z - info: Using existing server instance.
+2018-07-04T21:40:47.709Z - info: Verifying license key free
+2018-07-04T21:40:47.718Z - info: Using free license
+2018-07-04T21:40:47.722Z - info: reporter initialized
+2018-07-04T21:43:50.744Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:43:51.338Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:43:51.343Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:43:52.089Z - info: Found 30 extensions
+2018-07-04T21:43:52.189Z - info: Using extension import-export
+2018-07-04T21:43:52.672Z - info: Using extension tags
+2018-07-04T21:43:52.681Z - info: Using extension templates
+2018-07-04T21:43:52.709Z - info: Using extension jsrender
+2018-07-04T21:43:52.715Z - info: Using extension cli
+2018-07-04T21:43:52.720Z - info: Using extension handlebars
+2018-07-04T21:43:52.723Z - info: Using extension debug
+2018-07-04T21:43:52.725Z - info: Using extension express
+2018-07-04T21:43:52.865Z - info: Using extension fop-pdf
+2018-07-04T21:43:52.960Z - info: Using extension phantom-pdf
+2018-07-04T21:43:53.177Z - info: Using extension fs-store
+2018-07-04T21:43:53.823Z - info: Using extension authorization
+2018-07-04T21:43:53.904Z - info: Using extension images
+2018-07-04T21:43:53.975Z - info: Using extension child-templates
+2018-07-04T21:43:53.991Z - info: Using extension browser-client
+2018-07-04T21:43:53.999Z - info: Using extension licensing
+2018-07-04T21:43:54.199Z - info: Using extension data
+2018-07-04T21:43:54.258Z - info: Using extension text
+2018-07-04T21:43:54.259Z - info: Using extension reports
+2018-07-04T21:43:54.327Z - info: Using extension resources
+2018-07-04T21:43:54.383Z - info: Using extension base
+2018-07-04T21:43:54.384Z - info: Using extension studio
+2018-07-04T21:43:54.479Z - info: Using extension html-to-xlsx
+2018-07-04T21:43:54.624Z - info: Using extension scripts
+2018-07-04T21:43:54.682Z - info: Using extension assets
+2018-07-04T21:43:54.694Z - info: Using extension scheduling
+2018-07-04T21:43:54.732Z - info: Using extension xlsx
+2018-07-04T21:43:55.051Z - info: Using extension sample-template
+2018-07-04T21:43:55.104Z - info: Using extension public-templates
+2018-07-04T21:43:55.167Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:43:55.404Z - info: Configuring routes for existing express app.
+2018-07-04T21:43:55.510Z - info: Using existing server instance.
+2018-07-04T21:43:55.517Z - info: Verifying license key free
+2018-07-04T21:43:55.534Z - info: Using free license
+2018-07-04T21:43:55.548Z - info: reporter initialized
+2018-07-04T21:45:17.168Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:45:17.555Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:45:17.558Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:45:18.706Z - info: Found 30 extensions
+2018-07-04T21:45:18.788Z - info: Using extension import-export
+2018-07-04T21:45:19.145Z - info: Using extension tags
+2018-07-04T21:45:19.154Z - info: Using extension templates
+2018-07-04T21:45:19.160Z - info: Using extension jsrender
+2018-07-04T21:45:19.163Z - info: Using extension cli
+2018-07-04T21:45:19.164Z - info: Using extension handlebars
+2018-07-04T21:45:19.167Z - info: Using extension debug
+2018-07-04T21:45:19.172Z - info: Using extension express
+2018-07-04T21:45:19.274Z - info: Using extension fop-pdf
+2018-07-04T21:45:19.332Z - info: Using extension phantom-pdf
+2018-07-04T21:45:19.491Z - info: Using extension fs-store
+2018-07-04T21:45:20.066Z - info: Using extension authorization
+2018-07-04T21:45:20.135Z - info: Using extension images
+2018-07-04T21:45:20.230Z - info: Using extension child-templates
+2018-07-04T21:45:20.235Z - info: Using extension browser-client
+2018-07-04T21:45:20.239Z - info: Using extension licensing
+2018-07-04T21:45:20.431Z - info: Using extension data
+2018-07-04T21:45:20.505Z - info: Using extension text
+2018-07-04T21:45:20.507Z - info: Using extension reports
+2018-07-04T21:45:20.572Z - info: Using extension resources
+2018-07-04T21:45:20.644Z - info: Using extension base
+2018-07-04T21:45:20.647Z - info: Using extension studio
+2018-07-04T21:45:20.761Z - info: Using extension html-to-xlsx
+2018-07-04T21:45:20.906Z - info: Using extension scripts
+2018-07-04T21:45:20.969Z - info: Using extension assets
+2018-07-04T21:45:20.982Z - info: Using extension scheduling
+2018-07-04T21:45:21.030Z - info: Using extension xlsx
+2018-07-04T21:45:21.348Z - info: Using extension sample-template
+2018-07-04T21:45:21.400Z - info: Using extension public-templates
+2018-07-04T21:45:21.452Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:45:21.799Z - info: Configuring routes for existing express app.
+2018-07-04T21:45:21.865Z - info: Using existing server instance.
+2018-07-04T21:45:21.871Z - info: Verifying license key free
+2018-07-04T21:45:21.879Z - info: Using free license
+2018-07-04T21:45:21.885Z - info: reporter initialized
+2018-07-04T21:49:18.170Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:49:18.533Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:49:18.537Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:49:19.203Z - info: Found 30 extensions
+2018-07-04T21:49:19.228Z - info: Using extension import-export
+2018-07-04T21:49:19.586Z - info: Using extension tags
+2018-07-04T21:49:19.600Z - info: Using extension templates
+2018-07-04T21:49:19.606Z - info: Using extension jsrender
+2018-07-04T21:49:19.609Z - info: Using extension cli
+2018-07-04T21:49:19.611Z - info: Using extension handlebars
+2018-07-04T21:49:19.616Z - info: Using extension debug
+2018-07-04T21:49:19.618Z - info: Using extension express
+2018-07-04T21:49:19.772Z - info: Using extension fop-pdf
+2018-07-04T21:49:19.838Z - info: Using extension phantom-pdf
+2018-07-04T21:49:19.965Z - info: Using extension fs-store
+2018-07-04T21:49:20.352Z - info: Using extension authorization
+2018-07-04T21:49:20.393Z - info: Using extension images
+2018-07-04T21:49:20.449Z - info: Using extension child-templates
+2018-07-04T21:49:20.453Z - info: Using extension browser-client
+2018-07-04T21:49:20.455Z - info: Using extension licensing
+2018-07-04T21:49:20.587Z - info: Using extension data
+2018-07-04T21:49:20.650Z - info: Using extension text
+2018-07-04T21:49:20.652Z - info: Using extension reports
+2018-07-04T21:49:20.703Z - info: Using extension resources
+2018-07-04T21:49:20.751Z - info: Using extension base
+2018-07-04T21:49:20.752Z - info: Using extension studio
+2018-07-04T21:49:20.837Z - info: Using extension html-to-xlsx
+2018-07-04T21:49:20.982Z - info: Using extension scripts
+2018-07-04T21:49:21.037Z - info: Using extension assets
+2018-07-04T21:49:21.056Z - info: Using extension scheduling
+2018-07-04T21:49:21.090Z - info: Using extension xlsx
+2018-07-04T21:49:21.428Z - info: Using extension sample-template
+2018-07-04T21:49:21.486Z - info: Using extension public-templates
+2018-07-04T21:49:21.547Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:49:21.744Z - info: Configuring routes for existing express app.
+2018-07-04T21:49:21.817Z - info: Using existing server instance.
+2018-07-04T21:49:21.821Z - info: Verifying license key free
+2018-07-04T21:49:21.823Z - info: Using free license
+2018-07-04T21:49:21.825Z - info: reporter initialized
+2018-07-04T21:50:27.673Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:50:28.052Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:50:28.060Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:50:29.054Z - info: Found 30 extensions
+2018-07-04T21:50:29.156Z - info: Using extension import-export
+2018-07-04T21:50:29.481Z - info: Using extension tags
+2018-07-04T21:50:29.488Z - info: Using extension templates
+2018-07-04T21:50:29.493Z - info: Using extension jsrender
+2018-07-04T21:50:29.497Z - info: Using extension cli
+2018-07-04T21:50:29.499Z - info: Using extension handlebars
+2018-07-04T21:50:29.501Z - info: Using extension debug
+2018-07-04T21:50:29.506Z - info: Using extension express
+2018-07-04T21:50:29.639Z - info: Using extension fop-pdf
+2018-07-04T21:50:29.702Z - info: Using extension phantom-pdf
+2018-07-04T21:50:29.832Z - info: Using extension fs-store
+2018-07-04T21:50:30.288Z - info: Using extension authorization
+2018-07-04T21:50:30.337Z - info: Using extension images
+2018-07-04T21:50:30.391Z - info: Using extension child-templates
+2018-07-04T21:50:30.396Z - info: Using extension browser-client
+2018-07-04T21:50:30.399Z - info: Using extension licensing
+2018-07-04T21:50:30.536Z - info: Using extension data
+2018-07-04T21:50:30.593Z - info: Using extension text
+2018-07-04T21:50:30.594Z - info: Using extension reports
+2018-07-04T21:50:30.654Z - info: Using extension resources
+2018-07-04T21:50:30.725Z - info: Using extension base
+2018-07-04T21:50:30.741Z - info: Using extension studio
+2018-07-04T21:50:30.885Z - info: Using extension html-to-xlsx
+2018-07-04T21:50:31.118Z - info: Using extension scripts
+2018-07-04T21:50:31.174Z - info: Using extension assets
+2018-07-04T21:50:31.186Z - info: Using extension scheduling
+2018-07-04T21:50:31.222Z - info: Using extension xlsx
+2018-07-04T21:50:31.649Z - info: Using extension sample-template
+2018-07-04T21:50:31.702Z - info: Using extension public-templates
+2018-07-04T21:50:31.764Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:50:32.003Z - info: Configuring routes for existing express app.
+2018-07-04T21:50:32.072Z - info: Using existing server instance.
+2018-07-04T21:50:32.077Z - info: Verifying license key free
+2018-07-04T21:50:32.078Z - info: Using free license
+2018-07-04T21:50:32.082Z - info: reporter initialized
+2018-07-04T21:54:26.953Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:54:27.661Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:54:27.665Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:54:28.408Z - info: Found 30 extensions
+2018-07-04T21:54:28.466Z - info: Using extension import-export
+2018-07-04T21:54:28.759Z - info: Using extension tags
+2018-07-04T21:54:28.768Z - info: Using extension templates
+2018-07-04T21:54:28.777Z - info: Using extension jsrender
+2018-07-04T21:54:28.779Z - info: Using extension cli
+2018-07-04T21:54:28.780Z - info: Using extension handlebars
+2018-07-04T21:54:28.784Z - info: Using extension debug
+2018-07-04T21:54:28.786Z - info: Using extension express
+2018-07-04T21:54:28.899Z - info: Using extension fop-pdf
+2018-07-04T21:54:29.045Z - info: Using extension phantom-pdf
+2018-07-04T21:54:29.275Z - info: Using extension fs-store
+2018-07-04T21:54:29.778Z - info: Using extension authorization
+2018-07-04T21:54:29.842Z - info: Using extension images
+2018-07-04T21:54:29.920Z - info: Using extension child-templates
+2018-07-04T21:54:29.927Z - info: Using extension browser-client
+2018-07-04T21:54:29.933Z - info: Using extension licensing
+2018-07-04T21:54:30.109Z - info: Using extension data
+2018-07-04T21:54:30.168Z - info: Using extension text
+2018-07-04T21:54:30.170Z - info: Using extension reports
+2018-07-04T21:54:30.230Z - info: Using extension resources
+2018-07-04T21:54:30.289Z - info: Using extension base
+2018-07-04T21:54:30.290Z - info: Using extension studio
+2018-07-04T21:54:30.381Z - info: Using extension html-to-xlsx
+2018-07-04T21:54:30.520Z - info: Using extension scripts
+2018-07-04T21:54:30.565Z - info: Using extension assets
+2018-07-04T21:54:30.573Z - info: Using extension scheduling
+2018-07-04T21:54:30.599Z - info: Using extension xlsx
+2018-07-04T21:54:30.901Z - info: Using extension sample-template
+2018-07-04T21:54:30.954Z - info: Using extension public-templates
+2018-07-04T21:54:31.006Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:54:31.362Z - info: Configuring routes for existing express app.
+2018-07-04T21:54:31.451Z - info: Using existing server instance.
+2018-07-04T21:54:31.458Z - info: Verifying license key free
+2018-07-04T21:54:31.459Z - info: Using free license
+2018-07-04T21:54:31.462Z - info: reporter initialized
+2018-07-04T21:57:43.485Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T21:57:43.873Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T21:57:43.876Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T21:57:44.486Z - info: Found 30 extensions
+2018-07-04T21:57:44.524Z - info: Using extension import-export
+2018-07-04T21:57:44.803Z - info: Using extension tags
+2018-07-04T21:57:44.814Z - info: Using extension templates
+2018-07-04T21:57:44.820Z - info: Using extension jsrender
+2018-07-04T21:57:44.822Z - info: Using extension cli
+2018-07-04T21:57:44.823Z - info: Using extension handlebars
+2018-07-04T21:57:44.825Z - info: Using extension debug
+2018-07-04T21:57:44.827Z - info: Using extension express
+2018-07-04T21:57:44.957Z - info: Using extension fop-pdf
+2018-07-04T21:57:45.017Z - info: Using extension phantom-pdf
+2018-07-04T21:57:45.140Z - info: Using extension fs-store
+2018-07-04T21:57:45.517Z - info: Using extension authorization
+2018-07-04T21:57:45.566Z - info: Using extension images
+2018-07-04T21:57:45.616Z - info: Using extension child-templates
+2018-07-04T21:57:45.621Z - info: Using extension browser-client
+2018-07-04T21:57:45.623Z - info: Using extension licensing
+2018-07-04T21:57:45.744Z - info: Using extension data
+2018-07-04T21:57:45.793Z - info: Using extension text
+2018-07-04T21:57:45.795Z - info: Using extension reports
+2018-07-04T21:57:45.850Z - info: Using extension resources
+2018-07-04T21:57:45.905Z - info: Using extension base
+2018-07-04T21:57:45.907Z - info: Using extension studio
+2018-07-04T21:57:46.022Z - info: Using extension html-to-xlsx
+2018-07-04T21:57:46.159Z - info: Using extension scripts
+2018-07-04T21:57:46.208Z - info: Using extension assets
+2018-07-04T21:57:46.218Z - info: Using extension scheduling
+2018-07-04T21:57:46.246Z - info: Using extension xlsx
+2018-07-04T21:57:46.533Z - info: Using extension sample-template
+2018-07-04T21:57:46.581Z - info: Using extension public-templates
+2018-07-04T21:57:46.630Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T21:57:46.798Z - info: Configuring routes for existing express app.
+2018-07-04T21:57:46.859Z - info: Using existing server instance.
+2018-07-04T21:57:46.867Z - info: Verifying license key free
+2018-07-04T21:57:46.868Z - info: Using free license
+2018-07-04T21:57:46.871Z - info: reporter initialized
+2018-07-04T22:01:12.495Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:01:12.952Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:01:12.960Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:01:13.608Z - info: Found 30 extensions
+2018-07-04T22:01:13.657Z - info: Using extension import-export
+2018-07-04T22:01:14.008Z - info: Using extension tags
+2018-07-04T22:01:14.018Z - info: Using extension templates
+2018-07-04T22:01:14.028Z - info: Using extension jsrender
+2018-07-04T22:01:14.030Z - info: Using extension cli
+2018-07-04T22:01:14.031Z - info: Using extension handlebars
+2018-07-04T22:01:14.034Z - info: Using extension debug
+2018-07-04T22:01:14.043Z - info: Using extension express
+2018-07-04T22:01:14.180Z - info: Using extension fop-pdf
+2018-07-04T22:01:14.243Z - info: Using extension phantom-pdf
+2018-07-04T22:01:14.394Z - info: Using extension fs-store
+2018-07-04T22:01:14.909Z - info: Using extension authorization
+2018-07-04T22:01:14.965Z - info: Using extension images
+2018-07-04T22:01:15.029Z - info: Using extension child-templates
+2018-07-04T22:01:15.033Z - info: Using extension browser-client
+2018-07-04T22:01:15.038Z - info: Using extension licensing
+2018-07-04T22:01:15.316Z - info: Using extension data
+2018-07-04T22:01:15.386Z - info: Using extension text
+2018-07-04T22:01:15.387Z - info: Using extension reports
+2018-07-04T22:01:15.454Z - info: Using extension resources
+2018-07-04T22:01:15.566Z - info: Using extension base
+2018-07-04T22:01:15.568Z - info: Using extension studio
+2018-07-04T22:01:15.762Z - info: Using extension html-to-xlsx
+2018-07-04T22:01:16.052Z - info: Using extension scripts
+2018-07-04T22:01:16.128Z - info: Using extension assets
+2018-07-04T22:01:16.147Z - info: Using extension scheduling
+2018-07-04T22:01:16.186Z - info: Using extension xlsx
+2018-07-04T22:01:16.530Z - info: Using extension sample-template
+2018-07-04T22:01:16.577Z - info: Using extension public-templates
+2018-07-04T22:01:16.637Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:01:17.011Z - info: Configuring routes for existing express app.
+2018-07-04T22:01:17.081Z - info: Using existing server instance.
+2018-07-04T22:01:17.086Z - info: Verifying license key free
+2018-07-04T22:01:17.090Z - info: Using free license
+2018-07-04T22:01:17.099Z - info: reporter initialized
+2018-07-04T22:03:17.000Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:03:17.372Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:03:17.378Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:03:18.051Z - info: Found 30 extensions
+2018-07-04T22:03:18.085Z - info: Using extension import-export
+2018-07-04T22:03:18.764Z - info: Using extension tags
+2018-07-04T22:03:18.793Z - info: Using extension templates
+2018-07-04T22:03:18.820Z - info: Using extension jsrender
+2018-07-04T22:03:18.822Z - info: Using extension cli
+2018-07-04T22:03:18.824Z - info: Using extension handlebars
+2018-07-04T22:03:18.827Z - info: Using extension debug
+2018-07-04T22:03:18.834Z - info: Using extension express
+2018-07-04T22:03:19.344Z - info: Using extension fop-pdf
+2018-07-04T22:03:19.492Z - info: Using extension phantom-pdf
+2018-07-04T22:03:19.673Z - info: Using extension fs-store
+2018-07-04T22:03:20.224Z - info: Using extension authorization
+2018-07-04T22:03:20.282Z - info: Using extension images
+2018-07-04T22:03:20.343Z - info: Using extension child-templates
+2018-07-04T22:03:20.347Z - info: Using extension browser-client
+2018-07-04T22:03:20.350Z - info: Using extension licensing
+2018-07-04T22:03:20.483Z - info: Using extension data
+2018-07-04T22:03:20.538Z - info: Using extension text
+2018-07-04T22:03:20.539Z - info: Using extension reports
+2018-07-04T22:03:20.588Z - info: Using extension resources
+2018-07-04T22:03:20.631Z - info: Using extension base
+2018-07-04T22:03:20.632Z - info: Using extension studio
+2018-07-04T22:03:20.714Z - info: Using extension html-to-xlsx
+2018-07-04T22:03:20.857Z - info: Using extension scripts
+2018-07-04T22:03:20.908Z - info: Using extension assets
+2018-07-04T22:03:20.919Z - info: Using extension scheduling
+2018-07-04T22:03:20.948Z - info: Using extension xlsx
+2018-07-04T22:03:21.232Z - info: Using extension sample-template
+2018-07-04T22:03:21.279Z - info: Using extension public-templates
+2018-07-04T22:03:21.333Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:03:21.699Z - info: Configuring routes for existing express app.
+2018-07-04T22:03:21.781Z - info: Using existing server instance.
+2018-07-04T22:03:21.789Z - info: Verifying license key free
+2018-07-04T22:03:21.790Z - info: Using free license
+2018-07-04T22:03:21.793Z - info: reporter initialized
+2018-07-04T22:10:48.425Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:10:48.839Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:10:48.842Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:10:49.437Z - info: Found 30 extensions
+2018-07-04T22:10:49.458Z - info: Using extension import-export
+2018-07-04T22:10:49.695Z - info: Using extension tags
+2018-07-04T22:10:49.702Z - info: Using extension templates
+2018-07-04T22:10:49.707Z - info: Using extension jsrender
+2018-07-04T22:10:49.708Z - info: Using extension cli
+2018-07-04T22:10:49.709Z - info: Using extension handlebars
+2018-07-04T22:10:49.711Z - info: Using extension debug
+2018-07-04T22:10:49.712Z - info: Using extension express
+2018-07-04T22:10:49.789Z - info: Using extension fop-pdf
+2018-07-04T22:10:49.841Z - info: Using extension phantom-pdf
+2018-07-04T22:10:49.951Z - info: Using extension fs-store
+2018-07-04T22:10:50.309Z - info: Using extension authorization
+2018-07-04T22:10:50.357Z - info: Using extension images
+2018-07-04T22:10:50.404Z - info: Using extension child-templates
+2018-07-04T22:10:50.409Z - info: Using extension browser-client
+2018-07-04T22:10:50.411Z - info: Using extension licensing
+2018-07-04T22:10:50.536Z - info: Using extension data
+2018-07-04T22:10:50.586Z - info: Using extension text
+2018-07-04T22:10:50.587Z - info: Using extension reports
+2018-07-04T22:10:50.633Z - info: Using extension resources
+2018-07-04T22:10:50.674Z - info: Using extension base
+2018-07-04T22:10:50.676Z - info: Using extension studio
+2018-07-04T22:10:50.755Z - info: Using extension html-to-xlsx
+2018-07-04T22:10:50.883Z - info: Using extension scripts
+2018-07-04T22:10:50.928Z - info: Using extension assets
+2018-07-04T22:10:50.940Z - info: Using extension scheduling
+2018-07-04T22:10:50.967Z - info: Using extension xlsx
+2018-07-04T22:10:51.262Z - info: Using extension sample-template
+2018-07-04T22:10:51.310Z - info: Using extension public-templates
+2018-07-04T22:10:51.361Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:10:51.639Z - info: Configuring routes for existing express app.
+2018-07-04T22:10:51.699Z - info: Using existing server instance.
+2018-07-04T22:10:51.704Z - info: Verifying license key free
+2018-07-04T22:10:51.706Z - info: Using free license
+2018-07-04T22:10:51.709Z - info: reporter initialized
+2018-07-04T22:17:48.517Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:17:48.928Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:17:48.932Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:17:49.560Z - info: Found 30 extensions
+2018-07-04T22:17:49.610Z - info: Using extension import-export
+2018-07-04T22:17:49.870Z - info: Using extension tags
+2018-07-04T22:17:49.878Z - info: Using extension templates
+2018-07-04T22:17:49.883Z - info: Using extension jsrender
+2018-07-04T22:17:49.884Z - info: Using extension cli
+2018-07-04T22:17:49.885Z - info: Using extension handlebars
+2018-07-04T22:17:49.887Z - info: Using extension debug
+2018-07-04T22:17:49.888Z - info: Using extension express
+2018-07-04T22:17:49.977Z - info: Using extension fop-pdf
+2018-07-04T22:17:50.026Z - info: Using extension phantom-pdf
+2018-07-04T22:17:50.131Z - info: Using extension fs-store
+2018-07-04T22:17:50.475Z - info: Using extension authorization
+2018-07-04T22:17:50.529Z - info: Using extension images
+2018-07-04T22:17:50.592Z - info: Using extension child-templates
+2018-07-04T22:17:50.597Z - info: Using extension browser-client
+2018-07-04T22:17:50.600Z - info: Using extension licensing
+2018-07-04T22:17:50.763Z - info: Using extension data
+2018-07-04T22:17:50.808Z - info: Using extension text
+2018-07-04T22:17:50.809Z - info: Using extension reports
+2018-07-04T22:17:50.855Z - info: Using extension resources
+2018-07-04T22:17:50.903Z - info: Using extension base
+2018-07-04T22:17:50.904Z - info: Using extension studio
+2018-07-04T22:17:50.981Z - info: Using extension html-to-xlsx
+2018-07-04T22:17:51.101Z - info: Using extension scripts
+2018-07-04T22:17:51.141Z - info: Using extension assets
+2018-07-04T22:17:51.149Z - info: Using extension scheduling
+2018-07-04T22:17:51.177Z - info: Using extension xlsx
+2018-07-04T22:17:51.457Z - info: Using extension sample-template
+2018-07-04T22:17:51.500Z - info: Using extension public-templates
+2018-07-04T22:17:51.552Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:17:51.744Z - info: Configuring routes for existing express app.
+2018-07-04T22:17:51.800Z - info: Using existing server instance.
+2018-07-04T22:17:51.805Z - info: Verifying license key free
+2018-07-04T22:17:51.806Z - info: Using free license
+2018-07-04T22:17:51.809Z - info: reporter initialized
+2018-07-04T22:19:18.138Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:19:18.626Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:19:18.633Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:19:19.321Z - info: Found 30 extensions
+2018-07-04T22:19:19.338Z - info: Using extension import-export
+2018-07-04T22:19:19.589Z - info: Using extension tags
+2018-07-04T22:19:19.599Z - info: Using extension templates
+2018-07-04T22:19:19.605Z - info: Using extension jsrender
+2018-07-04T22:19:19.606Z - info: Using extension cli
+2018-07-04T22:19:19.607Z - info: Using extension handlebars
+2018-07-04T22:19:19.610Z - info: Using extension debug
+2018-07-04T22:19:19.612Z - info: Using extension express
+2018-07-04T22:19:19.714Z - info: Using extension fop-pdf
+2018-07-04T22:19:19.764Z - info: Using extension phantom-pdf
+2018-07-04T22:19:19.875Z - info: Using extension fs-store
+2018-07-04T22:19:20.218Z - info: Using extension authorization
+2018-07-04T22:19:20.267Z - info: Using extension images
+2018-07-04T22:19:20.318Z - info: Using extension child-templates
+2018-07-04T22:19:20.324Z - info: Using extension browser-client
+2018-07-04T22:19:20.326Z - info: Using extension licensing
+2018-07-04T22:19:20.460Z - info: Using extension data
+2018-07-04T22:19:20.504Z - info: Using extension text
+2018-07-04T22:19:20.506Z - info: Using extension reports
+2018-07-04T22:19:20.556Z - info: Using extension resources
+2018-07-04T22:19:20.603Z - info: Using extension base
+2018-07-04T22:19:20.604Z - info: Using extension studio
+2018-07-04T22:19:20.688Z - info: Using extension html-to-xlsx
+2018-07-04T22:19:20.829Z - info: Using extension scripts
+2018-07-04T22:19:20.879Z - info: Using extension assets
+2018-07-04T22:19:20.891Z - info: Using extension scheduling
+2018-07-04T22:19:20.921Z - info: Using extension xlsx
+2018-07-04T22:19:21.199Z - info: Using extension sample-template
+2018-07-04T22:19:21.246Z - info: Using extension public-templates
+2018-07-04T22:19:21.305Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:19:21.475Z - info: Configuring routes for existing express app.
+2018-07-04T22:19:21.542Z - info: Using existing server instance.
+2018-07-04T22:19:21.547Z - info: Verifying license key free
+2018-07-04T22:19:21.548Z - info: Using free license
+2018-07-04T22:19:21.550Z - info: reporter initialized
+2018-07-04T22:19:26.391Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:19:26.784Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:19:26.787Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:19:27.507Z - info: Found 30 extensions
+2018-07-04T22:19:27.539Z - info: Using extension import-export
+2018-07-04T22:19:27.857Z - info: Using extension tags
+2018-07-04T22:19:27.865Z - info: Using extension templates
+2018-07-04T22:19:27.869Z - info: Using extension jsrender
+2018-07-04T22:19:27.870Z - info: Using extension cli
+2018-07-04T22:19:27.871Z - info: Using extension handlebars
+2018-07-04T22:19:27.873Z - info: Using extension debug
+2018-07-04T22:19:27.875Z - info: Using extension express
+2018-07-04T22:19:27.966Z - info: Using extension fop-pdf
+2018-07-04T22:19:28.017Z - info: Using extension phantom-pdf
+2018-07-04T22:19:28.130Z - info: Using extension fs-store
+2018-07-04T22:19:28.441Z - info: Using extension authorization
+2018-07-04T22:19:28.488Z - info: Using extension images
+2018-07-04T22:19:28.537Z - info: Using extension child-templates
+2018-07-04T22:19:28.541Z - info: Using extension browser-client
+2018-07-04T22:19:28.544Z - info: Using extension licensing
+2018-07-04T22:19:28.670Z - info: Using extension data
+2018-07-04T22:19:28.716Z - info: Using extension text
+2018-07-04T22:19:28.718Z - info: Using extension reports
+2018-07-04T22:19:28.762Z - info: Using extension resources
+2018-07-04T22:19:28.807Z - info: Using extension base
+2018-07-04T22:19:28.809Z - info: Using extension studio
+2018-07-04T22:19:28.892Z - info: Using extension html-to-xlsx
+2018-07-04T22:19:29.014Z - info: Using extension scripts
+2018-07-04T22:19:29.055Z - info: Using extension assets
+2018-07-04T22:19:29.065Z - info: Using extension scheduling
+2018-07-04T22:19:29.095Z - info: Using extension xlsx
+2018-07-04T22:19:29.389Z - info: Using extension sample-template
+2018-07-04T22:19:29.437Z - info: Using extension public-templates
+2018-07-04T22:19:29.490Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:19:29.672Z - info: Configuring routes for existing express app.
+2018-07-04T22:19:29.737Z - info: Using existing server instance.
+2018-07-04T22:19:29.742Z - info: Verifying license key free
+2018-07-04T22:19:29.743Z - info: Using free license
+2018-07-04T22:19:29.746Z - info: reporter initialized
+2018-07-04T22:22:17.724Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:22:18.168Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:22:18.172Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:22:18.904Z - info: Found 30 extensions
+2018-07-04T22:22:18.938Z - info: Using extension import-export
+2018-07-04T22:22:19.314Z - info: Using extension tags
+2018-07-04T22:22:19.327Z - info: Using extension templates
+2018-07-04T22:22:19.336Z - info: Using extension jsrender
+2018-07-04T22:22:19.338Z - info: Using extension cli
+2018-07-04T22:22:19.339Z - info: Using extension handlebars
+2018-07-04T22:22:19.342Z - info: Using extension debug
+2018-07-04T22:22:19.344Z - info: Using extension express
+2018-07-04T22:22:19.438Z - info: Using extension fop-pdf
+2018-07-04T22:22:19.486Z - info: Using extension phantom-pdf
+2018-07-04T22:22:19.589Z - info: Using extension fs-store
+2018-07-04T22:22:19.924Z - info: Using extension authorization
+2018-07-04T22:22:19.974Z - info: Using extension images
+2018-07-04T22:22:20.022Z - info: Using extension child-templates
+2018-07-04T22:22:20.026Z - info: Using extension browser-client
+2018-07-04T22:22:20.028Z - info: Using extension licensing
+2018-07-04T22:22:20.163Z - info: Using extension data
+2018-07-04T22:22:20.224Z - info: Using extension text
+2018-07-04T22:22:20.226Z - info: Using extension reports
+2018-07-04T22:22:20.277Z - info: Using extension resources
+2018-07-04T22:22:20.320Z - info: Using extension base
+2018-07-04T22:22:20.321Z - info: Using extension studio
+2018-07-04T22:22:20.420Z - info: Using extension html-to-xlsx
+2018-07-04T22:22:20.548Z - info: Using extension scripts
+2018-07-04T22:22:20.590Z - info: Using extension assets
+2018-07-04T22:22:20.598Z - info: Using extension scheduling
+2018-07-04T22:22:20.625Z - info: Using extension xlsx
+2018-07-04T22:22:20.921Z - info: Using extension sample-template
+2018-07-04T22:22:20.964Z - info: Using extension public-templates
+2018-07-04T22:22:21.010Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:22:21.165Z - info: Configuring routes for existing express app.
+2018-07-04T22:22:21.229Z - info: Using existing server instance.
+2018-07-04T22:22:21.234Z - info: Verifying license key free
+2018-07-04T22:22:21.235Z - info: Using free license
+2018-07-04T22:22:21.238Z - info: reporter initialized
+2018-07-04T22:22:25.165Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:22:25.627Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:22:25.634Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:22:26.503Z - info: Found 30 extensions
+2018-07-04T22:22:26.533Z - info: Using extension import-export
+2018-07-04T22:22:26.876Z - info: Using extension tags
+2018-07-04T22:22:26.887Z - info: Using extension templates
+2018-07-04T22:22:26.892Z - info: Using extension jsrender
+2018-07-04T22:22:26.894Z - info: Using extension cli
+2018-07-04T22:22:26.895Z - info: Using extension handlebars
+2018-07-04T22:22:26.897Z - info: Using extension debug
+2018-07-04T22:22:26.899Z - info: Using extension express
+2018-07-04T22:22:27.054Z - info: Using extension fop-pdf
+2018-07-04T22:22:27.110Z - info: Using extension phantom-pdf
+2018-07-04T22:22:27.237Z - info: Using extension fs-store
+2018-07-04T22:22:27.835Z - info: Using extension authorization
+2018-07-04T22:22:27.883Z - info: Using extension images
+2018-07-04T22:22:28.000Z - info: Using extension child-templates
+2018-07-04T22:22:28.005Z - info: Using extension browser-client
+2018-07-04T22:22:28.010Z - info: Using extension licensing
+2018-07-04T22:22:28.249Z - info: Using extension data
+2018-07-04T22:22:28.310Z - info: Using extension text
+2018-07-04T22:22:28.312Z - info: Using extension reports
+2018-07-04T22:22:28.369Z - info: Using extension resources
+2018-07-04T22:22:28.416Z - info: Using extension base
+2018-07-04T22:22:28.417Z - info: Using extension studio
+2018-07-04T22:22:28.513Z - info: Using extension html-to-xlsx
+2018-07-04T22:22:28.656Z - info: Using extension scripts
+2018-07-04T22:22:28.705Z - info: Using extension assets
+2018-07-04T22:22:28.715Z - info: Using extension scheduling
+2018-07-04T22:22:28.740Z - info: Using extension xlsx
+2018-07-04T22:22:29.037Z - info: Using extension sample-template
+2018-07-04T22:22:29.087Z - info: Using extension public-templates
+2018-07-04T22:22:29.142Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:22:29.490Z - info: Configuring routes for existing express app.
+2018-07-04T22:22:29.600Z - info: Using existing server instance.
+2018-07-04T22:22:29.606Z - info: Verifying license key free
+2018-07-04T22:22:29.607Z - info: Using free license
+2018-07-04T22:22:29.613Z - info: reporter initialized
+2018-07-04T22:35:53.570Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T22:35:53.935Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T22:35:53.939Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T22:35:54.657Z - info: Found 30 extensions
+2018-07-04T22:35:54.681Z - info: Using extension import-export
+2018-07-04T22:35:55.100Z - info: Using extension tags
+2018-07-04T22:35:55.113Z - info: Using extension templates
+2018-07-04T22:35:55.125Z - info: Using extension jsrender
+2018-07-04T22:35:55.127Z - info: Using extension cli
+2018-07-04T22:35:55.128Z - info: Using extension handlebars
+2018-07-04T22:35:55.131Z - info: Using extension debug
+2018-07-04T22:35:55.134Z - info: Using extension express
+2018-07-04T22:35:55.269Z - info: Using extension fop-pdf
+2018-07-04T22:35:55.326Z - info: Using extension phantom-pdf
+2018-07-04T22:35:55.438Z - info: Using extension fs-store
+2018-07-04T22:35:55.816Z - info: Using extension authorization
+2018-07-04T22:35:55.864Z - info: Using extension images
+2018-07-04T22:35:55.917Z - info: Using extension child-templates
+2018-07-04T22:35:55.921Z - info: Using extension browser-client
+2018-07-04T22:35:55.923Z - info: Using extension licensing
+2018-07-04T22:35:56.051Z - info: Using extension data
+2018-07-04T22:35:56.095Z - info: Using extension text
+2018-07-04T22:35:56.096Z - info: Using extension reports
+2018-07-04T22:35:56.142Z - info: Using extension resources
+2018-07-04T22:35:56.189Z - info: Using extension base
+2018-07-04T22:35:56.190Z - info: Using extension studio
+2018-07-04T22:35:56.272Z - info: Using extension html-to-xlsx
+2018-07-04T22:35:56.413Z - info: Using extension scripts
+2018-07-04T22:35:56.462Z - info: Using extension assets
+2018-07-04T22:35:56.475Z - info: Using extension scheduling
+2018-07-04T22:35:56.505Z - info: Using extension xlsx
+2018-07-04T22:35:56.807Z - info: Using extension sample-template
+2018-07-04T22:35:56.853Z - info: Using extension public-templates
+2018-07-04T22:35:56.908Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T22:35:57.161Z - info: Configuring routes for existing express app.
+2018-07-04T22:35:57.216Z - info: Using existing server instance.
+2018-07-04T22:35:57.221Z - info: Verifying license key free
+2018-07-04T22:35:57.222Z - info: Using free license
+2018-07-04T22:35:57.224Z - info: reporter initialized
+2018-07-04T23:41:39.148Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T23:41:39.511Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T23:41:39.552Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T23:41:41.328Z - info: Found 30 extensions
+2018-07-04T23:41:41.377Z - info: Using extension import-export
+2018-07-04T23:41:42.273Z - info: Using extension tags
+2018-07-04T23:41:42.325Z - info: Using extension templates
+2018-07-04T23:41:42.347Z - info: Using extension jsrender
+2018-07-04T23:41:42.354Z - info: Using extension cli
+2018-07-04T23:41:42.356Z - info: Using extension handlebars
+2018-07-04T23:41:42.363Z - info: Using extension debug
+2018-07-04T23:41:42.380Z - info: Using extension express
+2018-07-04T23:41:42.760Z - info: Using extension fop-pdf
+2018-07-04T23:41:42.907Z - info: Using extension phantom-pdf
+2018-07-04T23:41:43.177Z - info: Using extension fs-store
+2018-07-04T23:41:45.330Z - info: Using extension authorization
+2018-07-04T23:41:45.546Z - info: Using extension images
+2018-07-04T23:41:45.739Z - info: Using extension child-templates
+2018-07-04T23:41:45.759Z - info: Using extension browser-client
+2018-07-04T23:41:45.761Z - info: Using extension licensing
+2018-07-04T23:41:46.279Z - info: Using extension data
+2018-07-04T23:41:46.441Z - info: Using extension text
+2018-07-04T23:41:46.446Z - info: Using extension reports
+2018-07-04T23:41:46.617Z - info: Using extension resources
+2018-07-04T23:41:46.801Z - info: Using extension base
+2018-07-04T23:41:46.814Z - info: Using extension studio
+2018-07-04T23:41:47.125Z - info: Using extension html-to-xlsx
+2018-07-04T23:41:47.698Z - info: Using extension scripts
+2018-07-04T23:41:47.976Z - info: Using extension assets
+2018-07-04T23:41:48.032Z - info: Using extension scheduling
+2018-07-04T23:41:48.099Z - info: Using extension xlsx
+2018-07-04T23:41:49.125Z - info: Using extension sample-template
+2018-07-04T23:41:49.419Z - info: Using extension public-templates
+2018-07-04T23:41:49.607Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T23:41:49.998Z - info: Configuring routes for existing express app.
+2018-07-04T23:41:50.619Z - info: Using existing server instance.
+2018-07-04T23:41:50.660Z - info: Verifying license key free
+2018-07-04T23:41:50.662Z - info: Using free license
+2018-07-04T23:41:50.665Z - info: reporter initialized
+2018-07-04T23:42:03.864Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T23:42:04.219Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T23:42:04.223Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T23:42:04.851Z - info: Found 30 extensions
+2018-07-04T23:42:04.873Z - info: Using extension import-export
+2018-07-04T23:42:05.148Z - info: Using extension tags
+2018-07-04T23:42:05.155Z - info: Using extension templates
+2018-07-04T23:42:05.160Z - info: Using extension jsrender
+2018-07-04T23:42:05.162Z - info: Using extension cli
+2018-07-04T23:42:05.165Z - info: Using extension handlebars
+2018-07-04T23:42:05.167Z - info: Using extension debug
+2018-07-04T23:42:05.169Z - info: Using extension express
+2018-07-04T23:42:05.272Z - info: Using extension fop-pdf
+2018-07-04T23:42:05.327Z - info: Using extension phantom-pdf
+2018-07-04T23:42:05.444Z - info: Using extension fs-store
+2018-07-04T23:42:05.810Z - info: Using extension authorization
+2018-07-04T23:42:05.863Z - info: Using extension images
+2018-07-04T23:42:05.914Z - info: Using extension child-templates
+2018-07-04T23:42:05.919Z - info: Using extension browser-client
+2018-07-04T23:42:05.921Z - info: Using extension licensing
+2018-07-04T23:42:06.056Z - info: Using extension data
+2018-07-04T23:42:06.107Z - info: Using extension text
+2018-07-04T23:42:06.110Z - info: Using extension reports
+2018-07-04T23:42:06.163Z - info: Using extension resources
+2018-07-04T23:42:06.212Z - info: Using extension base
+2018-07-04T23:42:06.213Z - info: Using extension studio
+2018-07-04T23:42:06.309Z - info: Using extension html-to-xlsx
+2018-07-04T23:42:06.444Z - info: Using extension scripts
+2018-07-04T23:42:06.493Z - info: Using extension assets
+2018-07-04T23:42:06.505Z - info: Using extension scheduling
+2018-07-04T23:42:06.535Z - info: Using extension xlsx
+2018-07-04T23:42:06.857Z - info: Using extension sample-template
+2018-07-04T23:42:06.908Z - info: Using extension public-templates
+2018-07-04T23:42:06.965Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T23:42:07.179Z - info: Configuring routes for existing express app.
+2018-07-04T23:42:07.282Z - info: Using existing server instance.
+2018-07-04T23:42:07.290Z - info: Verifying license key free
+2018-07-04T23:42:07.292Z - info: Using free license
+2018-07-04T23:42:07.297Z - info: reporter initialized
+2018-07-04T23:54:20.881Z - info: Initializing jsreport@1.10.0 in development mode using configuration file: jsreport.config.json
+2018-07-04T23:54:21.246Z - info: Searching for available extensions in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\
+2018-07-04T23:54:21.250Z - info: Extensions location cache contains up to date information, skipping crawling in C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\node_modules\
+2018-07-04T23:54:21.894Z - info: Found 30 extensions
+2018-07-04T23:54:21.916Z - info: Using extension import-export
+2018-07-04T23:54:22.213Z - info: Using extension tags
+2018-07-04T23:54:22.221Z - info: Using extension templates
+2018-07-04T23:54:22.227Z - info: Using extension jsrender
+2018-07-04T23:54:22.229Z - info: Using extension cli
+2018-07-04T23:54:22.230Z - info: Using extension handlebars
+2018-07-04T23:54:22.234Z - info: Using extension debug
+2018-07-04T23:54:22.237Z - info: Using extension express
+2018-07-04T23:54:22.334Z - info: Using extension fop-pdf
+2018-07-04T23:54:22.390Z - info: Using extension phantom-pdf
+2018-07-04T23:54:22.526Z - info: Using extension fs-store
+2018-07-04T23:54:22.867Z - info: Using extension authorization
+2018-07-04T23:54:22.917Z - info: Using extension images
+2018-07-04T23:54:22.977Z - info: Using extension child-templates
+2018-07-04T23:54:22.982Z - info: Using extension browser-client
+2018-07-04T23:54:22.984Z - info: Using extension licensing
+2018-07-04T23:54:23.112Z - info: Using extension data
+2018-07-04T23:54:23.164Z - info: Using extension text
+2018-07-04T23:54:23.165Z - info: Using extension reports
+2018-07-04T23:54:23.216Z - info: Using extension resources
+2018-07-04T23:54:23.265Z - info: Using extension base
+2018-07-04T23:54:23.266Z - info: Using extension studio
+2018-07-04T23:54:23.356Z - info: Using extension html-to-xlsx
+2018-07-04T23:54:23.489Z - info: Using extension scripts
+2018-07-04T23:54:23.537Z - info: Using extension assets
+2018-07-04T23:54:23.547Z - info: Using extension scheduling
+2018-07-04T23:54:23.572Z - info: Using extension xlsx
+2018-07-04T23:54:23.888Z - info: Using extension sample-template
+2018-07-04T23:54:23.939Z - info: Using extension public-templates
+2018-07-04T23:54:24.001Z - info: Initializing fs storage at C:\Users\Desarrollo04\Documents\GitHub\iFacturacionPale\data
+2018-07-04T23:54:24.174Z - info: Configuring routes for existing express app.
+2018-07-04T23:54:24.242Z - info: Using existing server instance.
+2018-07-04T23:54:24.248Z - info: Verifying license key free
+2018-07-04T23:54:24.249Z - info: Using free license
+2018-07-04T23:54:24.252Z - info: reporter initialized

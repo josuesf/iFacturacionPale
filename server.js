@@ -234,6 +234,7 @@ app.post('/login', function (req, res) {
           EXEC_SQL('usp_PRI_EMPRESA_TXPK', p, function (e) {
             
             app.locals.empresa = e.result 
+            global.empresa = e.result
             
             if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
               LOGIN_SQL(req.body.usuario, req.body.password, function (e) {

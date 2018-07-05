@@ -148,7 +148,18 @@ table.dataTable.no-footer {
     font-weight: bold;
     margin-right: 2px;
 }
- 
+
+.btn-rotate{
+    vertical-align: top;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    width: 80px;
+    height: 40px;
+    -ms-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+}
+
 
 @media only screen and (max-width: 1950px) {
     .divDP {

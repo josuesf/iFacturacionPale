@@ -498,7 +498,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente)
-            $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
@@ -2363,7 +2363,7 @@ function BuscarClienteDoc(CodLibro) {
                 global.objCliente = res.data.cliente[0]
 
                 if(global.objCliente !='' && global.objCliente){
-                    $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+                    $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
                     $("#Cliente").val(global.objCliente.Cliente)
                     $("#Nro_Documento").val(global.objCliente.Nro_Documento)
                     $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)

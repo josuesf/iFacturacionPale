@@ -267,15 +267,10 @@ function AgregarFilaTabla(CodTipoComprobante,fecha_actual){
         <td class="Observaciones"><input class="form-control" type="text" value="" name="Observaciones"></td>
         <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
         <td>
-            <div class="btn-group">
-                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle">
-                Elegir una accion <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,fecha_actual,CodTipoComprobante)}">Asignar Serie</a></li>
-                <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                </ul>
-            </div> 
+            <div style="display:flex;">
+                <button type="button" onclick="${()=>AsignarSeries(idFila,fecha_actual,CodTipoComprobante)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                <button type="button" onclick="${()=>EliminarFila(idFila)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            </div>
         </td>
     </tr>`
     contador++
@@ -311,15 +306,10 @@ function LlenarProductos(productos,CodTipoComprobante,fecha_actual){
                         <td class="Observaciones"><input class="form-control" type="text" value="" name="Observaciones"></td>
                         <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
                         <td>
-                            <div class="btn-group">
-                                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle">
-                                Elegir una accion <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(u.Id_Producto,fecha_actual,CodTipoComprobante)}">Asignar Serie</a></li>
-                                <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(u.Id_Producto)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                                </ul>
-                            </div> 
+                            <div style="display:flex;">
+                                <button type="button" onclick="${()=>AsignarSeries(u.Id_Producto,fecha_actual,CodTipoComprobante)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                                <button type="button" onclick="${()=>EliminarFila(u.Id_Producto)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            </div>
                         </td>
                     </tr>`
                 )}
