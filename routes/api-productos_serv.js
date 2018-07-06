@@ -303,4 +303,18 @@ router.post('/update_producto_stock', function (req, res){
 })
 
 
+router.post('/get_codigo_unidad_by_codP_codA_codTP', function (req, res){
+    input = req.body 
+    parametros = [
+        {nom_parametro: 'Cod_Producto', valor_parametro: input.Cod_Producto},
+        {nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro: 'Cod_TipoPrecio', valor_parametro: input.Cod_TipoPrecio}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TPreciosXCodProd_CodAlm_CodPre', parametros:[]}
+    ]
+    Ejecutar_Procedimientos(res, procedimientos)
+})
+
+
 module.exports = router;

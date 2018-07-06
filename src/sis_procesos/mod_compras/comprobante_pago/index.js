@@ -838,7 +838,7 @@ function AgregarFilaTabla(CodLibro,variables){
             var Id_Producto = $("#Nom_Producto").attr("data-id")
             var Cod_Producto = $("#Cod_Producto").val()==null?"": $("#Cod_Producto").val()
             var Cod_Almacen = $("#Cod_Almacen").val()
-            var Cod_UnidadMedida = $("#Cod_UnidadMedida").text()
+            var Cod_UnidadMedida = $("#Cod_UnidadMedida option:selected").text()
             var Stock = $("#Stock").val()
             var Cantidad = $("#Cantidad").val()
             var Nom_Producto = $("#Nom_Producto").val()

@@ -419,6 +419,8 @@ app.get('/logout', function (req, res) {
   delete req.session.authenticated;
   res.redirect('/');
 });
+ 
+
 
 /*
 let Client = new PDFGeneratorAPI(
