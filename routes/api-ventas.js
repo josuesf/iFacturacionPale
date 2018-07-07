@@ -41,6 +41,15 @@ router.post('/get_comprobante_by_tipo', function (req, res) {
     Ejecutar_Procedimientos(res, procedimientos)
 });
 
+router.post('/get_monedas', function (req, res) {
+    input = req.body
+    procedimientos = [ 
+        { nom_respuesta: 'monedas', sp_name: 'USP_VIS_MONEDAS_TT', parametros: [] }
+    ]  
+    Ejecutar_Procedimientos(res, procedimientos)
+         
+});
+
  
  
  

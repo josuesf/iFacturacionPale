@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente } from '../../modales'
+import { isBuffer } from 'util';
 
 var cantidad_tabs = 1
 var Total = 0
@@ -93,7 +94,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                                 yo`
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="euros" onchange=${()=>CambioMonedaFormaPagoEuros(Cod_Moneda,variables,Tipo_Cambio)}/>
+                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="euros" onchange=${()=>CambioMonedaFormaPagoEuros(idTabVenta)}/>
                                                                         <label class="drinkcard-cc euros" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
                                                                     </div>
                                                                 </div>`
@@ -101,7 +102,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                                 yo`
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="dolares" onchange=${()=>CambioMonedaFormaPagoDolares(Cod_Moneda,variables,Tipo_Cambio)}/>
+                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="dolares" onchange=${()=>CambioMonedaFormaPagoDolares(idTabVenta)}/>
                                                                         <label class="drinkcard-cc dolares" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
                                                                     </div>
                                                                 </div>`
@@ -109,7 +110,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                                 yo`
                                                                 <div class="row">
                                                                     <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="soles" checked="checked" onchange=${()=>CambioMonedaFormaPagoSoles(Cod_Moneda)}/>
+                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="soles" checked="checked" onchange=${()=>CambioMonedaFormaPagoSoles(idTabVenta)}/>
                                                                         <label class="drinkcard-cc soles" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
                                                                     </div>
                                                                 </div>`
@@ -123,7 +124,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                         <div class="col-md-8">
                                                             <div class="form-group">
                                                                 <label>Tipo Cambio</label>
-                                                                <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTabVenta}" name="Tipo_Cambio_Venta_${idTabVenta}">
+                                                                <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTabVenta}" name="Tipo_Cambio_Venta_${idTabVenta}" onkeypress=${()=>CambioTipoCambioVenta(idTabVenta)}>
                                                             </div> 
                                                         </div>
                                                     </div>
@@ -147,7 +148,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                             yo`
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <input  checked="checked" id="Cod_FormaPago_MasterCard_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard()}/>
+                                                                    <input  checked="checked" id="Cod_FormaPago_MasterCard_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard(idTabVenta)}/>
                                                                     <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
                                                                 </div>
                                                             </div>`
@@ -155,7 +156,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                             yo`
                                                             <div class="row">
                                                                 <div class="col-md-12">
-                                                                    <input  checked="checked" id="Cod_FormaPago_Visa_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa()}/>
+                                                                    <input  checked="checked" id="Cod_FormaPago_Visa_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa(idTabVenta)}/>
                                                                     <label class="drinkcard-cc visa" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
                                                                 </div>
                                                             </div>`
@@ -198,7 +199,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                     <div class="col-md-8">
                                         <div class="form-group">
                                             <label>Codigo/Nombres Producto</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" id="txtBusqueda_${idTabVenta}">
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -242,9 +243,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnDescuentos" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnTotal" data-toggle="button" aria-pressed="false" autocomplete="off"><i class="fa fa-money text-green"></i></button></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnConversion" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
+                                            <td><button class="btn btn-default btn-lg" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
+                                            <td><button class="btn btn-default btn-lg" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
+                                            <td><button class="btn btn-default btn-lg" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
                                         </tr>
                                     </tfoot>
 
@@ -298,10 +299,15 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs").append(tab)
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
-    TraerSimboloSOLES(variables.monedas,'PEN') 
+    TraerSimboloSOLES(variables.monedas,'PEN',idTabVenta)
+    CambioMonedaFormaPagoSoles(idTabVenta)
+    CambioMonedaFormaPagoDolares(idTabVenta)
+    CambioMonedaFormaPagoEuros(idTabVenta)
+    CambioMonedaFormaPagoMasterCard(idTabVenta)
+    CambioMonedaFormaPagoVisa(idTabVenta)
 }
 
-function CrearDivFavoritos(idTab){
+function CrearDivFavoritos(variables,idTab){
     var div = yo`
                 <div>
                     <div class="row">              
@@ -310,8 +316,8 @@ function CrearDivFavoritos(idTab){
                                 <div class="box-header with-border">
                                     <h3 class="box-title"><i class="fa fa-star text-orange"></i> Favoritos</h3>
                                 </div>
-                                <div class="box-body" id="divFavoritos_${idTabVenta}">
-                                    ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)}
+                                <div class="box-body" id="divFavoritos_${idTab}">
+                                    ${CrearBotonesFavoritos(variables.favoritos,idTab)}
                                 </div>
                             </div>
                         </div>
@@ -322,13 +328,13 @@ function CrearDivFavoritos(idTab){
                                 <div class="box-header with-border">
                                     <h3 class="box-title" style="margin-left:20px">Productos</h3>
                                     
-                                    <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTabVenta}">
-                                        <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button>
+                                    <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTab}">
+                                        <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTab)}><i class="fa fa-arrow-left"></i></button>
                                     </div>
 
                                 </div>
-                                <div class="box-body" id="divProductos_${idTabVenta}">
-                                    ${CrearBotonesCategorias(variables.categorias,idTabVenta)}
+                                <div class="box-body" id="divProductos_${idTab}">
+                                    ${CrearBotonesCategorias(variables.categorias,idTab)}
                                 </div>
                             </div>
                         </div>
@@ -336,6 +342,85 @@ function CrearDivFavoritos(idTab){
                 </div>`
     var divFV = document.getElementById('divFooter_'+idTab);
     empty(divFV).appendChild(div);
+}
+
+function CrearDivVuelto(idTab){
+    var div = yo`
+                <div>
+                    <div class="row">              
+                        <div class="col-md-4 col-md-offset-4">
+                            <div class="box box-success">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Vuelto Ideal</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label><h4 id="lbVuelto_${idTab}" style="font-weight: bold;">Vuelto</h4></label>
+                                                <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" id="Vuelto_${idTab}" value="0.00" class="form-control">
+                                            </div>
+                                        </div> 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="col-md-4" id="divUSD_${idTab}">
+                                                <div class="form-group">
+                                                    <label style="font-weight: bold;" id="lbUSD_${idTab}">USD:</label>
+                                                    <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control">
+                                                </div> 
+                                            </div>
+                                            <div class="col-md-4" id="divTC_${idTab}"> 
+                                                <label id="laCambio_${idTab}" style="margin-top: 30px;margin-left: -20px;">x T/C</label>
+                                            </div>
+                                            <div class="col-md-4" id="divPEN_${idTab}">
+                                                <div class="form-group">
+                                                    <label style="font-weight: bold;" id="lbPEN_${idTab}">PEN:</label>
+                                                    <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control">
+                                                </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label id="lbTotalCobrar_${idTab}" style="font-weight: bold;">Total a Cobrar</label>
+                                        <input type="number" id="TotalCobrar_${idTab}" style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                    </div> 
+                                    <div class="form-group">
+                                        <label id="lbTotalRecibidos_${idTab}" style="font-weight: bold;">Total Recibidos</label>
+                                        <input type="number" id="TotalRecibidos_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                    </div>
+                                    <div style="height: 1px;background: #00a65a;"></div> 
+                                    <p></p>
+                                    <div class="form-group">
+                                        <label id="lbVueltoCalculado_${idTab}" style="font-weight: bold;">Vuelto calculado</label>
+                                        <input type="number" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success btn-xs" onclick=${()=>CalcularVuelto(idTab)}>Calcular</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>`
+    var divFV = document.getElementById('divFooter_'+idTab);
+    empty(divFV).appendChild(div);
+    CalcularVuelto(idTab)
+}
+
+function VerVuelto(variables,idTab){
+    if($("#btnTotal_"+idTab).hasClass('active')){
+        CrearDivFavoritos(variables,idTab)
+    }else{
+        CrearDivVuelto(idTab)
+    }
 }
 
 function CrearBotonesProductos(c,idTab,callback){
@@ -454,7 +539,7 @@ function SeleccionarCategoria(c,categorias,idTab){
 
 }
 
-function TraerSimboloSOLES(monedas,pCodMoneda){
+function TraerSimboloSOLES(monedas,pCodMoneda,idTab){
     for(var i=0;i<monedas.length;i++){
         if(monedas[i].Cod_Moneda==pCodMoneda){
             SimboloMoneda = monedas[i].Simbolo
@@ -462,7 +547,7 @@ function TraerSimboloSOLES(monedas,pCodMoneda){
             break
         }
     }
-    $("#btnTotal").html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
+    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
 }
 
 function ExisteProducto(CodProducto,idTab,callback){
@@ -509,7 +594,44 @@ function RecalcularDescuentosTotales(idTab){
     CalcularTotalDescuentos(idTab)
 }
 
+function CalcularVuelto(idTab){
+    if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        $("#TotalCobrar_"+idTab).val(Total)
+    }else{
+        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+    }
+    $("#VueltoCalculado_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
 
+    if(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val())>0){
+        $("#lbVuelto_"+idTab).text("VUELTO:")
+        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+            $("#Vuelto_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
+        }else{
+           
+            var ArregloNumero = (parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val())).toString().split('.')
+            var _ParteEntera = parseInt(ArregloNumero[0])
+            var _ParteDecimal =0
+            if(ArregloNumero.length>1)
+                _ParteDecimal = parseFloat('0.'+ArregloNumero[1])
+            $("#Vuelto_"+idTab).val(_ParteEntera)
+            $("#USD_"+idTab).val(_ParteDecimal)
+            $("#PEN_"+idTab).val(parseFloat(_ParteDecimal)*parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()))
+
+        }
+    }else{
+        $("#lbVuelto_"+idTab).text("FALTA:")
+        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+            $("#Vuelto_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
+        }else{
+            $("#Vuelto_"+idTab).val('0.00')
+            $("#USD_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
+            $("#PEN_"+idTab).val(parseFloat($("#USD_"+idTab).val())*parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()))
+        }
+    }
+    $("#txtBusqueda_"+idTab).focus()
+    $("#TotalRecibidos_"+idTab).focus() 
+
+}
 
 function CalcularTotalDescuentos(idTab){
     var _total = 0
@@ -518,11 +640,11 @@ function CalcularTotalDescuentos(idTab){
     });
     _total = parseFloat(_total.toFixed(2))
     TotalDescuentos = _total
-    $("#btnDescuentos").html('<i class="fa fa-arrow-circle-down text-red"></i> TOTAL DESCUENTOS: '+SimboloMoneda+' '+parseFloat(TotalDescuentos).toFixed(2))
+    $("#btnDescuentos_"+idTab).html('<i class="fa fa-arrow-circle-down text-red"></i> TOTAL DESCUENTOS: '+SimboloMoneda+' '+parseFloat(TotalDescuentos).toFixed(2))
     if(_total!=0){
-        $("#btnDescuentos").css("display","block")
+        $("#btnDescuentos_"+idTab).css("display","block")
     }else{
-        $("#btnDescuentos").css("display","none")
+        $("#btnDescuentos_"+idTab).css("display","none")
     }
 }
 
@@ -533,17 +655,17 @@ function CalcularTotal(idTab){
     });
     _total = parseFloat(_total.toFixed(2))
     Total = _total
-    $("#btnTotal").html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
+    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
     if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros') {
         if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
-            $("#btnConversion").css("display","block")
-            $("#btnConversion").html('<i class="fa fa-refresh text-green"></i> EN EUROS: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
+            $("#btnConversion_"+idTab).css("display","block")
+            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN EUROS: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
         }else{
-            $("#btnConversion").css("display","block")
-            $("#btnConversion").html('<i class="fa fa-refresh text-green"></i> EN DOLARES: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
+            $("#btnConversion_"+idTab).css("display","block")
+            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN DOLARES: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
         }
     }else{
-        $("#btnConversion").css("display","none")
+        $("#btnConversion_"+idTab).css("display","none")
     }
 }
 
@@ -564,6 +686,207 @@ function FocusInOutCantidadVenta(idFila,idTab){
     if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
         _CantidadOriginal = parseFloat($('#'+idFila).find('td.Cantidad').find('input').val())
     }
+}
+
+function CambioMonedaFormaPagoMasterCard(idTab){
+    if ($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard'){
+        $("#Nro_Tarjeta_"+idTab).val("")
+        $("#Nro_Tarjeta_"+idTab).prop("disabled",true)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="mastercard"]').prop("checked",false)
+    }else{
+        $("#Nro_Tarjeta_"+idTab).prop("disabled",false)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="mastercard"]').prop("checked",true)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="visa"]').prop("checked",false)
+    }
+}
+
+function CambioMonedaFormaPagoVisa(idTab){
+    if ($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'visa'){
+        $("#Nro_Tarjeta_"+idTab).val("")
+        $("#Nro_Tarjeta_"+idTab).prop("disabled",true)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="visa"]').prop("checked",false)
+    }else{
+        $("#Nro_Tarjeta_"+idTab).prop("disabled",false)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="mastercard"]').prop("checked",false)
+        $('input[name=Cod_FormaPago_Modal_'+idTab+'][value="visa"]').prop("checked",true)
+    }
+}
+
+
+function CambioMonedaFormaPagoEuros(idTab){
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_actual = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var Cod_Moneda = 'EUR' 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Moneda,
+            FechaHora:fecha_actual
+        })
+    }
+    fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=="ok"){
+                var tipos_cambios = res.data.tipos_cambios
+                TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta))
+                TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
+                $("#Tipo_Cambio_Venta_"+idTab).val(TipodeCambio)
+
+                const parametrosMonedas = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                    })
+                }
+                fetch(URL + '/ventas_api/get_monedas', parametrosMonedas)
+                    .then(req => req.json())
+                    .then(res => {
+                        if(res.respuesta=="ok"){
+                            var monedas = res.data.monedas
+                            for(var i=0;i<monedas.length;i++){
+                                if(monedas[i].Cod_Moneda == 'EUR'){
+                                    SimboloMonedaExtra = monedas[i].Simbolo
+                                    break
+                                }
+                            }
+
+                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
+                                $("#lbTotalCobrar_"+idTab).attr("data-value","EUR")
+                                $("#lbTotalRecibidos_"+idTab).attr("data-value","EUR")
+                                $("#lbVuelto_"+idTab).attr("data-value","EUR")
+                                $("#lbVueltoCalculado_"+idTab).attr("data-value","EUR")
+                                $("#lbUSD_"+idTab).text("EUR")
+                                $("#divUSD_"+idTab).css("display","block")
+                                $("#laCambio_"+idTab).css("display","block")
+                                $("#lbVuelto_"+idTab).val(parseFloat($("#lbVuelto_"+idTab).val()).toFixed(0))
+                                $("#divPEN_"+idTab).css("display","block")
+                            }
+
+                            CalcularTotal(idTab)
+                            CalcularTotalDescuentos(idTab)
+
+                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+                                $("#TotalCobrar_"+idTab).val(Total)
+                            }else{
+                                $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+                            }
+                            CalcularVuelto(idTab)
+
+                        }
+                    })
+
+
+            }
+        })
+ 
+}
+
+function CambioMonedaFormaPagoDolares(idTab){
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate()
+    var fecha_actual = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var Cod_Moneda = 'USD' 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Moneda,
+            FechaHora:fecha_actual
+        })
+    }
+    fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=="ok"){
+                var tipos_cambios = res.data.tipos_cambios
+                TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta))
+                TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
+                $("#Tipo_Cambio_Venta_"+idTab).val(TipodeCambio)
+
+                const parametrosMonedas = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                    })
+                }
+                fetch(URL + '/ventas_api/get_monedas', parametrosMonedas)
+                    .then(req => req.json())
+                    .then(res => {
+                        if(res.respuesta=="ok"){
+                            var monedas = res.data.monedas
+                            for(var i=0;i<monedas.length;i++){
+                                if(monedas[i].Cod_Moneda == 'USD'){
+                                    SimboloMonedaExtra = monedas[i].Simbolo
+                                    break
+                                }
+                            }
+
+                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares'){
+                                $("#lbTotalCobrar_"+idTab).attr("data-value","USD")
+                                $("#lbTotalRecibidos_"+idTab).attr("data-value","USD")
+                                $("#lbVuelto_"+idTab).attr("data-value","USD")
+                                $("#lbVueltoCalculado_"+idTab).attr("data-value","USD")
+                                $("#lbUSD_"+idTab).text("USD")
+                                $("#divUSD_"+idTab).css("display","block")
+                                $("#laCambio_"+idTab).css("display","block")
+                                $("#lbVuelto_"+idTab).val(parseFloat($("#lbVuelto_"+idTab).val()).toFixed(0))
+                                $("#divPEN_"+idTab).css("display","block")
+                            }
+
+                            CalcularTotal(idTab)
+                            CalcularTotalDescuentos(idTab)
+
+                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+                                $("#TotalCobrar_"+idTab).val(Total)
+                            }else{
+                                $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+                            }
+                            CalcularVuelto(idTab)
+
+                        }
+                    })
+
+
+            }
+        })
+ 
+}
+
+function CambioMonedaFormaPagoSoles(idTab){
+    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        $("#lbTotalCobrar_"+idTab).attr("data-value","PEN")
+        $("#lbTotalRecibidos_"+idTab).attr("data-value","PEN")
+        $("#lbVuelto_"+idTab).attr("data-value","PEN")
+        $("#lbVueltoCalculado_"+idTab).attr("data-value","PEN")
+        $("#divUSD_"+idTab).css("display","none")
+        $("#divTC_"+idTab).css("display","none")
+        $("#divPEN_"+idTab).css("display","none")
+        $("#lbVuelto_"+idTab).val(parseFloat($("#lbVuelto_"+idTab).val()).toFixed(2))
+    }
+
+    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        $("#TotalCobrar_"+idTab).val(Total)
+    }else{
+        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+    }
+    CalcularVuelto(idTab)
 }
 
 
@@ -621,7 +944,17 @@ function CambioPrecioDescuentos(idFila,idTab){
  
 }
  
-
+function CambioTipoCambioVenta(idTab){
+    TipodeCambio = parseFloat($("#Tipo_Cambio_Venta_"+idTab).val())
+    CalcularTotal(idTab)
+    CalcularTotalDescuentos(idTab)
+    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        $("#TotalCobrar_"+idTab).val(Total)
+    }else{
+        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+    }
+    CalcularVuelto(idTab)
+}
 
 
 function AgregarProducto(producto,favoritos,idTab){
