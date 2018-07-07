@@ -243,7 +243,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                             <td></td>
                                             <td></td>
                                             <td><button class="btn btn-default btn-lg" id="btnDescuentos" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnTotal"><i class="fa fa-money text-green"></i></button></td>
+                                            <td><button class="btn btn-default btn-lg" id="btnTotal" data-toggle="button" aria-pressed="false" autocomplete="off"><i class="fa fa-money text-green"></i></button></td>
                                             <td><button class="btn btn-default btn-lg" id="btnConversion" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
                                         </tr>
                                     </tfoot>
@@ -258,7 +258,7 @@ function VerNuevaVenta(variables,CodLibro) {
                             
 
                         </div>
-                        <div class="box-footer">
+                        <div class="box-footer" id="divFooter_${idTabVenta}">
                             <div class="row"> 
                                 
                                 <div class="col-md-12">
@@ -299,6 +299,43 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
     TraerSimboloSOLES(variables.monedas,'PEN') 
+}
+
+function CrearDivFavoritos(idTab){
+    var div = yo`
+                <div>
+                    <div class="row">              
+                        <div class="col-md-12">
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-star text-orange"></i> Favoritos</h3>
+                                </div>
+                                <div class="box-body" id="divFavoritos_${idTabVenta}">
+                                    ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="box box-warning">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title" style="margin-left:20px">Productos</h3>
+                                    
+                                    <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTabVenta}">
+                                        <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button>
+                                    </div>
+
+                                </div>
+                                <div class="box-body" id="divProductos_${idTabVenta}">
+                                    ${CrearBotonesCategorias(variables.categorias,idTabVenta)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+    var divFV = document.getElementById('divFooter_'+idTab);
+    empty(divFV).appendChild(div);
 }
 
 function CrearBotonesProductos(c,idTab,callback){
