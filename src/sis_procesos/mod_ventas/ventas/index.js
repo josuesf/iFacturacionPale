@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import { NuevoCliente, BuscarCliente } from '../../modales'
+import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
 import { isBuffer } from 'util';
 
 var cantidad_tabs = 1
@@ -13,6 +13,7 @@ var SimboloMoneda = ''
 var SimboloMonedaExtra = ''
 
 function VerNuevaVenta(variables,CodLibro) {
+    global.objProductoVentas = ''
     cantidad_tabs++
     const idTabVenta = cantidad_tabs
     var tab = yo`
@@ -199,7 +200,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                     <div class="col-md-8">
                                         <div class="form-group">
                                             <label>Codigo/Nombres Producto</label>
-                                            <input type="text" class="form-control" id="txtBusqueda_${idTabVenta}">
+                                            <input type="text" class="form-control" id="txtBusqueda_${idTabVenta}" onblur=${()=>BuscarProductoCP(event,'blur',idTabVenta)} onkeypress=${()=>BuscarProductoCP(event,'key',idTabVenta)}>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -305,6 +306,67 @@ function VerNuevaVenta(variables,CodLibro) {
     CambioMonedaFormaPagoEuros(idTabVenta)
     CambioMonedaFormaPagoMasterCard(idTabVenta)
     CambioMonedaFormaPagoVisa(idTabVenta)
+
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objProductoVentas!='' && global.objProductoVentas){
+            $("#txtBusqueda_"+idTabVenta).val("")
+
+            ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,idTabVenta,function(flag){
+                if(flag){
+                    ExisteProducto(global.objProductoVentas.Cod_Producto,idTabVenta,function(flag,index){
+                        if(flag){
+                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
+                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2))
+                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
+                        }else{
+                            var idFila = $('#tablaBodyProductosVentas_'+idTabVenta+' > tr').length
+                            var fila = yo`
+                            <tr id="${idFila+''+idTabVenta}">
+                                <td class="Cod_Producto">${global.objProductoVentas.Cod_Producto}</td> 
+                                <td class="Flag_Stock hidden">${global.objProductoVentas.Flag_Stock}</td> 
+                                <td class="Nom_Producto" style="width: 30%;">${global.objProductoVentas.Nom_Producto}</td> 
+                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTabVenta,idTabVenta)} onchange=${()=>CambioCantidadVenta(idFila+''+idTabVenta,idTabVenta)}></td>
+                                <td class="Unitario hidden">${global.objProductoVentas.Precio_Venta}</td>
+                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTabVenta,idTabVenta)}></td> 
+                                <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTabVenta,idTabVenta)}></td>
+                                <td class="DescuentoUnitario hidden">0</td> 
+                                <td class="DescuentoTotal hidden">0</td> 
+                                <td class="Precio">${global.objProductoVentas.Precio_Venta}</td>
+                                <td>
+                                    <div style="display:flex;"> 
+                                        <button type="button" onclick="${()=>EliminarFila(idFila+''+idTabVenta,idTabVenta)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>`
+                            $('#tablaBodyProductosVentas_'+idTabVenta).append(fila)
+                        }
+                        CalcularTotal(idTabVenta)
+                        CalcularTotalDescuentos(idTabVenta)
+                    })
+                   
+                    
+                }else{
+                    toastr.error('No existe stock para dicho producto','Error',{timeOut: 5000})  
+                }
+            })
+
+ 
+        }
+    })
+
+    $("#modal-superior").on("shown.bs.modal", function () { 
+        //console.log("modal show")
+        $("#chbSoloProductoStock").prop("checked",false)
+        $("#divSoloProductoStock").css("display","none")
+        $("#Cod_Categoria").css("display","block")
+        $("#lbCod_Categoria").css("display","block")
+        $("#Cod_Categoria").val("01")
+        $("#Cod_Precio").val($("#Cod_Precio_"+idTabVenta).val())
+        Buscar()
+   
+    });
+
 }
 
 function CrearDivFavoritos(variables,idTab){
@@ -358,7 +420,7 @@ function CrearDivVuelto(idTab){
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label><h4 id="lbVuelto_${idTab}" style="font-weight: bold;">Vuelto</h4></label>
-                                                <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" id="Vuelto_${idTab}" value="0.00" class="form-control">
+                                                <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" id="Vuelto_${idTab}" value="0.00" class="form-control" onblur=${()=>CalcularVueltoEspecial(idTab)}>
                                             </div>
                                         </div> 
                                     </div>
@@ -393,7 +455,7 @@ function CrearDivVuelto(idTab){
                                     </div> 
                                     <div class="form-group">
                                         <label id="lbTotalRecibidos_${idTab}" style="font-weight: bold;">Total Recibidos</label>
-                                        <input type="number" id="TotalRecibidos_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                        <input type="number" id="TotalRecibidos_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control" onblur=${()=>CalcularVuelto(idTab)} onkeypress=${()=>KeyCalcularVuelto(event,idTab)}>
                                     </div>
                                     <div style="height: 1px;background: #00a65a;"></div> 
                                     <p></p>
@@ -422,6 +484,7 @@ function VerVuelto(variables,idTab){
         CrearDivVuelto(idTab)
     }
 }
+
 
 function CrearBotonesProductos(c,idTab,callback){
     const parametros = {
@@ -575,6 +638,8 @@ function RecuperarPrecio(favoritos,producto){
     return pValor
 }
 
+
+
 function RecalcularSubtotales(idTab){
     $('#tablaBodyProductosVentas_'+idTab+' tr').each(function (index) { 
         var _Cantidad = parseFloat($(this).find("td").eq(3).find('input').val())
@@ -631,6 +696,25 @@ function CalcularVuelto(idTab){
     $("#txtBusqueda_"+idTab).focus()
     $("#TotalRecibidos_"+idTab).focus() 
 
+}
+
+function KeyCalcularVuelto(event,idTab){
+    if(event.which==13){
+        CalcularVuelto(idTab)
+    }
+}
+
+function CalcularVueltoEspecial(idTab){
+    
+    if(parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#TotalCobrar_"+idTab).val())){
+        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+            $("#TotalRecibidos_"+idTab).val(parseFloat($("#TotalCobrar_"+idTab).val())+parseFloat($("#Vuelto_"+idTab)))
+            CalcularVuelto(idTab)
+        }else{
+            $("#USD_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#TotalCobrar_"+idTab).val()) - parseFloat($("#Vuelto_"+idTab).val()))
+            $("#PEN_"+idTab).val(parseFloat($("#USD_"+idTab).val()) * parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()))
+        }
+    }
 }
 
 function CalcularTotalDescuentos(idTab){
@@ -1017,6 +1101,27 @@ function AgregarProducto(producto,favoritos,idTab){
         })
 }
 
+
+function BuscarProductoCP(event,tipo,idTab) { 
+    if(tipo=='blur'){
+        if($("#txtBusqueda_"+idTab).val().trim().length>=3){
+            global.objProductoVentas = ''
+            BuscarProducto(true, $("#txtBusqueda_"+idTab).val())
+        } 
+    }else{
+        if(event.which==13){
+            if($("#txtBusqueda_"+idTab).val().trim().length>=3){
+                $("#Cod_Precio_"+idTab).focus()
+                global.objProductoVentas = ''
+                BuscarProducto(true, $("#txtBusqueda_"+idTab).val())
+            } 
+        }
+        //if(!$("#optEsGasto").is(":checked"))
+        //    BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
+        
+        //$("#Nom_Producto").focusout()
+    }
+}
 
 
 

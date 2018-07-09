@@ -23,7 +23,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="Cod_Categoria">Categoria</label>
+                                <label for="Cod_Categoria" id="lbCod_Categoria">Categoria</label>
                                 <select id="Cod_Categoria" class="form-control" onchange=${()=>Buscar()}>
                                    
                                 </select>
@@ -40,9 +40,9 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                         <div  class="col-md-4">
                             <div class="form-group">
                                 <label></label>
-                                <div class="checkbox">
+                                <div class="checkbox" id="divSoloProductoStock">
                                     <label>
-                                        <input type="checkbox" checked="checked"> Solo productos con stock?
+                                        <input type="checkbox" checked="checked" id="chbSoloProductoStock"> Solo productos con stock?
                                     </label>
                                 </div>
                             </div>
@@ -341,6 +341,7 @@ function getValueXML(xmlDoc, TAG) {
 
 function SeleccionarProducto(producto){    
     global.objProducto = producto
+    global.objProductoVentas = producto
 }
 
 function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
@@ -586,4 +587,4 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
 
 
   
-export { NuevoCliente , BuscarCliente , AbrirModalObs , BuscarProducto }
+export { NuevoCliente , BuscarCliente , AbrirModalObs , BuscarProducto,Buscar }
