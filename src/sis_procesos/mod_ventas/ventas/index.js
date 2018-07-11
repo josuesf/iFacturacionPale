@@ -407,8 +407,7 @@ function CrearDivFavoritos(variables,idTab){
 }
 
 function CrearDivVuelto(idTab){
-    var div = yo`
-                <div>
+    var div = yo` 
                     <div class="row">              
                         <div class="col-md-4 col-md-offset-4">
                             <div class="box box-success">
@@ -429,7 +428,7 @@ function CrearDivVuelto(idTab){
                                             <div class="col-md-4" id="divUSD_${idTab}">
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbUSD_${idTab}">USD:</label>
-                                                    <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control">
+                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control" onkeypress=${()=>BloquearControles(event,idTab)} >
                                                 </div> 
                                             </div>
                                             <div class="col-md-4" id="divTC_${idTab}"> 
@@ -438,7 +437,7 @@ function CrearDivVuelto(idTab){
                                             <div class="col-md-4" id="divPEN_${idTab}">
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbPEN_${idTab}">PEN:</label>
-                                                    <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control">
+                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control"  onkeypress=${()=>BloquearControles(event),idTab} >
                                                 </div> 
                                             </div>
                                         </div>
@@ -461,7 +460,7 @@ function CrearDivVuelto(idTab){
                                     <p></p>
                                     <div class="form-group">
                                         <label id="lbVueltoCalculado_${idTab}" style="font-weight: bold;">Vuelto calculado</label>
-                                        <input type="number" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                        <input type="text" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control"  onkeypress=${()=>BloquearControles(event,idTab)} >
                                     </div>
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-xs" onclick=${()=>CalcularVuelto(idTab)}>Calcular</button>
@@ -469,9 +468,7 @@ function CrearDivVuelto(idTab){
                                 </div>
                             </div>
                         </div>
-                    </div>
-                   
-                </div>`
+                    </div> `
     var divFV = document.getElementById('divFooter_'+idTab);
     empty(divFV).appendChild(div);
     CalcularVuelto(idTab)
@@ -485,6 +482,10 @@ function VerVuelto(variables,idTab){
     }
 }
 
+function BloquearControles(event,idTab){
+    event.preventDefault();
+    event.stopPropagation(); 
+}
 
 function CrearBotonesProductos(c,idTab,callback){
     const parametros = {
@@ -693,8 +694,8 @@ function CalcularVuelto(idTab){
             $("#PEN_"+idTab).val(parseFloat($("#USD_"+idTab).val())*parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()))
         }
     }
-    $("#txtBusqueda_"+idTab).focus()
-    $("#TotalRecibidos_"+idTab).focus() 
+    //$("#txtBusqueda_"+idTab).focus()
+    //$("#TotalRecibidos_"+idTab).focus() 
 
 }
 
@@ -706,7 +707,7 @@ function KeyCalcularVuelto(event,idTab){
 
 function CalcularVueltoEspecial(idTab){
     
-    if(parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#TotalCobrar_"+idTab).val())){
+    if(parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#TotalCobrar_"+idTab).val()) > 0 ){
         if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
             $("#TotalRecibidos_"+idTab).val(parseFloat($("#TotalCobrar_"+idTab).val())+parseFloat($("#Vuelto_"+idTab)))
             CalcularVuelto(idTab)

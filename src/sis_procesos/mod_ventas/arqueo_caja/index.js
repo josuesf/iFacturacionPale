@@ -3,11 +3,13 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
+import { BloquearControles } from '../../../../utility/tools'
 
-var aCargarEfectivo = null
+var aCargarEfectivo = null 
 
 
 function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
+ 
     var el = yo`
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -29,7 +31,7 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                             <div class="box box-primary">
                                 <div class="box-header with-border">
                                     <div class="col-md-4">
-                                        <h3 class="box-title">Turno : ${turno_actual.Des_Turno}</h3>
+                                        <h3 class="box-title">Turno : ${turno_actual.Cod_Turno}</h3>
                                     </div>
                                     <div class="col-md-8 text-right">
                                         <h3 class="box-title">Nro : 0000${arqueo.Numero}</h3>
@@ -40,19 +42,19 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="Cajero">Responsable</label>
-                                                <input type="text" class="form-control" id="Cajero" disabled>
+                                                <input type="text" class="form-control" id="Cajero" onkeypress=${()=>BloquearControles(event)}>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="Cod_Caja">Caja</label>
-                                                <input type="text" class="form-control" id="Cod_Caja" value="${caja_actual.Des_Caja}" disabled>
+                                                <input type="text" class="form-control" id="Cod_Caja" value="${caja_actual.Des_Caja}" onkeypress=${()=>BloquearControles(event)}>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label for="FechaHora">Fecha y Hora</label>
-                                                <input type="date" class="form-control" id="FechaHora" value=${fecha_hora}>
+                                                <input type="datetime-local" class="form-control" id="FechaHora" value=${fecha_hora}>
                                             </div>
                                         </div>
                                     </div>
@@ -102,8 +104,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                                 <tbody> 
                                                                                     ${resumenpen.map(u => yo`
                                                                                     <tr name="filaSumaSoles">
-                                                                                        <td><input class="form-control" type="text" value="${u.Nom_FormaPago}" name="tipo" disabled></td>
-                                                                                        <td><input class="form-control" type="number" value="${u.Monto}" name="Monto" disabled></td> 
+                                                                                        <td><input class="form-control" type="text" value="${u.Nom_FormaPago}" name="tipo" onkeypress=${()=>BloquearControles(event)}></td>
+                                                                                        <td><input class="form-control" type="text" value="${u.Monto}" name="Monto" onkeypress=${()=>BloquearControles(event)}></td> 
                                                                                     </tr>`)}
                                                                                 </tbody>
                                                                             </table>
@@ -116,13 +118,13 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label id="laSaldoTotalSoles"></label>
-                                                                                    <input type="number" class="form-control required" id="SaldoTotalSoles" value="0.00" disabled>
+                                                                                    <input type="text" class="form-control required" id="SaldoTotalSoles" value="0.00" onkeypress=${()=>BloquearControles(event)}>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label id="laDiferenciaSoles"></label>
-                                                                                    <input type="number" class="form-control required" id="DiferenciaSoles"  disabled>
+                                                                                    <input type="text" class="form-control required" id="DiferenciaSoles"  onkeypress=${()=>BloquearControles(event)}>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -142,8 +144,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                                 <tbody> 
                                                                                     ${resumenusd.map(u => yo`
                                                                                     <tr  name="filaSumaDolares">
-                                                                                        <td><input  class="form-control" type="text" value="${u.Nom_FormaPago}" name="tipo" disabled></td>
-                                                                                        <td><input  class="form-control" type="number" value="${u.Monto}" name="Monto" disabled></td>
+                                                                                        <td><input  class="form-control" type="text" value="${u.Nom_FormaPago}" name="tipo" onkeypress=${()=>BloquearControles(event)}></td>
+                                                                                        <td><input  class="form-control" type="text" value="${u.Monto}" name="Monto" onkeypress=${()=>BloquearControles(event)}></td>
                                                                                     </tr>`)}
                                                                                 </tbody>
                                                                             </table>
@@ -156,13 +158,13 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label id="laSaldoTotalDolares"></label>
-                                                                                    <input type="number" class="form-control required" id="SaldoTotalDolares" value="0.00" disabled>
+                                                                                    <input type="text" class="form-control required" id="SaldoTotalDolares" value="0.00" onkeypress=${()=>BloquearControles(event)}>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <div class="form-group">
                                                                                     <label id="laDiferenciaDolares"></label>
-                                                                                    <input type="number" class="form-control required" id="DiferenciaDolares" disabled>
+                                                                                    <input type="text" class="form-control required" id="DiferenciaDolares" onkeypress=${()=>BloquearControles(event)}>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -180,7 +182,7 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="nav-tabs-custom">
-                                                        <ul class="nav nav-tabs" id="tabsArqueoCaja">
+                                                        <ul class="nav nav-tabs" id="tabsArqueoCajaBilletes">
                                                             <li class="active"><a href="#tabSolesBilletes" id="tbSoles" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalSoles(resumenpen)}">Soles S/</a></li>
                                                             <li ><a href="#tabDolaresBilletes" id="tbDolares" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalDolares(resumenusd)}">Dolares $</a></li>
                                                         </ul>
@@ -280,8 +282,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
     empty(modal_proceso).appendChild(el);
     $('#modal-proceso').modal()
     $('#Cajero').val($('#nick').text())
-    CalcularSumaTotalSoles(resumenpen)
     CalcularSumaTotalDolares(resumenusd)
+    CalcularSumaTotalSoles(resumenpen)
     CargarBilletes(arqueo)
 }
 
@@ -370,18 +372,20 @@ function LlenarTabla(billetes){
     empty(document.getElementById('divTablaSoles')).appendChild(elsoles);
     empty(document.getElementById('divTablaDolares')).appendChild(eldolares);
     if(aCargarEfectivo){
-        if(parseFloat($("#SaldoTotalSoles").val())>0){
+        if(parseFloat($("#SaldoTotalSoles").val())>=0){
             $("#laCantidadBilletesSoles").text("Total en Soles S/")
             $("#CantidadBilletesSoles").val($("#SaldoTotalSoles").val())
         }else{
             toastr.error('No puede realizar aun el Cierre verifique no tenga saldo final Menor a Cero y vuelta a intentarlo.\n\n','Error',{timeOut: 5000})
+            $('#modal-proceso').modal('hide')
         }
 
-        if(parseFloat($("#SaldoTotalDolares").val())>0){
+        if(parseFloat($("#SaldoTotalDolares").val())>=0){
             $("#laCantidadBilletesDolares").text("Total en Dolares USD")
             $("#CantidadBilletesDolares").val($("#SaldoTotalDolares").val())
         }else{
             toastr.error('No puede realizar aun el Cierre verifique no tenga saldo final Menor a Cero y vuelta a intentarlo.\n\n','Error',{timeOut: 5000})
+            $('#modal-proceso').modal('hide')
         }
     }
 }
@@ -426,9 +430,11 @@ function CalcularSumaTotalSoles(resumen){
     $("#laSaldoTotalSoles").text("SALDO : S/")
     $("#SaldoTotalSoles").val(suma)
     $("#laDiferenciaSoles").text("DIFERENCIA : S/")
-    $("#DiferenciaSoles").val(-1*suma)
-    //$("#tSoles").click()
-    //$("#tbSoles").click()
+    $("#DiferenciaSoles").val(-1*suma) 
+     
+    $("#tbSoles").tab('show');
+    $("#tSoles").tab('show');
+ 
 }
  
 function CalcularSumaTotalDolares(resumen){
@@ -441,9 +447,9 @@ function CalcularSumaTotalDolares(resumen){
     $("#laSaldoTotalDolares").text("SALDO : USD ")
     $("#SaldoTotalDolares").val(suma)
     $("#laDiferenciaDolares").text("DIFERENCIA : USD ")
-    $("#DiferenciaDolares").val(-1*suma)
-    //$("#tDolares").click()
-    //$("#tbDolares").click()
+    $("#DiferenciaDolares").val(-1*suma) 
+    $("#tbDolares").tab('show');
+    $("#tDolares").tab('show');
 }
 
 function DistribuirSoles(){
@@ -487,6 +493,7 @@ function CargarBilletes(arqueo){
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({ 
             })
         }
@@ -506,6 +513,7 @@ function CargarBilletes(arqueo){
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
+            credentials: 'same-origin',
             body: JSON.stringify({ 
             })
         }
@@ -542,7 +550,7 @@ function ArquearCaja(){
 
 function AceptarConfirmacion(){
     H5_loading.show();
-    var Fecha = $("#FechaHora").val()
+    var Fecha = $("#FechaHora").val().replace('T',' ')
     var dataFormTS = $("#formSumaTotalSoles").serializeArray()
     var dataFormTD = $("#formSumaTotalDolares").serializeArray() 
     var dataBS = $("#formBilletesSoles").serializeArray()
@@ -555,6 +563,7 @@ function AceptarConfirmacion(){
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({ 
             Fecha, 
             dataFormTS,
@@ -568,9 +577,14 @@ function AceptarConfirmacion(){
     fetch(URL + '/cajas_api/guardar_arqueo', parametros)
         .then(req => req.json())
         .then(res => {
-             console.log(res)
-             $('#modal-alerta').modal('hide')
-             H5_loading.hide();
+            if(res.respuesta == 'ok'){
+                window.location.href = '/logout';
+            }else{
+                toastr.error('Ocurrio un erro en el arqueo, comuniquese con el administrador de sistemas','Error',{timeOut: 5000})
+                $('#modal-alerta').modal('hide')
+                H5_loading.hide();
+            }
+           
         })
 }
 
@@ -580,13 +594,14 @@ function NuevoArqueoCaja(pCargarEfectivo) {
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate() 
-    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia) + 'T'+ [(fecha.getHours()>9?fecha.getHours():'0'+fecha.getHours()), (fecha.getMinutes()>9?fecha.getMinutes():'0'+fecha.getMinutes())].join(':');
     const parametros = {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({ 
         })
     }

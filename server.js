@@ -396,7 +396,18 @@ app.post('/loginarqueo', function (req, res) {
             { nom_parametro: 'CodTurno', valor_parametro:  Cod_Turno}
           ] 
           EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
-              app.locals.arqueo = dataArqueoFisico.result
+
+            p_ = [
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result }
+            ] 
+
+            EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p_ , function (dataArqueo) {
+              
+              app.locals.arqueo = dataArqueo.result
+              
+            })
+
+              //app.locals.arqueo = dataArqueoFisico.result
           })
 
         })

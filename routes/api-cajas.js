@@ -259,10 +259,11 @@ router.post('/get_detalle_arqueo', function (req, res){
     Ejecutar_Procedimientos(res,procedimientos)
 })
 
+
+
+
 router.post('/guardar_arqueo', function (req, res){
-    input = req.body 
-    console.log(input.dataFormTS)
-    console.log(input.dataBS)
+    input = req.body  
     p = [
         { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},
         { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
@@ -276,7 +277,13 @@ router.post('/guardar_arqueo', function (req, res){
       ]
   
       EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
-        for(var i=0;i<input.dataFormTS.length;i += 2){
+        if(dataArqueoFisico.err){
+            res.json({ respuesta: 'error'})
+        }
+        
+        GuardarSaldoSoles(0,req,res,dataArqueoFisico.result)
+ 
+        /*for(var i=0;i<input.dataFormTS.length;i += 2){ 
             var tipo=input.dataFormTS[i].value
             var monto = input.dataFormTS[i+1].value
             var parametros = [
@@ -288,13 +295,10 @@ router.post('/guardar_arqueo', function (req, res){
               ]
             
 
-            EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
-            })
-
-            /*procedimientos =[
-                {nom_respuesta:'arqueo', sp_name: 'USP_CAJ_ARQUEOFISICO_SALDO_G',parametros}
-            ]*/
+            EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+            })  
         }
+ 
 
         for(var i=0;i<input.dataFormTD.length;i += 2){ 
             var tipo=input.dataFormTS[i].value
@@ -307,13 +311,9 @@ router.post('/guardar_arqueo', function (req, res){
                 { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
               ]
             
-            EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+            EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
             })
-
-            /*
-            procedimientos =[
-                {nom_respuesta:'arqueo', sp_name: 'USP_CAJ_ARQUEOFISICO_SALDO_G',parametros}
-            ]*/
+ 
         }
 
         var parametros = [
@@ -324,14 +324,9 @@ router.post('/guardar_arqueo', function (req, res){
             { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
         ]
 
-        EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
         })
-
-        
-        /*procedimientos =[
-            {nom_respuesta:'arqueo', sp_name: 'USP_CAJ_ARQUEOFISICO_SALDO_G',parametros}
-        ]*/
-
+ 
         var parametros = [
             { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
             { nom_parametro: 'Cod_Moneda', valor_parametro: 'USD'},
@@ -340,13 +335,9 @@ router.post('/guardar_arqueo', function (req, res){
             { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
         ]
 
-        EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
         })
-
-        
-        /*procedimientos =[
-            {nom_respuesta:'arqueo', sp_name: 'USP_CAJ_ARQUEOFISICO_SALDO_G',parametros}
-        ]*/
+ 
 
         for(var i=0;i<input.dataBS.length;i += 4){ 
             var Cod_Billete=input.dataBS[i].value
@@ -354,19 +345,16 @@ router.post('/guardar_arqueo', function (req, res){
             var Cantidad = input.dataBS[i+2].value
             var Total = input.dataBS[i+3].value
             var parametros = [
-                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
+                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result,tipo_parametro:sql.Int},
                 { nom_parametro: 'Cod_Billete', valor_parametro: Cod_Billete},
-                { nom_parametro: 'Cantidad', valor_parametro: Cantidad},
+                { nom_parametro: 'Cantidad', valor_parametro: Cantidad,tipo_parametro:sql.Int},
                 { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
               ]
             
 
-            EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
+            EXEC_SQL('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
             })
-
-            /*procedimientos =[
-                {nom_respuesta:'arqueo_fisico', sp_name: 'USP_CAJ_ARQUEOFISICO_D_G',parametros}
-            ]*/
+ 
         }
 
         for(var i=0;i<input.dataBD.length;i += 4){ 
@@ -375,24 +363,163 @@ router.post('/guardar_arqueo', function (req, res){
             var Cantidad = input.dataBD[i+2].value
             var Total = input.dataBD[i+3].value
             var parametros = [
-                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
+                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result,tipo_parametro:sql.Int},
                 { nom_parametro: 'Cod_Billete', valor_parametro: Cod_Billete},
-                { nom_parametro: 'Cantidad', valor_parametro: Cantidad},
+                { nom_parametro: 'Cantidad', valor_parametro: Cantidad,tipo_parametro:sql.Int},
                 { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
               ]
             
-            EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
-            })
-
-            /*procedimientos =[
-                {nom_respuesta:'arqueo_fisico', sp_name: 'USP_CAJ_ARQUEOFISICO_D_G',parametros}
-            ]*/
+            EXEC_SQL('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
+            }) 
         }
 
-        res.json({ respuesta: 'ok', data: dataArqueoFisico.result })
+        //res.json({ respuesta: 'ok',data: dataArqueoFisico.result })*/
        
       })
      
 })
+
+function GuardarSaldoSoles(i,req,res,idArqueo){ 
+    if(i<req.body.dataFormTS.length && req.body.dataFormTS.length>0){ 
+        var tipo = req.body.dataFormTS[i].value
+        var monto = req.body.dataFormTS[i+1].value
+        var parametros = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo},
+            { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
+            { nom_parametro: 'Tipo', valor_parametro: tipo},
+            { nom_parametro: 'Monto', valor_parametro:monto},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+          ] 
+        
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+            if(dataArqueoFisicoSaldo.err){
+                res.json({ respuesta: 'error'})
+            }else{
+                GuardarSaldoSoles(i += 2,req,res,idArqueo)
+            }
+        })   
+    }else{
+        GuardarSaldoDolares(0,req,res,idArqueo)
+    }
+}
+
+
+function GuardarSaldoDolares(i,req,res,idArqueo){ 
+    if(i<req.body.dataFormTD.length && req.body.dataFormTD.length>0){ 
+        var tipo = req.body.dataFormTD[i].value
+        var monto = req.body.dataFormTD[i+1].value
+        var parametros = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo},
+            { nom_parametro: 'Cod_Moneda', valor_parametro: 'USD'},
+            { nom_parametro: 'Tipo', valor_parametro: tipo},
+            { nom_parametro: 'Monto', valor_parametro:monto},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+          ] 
+        
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros , function (dataArqueoFisicoSaldo) {
+            if(dataArqueoFisicoSaldo.err){
+                res.json({ respuesta: 'error'})
+            }else{
+                GuardarSaldoDolares(i += 2,req,res,idArqueo)
+            }
+        })   
+    }else{
+        
+        var parametrosFinalSoles = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo},
+            { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
+            { nom_parametro: 'Tipo', valor_parametro: "SALDO FINAL"},
+            { nom_parametro: 'Monto', valor_parametro: req.body.totalBilletesSoles},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+        ]
+
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametrosFinalSoles , function (dataArqueoFisicoSaldo) {
+            if(dataArqueoFisicoSaldo.err){
+                res.json({ respuesta: 'error'})
+            }else{
+                
+                var parametrosFinalDolares = [
+                    { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo},
+                    { nom_parametro: 'Cod_Moneda', valor_parametro: 'USD'},
+                    { nom_parametro: 'Tipo', valor_parametro: "SALDO FINAL"},
+                    { nom_parametro: 'Monto', valor_parametro: req.body.totalBilletesDolares},
+                    { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+                ]
+        
+                EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G',parametrosFinalDolares , function (dataArqueoFisicoSaldo) {
+                    if(dataArqueoFisicoSaldo.err){
+                        res.json({ respuesta: 'error'})
+                    }else{
+                        GuardarBilletesSoles(0,req,res,idArqueo)
+                    }
+                })
+
+            } 
+
+
+        })
+
+    }
+}
+
+function GuardarBilletesSoles(i,req,res,idArqueo){
+    
+    if(i<req.body.dataBS.length && req.body.dataBS.length>0){ 
+
+        var Cod_Billete=req.body.dataBS[i].value
+        var Valor_Billete = req.body.dataBS[i+1].value
+        var Cantidad = req.body.dataBS[i+2].value
+        var Total = req.body.dataBS[i+3].value
+        var parametros = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo,tipo_parametro:sql.Int},
+            { nom_parametro: 'Cod_Billete', valor_parametro: Cod_Billete},
+            { nom_parametro: 'Cantidad', valor_parametro: Cantidad,tipo_parametro:sql.Int},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+          ]
+        
+
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
+            if(dataArqueoFisicoDetalles.err){
+                res.json({ respuesta: 'error'})
+            }else{
+                GuardarBilletesSoles(i += 4,req,res,idArqueo)
+            }
+        })
+ 
+    }else{
+        GuardarBilletesDolares(0,req,res,idArqueo)
+    }
+}
+    
+
+function GuardarBilletesDolares(i,req,res,idArqueo){
+    
+    if(i<req.body.dataBD.length && req.body.dataBD.length>0){ 
+
+        var Cod_Billete=req.body.dataBD[i].value
+        var Valor_Billete = req.body.dataBD[i+1].value
+        var Cantidad = req.body.dataBD[i+2].value
+        var Total = req.body.dataBD[i+3].value
+        var parametros = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: idArqueo,tipo_parametro:sql.Int},
+            { nom_parametro: 'Cod_Billete', valor_parametro: Cod_Billete},
+            { nom_parametro: 'Cantidad', valor_parametro: Cantidad,tipo_parametro:sql.Int},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+          ]
+        
+
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_D_G', parametros , function (dataArqueoFisicoDetalles) {
+            if(dataArqueoFisicoDetalles.err){
+                res.json({ respuesta: 'error'})
+            }else{
+                GuardarBilletesDolares(i += 4,req,res,idArqueo)
+            }
+        })
+ 
+    }else{
+        res.json({ respuesta: 'ok' })
+    }
+    
+}
 
 module.exports = router;

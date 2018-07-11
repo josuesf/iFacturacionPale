@@ -183,6 +183,12 @@ function UnObfuscateString(cadena){
     }
 }
 
+function BloquearControles(event){
+    event.preventDefault();
+    event.stopPropagation(); 
+}
+ 
+
 function CambiarCadenaConexion(cadena){
     console.log(cadena)
     var posicionDataSource = cadena.search("Data Source=")
@@ -229,4 +235,4 @@ function TraerConexion(req, res, callback){
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion }
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles }
