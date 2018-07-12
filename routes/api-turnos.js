@@ -17,7 +17,7 @@ router.post('/get_turnos', function (req, res) {
         {nom_respuesta:'turnos',sp_name:'usp_CAJ_TURNO_ATENCION_TP',parametros},
         {nom_respuesta:'num_filas',sp_name:'usp_CAJ_TURNO_ATENCION_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -34,7 +34,7 @@ router.post('/guardar_turno', function (req, res){
     procedimientos = [
         {nom_respuesta: 'turno', sp_name: 'USP_CAJ_TURNO_ATENCION_G', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/cambiar_comprobante_by_turno', function (req, res){
@@ -47,7 +47,7 @@ router.post('/cambiar_comprobante_by_turno', function (req, res){
     procedimientos = [
         {nom_respuesta: 'turno', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_CambiarTurno', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/cambiar_movimientos_by_turno', function (req, res){
@@ -60,7 +60,7 @@ router.post('/cambiar_movimientos_by_turno', function (req, res){
     procedimientos = [
         {nom_respuesta: 'turno', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_CambiarTurno', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/cambiar_almacen_by_turno', function (req, res){
@@ -73,7 +73,7 @@ router.post('/cambiar_almacen_by_turno', function (req, res){
     procedimientos = [
         {nom_respuesta: 'turno', sp_name: 'USP_ALM_ALMACEN_MOV_CambiarTurno', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/eliminar_turno', function (req, res){
@@ -84,7 +84,7 @@ router.post('/eliminar_turno', function (req, res){
     procedimientos = [
         {nom_respuesta: 'turno', sp_name: 'usp_CAJ_TURNO_ATENCION_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 

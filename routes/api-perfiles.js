@@ -17,7 +17,7 @@ router.post('/get_perfiles', function (req, res) {
         {nom_respuesta:'num_filas',sp_name:'usp_PRI_PERFIL_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]},
         {nom_respuesta:'modulos',sp_name:'usp_PRI_MODULO_TT',parametros:[]},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/guardar_sucursal', function (req, res) {
     input = req.body
@@ -37,7 +37,7 @@ router.post('/guardar_sucursal', function (req, res) {
     procedimientos =[
         {nom_respuesta:'sucursal',sp_name:'USP_PRI_SUCURSAL_G',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/eliminar_sucursal', function (req, res){
@@ -48,7 +48,7 @@ router.post('/eliminar_sucursal', function (req, res){
     procedimientos = [
         {nom_respuesta:'sucursal',sp_name:'usp_PRI_SUCURSAL_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 module.exports = router;

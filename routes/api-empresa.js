@@ -11,7 +11,7 @@ router.post('/get_unica_empresa', function (req, res) {
     procedimientos =[
         {nom_respuesta:'empresa',sp_name:'USP_PRI_EMPRESA_TraerUnicaEmpresa',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/get_empresa', function (req, res) {
     input = req.body
@@ -19,7 +19,7 @@ router.post('/get_empresa', function (req, res) {
     procedimientos =[
         {nom_respuesta:'empresa_actual',sp_name:'usp_PRI_EMPRESA_TXPK',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/guardar_modulo', function (req, res) {
     input = req.body
@@ -32,7 +32,7 @@ router.post('/guardar_modulo', function (req, res) {
     procedimientos =[
         {nom_respuesta:'modulo',sp_name:'USP_PRI_MODULO_G',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_periodos_by_gestion', function (req, res) {
@@ -43,7 +43,7 @@ router.post('/get_periodos_by_gestion', function (req, res) {
     procedimientos =[
         {nom_respuesta:'periodos',sp_name:'USP_VIS_PERIODOS_TraerPorGestion',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_turnos_by_periodo', function (req, res) {
@@ -54,7 +54,7 @@ router.post('/get_turnos_by_periodo', function (req, res) {
     procedimientos =[
         {nom_respuesta:'turnos',sp_name:'USP_CAJ_TURNO_ATENCION_TXCodPeriodo',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 

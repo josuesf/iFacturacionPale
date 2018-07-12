@@ -395,7 +395,7 @@ app.post('/loginarqueo', function (req, res) {
             { nom_parametro: 'CodCaja', valor_parametro: Cod_Caja },
             { nom_parametro: 'CodTurno', valor_parametro:  Cod_Turno}
           ] 
-          EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+          EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisicoCajaTurno) {
 
             p_ = [
               { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result }

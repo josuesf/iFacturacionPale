@@ -507,23 +507,8 @@ function NuevoEnvioEfectivo(_escritura, caja) {
                 const mes = fecha.getMonth() + 1
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-
-
-                const parametros = {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                    })
-                }
-                fetch(URL + '/cajas_api/get_caja_actual', parametros)
-                    .then(req => req.json())
-                    .then(res => {
-                        Ver(_escritura, variables,fecha_format,res.caja)
-                    })
-
+                Ver(_escritura, variables,fecha_format,res.caja)
+              
             }
             else { 
                 

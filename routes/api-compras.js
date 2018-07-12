@@ -33,7 +33,7 @@ router.post('/get_variable_registro_compra', function (req, res) {
         { nom_respuesta: 'monedas', sp_name: 'USP_VIS_MONEDAS_TT',parametros }, 
         { nom_respuesta: 'tipocomprobantes', sp_name: nombreProcedimientFinal,parametros : parametrosFinales },
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 
@@ -47,7 +47,7 @@ router.post('/get_diagramas_xml_comprobante', function (req, res) {
         { nom_respuesta: 'diagramas', sp_name: 'USP_VIS_DIAGRAMAS_XML_TXCodTabla', parametros }
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 
@@ -61,7 +61,7 @@ router.post('/get_pago_adelantado', function (req, res) {
         { nom_respuesta: 'pagos_adelantados', sp_name: 'USP_CAJ_FORMA_PAGO_TXPagoAdelantado', parametros }
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 
@@ -79,7 +79,7 @@ router.post('/get_variables_formas_pago', function (req, res) {
         { nom_respuesta: 'tipos_cambios', sp_name: 'USP_CAJ_TIPOCAMBIO_TXFechaMoneda', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 
@@ -95,7 +95,7 @@ router.post('/get_tipos_comprobantes', function (req, res) {
         { nom_respuesta: 'tipos_comprobantes', sp_name: 'USP_VIS_TIPO_COMPROBANTES_TXLibro', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 
@@ -114,7 +114,7 @@ router.post('/get_comprobante_by_cliente', function (req, res) {
         { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXClienteTipoSerieNumero', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
  
  

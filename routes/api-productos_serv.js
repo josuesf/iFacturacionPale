@@ -15,7 +15,7 @@ router.post('/get_by_script_productos_serv', function (req, res) {
     procedimientos =[
         {nom_respuesta:'productos',sp_name:'usp_PRI_PRODUCTOS_TP',parametros} 
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -28,7 +28,7 @@ router.post('/get_producto_by_codalm_codprec_stock', function (req, res) {
     procedimientos =[
         {nom_respuesta:'productos',sp_name:'USP_PRODUCTOS_TXCodCat_CodAlm_CodPrec_Stock',parametros} 
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -59,7 +59,7 @@ router.post('/get_productos_serv', function (req, res) {
         {nom_respuesta:'tipo_imagen', sp_name:'USP_VIS_TIPO_IMAGEN_TT', parametros},
         {nom_respuesta:'diagramas_xml', sp_name:'USP_VIS_DIAGRAMAS_XML_TXCodTabla', parametros: parametros3}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_lista_stock', function (req, res) {
@@ -79,7 +79,7 @@ router.post('/get_lista_stock', function (req, res) {
         {nom_respuesta:'monedas',sp_name:'USP_VIS_MONEDAS_TT', parametros},
         {nom_respuesta:'precio_categoria',sp_name:'USP_PRI_PRODUCTO_PRECIO_TXCategoria', parametros:parametros2},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/guardar_presentacion_ubicacion', function (req, res){
@@ -110,7 +110,7 @@ router.post('/guardar_presentacion_ubicacion', function (req, res){
         {nom_respuesta: 'presentacion_ubicacion_stock', sp_name: 'USP_PRI_PRODUCTO_STOCK_G', parametros},
         {nom_respuesta:'presentacion_ubicacion_precio',sp_name:'USP_PRI_PRODUCTO_PRECIO_G',parametros:parametros1}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_categoriaspadre', function (req, res){
@@ -119,7 +119,7 @@ router.post('/get_categoriaspadre', function (req, res){
     procedimientos = [
         {nom_respuesta: 'categoriaspadre', sp_name: 'USP_PRI_CATEGORIA_TArbol', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/guardar_producto', function (req, res){
@@ -149,7 +149,7 @@ router.post('/guardar_producto', function (req, res){
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTOS_G_2', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -161,7 +161,7 @@ router.post('/get_producto_by_pk', function (req, res){
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_TXPK', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_producto_stock', function (req, res){
@@ -174,7 +174,7 @@ router.post('/get_producto_stock', function (req, res){
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTO_STOCK_TXPK', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -188,7 +188,7 @@ router.post('/get_producto_precio', function (req, res){
     procedimientos = [
         {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TXProductoAlmacenUnidad', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/eliminar_producto', function (req, res){
@@ -199,7 +199,7 @@ router.post('/eliminar_producto', function (req, res){
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/buscar_producto_caja_actual', function (req, res){
@@ -216,7 +216,7 @@ router.post('/buscar_producto_caja_actual', function (req, res){
     procedimientos = [
         {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_Buscar', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/buscar_producto_by_id_cliente_caja_actual', function (req, res){
@@ -231,7 +231,7 @@ router.post('/buscar_producto_by_id_cliente_caja_actual', function (req, res){
     procedimientos = [
         {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_BuscarXIdClienteProveedor', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_precios', function (req, res){
@@ -240,7 +240,7 @@ router.post('/get_precios', function (req, res){
     procedimientos = [
         {nom_respuesta: 'precios', sp_name: 'USP_VIS_PRECIOS_TT', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -254,7 +254,7 @@ router.post('/get_unidad_medida_by_producto_almacen', function (req, res){
     procedimientos = [
         {nom_respuesta: 'unidades_medidas', sp_name: 'USP_PRI_PRODUCTO_TUnidadMedidaXProductoAlmacen', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -266,7 +266,7 @@ router.post('/get_presentacion_ubicacion', function (req, res){
     procedimientos = [
         {nom_respuesta: 'presentacionubicacion', sp_name: 'USP_PRI_PRODUCTO_STOCK_TXIdProducto', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/eliminar_presentacion_ubicacion', function (req, res){
@@ -279,7 +279,7 @@ router.post('/eliminar_presentacion_ubicacion', function (req, res){
     procedimientos = [
         {nom_respuesta: 'presentacionubicacion', sp_name: 'usp_PRI_PRODUCTO_STOCK_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -291,7 +291,7 @@ router.post('/get_producto_by_almacen', function (req, res){
     procedimientos = [
         {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTO_TXCodAlmacen', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/update_producto_stock', function (req, res){
@@ -299,7 +299,7 @@ router.post('/update_producto_stock', function (req, res){
     procedimientos = [
         {nom_respuesta: 'stock', sp_name: 'USP_PRI_PRODUCTO_STOCK_ActualizarStockGeneral', parametros:[]}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -313,7 +313,7 @@ router.post('/get_codigo_unidad_by_codP_codA_codTP', function (req, res){
     procedimientos = [
         {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TPreciosXCodProd_CodAlm_CodPre', parametros:[]}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 

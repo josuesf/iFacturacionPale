@@ -17,7 +17,7 @@ router.post('/get_conceptos', function (req, res) {
         {nom_respuesta:'num_filas',sp_name:'usp_CAJ_CONCEPTO_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]},
         {nom_respuesta:'tipos_conceptos',sp_name:'USP_VIS_TIPO_CONCEPTO_TT',parametros:[]},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/guardar_concepto', function (req, res) {
     input = req.body
@@ -32,7 +32,7 @@ router.post('/guardar_concepto', function (req, res) {
     procedimientos =[
         {nom_respuesta:'concepto',sp_name:'USP_CAJ_CONCEPTO_G',parametros},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/eliminar_concepto', function (req, res){
@@ -43,7 +43,7 @@ router.post('/eliminar_concepto', function (req, res){
     procedimientos = [
         {nom_respuesta:'concepto',sp_name:'USP_CAJ_CONCEPTO_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 module.exports = router;

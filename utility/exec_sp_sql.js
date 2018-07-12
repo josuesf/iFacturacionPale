@@ -99,10 +99,10 @@ var EXEC_QUERY_DBMaster = function (query, parametros, next) {
 }
 
 
-var Ejecutar_Procedimientos = function (res, procedimientos,respuesta_previa) {
-    Ejecutar_SP_SQL(res,procedimientos,0,respuesta_previa)
+var Ejecutar_Procedimientos = function (req,res, procedimientos,respuesta_previa) {
+    Ejecutar_SP_SQL(req,res,procedimientos,0,respuesta_previa)
 }
-var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
+var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previa) {
     var dbConn = new sql.Connection(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
@@ -125,7 +125,7 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
             }
             procedimientos[posicion].data =  result[0]
             if(posicion+1<procedimientos.length)
-                Ejecutar_SP_SQL(res,procedimientos,posicion+1,respuesta_previa)
+                Ejecutar_SP_SQL(req,res,procedimientos,posicion+1,respuesta_previa)
             else{
                 data = {}
                 for(j=0;j<procedimientos.length;j++){
@@ -136,7 +136,7 @@ var Ejecutar_SP_SQL = function (res,procedimientos, posicion,respuesta_previa) {
                         data[respuesta_previa[i].nombre] = respuesta_previa[i].valor
                     }
                 }
-                return res.json({ respuesta: 'ok', data }
+                return res.json({ respuesta: 'ok',arqueo:req.app.locals.arqueo?req.app.locals.arqueo[0]:null,empresa:req.app.locals.empresa?req.app.locals.empresa[0]:null,caja:req.app.locals.caja?req.app.locals.caja[0]:null,turno:req.app.locals.turno?req.app.locals.turno[0]:null, data }
             )}
         });
 

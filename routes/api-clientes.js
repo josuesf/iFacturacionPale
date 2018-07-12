@@ -26,7 +26,7 @@ router.post('/get_clientes', function (req, res) {
         { nom_respuesta: 'sexos', sp_name: 'USP_VIS_SEXOS_TT', parametros: [] },
         { nom_respuesta: 'diagramas', sp_name: 'USP_VIS_DIAGRAMAS_XML_TXCodTabla', parametros: [{ nom_parametro: 'Cod_Tabla', valor_parametro: 'PRI_CLIENTE_PROVEEDOR' },] },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 router.post('/guardar_cliente', function (req, res) {
     input = req.body
@@ -64,7 +64,7 @@ router.post('/guardar_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G_2', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/guardar_cliente_2', function (req, res) {
@@ -105,7 +105,7 @@ router.post('/guardar_cliente_2', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/get_cliente_by_documento', function (req, res) {
@@ -119,7 +119,7 @@ router.post('/get_cliente_by_documento', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXDocumento', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/get_cliente_by_nombre', function (req, res) {
@@ -131,7 +131,7 @@ router.post('/get_cliente_by_nombre', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXCliente', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/eliminar_cliente', function (req, res) {
@@ -142,7 +142,7 @@ router.post('/eliminar_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'usp_PRI_CLIENTE_PROVEEDOR_E', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_provincias', function (req, res) {
@@ -153,7 +153,7 @@ router.post('/get_provincias', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'provincias', sp_name: 'USP_VIS_PROVINCIAS_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_distritos', function (req, res) {
     input = req.body
@@ -164,7 +164,7 @@ router.post('/get_distritos', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'distritos', sp_name: 'USP_VIS_DISTRITOS_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 //get_one_cliente
 router.post('/get_one_cliente', function (req, res) {
@@ -175,7 +175,7 @@ router.post('/get_one_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'usp_PRI_CLIENTE_PROVEEDOR_TXPK', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_clientes_varios', function (req, res) {
@@ -183,7 +183,7 @@ router.post('/get_clientes_varios', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_TClientesVarios', parametros:[] },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
  
@@ -195,7 +195,7 @@ router.post('/get_cuentas_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cuentas', sp_name: 'USP_PRI_CLIENTE_CUENTABANCARIA_TXId_ClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_entidades_tiposcuentas', function (req, res) {
     input = req.body
@@ -204,7 +204,7 @@ router.post('/get_entidades_tiposcuentas', function (req, res) {
         { nom_respuesta: 'entidades', sp_name: 'USP_VIS_ENTIDADES_FINANCIERAS_TT', parametros },
         { nom_respuesta: 'tipos_cuenta', sp_name: 'USP_VIS_TIPO_CUENTA_BANCARIA_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -216,7 +216,7 @@ router.post('/get_licitaciones_by_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'licitaciones', sp_name: 'USP_PRI_LICITACIONES_TXIdClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_entidades_tiposcuentas', function (req, res) {
@@ -226,7 +226,7 @@ router.post('/get_entidades_tiposcuentas', function (req, res) {
         { nom_respuesta: 'entidades', sp_name: 'USP_VIS_ENTIDADES_FINANCIERAS_TT', parametros },
         { nom_respuesta: 'tipos_cuenta', sp_name: 'USP_VIS_TIPO_CUENTA_BANCARIA_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/guardar_cuenta_bancaria_cliente', function (req, res) {
@@ -245,7 +245,7 @@ router.post('/guardar_cuenta_bancaria_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cuenta', sp_name: 'USP_PRI_CLIENTE_CUENTABANCARIA_G', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -258,7 +258,7 @@ router.post('/eliminar_cuenta_bancaria_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cuenta', sp_name: 'usp_PRI_CLIENTE_CUENTABANCARIA_E', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 //CONTACTOS POR CLIENTE
 router.post('/get_contactos_cliente', function (req, res) {
@@ -269,7 +269,7 @@ router.post('/get_contactos_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'contactos', sp_name: 'USP_PRI_CLIENTE_CONTACTO_TXId_ClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_tiposRelaciones_codTelefonos', function (req, res) {
     input = req.body
@@ -294,7 +294,7 @@ router.post('/get_tiposRelaciones_codTelefonos', function (req, res) {
             { nom_respuesta: 'tipos_relaciones', sp_name: 'USP_VIS_TIPO_RELACION_TT', parametros },
             { nom_respuesta: 'cod_telefonos', sp_name: 'USP_VIS_CODIGO_TELEFONO_TT', parametros }]
     }
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_contacto_cliente', function (req, res) {
     input = req.body
@@ -319,7 +319,7 @@ router.post('/guardar_contacto_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'contacto', sp_name: 'USP_PRI_CLIENTE_CONTACTO_G_2', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/eliminar_contacto_cliente', function (req, res) {
     input = req.body
@@ -330,7 +330,7 @@ router.post('/eliminar_contacto_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'contacto', sp_name: 'usp_PRI_CLIENTE_CONTACTO_E', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 //Establecimiento por cliente
 router.post('/get_establecimientos_cliente', function (req, res) {
@@ -341,7 +341,7 @@ router.post('/get_establecimientos_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'establecimientos', sp_name: 'USP_PRI_ESTABLECIMIENTOS_TXId_ClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_tipos_establecimientos', function (req, res) {
     input = req.body
@@ -349,7 +349,7 @@ router.post('/get_tipos_establecimientos', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'tipos_establecimientos', sp_name: 'USP_VIS_TIPO_ESTABLECIMIENTOS_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_establecimiento_cliente', function (req, res) {
     input = req.body
@@ -367,7 +367,7 @@ router.post('/guardar_establecimiento_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'establecimiento', sp_name: 'USP_PRI_ESTABLECIMIENTOS_G', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/eliminar_establecimiento_cliente', function (req, res) {
     input = req.body
@@ -378,7 +378,7 @@ router.post('/eliminar_establecimiento_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'establecimiento', sp_name: 'usp_PRI_ESTABLECIMIENTOS_E', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 //ProductosxCliente falta informacion
 //Vehiculos por cliente
@@ -390,7 +390,7 @@ router.post('/get_vehiculos_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'vehiculos', sp_name: 'USP_PRI_CLIENTE_VEHICULOS_TXId_ClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_vehiculo_cliente', function (req, res) {
     input = req.body
@@ -408,7 +408,7 @@ router.post('/guardar_vehiculo_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'vehiculo', sp_name: 'USP_PRI_CLIENTE_VEHICULOS_G', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/eliminar_vehiculo_cliente', function (req, res) {
     input = req.body
@@ -419,7 +419,7 @@ router.post('/eliminar_vehiculo_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'vehiculo', sp_name: 'usp_PRI_CLIENTE_VEHICULOS_E', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 // Padrones X Cliente
 router.post('/get_padrones_cliente', function (req, res) {
@@ -430,7 +430,7 @@ router.post('/get_padrones_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'padrones', sp_name: 'USP_PRI_PADRONES_TxId_ClienteProveedor', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_tipos_padrones', function (req, res) {
     input = req.body
@@ -438,7 +438,7 @@ router.post('/get_tipos_padrones', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'tipos_padrones', sp_name: 'USP_VIS_TIPO_PADRON_TT', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_padron_cliente', function (req, res) {
     input = req.body
@@ -455,7 +455,7 @@ router.post('/guardar_padron_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'padron', sp_name: 'USP_PRI_PADRONES_G', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/eliminar_padron_cliente', function (req, res) {
     input = req.body
@@ -466,7 +466,7 @@ router.post('/eliminar_padron_cliente', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'padron', sp_name: 'USP_PRI_PADRONES_E', parametros },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
  
 

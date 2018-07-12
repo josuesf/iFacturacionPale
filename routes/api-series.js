@@ -19,7 +19,7 @@ router.post('/get_variables_series', function (req, res) {
         { nom_respuesta: 'producto', sp_name: 'usp_PRI_PRODUCTOS_TXPK', parametros:parametros1 },
         { nom_respuesta: 'almacen', sp_name: 'usp_ALM_ALMACEN_TXPK', parametros: parametros2 },
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 }); 
  

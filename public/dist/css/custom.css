@@ -160,6 +160,17 @@ table.dataTable.no-footer {
     -o-transform: rotate(-90deg);
 }
 
+.not-active{
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: #626467;
+}
+
+.skin-red .sidebar a.not-active {
+    color: #626467;
+}
+
 
 @media only screen and (max-width: 1950px) {
     .divDP {

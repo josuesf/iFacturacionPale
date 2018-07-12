@@ -33,7 +33,7 @@ router.post('/guardar_compra_venta_me', function (req, res) {
     procedimientos =[
         {nom_respuesta:'compra_venta_me',sp_name:'USP_CAJ_CAJA_MOVIMIENTOS_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -60,7 +60,7 @@ router.post('/guardar_cuenta_bancaria_compra_venta_me', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuenta_bancaria_compra_venta_me',sp_name:'USP_BAN_CUENTA_M_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_comprobante_by_caja', function (req, res) {
@@ -72,7 +72,7 @@ router.post('/get_comprobante_by_caja', function (req, res) {
     procedimientos =[
         {nom_respuesta:'comprobante_caja',sp_name:'USP_CAJ_CAJAS_DOC_TXCodCajaComprobante',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
  
 
@@ -90,7 +90,7 @@ router.post('/get_next_number_comprobante', function (req, res) {
         {nom_respuesta:'entidades_financieras',sp_name:'USP_VIS_ENTIDADES_FINANCIERAS_TT ',parametros},
         {nom_respuesta: 'diagramas', sp_name: 'USP_VIS_DIAGRAMAS_XML_TXCodTabla',parametros: [{ nom_parametro: 'Cod_Tabla', valor_parametro: 'CAJ_CAJA_MOVIMIENTOS' }] },
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_cuenta_bancaria_by_entidad_financiera', function (req, res) {
@@ -108,7 +108,7 @@ router.post('/get_cuenta_bancaria_by_entidad_financiera', function (req, res) {
         {nom_respuesta:'cuenta_bancaria_pen',sp_name:'USP_BAN_CUENTA_BANCARIA_TxEntidadFinanciera',parametros:parametros1},
         {nom_respuesta:'cuenta_bancaria_usd',sp_name:'USP_BAN_CUENTA_BANCARIA_TxEntidadFinanciera',parametros:parametros2}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 

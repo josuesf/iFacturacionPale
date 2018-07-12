@@ -17,7 +17,7 @@ router.post('/get_categorias', function (req, res) {
         {nom_respuesta:'categorias',sp_name:'usp_PRI_CATEGORIA_TP',parametros},
         {nom_respuesta:'num_filas',sp_name:'usp_PRI_CATEGORIA_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_categoriaspadre', function (req, res){
@@ -26,7 +26,7 @@ router.post('/get_categoriaspadre', function (req, res){
     procedimientos = [
         {nom_respuesta: 'categoriaspadre', sp_name: 'USP_PRI_CATEGORIA_TArbol', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/guardar_categoria', function (req, res){
@@ -41,7 +41,7 @@ router.post('/guardar_categoria', function (req, res){
     procedimientos = [
         {nom_respuesta: 'categoria', sp_name: 'USP_PRI_CATEGORIA_G', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/eliminar_categoria', function (req, res){
@@ -52,7 +52,7 @@ router.post('/eliminar_categoria', function (req, res){
     procedimientos = [
         {nom_respuesta: 'categoria', sp_name: 'usp_PRI_CATEGORIA_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 

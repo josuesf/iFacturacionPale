@@ -26,7 +26,7 @@ router.post('/guardar_forma_pago', function (req, res) {
     procedimientos =[
         {nom_respuesta:'formas_pago',sp_name:'USP_CAJ_FORMA_PAGO_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
  
 
@@ -38,7 +38,7 @@ router.post('/traer_siguiente_item', function (req, res) {
     procedimientos =[
         {nom_respuesta:'item',sp_name:'USP_CAJ_FORMA_PAGO_SiguienteItem',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
  
 

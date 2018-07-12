@@ -57,7 +57,7 @@ router.post('/guardar_reserva',function(req,res){
     procedimientos = [
         { nom_respuesta: 'reservas', sp_name: 'USP_RESERVA_UNICA_G', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
  
 })
 
@@ -106,7 +106,7 @@ router.post('/get_habitaciones',function(req,res){
     procedimientos = [
         { nom_respuesta: 'habitaciones', sp_name: 'USP_HABITACION_TT', parametros:[]}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
  
 
@@ -119,7 +119,7 @@ router.post('/get_reservas',function(req,res){
     procedimientos = [
         { nom_respuesta: 'reservas', sp_name: 'USP_RESERVAS_TXFECHAS', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
  
 
@@ -133,7 +133,7 @@ router.post('/get_variables_reserva', function (req, res) {
         { nom_respuesta: 'paises', sp_name: 'USP_VIS_PAISES_TT2',parametros:[] }
 
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 

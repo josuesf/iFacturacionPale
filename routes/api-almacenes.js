@@ -17,7 +17,7 @@ router.post('/get_almacenes', function (req, res) {
         {nom_respuesta:'num_filas',sp_name:'usp_ALM_ALMACEN_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]},
         {nom_respuesta:'tipo_almacenes',sp_name:'USP_VIS_TIPO_ALMACENES_TT',parametros:[]},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_cajas_by_almacen', function (req, res) {
@@ -28,7 +28,7 @@ router.post('/get_cajas_by_almacen', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cajas_almacen',sp_name:'USP_CAJ_CAJA_ALMACEN_TXAlmacen',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/guardar_almacen', function (req, res) {
     input = req.body
@@ -43,7 +43,7 @@ router.post('/guardar_almacen', function (req, res) {
     procedimientos =[
         {nom_respuesta:'almacen',sp_name:'USP_ALM_ALMACEN_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/eliminar_almacen', function (req, res) {
     input = req.body
@@ -53,7 +53,7 @@ router.post('/eliminar_almacen', function (req, res) {
     procedimientos =[
         {nom_respuesta:'almacen',sp_name:'USP_ALM_ALMACEN_E',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 router.post('/eliminar_caja_almacen', function (req, res){
     input = req.body
@@ -64,7 +64,7 @@ router.post('/eliminar_caja_almacen', function (req, res){
     procedimientos = [
         {nom_respuesta: 'caja_almacen', sp_name: 'usp_CAJ_CAJA_ALMACEN_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_caja_almacen', function (req, res){
     input = req.body
@@ -77,14 +77,14 @@ router.post('/guardar_caja_almacen', function (req, res){
     procedimientos = [
         {nom_respuesta: 'caja_almacen', sp_name: 'USP_CAJ_CAJA_ALMACEN_G', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_cajas_activas', function (req, res){
     input = req.body
     procedimientos = [
         {nom_respuesta: 'cajas_activas', sp_name: 'USP_CAJ_CAJAS_TActivos', parametros:[]}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_almacen_by_producto', function (req, res){
@@ -95,7 +95,7 @@ router.post('/get_almacen_by_producto', function (req, res){
     procedimientos = [
         {nom_respuesta: 'almacenes', sp_name: 'USP_PRI_PRODUCTO_TAlamcenXProducto', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -107,7 +107,7 @@ router.post('/get_almacenes_distinto', function (req, res){
     procedimientos = [
         {nom_respuesta: 'almacenes', sp_name: 'USP_ALM_ALMACEN_TDistintoDe', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_mov_pendiente_almacenes', function (req, res){
@@ -118,7 +118,7 @@ router.post('/get_mov_pendiente_almacenes', function (req, res){
     procedimientos = [
         {nom_respuesta: 'pendientes', sp_name: 'USP_ALM_ALMACEN_MOV_TPendiente', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_almacen_mov_by_id', function (req, res){
@@ -129,7 +129,7 @@ router.post('/get_almacen_mov_by_id', function (req, res){
     procedimientos = [
         {nom_respuesta: 'movimientos_almacen', sp_name: 'usp_ALM_ALMACEN_MOV_TXPK', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_almacen_mov_detalle_by_id', function (req, res){
@@ -140,7 +140,7 @@ router.post('/get_almacen_mov_detalle_by_id', function (req, res){
     procedimientos = [
         {nom_respuesta: 'movimientos_detalle_almacen', sp_name: 'USP_ALM_ALMACEN_MOV_D_TXIdMovimiento', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/guardar_mov_almacen', function (req, res){ 
@@ -296,7 +296,7 @@ router.post('/guardar_mov_almacen', function (req, res){
                             }
                         })
 
-                        /*Ejecutar_Procedimientos(res, procedimientos) 
+                        /*Ejecutar_Procedimientos(req,res, procedimientos) 
 
                         if(Series.length>0){
                             for(var j=0;j<Series.length;j ++){
@@ -312,7 +312,7 @@ router.post('/guardar_mov_almacen', function (req, res){
                                 var procedimientos = [
                                     {nom_respuesta: 'series', sp_name: 'USP_CAJ_SERIES_G', parametros:p}
                                 ]
-                                Ejecutar_Procedimientos(res, procedimientos)
+                                Ejecutar_Procedimientos(req,res, procedimientos)
                                 
                             }
                         }*/

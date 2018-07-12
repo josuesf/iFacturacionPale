@@ -32,7 +32,7 @@ router.post('/get_variables_recibo_iegreso', function (req, res) {
                 { nombre: 'Serie', valor: o.result },
                 { nombre: 'Numero', valor: m.result[0].Numero }
             ]
-            Ejecutar_Procedimientos(res, procedimientos, respuesta_previa)
+            Ejecutar_Procedimientos(req,res, procedimientos, respuesta_previa)
         })
     })
 
@@ -46,7 +46,7 @@ router.post('/get_cliente_by_nro_documento',function(req,res){
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXDocumento', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/guardar_recibo',function(req,res){
     input =req.body
@@ -77,7 +77,7 @@ router.post('/guardar_recibo',function(req,res){
     procedimientos = [
         { nom_respuesta: 'cliente', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 
@@ -96,7 +96,7 @@ router.post('/get_comprobante_by_cliente', function (req, res) {
         { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXClienteTipoSerieNumero', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 
@@ -118,7 +118,7 @@ router.post('/get_cuentas_by_cobrar_pagar', function (req, res) {
         { nom_respuesta: 'cuentas', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXPagarCobrar', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 

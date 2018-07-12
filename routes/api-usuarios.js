@@ -18,7 +18,7 @@ router.post('/get_usuarios', function (req, res) {
         { nom_respuesta: 'perfiles', sp_name: 'usp_PRI_PERFIL_TT', parametros: [] },
         { nom_respuesta: 'estados', sp_name: 'USP_VIS_ESTADO_TRABAJADOR_TT', parametros: [] },
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 router.post('/guardar_usuario', function (req, res) {
     input = req.body
@@ -47,7 +47,7 @@ router.post('/guardar_usuario', function (req, res) {
             ]
         })
     }
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/eliminar_usuario', function (req, res) {
@@ -58,7 +58,7 @@ router.post('/eliminar_usuario', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'usuario', sp_name: 'usp_PRI_USUARIO_E', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 router.post('/get_cajas_usuario', function (req, res) {
     input = req.body
@@ -68,7 +68,7 @@ router.post('/get_cajas_usuario', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'cajas', sp_name: 'USP_CAJ_CAJAS_TraerCajasXCodUsuario', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 module.exports = router;

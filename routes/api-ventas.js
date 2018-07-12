@@ -20,7 +20,7 @@ router.post('/get_variables_ventas', function (req, res) {
         { nom_respuesta: 'favoritos', sp_name: 'USP_VIS_FAVORITOS_TXCaja',parametros },
         { nom_respuesta: 'categorias', sp_name: 'USP_PRI_CATEGORIA_TArbol',parametros:[] },
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 
@@ -38,7 +38,7 @@ router.post('/get_comprobante_by_tipo', function (req, res) {
         { nom_respuesta: 'comprobante', sp_name: 'USP_CAJ_COMPROBANTE_PAGO_TXTipoSerieNumero', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/get_monedas', function (req, res) {
@@ -46,7 +46,7 @@ router.post('/get_monedas', function (req, res) {
     procedimientos = [ 
         { nom_respuesta: 'monedas', sp_name: 'USP_VIS_MONEDAS_TT', parametros: [] }
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
          
 });
 

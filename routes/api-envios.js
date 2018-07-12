@@ -29,7 +29,7 @@ router.post('/get_cajas_envios', function (req, res) {
         { nom_respuesta: 'serie', sp_name: 'USP_CAJ_CAJAS_DOC_TXCodCajaComprobante ', parametros:parametros3 },
     ]
    
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 
@@ -97,7 +97,7 @@ router.post('/guardar_movimientos_ingreso_otra_caja', function (req, res) {
         { nom_respuesta: 'cajas', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G ', parametros }
     ]
     
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 router.post('/guardar_movimientos_cuenta_bancaria', function (req, res) {
@@ -145,7 +145,7 @@ router.post('/guardar_movimientos_cuenta_bancaria', function (req, res) {
         { nom_respuesta: 'sexos', sp_name: 'USP_VIS_SEXOS_TT', parametros: [] },
         { nom_respuesta: 'diagramas', sp_name: 'USP_VIS_DIAGRAMAS_XML_TXCodTabla', parametros: [{ nom_parametro: 'Cod_Tabla', valor_parametro: 'PRI_CLIENTE_PROVEEDOR' },] },
     ]*/
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 module.exports = router;

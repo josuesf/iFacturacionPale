@@ -20,7 +20,7 @@ router.post('/get_cuentas', function (req, res) {
         {nom_respuesta:'tipos_cuentas',sp_name:'USP_VIS_TIPO_CUENTA_BANCARIA_TT',parametros:[]},
         {nom_respuesta:'monedas',sp_name:'USP_VIS_MONEDAS_TT',parametros:[]},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_cuenta', function (req, res) {
@@ -31,7 +31,7 @@ router.post('/get_cuenta', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuenta',sp_name:'usp_BAN_CUENTA_BANCARIA_TXPK',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_cuenta_by_sucursal', function (req, res) {
@@ -42,7 +42,7 @@ router.post('/get_cuenta_by_sucursal', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuentas',sp_name:'USP_BAN_CUENTA_BANCARIA_TXSucursal',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_cuenta_by_id_cliente', function (req, res) {
@@ -53,7 +53,7 @@ router.post('/get_cuenta_by_id_cliente', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuentas',sp_name:'USP_PRI_CLIENTE_CUENTABANCARIA_TXId_ClienteProveedor',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -67,7 +67,7 @@ router.post('/get_cheques_by_cuenta_cliente', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cheques',sp_name:'USP_BAN_CUENTA_CHEQUESxCuentaCliente',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -88,7 +88,7 @@ router.post('/guardar_cuenta', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuenta',sp_name:'USP_BAN_CUENTA_BANCARIA_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/guardar_cuenta_movimiento', function (req, res) {
@@ -114,7 +114,7 @@ router.post('/guardar_cuenta_movimiento', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuenta',sp_name:'USP_BAN_CUENTA_M_G',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/eliminar_cuenta', function (req, res) {
@@ -125,7 +125,7 @@ router.post('/eliminar_cuenta', function (req, res) {
     procedimientos =[
         {nom_respuesta:'cuenta',sp_name:'USP_BAN_CUENTA_BANCARIA_E',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 module.exports = router;

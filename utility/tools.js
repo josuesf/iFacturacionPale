@@ -183,6 +183,26 @@ function UnObfuscateString(cadena){
     }
 }
 
+function getObjectArrayJsonVentas(arrayJson, pIdTab) {
+    var objects = [];
+    for (var i in arrayJson) { 
+        if(arrayJson[i].idTab == pIdTab){
+            objects.push({
+                    idTab:arrayJson[i].idTab,
+                    Total:arrayJson[i].Total,
+                    TotalDescuentos:arrayJson[i].TotalDescuentos,
+                    TipodeCambio:arrayJson[i].TipodeCambio,
+                    _CantidadOriginal:arrayJson[i]._CantidadOriginal,
+                    SimboloMoneda:arrayJson[i].SimboloMoneda,
+                    SimboloMonedaExtra:arrayJson[i].SimboloMonedaExtra
+                })
+        }
+      
+    }
+    return objects;
+}
+ 
+
 function BloquearControles(event){
     event.preventDefault();
     event.stopPropagation(); 
@@ -235,4 +255,4 @@ function TraerConexion(req, res, callback){
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles }
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas }

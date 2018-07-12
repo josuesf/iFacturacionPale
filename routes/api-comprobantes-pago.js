@@ -12,7 +12,7 @@ router.post('/get_comprobante_pago', function (req, res) {
     procedimientos =[
         {nom_respuesta:'comprobante_pago',sp_name:'USP_CAJ_COMPROBANTE_PAGO_TXPK',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
  
  

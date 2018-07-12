@@ -19,7 +19,7 @@ router.post('/guardar_caja', function (req, res){
     procedimientos = [
         {nom_respuesta: 'caja', sp_name: 'USP_CAJ_CAJAS_G', parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/eliminar_caja', function (req, res) {
@@ -30,7 +30,7 @@ router.post('/eliminar_caja', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'caja', sp_name: 'USP_CAJ_CAJAS_E', parametros }
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/get_cajas', function (req, res) {
@@ -46,7 +46,7 @@ router.post('/get_cajas', function (req, res) {
         {nom_respuesta:'num_filas',sp_name:'usp_CAJ_CAJAS_TNF',parametros:[{nom_parametro:'ScripWhere',valor_parametro:input.ScripWhere}]},
         {nom_respuesta:'sucursales',sp_name:'usp_PRI_SUCURSAL_TT',parametros:[]},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/get_documents_by_caja', function (req, res) {
@@ -58,7 +58,7 @@ router.post('/get_documents_by_caja', function (req, res) {
         {nom_respuesta:'documentos',sp_name:'USP_CAJ_CAJAS_DOC_TXCod_Caja',parametros},
         {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/buscar_usuarios', function (req, res){
@@ -72,7 +72,7 @@ router.post('/buscar_usuarios', function (req, res){
     procedimientos = [
         {nom_respuesta:'usuarios',sp_name:'usp_PRI_USUARIO_TP',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/get_comprobantes', function (req, res){
@@ -81,7 +81,7 @@ router.post('/get_comprobantes', function (req, res){
     procedimientos = [
         {nom_respuesta:'comprobantes',sp_name:'USP_VIS_TIPO_COMPROBANTES_TT',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/get_series_by_cod_caja_comprobante', function (req, res){
@@ -93,7 +93,7 @@ router.post('/get_series_by_cod_caja_comprobante', function (req, res){
     procedimientos = [
         {nom_respuesta:'series',sp_name:'USP_CAJ_CAJAS_DOC_TXCodCajaComprobante',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/get_next_comprobante_by_tipo_serie_libro', function (req, res){
@@ -106,7 +106,7 @@ router.post('/get_next_comprobante_by_tipo_serie_libro', function (req, res){
     procedimientos = [
         {nom_respuesta:'comprobante',sp_name:'USP_CAJ_COMPROBANTE_PAGO_NumeroXTipoSerieLibro',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/guardar_documento', function (req, res){
@@ -128,7 +128,7 @@ router.post('/guardar_documento', function (req, res){
     procedimientos = [
         {nom_respuesta: 'documento', sp_name: 'USP_CAJ_CAJAS_DOC_G', parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/eliminar_documento', function (req, res){
@@ -140,7 +140,7 @@ router.post('/eliminar_documento', function (req, res){
     procedimientos = [
         {nom_respuesta: 'documento', sp_name: 'usp_CAJ_CAJAS_DOC_E', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/opciones_buscar_producto', function (req, res){
@@ -149,7 +149,7 @@ router.post('/opciones_buscar_producto', function (req, res){
         {nom_respuesta: 'categorias', sp_name: 'USP_PRI_CATEGORIA_TArbol ', parametros: []},
         {nom_respuesta: 'tipoprecio', sp_name: 'USP_VIS_PRECIOS_TT', parametros: []}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/buscar_producto', function (req, res){
@@ -165,7 +165,7 @@ router.post('/buscar_producto', function (req, res){
     procedimientos = [
         {nom_respuesta: 'productos', sp_name: 'USP_PRI_PRODUCTOS_Buscar', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
 router.post('/guardar_favorito', function (req, res){
@@ -185,7 +185,7 @@ router.post('/guardar_favorito', function (req, res){
         {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros:parametros1}
         
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/eliminar_favorito', function (req, res){
@@ -202,7 +202,7 @@ router.post('/eliminar_favorito', function (req, res){
         {nom_respuesta:'productos',sp_name:'USP_VIS_CAJA_PRODUCTOS_TxCaja',parametros:parametros1}
         
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 
@@ -215,6 +215,11 @@ router.post('/get_caja_actual', function (req, res) {
 router.post('/get_empresa', function (req, res) {
     input = req.body
     res.json({empresa:req.app.locals.empresa[0]})
+})
+
+router.post('/get_arqueo', function (req, res) {
+    input = req.body
+    res.json({arqueo:req.app.locals.arqueo})
 })
 
 router.post('/arqueo_caja', function (req, res){
@@ -234,7 +239,7 @@ router.post('/arqueo_caja', function (req, res){
         {nom_respuesta:'resumenpen', sp_name: 'USP_CAJ_COMPROBANTE_P_RESUMENxCajaTurno',parametros:parametros1},
         {nom_respuesta:'resumenusd', sp_name: 'USP_CAJ_COMPROBANTE_P_RESUMENxCajaTurno',parametros:parametros2}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 
@@ -244,7 +249,7 @@ router.post('/get_billetes', function (req, res){
     procedimientos =[
         {nom_respuesta:'billetes', sp_name: 'USP_VIS_BILLETES_TT',parametros:[]}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 router.post('/get_detalle_arqueo', function (req, res){
@@ -256,7 +261,7 @@ router.post('/get_detalle_arqueo', function (req, res){
     procedimientos =[
         {nom_respuesta:'billetes', sp_name: 'USP_CAJ_ARQUEOFISICO_D_TXid_ArqueoFisico',parametros:[]}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 })
 
 

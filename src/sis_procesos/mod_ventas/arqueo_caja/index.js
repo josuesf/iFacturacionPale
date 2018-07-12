@@ -605,19 +605,14 @@ function NuevoArqueoCaja(pCargarEfectivo) {
         body: JSON.stringify({ 
         })
     }
-    fetch(URL + '/cajas_api/get_caja_actual', parametros)
+    fetch(URL + '/cajas_api/arqueo_caja', parametros)
         .then(req => req.json())
         .then(res => {
             var caja = res.caja
             var turno = res.turno
-            var arqueo = res.arqueo
-            
-            fetch(URL + '/cajas_api/arqueo_caja', parametros)
-            .then(req => req.json())
-            .then(res => { 
-                Ver(fecha_format,caja,turno,arqueo,res.data.resumenpen,res.data.resumenusd)
-                H5_loading.hide();
-            })
+            var arqueo = res.arqueo 
+            Ver(fecha_format,caja,turno,arqueo,res.data.resumenpen,res.data.resumenusd)
+            H5_loading.hide(); 
 
         })
 

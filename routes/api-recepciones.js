@@ -16,7 +16,7 @@ router.post('/get_variables_recepcion_transferencia', function (req, res) {
         { nom_respuesta: 'conceptos', sp_name: 'USP_CAJ_CONCEPTO_VEfectivo ', parametros: []},
         { nom_respuesta: 'movimientos_pendientes', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_TPendientes', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 
 });
 
@@ -31,7 +31,7 @@ router.post('/get_recepcionados', function (req, res) {
     procedimientos = [
         { nom_respuesta: 'movimientos_recepcionados', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_TRecepcionados', parametros}
     ]
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 
 });
 
@@ -177,7 +177,7 @@ router.post('/recepcionar', function (req, res) {
                             procedimientos = [
                                 { nom_respuesta: 'movimientos', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G', parametros}
                             ]
-                            Ejecutar_Procedimientos(res, procedimientos)
+                            Ejecutar_Procedimientos(req,res, procedimientos)
                         }else{
                             if(parseFloat(Diferencia_)<0){
                                 parametros = [
@@ -207,7 +207,7 @@ router.post('/recepcionar', function (req, res) {
                                 procedimientos = [
                                     { nom_respuesta: 'movimientos', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G', parametros}
                                 ]
-                                Ejecutar_Procedimientos(res, procedimientos)  
+                                Ejecutar_Procedimientos(req,res, procedimientos)  
                             }else{
                                 res.json({ respuesta: 'ok', data: dataMovimientoEgreso })
                             }
@@ -279,7 +279,7 @@ router.post('/reactivar', function (req, res) {
             { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username }
     
         ]
-        Ejecutar_Procedimientos(res, procedimientos)
+        Ejecutar_Procedimientos(req,res, procedimientos)
     })
 
  

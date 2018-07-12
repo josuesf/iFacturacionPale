@@ -63,7 +63,7 @@ router.post('/get_all_productos_serv', function (req, res) {
             procedimientos =[
                 {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
             ]
-            Ejecutar_Procedimientos(res,procedimientos)
+            Ejecutar_Procedimientos(req,res,procedimientos)
         }else
             return res.json({respuesta:"error"}) 
     });
@@ -86,7 +86,7 @@ router.post('/get_cliente', function (req, res) {
             procedimientos = [
                 { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_TXDocumento', parametros },
             ]
-            Ejecutar_Procedimientos(res, procedimientos)
+            Ejecutar_Procedimientos(req,res, procedimientos)
         }else
             return res.json({respuesta:"error"}) 
     });

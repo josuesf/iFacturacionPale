@@ -1,7 +1,7 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
 import {URL} from '../../constantes_entorno/constantes'
-function Ver(movimientos,saldos) {
+function Ver(Flag_Cerrado,movimientos,saldos) {
     var el = yo`
         <div>
             <section class="content-header" id="sectionModals">
@@ -160,7 +160,7 @@ function Ver(movimientos,saldos) {
                                     
                                     <div class="box box-primary">
                                         <div class="box-header">
-                                            <h3 class="box-title">Movimientos de Caja</h3>
+                                            <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}</h3>
                                         </div>
                                         <!-- /.box-header -->
                                         <div class="box-body">
@@ -197,18 +197,27 @@ function Ver(movimientos,saldos) {
                                                     <td>${u.Ingreso}</td>
                                                     <td>${u.Egreso}</td>
                                                     <td>
+                                                    ${!Flag_Cerrado?
+                                                    yo`<div class="btn-group">
+                                                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                            Elegir una accion <span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
+                                                                <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
+                                                            </ul>
+                                                        </div>`
+                                                    :
+                                                    yo`
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                                                         Elegir una accion <span class="caret"></span>
                                                         </button>
-                                                        <ul class="dropdown-menu">
-                                                        <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                                        <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
-                                                        <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
-                                                        <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
-                                                        <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
-                                                        </ul>
                                                     </div>
+                                                    `}
                                                     </td>
                                                 </tr>`)}
                                                 </tbody>
@@ -298,7 +307,7 @@ function VerModalJustificacion(titulo,descripcion) {
 }
 
 
-function VerTabCaja(movimientos,saldos) {
+function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     var sectionModals = yo`
                 <div>
                     <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
@@ -446,7 +455,7 @@ function VerTabCaja(movimientos,saldos) {
 
     var el = yo`<div class="box box-primary">
                     <div class="box-header">
-                        <h3 class="box-title">Movimientos de Caja</h3>
+                        <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -483,18 +492,28 @@ function VerTabCaja(movimientos,saldos) {
                                 <td>${u.Ingreso}</td>
                                 <td>${u.Egreso}</td>
                                 <td>
+
+                                ${!Flag_Cerrado?
+                                yo`<div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Elegir una accion <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
+                                        </ul>
+                                    </div>`
+                                :
+                                yo`
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                                     Elegir una accion <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
-                                    <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
-                                    <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
-                                    <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
-                                    <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
-                                    </ul>
                                 </div>
+                                `}
                                 </td>
                             </tr>`)}
                             </tbody>
@@ -967,7 +986,7 @@ function ExtornarAnular() {
         .then(res => {
             if (res.respuesta == 'ok') {
 
-                VerTabCaja(res.data.movimientos,res.data.saldos)
+                VerTabCaja(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos)
             }
             else
                 VerTabCaja([])
@@ -991,8 +1010,7 @@ module.exports = function movimientos_caja(ctx, next) {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-
-                Ver(res.data.movimientos,res.data.saldos)
+                Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos)
             }
             else
                 Ver([])

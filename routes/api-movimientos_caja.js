@@ -19,7 +19,7 @@ router.post('/get_movimientos', function (req, res) {
         {nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},
         {nom_respuesta:'saldos',sp_name:'USP_SaldosXCajaTurno',parametros:parametros2},
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -56,7 +56,7 @@ router.post('/guardar_movimiento_caja', function (req, res) {
         { nom_respuesta: 'movimiento', sp_name: 'USP_CAJ_CAJA_MOVIMIENTOS_G', parametros}
         
     ]  
-    Ejecutar_Procedimientos(res, procedimientos)
+    Ejecutar_Procedimientos(req,res, procedimientos)
 });
 
 
@@ -72,7 +72,7 @@ router.post('/extornar_movimiento', function (req, res) {
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'USP_CAJ_CAJA_MOVIMIENTOS_EXTORNAR',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -86,7 +86,7 @@ router.post('/extornar_movimiento_almacen', function (req, res) {
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'USP_ALM_ALMACEN_MOV_EXTORNAR',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 router.post('/extornar_movimiento_forma_pago', function (req, res) {
@@ -99,7 +99,7 @@ router.post('/extornar_movimiento_forma_pago', function (req, res) {
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'USP_CAJ_FORMA_PAGO_E',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -112,7 +112,7 @@ router.post('/eliminar_movimiento', function (req, res) {
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'usp_CAJ_CAJA_MOVIMIENTOS_E',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -127,7 +127,7 @@ router.post('/eliminar_comprobante_pago', function (req, res) {
     procedimientos =[
         {nom_respuesta:'movimientos',sp_name:'USP_CAJ_COMPROBANTE_PAGO_E',parametros}
     ]
-    Ejecutar_Procedimientos(res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
 
@@ -143,7 +143,7 @@ router.post('/eliminar_movimiento_almacen', function (req, res) {
             procedimientos =[
                 {nom_respuesta:'movimientos',sp_name:'usp_ALM_ALMACEN_MOV_E',parametros}
             ]
-            Ejecutar_Procedimientos(res,procedimientos)
+            Ejecutar_Procedimientos(req,res,procedimientos)
         }else{
             return res.json({ respuesta: 'error' })
         }

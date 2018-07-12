@@ -2,9 +2,11 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
-import { isBuffer } from 'util';
+import { BloquearControles,getObjectArrayJsonVentas } from '../../../../utility/tools'
 
 var cantidad_tabs = 1
+var IdTabSeleccionado = null
+
 var Total = 0
 var TotalDescuentos = 0
 var TipodeCambio = 1
@@ -12,12 +14,15 @@ var _CantidadOriginal = null
 var SimboloMoneda = ''
 var SimboloMonedaExtra = ''
 
+global.variablesVentas = []
+
 function VerNuevaVenta(variables,CodLibro) {
-    global.objProductoVentas = ''
     cantidad_tabs++
     const idTabVenta = cantidad_tabs
+    global.objProductoVentas = ''
+    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:''})
     var tab = yo`
-        <li class=""><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
+        <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
 
     var tabContent = yo`
         <div class="tab-pane" id="tab_${idTabVenta}">
@@ -69,7 +74,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="col-md-12"> 
                                     <div class="form-group">
                                         <label>Direccion</label>
-                                        <input type="text" class="form-control" id="Direccion">
+                                        <input type="text" class="form-control" id="Direccion_${idTabVenta}">
                                     </div>
                                 </div>
                             </div>
@@ -367,6 +372,7 @@ function VerNuevaVenta(variables,CodLibro) {
    
     });
 
+    IdTabSeleccionado = idTabVenta
 }
 
 function CrearDivFavoritos(variables,idTab){
@@ -428,7 +434,7 @@ function CrearDivVuelto(idTab){
                                             <div class="col-md-4" id="divUSD_${idTab}">
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbUSD_${idTab}">USD:</label>
-                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control" onkeypress=${()=>BloquearControles(event,idTab)} >
+                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control" onkeypress=${()=>BloquearControles(event)} >
                                                 </div> 
                                             </div>
                                             <div class="col-md-4" id="divTC_${idTab}"> 
@@ -437,7 +443,7 @@ function CrearDivVuelto(idTab){
                                             <div class="col-md-4" id="divPEN_${idTab}">
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbPEN_${idTab}">PEN:</label>
-                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control"  onkeypress=${()=>BloquearControles(event),idTab} >
+                                                    <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control"  onkeypress=${()=>BloquearControles(event)} >
                                                 </div> 
                                             </div>
                                         </div>
@@ -460,7 +466,7 @@ function CrearDivVuelto(idTab){
                                     <p></p>
                                     <div class="form-group">
                                         <label id="lbVueltoCalculado_${idTab}" style="font-weight: bold;">Vuelto calculado</label>
-                                        <input type="text" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control"  onkeypress=${()=>BloquearControles(event,idTab)} >
+                                        <input type="text" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control"  onkeypress=${()=>BloquearControles(event)} >
                                     </div>
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-xs" onclick=${()=>CalcularVuelto(idTab)}>Calcular</button>
@@ -480,11 +486,6 @@ function VerVuelto(variables,idTab){
     }else{
         CrearDivVuelto(idTab)
     }
-}
-
-function BloquearControles(event,idTab){
-    event.preventDefault();
-    event.stopPropagation(); 
 }
 
 function CrearBotonesProductos(c,idTab,callback){
@@ -754,11 +755,33 @@ function CalcularTotal(idTab){
     }
 }
 
+function LimpiarVenta(idTab){
+    $("#tablaBodyProductosVentas_"+idTab).html('')
+    $("#txtBusqueda_"+idTab).val('')
+    $("#txtBusqueda_"+idTab).focus()
+    $("#btnConversion_"+idTab).css("display","none")
+    $("#Direccion_"+idTab).val('')
+    $("#Nro_Documento_"+idTab).val('')
+
+    if($("#btnTotal_"+idTab).hasClass('active')){
+        $("#btnTotal_"+idTab).click()
+    }
+
+     
+    CalcularTotal(idTab)
+    CalcularTotalDescuentos(idTab)
+}
+
+function TabVentaSeleccionado(idTab){
+    IdTabSeleccionado = idTab
+}
+
 function CerrarTabVenta(idTab){
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
+    IdTabSeleccionado = null
 }
 
 function EliminarFila(idFila,idTab){
@@ -1143,15 +1166,15 @@ function BuscarClienteDoc(CodLibro,idTab) {
      
     fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                global.objCliente = res.data.cliente[0]
-
-                if(global.objCliente !='' && global.objCliente){
-                    $("#Cod_TipoDoc_"+idTab).val(global.objCliente.Cod_TipoDocumento)
-                    $("#Cliente_"+idTab).val(global.objCliente.Cliente)
-                    $("#Nro_Documento_"+idTab).val(global.objCliente.Nro_Documento)
-                    $("#Cliente_"+idTab).attr("data-id",global.objCliente.Id_ClienteProveedor)                   
+                global.objClienteVenta = res.data.cliente[0]
+                if(global.objClienteVenta !='' && global.objClienteVenta){
+                    $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
+                    $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
+                    $("#Direccion_"+idTab).val(global.objClienteVenta.Direccion)
+                    $("#Nro_Documento_"+idTab).val(global.objClienteVenta.Nro_Documento)
+                    $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)                   
                 } 
             }
             H5_loading.hide()
@@ -1181,7 +1204,23 @@ function NuevaVenta() {
             }
             H5_loading.hide()
         })
-    //VerNuevaVenta()
 }
 
-export { NuevaVenta }
+
+function VentaSimple(){
+
+    console.log(global.variablesVentas)
+
+    if(!($('#tabs li:first').hasClass('active'))){
+        if(IdTabSeleccionado!=null){
+            console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado))
+            //LimpiarVenta(IdTabSeleccionado)
+        }
+    }else{
+        IdTabSeleccionado = null
+    } 
+}
+
+
+
+export { NuevaVenta, VentaSimple }
