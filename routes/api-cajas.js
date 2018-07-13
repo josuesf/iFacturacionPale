@@ -87,7 +87,7 @@ router.post('/get_comprobantes', function (req, res){
 router.post('/get_series_by_cod_caja_comprobante', function (req, res){
     input = req.body
     parametros = [
-        {nom_parametro:'Cod_Caja',valor_parametro:req.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
         {nom_parametro:'Cod_TipoComprobante',valor_parametro:input.Cod_TipoComprobante}
     ]
     procedimientos = [

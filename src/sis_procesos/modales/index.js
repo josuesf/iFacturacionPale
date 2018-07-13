@@ -139,6 +139,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
     empty(modal_proceso).appendChild(el);
     $('#modal-superior').modal()
     $("#txtBuscarCliente").val($("#"+idInputCliente).val())
+    BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)
 }
 
 
@@ -353,6 +354,7 @@ function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
 
     
     global.objCliente = cliente
+    global.objClienteVenta = cliente
     
     if (idInputCliente!=null)
         $("#"+idInputCliente).attr("data-id",cliente.Id_ClienteProveedor)

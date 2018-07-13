@@ -85,7 +85,7 @@ function BuscarComprobantePago(CodLibro){
             CodLibro
         })
     }
-    fetch(URL+'/compras_api/get_tipos_comprobantes', parametros)
+    fetch(URL+'/comprobantes_pago_api/get_tipos_comprobantes', parametros)
     .then(req => req.json())
     .then(res => {
         if (res.respuesta == 'ok') {
@@ -115,7 +115,7 @@ function AceptarComprobante(CodLibro){
                 Numero
             })
         }
-        fetch(URL+'/compras_api/get_comprobante_by_cliente', parametros)
+        fetch(URL+'/comprobantes_pago_api/get_comprobante_by_cliente', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
@@ -153,7 +153,7 @@ function AceptarComprobante(CodLibro){
                 DocCliente : $("#txtBusquedaModalComprobantePago").val()
             })
         }
-        fetch(URL+'/ventas_api/get_comprobante_by_tipo', parametros)
+        fetch(URL+'/comprobantes_pago_api/get_comprobante_by_tipo', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {

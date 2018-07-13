@@ -1,9 +1,9 @@
 var empty = require('empty-element');
-var yo = require('yo-yo');
+var yo = require('yo-yo'); 
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal } from '../../modales/series'
-import { ConvertirCadena } from '../../../../utility/tools'
+import { ConvertirCadena } from '../../../../utility/tools' 
 
 var listaFormaPago = []
 var obs_xml = null
@@ -15,13 +15,13 @@ var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
  
 
-function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
+function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
     CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
     obs_xml = null
     aMonto = 0 
     idFilaSeleccionadaSerie = 0
-    global.objCliente = ''
+    global.objCliente = Cliente?Cliente:''
     global.objProducto = ''
     global.arraySeries = ''
     contador = 0
@@ -57,13 +57,13 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
                                     <div class="col-md-3" id="divCodTipoDoc">
                                         <div class="form-group">
                                             <select id="Cod_TipoDoc" class="form-control input-sm" onchange=${()=>CambioTipoDocumento()}>
-                                                ${variables.documentos.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
+                                                ${variables.documentos.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}" ${Cliente?(Cliente.Cod_TipoDocumento==e.Cod_TipoDoc?'selected':''):''}>${e.Nom_TipoDoc}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required">
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
                                                     <i class="fa fa-globe"></i>
@@ -87,7 +87,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
                                                         <i class="fa fa-plus"></i>
                                                     </button>
                                                 </div>
-                                                <input type="text" id="Cliente" class="form-control required" data-id=null>
+                                                <input type="text" id="Cliente" class="form-control required" data-id=${Cliente?Cliente.Id_ClienteProveedor:null} value=${Cliente?Cliente.Cliente:''}>
                                                 <div class="input-group-btn">
                                                     <button type="button" class="btn btn-info" id="BuscarCliente"  onclick=${()=>BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")}>
                                                         <i class="fa fa-search"></i>
@@ -101,7 +101,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
                                     <div class="col-md-12" id="divDireccion">
                                         <div class="form-group">
                                             <label> Direccion : </label>
-                                            <input type="text" id="Direccion" class="form-control input-sm required">
+                                            <input type="text" id="Direccion" class="form-control input-sm required" value=${Cliente?Cliente.Direccion:''}>
                                         </div>
                                     </div>
                                 </div>
@@ -121,23 +121,31 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <select id="Cod_TipoComprobante" class="form-control selectPalerp">
-                                                ${variables.tipocomprobantes.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`)}
+                                            <select id="Cod_TipoComprobante" class="form-control selectPalerp" onchange=${()=>CargarSeries(CodLibro)}>
+                                                ${variables.tipocomprobantes.map(e=>
+                                                    (CodLibro=='08' && e.Flag_Compras==1)? 
+                                                        yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`
+                                                        :
+                                                        (CodLibro=='14' && e.Flag_Ventas==1)?
+                                                            yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`
+                                                            : 
+                                                            yo``)}
                                             </select>
                                         </div>
                                     </div>
                                 </div> 
                                 
                                 <div class="row">
-                                    <div class="col-md-5" id="divSerie">
+                                    <div class="col-md-6" id="divSerie">
                                         <div class="form-group">
- 
-                                            <select class="form-control input-sm" id="Serie">
-                                                
+
+                                            <select class="form-control input-sm" id="Serie" onchange=${()=>TraerSiguienteNumero(CodLibro)}>
+                                               
                                             </select>
+ 
                                         </div>
                                     </div>
-                                    <div class="col-md-7" id="divNumero">
+                                    <div class="col-md-6" id="divNumero">
                                         <div class="form-group">
                                             <input type="text" class="form-control input-sm required" id="Numero" onblur="${()=>CambioNumero()}">
                                         </div>
@@ -346,8 +354,16 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
                                                 <input class="hidden" id="Cod_TipoOperatividad" value=null>
                                                 <th><input type="text" id="Nom_Producto" data-id=null class="form-control input-sm" onblur=${()=>BuscarProductoCP(CodLibro,'blur')}></th>
                                                 <th><select class="form-control input-sm" id="Cod_Almacen" onchange="${()=>CargarUnidadMedida()}"> </select></th>
-                                                <th><select class="form-control input-sm" id="Cod_UnidadMedida" onchange="${()=>CambioUnidadMedida()}"> </select><select class="form-control input-sm" style="display:${CodLibro=='14'? 'block':'none'}" id="Cod_TipoPrecio" > </select></th>
-                                                <th><input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad(CodLibro)} onchange=${()=>KeyPressCantidad(CodLibro)}></th>
+                                                <th>
+                                                   <select class="form-control input-sm" id="Cod_UnidadMedida" onchange="${()=>CambioUnidadMedida()}"> </select>
+                                                </th>
+                                                <th>
+                                                    <div style="display: inline-flex;">
+                                                        <input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad(CodLibro)} onchange=${()=>KeyPressCantidad(CodLibro)}>
+                                                        <select class="form-control input-sm" style="display:${CodLibro=='14'? 'block':'none'}" id="Cod_TipoPrecio" > </select>
+                                                    </div>
+                                                </th>
+                                                
                                                 <th><input type="number" class="form-control input-sm" id="Precio_Unitario"  value="0.00" onkeypress=${()=>KeyPressPrecioUnitario()} onchange=${()=>KeyPressPrecioUnitario()}></th>
                                                 <th><input type="number" class="form-control input-sm" id="Descuento" value="0.00" ></th>
                                                 <th><input type="number" class="form-control input-sm" id="Importe" value="0.00" onkeypress=${()=>KeyEnterImporte(event,CodLibro,variables)}></th>
@@ -485,8 +501,21 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
     </div>`
     var ingreso = document.getElementById('modal-proceso')
     empty(ingreso).appendChild(el)
-    $('#modal-proceso').modal()
-    CambioMoneda()
+    $('#modal-proceso').modal() 
+    if(CodLibro=='08'){
+        $("#Serie").editableSelect({ effects: 'slide' })
+                    .on('select.editable-select', function (e, li) {
+                        TraerSiguienteNumero(CodLibro)
+                    })
+        $("#Serie").blur(function(){
+            FocusOutSerie()
+        })
+    } 
+ 
+    CargarConfiguracionDefault(CodLibro,variables) 
+     
+
+    /*CambioMoneda()
     CambioTipoDocumento()
     CambioFormasPago(CodLibro)
     CambioCreditoContado()
@@ -502,8 +531,7 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
-            if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
-                console.log(global.objCliente.Limite_Credito)
+            if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
                 $("input[name=optCredito][value='credito']").prop("checked",true);
                 $("#divCredito").css("display","block")
             }
@@ -553,8 +581,69 @@ function VerRegistroCompra(variables,fecha_actual,CodLibro,CodTipoOperacion) {
         }
     })
 
-    CambioLicitacion()
- 
+    CambioLicitacion()*/
+    
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente)
+            $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente").val(global.objCliente.Cliente)
+            $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+            if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
+                $("input[name=optCredito][value='credito']").prop("checked",true);
+                $("#divCredito").css("display","block")
+            }
+            else{
+                $("input[name=optCredito][value='contado']").prop("checked",true);
+                $("#divCredito").css("display","none")
+            }
+            
+            if($("#divCredito").css("display")=="block"){
+                $("input[name=optCredito][value='credito']").prop("checked",true);
+                $("#Nro_Dias").val(30)
+            }else{
+                $("input[name=optCredito][value='credito']").prop("checked",false);
+                $("#Nro_Dias").val(0)
+            }
+
+            if(CodLibro=="14"){
+                $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
+                CargarSeries(CodLibro)
+                CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+            }
+        }
+        CambioLicitacion()
+        CambioCreditoContado()
+
+        if(global.objProducto!='' && global.objProducto){
+            $("#Nom_Producto").attr("data-id",global.objProducto.Id_Producto)
+            $("#Nom_Producto").val(global.objProducto.Nom_Producto)
+            $("#Cod_TipoOperatividad").val(global.objProducto.Cod_TipoOperatividad)
+            $("#Cod_Producto").val(global.objProducto.Cod_Producto)
+            CargarAlmacenes(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
+            CargarUnidadMedida(global.objProducto.Id_Producto,global.objProducto.Cod_Almacen)
+            $("#Cod_UnidadMedida").val(global.objProducto.Cod_UnidadMedida)
+            $("#Cod_TipoPrecio").val('001')
+            $("#Stock").val(parseFloat(global.objProducto.Stock_Act)+".00")
+            $("#Precio_Unitario").val(parseFloat(global.objProducto.Precio_Venta))
+            $("#Cantidad").val(1)
+            $("#Cantidad").focus()
+            $("#Descuento").val(global.objProducto.Descuento)
+        }
+    })
+
+
+    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+        if(global.arraySeries!='' && global.arraySeries){ 
+            $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
+        }
+    })
+
+
+    if(global.objCliente =='')
+            BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")
 
    $(document).on('keypress','input',function(event){                
        event.stopImmediatePropagation();
@@ -1200,7 +1289,7 @@ function AbrirModalFormasPago(variables,fecha_actual){
             FechaHora
         })
     }
-    fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
         .then(req => req.json())
         .then(res => {
             //console.log(res.data)
@@ -1684,10 +1773,20 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
 }
 
 
-function CargarConfiguracionDefault(CodLibro,variables){
+function CargarConfiguracionDefault(CodLibro,variables){ 
+    CambioMoneda()
+    CambioTipoDocumento()
+    CambioFormasPago(CodLibro)
+    CambioCreditoContado()
+     
     CargarSeries(CodLibro)
+    
+
+     
     $("#divExportacion").css("display","none")
     CalcularTotal(CodLibro,variables)
+    $("input[name=optCredito][value='contado']").prop("checked",true)
+    CambioLicitacion()
 }
  
 
@@ -1807,16 +1906,18 @@ function CargarSeries(CodLibro){
             body: JSON.stringify({
                 Cod_TipoComprobante
             })
-        }
+        } 
         fetch(URL + '/cajas_api/get_series_by_cod_caja_comprobante', parametros)
             .then(req => req.json())
             .then(res => {
+                console.log(res)
                 if (res.respuesta == 'ok') {
-                    var series = res.data.series
+                    var series = res.data.series 
                     LlenarSeries(series)
                     if(series.length>0){
                         TraerSiguienteNumero(CodLibro)
                     }else{
+                        $("#Serie").val("")
                         toastr.error('No se cuenta con ninguna Serie Autorizada para este tipo de Comprobante.\n\n Solicite al Administrador Autorice una serie para Continuar.','Error',{timeOut: 5000})
                     }
                 } 
@@ -1941,6 +2042,17 @@ function CambioGastos(){
     $("#Precio_Unitario").attr("disabled",$("#optEsGasto").is(":checked"))
     $("#btnBuscarSeries").css("display",visible)
 }
+
+function FocusOutSerie() {
+    if ($("#Serie").val().length < 4) {
+        var cadenaCeros = ""
+        var cantidadCeros = 4 - $("#Serie").val().length
+        for (var i = 0; i < cantidadCeros; i++)
+            cadenaCeros = cadenaCeros + "0"
+        $("#Serie").val(cadenaCeros + $("#Serie").val())
+    }
+}
+ 
 
 function CambioNumero(){
     if($("#Numero").val().length<8){
@@ -2209,7 +2321,7 @@ function CambioFecha(CodLibro){
                     FechaHora
                 })
             }
-            fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+            fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
                 .then(req => req.json())
                 .then(res => {
                     if (res.respuesta == 'ok') {
@@ -2250,7 +2362,7 @@ function TraerSiguienteNumero(CodLibro){
             .then(res => {
                 if (res.respuesta == 'ok') {
                     var comprobante = res.data.comprobante
-                    $("#Numero").val("00000000"+comprobante[0].Numero)
+                    $("#Numero").val("00000000"+comprobante[0].NumeroSiguiente)
                 } 
             })
     }
@@ -2267,7 +2379,7 @@ function TraerSaldoPagoAdelantado(){
             Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
         })
     }
-    fetch(URL + '/compras_api/get_pago_adelantado', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_pago_adelantado', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
@@ -2326,7 +2438,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
 }
 
 
-function BuscarProductoCP(CodLibro,tipo) {
+function BuscarProductoCP(CodLibro,tipo) { 
     if(tipo=='blur'){
         if ($("#Nom_Producto").val().trim().length > 2 && !$("#optEsGasto").is(":checked")) {
             BuscarProducto(CodLibro == "14", $("#Nom_Producto").val())
@@ -2410,7 +2522,7 @@ function AbrirModalObsComprobantePago(){
             Cod_Tabla
         })
     }
-    fetch(URL + '/compras_api/get_diagramas_xml_comprobante', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_diagramas_xml_comprobante', parametros)
         .then(req => req.json())
         .then(res => {
             var variables = res.data
@@ -2420,7 +2532,7 @@ function AbrirModalObsComprobantePago(){
 
  
 
-function ComprobantePago(Cod_Libro) {
+function ComprobantePago(Cod_Libro,Cliente,Detalles) {
     H5_loading.show(); 
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -2432,11 +2544,12 @@ function ComprobantePago(Cod_Libro) {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
             Cod_Libro
         })
     }
-    fetch(URL + '/compras_api/get_variable_registro_compra', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_variable_comprobante_pago', parametros)
         .then(req => req.json())
         .then(res => {
             var variables = res.data
@@ -2453,8 +2566,8 @@ function ComprobantePago(Cod_Libro) {
                 .then(req => req.json())
                 .then(res => {
                     var data_empresa = res.empresa
-                    variables['empresa'] = data_empresa
-                    VerRegistroCompra(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01')
+                    variables['empresa'] = data_empresa   
+                    VerRegistroComprobante(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01',Cliente,Detalles)
                     H5_loading.hide()
     
                 })

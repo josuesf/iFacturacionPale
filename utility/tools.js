@@ -194,14 +194,43 @@ function getObjectArrayJsonVentas(arrayJson, pIdTab) {
                     TipodeCambio:arrayJson[i].TipodeCambio,
                     _CantidadOriginal:arrayJson[i]._CantidadOriginal,
                     SimboloMoneda:arrayJson[i].SimboloMoneda,
-                    SimboloMonedaExtra:arrayJson[i].SimboloMonedaExtra
+                    SimboloMonedaExtra:arrayJson[i].SimboloMonedaExtra,
+                    Cliente:arrayJson[i].Cliente,
+                    Detalles:arrayJson[i].Detalles
                 })
-        }
+            break
+        } 
       
     }
     return objects;
 }
- 
+
+
+function changeArrayJsonVentas(arrayJson, pIdTab,arrayCambios) { 
+    for (var i in global.variablesVentas) { 
+        if(global.variablesVentas[i].idTab == pIdTab){
+            global.variablesVentas[i].Total = ( arrayCambios[0]!=null)?arrayCambios[0]:global.variablesVentas[i].Total
+            global.variablesVentas[i].TotalDescuentos =  ( arrayCambios[1]!=null)?arrayCambios[1]:global.variablesVentas[i].TotalDescuentos
+            global.variablesVentas[i].TipodeCambio = ( arrayCambios[2]!=null)?arrayCambios[2]:global.variablesVentas[i].TipodeCambio
+            global.variablesVentas[i]._CantidadOriginal = ( arrayCambios[3]!=null)?arrayCambios[3]:global.variablesVentas[i]._CantidadOriginal
+            global.variablesVentas[i].SimboloMoneda = ( arrayCambios[4]!=null)?arrayCambios[4]:global.variablesVentas[i].SimboloMoneda
+            global.variablesVentas[i].SimboloMonedaExtra = ( arrayCambios[5]!=null)?arrayCambios[5]:global.variablesVentas[i].SimboloMonedaExtra
+            global.variablesVentas[i].Cliente = ( arrayCambios[6]!=null)?arrayCambios[6]:global.variablesVentas[i].Cliente
+            global.variablesVentas[i].Detalles = ( arrayCambios[7]!=null)?arrayCambios[7]:global.variablesVentas[i].Detalles
+            break
+        }
+      
+    } 
+}
+
+function deleteElementArrayJsonVentas(arrayJson, pIdTab) { 
+    for (var i in arrayJson) { 
+        if(arrayJson[i].idTab == pIdTab){
+           arrayJson.splice(i,1)
+           break
+        } 
+    }
+}
 
 function BloquearControles(event){
     event.preventDefault();
@@ -255,4 +284,4 @@ function TraerConexion(req, res, callback){
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas }
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas, deleteElementArrayJsonVentas}

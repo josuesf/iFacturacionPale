@@ -2,25 +2,28 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
-import { BloquearControles,getObjectArrayJsonVentas } from '../../../../utility/tools'
+import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas, deleteElementArrayJsonVentas } from '../../../../utility/tools'
+import { ComprobantePago } from '../../mod_compras/comprobante_pago'
+
 
 var cantidad_tabs = 1
 var IdTabSeleccionado = null
 
-var Total = 0
-var TotalDescuentos = 0
-var TipodeCambio = 1
-var _CantidadOriginal = null
-var SimboloMoneda = ''
-var SimboloMonedaExtra = ''
+//var Total = 0
+//var TotalDescuentos = 0
+//var TipodeCambio = 1
+//var _CantidadOriginal = null
+//var SimboloMoneda = ''
+//var SimboloMonedaExtra = ''
 
 global.variablesVentas = []
 
 function VerNuevaVenta(variables,CodLibro) {
     cantidad_tabs++
     const idTabVenta = cantidad_tabs
+    global.objClienteVenta = ''
     global.objProductoVentas = ''
-    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:''})
+    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cliente:null,Detalles:null})
     var tab = yo`
         <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
 
@@ -59,7 +62,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control">
+                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control" data-id=null>
                                             <div class="input-group-btn">
                                                 <button type="button" id="BuscarCliente" class="btn btn-info" onclick=${()=>BuscarCliente("Cliente_"+idTabVenta,"Nro_Documento_"+idTabVenta,null)}>
                                                     <i class="fa fa-search"></i>
@@ -312,42 +315,44 @@ function VerNuevaVenta(variables,CodLibro) {
     CambioMonedaFormaPagoMasterCard(idTabVenta)
     CambioMonedaFormaPagoVisa(idTabVenta)
 
+    
+
     $('#modal-superior').on('hidden.bs.modal', function () {
 
         if(global.objProductoVentas!='' && global.objProductoVentas){
-            $("#txtBusqueda_"+idTabVenta).val("")
+            $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
-            ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,idTabVenta,function(flag){
+            ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,IdTabSeleccionado,function(flag){
                 if(flag){
-                    ExisteProducto(global.objProductoVentas.Cod_Producto,idTabVenta,function(flag,index){
+                    ExisteProducto(global.objProductoVentas.Cod_Producto,IdTabSeleccionado,function(flag,index){
                         if(flag){
-                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
-                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2))
-                            $('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+idTabVenta+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
+                            $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
+                            $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2))
+                            $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
                         }else{
-                            var idFila = $('#tablaBodyProductosVentas_'+idTabVenta+' > tr').length
+                            var idFila = $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' > tr').length
                             var fila = yo`
-                            <tr id="${idFila+''+idTabVenta}">
+                            <tr id="${idFila+''+IdTabSeleccionado}">
                                 <td class="Cod_Producto">${global.objProductoVentas.Cod_Producto}</td> 
                                 <td class="Flag_Stock hidden">${global.objProductoVentas.Flag_Stock}</td> 
                                 <td class="Nom_Producto" style="width: 30%;">${global.objProductoVentas.Nom_Producto}</td> 
-                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTabVenta,idTabVenta)} onchange=${()=>CambioCantidadVenta(idFila+''+idTabVenta,idTabVenta)}></td>
+                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
                                 <td class="Unitario hidden">${global.objProductoVentas.Precio_Venta}</td>
-                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTabVenta,idTabVenta)}></td> 
-                                <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTabVenta,idTabVenta)}></td>
+                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
+                                <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
                                 <td class="DescuentoUnitario hidden">0</td> 
                                 <td class="DescuentoTotal hidden">0</td> 
                                 <td class="Precio">${global.objProductoVentas.Precio_Venta}</td>
                                 <td>
                                     <div style="display:flex;"> 
-                                        <button type="button" onclick="${()=>EliminarFila(idFila+''+idTabVenta,idTabVenta)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        <button type="button" onclick="${()=>EliminarFila(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>`
-                            $('#tablaBodyProductosVentas_'+idTabVenta).append(fila)
+                            $('#tablaBodyProductosVentas_'+IdTabSeleccionado).append(fila)
                         }
-                        CalcularTotal(idTabVenta)
-                        CalcularTotalDescuentos(idTabVenta)
+                        CalcularTotal(IdTabSeleccionado)
+                        CalcularTotalDescuentos(IdTabSeleccionado)
                     })
                    
                     
@@ -356,8 +361,14 @@ function VerNuevaVenta(variables,CodLibro) {
                 }
             })
 
- 
         }
+
+
+        if(global.objClienteVenta!='' && global.objClienteVenta){
+            changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[null,null,null,null,null,null,global.objClienteVenta,null])
+        }
+
+
     })
 
     $("#modal-superior").on("shown.bs.modal", function () { 
@@ -367,7 +378,7 @@ function VerNuevaVenta(variables,CodLibro) {
         $("#Cod_Categoria").css("display","block")
         $("#lbCod_Categoria").css("display","block")
         $("#Cod_Categoria").val("01")
-        $("#Cod_Precio").val($("#Cod_Precio_"+idTabVenta).val())
+        $("#Cod_Precio").val($("#Cod_Precio_"+IdTabSeleccionado).val())
         Buscar()
    
     });
@@ -479,6 +490,40 @@ function CrearDivVuelto(idTab){
     empty(divFV).appendChild(div);
     CalcularVuelto(idTab)
 }
+
+
+function CargarModalConfirmacion(idTab,_CodTipoComprobante){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <p>Se ha introducido moneda extranjera pero\n\nno introdujo un total recibido.Desea continuar sin comprar moneda extranjera?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacion(idTab,_CodTipoComprobante)}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+
+
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+}
+
+
+function AceptarConfirmacion(idTab,_CodTipoComprobante){
+    VentaSimpleSinME(idTab,_CodTipoComprobante)
+}
+
 
 function VerVuelto(variables,idTab){
     if($("#btnTotal_"+idTab).hasClass('active')){
@@ -593,7 +638,7 @@ function SeleccionarCategoria(c,categorias,idTab){
             CrearBotonesProductos(c,idTab,function(categoria,productos){
                 if(productos.length>0){ 
                     var listaProductos= yo`<div>
-                                            ${productos.map(e=> yo`<a class="btn btn-app" style="height:80px">${e.Nom_Producto}<p></p>${SimboloMoneda+' '+parseFloat(categoria.Valor).toFixed(4)}</a>`)}
+                                            ${productos.map(e=> yo`<a class="btn btn-app" style="height:80px">${e.Nom_Producto}<p></p>${getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(categoria.Valor).toFixed(4)}</a>`)}
                                         </div>`
                     var divProductos = document.getElementById('divProductos_'+idTab);
                     empty(divProductos).appendChild(listaProductos);
@@ -607,12 +652,14 @@ function SeleccionarCategoria(c,categorias,idTab){
 function TraerSimboloSOLES(monedas,pCodMoneda,idTab){
     for(var i=0;i<monedas.length;i++){
         if(monedas[i].Cod_Moneda==pCodMoneda){
-            SimboloMoneda = monedas[i].Simbolo
-            SimboloMonedaExtra = SimboloMoneda
+            changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,monedas[i].Simbolo,null,null,null])
+            //SimboloMoneda = monedas[i].Simbolo
+            changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,monedas[i].Simbolo,null,null])
+            //SimboloMonedaExtra = getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda
             break
         }
     }
-    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
+    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total).toFixed(2))
 }
 
 function ExisteProducto(CodProducto,idTab,callback){
@@ -663,9 +710,9 @@ function RecalcularDescuentosTotales(idTab){
 
 function CalcularVuelto(idTab){
     if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-        $("#TotalCobrar_"+idTab).val(Total)
+        $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
-        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+        $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
     }
     $("#VueltoCalculado_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
 
@@ -725,8 +772,9 @@ function CalcularTotalDescuentos(idTab){
         _total = _total + parseFloat($(this).find("td").eq(8).text())
     });
     _total = parseFloat(_total.toFixed(2))
-    TotalDescuentos = _total
-    $("#btnDescuentos_"+idTab).html('<i class="fa fa-arrow-circle-down text-red"></i> TOTAL DESCUENTOS: '+SimboloMoneda+' '+parseFloat(TotalDescuentos).toFixed(2))
+    changeArrayJsonVentas(global.variablesVentas,idTab,[null,_total,null,null,null,null,null,null])
+    //TotalDescuentos = _total
+    $("#btnDescuentos_"+idTab).html('<i class="fa fa-arrow-circle-down text-red"></i> TOTAL DESCUENTOS: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TotalDescuentos).toFixed(2))
     if(_total!=0){
         $("#btnDescuentos_"+idTab).css("display","block")
     }else{
@@ -740,15 +788,16 @@ function CalcularTotal(idTab){
         _total = _total + parseFloat($(this).find("td").eq(9).text())
     });
     _total = parseFloat(_total.toFixed(2))
-    Total = _total
-    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+SimboloMoneda+' '+parseFloat(Total).toFixed(2))
+    changeArrayJsonVentas(global.variablesVentas,idTab,[_total,null,null,null,null,null,null,null])
+    //Total = _total
+    $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total).toFixed(2))
     if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros') {
         if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
             $("#btnConversion_"+idTab).css("display","block")
-            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN EUROS: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
+            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN EUROS: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMonedaExtra+' '+(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio)).toFixed(2))
         }else{
             $("#btnConversion_"+idTab).css("display","block")
-            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN DOLARES: '+SimboloMonedaExtra+' '+(parseFloat(Total)/parseFloat(TipodeCambio)).toFixed(2))
+            $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN DOLARES: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMonedaExtra+' '+(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio)).toFixed(2))
         }
     }else{
         $("#btnConversion_"+idTab).css("display","none")
@@ -762,6 +811,10 @@ function LimpiarVenta(idTab){
     $("#btnConversion_"+idTab).css("display","none")
     $("#Direccion_"+idTab).val('')
     $("#Nro_Documento_"+idTab).val('')
+    $("#Cliente_"+idTab).val('')
+    $("#Cliente_"+idTab).attr("data-id",null)
+
+    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,-1,null])
 
     if($("#btnTotal_"+idTab).hasClass('active')){
         $("#btnTotal_"+idTab).click()
@@ -774,6 +827,7 @@ function LimpiarVenta(idTab){
 
 function TabVentaSeleccionado(idTab){
     IdTabSeleccionado = idTab
+    global.objClienteVenta = ''
 }
 
 function CerrarTabVenta(idTab){
@@ -782,6 +836,7 @@ function CerrarTabVenta(idTab){
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
     IdTabSeleccionado = null
+    deleteElementArrayJsonVentas(global.variablesVentas,idTab)
 }
 
 function EliminarFila(idFila,idTab){
@@ -792,7 +847,8 @@ function EliminarFila(idFila,idTab){
 
 function FocusInOutCantidadVenta(idFila,idTab){
     if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
-        _CantidadOriginal = parseFloat($('#'+idFila).find('td.Cantidad').find('input').val())
+        //_CantidadOriginal = parseFloat($('#'+idFila).find('td.Cantidad').find('input').val())
+        changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()),null,null,null,null])
     }
 }
 
@@ -838,14 +894,15 @@ function CambioMonedaFormaPagoEuros(idTab){
             FechaHora:fecha_actual
         })
     }
-    fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
         .then(req => req.json())
         .then(res => {
             if(res.respuesta=="ok"){
                 var tipos_cambios = res.data.tipos_cambios
-                TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta))
-                TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
-                $("#Tipo_Cambio_Venta_"+idTab).val(TipodeCambio)
+                //TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta)).toFixed(3)
+                //TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
+                changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta)).toFixed(3),null,null,null,null,null])
+                $("#Tipo_Cambio_Venta_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio)
 
                 const parametrosMonedas = {
                     method: 'POST',
@@ -856,14 +913,15 @@ function CambioMonedaFormaPagoEuros(idTab){
                     body: JSON.stringify({ 
                     })
                 }
-                fetch(URL + '/ventas_api/get_monedas', parametrosMonedas)
+                fetch(URL + '/comprobantes_pago_api/get_monedas', parametrosMonedas)
                     .then(req => req.json())
                     .then(res => {
                         if(res.respuesta=="ok"){
                             var monedas = res.data.monedas
                             for(var i=0;i<monedas.length;i++){
                                 if(monedas[i].Cod_Moneda == 'EUR'){
-                                    SimboloMonedaExtra = monedas[i].Simbolo
+                                    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,monedas[i].Simbolo,null,null])
+                                    //SimboloMonedaExtra = monedas[i].Simbolo
                                     break
                                 }
                             }
@@ -884,9 +942,9 @@ function CambioMonedaFormaPagoEuros(idTab){
                             CalcularTotalDescuentos(idTab)
 
                             if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-                                $("#TotalCobrar_"+idTab).val(Total)
+                                $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
                             }else{
-                                $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+                                $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
                             }
                             CalcularVuelto(idTab)
 
@@ -916,14 +974,15 @@ function CambioMonedaFormaPagoDolares(idTab){
             FechaHora:fecha_actual
         })
     }
-    fetch(URL + '/compras_api/get_variables_formas_pago', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
         .then(req => req.json())
         .then(res => {
             if(res.respuesta=="ok"){
                 var tipos_cambios = res.data.tipos_cambios
-                TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta))
-                TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
-                $("#Tipo_Cambio_Venta_"+idTab).val(TipodeCambio)
+                //TipodeCambio = parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta)).toFixed(3)
+                //TipodeCambio = parseFloat(TipodeCambio).toFixed(3)
+                changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat((tipos_cambios.length==0?'1':tipos_cambios[0].Venta)).toFixed(3),null,null,null,null,null])
+                $("#Tipo_Cambio_Venta_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio)
 
                 const parametrosMonedas = {
                     method: 'POST',
@@ -934,14 +993,15 @@ function CambioMonedaFormaPagoDolares(idTab){
                     body: JSON.stringify({ 
                     })
                 }
-                fetch(URL + '/ventas_api/get_monedas', parametrosMonedas)
+                fetch(URL + '/comprobantes_pago_api/get_monedas', parametrosMonedas)
                     .then(req => req.json())
                     .then(res => {
                         if(res.respuesta=="ok"){
                             var monedas = res.data.monedas
                             for(var i=0;i<monedas.length;i++){
                                 if(monedas[i].Cod_Moneda == 'USD'){
-                                    SimboloMonedaExtra = monedas[i].Simbolo
+                                    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,monedas[i].Simbolo,null,null])
+                                    //SimboloMonedaExtra = monedas[i].Simbolo
                                     break
                                 }
                             }
@@ -962,9 +1022,9 @@ function CambioMonedaFormaPagoDolares(idTab){
                             CalcularTotalDescuentos(idTab)
 
                             if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-                                $("#TotalCobrar_"+idTab).val(Total)
+                                $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
                             }else{
-                                $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+                                $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
                             }
                             CalcularVuelto(idTab)
 
@@ -990,9 +1050,9 @@ function CambioMonedaFormaPagoSoles(idTab){
     }
 
     if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-        $("#TotalCobrar_"+idTab).val(Total)
+        $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
-        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+        $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
     }
     CalcularVuelto(idTab)
 }
@@ -1020,10 +1080,10 @@ function CambioCantidadVenta(idFila,idTab){
                     var producto = res.data.producto[0]
                     if(parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()) > parseFloat(producto.Stock_Act)){
                         toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
-                        $('#'+idFila).find('td.Cantidad').find('input').val(_CantidadOriginal)
+                        $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                     }
                 }else{
-                    $('#'+idFila).find('td.Cantidad').find('input').val(_CantidadOriginal)
+                    $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                 }
 
             }) 
@@ -1053,13 +1113,14 @@ function CambioPrecioDescuentos(idFila,idTab){
 }
  
 function CambioTipoCambioVenta(idTab){
-    TipodeCambio = parseFloat($("#Tipo_Cambio_Venta_"+idTab).val())
+    //TipodeCambio = parseFloat($("#Tipo_Cambio_Venta_"+idTab).val())
+    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()),null,null,null,null,null])
     CalcularTotal(idTab)
     CalcularTotalDescuentos(idTab)
     if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-        $("#TotalCobrar_"+idTab).val(Total)
+        $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
-        $("#TotalCobrar_"+idTab).val(parseFloat(Total)/parseFloat(TipodeCambio))
+        $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
     }
     CalcularVuelto(idTab)
 }
@@ -1169,6 +1230,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
         .then(res => { 
             if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
                 global.objClienteVenta = res.data.cliente[0]
+                changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,global.objClienteVenta,null])
                 if(global.objClienteVenta !='' && global.objClienteVenta){
                     $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
                     $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
@@ -1192,35 +1254,67 @@ function NuevaVenta() {
         body: JSON.stringify({
         })
     }
-    fetch(URL + '/ventas_api/get_variables_ventas', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_variables_ventas', parametros)
         .then(req => req.json())
         .then(res => {
             var variables = res.data
             if (res.respuesta == 'ok') {
                 VerNuevaVenta(variables,null)
-            }
-            else { 
-                VerNuevaVenta([],null)
+            }else{
+                toastr.error(res.detalle_error,'Error',{timeOut: 5000})
             }
             H5_loading.hide()
         })
 }
-
+ 
 
 function VentaSimple(){
 
     console.log(global.variablesVentas)
-
+    var _CodTipoComprobante=""
     if(!($('#tabs li:first').hasClass('active'))){
         if(IdTabSeleccionado!=null){
-            console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado))
+            var rows = $("#tablaBodyProductosVentas_"+IdTabSeleccionado+" > tr").length
+            ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente)
+            if(rows>0){
+                // verificar cierre z ???
+                if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total<=700)){
+                    if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
+                        if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
+                            VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
+                        }else{ 
+                            CargarModalConfirmacion(IdTabSeleccionado,_CodTipoComprobante) 
+                        }
+                    }else{
+                        VentaSimpleSinME(IdTabSeleccionado,_CodTipoComprobante)
+                    }
+                }else{
+                    if($("#Cliente_"+IdTabSeleccionado).attr("data-id")==null){
+
+                    }else{
+                        if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
+                            if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
+                                VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
+                            }else{ 
+                                CargarModalConfirmacion(IdTabSeleccionado,_CodTipoComprobante) 
+                            }
+                        }else{
+                            VentaSimpleSinME(IdTabSeleccionado,_CodTipoComprobante)
+                        }
+                    }
+                }
+            }else{
+                toastr.error('No se puede Utilizar esta opcion sin haber ingresado al menos una venta.\n\n Ingrese la venta y vuelva a intentarlo.','Error',{timeOut: 5000})     
+            }
+            //console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)
+            //changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[10])
+            //console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado))
             //LimpiarVenta(IdTabSeleccionado)
         }
     }else{
         IdTabSeleccionado = null
     } 
 }
-
 
 
 export { NuevaVenta, VentaSimple }

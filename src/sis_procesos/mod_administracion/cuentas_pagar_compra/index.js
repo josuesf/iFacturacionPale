@@ -718,7 +718,7 @@ function TraerSaldoPagoAdelantado(){
             Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
         })
     }
-    fetch(URL + '/compras_api/get_pago_adelantado', parametros)
+    fetch(URL + '/comprobantes_pago_api/get_pago_adelantado', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
