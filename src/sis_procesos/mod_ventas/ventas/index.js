@@ -128,16 +128,15 @@ function VerNuevaVenta(variables,CodLibro) {
                                                         yo``
                                                         }
                                                     `)}
-                                                    
-                                                    <div class="row">
-                                                        <div class="col-md-8">
-                                                            <div class="form-group">
-                                                                <label>Tipo Cambio</label>
-                                                                <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTabVenta}" name="Tipo_Cambio_Venta_${idTabVenta}" onkeypress=${()=>CambioTipoCambioVenta(idTabVenta)}>
-                                                            </div> 
-                                                        </div>
-                                                    </div>
 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label>Tipo Cambio</label>
+                                                            <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTabVenta}" name="Tipo_Cambio_Venta_${idTabVenta}" onkeypress=${()=>CambioTipoCambioVenta(idTabVenta)}>
+                                                        </div> 
+                                                    </div>
                                                 </div>
                                         </div>
                                     </div>
@@ -171,24 +170,23 @@ function VerNuevaVenta(variables,CodLibro) {
                                                             </div>`
                                                         }
                                                     `)}
-
-                                                    ${variables.formaspago.map(e=>yo`
-                                                        ${  e.Cod_FormaPago=="005"?
-                                                            yo`
-                                                            <div class="row">
-                                                                <div class="col-md-8">
-                                                                    <div class="form-group">
-                                                                        <label>Nro Ref.</label>
-                                                                        <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTabVenta}" name="Nro_Tarjeta_${idTabVenta}">
-                                                                    </div> 
-                                                                </div>
-                                                            </div>`
-                                                            :
-                                                            yo``
-                                                        }
-                                                    `)}
                                                      
                                                 </div>
+                                                ${variables.formaspago.map(e=>yo`
+                                                    ${  e.Cod_FormaPago=="005"?
+                                                        yo`
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Nro Ref.</label>
+                                                                    <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTabVenta}" name="Nro_Tarjeta_${idTabVenta}">
+                                                                </div> 
+                                                            </div>
+                                                        </div>`
+                                                        :
+                                                        yo``
+                                                    }
+                                                `)}
                                         </div>
                                     </div>
                                 </div>
@@ -232,36 +230,36 @@ function VerNuevaVenta(variables,CodLibro) {
                             
                             <div class="row">
                                 <div class="col-md-12">
-                                
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr> 
-                                            <th>Codigo</th>
-                                            <th>Producto</th>
-                                            <th>Cantidad</th>
-                                            <th>Precio Unitario</th>
-                                            <th>Descuento(%)</th>
-                                            <th>SubTotal</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
-                                            <td><button class="btn btn-default btn-lg" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
-                                        </tr>
-                                    </tfoot>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr> 
+                                                    <th>Codigo</th>
+                                                    <th>Producto</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Precio Unitario</th>
+                                                    <th>Descuento(%)</th>
+                                                    <th>SubTotal</th>
+                                                    <th>Acciones</th>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td><button class="btn btn-default btn-lg" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
+                                                    <td><button class="btn btn-default btn-lg" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
+                                                    <td><button class="btn btn-default btn-lg" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
+                                                </tr>
+                                            </tfoot>
 
-                                    <tbody id="tablaBodyProductosVentas_${idTabVenta}">
-                                    </tbody> 
-                                </table>
-                                
+                                            <tbody id="tablaBodyProductosVentas_${idTabVenta}">
+                                            </tbody> 
+                                        </table>
+                                    </div>
                                 </div>
                                                         
                             </div>
