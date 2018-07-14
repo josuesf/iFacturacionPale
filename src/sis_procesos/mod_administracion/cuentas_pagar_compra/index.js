@@ -382,7 +382,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     }
 
     
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.objCliente!='' && global.arraySeries){ 
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Nom_Cliente)

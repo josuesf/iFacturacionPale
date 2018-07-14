@@ -370,7 +370,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             </tr>
                                         </thead>
                                     </table>
-                                    <table class="table table-bordered table-hover">
+                                    <table class="table table-bordered table-hover" id="tablaDetallesComprobante">
                                         <tbody id="tablaBody">
                                         </tbody>
                                     </table>
@@ -511,6 +511,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             FocusOutSerie()
         })
     } 
+
  
     CargarConfiguracionDefault(CodLibro,variables) 
      
@@ -583,7 +584,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
 
     CambioLicitacion()*/
     
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente)
@@ -635,7 +636,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     })
 
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -653,6 +654,12 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             $input.eq( $input.index( this ) + 1 ).focus()
        }
    });
+
+   
+    if (Detalles!=undefined){
+        AgregarFilaTabla_(CodLibro,variables,Detalles)
+    }   
+
 }
 
 
@@ -918,6 +925,78 @@ function AbrirModalPercepcion(CodLibro,variables){
     empty(modal_proceso).appendChild(el);
     $('#modal-otros-procesos').modal()     
 }
+
+function AgregarFilaTabla_(CodLibro,variables,Detalles){
+    var tabla = yo` 
+                <tbody id="tablaBody">
+                    ${Detalles.map((u,index) => 
+                            yo`
+                            <tr id="${index+ u.Id_Producto}">
+                                <td class="id_ComprobantePago hidden"><input value=${u.id_ComprobantePago}></td>
+                                <td class="id_Detalle hidden"><input value=${u.id_Detalle}></td> 
+                                <td class="Id_Producto hidden"><input value=${u.Id_Producto}></td> 
+                                <td class="Codigo hidden">${u.Codigo}</td>
+                                <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value=${u.Descripcion}></td>
+                                <td class="Almacen"><input type="text" class="form-control input-sm" value=${u.Almacen}></td> 
+                                <td class="UM"><input type="text" class="form-control input-sm" value=${u.UM}></td>
+                                <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${u.Stock}></td> 
+                                <td class="Cantidad"><input type="number" class="form-control input-sm" value=${u.Cantidad} onkeyup=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)}></td> 
+                                <td class="Despachado hidden">${u.Despachado}</td> 
+                                <td class="PU"><input type="number" class="form-control input-sm" value=${u.PU} onkeyup=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)}></td> 
+                                <td class="Descuento"><input type="number" class="form-control input-sm" value=${u.Descuento} onkeyup=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} ></td> 
+                                <td class="Importe"><input type="number" class="form-control input-sm" value=${u.Importe}></td>
+                                <td class="Cod_Manguera hidden">${u.Cod_Manguera}</td>  
+                                <td class="Tipo hidden">${u.Tipo}</td> 
+                                <td class="Obs_ComprobanteD hidden">${u.Obs_Comprobante}</td> 
+                                <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify(u.Series)} name="Series"></td>
+                                <td>
+                                <div style="display:flex;">
+                                    <button type="button" onclick="${()=>AsignarSeries(index+ u.Id_Producto,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                                    <button type="button" onclick="${()=>EliminarFila(index+ u.Id_Producto,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                </div>
+                                </td>
+                            </tr>`
+                    )}
+                </tbody>`
+
+    empty(document.getElementById('tablaDetallesComprobante')).appendChild(tabla);
+    contador = Detalles.length
+    CalcularTotal(CodLibro,variables)
+    /*var fila = yo``
+    for (var i in Detalles) { 
+        var idFila = contador+ Detalles[i].Id_Producto
+        fila = yo`
+        <tr id="${idFila}">
+            <td class="id_ComprobantePago hidden"><input value=${Detalles[i].id_ComprobantePago}></td>
+            <td class="id_Detalle hidden"><input value=${Detalles[i].id_Detalle}></td> 
+            <td class="Id_Producto hidden"><input value=${Detalles[i].Id_Producto}></td> 
+            <td class="Codigo hidden">${Detalles[i].Codigo}</td>
+            <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value=${Detalles[i].Descripcion}></td>
+            <td class="Almacen"><input type="text" class="form-control input-sm" value=${Detalles[i].Almacen}></td> 
+            <td class="UM"><input type="text" class="form-control input-sm" value=${Detalles[i].UM}></td>
+            <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${Detalles[i].Stock}></td> 
+            <td class="Cantidad"><input type="number" class="form-control input-sm" value=${Detalles[i].Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+            <td class="Despachado hidden">${Detalles[i].Despachado}</td> 
+            <td class="PU"><input type="number" class="form-control input-sm" value=${Detalles[i].PU} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+            <td class="Descuento"><input type="number" class="form-control input-sm" value=${Detalles[i].Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
+            <td class="Importe"><input type="number" class="form-control input-sm" value=${Detalles[i].Importe}></td>
+            <td class="Cod_Manguera hidden">${Detalles[i].Cod_Manguera}</td>  
+            <td class="Tipo hidden">${Detalles[i].Tipo}</td> 
+            <td class="Obs_ComprobanteD hidden">${Detalles[i].Obs_Comprobante}</td> 
+            <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify(Detalles[i].Series)} name="Series"></td>
+            <td>
+            <div style="display:flex;">
+                <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            </div>
+            </td>
+        </tr>`
+        contador++
+    } 
+    $("#tablaBody").html(fila)
+
+    CalcularTotal(CodLibro,variables)*/
+}
  
 
 function AgregarFilaTabla(CodLibro,variables){
@@ -945,8 +1024,8 @@ function AgregarFilaTabla(CodLibro,variables){
                 <td class="id_ComprobantePago hidden"><input value="0"></td>
                 <td class="id_Detalle hidden"><input value="${rows}"></td> 
                 <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
-                <td class="Codigo">${flagGasto?'':Cod_Producto}</td>
-                <td class="Descripcion"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
+                <td class="Codigo hidden">${flagGasto?'':Cod_Producto}</td>
+                <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
                 <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
                 <td class="UM"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_UnidadMedida}></td>
                 <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
@@ -1008,8 +1087,8 @@ function AplicarPercepcion(CodLibro,variables){
                     <td class="id_ComprobantePago hidden"><input value="0"></td>
                     <td class="id_Detalle hidden"><input value="0"></td> 
                     <td class="Id_Producto hidden"><input value="0"></td> 
-                    <td class="Codigo"></td>
-                    <td class="Descripcion"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
+                    <td class="Codigo hidden"></td>
+                    <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
                     <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
                     <td class="UM"><input type="text" class="form-control input-sm"></td>
                     <td class="Stock hidden"><input type="number" class="form-control input-sm" value="1"></td> 
@@ -1909,8 +1988,7 @@ function CargarSeries(CodLibro){
         } 
         fetch(URL + '/cajas_api/get_series_by_cod_caja_comprobante', parametros)
             .then(req => req.json())
-            .then(res => {
-                console.log(res)
+            .then(res => { 
                 if (res.respuesta == 'ok') {
                     var series = res.data.series 
                     LlenarSeries(series)
@@ -2097,8 +2175,10 @@ function CambioExportacion(CodLibro,variables){
                 .then(req => req.json())
                 .then(res => {
                     if (res.respuesta == 'ok') {
-                        var producto = res.data.producto[0]
-                        $(this).find("td").eq(4).find("input").val(producto.Nom_Producto+' / '+producto.Des_CortaProducto)
+                        if(res.data.producto.length>0){
+                            var producto = res.data.producto[0]
+                            $(this).find("td").eq(4).find("input").val(producto.Nom_Producto+' / '+producto.Des_CortaProducto)
+                        }
                     }
                 })
  
@@ -2128,8 +2208,10 @@ function CambioExportacion(CodLibro,variables){
                 .then(req => req.json())
                 .then(res => {
                     if (res.respuesta == 'ok') {
-                        var producto = res.data.producto[0]
-                        $(this).find("td").eq(4).find("input").val(producto.Nom_Producto)
+                        if(res.data.producto.length>0){
+                            var producto = res.data.producto[0]
+                            $(this).find("td").eq(4).find("input").val(producto.Nom_Producto)
+                        }
                     }
                 })
            
@@ -2192,9 +2274,11 @@ function CambioUnidadMedida() {
             .then(req => req.json())
             .then(res => {
                 if (res.respuesta == 'ok') {
-                    var producto = res.data.producto[0]
-                    $("#Stock").val(producto.Stock_Act)
-                    CargarTipoPrecio()
+                    if(res.data.producto.length>0){
+                        var producto = res.data.producto[0]
+                        $("#Stock").val(producto.Stock_Act)
+                        CargarTipoPrecio()
+                    }
                 }
             })
     }
@@ -2306,6 +2390,7 @@ function CambioMoneda(){
 }
 
 function CambioFecha(CodLibro){
+    console.log("cambio fecha")
     if($("#Cod_Moneda").val()=="PEN"){
         try{
             var Cod_Moneda = $("#Cod_Moneda").val()
@@ -2325,16 +2410,18 @@ function CambioFecha(CodLibro){
                 .then(req => req.json())
                 .then(res => {
                     if (res.respuesta == 'ok') {
-                        if(CodLibro=="08"){
-                            $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+                        if(res.data.tipos_cambios.length>0){
+                            if(CodLibro=="08"){
+                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+                            }else{
+                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                            }
                         }else{
-                            $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                            $("#Tipo_Cambio").val(1)
                         }
                     } 
                 })
 
-
-            $("#Tipo_Cambio").val()
         }catch(e){
             $("#Tipo_Cambio").val(1)
         }
@@ -2361,8 +2448,10 @@ function TraerSiguienteNumero(CodLibro){
             .then(req => req.json())
             .then(res => {
                 if (res.respuesta == 'ok') {
-                    var comprobante = res.data.comprobante
-                    $("#Numero").val("00000000"+comprobante[0].NumeroSiguiente)
+                    if(res.data.comprobante.length>0){
+                        var comprobante = res.data.comprobante
+                        $("#Numero").val("00000000"+comprobante[0].NumeroSiguiente)
+                    }
                 } 
             })
     }

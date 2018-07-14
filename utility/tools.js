@@ -223,14 +223,55 @@ function changeArrayJsonVentas(arrayJson, pIdTab,arrayCambios) {
     } 
 }
 
-function deleteElementArrayJsonVentas(arrayJson, pIdTab) { 
+
+function changeDetallesArrayJsonVentas(pIdTab,pCodigo,arrayCambios) { 
+    for (var i in global.variablesVentas) { 
+        if(global.variablesVentas[i].idTab == pIdTab){
+            for (var j in global.variablesVentas[i].Detalles) { 
+                if(global.variablesVentas[i].Detalles[j].Codigo == pCodigo){ 
+                    global.variablesVentas[i].Detalles[j].id_ComprobantePago = ( arrayCambios[0]!=null)?arrayCambios[0]:global.variablesVentas[i].Detalles[j].id_ComprobantePago
+                    global.variablesVentas[i].Detalles[j].id_Detalle = ( arrayCambios[1]!=null)?arrayCambios[1]:global.variablesVentas[i].Detalles[j].id_Detalle
+                    global.variablesVentas[i].Detalles[j].Id_Producto = ( arrayCambios[2]!=null)?arrayCambios[2]:global.variablesVentas[i].Detalles[j].Id_Producto
+                    global.variablesVentas[i].Detalles[j].Codigo = ( arrayCambios[3]!=null)?arrayCambios[3]:global.variablesVentas[i].Detalles[j].Codigo
+                    global.variablesVentas[i].Detalles[j].Descripcion = ( arrayCambios[4]!=null)?arrayCambios[4]:global.variablesVentas[i].Detalles[j].Descripcion
+                    global.variablesVentas[i].Detalles[j].Almacen = ( arrayCambios[5]!=null)?arrayCambios[5]:global.variablesVentas[i].Detalles[j].Almacen
+                    global.variablesVentas[i].Detalles[j].UM = ( arrayCambios[6]!=null)?arrayCambios[6]:global.variablesVentas[i].Detalles[j].UM
+                    global.variablesVentas[i].Detalles[j].Stock = ( arrayCambios[7]!=null)?arrayCambios[7]:global.variablesVentas[i].Detalles[j].Stock
+                    global.variablesVentas[i].Detalles[j].Cantidad = ( arrayCambios[8]!=null)?arrayCambios[8]:global.variablesVentas[i].Detalles[j].Cantidad
+                    global.variablesVentas[i].Detalles[j].Despachado = ( arrayCambios[9]!=null)?arrayCambios[9]:global.variablesVentas[i].Detalles[j].Despachado
+                    global.variablesVentas[i].Detalles[j].PU = ( arrayCambios[10]!=null)?arrayCambios[10]:global.variablesVentas[i].Detalles[j].PU
+                    global.variablesVentas[i].Detalles[j].Descuento = ( arrayCambios[11]!=null)?arrayCambios[11]:global.variablesVentas[i].Detalles[j].Descuento
+                    global.variablesVentas[i].Detalles[j].Importe = ( arrayCambios[12]!=null)?arrayCambios[12]:global.variablesVentas[i].Detalles[j].Importe
+                    global.variablesVentas[i].Detalles[j].Cod_Manguera = ( arrayCambios[13]!=null)?arrayCambios[13]:global.variablesVentas[i].Detalles[j].Cod_Manguera
+                    global.variablesVentas[i].Detalles[j].Tipo = ( arrayCambios[14]!=null)?arrayCambios[14]:global.variablesVentas[i].Detalles[j].Tipo
+                    global.variablesVentas[i].Detalles[j].Obs_ComprobanteD = ( arrayCambios[15]!=null)?arrayCambios[15]:global.variablesVentas[i].Detalles[j].Obs_ComprobanteD
+                    break
+                } 
+            }
+        }
+      
+    } 
+}
+
+function deleteElementArrayJsonVentas(arrayJson, pIdTab, pCodigo) { 
     for (var i in arrayJson) { 
         if(arrayJson[i].idTab == pIdTab){
-           arrayJson.splice(i,1)
-           break
+            if(pCodigo!=undefined){
+                for (var j in arrayJson[i].Detalles){  
+                    if(arrayJson[i].Detalles[j].Codigo == pCodigo){
+                        arrayJson[i].Detalles.splice(j,1)
+                        break
+                    }
+                }
+            }else{
+                arrayJson.splice(i,1)
+                break
+            }
         } 
     }
 }
+ 
+
 
 function BloquearControles(event){
     event.preventDefault();
@@ -284,4 +325,4 @@ function TraerConexion(req, res, callback){
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas, deleteElementArrayJsonVentas}
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas}

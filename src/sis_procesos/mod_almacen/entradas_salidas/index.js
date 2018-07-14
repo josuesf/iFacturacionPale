@@ -218,7 +218,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal()
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -240,7 +240,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
         }
     })
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }

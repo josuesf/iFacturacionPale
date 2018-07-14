@@ -311,7 +311,7 @@ router.post('/get_codigo_unidad_by_codP_codA_codTP', function (req, res){
         {nom_parametro: 'Cod_TipoPrecio', valor_parametro: input.Cod_TipoPrecio}
     ]
     procedimientos = [
-        {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TPreciosXCodProd_CodAlm_CodPre', parametros:[]}
+        {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTO_PRECIO_TPreciosXCodProd_CodAlm_CodPre', parametros}
     ]
     Ejecutar_Procedimientos(req,res, procedimientos)
 })

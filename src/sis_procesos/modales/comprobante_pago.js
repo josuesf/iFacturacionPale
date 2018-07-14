@@ -61,7 +61,7 @@ function VerBuscarComprobatenPago(CodLibro,tipos_comprobantes){
     empty(modal_proceso).appendChild(el);
     $('#modal-otros-procesos').modal()   
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){ 
             $("#txtBusquedaModalComprobantePago").val(global.objCliente.Cliente) 

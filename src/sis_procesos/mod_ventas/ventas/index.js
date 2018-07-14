@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
-import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas, deleteElementArrayJsonVentas } from '../../../../utility/tools'
+import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas } from '../../../../utility/tools'
 import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 
 
@@ -23,9 +23,9 @@ function VerNuevaVenta(variables,CodLibro) {
     const idTabVenta = cantidad_tabs
     global.objClienteVenta = ''
     global.objProductoVentas = ''
-    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cliente:null,Detalles:null})
+    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cliente:null,Detalles:[]})
     var tab = yo`
-        <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
+        <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button style="padding-left: 10px;" type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
 
     var tabContent = yo`
         <div class="tab-pane" id="tab_${idTabVenta}">
@@ -221,6 +221,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                         <div class="form-group">
                                             <label>Almacen</label>
                                             <select class="form-control" id="Cod_Almacen_${idTabVenta}">
+                                                <option value=''>Seleccione un almacen</option>
                                                 ${variables.almacenes.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Almacen}">${e.Des_Almacen}</option>`)}
                                             </select>
                                         </div>
@@ -315,19 +316,25 @@ function VerNuevaVenta(variables,CodLibro) {
 
     
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
-
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
+         
         if(global.objProductoVentas!='' && global.objProductoVentas){
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
             ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,IdTabSeleccionado,function(flag){
                 if(flag){
                     ExisteProducto(global.objProductoVentas.Cod_Producto,IdTabSeleccionado,function(flag,index){
+ 
                         if(flag){
+                            
+                            changeDetallesArrayJsonVentas(IdTabSeleccionado,$('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2),null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2),null,null,null,null])
+                            
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2))
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
+                             
                         }else{
+                            //console.log(global.objProductoVentas)
                             var idFila = $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' > tr').length
                             var fila = yo`
                             <tr id="${idFila+''+IdTabSeleccionado}">
@@ -348,6 +355,26 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </td>
                             </tr>`
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado).append(fila)
+                              
+                             getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles.push({ 
+                                id_ComprobantePago:0,
+                                id_Detalle:0,
+                                Id_Producto:global.objProductoVentas.Id_Producto,
+                                Codigo:global.objProductoVentas.Cod_Producto,
+                                Descripcion:global.objProductoVentas.Nom_Producto,
+                                Almacen:global.objProductoVentas.Cod_Almacen,
+                                UM:global.objProductoVentas.Cod_UnidadMedida,
+                                Stock:global.objProductoVentas.Stock_Act,
+                                Cantidad:1,
+                                Despachado:1,
+                                PU:global.objProductoVentas.Precio_Venta,
+                                Descuento:'0.00',
+                                Importe:global.objProductoVentas.Precio_Venta,
+                                Cod_Manguera:$("#Cod_Precio_"+IdTabSeleccionado).val(),
+                                Tipo:global.objProductoVentas.Cod_TipoOperatividad,
+                                Obs_ComprobanteD:'',
+                                Series:[]
+                            })
                         }
                         CalcularTotal(IdTabSeleccionado)
                         CalcularTotalDescuentos(IdTabSeleccionado)
@@ -358,7 +385,7 @@ function VerNuevaVenta(variables,CodLibro) {
                     toastr.error('No existe stock para dicho producto','Error',{timeOut: 5000})  
                 }
             })
-
+            $("#txtBusqueda_"+IdTabSeleccionado).focus()
         }
 
 
@@ -369,16 +396,15 @@ function VerNuevaVenta(variables,CodLibro) {
 
     })
 
-    $("#modal-superior").on("shown.bs.modal", function () { 
-        //console.log("modal show")
+    $("#modal-superior").off('shown.bs.modal').on("shown.bs.modal", function () { 
+         
         $("#chbSoloProductoStock").prop("checked",false)
         $("#divSoloProductoStock").css("display","none")
         $("#Cod_Categoria").css("display","block")
         $("#lbCod_Categoria").css("display","block")
         $("#Cod_Categoria").val("01")
         $("#Cod_Precio").val($("#Cod_Precio_"+IdTabSeleccionado).val())
-        Buscar()
-   
+        Buscar() 
     });
 
     IdTabSeleccionado = idTabVenta
@@ -532,28 +558,32 @@ function VerVuelto(variables,idTab){
 }
 
 function CrearBotonesProductos(c,idTab,callback){
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            CodCategoria:c.Cod_Categoria,
-            CodAlmacen:$("#Cod_Almacen_"+idTab).val()
-        })
+    if($("#Cod_Almacen_"+idTab).val()!=''){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                CodCategoria:c.Cod_Categoria,
+                CodAlmacen:$("#Cod_Almacen_"+idTab).val()
+            })
+        }
+        fetch(URL + '/productos_serv_api/get_producto_by_codalm_codprec_stock', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=="ok"){
+                    var productos = res.data.productos
+                    callback(c,productos)
+                }else{
+                    callback(c,[])
+                }
+        
+            }) 
+    }else{
+        toastr.error('Es necesario seleccionar un almacen','Error',{timeOut: 5000})
     }
-    fetch(URL + '/productos_serv_api/get_producto_by_codalm_codprec_stock', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if(res.respuesta=="ok"){
-                var productos = res.data.productos
-                callback(c,productos)
-            }else{
-                callback(c,[])
-            }
-    
-        }) 
 }
 
 function CrearBotonesCategorias(categorias,idTab){
@@ -670,7 +700,7 @@ function ExisteProducto(CodProducto,idTab,callback){
             posicion = index
             return false
         }
-    });
+    }); 
     callback(flag,posicion)
 }
 
@@ -692,6 +722,7 @@ function RecalcularSubtotales(idTab){
         var _Cantidad = parseFloat($(this).find("td").eq(3).find('input').val())
         var _PrecioUnitario = parseFloat($(this).find("td").eq(4).text())
         $(this).find("td").eq(9).text((parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2))
+        changeDetallesArrayJsonVentas(idTab,$(this).find("td").eq(0).text(),[null,null,null,null,null,null,null,null,null,null,null,null,(parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2),null,null,null,null])
     });
     CalcularTotal(idTab)
 }
@@ -812,7 +843,7 @@ function LimpiarVenta(idTab){
     $("#Cliente_"+idTab).val('')
     $("#Cliente_"+idTab).attr("data-id",null)
 
-    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,-1,null])
+    deleteElementArrayJsonVentas(global.variablesVentas,idTab)
 
     if($("#btnTotal_"+idTab).hasClass('active')){
         $("#btnTotal_"+idTab).click()
@@ -826,6 +857,7 @@ function LimpiarVenta(idTab){
 function TabVentaSeleccionado(idTab){
     IdTabSeleccionado = idTab
     global.objClienteVenta = ''
+    global.objProductoVentas = ''
 }
 
 function CerrarTabVenta(idTab){
@@ -838,6 +870,7 @@ function CerrarTabVenta(idTab){
 }
 
 function EliminarFila(idFila,idTab){
+    deleteElementArrayJsonVentas(global.variablesVentas,idTab,$('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Cod_Producto').text())
     $('#'+idFila).remove()
     CalcularTotal(idTab)
     CalcularTotalDescuentos(idTab)
@@ -1057,6 +1090,10 @@ function CambioMonedaFormaPagoSoles(idTab){
 
 
 function CambioCantidadVenta(idFila,idTab){
+    
+    changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Cantidad').find('input').val()).toFixed(2),null,null,null,null,null,null,null,null])
+                                    
+
     if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
         
         const parametros = {
@@ -1075,9 +1112,13 @@ function CambioCantidadVenta(idFila,idTab){
             .then(req => req.json())
             .then(res => {
                 if(res.respuesta=="ok"){
-                    var producto = res.data.producto[0]
-                    if(parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()) > parseFloat(producto.Stock_Act)){
-                        toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
+                    if(res.data.producto.length>0){
+                        var producto = res.data.producto[0]
+                        if(parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()) > parseFloat(producto.Stock_Act)){
+                            toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
+                            $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
+                        }
+                    }else{
                         $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                     }
                 }else{
@@ -1092,6 +1133,9 @@ function CambioCantidadVenta(idFila,idTab){
 
 
 function CambioPrecioDescuentos(idFila,idTab){
+
+    changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.UnitarioBase').find('input').val()).toFixed(2),parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Descuentos').find('input').val()).toFixed(2),null,null,null,null,null])
+
     var _Unitario = parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())
     var _Descuento = parseFloat($('#'+idFila).find('td.Descuentos').find('input').val()) / 100
     if(_Descuento !=0){
@@ -1124,64 +1168,132 @@ function CambioTipoCambioVenta(idTab){
 }
 
 
-function AgregarProducto(producto,favoritos,idTab){
-
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Id_Producto: producto.Id_Producto
-        })
-    }
-    fetch(URL + '/productos_serv_api/get_producto_by_pk', parametros)
-        .then(req => req.json())
-        .then(res => {
-            if(res.respuesta=="ok"){
-                var dataProducto = res.data.producto[0]
-                ValidarStock(producto.Stock_Act,dataProducto,idTab,function(flag){
-                    if(flag){
-                        ExisteProducto(producto.Cod_Producto,idTab,function(flag,index){
+function AgregarProducto(producto,favoritos,idTab){ 
+    if($("#Cod_Almacen_"+idTab).val()!=''){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Cod_Producto: producto.Cod_Producto,
+                Cod_Almacen: $("#Cod_Almacen_"+idTab).val(),
+                Cod_TipoPrecio: $("#Cod_Precio_"+idTab).val()
+            })
+        }
+        fetch(URL + '/productos_serv_api/get_codigo_unidad_by_codP_codA_codTP', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=="ok"){
+                    if(res.data.producto.length>0){
+                        var dataProducto = res.data.producto[0]  
+                        ValidarStock(producto.Stock_Act,dataProducto,idTab,function(flag){
                             if(flag){
-                                $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
-                                $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(RecuperarPrecio(favoritos,dataProducto))).toFixed(2))
-                                $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
+                                ExisteProducto(producto.Cod_Producto,idTab,function(flag,index){
+                                    if(flag){
+                                        changeDetallesArrayJsonVentas(idTab,$('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2),null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(RecuperarPrecio(favoritos,dataProducto))).toFixed(2),null,null,null,null])
+                                    
+
+                                        $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
+                                        $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(RecuperarPrecio(favoritos,dataProducto))).toFixed(2))
+                                        $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
+                                        
+                                       
+                                    }else{
+                                        const idFila = $('#tablaBodyProductosVentas_'+idTab+' > tr').length
+                                        var fila = yo`
+                                        <tr id="${idFila+''+idTab}">
+                                            <td class="Cod_Producto">${dataProducto.Cod_Producto}</td> 
+                                            <td class="Flag_Stock hidden">${dataProducto.Flag_Stock}</td> 
+                                            <td class="Nom_Producto" style="width: 30%;">${dataProducto.Nom_Producto}</td> 
+                                            <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
+                                            <td class="Unitario hidden">${RecuperarPrecio(favoritos,dataProducto)}</td>
+                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
+                                            <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td>
+                                            <td class="DescuentoUnitario hidden">0</td> 
+                                            <td class="DescuentoTotal hidden">0</td> 
+                                            <td class="Precio">${RecuperarPrecio(favoritos,dataProducto)}</td>
+                                            <td>
+                                                <div style="display:flex;"> 
+                                                    <button type="button" onclick="${()=>EliminarFila(idFila+''+idTab,idTab)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>`
+                                         
+                                        $('#tablaBodyProductosVentas_'+idTab).append(fila)
+
+                                        getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Detalles.push({
+                                            id_ComprobantePago:0,
+                                            id_Detalle:0,
+                                            Id_Producto:dataProducto.Id_Producto,
+                                            Codigo:dataProducto.Cod_Producto,
+                                            Descripcion:dataProducto.Nom_Producto,
+                                            Almacen:$("#Cod_Almacen_"+idTab).val(),
+                                            UM:dataProducto.Cod_UnidadMedida,
+                                            Stock:dataProducto.Stock_Act,
+                                            Cantidad:1,
+                                            Despachado:1,
+                                            PU:RecuperarPrecio(favoritos,dataProducto),
+                                            Descuento:'0.00',
+                                            Importe:RecuperarPrecio(favoritos,dataProducto),
+                                            Cod_Manguera:$("#Cod_Precio_"+idTab).val(),
+                                            Tipo:dataProducto.Cod_TipoOperatividad,
+                                            Obs_ComprobanteD:'',
+                                            Series:[]
+                                        })
+                                        /*
+
+
+                                        <tr id="${idFila}">
+                                            <td class="id_ComprobantePago hidden"><input value="0"></td>
+                                            <td class="id_Detalle hidden"><input value="${rows}"></td> 
+                                            <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
+                                            <td class="Codigo">${flagGasto?'':Cod_Producto}</td>
+                                            <td class="Descripcion"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
+                                            <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
+                                            <td class="UM"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_UnidadMedida}></td>
+                                            <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
+                                            <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+                                            <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
+                                            <td class="PU"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+                                            <td class="Descuento"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
+                                            <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
+                                            <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
+                                            <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
+                                            <td class="Obs_ComprobanteD hidden"></td> 
+                                            <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+                                            <td>
+                                            <div style="display:flex;">
+                                                <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                                                <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                            </td>
+                                        </tr>`
+
+                                        */
+
+
+                                    }
+                                    CalcularTotal(idTab)
+                                    CalcularTotalDescuentos(idTab)
+                                })
+                            
+                                
                             }else{
-                                var idFila = $('#tablaBodyProductosVentas_'+idTab+' > tr').length
-                                var fila = yo`
-                                <tr id="${idFila+''+idTab}">
-                                    <td class="Cod_Producto">${dataProducto.Cod_Producto}</td> 
-                                    <td class="Flag_Stock hidden">${dataProducto.Flag_Stock}</td> 
-                                    <td class="Nom_Producto" style="width: 30%;">${dataProducto.Nom_Producto}</td> 
-                                    <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
-                                    <td class="Unitario hidden">${RecuperarPrecio(favoritos,dataProducto)}</td>
-                                    <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
-                                    <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td>
-                                    <td class="DescuentoUnitario hidden">0</td> 
-                                    <td class="DescuentoTotal hidden">0</td> 
-                                    <td class="Precio">${RecuperarPrecio(favoritos,dataProducto)}</td>
-                                    <td>
-                                        <div style="display:flex;"> 
-                                            <button type="button" onclick="${()=>EliminarFila(idFila+''+idTab,idTab)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>`
-                                $('#tablaBodyProductosVentas_'+idTab).append(fila)
+                                toastr.error('No existe stock para dicho producto','Error',{timeOut: 5000})  
                             }
-                            CalcularTotal(idTab)
-                            CalcularTotalDescuentos(idTab)
                         })
-                       
-                        
+                    
                     }else{
-                        toastr.error('No existe stock para dicho producto','Error',{timeOut: 5000})  
+                        toastr.error('El producto seleccionado no existe para el almacen y precio seleccionado.','Error',{timeOut: 5000})
                     }
-                })
-            }
-    
-        })
+                }
+        
+            })
+    }else{
+        toastr.error('Es necesario seleccionar un almacen.','Error',{timeOut: 5000})
+    }
 }
 
 
@@ -1268,13 +1380,13 @@ function NuevaVenta() {
 
 function VentaSimple(){
 
-    console.log(global.variablesVentas)
+    //console.log(global.variablesVentas)
     var _CodTipoComprobante=""
     if(!($('#tabs li:first').hasClass('active'))){
         if(IdTabSeleccionado!=null){
             var rows = $("#tablaBodyProductosVentas_"+IdTabSeleccionado+" > tr").length
-            ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente)
-            if(rows>0){
+            ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
+            /*if(rows>0){
                 // verificar cierre z ???
                 if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total<=700)){
                     if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
@@ -1303,11 +1415,8 @@ function VentaSimple(){
                 }
             }else{
                 toastr.error('No se puede Utilizar esta opcion sin haber ingresado al menos una venta.\n\n Ingrese la venta y vuelva a intentarlo.','Error',{timeOut: 5000})     
-            }
-            //console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)
-            //changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[10])
-            //console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado))
-            //LimpiarVenta(IdTabSeleccionado)
+            }*/
+            
         }
     }else{
         IdTabSeleccionado = null

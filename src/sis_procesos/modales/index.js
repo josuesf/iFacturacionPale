@@ -9,6 +9,7 @@ var aCodTipoProducto = null
 
 function BuscarProducto(_RequiereStock,text_busqueda) {
     H5_loading.show()
+    global.objProductoVentas = ''
     aRequiereStock = _RequiereStock
     var el = yo`
         <div class="modal-dialog">
