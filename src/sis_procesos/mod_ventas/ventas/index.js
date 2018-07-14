@@ -325,14 +325,15 @@ function VerNuevaVenta(variables,CodLibro) {
                 if(flag){
                     ExisteProducto(global.objProductoVentas.Cod_Producto,IdTabSeleccionado,function(flag,index){
  
-                        if(flag){
-                            
-                            changeDetallesArrayJsonVentas(IdTabSeleccionado,$('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2),null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2),null,null,null,null])
+                        if(flag){                            
                             
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(global.objProductoVentas.Precio_Venta)).toFixed(2))
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
                              
+
+                            changeDetallesArrayJsonVentas(IdTabSeleccionado,$('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,$('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val(),null,null,null,$('#tablaBodyProductosVentas_'+IdTabSeleccionado+' tr:eq('+ index + ')').find('td.Precio').text(),null,null,null,null])
+
                         }else{
                             //console.log(global.objProductoVentas)
                             var idFila = $('#tablaBodyProductosVentas_'+IdTabSeleccionado+' > tr').length
@@ -1138,6 +1139,10 @@ function CambioPrecioDescuentos(idFila,idTab){
 
     var _Unitario = parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())
     var _Descuento = parseFloat($('#'+idFila).find('td.Descuentos').find('input').val()) / 100
+    if(_Descuento.toString()==''){
+        $('#'+idFila).find('td.Descuentos').find('input').val('0.00')
+        _Descuento = 0
+    }
     if(_Descuento !=0){
         $('#'+idFila).find('td.Descuentos').find('input').css("background","#dd4b39")
         $('#'+idFila).find('td.Descuentos').find('input').css("color","white")
@@ -1192,13 +1197,12 @@ function AgregarProducto(producto,favoritos,idTab){
                             if(flag){
                                 ExisteProducto(producto.Cod_Producto,idTab,function(flag,index){
                                     if(flag){
-                                        changeDetallesArrayJsonVentas(idTab,$('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2),null,null,null,(parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(RecuperarPrecio(favoritos,dataProducto))).toFixed(2),null,null,null,null])
-                                    
 
                                         $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())+1).toFixed(2))
                                         $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Precio').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())*parseFloat(RecuperarPrecio(favoritos,dataProducto))).toFixed(2))
                                         $('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoTotal').text((parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.DescuentoUnitario').text())*parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val())).toFixed(2))
                                         
+                                        changeDetallesArrayJsonVentas(idTab,$('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,$('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Cantidad').find('input').val(),null,null,null,$('#tablaBodyProductosVentas_'+idTab+' tr:eq('+ index + ')').find('td.Precio').text(),null,null,null,null])
                                        
                                     }else{
                                         const idFila = $('#tablaBodyProductosVentas_'+idTab+' > tr').length
@@ -1380,13 +1384,13 @@ function NuevaVenta() {
 
 function VentaSimple(){
 
-    //console.log(global.variablesVentas)
+    console.log(global.variablesVentas)
     var _CodTipoComprobante=""
     if(!($('#tabs li:first').hasClass('active'))){
         if(IdTabSeleccionado!=null){
             var rows = $("#tablaBodyProductosVentas_"+IdTabSeleccionado+" > tr").length
-            ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
-            /*if(rows>0){
+            //ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
+            if(rows>0){
                 // verificar cierre z ???
                 if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total<=700)){
                     if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
@@ -1400,7 +1404,7 @@ function VentaSimple(){
                     }
                 }else{
                     if($("#Cliente_"+IdTabSeleccionado).attr("data-id")==null){
-
+                        ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
                     }else{
                         if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                             if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
@@ -1415,7 +1419,7 @@ function VentaSimple(){
                 }
             }else{
                 toastr.error('No se puede Utilizar esta opcion sin haber ingresado al menos una venta.\n\n Ingrese la venta y vuelva a intentarlo.','Error',{timeOut: 5000})     
-            }*/
+            }
             
         }
     }else{

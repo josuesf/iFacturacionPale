@@ -360,7 +360,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <th>
                                                     <div style="display: inline-flex;">
                                                         <input type="number" class="form-control input-sm" id="Cantidad" value="0.00" onkeypress=${()=>KeyPressCantidad(CodLibro)} onchange=${()=>KeyPressCantidad(CodLibro)}>
-                                                        <select class="form-control input-sm" style="display:${CodLibro=='14'? 'block':'none'}" id="Cod_TipoPrecio" > </select>
+                                                        <select class="form-control input-sm" style="display:${CodLibro=='14'? 'block':'none'};width: 10%;" id="Cod_TipoPrecio" > </select>
                                                     </div>
                                                 </th>
                                                 
