@@ -399,7 +399,8 @@ function VentaSimple(req,res){
                                             flag_control = false
                                             //return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
                                             //break
-                                        }   
+                                        }
+                                        console.log(dataComprobanteDetalle)   
                                     })
                                 } 
                             }
@@ -424,9 +425,9 @@ function VentaSimple(req,res){
 function DataCliente(input,callback){
     var Id_Cliente = input.Id_Cliente
     var Cod_TipoDoc = input.Cod_TipoDoc
-    var Doc_Cliente = ''
-    var Nom_Cliente = ''
-    var Direccion_Cliente = ''
+    var Doc_Cliente = input.Doc_Cliente
+    var Nom_Cliente = input.Nom_Cliente
+    var Direccion_Cliente = input.Direccion_Cliente
 
     if(Id_Cliente== -1){
         if(Cod_TipoDoc=='99'){

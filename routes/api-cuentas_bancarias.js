@@ -94,7 +94,7 @@ router.post('/guardar_cuenta', function (req, res) {
 router.post('/guardar_cuenta_movimiento', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'Id_Movimiento',valor_parametro:-1},
+        {nom_parametro:'Id_MovimientoCuenta',valor_parametro:-1},
         {nom_parametro:'Cod_CuentaBancaria',valor_parametro:input.Cod_CuentaBancaria},
         {nom_parametro:'Nro_Operacion',valor_parametro:input.Nro_Operacion},
         {nom_parametro:'Des_Movimiento',valor_parametro:input.Des_Movimiento},

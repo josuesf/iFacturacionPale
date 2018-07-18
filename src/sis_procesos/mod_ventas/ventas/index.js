@@ -23,7 +23,7 @@ function VerNuevaVenta(variables,CodLibro) {
     const idTabVenta = cantidad_tabs
     global.objClienteVenta = ''
     global.objProductoVentas = ''
-    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cliente:null,Detalles:[]})
+    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
     var tab = yo`
         <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button style="padding-left: 10px;" type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
 
@@ -1357,6 +1357,86 @@ function BuscarClienteDoc(CodLibro,idTab) {
         })
 }
 
+function EmisionRapida(pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
+
+    H5_loading.show();
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cliente:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente
+        })
+    }
+    fetch(URL + '/comprobantes_pago_api/venta_simple', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log(res)
+            H5_loading.hide()
+        })
+
+
+}
+
+function ObtenerFormaPago(callback){
+    if($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard' || $('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'visa'){
+        if ($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard'){
+            let listaFormaPago = []
+            listaFormaPago.push({
+                id_ComprobantePago :0,
+                Item : 1,
+                Des_FormaPago : 'VISA NET',
+                Cod_FormaPago : '005',
+                Cod_Moneda : 'PEN',
+                TipoCambio : 1,
+                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+                CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
+            })
+            callback(listaFormaPago)
+        }else{
+            let listaFormaPago = []
+            listaFormaPago.push({
+                id_ComprobantePago :0,
+                Item : 1,
+                Des_FormaPago : 'MASTERCARD',
+                Cod_FormaPago : '006',
+                Cod_Moneda : 'PEN',
+                TipoCambio : 1,
+                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+                CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
+            })
+            callback(listaFormaPago)
+        }
+    }else{
+
+        let listaFormaPago = []
+        listaFormaPago.push({
+            id_ComprobantePago :0,
+            Item : 1,
+            Des_FormaPago : 'EFECTIVO',
+            Cod_FormaPago : '008',
+            Cod_Moneda : 'PEN',
+            TipoCambio : 1,
+            Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+            CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
+        })
+        callback(listaFormaPago)
+    }
+}
+
+function VentaSimpleSinME(idTab,_CodTipoComprobante){
+    console.log($("#cog").val())
+    //console.log(global.variablesVentas)
+    console.log("venta simple")
+    /*if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
+        _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
+    }
+    EmisionRapida(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)*/
+}
+
 function NuevaVenta() {
     H5_loading.show();
     const parametros = {
@@ -1365,13 +1445,14 @@ function NuevaVenta() {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
+        credentials: 'same-origin',
         body: JSON.stringify({
         })
     }
     fetch(URL + '/comprobantes_pago_api/get_variables_ventas', parametros)
         .then(req => req.json())
         .then(res => {
-            var variables = res.data
+            const variables = res.data
             if (res.respuesta == 'ok') {
                 VerNuevaVenta(variables,null)
             }else{
@@ -1383,6 +1464,10 @@ function NuevaVenta() {
  
 
 function VentaSimple(){
+    if($("#Cliente_"+IdTabSeleccionado).val().trim()==''){
+        getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente = null
+        $("#Cliente_"+IdTabSeleccionado).attr("data-id",null)
+    }
 
     console.log(global.variablesVentas)
     var _CodTipoComprobante=""
@@ -1392,7 +1477,7 @@ function VentaSimple(){
             //ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
             if(rows>0){
                 // verificar cierre z ???
-                if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total<=700)){
+                if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)<=700){
                     if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                         if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
                             VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
