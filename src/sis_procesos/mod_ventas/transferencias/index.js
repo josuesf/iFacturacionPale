@@ -428,7 +428,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                     Ingreso = $("#Monto").val()
                     Egreso = 0
                     Flag_Extornado = 0
-                    Id_MovimientoRef = res.data.result
+                    Id_MovimientoRef = res.data
                     GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables)
                 }
                 else {

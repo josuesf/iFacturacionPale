@@ -855,14 +855,16 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                             </div>
                             <div class="box-footer">
                                 <div class="row">
-                                    <div class="col-md-4 col-md-offset-8">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <button class="btn btn-success" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
-                                            </div>   
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button class="btn btn-danger" id="btnTotal">TOTAL </button>
+                                    <div class="col-md-12">
+                                        <div class="col-md-4 col-md-offset-8">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <button class="btn btn-success" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
+                                                </div>   
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-danger" id="btnTotal">TOTAL </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -942,8 +944,8 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
                                 <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${u.Stock}></td> 
                                 <td class="Cantidad"><input type="number" class="form-control input-sm" value=${u.Cantidad} onkeyup=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)}></td> 
                                 <td class="Despachado hidden">${u.Despachado}</td> 
-                                <td class="PU"><input type="number" class="form-control input-sm" value=${u.PU} onkeyup=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)}></td> 
-                                <td class="Descuento"><input type="number" class="form-control input-sm" value=${u.Descuento} onkeyup=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} ></td> 
+                                <td class="PU"><input type="number" class="form-control input-sm" data-value=${parseFloat(u.PU)-(parseFloat(u.Descuento)*parseFloat(u.PU)/100)} value=${u.PU} onkeyup=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(index+ u.Id_Producto,CodLibro,variables)}></td> 
+                                <td class="Descuento"><input type="number" style=${parseFloat(u.Descuento)/100 != 0?"background:#dd4b39;color:white;border-color:#dd4b39":"background:white;color:#555;border-color:#98999c"} data-value=${parseFloat(u.Descuento)*parseFloat(u.PU)/100} class="form-control input-sm" value=${u.Descuento} onkeyup=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarDescuento(index+ u.Id_Producto,CodLibro,variables)} ></td> 
                                 <td class="Importe"><input type="number" class="form-control input-sm" value=${u.Importe}></td>
                                 <td class="Cod_Manguera hidden">${u.Cod_Manguera}</td>  
                                 <td class="Tipo hidden">${u.Tipo}</td> 
@@ -1441,7 +1443,7 @@ function CalcularTotal(CodLibro,variables){
 
         var tipo = $(this).find("td").eq(14).text()
         var sub_total = $(this).find("td").eq(12).find("input").val()
-        var descuento = $(this).find("td").eq(11).find("input").val()
+        var descuento = $(this).find("td").eq(11).find("input").attr("data-value")
         var cantidad = $(this).find("td").eq(8).find("input").val()
         var DescuentosGlobales = parseFloat($("#Descuento_Global").val())
 

@@ -165,7 +165,7 @@ router.post('/guardar_mov_almacen', function (req, res){
     EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
         if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
         else{
-            var Id_AlmacenMov = dataMov.result  
+            var Id_AlmacenMov = dataMov.result[0].valor  
             var contador = 1 
             //console.log(input.dataForm)
             for(var i=0;i<input.dataForm.length;i += 9){
@@ -241,7 +241,7 @@ router.post('/guardar_mov_almacen', function (req, res){
 
                 EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametrosDestino , function (dataMov) {
                     if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
-                    var Id_AlmacenMov = dataMov.result  
+                    var Id_AlmacenMov = dataMov.result[0].valor  
                     var contador = 1 
                     for(var i=0;i<input.dataForm.length;i += 9){
 

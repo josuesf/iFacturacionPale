@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var { Ejecutar_Procedimientos, EXEC_SQL } = require('../utility/exec_sp_sql')
+var { Ejecutar_Procedimientos, EXEC_SQL, EXEC_SQL_OUTPUT } = require('../utility/exec_sp_sql')
 // define the home page route
 router.post('/get_comprobante_pago', function (req, res) {
     input = req.body
@@ -179,10 +179,10 @@ router.post('/get_monedas', function (req, res) {
 
 
 router.post('/venta_simple', function (req, res) {
-     
+    var input = req.body
       
     var parametros = [
-        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDoc },
+        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDoc },
         { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja }
     ]
 
@@ -213,163 +213,140 @@ router.post('/venta_simple', function (req, res) {
                 var TipoCambio = 1
                 var Flag_Anulado = '0'
                 var Flag_Despachado = '1'
-                var Cod_FormaPago = input.Cod_FormaPago
+                var Cod_FormaPago =  (input.FormaPago.length == 0 || input.FormaPago==null)? '999':input.FormaPago[0].Cod_FormaPago
                 var Descuento_Total = 0
                 var Cod_Moneda = input.Cod_Moneda
-                var Impuesto = input.Impuesto
-                var Total = input.Total
-                var Obs_Comprobante = input.Obs_Comprobante
-                var Id_GuiaRemision = 0
-                var GuiaRemision = ''
-                var id_ComprobanteRef = 0
-                var Cod_Plantilla = null
-                var Numero = ''
-                var Cod_UsuarioVendedor = null
-                var Cod_RegimenPercepcion = null
-                var Tasa_Percepcion = 0
-                var Placa_Vehiculo = ''
-                var Cod_TipoDocReferencia = null
-                var Nro_DocReferencia = null
-                var Valor_Resumen = null
-                var Valor_Firma = null
-                var Cod_EstadoComprobante = 'EMI'
-                var MotivoAnulacion = null
-                var Otros_Cargos = 0
-                var Otros_Tributos = 0
-                var Cod_Usuario = req.session.username
 
-                var parametrosComprobante = [
-                    { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output"},
-                    { nom_parametro: 'Cod_Libro', valor_parametro: '14'},
-                    { nom_parametro: 'Cod_Periodo', valor_parametro:Cod_Periodo},
-                    { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
-                    { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
-                    { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
-                    { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
-                    { nom_parametro: 'Serie', valor_parametro: Serie},
-                    { nom_parametro: 'Numero', valor_parametro: Numero},
-                    { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
-                    { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
-                    { nom_parametro: 'Doc_Cliente', valor_parametro: Doc_Cliente},
-                    { nom_parametro: 'Nom_Cliente', valor_parametro: Nom_Cliente},
-                    { nom_parametro: 'Direccion_Cliente', valor_parametro: Direccion_Cliente},
-                    { nom_parametro: 'FechaEmision', valor_parametro: FechaEmision},
-                    { nom_parametro: 'FechaVencimiento', valor_parametro: FechaEmision},
-                    { nom_parametro: 'FechaCancelacion', valor_parametro: FechaEmision},
-                    { nom_parametro: 'Glosa', valor_parametro: Glosa},
-                    { nom_parametro: 'TipoCambio', valor_parametro: TipoCambio},
-                    { nom_parametro: 'Flag_Anulado', valor_parametro: Flag_Anulado},
-                    { nom_parametro: 'Flag_Despachado', valor_parametro: Flag_Despachado},
-                    { nom_parametro: 'Cod_FormaPago', valor_parametro: Cod_FormaPago},
-                    { nom_parametro: 'Descuento_Total', valor_parametro: Descuento_Total},
-                    { nom_parametro: 'Cod_Moneda', valor_parametro: Cod_Moneda},
-                    { nom_parametro: 'Impuesto', valor_parametro: Impuesto},
-                    { nom_parametro: 'Total', valor_parametro: Total},
-                    { nom_parametro: 'Obs_Comprobante', valor_parametro: Obs_Comprobante},
-                    { nom_parametro: 'Id_GuiaRemision', valor_parametro: Id_GuiaRemision},
-                    { nom_parametro: 'GuiaRemision', valor_parametro: GuiaRemision},
-                    { nom_parametro: 'id_ComprobanteRef', valor_parametro: id_ComprobanteRef},
-                    { nom_parametro: 'Cod_Plantilla', valor_parametro: Cod_Plantilla},
-                    { nom_parametro: 'Nro_Ticketera', valor_parametro: Nro_Ticketera},
-                    { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: Cod_UsuarioVendedor},
-                    { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: Cod_RegimenPercepcion},
-                    { nom_parametro: 'Tasa_Percepcion', valor_parametro: Tasa_Percepcion},
-                    { nom_parametro: 'Placa_Vehiculo', valor_parametro: Placa_Vehiculo},
-                    { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: Cod_TipoDocReferencia},
-                    { nom_parametro: 'Nro_DocReferencia', valor_parametro: Nro_DocReferencia},
-                    { nom_parametro: 'Valor_Resumen', valor_parametro: Valor_Resumen},
-                    { nom_parametro: 'Valor_Firma', valor_parametro: Valor_Firma},
-                    { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: Cod_EstadoComprobante},
-                    { nom_parametro: 'MotivoAnulacion', valor_parametro: MotivoAnulacion},
-                    { nom_parametro: 'Otros_Cargos', valor_parametro: Otros_Cargos},
-                    { nom_parametro: 'Otros_Tributos', valor_parametro: Otros_Tributos},
-                    { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario},
-                ]
-                console.log(parametrosComprobante)
-                
-                EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
-                    if (dataComprobante.err){
-                        console.log(dataComprobante.err)
-                        return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
-                    }
+
+                var impuesto = 0
+                var total = 0  
+                DeterminarImpuesto(0,req,impuesto,total,req.app.locals.empresa[0].Flag_ExoneradoImpuesto,function(Impuesto,Total){
+                    var Obs_Comprobante = input.Obs_Comprobante
+                    var Id_GuiaRemision = 0
+                    var GuiaRemision = ''
+                    var id_ComprobanteRef = 0
+                    var Cod_Plantilla = null
+                    var Numero = ''
+                    var Cod_UsuarioVendedor = null
+                    var Cod_RegimenPercepcion = null
+                    var Tasa_Percepcion = 0
+                    var Placa_Vehiculo = ''
+                    var Cod_TipoDocReferencia = null
+                    var Nro_DocReferencia = null
+                    var Valor_Resumen = null
+                    var Valor_Firma = null
+                    var Cod_EstadoComprobante = 'EMI'
+                    var MotivoAnulacion = null
+                    var Otros_Cargos = 0
+                    var Otros_Tributos = 0
+                    var Cod_Usuario = req.session.username 
+                    var parametrosComprobante = [
+                        { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output"},
+                        { nom_parametro: 'Cod_Libro', valor_parametro: '14'},
+                        { nom_parametro: 'Cod_Periodo', valor_parametro:Cod_Periodo},
+                        { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
+                        { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
+                        { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
+                        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
+                        { nom_parametro: 'Serie', valor_parametro: Serie},
+                        { nom_parametro: 'Numero', valor_parametro: Numero,tipo_parametro:sql.VarChar,tipo:"output"},
+                        { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
+                        { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
+                        { nom_parametro: 'Doc_Cliente', valor_parametro: Doc_Cliente},
+                        { nom_parametro: 'Nom_Cliente', valor_parametro: Nom_Cliente},
+                        { nom_parametro: 'Direccion_Cliente', valor_parametro: Direccion_Cliente},
+                        { nom_parametro: 'FechaEmision', valor_parametro: FechaEmision},
+                        { nom_parametro: 'FechaVencimiento', valor_parametro: FechaEmision},
+                        { nom_parametro: 'FechaCancelacion', valor_parametro: FechaEmision},
+                        { nom_parametro: 'Glosa', valor_parametro: Glosa},
+                        { nom_parametro: 'TipoCambio', valor_parametro: TipoCambio},
+                        { nom_parametro: 'Flag_Anulado', valor_parametro: Flag_Anulado},
+                        { nom_parametro: 'Flag_Despachado', valor_parametro: Flag_Despachado},
+                        { nom_parametro: 'Cod_FormaPago', valor_parametro: Cod_FormaPago},
+                        { nom_parametro: 'Descuento_Total', valor_parametro: Descuento_Total},
+                        { nom_parametro: 'Cod_Moneda', valor_parametro: Cod_Moneda},
+                        { nom_parametro: 'Impuesto', valor_parametro: Impuesto},
+                        { nom_parametro: 'Total', valor_parametro: Total},
+                        { nom_parametro: 'Obs_Comprobante', valor_parametro: Obs_Comprobante},
+                        { nom_parametro: 'Id_GuiaRemision', valor_parametro: Id_GuiaRemision},
+                        { nom_parametro: 'GuiaRemision', valor_parametro: GuiaRemision},
+                        { nom_parametro: 'id_ComprobanteRef', valor_parametro: id_ComprobanteRef},
+                        { nom_parametro: 'Cod_Plantilla', valor_parametro: Cod_Plantilla},
+                        { nom_parametro: 'Nro_Ticketera', valor_parametro: Nro_Ticketera},
+                        { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: Cod_UsuarioVendedor},
+                        { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: Cod_RegimenPercepcion},
+                        { nom_parametro: 'Tasa_Percepcion', valor_parametro: Tasa_Percepcion},
+                        { nom_parametro: 'Placa_Vehiculo', valor_parametro: Placa_Vehiculo},
+                        { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: Cod_TipoDocReferencia},
+                        { nom_parametro: 'Nro_DocReferencia', valor_parametro: Nro_DocReferencia},
+                        { nom_parametro: 'Valor_Resumen', valor_parametro: Valor_Resumen},
+                        { nom_parametro: 'Valor_Firma', valor_parametro: Valor_Firma},
+                        { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: Cod_EstadoComprobante},
+                        { nom_parametro: 'MotivoAnulacion', valor_parametro: MotivoAnulacion},
+                        { nom_parametro: 'Otros_Cargos', valor_parametro: Otros_Cargos},
+                        { nom_parametro: 'Otros_Tributos', valor_parametro: Otros_Tributos},
+                        { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario},
+                    ] 
                     
-                    DataDetalles(req,res,dataComprobante.result,function(flag){
-                        if(flaq){
-                            let FormaPago = req.body.FormaPago
-                            if(FormaPago!=null){
-                                let id_ComprobantePago = dataComprobante.result
-                                
-                                let Id_Movimiento = GuardarCuentaBancaria(req,res,FormaPago,FechaEmision,Nom_Cliente,id_ComprobantePago)
-                                if(Id_Movimiento!=null){
-
-                                    const parametrosFormaPago = [
-                                        {nom_parametro:'id_ComprobantePago',valor_parametro:id_ComprobantePago},
-                                        {nom_parametro:'Item',valor_parametro:FormaPago[0].Item},
-                                        {nom_parametro:'Des_FormaPago',valor_parametro:FormaPago[0].Des_FormaPago},
-                                        {nom_parametro:'Cod_TipoFormaPago',valor_parametro:FormaPago[0].Cod_FormaPago},
-                                        {nom_parametro:'Cuenta_CajaBanco',valor_parametro:FormaPago[0].CuentaCajaBanco},
-                                        {nom_parametro:'Id_Movimiento',valor_parametro:Id_Movimiento},
-                                        {nom_parametro:'TipoCambio',valor_parametro:FormaPago[0].TipoCambio},
-                                        {nom_parametro:'Cod_Moneda',valor_parametro:FormaPago[0].Cod_Moneda},
-                                        {nom_parametro:'Monto',valor_parametro:FormaPago[0].Monto},
-                                        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
-                                        {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
-                                        {nom_parametro:'Cod_Plantilla',valor_parametro:''},
-                                        {nom_parametro:'Obs_FormaPago',valor_parametro:''},
-                                        {nom_parametro:'Fecha',valor_parametro:FechaEmision},        
-                                        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
-                                    ]
-    
-                                    EXEC_SQL('USP_CAJ_FORMA_PAGO_G',parametrosFormaPago, function (dataFormaPago) {
-                                        if (dataFormaPago.err){
-                                            console.log(dataFormaPago.err)
-                                            return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
-                                        } else{
-                                            return res.json({respuesta:"ok"})
-                                        }
-                                    })
-
-
-                                }else{
-                                    return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la cuenta bancaria'})
-                                }
-                                /*const parametrosFormaPago = [
-                                    {nom_parametro:'id_ComprobantePago',valor_parametro:-1,tipo:"output"},
-                                    {nom_parametro:'Item',valor_parametro:Cod_CuentaBancaria},
-                                    {nom_parametro:'Des_FormaPago',valor_parametro:Nro_Operacion},
-                                    {nom_parametro:'Cod_TipoFormaPago',valor_parametro:Des_Movimiento},
-                                    {nom_parametro:'Cuenta_CajaBanco',valor_parametro:Cod_TipoOperacionBancaria},
-                                    {nom_parametro:'Id_Movimiento',valor_parametro:Fecha},
-                                    {nom_parametro:'TipoCambio',valor_parametro:Monto},
-                                    {nom_parametro:'Cod_Moneda',valor_parametro:TipoCambio},
-                                    {nom_parametro:'Monto',valor_parametro:req.app.locals.caja[0].Cod_Caja},
-                                    {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.turno[0].Cod_Turno},
-                                    {nom_parametro:'Cod_Turno',valor_parametro:''},
-                                    {nom_parametro:'Cod_Plantilla',valor_parametro:''},
-                                    {nom_parametro:'Obs_FormaPago',valor_parametro:''},
-                                    {nom_parametro:'Fecha',valor_parametro:dataComprobante.result},        
-                                    {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
-                                ]
-
-                                EXEC_SQL('USP_CAJ_FORMA_PAGO_G',parametrosFormaPago, function (dataFormaPago) {
-                                    if (dataFormaPago.err){
-                                        console.log(dataFormaPago.err)
-                                        return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
-                                    } else{
-                                        return res.json({respuesta:"ok"})
-                                    }
-                                })*/
-                                
-                            }
-                            //return res.json({respuesta:"ok"})
-                        }else{
-                            return res.json({respuesta:"error"})
+                    EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
+                        if (dataComprobante.err){
+                            console.log(dataComprobante.err)
+                            return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                         }
+                        
+                        DataDetalles(0,req,res,dataComprobante.result[0].valor,function(flag){ 
+                            if(flag){
+                                 
+                                let FormaPago = req.body.FormaPago 
+                                if(FormaPago!=null){
+                                    let id_ComprobantePago = dataComprobante.result[0].valor
+                                    let Id_Movimiento = GuardarCuentaBancaria(req,res,FormaPago,FechaEmision,Nom_Cliente,id_ComprobantePago)
+                                    
+                                    if(Id_Movimiento!=null){
+    
+                                        const parametrosFormaPago = [
+                                            {nom_parametro:'id_ComprobantePago',valor_parametro:id_ComprobantePago},
+                                            {nom_parametro:'Item',valor_parametro:FormaPago[0].Item},
+                                            {nom_parametro:'Des_FormaPago',valor_parametro:FormaPago[0].Des_FormaPago},
+                                            {nom_parametro:'Cod_TipoFormaPago',valor_parametro:FormaPago[0].Cod_FormaPago},
+                                            {nom_parametro:'Cuenta_CajaBanco',valor_parametro:FormaPago[0].CuentaCajaBanco},
+                                            {nom_parametro:'Id_Movimiento',valor_parametro:Id_Movimiento},
+                                            {nom_parametro:'TipoCambio',valor_parametro:FormaPago[0].TipoCambio},
+                                            {nom_parametro:'Cod_Moneda',valor_parametro:FormaPago[0].Cod_Moneda},
+                                            {nom_parametro:'Monto',valor_parametro:FormaPago[0].Monto},
+                                            {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
+                                            {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
+                                            {nom_parametro:'Cod_Plantilla',valor_parametro:''},
+                                            {nom_parametro:'Obs_FormaPago',valor_parametro:''},
+                                            {nom_parametro:'Fecha',valor_parametro:FechaEmision},        
+                                            {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
+                                        ]
+        
+                                        EXEC_SQL('USP_CAJ_FORMA_PAGO_G',parametrosFormaPago, function (dataFormaPago) {
+                                            if (dataFormaPago.err){
+                                                console.log(dataFormaPago.err)
+                                                return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
+                                            } else{
+                                                return res.json({respuesta:"ok"})
+                                            }
+                                        })
+    
+    
+                                    }else{
+                                        return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la cuenta bancaria'})
+                                    }
+                                   
+                                    
+                                } 
+                            }else{
+                                return res.json({respuesta:"error"})
+                            }
+                        })
+                         
                     })
-                    
-                   
-                })
+                
 
+                })
             })
 
         }else{
@@ -412,11 +389,27 @@ function GuardarCuentaBancaria(req,res,FormaPago,Fecha,Nom_Cliente,Id_Comprobant
             if (dataCuentaBancaria.err){
                 return null
             }else{
-                return dataCuentaBancaria.result
+                return dataCuentaBancaria.result[0].valor
             } 
         })
     }else{
         return 0
+    }
+}
+
+function DeterminarImpuesto(i,req,impuesto,total,flagImpuesto,callback){
+    if(i<req.body.Detalles.length){
+        var SubTotal = (parseFloat(req.body.Detalles[i].Importe) * (1 - parseFloat(req.body.Detalles[i].Descuento)/100)).toFixed(2)
+        total += parseFloat(req.body.Detalles[i].Cantidad) * parseFloat(req.body.Detalles[i].PU) * (1 - parseFloat(req.body.Detalles[i].Descuento)/100)
+        if(flagImpuesto && req.body.Detalles[i].Tipo=="GRA"){
+            impuesto += ((parseFloat(SubTotal) / (1+parseFloat(req.app.locals.empresa[0].Por_Impuesto))) * (parseFloat(req.app.locals.empresa[0].Por_Impuesto)/100))
+        }
+        console.log(SubTotal)
+        console.log(total)
+        console.log(impuesto)
+        DeterminarImpuesto(i+1,req,impuesto,total,flagImpuesto,callback)
+    }else{ 
+        callback(impuesto,total)
     }
 }
 
@@ -456,7 +449,7 @@ function DeterminarTipoIGV(req,res,flagImpuesto,flagExportacion,Tipo,SubTotal,ca
     callback(IGV,Cod_TipoIGV)
 }
 
-function DataDetalles(req,res,i,idComprobante,callback){
+function DataDetalles(i,req,res,idComprobante,callback){
     if(i<req.body.Detalles.length){
         DeterminarTipoIGV(req,res,req.app.locals.empresa[0].Flag_ExoneradoImpuesto,false,req.body.Detalles[i].Tipo,req.body.Detalles[i].Importe,function(IGV,Cod_TipoIGV){
             var parametrosComprobanteDetalles = [
@@ -491,7 +484,7 @@ function DataDetalles(req,res,i,idComprobante,callback){
                     console.log(dataComprobanteDetalle.err)
                     callback(false)
                 }else{
-                    DataDetalles(req,res,i+1,idComprobante,callback)
+                    DataDetalles(i+1,req,res,idComprobante,callback)
                 }   
             }) 
         })
@@ -502,7 +495,7 @@ function DataDetalles(req,res,i,idComprobante,callback){
     
 }
 
-function DataCliente(input,req,res,callback){
+function DataCliente(req,res,callback){
     var Id_Cliente = req.body.Cliente == null? -1:req.body.Cliente.Id_Cliente
     var Cod_TipoDoc = req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDoc//input.Cod_TipoDoc
     var Doc_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Doc_Cliente
@@ -554,7 +547,7 @@ function DataCliente(input,req,res,callback){
                 if (dataCliente.err)
                     return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
                 
-                Id_Cliente = dataCliente.result
+                Id_Cliente = dataCliente.result[0].valor
                 Cod_TipoDoc = req.body.Cliente.Cod_TipoDoc
                 Doc_Cliente = req.body.Cliente.Doc_Cliente
                 Nom_Cliente = req.body.Cliente.Nom_Cliente

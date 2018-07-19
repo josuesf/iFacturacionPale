@@ -286,7 +286,7 @@ router.post('/guardar_arqueo', function (req, res){
             res.json({ respuesta: 'error'})
         }
         
-        GuardarSaldoSoles(0,req,res,dataArqueoFisico.result)
+        GuardarSaldoSoles(0,req,res,dataArqueoFisico.result[0].valor)
  
         /*for(var i=0;i<input.dataFormTS.length;i += 2){ 
             var tipo=input.dataFormTS[i].value

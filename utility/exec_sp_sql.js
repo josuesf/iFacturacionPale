@@ -213,7 +213,8 @@ var EXEC_SQL = function (sp_name, parametros, next) {
 
 
 var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
-    var paramOutPut = null
+    var arrayParamOutPut = []
+    var arrayResulOutPut = []
     var dbConn = new sql.Connection(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
@@ -224,21 +225,39 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
         for (i = 0; i < param.length; i++) {
             if(param[i].tipo){
                 request.output(param[i].nom_parametro, param[i].tipo_parametro || sql.Int, param[i].valor_parametro)
-                paramOutPut = param[i].nom_parametro
+                arrayParamOutPut.push({parametro:param[i].nom_parametro})
+                //paramOutPut = param[i].nom_parametro
             }
             else
                 request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
-        }
-      
+        } 
         request.execute(sp_name, function (err, result) {
+            
             dbConn.close() 
             if (err) {
                 return next({err})
-            }
-            return next({result:request.parameters[paramOutPut].value})
+            } 
+            LlenarArregloOutPut(0,arrayResulOutPut,arrayParamOutPut,request,function(arrayResult){
+                
+                return next({result:arrayResult})
+            })
+
+            //return next({result:request.parameters[paramOutPut].value})
         });
 
     });
+}
+
+
+function LlenarArregloOutPut(i,arrayResulOutPut,arrayParamOutPut,request,callback){
+    if(i<arrayParamOutPut.length){
+        arrayResulOutPut.push({
+            valor:request.parameters[arrayParamOutPut[i].parametro].value
+        })
+        LlenarArregloOutPut(i+1,arrayResulOutPut,arrayParamOutPut,request,callback)
+    }else{
+        callback(arrayResulOutPut)
+    }
 }
 
 module.exports = { Ejecutar_Procedimientos,LOGIN_SQL,EXEC_SQL,EXEC_SQL_OUTPUT, Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster, EXEC_QUERY }

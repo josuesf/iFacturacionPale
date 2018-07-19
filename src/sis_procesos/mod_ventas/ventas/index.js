@@ -733,7 +733,7 @@ function RecalcularDescuentosTotales(idTab){
     $('#tablaBodyProductosVentas_'+idTab+' tr').each(function (index) { 
         var _Cantidad = parseFloat($(this).find("td").eq(3).find('input').val())
         var _DescuentoUnitario = parseFloat($(this).find("td").eq(7).text())
-        $(this).find("td").eq(8).text((_Cantidad*_DescuentoUnitario).toFixed(2))
+        $(this).find("td").eq(8).text((_Cantidad*_DescuentoUnitario))
     });
     CalcularTotalDescuentos(idTab)
 }
@@ -845,7 +845,7 @@ function LimpiarVenta(idTab){
     $("#Cliente_"+idTab).attr("data-id",null)
 
     deleteElementArrayJsonVentas(global.variablesVentas,idTab)
-
+    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
     if($("#btnTotal_"+idTab).hasClass('active')){
         $("#btnTotal_"+idTab).click()
     }
@@ -1213,7 +1213,7 @@ function AgregarProducto(producto,favoritos,idTab){
                                             <td class="Nom_Producto" style="width: 30%;">${dataProducto.Nom_Producto}</td> 
                                             <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
                                             <td class="Unitario hidden">${RecuperarPrecio(favoritos,dataProducto)}</td>
-                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
+                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeypress=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
                                             <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td>
                                             <td class="DescuentoUnitario hidden">0</td> 
                                             <td class="DescuentoTotal hidden">0</td> 
@@ -1357,9 +1357,14 @@ function BuscarClienteDoc(CodLibro,idTab) {
         })
 }
 
-function EmisionRapida(pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
+function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
 
     H5_loading.show();
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate() 
+    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia) + ' '+ [(fecha.getHours()>9?fecha.getHours():'0'+fecha.getHours()), (fecha.getMinutes()>9?fecha.getMinutes():'0'+fecha.getMinutes())].join(':');
+    
     const parametros = {
         method: 'POST',
         headers: {
@@ -1368,20 +1373,33 @@ function EmisionRapida(pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
         },
         credentials: 'same-origin',
         body: JSON.stringify({
-            Cliente:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente
+            Cliente:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,
+            FormaPago: ObtenerFormaPago(idTab),
+            Detalles: getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,
+            Cod_Moneda: 'PEN',
+            Total:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total,
+            Obs_Comprobante:null,
+            Fecha_Emision:fecha_format
+
         })
     }
     fetch(URL + '/comprobantes_pago_api/venta_simple', parametros)
         .then(req => req.json())
         .then(res => {
             console.log(res)
+            if(res.respuesta == 'ok'){
+                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                LimpiarVenta(idTab)
+            }else{
+                toastr.error(res.detalle_error,'Error',{timeOut: 5000}) 
+            }
             H5_loading.hide()
         })
 
 
 }
 
-function ObtenerFormaPago(callback){
+function ObtenerFormaPago(idTab){
     if($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard' || $('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'visa'){
         if ($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard'){
             let listaFormaPago = []
@@ -1395,7 +1413,7 @@ function ObtenerFormaPago(callback){
                 Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
             })
-            callback(listaFormaPago)
+            return listaFormaPago
         }else{
             let listaFormaPago = []
             listaFormaPago.push({
@@ -1408,7 +1426,7 @@ function ObtenerFormaPago(callback){
                 Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
             })
-            callback(listaFormaPago)
+            return listaFormaPago
         }
     }else{
 
@@ -1423,18 +1441,17 @@ function ObtenerFormaPago(callback){
             Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
             CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
         })
-        callback(listaFormaPago)
+        return listaFormaPago
     }
 }
 
 function VentaSimpleSinME(idTab,_CodTipoComprobante){
-    console.log($("#cog").val())
     //console.log(global.variablesVentas)
     console.log("venta simple")
-    /*if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
+    if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)*/
+    EmisionRapida(idTab,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)
 }
 
 function NuevaVenta() {

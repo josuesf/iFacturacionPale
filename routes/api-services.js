@@ -71,6 +71,42 @@ router.post('/get_all_productos_serv', function (req, res) {
 }); 
 
 
+router.post('/get_all_comprobantes', function (req, res) {
+    console.log(req.body)
+    TraerConexion(req,res,function(flag){
+        if(flag){
+            var parametros = [
+                {nom_parametro:'Cod_Caja',valor_parametro:req.body.Cod_Caja},
+                {nom_parametro:'Cod_Turno',valor_parametro:req.body.Cod_Turno}
+            ]
+            var procedimientos =[
+                {nom_respuesta:'comprobantes',sp_name:'USP_CAJ_COMPROBANTE_PAGO_TXCODCAJACODTURNO',parametros} 
+            ] 
+            Ejecutar_Procedimientos(req,res,procedimientos)
+        }else
+            return res.json({respuesta:"error"}) 
+    });
+
+}); 
+
+
+router.post('/get_comprobante_detalle', function (req, res) {
+    
+    TraerConexion(req,res,function(flag){
+        if(flag){
+            parametros = [
+                {nom_parametro:'id_ComprobantePago',valor_parametro:input.id_comprobantePago}
+            ]
+            procedimientos =[
+                {nom_respuesta:'detalles',sp_name:'USP_CAJ_COMPROBANTE_D_TXIDCOMPROBANTE',parametros} 
+            ]
+            Ejecutar_Procedimientos(req,res,procedimientos)
+        }else
+            return res.json({respuesta:"error"}) 
+    });
+
+}); 
+
 router.post('/get_cliente', function (req, res) {
     
     TraerConexion(req,res,function(flag){
@@ -316,7 +352,7 @@ function VentaSimple(req,res){
                             { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
                             { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
                             { nom_parametro: 'Serie', valor_parametro: Serie},
-                            { nom_parametro: 'Numero', valor_parametro: Numero},
+                            { nom_parametro: 'Numero', valor_parametro: Numero,tipo_parametro:sql.VarChar,tipo:"output"},
                             { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
                             { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
                             { nom_parametro: 'Doc_Cliente', valor_parametro: Doc_Cliente},
@@ -357,17 +393,52 @@ function VentaSimple(req,res){
                         console.log(parametrosComprobante)
                         
                         EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
+                            console.log()
                             if (dataComprobante.err){
                                 console.log(dataComprobante.err)
                                 return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                             }
-                            
-                            //return res.json({respuesta:"ok"})
+
+                            DataDetalles(0,input,dataComprobante.result[0].valor,function(flag){
+                                if(flag){
+                                    const parametrosFormaPago = [
+                                        {nom_parametro:'id_ComprobantePago',valor_parametro:dataComprobante.result[0].valor},
+                                        {nom_parametro:'Item',valor_parametro:1},
+                                        {nom_parametro:'Des_FormaPago',valor_parametro:input.Des_FormaPago},
+                                        {nom_parametro:'Cod_TipoFormaPago',valor_parametro:input.Cod_FormaPago},
+                                        {nom_parametro:'Cuenta_CajaBanco',valor_parametro:''},
+                                        {nom_parametro:'Id_Movimiento',valor_parametro:0},
+                                        {nom_parametro:'TipoCambio',valor_parametro:1},
+                                        {nom_parametro:'Cod_Moneda',valor_parametro:'PEN'},
+                                        {nom_parametro:'Monto',valor_parametro:Total},
+                                        {nom_parametro:'Cod_Caja',valor_parametro:Cod_Caja},
+                                        {nom_parametro:'Cod_Turno',valor_parametro:Cod_Turno},
+                                        {nom_parametro:'Cod_Plantilla',valor_parametro:''},
+                                        {nom_parametro:'Obs_FormaPago',valor_parametro:''},
+                                        {nom_parametro:'Fecha',valor_parametro:FechaEmision},        
+                                        {nom_parametro:'Cod_Usuario',valor_parametro: Cod_Usuario},
+                                    ]
+    
+                                    EXEC_SQL('USP_CAJ_FORMA_PAGO_G',parametrosFormaPago, function (dataFormaPago) {
+                                        if (dataFormaPago.err){
+                                            console.log(dataFormaPago.err)
+                                            return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
+                                        } else{
+                                            return res.json({respuesta:"ok",numero:dataComprobante.result[1].valor,serie:Serie,id_comprobante:dataComprobante.result[0].valor})
+                                        }
+                                    })
+
+                                }else{
+                                    return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
+                                }
+                            })
+
+                            /*
                             var flag_control = true
                             for(var i=0; i<input.productos.length;i++){
                                 if(flag_control){
                                     var parametrosComprobanteDetalles = [
-                                        { nom_parametro: 'id_ComprobantePago', valor_parametro: dataComprobante.result},
+                                        { nom_parametro: 'id_ComprobantePago', valor_parametro: dataComprobante.result[0].valor},
                                         { nom_parametro: 'id_Detalle', valor_parametro: i},
                                         { nom_parametro: 'Id_Producto', valor_parametro:input.productos[i].Id_Producto},
                                         { nom_parametro: 'Cod_Almacen', valor_parametro: input.productos[i].Cod_Almacen},
@@ -397,18 +468,16 @@ function VentaSimple(req,res){
                                         if (dataComprobanteDetalle.err){
                                             console.log(dataComprobanteDetalle.err)
                                             flag_control = false
-                                            //return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
-                                            //break
+                                            
                                         }
                                         console.log(dataComprobanteDetalle)   
                                     })
                                 } 
                             }
                             if(flag_control)
-                                return res.json({respuesta:"ok"})
+                                return res.json({respuesta:"ok",numero:dataComprobante.result[1].valor,serie:Serie,id_comprobante:dataComprobante.result[0].valor})
                             else
-                                return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})
-                            //return res.json({respuesta:"ok"})    
+                                return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente los detalles de la venta'})*/  
                         })
 
                     })
@@ -418,9 +487,56 @@ function VentaSimple(req,res){
                 }
             })
         
-    }) 
+    })    
+}
+
+
+function DataDetalles(i,input,idComprobante,callback){
+    if(i<input.productos.length){
+        //DeterminarTipoIGV(req,res,req.app.locals.empresa[0].Flag_ExoneradoImpuesto,false,req.body.Detalles[i].Tipo,req.body.Detalles[i].Importe,function(IGV,Cod_TipoIGV){
+            var parametrosComprobanteDetalles = [
+                { nom_parametro: 'id_ComprobantePago', valor_parametro: idComprobante},
+                { nom_parametro: 'id_Detalle', valor_parametro: 0},
+                { nom_parametro: 'Id_Producto', valor_parametro:input.productos[i].Id_Producto},
+                { nom_parametro: 'Cod_Almacen', valor_parametro: input.productos[i].Cod_Almacen},
+                { nom_parametro: 'Cantidad', valor_parametro: input.productos[i].Cantidad},
+                { nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.productos[i].Cod_UnidadMedida},
+                { nom_parametro: 'Despachado', valor_parametro: 1},
+                { nom_parametro: 'Descripcion', valor_parametro: input.productos[i].Descripcion},
+                { nom_parametro: 'PrecioUnitario', valor_parametro: input.productos[i].PrecioUnitario},
+                { nom_parametro: 'Descuento', valor_parametro: input.productos[i].Descuento},
+                { nom_parametro: 'Sub_Total', valor_parametro: input.productos[i].Sub_Total},
+                { nom_parametro: 'Tipo', valor_parametro: input.productos[i].Tipo},
+                { nom_parametro: 'Obs_ComprobanteD', valor_parametro: input.productos[i].Obs_ComprobanteD},
+                { nom_parametro: 'Cod_Manguera', valor_parametro: '001'},
+                { nom_parametro: 'Flag_AplicaImpuesto', valor_parametro: 1},
+                { nom_parametro: 'Formalizado', valor_parametro: 1},
+                { nom_parametro: 'Valor_NoOneroso', valor_parametro: 0},
+                { nom_parametro: 'Cod_TipoISC', valor_parametro: null},
+                { nom_parametro: 'Porcentaje_ISC', valor_parametro: 0},
+                { nom_parametro: 'ISC', valor_parametro: 0},
+                { nom_parametro: 'Cod_TipoIGV', valor_parametro: input.productos[i].Cod_TipoIGV},
+                { nom_parametro: 'Porcentaje_IGV', valor_parametro: input.productos[i].Porcentaje_IGV},
+                { nom_parametro: 'IGV', valor_parametro: input.productos[i].IGV},
+                { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario}
+            ]
+    
+            EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
+                if (dataComprobanteDetalle.err){
+                    console.log(dataComprobanteDetalle.err)
+                    callback(false)
+                }else{
+                    DataDetalles(i+1,input,idComprobante,callback)
+                }   
+            }) 
+        //})
+      
+    }else{
+        callback(true)
+    }
     
 }
+
 
 function DataCliente(input,callback){
     var Id_Cliente = input.Id_Cliente
@@ -474,7 +590,7 @@ function DataCliente(input,callback){
                 if (dataCliente.err)
                     return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
                 
-                Id_Cliente = dataCliente.result
+                Id_Cliente = dataCliente.result[0].valor
                 Cod_TipoDoc = input.Cod_TipoDoc
                 Doc_Cliente = input.Doc_Cliente
                 Nom_Cliente = input.Nom_Cliente
@@ -848,7 +964,7 @@ function Arquear(req,res){
         if(dataArqueoFisico.err) return res.json({respuesta:"error"+dataArqueoFisico.err}) 
          
             var parametros = [
-                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
+                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
                 { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
                 { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
                 { nom_parametro: 'Monto', valor_parametro: req.body.Monto},
