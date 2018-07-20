@@ -151,6 +151,21 @@ router.post('/get_variables_ventas', function (req, res) {
          
 });
 
+router.post('/get_licitacion_detallado', function (req, res) {
+    input = req.body
+
+    parametros = [
+        { nom_parametro: 'Cod_Licitacion', valor_parametro: input.Cod_Licitacion }, 
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor }, 
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'licitaciones', sp_name: 'USP_PRI_LICITACIONES_TDetalladoXLicitacion', parametros }
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+         
+});
+
 router.post('/get_comprobante_by_tipo', function (req, res) {
     
     input = req.body 

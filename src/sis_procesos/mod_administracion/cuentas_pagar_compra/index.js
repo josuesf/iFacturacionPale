@@ -85,7 +85,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="panel panel-default" style="pointer-events:none;">
+                        <div class="panel panel-default" style="pointer-events:none;" id="divCabecera">
                             <div class="panel-heading text-center">
                                 <div class="row">
                                     <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC}</strong></h4>
@@ -154,7 +154,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             </div>
                                             <div class="col-md-8" id="divCuentaCajaBancos">
                                                 <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cuenta_CajaBancos"> 
+                                                    <select class="form-control input-sm" id="Cuenta_CajaBancos" onblur=${()=>TraerPorCuentaOperacion()}> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -165,7 +165,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-4" id="divMoneda">
                                                 <div class="form-group">
                                                     <b>Moneda: </b>
-                                                    <select id="Cod_Moneda" class="form-control input-sm">
+                                                    <select id="Cod_Moneda" class="form-control input-sm" onchange=${()=>CambioMoneda(CodLibro)}>
                                                         ${variables.dataMonedas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                     </select>
                                                 </div>
@@ -179,7 +179,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-5" id="divFecha">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}">
+                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onkeypress=${()=>TraerTipoCambio(CodLibro)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4">
-                                                        <button class="btn btn-info" type="button">Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -240,7 +240,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4">
-                                                        <button class="btn btn-info" type="button">Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -288,7 +288,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4 col-md-4">
-                                                        <button class="btn btn-info" type="button">Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -321,6 +321,15 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             </tbody>
                                         </table>
 
+                                    </div>
+                                </div>
+                                <div class="row" id="divAnulado" style="display:none">
+                                    <div class="col-md-12 text-center">
+                                        <div class="small-box bg-red">
+                                            <div class="inner">
+                                                <h3 id="laAnulado">EXTORNADO</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -375,6 +384,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
         $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
         $("#Cliente").val(global.objCliente.Nom_Cliente)
         $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+        $("#Direccion").val(global.objCliente.Direccion_Cliente)
         $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
         $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
         CargarLicitacionesCliente(global.objCliente.Id_Cliente)
@@ -383,10 +393,12 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
 
     
     $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
+         
         if(global.objCliente!='' && global.arraySeries){ 
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Nom_Cliente)
             $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+            $("#Direccion").val(global.objCliente.Direccion_Cliente)
             $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
             $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
             CargarLicitacionesCliente(global.objCliente.Id_Cliente)
@@ -397,6 +409,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     CambioTodoFechas()
     CambioTodoVencimiento()
     CambioTodoLicitacion()
+ 
 }
 
 function AgregarTabla(comprobantes){
@@ -479,7 +492,7 @@ function LlenarCuentaBancaria_(cuentas,CodLibro){
 }
 
 function LlenarCheques(cheques){
-    var html = ''
+    var html = '<option value="">Seleccione una opcion</option>'
     for(var i=0; i<cheques.length; i++){
         html = html+'<option value="'+cheques[i].Id_MovimientoCuenta+'">'+cheques[i].Des_Movimiento+'</option>'
     }
@@ -591,6 +604,18 @@ function BuscarPorFecha(CodLibro){
     
 }
 
+function CambioMoneda(CodLibro){
+    if($("#Cod_Moneda").val()!=null && $("#Cod_Moneda").val()!=""){
+        if($("#Cod_Moneda").val()=="USD"){
+            $("#divTC").css("display","block")
+            TraerTipoCambio(CodLibro)
+        }else{
+            $("#divTC").css("display","none")
+            $("#Tipo_Cambio").val("1")
+        }
+    }
+}
+
 function CambioTodoFechas(){
     $("#FechaFin").attr("disabled",($("#optTodoFechas").is(":checked")))
     $("#FechaInicio").attr("disabled",($("#optTodoFechas").is(":checked")))
@@ -693,6 +718,7 @@ function CambioFormasPago(CodLibro){
                     $("#divOperacion").css("display","none")
                     $("#Cod_CuentaBancaria").css("display","none")
                     $("#divCuentaCajaBancos").css("display","none")
+                    $("#divCabecera").css("pointer-events","auto")
                     break
                 case "998":
                     $("#lbCuentaCajaBanco").text("Selecione Pago Adelantado: ")
@@ -705,7 +731,70 @@ function CambioFormasPago(CodLibro){
         }
     }
 }
- 
+
+function TraerPorCuentaOperacion(){ 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_CuentaBancaria:$("#Cod_CuentaBancaria").val(),
+            Nro_Operacion:$("#Cuenta_CajaBancos option:selected").text()
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/get_by_cuenta_operacion', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            if (res.respuesta == 'ok') {
+                var cuentas = res.data.cuentas
+                if(cuentas.length > 0){
+                    toastr.error('En la Cuenta: '+$("#Cod_CuentaBancaria option:selected").text()+' la Operacion N°: '+$("#Cuenta_CajaBancos option:selected").text()+', ya Existe. Verifique y Vuelva a Intentarlo','Error',{timeOut: 5000})
+                    $("#Cuenta_CajaBancos").val("")
+                    $("#Cuenta_CajaBancos").focus()
+                }
+            } 
+        })
+}
+
+function TraerTipoCambio(CodLibro){
+    if($("#Cod_Moneda").val()!="PEN"){
+        try{
+            var Cod_Moneda = $("#Cod_Moneda").val()
+            var FechaHora = $("#Fecha").val()
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Cod_Moneda,
+                    FechaHora
+                })
+            }
+            fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {
+                        if(res.data.tipos_cambios.length>0){
+                            if(CodLibro=="08"){
+                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+                            }else{
+                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                            }
+                        }else{
+                            $("#Tipo_Cambio").val(1)
+                        }
+                    } 
+                })
+
+        }catch(e){
+            $("#Tipo_Cambio").val(1)
+        }
+    }
+}
 
 function TraerSaldoPagoAdelantado(){
     const parametros = {
@@ -792,13 +881,14 @@ function BuscarClienteDoc(CodLibro) {
     }
     fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
                 global.objCliente = res.data.cliente[0]
-
+                
                 if(global.objCliente !='' && global.objCliente){
                     $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
                     $("#Cliente").val(global.objCliente.Cliente)
+                    $("#Direccion").val(global.objCliente.Direccion)
                     $("#Nro_Documento").val(global.objCliente.Nro_Documento)
                     $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
                     CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)

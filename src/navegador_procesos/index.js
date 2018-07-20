@@ -106,8 +106,8 @@ function Ver(Flag_Cerrado) {
                     </a>
                     <ul class="treeview-menu">
                         <li>
-                            <a href="javascript:void(0);" onclick=${() => Cuentas('14')}>
-                            <span> Cuentas por Cobrar</span>   
+                            <a href="javascript:void(0);" onclick=${() => Cuentas('08')}>
+                            <span> Cuentas por Pagar</span>   
                             </a>
                         </li>
                     </ul>

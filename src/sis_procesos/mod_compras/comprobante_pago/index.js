@@ -225,7 +225,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             </div>
                                             <div class="col-md-8" id="divCodigoLicitacion" style="display:none">
                                                 <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cod_Licitacion"> 
+                                                    <select class="form-control input-sm" id="Cod_Licitacion" onchange=${()=>CambioSelectLicitacion(CodLibro,variables)}> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -241,7 +241,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <div class="col-sm-3" id="divMoneda">
                                                 <div class="form-group">
                                                     <b>Moneda: </b>
-                                                    <select id="Cod_Moneda" class="form-control input-sm" onchange=${()=>CambioMoneda()}>
+                                                    <select id="Cod_Moneda" class="form-control input-sm" onchange=${()=>CambioMoneda(CodLibro)}>
                                                         ${variables.monedas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                     </select>
                                                 </div>
@@ -255,7 +255,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <div class="col-sm-4" id="divFecha">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onchange=${()=>CambioFecha(CodLibro)}>
+                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onchange=${()=>TraerTipoCambio(CodLibro)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -494,7 +494,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick=${()=>GenerarComprobante()}>${CodLibro=='08'?'Comprar':'Vender'}</button>
+                <button class="btn btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante()}>${CodLibro=='08'?'Comprar':'Vender'}</button>
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -503,15 +503,20 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal() 
     if(CodLibro=='08'){
-        $("#Serie").editableSelect({ effects: 'slide' })
+        $("#Serie").combobox()
+        $("#Serie").change(function(){
+            TraerSiguienteNumero(CodLibro)
+        }) 
+        /*editableSelect({ effects: 'slide' })
                     .on('select.editable-select', function (e, li) {
                         TraerSiguienteNumero(CodLibro)
-                    })
+                    })*/
         $("#Serie").blur(function(){
+            console.log("blur")
             FocusOutSerie()
         })
     } 
-
+ 
  
     CargarConfiguracionDefault(CodLibro,variables) 
      
@@ -939,8 +944,8 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
                                 <td class="Id_Producto hidden"><input value=${u.Id_Producto}></td> 
                                 <td class="Codigo hidden">${u.Codigo}</td>
                                 <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value=${u.Descripcion}></td>
-                                <td class="Almacen"><input type="text" class="form-control input-sm" value=${u.Almacen}></td> 
-                                <td class="UM"><input type="text" class="form-control input-sm" value=${u.UM}></td>
+                                <td class="Almacen"><input type="text" class="form-control input-sm" data-id=${u.Almacen} value=${u.Des_Almacen}></td> 
+                                <td class="UM"><input type="text" class="form-control input-sm" data-id=${u.UM} value=${u.Nom_UnidadMedida}></td>
                                 <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${u.Stock}></td> 
                                 <td class="Cantidad"><input type="number" class="form-control input-sm" value=${u.Cantidad} onkeyup=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)} onchange=${()=>EditarCantidad(index+ u.Id_Producto,CodLibro,variables)}></td> 
                                 <td class="Despachado hidden">${u.Despachado}</td> 
@@ -1007,7 +1012,7 @@ function AgregarFilaTabla(CodLibro,variables){
 
             var Id_Producto = $("#Nom_Producto").attr("data-id")
             var Cod_Producto = $("#Cod_Producto").val()==null?"": $("#Cod_Producto").val()
-            var Cod_Almacen = $("#Cod_Almacen").val()
+            var Cod_Almacen = $("#Cod_Almacen option:selected").text()//$("#Cod_Almacen").val()
             var Cod_UnidadMedida = $("#Cod_UnidadMedida option:selected").text()
             var Stock = $("#Stock").val()
             var Cantidad = $("#Cantidad").val()
@@ -1028,13 +1033,13 @@ function AgregarFilaTabla(CodLibro,variables){
                 <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
                 <td class="Codigo hidden">${flagGasto?'':Cod_Producto}</td>
                 <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
-                <td class="Almacen"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_Almacen}></td> 
-                <td class="UM"><input type="text" class="form-control input-sm" value=${flagGasto?'':Cod_UnidadMedida}></td>
+                <td class="Almacen"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_Almacen").val()} value=${flagGasto?'':Cod_Almacen}></td> 
+                <td class="UM"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_UnidadMedida").val()} value=${flagGasto?'':Cod_UnidadMedida}></td>
                 <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
                 <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
                 <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
-                <td class="PU"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
-                <td class="Descuento"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
+                <td class="PU"><input type="number" data-value=${flagGasto?0:Precio_Unitario} class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+                <td class="Descuento"><input type="number" data-value=0 class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
                 <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
                 <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
                 <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
@@ -1091,13 +1096,13 @@ function AplicarPercepcion(CodLibro,variables){
                     <td class="Id_Producto hidden"><input value="0"></td> 
                     <td class="Codigo hidden"></td>
                     <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="PERCEPCION ${Cod_TipoComprobante} : ${Serie} - ${Numero}"></td>
-                    <td class="Almacen"><input type="text" class="form-control input-sm"></td> 
-                    <td class="UM"><input type="text" class="form-control input-sm"></td>
+                    <td class="Almacen"><input type="text" class="form-control input-sm" data-id=null></td> 
+                    <td class="UM"><input type="text" class="form-control input-sm" data-id=null></td>
                     <td class="Stock hidden"><input type="number" class="form-control input-sm" value="1"></td> 
                     <td class="Cantidad"><input type="number" class="form-control input-sm" value="1"></td> 
                     <td class="Despachado hidden">1</td> 
-                    <td class="PU"><input type="number" class="form-control input-sm" value="${Calculo}"></td> 
-                    <td class="Descuento"><input type="number" class="form-control input-sm" value="0.00"></td> 
+                    <td class="PU"><input type="number" class="form-control input-sm" value="${Calculo}" data-value=0></td> 
+                    <td class="Descuento"><input type="number" class="form-control input-sm" value="0.00" data-value=0></td> 
                     <td class="Importe"><input type="number" class="form-control input-sm" value="${Calculo}"></td>
                     <td class="Cod_Manguera hidden"></td>  
                     <td class="Tipo hidden">PER</td> 
@@ -1855,7 +1860,7 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
 
 
 function CargarConfiguracionDefault(CodLibro,variables){ 
-    CambioMoneda()
+    CambioMoneda(CodLibro)
     CambioTipoDocumento()
     CambioFormasPago(CodLibro)
     CambioCreditoContado()
@@ -2124,6 +2129,7 @@ function CambioGastos(){
 }
 
 function FocusOutSerie() {
+    
     if ($("#Serie").val().length < 4) {
         var cadenaCeros = ""
         var cantidadCeros = 4 - $("#Serie").val().length
@@ -2223,6 +2229,47 @@ function CambioExportacion(CodLibro,variables){
     CalcularTotal(CodLibro,variables)
 }
 
+function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,indiceLicitacion,arregloLicitacion,_ExisteAtencion){
+    if(indiceDetalle < $("#tablaBody > tr").length){
+        _ExisteAtencion = false
+        if(indiceLicitacion<arregloLicitacion.length){
+            if((arregloLicitacion[indiceLicitacion].Id_Producto).toString()==$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val().toString()){
+                _ExisteAtencion = true
+                if(parseFloat(arregloLicitacion[indiceLicitacion].Por_Descuento)==parseFloat("0.00")){
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val(arregloLicitacion[indiceLicitacion].Precio_Unitario)
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').attr("data-value",arregloLicitacion[indiceLicitacion].Precio_Unitario)
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val(parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(8).find('input').val())*parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val()))
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').val("0.00")
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').attr("data-value",0)
+                }else{
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val(parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val()) - parseFloat(arregloLicitacion[indiceLicitacion].Precio_Unitario))
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').attr("data-value",parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val())-parseFloat(arregloLicitacion[indiceLicitacion].Precio_Unitario))
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').val("0.00")
+                    $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').attr("data-value",0)
+                }
+
+                if((parseFloat(arregloLicitacion[indiceLicitacion].Diferencia) - parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(8).find('input').val())) >= 0){
+                   $("#btnAceptarGenerarComprobante").attr("disabled",false)
+                }else{
+                    toastr.error('Solo se puede atender '+arregloLicitacion[indiceLicitacion].Diferencia+' de '+arregloLicitacion[indiceLicitacion].Nom_Producto+'. Selecione otra Licitación','Error',{timeOut: 5000})
+                }
+            }
+            CalcularTotal(CodLibro,variables)
+            if(!_ExisteAtencion){
+                toastr.error('El producto: '+$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(4).find('input').val()+' no se encuentra dentro la Licitación Seleccionada.','Error',{timeOut: 5000})
+                $("#Cod_Licitacion").val("")
+            }
+            RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,indiceLicitacion+1,arregloLicitacion,_ExisteAtencion)
+        }else{
+            RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle+1,0,arregloLicitacion,_ExisteAtencion)
+        }
+        //console.log($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())
+    } 
+    /*$('#tablaBody tr').each(function () {
+        var Id_Producto = $(this).find("td").eq(2).find("input").val()
+    })*/
+}
+
 function CambioCreditoContado(){
     $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val())
     if($("#Cod_FormaPago").val()!="" && $("#Cod_FormaPago").val()!=null){
@@ -2246,6 +2293,39 @@ function CambioCreditoContado(){
         $("#divFormasPago").css("display","none")
         $("#divOperacion").css("display","none")
         $("#divCuentaCajaBancos").css("display","none")
+    }
+}
+
+function CambioSelectLicitacion(CodLibro,variables){
+    if($("#divCodigoLicitacion").css("display")=="block"){
+        if($("#optLicitacion").is(":checked")){
+            if($("#Cod_Licitacion").val()!=""){
+                var _ExisteAtencion = false
+                
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Cod_Licitacion: $("#Cod_Licitacion").val(),
+                        Id_ClienteProveedor: global.objCliente.Id_ClienteProveedor
+                    })
+                }
+                fetch(URL + '/comprobantes_pago_api/get_licitacion_detallado', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        if (res.respuesta == 'ok') {
+                            if(res.data.licitaciones.length>0)
+                                RecorrerTablaDetalles_Licitaciones(CodLibro,variables,0,0,res.data.licitaciones,_ExisteAtencion)
+                        }else{
+                            toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
+                        }
+                    })
+
+            }
+        }
     }
 }
 
@@ -2380,10 +2460,11 @@ function CambioTipoDocumento(){
         $("#BuscarRENIEC").hide()
 }
 
-function CambioMoneda(){
+function CambioMoneda(CodLibro){
     if($("#Cod_Moneda").val()!=null && $("#Cod_Moneda").val()!=""){
         if($("#Cod_Moneda").val()=="USD"){
             $("#divTC").css("display","block")
+            TraerTipoCambio(CodLibro)
         }else{
             $("#divTC").css("display","none")
             $("#Tipo_Cambio").val("1")
@@ -2391,9 +2472,8 @@ function CambioMoneda(){
     }
 }
 
-function CambioFecha(CodLibro){
-    console.log("cambio fecha")
-    if($("#Cod_Moneda").val()=="PEN"){
+function TraerTipoCambio(CodLibro){ 
+    if($("#Cod_Moneda").val()!="PEN"){
         try{
             var Cod_Moneda = $("#Cod_Moneda").val()
             var FechaHora = $("#Fecha").val()

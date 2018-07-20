@@ -128,4 +128,16 @@ router.post('/eliminar_cuenta', function (req, res) {
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
+router.post('/get_by_cuenta_operacion', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_CuentaBancaria',valor_parametro:input.Cod_CuentaBancaria},
+        {nom_parametro:'Nro_Operacion',valor_parametro:input.Nro_Operacion}
+    ]
+    procedimientos =[
+        {nom_respuesta:'cuentas',sp_name:'USP_BAN_CUENTA_M_XCuentaOperacion',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
 module.exports = router;

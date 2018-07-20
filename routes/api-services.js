@@ -95,7 +95,7 @@ router.post('/get_comprobante_detalle', function (req, res) {
     TraerConexion(req,res,function(flag){
         if(flag){
             parametros = [
-                {nom_parametro:'id_ComprobantePago',valor_parametro:input.id_comprobantePago}
+                {nom_parametro:'id_ComprobantePago',valor_parametro:req.body.id_ComprobantePago}
             ]
             procedimientos =[
                 {nom_respuesta:'detalles',sp_name:'USP_CAJ_COMPROBANTE_D_TXIDCOMPROBANTE',parametros} 

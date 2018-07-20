@@ -130,14 +130,8 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     `)}
 
                                                 </div>
-                                                <div class="row">
-                                                    <div class="col-md-8">
-                                                        <div class="form-group">
-                                                            <label>Tipo Cambio</label>
-                                                            <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTabVenta}" name="Tipo_Cambio_Venta_${idTabVenta}" onkeypress=${()=>CambioTipoCambioVenta(idTabVenta)}>
-                                                        </div> 
-                                                    </div>
-                                                </div>
+                                                ${MostrarCampos(0,variables.formaspago,1,idTabVenta)}
+                                               
                                         </div>
                                     </div>
                                 </div>
@@ -172,21 +166,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     `)}
                                                      
                                                 </div>
-                                                ${variables.formaspago.map(e=>yo`
-                                                    ${  e.Cod_FormaPago=="005"?
-                                                        yo`
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label>Nro Ref.</label>
-                                                                    <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTabVenta}" name="Nro_Tarjeta_${idTabVenta}">
-                                                                </div> 
-                                                            </div>
-                                                        </div>`
-                                                        :
-                                                        yo``
-                                                    }
-                                                `)}
+
+                                                ${MostrarCampos(0,variables.formaspago,2,idTabVenta)}
+                                                 
                                         </div>
                                     </div>
                                 </div>
@@ -317,7 +299,7 @@ function VerNuevaVenta(variables,CodLibro) {
     
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
-         
+        console.log(global.objProductoVentas)
         if(global.objProductoVentas!='' && global.objProductoVentas){
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
@@ -374,7 +356,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                 Cod_Manguera:$("#Cod_Precio_"+IdTabSeleccionado).val(),
                                 Tipo:global.objProductoVentas.Cod_TipoOperatividad,
                                 Obs_ComprobanteD:'',
-                                Series:[]
+                                Series:[],
+                                Nom_UnidadMedida:global.objProductoVentas.Nom_UnidadMedida,
+                                Des_Almacen:global.objProductoVentas.Des_Almacen                                
                             })
                         }
                         CalcularTotal(IdTabSeleccionado)
@@ -555,6 +539,49 @@ function VerVuelto(variables,idTab){
         CrearDivFavoritos(variables,idTab)
     }else{
         CrearDivVuelto(idTab)
+    }
+}
+
+function MostrarCampos(indice,arreglo,opcion,idTab){
+    if(opcion==1){
+        if(indice<arreglo.length){
+            if(arreglo[indice].Cod_FormaPago=='008'){
+                return yo`
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Tipo Cambio</label>
+                                <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
+                            </div> 
+                        </div>
+                    </div>`
+            }else{
+                MostrarCampos(indice+1,arreglo,opcion,idTab)
+            }
+        }else{
+            return yo``
+        }
+       
+    }else{
+
+        if(indice<arreglo.length){
+            if(arreglo[indice].Cod_FormaPago=='005' || arreglo[indice].Cod_FormaPago=='006'){
+                return  yo`
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Nro Ref.</label>
+                                <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTab}" name="Nro_Tarjeta_${idTab}" >
+                            </div> 
+                        </div>
+                    </div>`
+            }else{
+                MostrarCampos(indice+1,arreglo,opcion,idTab)
+            }
+        }else{
+            return yo``
+        }
+ 
     }
 }
 
@@ -1244,7 +1271,9 @@ function AgregarProducto(producto,favoritos,idTab){
                                             Cod_Manguera:$("#Cod_Precio_"+idTab).val(),
                                             Tipo:dataProducto.Cod_TipoOperatividad,
                                             Obs_ComprobanteD:'',
-                                            Series:[]
+                                            Series:[],
+                                            Nom_UnidadMedida:dataProducto.Cod_UnidadMedida,
+                                            Des_Almacen:$("#Cod_Almacen_"+idTab).val()//dataProducto.Des_Almacen      
                                         })
                                         /*
 
