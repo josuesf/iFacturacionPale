@@ -700,6 +700,7 @@ function VerificarArqueoCaja(req,res){
                                     return res.json({respuesta:"error"})
                                 }else{
                                     req.app.locals.arqueo = dataArqueo.result
+                                    console.log(dataArqueo.result[0].Flag_Cerrado)
                                     if(dataArqueo.result[0].Flag_Cerrado){
  
                                         return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:'', data_cierre:{flag_apertura:'CERRADO',saldo:0,Cod_Turno:''}}}) 
@@ -840,7 +841,7 @@ function VerificarLogin(req,res){
                                                                                 //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
                                         
                                                                             }else{
-                                        
+                                                                                console.log(dataSaldoAnterior.result[0].Flag_Cerrado)
                                                                                 if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
                                                                                     return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
                                                                                     //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 

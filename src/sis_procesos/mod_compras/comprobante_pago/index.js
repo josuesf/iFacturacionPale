@@ -515,7 +515,12 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     } 
  
     $("#Cuenta_CajaBancos").combobox()
-    CargarConfiguracionDefault(CodLibro,variables) 
+     
+
+    $("#modal-proceso").off('shown.bs.modal').on("shown.bs.modal", function () {
+        //console.log("cargando")
+        CargarConfiguracionDefault(CodLibro,variables) 
+    });
      
 
     /*CambioMoneda()
@@ -1433,7 +1438,7 @@ function EliminarFilaPagosMultiples(idFila,Cod_Moneda,Tipo_Cambio){
 }
 
 
-function CalcularTotal(CodLibro,variables){
+function CalcularTotal(CodLibro,variables){ 
     var Suma = 0
     var SumaExoneracion = 0
     var SumaPercepcion = 0
@@ -1519,14 +1524,15 @@ function CalcularTotal(CodLibro,variables){
         $("#laDescuento").css("display","none")
         $("#DescuentoTotal").css("display","none")
         $("#DescuentoTotal").val(0)
-    }
+    } 
 
     if($("#ckbAplicaImpuesto").is(":checked")){
-        if($("#ckbIncluyeIGv").is(":checked")){
+        if($("#ckbIncluyeIGV").is(":checked")){
             $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
             var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
             Suma = Suma - Suma * porcDescuentoglobal
-             
+            console.log("suma")
+            console.log(Suma)
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
         }else{
@@ -1857,6 +1863,7 @@ function CargarConfiguracionDefaultFormaPago(variables,amodo,Cod_Moneda,Tipo_Cam
 
 
 function CargarConfiguracionDefault(CodLibro,variables){ 
+ 
     CambioMoneda(CodLibro)
     CambioTipoDocumento()
     CambioFormasPago(CodLibro)

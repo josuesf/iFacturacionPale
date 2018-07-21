@@ -300,8 +300,7 @@ function VerNuevaVenta(variables,CodLibro) {
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         
-        if(global.objProductoVentas!=''){
-            console.log("entre")
+        if(global.objProductoVentas!=''){ 
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
             ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,IdTabSeleccionado,function(flag){
