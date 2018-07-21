@@ -24,5 +24,20 @@ router.post('/get_variables_series', function (req, res) {
 }); 
  
  
+
+router.post('/get_TOP_by_serie', function (req, res) {
+    input = req.body
+
+    parametros = [
+        { nom_parametro: 'Serie', valor_parametro: input.Serie }, 
+        { nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen }
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'productos', sp_name: 'USP_CAJ_SERIES_TOPxSerie', parametros:parametros1 }
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+         
+}); 
  
 module.exports = router;

@@ -37,7 +37,7 @@
     			input.addClass( "ui-widget ui-widget-content ui-corner-left" )
     			     .click(function(){ this.select(); });
     			
-    			this.button = $( "<button type='button'>&nbsp;</button>" )
+    			this.button = $( "<button type='button'><i class='fa fa-sort-down'></i></button>" )
                 .attr( "tabIndex", -1 )
                 .attr( "title", "Show All Items" )
                 .insertAfter( input )
@@ -177,15 +177,35 @@
             },
             
             _change: function( event ){
-            	if ( !this.selectedItem ) {
+                var select = this.element
+                if ( !this.selectedItem ) {
+                    var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( this.element.val() ) + "$", "i" ),
+                        match = $.grep( this.options.source, function(value) {
+                            return matcher.test( value.label );
+                        });
+                    if (match.length){
+                        if (match[0].option != undefined) match[0].option.selected = true;
+                    }else{
+                        if(select.hasClass("select-preserve")){
+                            if (this.options.selectElement) {
+                                var firstItem = this.options.selectElement.children("option:first");
+                                this.element.val(firstItem.text());
+                                firstItem.prop("selected", true);
+                            }else {
+                                this.element.val( "" );
+                            }
+                            $(event.target).data("ui-combobox").previous = null;  
+                        }
+                    }
+                }
+            	/*if ( !this.selectedItem ) {
                     var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( this.element.val() ) + "$", "i" ),
                         match = $.grep( this.options.source, function(value) {
                             return matcher.test( value.label );
                         });
                     if (match.length){
                     	if (match[0].option != undefined) match[0].option.selected = true;
-                    }else {
-                        // remove invalid value, as it didn't match anything
+                    }else { 
                         if (this.options.selectElement) {
                         	var firstItem = this.options.selectElement.children("option:first");
                             this.element.val(firstItem.text());
@@ -193,9 +213,9 @@
                         }else {
                         	this.element.val( "" );
                         }
-                        $(event.target).data("ui-combobox").previous = null;  // this will force a change event
+                        $(event.target).data("ui-combobox").previous = null;  
                     }
-                }                
+                } */               
             	// super()
             	$.ui.autocomplete.prototype._change.call(this, event);
             },

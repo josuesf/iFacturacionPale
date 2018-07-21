@@ -153,8 +153,8 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                 </div>
                                             </div>
                                             <div class="col-md-8" id="divCuentaCajaBancos">
-                                                <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cuenta_CajaBancos" onblur=${()=>TraerPorCuentaOperacion()}> 
+                                                <div class="form-group" style="display: flex;">
+                                                    <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos"> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -392,7 +392,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     }
 
     
-    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
          
         if(global.objCliente!='' && global.arraySeries){ 
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
@@ -409,6 +409,11 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     CambioTodoFechas()
     CambioTodoVencimiento()
     CambioTodoLicitacion()
+
+    $("#Cuenta_CajaBancos").combobox()
+    $("#Cuenta_CajaBancos").parent().find('input.ui-widget').blur(function(){ 
+        TraerPorCuentaOperacion()
+    })
  
 }
 

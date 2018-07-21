@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
-import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas } from '../../../../utility/tools'
+import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas,LimpiarVariablesGlobales } from '../../../../utility/tools'
 import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 
 
@@ -299,8 +299,9 @@ function VerNuevaVenta(variables,CodLibro) {
     
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
-        console.log(global.objProductoVentas)
-        if(global.objProductoVentas!='' && global.objProductoVentas){
+        
+        if(global.objProductoVentas!=''){
+            console.log("entre")
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
             ValidarStock(global.objProductoVentas.Stock_Act,global.objProductoVentas,IdTabSeleccionado,function(flag){
@@ -374,7 +375,7 @@ function VerNuevaVenta(variables,CodLibro) {
         }
 
 
-        if(global.objClienteVenta!='' && global.objClienteVenta){
+        if(global.objClienteVenta!=''){
             changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[null,null,null,null,null,null,global.objClienteVenta,null])
         }
 
@@ -872,7 +873,7 @@ function LimpiarVenta(idTab){
     $("#Cliente_"+idTab).attr("data-id",null)
 
     deleteElementArrayJsonVentas(global.variablesVentas,idTab)
-    global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
+    global.variablesVentas.push({idTab:idTab,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
     if($("#btnTotal_"+idTab).hasClass('active')){
         $("#btnTotal_"+idTab).click()
     }
@@ -1475,13 +1476,22 @@ function ObtenerFormaPago(idTab){
 }
 
 function VentaSimpleSinME(idTab,_CodTipoComprobante){
-    //console.log(global.variablesVentas)
-    console.log("venta simple")
+     
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
     EmisionRapida(idTab,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)
 }
+
+function VentaSimpleConME(idTab,_CodTipoComprobante){
+     
+    if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
+        _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
+    }
+    EmisionRapida(idTab,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)
+}
+
+
 
 function NuevaVenta() {
     H5_loading.show();
@@ -1535,6 +1545,7 @@ function VentaSimple(){
                     }
                 }else{
                     if($("#Cliente_"+IdTabSeleccionado).attr("data-id")==null){
+                        LimpiarVariablesGlobales()
                         ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
                     }else{
                         if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
@@ -1558,5 +1569,22 @@ function VentaSimple(){
     } 
 }
 
+function VentaCompleta(){ 
+    console.log(global.variablesVentas)
+    if(!($('#tabs li:first').hasClass('active'))){
+        if(IdTabSeleccionado!=null){
+            var rows = $("#tablaBodyProductosVentas_"+IdTabSeleccionado+" > tr").length
+            if(rows>0){
+                LimpiarVariablesGlobales()
+                ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
+            }else{
+                toastr.error('No se puede Utilizar esta opcion sin haber ingresado al menos una venta.\n\n Ingrese la venta y vuelva a intentarlo.','Error',{timeOut: 5000})     
+            }
+        }
+    }else{
+        IdTabSeleccionado = null
+    } 
+}
 
-export { NuevaVenta, VentaSimple }
+
+export { NuevaVenta, VentaSimple, VentaCompleta }

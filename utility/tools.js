@@ -277,7 +277,11 @@ function BloquearControles(event){
     event.preventDefault();
     event.stopPropagation(); 
 }
- 
+
+function LimpiarVariablesGlobales(){
+    global.objClienteVenta = ''
+    global.objProductoVentas = ''
+}
 
 function CambiarCadenaConexion(cadena){
     console.log(cadena)
@@ -325,4 +329,4 @@ function TraerConexion(req, res, callback){
 }
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas}
+module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales}

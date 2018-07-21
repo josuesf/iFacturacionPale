@@ -2,8 +2,8 @@ var empty = require('empty-element');
 var yo = require('yo-yo'); 
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
-import { AsignarSeriesModal } from '../../modales/series'
-import { ConvertirCadena } from '../../../../utility/tools' 
+import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
+import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 
 var listaFormaPago = []
 var obs_xml = null
@@ -137,17 +137,17 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 
                                 <div class="row">
                                     <div class="col-md-6" id="divSerie">
-                                        <div class="form-group">
+                                        <div class="form-group" style="display:flex">
 
                                             <select class="form-control input-sm" id="Serie" onchange=${()=>TraerSiguienteNumero(CodLibro)}>
                                                
                                             </select>
- 
+                                            
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="divNumero">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-sm required" id="Numero" onblur="${()=>CambioNumero()}">
+                                            <input type=${CodLibro=='08'?"number":"text"} class="form-control input-sm required" id="Numero" onblur=${()=>CambioNumero()} onkeypress=${()=>CambioNumero_(event,CodLibro)}>
                                         </div>
                                     </div>
                                 </div> 
@@ -209,8 +209,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 </div>
                                             </div>
                                             <div class="col-md-8" id="divCuentaCajaBancos">
-                                                <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cuenta_CajaBancos"> 
+                                                <div class="form-group" style="display: flex;">
+                                                    <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos"> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -388,7 +388,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <label for="subtotal" class="col-sm-5 control-label" value="0.00">SUB TOTAL</label>
                         
                                             <div class="col-sm-7">
-                                                <input type="number" class="form-control input-sm" id="subtotal">
+                                                <input type="text" class="form-control input-sm" id="subtotal" onkeypress=${()=>BloquearControles(event)}>
                                             </div>
                                         </div>
                                     </div>
@@ -399,7 +399,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <div class="col-md-12">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" id="ckbIncluyeIGB" checked="checked" onchange="${()=>CalcularTotal(CodLibro,variables)}">Precio Unitario Incluye IGV?
+                                                        <input type="checkbox" id="ckbIncluyeIGV" checked="checked" onchange="${()=>CalcularTotal(CodLibro,variables)}">Precio Unitario Incluye IGV?
                                                     </label>
                                                 </div>
                                             </div>
@@ -423,7 +423,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <label>Stock actual:</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control input-sm" id="Stock" disabled>
+                                                <input type="text" class="form-control input-sm" id="Stock" onkeypress=${()=>BloquearControles(event)}>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -431,7 +431,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <button type="button" class="btn btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
                                             </div>
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-warning btn-sm btn-block" id="btnBuscarSeries">Buscar Series</button>
+                                                <button type="button" class="btn btn-warning btn-sm btn-block" id="btnBuscarSeries" onclick="${()=>BuscarPorSerie()}">Buscar Series</button>
                                             </div>
                                         </div>  
                                     </div>
@@ -458,7 +458,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <label>
                                                 <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}> I.G.V 18%
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00" id="Impuesto">
+                                            <input type="text" class="form-control input-sm" value="0.00" id="Impuesto" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                         <div class="form-group">
                                             <label>
@@ -478,7 +478,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="form-group">
                                             <strong>GRAN TOTAL</strong>
-                                            <input type="number" class="form-control input-sm" id="Gran_Total" value="0.00" disabled>
+                                            <input type="text" class="form-control input-sm" id="Gran_Total" value="0.00" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                     </div>
                                 </div>
@@ -501,23 +501,20 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     </div>`
     var ingreso = document.getElementById('modal-proceso')
     empty(ingreso).appendChild(el)
-    $('#modal-proceso').modal() 
-    if(CodLibro=='08'){
+    $('#modal-proceso').modal('show') 
+    if(CodLibro=='08'){ 
+ 
         $("#Serie").combobox()
-        $("#Serie").change(function(){
+        $("#Serie").change(function(){ 
             TraerSiguienteNumero(CodLibro)
-        }) 
-        /*editableSelect({ effects: 'slide' })
-                    .on('select.editable-select', function (e, li) {
-                        TraerSiguienteNumero(CodLibro)
-                    })*/
-        $("#Serie").blur(function(){
-            console.log("blur")
+        })  
+
+        $("#Serie").parent().find('input.ui-widget').blur(function(){ 
             FocusOutSerie()
         })
     } 
  
- 
+    $("#Cuenta_CajaBancos").combobox()
     CargarConfiguracionDefault(CodLibro,variables) 
      
 
@@ -589,7 +586,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
 
     CambioLicitacion()*/
     
-    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-superior').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente)
@@ -641,7 +638,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     })
 
 
-    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -666,7 +663,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     }   
 
 }
-
+ 
 
 function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
     var el = yo`
@@ -1525,11 +1522,11 @@ function CalcularTotal(CodLibro,variables){
     }
 
     if($("#ckbAplicaImpuesto").is(":checked")){
-        if($("#ckbIncluyeIGB").is(":checked")){
+        if($("#ckbIncluyeIGv").is(":checked")){
             $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
             var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
             Suma = Suma - Suma * porcDescuentoglobal
-
+             
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
         }else{
@@ -2130,15 +2127,25 @@ function CambioGastos(){
 
 function FocusOutSerie() {
     
-    if ($("#Serie").val().length < 4) {
+    if ($("#Serie").parent().find('input.ui-widget').val().length < 4) {
         var cadenaCeros = ""
-        var cantidadCeros = 4 - $("#Serie").val().length
+        var cantidadCeros = 4 - $("#Serie").parent().find('input.ui-widget').val().length
         for (var i = 0; i < cantidadCeros; i++)
             cadenaCeros = cadenaCeros + "0"
-        $("#Serie").val(cadenaCeros + $("#Serie").val())
+        $("#Serie").parent().find('input.ui-widget').val(cadenaCeros + $("#Serie").parent().find('input.ui-widget').val())
+    }
+
+    var nuevoValor = $("<option value="+$("#Serie").parent().find('input.ui-widget').val()+">"+$("#Serie").parent().find('input.ui-widget').val()+"</option>");
+    $("#Serie").append(nuevoValor);
+    $("#Serie option:last").attr("selected", "selected");
+
+}
+
+function CambioNumero_(event,CodLibro){
+    if(CodLibro!='08'){
+        BloquearControles(event)
     }
 }
- 
 
 function CambioNumero(){
     if($("#Numero").val().length<8){
@@ -2533,6 +2540,8 @@ function TraerSiguienteNumero(CodLibro){
                     if(res.data.comprobante.length>0){
                         var comprobante = res.data.comprobante
                         $("#Numero").val("00000000"+comprobante[0].NumeroSiguiente)
+                    }else{
+                        $("#Numero").val("")
                     }
                 } 
             })

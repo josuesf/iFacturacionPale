@@ -6,7 +6,75 @@ var aCantidad = 0
 var NroDias = 60
 var aStock
 
+
+
+function VerBuscarPorSerie(almacenes) {
+ 
+    var el = yo`
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button> 
+                    <h4 class="modal-title"><strong>Busqueda por Serie</strong></h4>
+                </div>
+                <div class="modal-body">
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group"> 
+                                <select id="Cod_AlmacenBuscarSerie" class="form-control">
+                                    ${almacenes.map((e)=>yo`<option value=${e.Cod_Almacen}>${e.Des_Almacen}</option>`)}
+                                </select>
+                            </div>
+                        </div>
+                        <div  class="col-md-6">
+                            <div class="form-group">
+                                <input type="text" id="txtBuscarSerie"  placeholder="Ingrese la serie para realizar la busqueda" class="form-control" onkeypress=${()=>BuscarSerie(event)}>
+                            </div>
+                        </div>
+                        <div  class="col-md-2">
+                            <div class="form-group">
+                               <button class="btn btn-success" onclick=${()=>BuscarSerie(event)}><i class="fa fa-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <p></p>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive" id="divTablaSeries">
+                                <table id="tablaSeries" class="table table-bordered table-hover">
+                                    <thead>
+                                        <th>Codigo</th>
+                                        <th>Producto</th>
+                                        <th>Serie</th>
+                                        <th>Observacion</th>
+                                    </thead>
+                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info">Aceptar</button>
+                </div>
+            </div>
+        </div>`
+
+    var modal_proceso = document.getElementById('modal-otros-procesos');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-otros-procesos').modal()
+}
+
+
 function VerAsignarSeries(_Series, fecha, Stock, Cantidad) {
+ 
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -68,6 +136,7 @@ function VerAsignarSeries(_Series, fecha, Stock, Cantidad) {
 }
 
 function VerGenerarSeries(_Series, fecha, Stock, Cantidad) {
+    LimpiarVariablesGlobales()
     var el = yo`
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -144,6 +213,40 @@ function VerGenerarSeries(_Series, fecha, Stock, Cantidad) {
     $('#modal-superior').modal()
 }
 
+function LlenarTablaSeries(productos){
+
+    if (productos.length == 1) { 
+        if(parseInt(productos[0].Stock)==1){
+            var el = yo`<table class="table table-bordered table-striped" id="tablaSeries">
+                <thead>
+                    <th>Codigo</th>
+                    <th>Producto</th>
+                    <th>Serie</th>
+                    <th>Observacion</th>
+                </thead>
+                <tbody>
+                    
+                    
+                </tbody>
+
+            </table>`
+
+
+            empty(document.getElementById('divTablaSeries')).appendChild(el);
+            $("#txtBuscarSerie").val("")
+            $("#txtBuscarSerie").focus()
+        }else{
+            toastr.error('El producto ya fue despachado de este Almacen','Error',{timeOut: 5000}) 
+            $("#txtBuscarSerie").val("")
+            $("#txtBuscarSerie").focus()
+        }
+       
+    }else{
+        toastr.error('El producto ya se encuentra en este Almacen','Error',{timeOut: 5000}) 
+        $("#txtBuscarSerie").val("")
+        $("#txtBuscarSerie").focus()
+    }
+}
 
 function CambioGenerarSerie() {
     if ($("input[name=optionsGenerarSerie]:checked").val() == "Cantidad") {
@@ -157,8 +260,9 @@ function CambioGenerarSerie() {
         $("#SerieFinal").val("")
     }
 }
+ 
 
-function CambioGenerarSerie() {
+function CambioSerieFinal() {
     try {
         $("#Cantidad").val(parseInt($("#SerieFinal").val()) - parseInt($("#SerieInicial").val()))
     } catch (e) {
@@ -208,6 +312,38 @@ function NumeroCeros(pCantidad) {
             return "";
 
     }
+}
+
+function BuscarSerie(evente){
+    if(event.which==13){
+        if($("#txtBuscarSerie").val().trim()!='' && $("#txtBuscarSerie").val().length>6){
+            TraerTOPXSerie()
+        } 
+    }
+}
+
+function TraerTOPXSerie(){
+    H5_loading.show()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Serie:$("#txtBuscarSerie").val(),
+            Cod_Almacen:$("#Cod_AlmacenBuscarSerie").val()
+        })
+    }
+    fetch(URL + '/series_api/get_TOP_by_serie', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                LlenarTablaSeries(res.data.productos)
+                H5_loading.hide()
+            }
+        })
 }
 
 function AceptarGenerarSerie() {
@@ -368,4 +504,27 @@ function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series
     //VerAsignarSeries(CodAlmacen, IdProducto,Cantidad,NroDias)
 }
 
-export { AsignarSeriesModal }
+function BuscarPorSerie(){
+    H5_loading.show()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({  
+        })
+    }
+    fetch(URL + '/almacenes_api/get_almacenes_by_caja', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var almacenes = res.data.almacenes
+                VerBuscarPorSerie(almacenes)
+                H5_loading.hide()
+            }
+        })
+}
+
+export { AsignarSeriesModal, BuscarPorSerie }

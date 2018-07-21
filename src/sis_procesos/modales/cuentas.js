@@ -17,7 +17,7 @@ function VerBuscarCuentasPendientes(CodLibro,cuentas){
                     
                     <div class="row">
                         <div class="col-sm-12 col-md-12">
-                            <div class="table-responsive" id="contenedorTablaClientes"> 
+                            <div class="table-responsive" id="contenedorTablaClientesCuentas"> 
                             </div>
                         </div>
                     </div>
@@ -36,7 +36,7 @@ function VerBuscarCuentasPendientes(CodLibro,cuentas){
     AgregarTabla(cuentas,CodLibro)
 }
 
-function AgregarTabla(cuentas,CodLibro){
+function AgregarTabla(cuentas,CodLibro){ 
  
     var el = yo`<table id="example" class="table table-bordered table-striped">
     <thead>
@@ -66,7 +66,7 @@ function AgregarTabla(cuentas,CodLibro){
     </tbody>
 
 </table>`
-    empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
+    empty(document.getElementById('contenedorTablaClientesCuentas')).appendChild(el);
 
     $('#example').DataTable({
         "lengthChange": false,
@@ -76,7 +76,6 @@ function AgregarTabla(cuentas,CodLibro){
     });
 
     $("#example_filter").find("input").keyup(function(){
-        console.log("cambio de searcgh")
     })
 }
 

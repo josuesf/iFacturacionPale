@@ -9,7 +9,7 @@ import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
 import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
-import { NuevaVenta, VentaSimple } from '../sis_procesos/mod_ventas/ventas'
+import { NuevaVenta, VentaSimple,VentaCompleta } from '../sis_procesos/mod_ventas/ventas'
 import { NuevoArqueoCaja } from '../sis_procesos/mod_ventas/arqueo_caja'
 
 
@@ -45,6 +45,7 @@ function Ver(Flag_Cerrado) {
                     <ul class="treeview-menu">
                         <li class=""><a href="javascript:void(0);" onclick=${() => NuevaVenta()}><i class="fa fa-cart-plus"></i> <span> Nueva Venta</span></a></li>
                         <li class=""><a href="javascript:void(0);" onclick=${() => VentaSimple()}><i class="fa fa-shopping-basket"></i> <span> Venta Simple</span></a></li>
+                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaCompleta()}><i class="fa fa-opencart"></i> <span> Venta Completa</span></a></li>
                     </ul>
                 </li>  
 
@@ -140,6 +141,7 @@ function Ver(Flag_Cerrado) {
                     <ul class="treeview-menu">
                         <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-cart-plus"></i> <span> Nueva Venta</span></a></li>
                         <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-shopping-basket"></i> <span> Venta Simple</span></a></li>
+                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-opencart"></i> <span> Venta Completa</span></a></li>
                     </ul>
                 </li>  
 

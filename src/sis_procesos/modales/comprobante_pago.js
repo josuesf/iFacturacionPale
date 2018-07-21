@@ -3,7 +3,8 @@ var yo = require('yo-yo');
 import { BuscarCliente } from './index'
 import { URL } from '../../constantes_entorno/constantes'
 
-function VerBuscarComprobatenPago(CodLibro,tipos_comprobantes){ 
+function VerBuscarComprobatePago(CodLibro,tipos_comprobantes){ 
+    LimpiarVariablesGlobales()
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -61,9 +62,9 @@ function VerBuscarComprobatenPago(CodLibro,tipos_comprobantes){
     empty(modal_proceso).appendChild(el);
     $('#modal-otros-procesos').modal()   
 
-    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-superior').on('hidden.bs.modal', function () {
 
-        if(global.objCliente !='' && global.objCliente){ 
+        if(global.objCliente !=''){ 
             $("#txtBusquedaModalComprobantePago").val(global.objCliente.Cliente) 
             $("#txtBusquedaModalComprobantePago").attr("data-id",global.objCliente.Id_ClienteProveedor)
         }
@@ -90,7 +91,7 @@ function BuscarComprobantePago(CodLibro){
     .then(res => {
         if (res.respuesta == 'ok') {
             var tipos_comprobantes = res.data.tipos_comprobantes 
-            VerBuscarComprobatenPago(CodLibro,tipos_comprobantes)
+            VerBuscarComprobatePago(CodLibro,tipos_comprobantes)
         }
     })
 }

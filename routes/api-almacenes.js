@@ -143,6 +143,23 @@ router.post('/get_almacen_mov_detalle_by_id', function (req, res){
     Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
+
+
+router.post('/get_almacenes_by_caja', function (req, res) {
+    input = req.body
+
+    parametros = [
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja }, 
+    ] 
+     
+    procedimientos = [
+        { nom_respuesta: 'almacenes', sp_name: 'USP_CAJ_CAJA_ALMACEN_TXCaja', parametros }
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+         
+}); 
+ 
+
 router.post('/guardar_mov_almacen', function (req, res){ 
     input = req.body
     parametros = [

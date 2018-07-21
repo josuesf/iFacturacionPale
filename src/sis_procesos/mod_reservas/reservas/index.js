@@ -687,13 +687,13 @@ function VerRegistroReserva(variables) {
     var modal_proceso = document.getElementById('modal-proceso');
     empty(modal_proceso).appendChild(el);
     $('#modal-proceso').modal()
-    $('#modal-proceso').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-proceso').on('hidden.bs.modal', function () {
         dp.clearSelection();
     })  
 
-    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-superior').on('hidden.bs.modal', function () {
 
-        if(global.objCliente !='' && global.objCliente){
+        if(global.objCliente !=''){
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)

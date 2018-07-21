@@ -37,7 +37,7 @@ router.post('/arquear_caja', function (req, res) {
    
     TraerConexion(req,res,function(flag){
         if(flag)
-            Arquear(req,res)
+            ArquearVerificacion(req,res)
         else
             return res.json({respuesta:"error"}) 
     });
@@ -93,6 +93,7 @@ router.post('/get_all_comprobantes', function (req, res) {
 router.post('/get_comprobante_detalle', function (req, res) {
     
     TraerConexion(req,res,function(flag){
+        console.log(req.body.id_ComprobantePago)
         if(flag){
             parametros = [
                 {nom_parametro:'id_ComprobantePago',valor_parametro:req.body.id_ComprobantePago}
@@ -933,7 +934,97 @@ function VerificarLogin(req,res){
 }
 
 
-function Arquear(req,res){
+function ArquearVerificacion(req,res){
+    var Flag_Cerrado = req.body.Flag_Cerrado
+    if(Flag_Cerrado=='0'){
+        ArquearApertura(req,res)
+    }else{
+        ArquearCierre(req,res)
+    }
+}
+
+function CalcularTotalCierre(resumenpen,callback){
+    var sumapen = 0
+    for(var i=0;i<resumenpen.length;i++){
+        if(resumenpen[i].FlagEfectivo=="1"){
+            sumapen+=parseFloat(resumenpen[i].Monto)
+        }
+    }
+ 
+    callback(sumapen)
+}
+
+function ArquearCierre(req,res){
+    var parametros1 = [
+        {nom_parametro:'Cod_Caja',valor_parametro:req.body.Cod_Caja},
+        {nom_parametro:'Cod_Turno',valor_parametro:req.body.Cod_Turno},
+        {nom_parametro:'Cod_Moneda',valor_parametro:'PEN'}
+    ]
+     
+     
+    EXEC_SQL('USP_CAJ_COMPROBANTE_P_RESUMENxCajaTurno', parametros1 , function (resumenopen) {
+        if(resumenopen.err) return res.json({respuesta:"error"+resumenopen.err}) 
+        console.log("soles")
+        console.log(resumenopen)
+        CalcularTotalCierre(resumenopen.result,function(totalpen){
+            const fecha = new Date()
+            const mes = fecha.getMonth() + 1
+            const dia = fecha.getDate()
+            var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+
+            var Numero = req.body.Numero
+            var Des_ArqueoFisico = "Arqueo de "+req.body.Cod_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
+            var Obs_ArqueoFisico = ''
+            var Fecha = fecha_format
+            var Flag_Cerrado = req.body.Flag_Cerrado
+            var Cod_Usuario = req.body.Cod_Usuario
+            var Cod_Caja = req.body.Cod_Caja
+            var Cod_Turno =  req.body.Cod_Turno
+        
+            p = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},
+            { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
+            { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
+            { nom_parametro: 'Numero', valor_parametro: Numero},
+            { nom_parametro: 'Des_ArqueoFisico', valor_parametro: Des_ArqueoFisico},
+            { nom_parametro: 'Obs_ArqueoFisico', valor_parametro: Obs_ArqueoFisico},
+            { nom_parametro: 'Fecha', valor_parametro: Fecha},
+            { nom_parametro: 'Flag_Cerrado', valor_parametro: Flag_Cerrado},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
+            ]
+
+            EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
+                if(dataArqueoFisico.err) return res.json({respuesta:"error",detalle_error:dataArqueoFisico.err}) 
+                
+                    var parametros = [
+                        { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+                        { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
+                        { nom_parametro: 'Tipo', valor_parametro: "SALDO FINAL"},
+                        { nom_parametro: 'Monto', valor_parametro: totalpen},
+                        { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
+                    ]
+
+                    EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros, function (dataSaldoArqueo) {
+                        if(dataSaldoArqueo.err) return res.json({respuesta:"error"}) 
+                        p = [
+                            { nom_parametro: 'CodCaja', valor_parametro: Cod_Caja },
+                            { nom_parametro: 'CodTurno', valor_parametro:  Cod_Turno}
+                        ] 
+                        EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+                            if(dataArqueoFisico.err) return res.json({respuesta:"error"}) 
+                            req.app.locals.arqueo = dataArqueoFisico.result
+                            return res.json({respuesta:"ok"}) 
+                        })
+
+                    }) 
+            })
+        })
+         
+    })
+
+}
+
+function ArquearApertura(req,res){
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate()
@@ -947,7 +1038,7 @@ function Arquear(req,res){
     var Cod_Usuario = req.body.Cod_Usuario
     var Cod_Caja = req.body.Cod_Caja
     var Cod_Turno =  req.body.Cod_Turno
-
+ 
     p = [
       { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},
       { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
@@ -961,7 +1052,7 @@ function Arquear(req,res){
     ]
 
     EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
-        if(dataArqueoFisico.err) return res.json({respuesta:"error"+dataArqueoFisico.err}) 
+        if(dataArqueoFisico.err) return res.json({respuesta:"error",detalle_error:dataArqueoFisico.err}) 
          
             var parametros = [
                 { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},

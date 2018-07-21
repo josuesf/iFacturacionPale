@@ -62,7 +62,7 @@ function Ver(variables, _escritura, producto) {
 
     var main = document.getElementById('tab_general');
     empty(main).appendChild(el);
-    $('#modal-danger-presentacion-ubicacion').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-danger-presentacion-ubicacion').on('hidden.bs.modal', function () {
         var old_element = document.getElementById("btnEliminar-presentacion-ubicacion");
         var new_element = old_element.cloneNode(true);
         old_element.parentNode.replaceChild(new_element, old_element);

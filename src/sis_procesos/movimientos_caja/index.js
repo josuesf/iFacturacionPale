@@ -138,7 +138,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
 
                 <div class="modal fade" id="modal-superior" style="display: none;z-index: 1052;overflow: auto;" >
                      
-                </div>
+                </div> 
 
                 <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;overflow: auto;" >
                      
@@ -205,7 +205,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                                             <ul class="dropdown-menu">
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
                                                                 <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
-                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                                                <li><a href="javascript:void(0)"   ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                                             </ul>
@@ -501,7 +501,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                         <ul class="dropdown-menu">
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
                                             <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
-                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalManguera(u)} ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                            <li><a href="javascript:void(0)"  ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                         </ul>

@@ -291,7 +291,7 @@ function Ver(_escritura, variables, producto){
 
     var main = document.getElementById('tab_general');
     empty(main).appendChild(el);
-    $('#modal-buscar-responsable').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal-buscar-responsable').on('hidden.bs.modal', function () {
         var old_element = document.getElementById("btnBuscar");
         var new_element = old_element.cloneNode(true);
         old_element.parentNode.replaceChild(new_element, old_element);

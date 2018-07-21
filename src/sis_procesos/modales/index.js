@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../constantes_entorno/constantes'
+import { LimpiarVariablesGlobales } from '../../../utility/tools'
 
 var aRequiereStock = true
 var aIdClienteProveedor = 0
@@ -9,7 +10,7 @@ var aCodTipoProducto = null
 
 function BuscarProducto(_RequiereStock,text_busqueda) {
     H5_loading.show()
-    global.objProductoVentas = ''
+    LimpiarVariablesGlobales()
     aRequiereStock = _RequiereStock
     var el = yo`
         <div class="modal-dialog">
@@ -85,6 +86,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
  
 
 function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
+    LimpiarVariablesGlobales()
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
@@ -145,6 +147,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
 
 
 function NuevoCliente(documentos) {
+    LimpiarVariablesGlobales()
     var el = yo`
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
