@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
 // app.use(authChecker);
-
+ 
 
 // configuration default
 app.locals.isla = false
@@ -382,7 +382,7 @@ app.post('/loginarqueo', function (req, res) {
     EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
       for(var i=0;i<req.body.Cod_Moneda.length;i++){
         var parametros = [
-              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result},
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
               { nom_parametro: 'Cod_Moneda', valor_parametro: req.body.Cod_Moneda[i]},
               { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
               { nom_parametro: 'Monto', valor_parametro: req.body.Monto_Moneda[i]},
@@ -398,7 +398,7 @@ app.post('/loginarqueo', function (req, res) {
           EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisicoCajaTurno) {
 
             p_ = [
-              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result }
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor }
             ] 
 
             EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p_ , function (dataArqueo) {
@@ -431,36 +431,7 @@ app.get('/logout', function (req, res) {
   res.redirect('/');
 });
  
-
-
-/*
-let Client = new PDFGeneratorAPI(
-  'ccb1bb52d7c00998f374a9d4c76438fc1fc915866d3dd01e7afe0dd0adcdd807',
-  'fb8204cfb07eb47f309c23e0a989cca03e71302a4d0e4e120716ff4d257bf43f'
-);
-
  
-Client.setWorkspace('{unique_workspace_identifier}');
- 
-app.get('/get_all_templates', function (req, res) {
-  
-  Client.output('21648', { "Name": "hola" }).then(function (response) {
-    //console.log("data base 764")
-    var fs = require('fs');
-    const input = req.body
-    var b64string = response.response
-    var buf = Buffer.from(b64string, 'base64');
-    fs.writeFile('./assets/media/prueba.pdf', buf, function (err) {
-      if (err) {
-        return res.json({ respuesta: err });
-      } else {
-        return res.json({ respuesta: 'ok' })
-      }
-    });
- 
-  })  
-});*/
-
 
 
 //Routes
@@ -487,17 +458,8 @@ var reservas_api = require('./routes/api-reservas')
 var services_api = require('./routes/api-services')
 var formas_pago_api = require('./routes/api-formas-pago')
 var comprobantes_pago_api = require('./routes/api-comprobantes-pago')
-
-// Routes Procesos
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
-
-function authChecker(req, res, next) {
-  if ((req.session && req.session.authenticated)||req.path==='/login') {
-      next();
-  } else {
-      res.render('login.ejs', { title: 'iFacturacion - Usuarios' });
-  }
-}
+ 
 app.use('/usuarios_api',usuarios_api);
 app.use('/cajas_api', cajas_api);
 app.use('/modulos_api', modulos_api);
@@ -523,6 +485,7 @@ app.use('/reservas_api', reservas_api)
 app.use('/ws', services_api)
 app.use('/formas_pago_api', formas_pago_api)
 app.use('/comprobantes_pago_api', comprobantes_pago_api)
+ 
 
 //Listen Server
 var server = app.listen(3000, function (err) {
