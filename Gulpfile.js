@@ -69,7 +69,29 @@ function compile_procesos(watch) {
     rebundle();
 }
 
+function compile_login(watch) {
+    var bundle = browserify(['./src/index_login.js'], { debug: true });
 
+    if (watch) {
+        bundle = watchify(bundle);
+        bundle.on('update', function () {
+            console.log('--> Bundling...');
+            rebundle();
+        });
+    }
+
+    function rebundle() {
+        bundle
+            .transform(babel, { presets: ['es2015'], plugins: ['syntax-async-functions', 'transform-regenerator'] })
+            .bundle()
+            .on('error', function (err) { console.log(err); this.emit('end') })
+            .pipe(source('index_login.js'))
+            .pipe(rename('app_login.js'))
+            .pipe(gulp.dest('public'));
+    }
+
+    rebundle();
+}
 
 gulp.task('build', function () {
     return compile();
@@ -90,5 +112,6 @@ gulp.task('watch-css', function () {
 
 gulp.task('watch-js', function () { return compile(true); });
 gulp.task('watch-procesos', function () { return compile_procesos(true); });
+gulp.task('watch-login', function () { return compile_login(true); });
 
 gulp.task('default', ['styles', 'build']);

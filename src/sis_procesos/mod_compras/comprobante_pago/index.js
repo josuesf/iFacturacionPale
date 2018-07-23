@@ -1663,6 +1663,7 @@ function CalcularSaldo(Cod_Moneda,Tipo_Cambio){
     }
 }
 
+
 function InicializarCredito(){
     /*
     kryptonGroupBox1.Enabled = false;

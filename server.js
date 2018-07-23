@@ -6,7 +6,7 @@ var { LOGIN_SQL,
       EXEC_SQL,
       EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
 
-var { UnObfuscateString, CambiarCadenaConexion } = require('./utility/tools')
+var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido } = require('./utility/tools')
 
 var express = require('express');
 var multer = require('multer');
@@ -417,6 +417,32 @@ app.post('/loginarqueo', function (req, res) {
     })
   } 
 })
+
+app.get('/register',function(req,res){
+  res.render('register.ejs', { });
+})
+
+app.post('/register',function(req,res){
+  var input = req.body
+  if(!RUCValido(input.RUC)){
+    res.render('register.ejs', {err:'El RUC es inválido'});
+  }else{
+    if(!EmailValido(input.email)){
+      res.render('register.ejs', {err:'El email es inválido'});
+    }else{
+      if(input.password==input.repeatpassword && input.repeatpassword!='' && input.password!=''){
+        if(input.nombre!='' && input.telefono!='' && input.password!='' && input.password==input.repeatpassword){
+
+        }else{
+          res.render('register.ejs', {err:'Existe campos vacios'});
+        }
+      }else{
+        res.render('register.ejs', {err:'Las contraseñas no coinciden'});
+      }
+    }
+  }
+   
+})
  
 app.get('/logout', function (req, res) {
   errores = ''
@@ -430,8 +456,7 @@ app.get('/logout', function (req, res) {
   delete req.session.authenticated;
   res.redirect('/');
 });
- 
- 
+  
 
 
 //Routes

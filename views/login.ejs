@@ -24,7 +24,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="../../index2.html">
+            <a href="javascript:void(0);">
                 <b>Pal</b>ERP</a>
         </div>
         <!-- /.login-logo -->
@@ -45,7 +45,7 @@
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="empresa">Empresa</label>
                     <div class="col-sm-9">
-                        <select id="empresa" name="RUC" class="form-control" onchange="CambioRUC('1')"> 
+                        <select id="empresa" name="RUC" class="form-control"> 
                         <% if(typeof empresa != 'undefined') { %>
                             <% empresa.forEach(function(e){ %>
                                 <option value="<%=e.RUC%>"><%=e.Nom_Comercial%></option> 
@@ -73,7 +73,7 @@
                     <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
                     <div class="col-sm-9">
                         <% if(typeof gestion != 'undefined') { %>
-                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion" onkeyup="TraerPeriodos()" onchange="TraerPeriodos()">
+                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion">
                         <% } %>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
                     <div class="col-sm-9">
-                        <select id="Periodo" name="Periodo" class="form-control" onchange="TraerTurnos()"> 
+                        <select id="Periodo" name="Periodo" class="form-control"> 
                             
                         </select>
                     </div>
@@ -103,6 +103,14 @@
                     </div>
                     <!-- /.col -->
                 </div>
+                <p></p>
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-xs-12">
+                        <a href="/register" class="btn btn-primary btn-block btn-flat">Registrarse</a>
+                    </div>
+                    <!-- /.col -->
+                </div>
             </form>
 
         </div>
@@ -112,7 +120,7 @@
     <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/dist/js/loading.js"></script>
-    <script src="/dist/js/loadingData.js"></script>
+    <script src="/app_login.js"></script>
     
     
 </body>
