@@ -169,7 +169,7 @@ router.post('/guardar_mov_almacen', function (req, res){
         {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
         {nom_parametro:'Serie', valor_parametro: input.Serie},
-        {nom_parametro:'Numero', valor_parametro: input.Numero},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
         {nom_parametro:'Fecha', valor_parametro: input.Fecha},
         {nom_parametro:'Motivo', valor_parametro: input.Motivo},
         {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},

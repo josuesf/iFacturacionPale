@@ -56,6 +56,7 @@
     "rundev": "nodemon server.js",
     "watchjs": "gulp watch-js",
     "watchjs_pro": "gulp watch-procesos",
+    "watchjs_login": "gulp watch-login",
     "watchcss": "gulp watch-css",
     "runelectron": "electron index_electron.js"
   }

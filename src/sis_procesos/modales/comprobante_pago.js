@@ -2,6 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { BuscarCliente } from './index'
 import { URL } from '../../constantes_entorno/constantes'
+import { LimpiarVariablesGlobales } from '../../../utility/tools'
 
 function VerBuscarComprobatePago(CodLibro,tipos_comprobantes){ 
     LimpiarVariablesGlobales()

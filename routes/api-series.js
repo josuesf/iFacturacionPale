@@ -34,7 +34,21 @@ router.post('/get_TOP_by_serie', function (req, res) {
     ]
      
     procedimientos = [
-        { nom_respuesta: 'productos', sp_name: 'USP_CAJ_SERIES_TOPxSerie', parametros:parametros1 }
+        { nom_respuesta: 'productos', sp_name: 'USP_CAJ_SERIES_TOPxSerie', parametros }
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+         
+}); 
+
+router.post('/get_series_by_idproducto', function (req, res) {
+    input = req.body
+
+    parametros = [
+        { nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto, tipo_parametro: sql.Int }
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'series', sp_name: 'USP_VIS_SERIES_ExisteProducto', parametros }
     ]  
     Ejecutar_Procedimientos(req,res, procedimientos)
          

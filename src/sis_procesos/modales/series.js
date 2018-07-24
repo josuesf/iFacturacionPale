@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../constantes_entorno/constantes'
+import { LimpiarVariablesGlobales } from '../../../utility/tools'
 
 var aCantidad = 0
 var NroDias = 60

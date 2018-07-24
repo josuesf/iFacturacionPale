@@ -216,7 +216,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4" id="divLicitacion" style="display:none">
+                                            <div class="col-md-4" id="divLicitacion" style="display:block">
                                                 <div class="checkbox">
                                                     <label>
                                                         <input type="checkbox" id="optLicitacion" name="optLicitacion" onchange=${()=>CambioLicitacion()}> Licitacion
@@ -409,7 +409,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <label>Glosa Contable:</label>
                                             </div>
                                             <div class="col-md-8">
-                                                <input type="text" class="form-control input-sm" value="${CodLibro=='08'?'POR LA COMPRA DE MERCADERIA':'POR LA VENTA DE MERCADERIA'}">
+                                                <input type="text" id="Glosa" class="form-control input-sm" value="${CodLibro=='08'?'POR LA COMPRA DE MERCADERIA':'POR LA VENTA DE MERCADERIA'}">
                                             </div>
                                         </div>  
                                         <div class="row">
@@ -417,7 +417,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <label>Placa Vehiculo:</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input type="text" class="form-control input-sm">
+                                                <input type="text" class="form-control input-sm" id="placaVehiculo">
                                             </div>
                                             <div class="col-md-3">
                                                 <label>Stock actual:</label>
@@ -494,7 +494,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante()}>${CodLibro=='08'?'Comprar':'Vender'}</button>
+                <button class="btn btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante(CodLibro,variables)}>${CodLibro=='08'?'Comprar':'Vender'}</button>
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -1005,6 +1005,33 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
     $("#tablaBody").html(fila)
 
     CalcularTotal(CodLibro,variables)*/
+}
+
+function AbrirModalConfirmacion(CodLibro,variables){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <p>Esta seguro que desea guardar este comprobante?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables)}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+
+
+    var modal_alerta = document.getElementById('modal-alerta');
+    empty(modal_alerta).appendChild(el);
+    $('#modal-alerta').modal()
 }
  
 
@@ -1531,8 +1558,6 @@ function CalcularTotal(CodLibro,variables){
             $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
             var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
             Suma = Suma - Suma * porcDescuentoglobal
-            console.log("suma")
-            console.log(Suma)
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
         }else{
@@ -1552,6 +1577,7 @@ function CalcularTotal(CodLibro,variables){
  
 
     $("#laSON").text(ConvertirCadena(parseFloat($("#Gran_Total").val()),$("#Cod_Moneda option:selected").text()))
+    return true
 }
 
 function AgregarMontoFormaPago(Cod_Moneda,Tipo_Cambio){
@@ -1879,11 +1905,286 @@ function CargarConfiguracionDefault(CodLibro,variables){
     $("input[name=optCredito][value='contado']").prop("checked",true)
     CambioLicitacion()
 }
+
+function EsValidaLicitacion(){ 
+    if($("#divLicitacion").css("display")=='block'){
+        if($("#optLicitacion").is(":checked")){
+            if($("#Cod_Licitacion").val()!=''){
+                return true
+            }else{
+                return false
+            }
+        }else{
+            return true
+        }
+    }else{
+        return true
+    }
+}
+
+function EsValidoCredito(CodLibro){
+    if($('input[name=optCredito]:checked').val()=="credito" && $("#divCredito").css("display")=='block'){
+        TraerCredito(CodLibro,function(flag){
+            return flag
+        })
+    }else{
+        return true
+    }
+}
+
+async function EsValidoSeries(CodLibro){
+    if(!$("#optEsGasto").is(":checked")){ 
+        await RecorrerTablaDetalles_Series(0)
+    }else{
+        return true
+    }
+}
  
 
-function GenerarComprobante(){
-    console.log(global.objCliente)
+function EsValido(CodLibro){
+    var MontoMaximo = 0
+    if($("#Cod_FormaPago").val()!=null && $("#Cod_FormaPago").val()!='' && $("#Cod_FormaPago").val()=='998' && $("#Cuenta_CajaBancos").val()!=null && $("#Cuenta_CajaBancos").val()!=''){
+        try{
+            MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[',']')[1])
+        }catch(e){
+            MontoMaximo = 0
+        }
+    }
+
+    if($("#divLicitacion").css("display")=='block' && $("#optLicitacion").is(":checked")){
+        EsValidaLicitacion()
+    }
+
+    if($("#Cliente").attr("data-id")!=null && $("#Cliente").attr("data-id")!=''){
+        if($("#Serie option:selected").text()!=''){
+            if($("#Numero").val()!=''){
+                if($("#Cod_TipoComprobante").val()!=''){
+                    if($("#tablaBody > tr").length > 0){
+                        if(MontoMaximo==0 || parseFloat($("#Gran_Total").val()) <= MontoMaximo){
+                            if(EsValidaLicitacion()){
+                                if(EsValidoCredito(CodLibro)){
+                                    console.log(EsValidoSeries(CodLibro))
+                                    if(EsValidoSeries(CodLibro)){
+                                        return true
+                                    }else{
+                                        toastr.error('Debe de Ingresar una Serie para Cada Producto','Error',{timeOut: 5000}) 
+                                        return false
+                                    }
+                                }else{
+                                    $("#Cliente").focus()
+                                    return false
+                                }
+                            }else{
+                                $("#Cod_Licitacion").focus()
+                                return false
+                            }
+                        }else{
+                            toastr.error('Debe de selecionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante','Error',{timeOut: 5000}) 
+                            return false
+                        }
+                    }else{
+                        toastr.error('Debe ingresar como minimo un Detalle en el Comprobante','Error',{timeOut: 5000}) 
+                        return false
+                    }
+                }else{
+                    toastr.error('Debe Selecionar un Comprobante','Error',{timeOut: 5000}) 
+                    return false
+                }
+            }else{
+                toastr.error('Debe ingresar un Numero para este Comprobante','Error',{timeOut: 5000}) 
+                return false
+            }
+        }else{
+            toastr.error('Debe ingresar o selecionar una serie para este Comprobante','Error',{timeOut: 5000}) 
+            return false
+        }
+    }else{
+        toastr.error('Debe selecionar un cliente si por defecto dejarlo en CLIENTES VARIOS','Error',{timeOut: 5000}) 
+        return false
+    }
+     
 }
+ 
+
+function GenerarComprobante(CodLibro,variables){
+    console.log(global.objCliente)
+    try{
+        if(EsValido(CodLibro)){
+            AbrirModalConfirmacion(CodLibro,variables)
+        }
+    }catch(e){
+        console.log(e)
+    }
+}
+
+function RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComprobante){
+    if(indiceVariables < variables.length){
+        if(variables[indiceVariables].Serie.toString() == Serie && variables[indiceVariables].Cod_TipoComprobante.toString()==Cod_TipoComprobante){
+            if(Cod_TipoComprobante=='TKB' || Cod_TipoComprobante=='TKF'){
+                return variables[indiceVariables].Nro_SerieTicketera.toString()
+            }else{
+                RecuperarNroTicketera(indiceVariables+1,variables,Serie,Cod_TipoComprobante)
+            }
+        }else{
+            RecuperarNroTicketera(indiceVariables+1,variables,Serie,Cod_TipoComprobante)
+        }  
+    }else{
+        return ""
+    }
+}
+
+function EmisionCompleta(CodLibro,variables){
+    GuardarCamposEntidadComprobante(CodLibro,variables)
+}
+
+async function GuardarCamposEntidadComprobante(CodLibro,variables){
+    AsyncCalcularTotal()
+    .then(data => 
+        RecuperarParametrosEmisionCompleta(CodLibro,variables)
+    )
+}
+
+function RecuperarParametrosEmisionCompleta(CodLibro,variables){
+    var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
+    var Cod_TipoOperacion = Cod_TipoDocReferencia
+    var Serie = $("#Serie option:selected").text()
+    var Numero = $("#Numero").val().trim()
+    if((CodLibro=="14") && (Cod_TipoComprobante=="TKB" || Cod_TipoComprobante=="TKF" || Cod_TipoComprobante=="BE" || Cod_TipoComprobante=="FE" || Cod_TipoComprobante=="NP")){
+        Numero = ""
+    }
+    var Id_Cliente = $("#Cliente").attr("data-id")
+    var Cod_TipoDoc = $("#Cod_TipoDoc").val()
+    var Doc_Cliente = $("#Nro_Documento").val()
+    var Nom_Cliente = $("#Cliente").val()
+    var Direccion_Cliente = $("#Direccion").val()
+    var FechaEmision = $("#Fecha").val()
+    Date.prototype.addDays = function (days) {
+        var dat = new Date(this.valueOf());
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+    var FechaDiasMas = new Date($("#Fecha").val()).addDays(parseInt($("#Nro_Dias").val()))
+    const mes = FechaDiasMas.getMonth() + 1
+    const dia = FechaDiasMas.getDate()
+    var FechaDiasMas_ = FechaDiasMas.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+    var FechaVencimiento = $('input[name=optCredito]:checked').val()=="credito"? FechaDiasMas_:$("#Fecha").val()
+    var FechaCancelacion = $("#Fecha").val()
+    var TipoCambio = $("#Tipo_Cambio").val()
+    var Flag_Anulado = false
+    var Glosa = ''
+    if($("#optEsGasto").is(":checked")){
+        Glosa = $('#tablaBody > tr:eq(0)').find('td').eq(4).find('input').val()
+    }else{
+        Glosa = $("#Glosa").val() 
+    }
+    var Flag_Despachado = $("#optDescargar").is(":checked")
+    var Cod_FormaPago = ''
+    if($('input[name=optCredito]:checked').val()=="contado"){
+        Cod_FormaPago = $("#Cod_FormaPago").val()
+    }else{
+        Cod_FormaPago = '999'
+    }
+    var Descuento_Total = $("#Descuento_Global").val()
+    var Cod_Moneda = $("#Cod_Moneda").val()
+    var Impuesto = 0
+    if($("#ckbAplicaImpuesto").is(":checked")){
+        Impuesto = $("#Impuesto").val()
+    }else{
+        Impuesto = 0
+    }
+    
+    var Total = $("#Gran_Total").val(parseFloat($("#Gran_Total").val()).toFixed(2))
+    var Id_GuiaRemision = 0
+    var GuiaRemision = null
+    var Nro_Ticketera = ''
+    if($("#Guia").val().trim()!=""){
+        try{    
+            Id_GuiaRemision = parseInt($("#Guia").attr("data-id"))
+        }catch(e){
+            Id_GuiaRemision = 0
+        }
+        GuiaRemision = $("#Guia").val() 
+    }
+    
+    var id_ComprobanteRef = 0
+    if(CodLibro=="14"){
+        Nro_Ticketera= RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComprobante)
+    }else{
+        Nro_Ticketera = ''
+    }
+    var Cod_RegimenPercepcion = ''
+    var Tasa_Percepcion = 0
+    var Placa_Vehiculo = $("#placaVehiculo").val().trim()
+    var Cod_TipoDocReferencia = ''
+    var Nro_DocReferencia = ''
+    var Valor_Resumen = ''
+    var Valor_Firma = ''
+    var Cod_EstadoComprobante = 'EMI'
+    var Motivo_Anulacion = ''
+    var Otros_Cargos = 0
+    var Otros_Tributos = 0 
+    var Obs_Comprobante = obs_xml
+    var Cod_Plantilla = null 
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_Libro:CodLibro,
+            Cod_TipoOperacion,
+            Cod_TipoComprobante,
+            Serie,
+            Numero,
+            Id_Cliente,
+            Cod_TipoDoc,
+            Doc_Cliente,
+            Nom_Cliente,
+            Direccion_Cliente,
+            FechaEmision,
+            FechaVencimiento,
+            FechaCancelacion,
+            Glosa,
+            TipoCambio,
+            Flag_Anulado,
+            Flag_Despachado,
+            Cod_FormaPago,
+            Descuento_Total,
+            Cod_Moneda,
+            Impuesto,   
+            Total,
+            Obs_Comprobante,
+            Id_GuiaRemision,
+            GuiaRemision,
+            id_ComprobanteRef,
+            Cod_Plantilla,
+            Nro_Ticketera,
+            Cod_RegimenPercepcion,
+            Tasa_Percepcion,
+            Placa_Vehiculo,
+            Cod_TipoDocReferencia,
+            Nro_DocReferencia,
+            Valor_Resumen,
+            Valor_Firma,
+            Cod_EstadoComprobante,
+            Motivo_Anulacion,
+            Otros_Cargos,
+            Otros_Tributos
+        })
+    }
+    fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+               console.log(res)
+            } 
+        })
+
+}
+
 
 function CargarTipoPrecio(){
     const parametros = {
@@ -2242,6 +2543,40 @@ function CambioExportacion(CodLibro,variables){
         }); 
     }
     CalcularTotal(CodLibro,variables)
+}
+
+async function RecorrerTablaDetalles_Series(indiceDetalle){
+    if(indiceDetalle < $("#tablaBody > tr").length){
+        var Id_Producto =   $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val()
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Id_Producto
+            })
+        }
+        fetch(URL + '/series_api/get_series_by_idproducto', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                var series = res.data.series 
+                if(series.length>0){
+                    var Series = JSON.parse( $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(16).find('input').val())
+                    if(Series.length==0){
+                        return Promise.resolve(false)
+                    }else{
+                        RecorrerTablaDetalles_Series(indiceDetalle+1) 
+                    }
+                }else{
+                    RecorrerTablaDetalles_Series(indiceDetalle+1) 
+                }
+               
+            })
+    }else{
+        return  Promise.resolve(true) 
+    }
 }
 
 function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,indiceLicitacion,arregloLicitacion,_ExisteAtencion){
@@ -2625,6 +2960,41 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
         })
 }
 
+function TraerCredito(CodLibro,callback){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_ClienteProveedor:$("#Cliente").attr("data-id"),
+            Cod_Libro:CodLibro
+        })
+    }
+    fetch(URL + '/clientes_api/get_credito_cliente', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+               if(res.data.creditos.length>0){
+                    var aCreditoUtilizado = parseFloat(res.data.creditos[0].CreditoUtilizado)
+                    var aLimiteCredito = parseFloat(res.data.creditos[0].LimiteCredito)
+                    if(aLimiteCredito-aCreditoUtilizado-parseFloat($("#Gran_Total"))>0){
+                        callback(true)
+                    }else{
+                        toastr.error('No hay Credito Suficiente!!!.\nSu Linea es: '+aLimiteCredito+'.\nCredito Utilizado: '+aCreditoUtilizado+'.','Error',{timeOut: 5000})
+                        callback(false)
+                    }
+
+               }else{
+                    callback(true)
+               }
+            }else{
+                callback(true)
+            } 
+        })
+}
+
 
 function BuscarProductoCP(CodLibro,tipo) { 
     if(tipo=='blur'){
@@ -2718,6 +3088,9 @@ function AbrirModalObsComprobantePago(){
         })
 }
 
+async function AsyncCalcularTotal(CodLibro,variables) {
+    return CalcularTotal(CodLibro,variables);
+}
  
 
 function ComprobantePago(Cod_Libro,Cliente,Detalles) {
@@ -2756,8 +3129,8 @@ function ComprobantePago(Cod_Libro,Cliente,Detalles) {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa   
                     VerRegistroComprobante(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01',Cliente,Detalles)
-                    H5_loading.hide()
-    
+                    H5_loading.hide() 
+                     
                 })
 
         }) 

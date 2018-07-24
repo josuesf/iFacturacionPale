@@ -45,7 +45,7 @@ router.post('/guardar_movimientos_egreso_caja', function (req, res) {
         { nom_parametro: 'Des_Movimiento', valor_parametro: input.Des_Movimiento },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'RT' },
         { nom_parametro: 'Serie', valor_parametro: input.Serie},
-        { nom_parametro: 'Numero', valor_parametro: '' },
+        { nom_parametro: 'Numero', valor_parametro: '' , tipo_parametro:sql.VarChar},
         { nom_parametro: 'Fecha', valor_parametro: input.Fecha },
         { nom_parametro: 'Tipo_Cambio', valor_parametro: input.Tipo_Cambio },
         { nom_parametro: 'Ingreso', valor_parametro: input.Ingreso },

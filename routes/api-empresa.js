@@ -58,6 +58,18 @@ router.post('/get_turnos_by_periodo', function (req, res) {
 });
 
 
+router.post('/crear_siguiente_turno', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Usuario', valor_parametro:input.Cod_Usuario}
+    ]
+    procedimientos =[
+        {nom_respuesta:'turnos',sp_name:'USP_CAJ_TURNO_ATENCION_GSIGUIENTE',parametros},
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
+
 router.post('/change_ruc', function (req, res) {
     input = req.body
     parametros = [

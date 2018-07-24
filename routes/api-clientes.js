@@ -469,5 +469,17 @@ router.post('/eliminar_padron_cliente', function (req, res) {
     Ejecutar_Procedimientos(req,res, procedimientos)
 })
  
+router.post('/get_credito_cliente', function (req, res) {
+    input = req.body
+    parametros = [
+        { nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor },
+        { nom_parametro: 'Cod_Libro', valor_parametro: input.Cod_Libro },
+    ]
+    procedimientos = [
+        { nom_respuesta: 'creditos', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_TCredito', parametros },
+    ]
+    Ejecutar_Procedimientos(req,res, procedimientos)
+})
+ 
 
 module.exports = router;

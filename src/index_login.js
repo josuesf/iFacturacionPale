@@ -33,8 +33,31 @@ $(document).ready(function(){
     $("#Periodo").change(function(){
         TraerTurnos()
     })
+
+    $("#btnTurnoSiguiente").click(function(){
+        CrearTurnoSiguiente()
+    })
 })
-//CambioRUC("0")
+
+function CrearTurnoSiguiente(){
+    var Cod_Usuario = 'MIGRACION'
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_Usuario
+        })
+    }
+    fetch(URL +'/empresa_api/crear_siguiente_turno', parametros)
+        .then(req => req.json())
+        .then(res => {
+            TraerTurnos()
+        })
+}
 
 function TraerPeriodos(){
     var Gestion = $("#Gestion").val()
@@ -85,6 +108,10 @@ function LlenarPeriodo(periodos,idSelect){
      
     $("#"+idSelect).html('')
     $("#"+idSelect).html(html) 
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1 
+    var periodo = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes)
+    $("#"+idSelect).val(periodo) 
 }
 
 function LlenarTurnos(turnos,idSelect){
@@ -94,7 +121,8 @@ function LlenarTurnos(turnos,idSelect){
     }
 
     $("#"+idSelect).html('')
-    $("#"+idSelect).html(html) 
+    $("#"+idSelect).html(html)
+    $("#"+idSelect+" option:last").attr("selected", "selected"); 
 }
 
 

@@ -193,6 +193,65 @@ router.post('/get_monedas', function (req, res) {
 });
 
 
+router.post('/guardar_comprobante_pago', function (req, res) {
+    var input = req.body
+    var parametros = [
+        { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output",tipo_parametro:sql.Int},
+        { nom_parametro: 'Cod_Libro', valor_parametro: input.Cod_Libro },
+        { nom_parametro: 'Cod_Periodo', valor_parametro: req.session.periodo },
+        { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja },
+        { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
+        { nom_parametro: 'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion },
+        { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
+        { nom_parametro: 'Serie', valor_parametro: input.Serie },
+        { nom_parametro: 'Numero', valor_parametro: input.Numero ,tipo:"output",tipo_parametro:sql.VarChar},
+        { nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente },
+        { nom_parametro: 'Cod_TipoDoc', valor_parametro: input.Cod_TipoDoc },
+        { nom_parametro: 'Doc_Cliente', valor_parametro: input.Doc_Cliente },
+        { nom_parametro: 'Nom_Cliente', valor_parametro: input.Nom_Cliente },
+        { nom_parametro: 'Direccion_Cliente', valor_parametro: input.Direccion_Cliente },
+        { nom_parametro: 'FechaEmision', valor_parametro: input.FechaEmision },
+        { nom_parametro: 'FechaVencimiento', valor_parametro: input.FechaVencimiento },
+        { nom_parametro: 'FechaCancelacion', valor_parametro: input.FechaCancelacion },
+        { nom_parametro: 'Glosa', valor_parametro: input.Glosa },
+        { nom_parametro: 'TipoCambio', valor_parametro: input.TipoCambio },
+        { nom_parametro: 'Flag_Anulado', valor_parametro: input.Flag_Anulado },
+        { nom_parametro: 'Flag_Despachado', valor_parametro: input.Flag_Despachado },
+        { nom_parametro: 'Cod_FormaPago', valor_parametro: input.Cod_FormaPago },
+        { nom_parametro: 'Descuento_Total', valor_parametro: input.Descuento_Total },
+        { nom_parametro: 'Cod_Moneda', valor_parametro: input.Cod_Moneda },
+        { nom_parametro: 'Impuesto', valor_parametro: input.Impuesto },
+        { nom_parametro: 'Total', valor_parametro: input.Total },
+        { nom_parametro: 'Obs_Comprobante', valor_parametro: input.Obs_Comprobante },
+        { nom_parametro: 'Id_GuiaRemision', valor_parametro: input.Id_GuiaRemision },
+        { nom_parametro: 'GuiaRemision', valor_parametro: input.GuiaRemision },
+        { nom_parametro: 'id_ComprobanteRef', valor_parametro: input.id_ComprobanteRef },
+        { nom_parametro: 'Cod_Plantilla', valor_parametro: input.Cod_Plantilla },
+        { nom_parametro: 'Nro_Ticketera', valor_parametro: input.Nro_Ticketera },
+        { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: req.session.username },
+        { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: input.Cod_RegimenPercepcion },
+        { nom_parametro: 'Tasa_Percepcion', valor_parametro: input.Tasa_Percepcion },
+        { nom_parametro: 'Placa_Vehiculo', valor_parametro: input.Placa_Vehiculo },
+        { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: input.Cod_TipoDocReferencia },
+        { nom_parametro: 'Nro_DocReferencia', valor_parametro: input.Nro_DocReferencia },
+        { nom_parametro: 'Valor_Resumen', valor_parametro: input.Valor_Resumen },
+        { nom_parametro: 'Valor_Firma', valor_parametro: input.Valor_Firma },
+        { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: input.Cod_EstadoComprobante },
+        { nom_parametro: 'Motivo_Anulacion', valor_parametro: input.Motivo_Anulacion },
+        { nom_parametro: 'Otros_Cargos', valor_parametro: input.Otros_Cargos },
+        { nom_parametro: 'Otros_Tributos', valor_parametro: input.Otros_Tributos },
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
+    ]
+
+    EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametros, function (dataComprobante) {
+        if (dataComprobante.err){
+            return res.json({respuesta:"error",detalle_error:dataComprobante.err})  
+        }else{
+            return res.json({respuesta:"ok"})
+        }
+    })
+})
+
 router.post('/venta_simple', function (req, res) {
     var input = req.body
       

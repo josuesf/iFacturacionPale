@@ -674,12 +674,12 @@ function VerificarArqueoCaja(req,res){
                                     if(dataSaldoAnterior.result.length==0){
 
 
-                                        return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
+                                        return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:''}}}) 
  
                                     }else{
  
                                         if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
+                                            return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'NUEVO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:''}}}) 
                                         }else{
                                             return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:dataSaldoAnterior.result[0].Cod_Turno}}}) 
                                         } 
@@ -745,6 +745,9 @@ function VerificarLogin(req,res){
                 EXEC_SQL('USP_PRI_EMPRESA_TXPK', p , function (dataE) {
                     if(dataE.err) return res.json({respuesta:"error"}) 
 
+                    EXEC_SQL('USP_CAJ_TURNO_ATENCION_GSIGUIENTE', [ { nom_parametro: 'Cod_Usuario', valor_parametro: dataLogin.Cod_Usuarios }], function (dataTS) {
+                        
+                    })
 
                     p = [
                         { nom_parametro: 'Cod_Usuarios', valor_parametro: dataLogin.Cod_Usuarios}
@@ -837,13 +840,12 @@ function VerificarLogin(req,res){
                                         
                                                                             if(dataSaldoAnterior.result.length==0){
                                         
-                                                                                return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
+                                                                                return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:''}}}) 
                                                                                 //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,data_cierre:{flag_apertura:'NUEVO',saldo:0,Cod_Turno:{}}}}) 
                                         
-                                                                            }else{
-                                                                                console.log(dataSaldoAnterior.result[0].Flag_Cerrado)
+                                                                            }else{ 
                                                                                 if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-                                                                                    return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
+                                                                                    return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'NUEVO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:''}}}) 
                                                                                     //return res.json({respuesta:"ok",flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1, data_cierre:{flag_apertura:'CERRADO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:{}}}}) 
                                                                                 }else{
                                                                                     return res.json({respuesta:"ok",empresa:dataE.result[0],flag_caja_abierta:"no",data:{numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,Cod_Usuario:dataLogin.Cod_Usuarios,Nick:dataLogin.Nick,cajas:e.result,periodos:dataPeriodos.result[0],turnos:dataTurnos.result,data_cierre:{flag_apertura:'ABIERTO',saldo:dataSaldoAnterior.result[0].Monto?dataSaldoAnterior.result[0].Monto:0,Cod_Turno:dataSaldoAnterior.result[0].Cod_Turno}}}) 
@@ -1032,7 +1034,7 @@ function ArquearApertura(req,res){
     var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
     var Numero = req.body.Numero
-    var Des_ArqueoFisico = "Arqueo de "+req.body.Cod_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
+    var Des_ArqueoFisico = "Apertura de "+req.body.Cod_Caja+" para el Turno "+req.body.Cod_Turno//req.body.Apertura
     var Obs_ArqueoFisico = ''
     var Fecha = fecha_format
     var Flag_Cerrado = req.body.Flag_Cerrado

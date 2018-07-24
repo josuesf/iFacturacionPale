@@ -273,7 +273,7 @@ router.post('/guardar_arqueo', function (req, res){
         { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},
         { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
         { nom_parametro: 'Cod_Turno', valor_parametro:req.app.locals.turno[0].Cod_Turno},
-        { nom_parametro: 'Numero', valor_parametro: req.app.locals.arqueo[0].Numero},
+        { nom_parametro: 'Numero', valor_parametro: req.app.locals.arqueo[0].Numero,tipo_parametro:sql.VarChar},
         { nom_parametro: 'Des_ArqueoFisico', valor_parametro: req.app.locals.arqueo[0].Des_ArqueoFisico},
         { nom_parametro: 'Obs_ArqueoFisico', valor_parametro: ''},
         { nom_parametro: 'Fecha', valor_parametro: input.Fecha},

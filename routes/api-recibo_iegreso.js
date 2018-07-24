@@ -60,7 +60,7 @@ router.post('/guardar_recibo',function(req,res){
         { nom_parametro: 'Des_Movimiento', valor_parametro: input.Des_Movimiento },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
         { nom_parametro: 'Serie', valor_parametro: input.Serie},
-        { nom_parametro: 'Numero', valor_parametro: input.Numero },
+        { nom_parametro: 'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar },
         { nom_parametro: 'Fecha', valor_parametro: input.Fecha },
         { nom_parametro: 'Tipo_Cambio', valor_parametro: '1' },
         { nom_parametro: 'Ingreso', valor_parametro: input.MontoIngreso },
@@ -89,7 +89,7 @@ router.post('/get_comprobante_by_cliente', function (req, res) {
         {nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente},
         {nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
         {nom_parametro: 'Serie', valor_parametro: input.Serie},
-        {nom_parametro: 'Numero', valor_parametro: input.Numero},
+        {nom_parametro: 'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
     ]
      
     procedimientos = [
