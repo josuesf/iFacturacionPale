@@ -1,10 +1,11 @@
 {
-    "_id": "fx0sAH7FplOVPWO1",
-    "shortid": "ByW-5fKfm",
-    "recipe": "phantom-pdf",
+    "_id": "qjdimnaEHHKPU4OR",
+    "shortid": "B16qSehQm",
+    "recipe": "chrome-pdf",
     "engine": "handlebars",
-    "modificationDate": {
-        "$$date": 1532476674152
+    "chrome": {
+        "printBackground": true,
+        "displayHeaderFooter": false
     },
     "data": {
         "shortid": "r1S4pGFz7"
@@ -16,5 +17,8 @@
                 "entitySet": "data"
             }
         ]
+    },
+    "modificationDate": {
+        "$$date": 1532476793268
     }
 }

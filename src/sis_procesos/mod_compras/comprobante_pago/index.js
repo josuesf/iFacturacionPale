@@ -6,6 +6,7 @@ import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 
 var listaFormaPago = []
+var arrayValidacion = [null,'null','']
 var obs_xml = null
 var aSaldo = 0
 var aMonto = 0 
@@ -598,6 +599,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Cliente)
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            $("#Direccion").val(global.objCliente.Direccion)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
             if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
                 $("input[name=optCredito][value='credito']").prop("checked",true);
@@ -1036,76 +1038,115 @@ function AbrirModalConfirmacion(CodLibro,variables){
  
 
 function AgregarFilaTabla(CodLibro,variables){
-    if($("#Nom_Producto").val().trim()!=""){
-        if($("#Nom_Producto").attr("data-id")!=null && $("#Nom_Producto").attr("data-id")!="null" &&  $("#Nom_Producto").attr("data-id")!=""){
+    
+    if($("#optEsGasto").is(":checked")){
+        var Nom_Producto = $("#Nom_Producto").val()
+        var Importe = $("#Importe").val()
+        var rows = $("#tablaBody > tr").length
+        var idFila = contador+"G"
+        var fila = yo`
+        <tr id="${idFila}">
+            <td class="id_ComprobantePago hidden"><input value="0"></td>
+            <td class="id_Detalle hidden"><input value="${rows}"></td> 
+            <td class="Id_Producto hidden"><input value="0"></td> 
+            <td class="Codigo hidden"></td>
+            <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
+            <td class="Almacen"><input type="text" class="form-control input-sm" data-id=null value=''></td> 
+            <td class="UM"><input type="text" class="form-control input-sm" data-id=null value=''></td>
+            <td class="Stock hidden"><input type="number" class="form-control input-sm" value=0></td> 
+            <td class="Cantidad"><input type="number" class="form-control input-sm" value=1 onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+            <td class="Despachado hidden">1</td> 
+            <td class="PU"><input type="number" data-value=0 class="form-control input-sm" value=${Importe} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+            <td class="Descuento"><input type="number" data-value=0 class="form-control input-sm" value=0.00 onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
+            <td class="Importe"><input type="number" class="form-control input-sm" value=${Importe}></td>
+            <td class="Cod_Manguera hidden"></td>  
+            <td class="Tipo hidden">NGR</td> 
+            <td class="Obs_ComprobanteD hidden"></td> 
+            <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+            <td>
+            <div style="display:flex;">
+                <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+            </div>
+            </td>
+        </tr>`
+        $("#tablaBody").append(fila)
+        contador++
 
-            var Id_Producto = $("#Nom_Producto").attr("data-id")
-            var Cod_Producto = $("#Cod_Producto").val()==null?"": $("#Cod_Producto").val()
-            var Cod_Almacen = $("#Cod_Almacen option:selected").text()//$("#Cod_Almacen").val()
-            var Cod_UnidadMedida = $("#Cod_UnidadMedida option:selected").text()
-            var Stock = $("#Stock").val()
-            var Cantidad = $("#Cantidad").val()
-            var Nom_Producto = $("#Nom_Producto").val()
-            var Importe = $("#Importe").val()
-            var Precio_Unitario = $("#Precio_Unitario").val()
-            var Descuento = $("#Descuento").val()
-            var Cod_TipoPrecio = $("#Cod_TipoPrecio").val()==null?"":$("#Cod_TipoPrecio").val()
-            var Cod_TipoOperatividad = $("#Cod_TipoOperatividad").val()
 
-            var flagGasto = $("#optEsGasto").is(":checked")
-            var rows = $("#tablaBody > tr").length
-            var idFila = contador+$("#Nom_Producto").attr("data-id")
-            var fila = yo`
-            <tr id="${idFila}">
-                <td class="id_ComprobantePago hidden"><input value="0"></td>
-                <td class="id_Detalle hidden"><input value="${rows}"></td> 
-                <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
-                <td class="Codigo hidden">${flagGasto?'':Cod_Producto}</td>
-                <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
-                <td class="Almacen"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_Almacen").val()} value=${flagGasto?'':Cod_Almacen}></td> 
-                <td class="UM"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_UnidadMedida").val()} value=${flagGasto?'':Cod_UnidadMedida}></td>
-                <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
-                <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
-                <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
-                <td class="PU"><input type="number" data-value=${flagGasto?0:Precio_Unitario} class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
-                <td class="Descuento"><input type="number" data-value=0 class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
-                <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
-                <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
-                <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
-                <td class="Obs_ComprobanteD hidden"></td> 
-                <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
-                <td>
-                <div style="display:flex;">
-                    <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
-                    <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                </div>
-                </td>
-            </tr>`
-            $("#tablaBody").append(fila)
-            contador++
-
-            CalcularTotal(CodLibro,variables)
-            $("#Nom_Producto").attr("data-id",null)
-            $("#Stock").val("")
-            $("#Precio_Unitario").val("0.00")
-            $("#Cantidad").val("0.00")
-            $("#Importe").val("0.00")
-            $("#Descuento").val("0.00")
-
-            //$("#Nom_Producto").attr("data-id",null)
-            $("#Cod_Producto").val(null)
-            $("#Cod_Almacen").val("")
-            $("#Cod_UnidadMedida").text("")
-            $("#Stock").val("")
-            $("#Nom_Producto").val("") 
-            $("#Cod_TipoPrecio").val(null)
-            $("#Cod_TipoOperatividad").val("")
-
-        }else{
-            BuscarProductoCP(CodLibro)
-        }
     }else{
-        $("#Nom_Producto").focus()
+
+        if($("#Nom_Producto").val().trim()!=""){
+            if(!arrayValidacion.includes($("#Nom_Producto").attr("data-id"))){
+
+                var Id_Producto = $("#Nom_Producto").attr("data-id")
+                var Cod_Producto = arrayValidacion.includes($("#Cod_Producto").val())?"": $("#Cod_Producto").val()
+                var Cod_Almacen = $("#Cod_Almacen option:selected").text()//$("#Cod_Almacen").val()
+                var Cod_UnidadMedida = $("#Cod_UnidadMedida option:selected").text()
+                var Stock = $("#Stock").val()
+                var Cantidad = $("#Cantidad").val()
+                var Nom_Producto = $("#Nom_Producto").val()
+                var Importe = $("#Importe").val()
+                var Precio_Unitario = $("#Precio_Unitario").val()
+                var Descuento = $("#Descuento").val()
+                var Cod_TipoPrecio = arrayValidacion.includes($("#Cod_TipoPrecio").val())?"":$("#Cod_TipoPrecio").val()
+                var Cod_TipoOperatividad = $("#Cod_TipoOperatividad").val()
+
+                var flagGasto = $("#optEsGasto").is(":checked")
+                var rows = $("#tablaBody > tr").length
+                var idFila = contador+$("#Nom_Producto").attr("data-id")
+                var fila = yo`
+                <tr id="${idFila}">
+                    <td class="id_ComprobantePago hidden"><input value="0"></td>
+                    <td class="id_Detalle hidden"><input value="${rows}"></td> 
+                    <td class="Id_Producto hidden"><input value="${flagGasto?'0':Id_Producto}"></td> 
+                    <td class="Codigo hidden">${flagGasto?'':Cod_Producto}</td>
+                    <td class="Descripcion" style="width: 24%;"><input type="text" class="form-control input-sm" value="${Nom_Producto}"></td>
+                    <td class="Almacen"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_Almacen").val()} value=${flagGasto?'':Cod_Almacen}></td> 
+                    <td class="UM"><input type="text" class="form-control input-sm" data-id=${flagGasto?null:$("#Cod_UnidadMedida").val()} value=${flagGasto?'':Cod_UnidadMedida}></td>
+                    <td class="Stock hidden"><input type="number" class="form-control input-sm" value=${flagGasto?"0":Stock}></td> 
+                    <td class="Cantidad"><input type="number" class="form-control input-sm" value=${flagGasto?"1":Cantidad} onkeyup=${()=>EditarCantidad(idFila,CodLibro,variables)} onchange=${()=>EditarCantidad(idFila,CodLibro,variables)}></td> 
+                    <td class="Despachado hidden">${flagGasto?"1":Cantidad}</td> 
+                    <td class="PU"><input type="number" data-value=${flagGasto?0:Precio_Unitario} class="form-control input-sm" value=${flagGasto?Importe:Precio_Unitario} onkeyup=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)} onchange=${()=>EditarPrecioUnitario(idFila,CodLibro,variables)}></td> 
+                    <td class="Descuento"><input type="number" data-value=0 class="form-control input-sm" value=${flagGasto?"0":Descuento} onkeyup=${()=>EditarDescuento(idFila,CodLibro,variables)} onchange=${()=>EditarDescuento(idFila,CodLibro,variables)} ></td> 
+                    <td class="Importe"><input type="number" class="form-control input-sm" value=${flagGasto?Importe:Importe}></td>
+                    <td class="Cod_Manguera hidden">${flagGasto?'':Cod_TipoPrecio}</td>  
+                    <td class="Tipo hidden">${flagGasto?'NGR':Cod_TipoOperatividad}</td> 
+                    <td class="Obs_ComprobanteD hidden"></td> 
+                    <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
+                    <td>
+                    <div style="display:flex;">
+                        <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                        <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                    </div>
+                    </td>
+                </tr>`
+                $("#tablaBody").append(fila)
+                contador++
+
+                CalcularTotal(CodLibro,variables)
+                $("#Nom_Producto").attr("data-id",null)
+                $("#Stock").val("")
+                $("#Precio_Unitario").val("0.00")
+                $("#Cantidad").val("0.00")
+                $("#Importe").val("0.00")
+                $("#Descuento").val("0.00")
+
+                //$("#Nom_Producto").attr("data-id",null)
+                $("#Cod_Producto").val(null)
+                $("#Cod_Almacen").val("")
+                $("#Cod_UnidadMedida").text("")
+                $("#Stock").val("")
+                $("#Nom_Producto").val("") 
+                $("#Cod_TipoPrecio").val(null)
+                $("#Cod_TipoOperatividad").val("")
+
+            }else{
+                BuscarProductoCP(CodLibro)
+            }
+        }else{
+            $("#Nom_Producto").focus()
+        }
     }
    
 }
@@ -1753,12 +1794,12 @@ function AsignarSeries(idFila,CodTipoComprobante){
     var Series = JSON.parse($("tr#"+idFila).find("td.Series").find("input").val())
     var NroDias = CodTipoComprobante=="14"?60:0
     var Stock = CodTipoComprobante=="14"?0:1 
-    if(Id_Producto!=null && Id_Producto!="")
+    if(!arrayValidacion.includes(Id_Producto))
         AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,null,Stock)
 }
 
 function RecuperarTipoCambio(Cod_Moneda,variables,Tipo_Cambio){ 
-    if($("#Tipo_Cambio_FormaPago").attr("data-value")==null){
+    if(arrayValidacion.includes($("#Tipo_Cambio_FormaPago").attr("data-value"))){
         var _Tipo_Cambio = 1
         _Tipo_Cambio = variables.tipos_cambios.length==0?"1":variables.tipos_cambios[0].Venta
         _Tipo_Cambio = parseFloat(_Tipo_Cambio).toFixed(3)
@@ -1922,28 +1963,31 @@ function EsValidaLicitacion(){
     }
 }
 
-function EsValidoCredito(CodLibro){
+function EsValidoCredito(CodLibro,callback){
     if($('input[name=optCredito]:checked').val()=="credito" && $("#divCredito").css("display")=='block'){
         TraerCredito(CodLibro,function(flag){
-            return flag
+            callback(flag)
         })
     }else{
-        return true
+        callback(true)
     }
 }
 
-async function EsValidoSeries(CodLibro){
+function EsValidoSeries(CodLibro,callback){
+    var flag_ = false
     if(!$("#optEsGasto").is(":checked")){ 
-        await RecorrerTablaDetalles_Series(0)
+        RecorrerTablaDetalles_Series(0,function(flag){
+            callback(flag)
+        })
     }else{
-        return true
+        callback(true)
     }
 }
  
 
-function EsValido(CodLibro){
+function EsValido(CodLibro,callback){
     var MontoMaximo = 0
-    if($("#Cod_FormaPago").val()!=null && $("#Cod_FormaPago").val()!='' && $("#Cod_FormaPago").val()=='998' && $("#Cuenta_CajaBancos").val()!=null && $("#Cuenta_CajaBancos").val()!=''){
+    if(!arrayValidacion.includes($("#Cod_FormaPago").val()) && $("#Cod_FormaPago").val()=='998' &&  !arrayValidacion.includes($("#Cuenta_CajaBancos").val())){
         try{
             MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[',']')[1])
         }catch(e){
@@ -1952,70 +1996,77 @@ function EsValido(CodLibro){
     }
 
     if($("#divLicitacion").css("display")=='block' && $("#optLicitacion").is(":checked")){
-        EsValidaLicitacion()
+        callback(EsValidaLicitacion())
     }
 
-    if($("#Cliente").attr("data-id")!=null && $("#Cliente").attr("data-id")!=''){
+    if(!arrayValidacion.includes($("#Cliente").attr("data-id"))){
         if($("#Serie option:selected").text()!=''){
             if($("#Numero").val()!=''){
                 if($("#Cod_TipoComprobante").val()!=''){
                     if($("#tablaBody > tr").length > 0){
                         if(MontoMaximo==0 || parseFloat($("#Gran_Total").val()) <= MontoMaximo){
                             if(EsValidaLicitacion()){
-                                if(EsValidoCredito(CodLibro)){
-                                    console.log(EsValidoSeries(CodLibro))
-                                    if(EsValidoSeries(CodLibro)){
-                                        return true
+                                EsValidoCredito(CodLibro,function(flag){
+                                    if(flag){
+                                        EsValidoSeries(CodLibro,function(flag){
+                                            if(flag){
+                                                callback(true)
+                                            }else{
+                                                toastr.error('Debe de Ingresar una Serie para Cada Producto','Error',{timeOut: 5000}) 
+                                                callback(false)
+                                            }
+                                        })
                                     }else{
-                                        toastr.error('Debe de Ingresar una Serie para Cada Producto','Error',{timeOut: 5000}) 
-                                        return false
+                                        $("#Cliente").focus()
+                                        callback(false)
                                     }
-                                }else{
-                                    $("#Cliente").focus()
-                                    return false
-                                }
+                                })
+ 
                             }else{
                                 $("#Cod_Licitacion").focus()
-                                return false
+                                callback(false)
                             }
                         }else{
-                            toastr.error('Debe de selecionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante','Error',{timeOut: 5000}) 
-                            return false
+                            toastr.error('Debe de seleccionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante','Error',{timeOut: 5000}) 
+                            callback(false)
                         }
                     }else{
                         toastr.error('Debe ingresar como minimo un Detalle en el Comprobante','Error',{timeOut: 5000}) 
-                        return false
+                        callback(false)
                     }
                 }else{
                     toastr.error('Debe Selecionar un Comprobante','Error',{timeOut: 5000}) 
-                    return false
+                    callback(false)
                 }
             }else{
                 toastr.error('Debe ingresar un Numero para este Comprobante','Error',{timeOut: 5000}) 
-                return false
+                callback(false)
             }
         }else{
-            toastr.error('Debe ingresar o selecionar una serie para este Comprobante','Error',{timeOut: 5000}) 
-            return false
+            toastr.error('Debe ingresar o seleccionar una serie para este Comprobante','Error',{timeOut: 5000}) 
+            callback(false)
         }
     }else{
-        toastr.error('Debe selecionar un cliente si por defecto dejarlo en CLIENTES VARIOS','Error',{timeOut: 5000}) 
-        return false
+        toastr.error('Debe seleccionar un cliente si por defecto dejarlo en CLIENTES VARIOS','Error',{timeOut: 5000}) 
+        callback(false)
     }
      
 }
  
 
-function GenerarComprobante(CodLibro,variables){
-    console.log(global.objCliente)
+function GenerarComprobante(CodLibro,variables){ 
     try{
-        if(EsValido(CodLibro)){
-            AbrirModalConfirmacion(CodLibro,variables)
-        }
+        
+        EsValido(CodLibro,function(flag){ 
+            if(flag)
+                AbrirModalConfirmacion(CodLibro,variables)
+        })
     }catch(e){
         console.log(e)
     }
 }
+
+
 
 function RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComprobante){
     if(indiceVariables < variables.length){
@@ -2033,18 +2084,223 @@ function RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComproban
     }
 }
 
+function DeterminarTipoIGV(flagImpuesto,flagExportacion,Por_Impuesto,Tipo,SubTotal,callback){
+    var IGV = 0
+    var Cod_TipoIGV = ''
+    if(flagImpuesto == true){
+        if(Tipo=='GRA'){
+            Cod_TipoIGV = '10'
+            IGV = ((parseFloat(SubTotal) / (1+parseFloat(Por_Impuesto))) * (parseFloat(Por_Impuesto)/100)).toFixed(2)
+        }
+
+        if(Tipo == 'GRT'){
+            Cod_TipoIGV = '13'
+        }
+    }else{
+        if(Tipo == 'GRA'){
+            Cod_TipoIGV = '20'
+        }
+        if(Tipo == 'GRT'){
+            Cod_TipoIGV = '21'
+        }
+    }   
+
+    if(Tipo == 'INA'){
+        Cod_TipoIGV = '30'
+    }
+
+    if(Tipo == 'EXO'){
+        Cod_TipoIGV = '20'
+    }
+
+    if(flagExportacion){
+        Cod_TipoIGV = '40'
+        IGV = 0
+    }
+    callback(IGV,Cod_TipoIGV)
+}
+
+function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_ComprobantePago,Flag_Cancelado,Obs_LicitacionesM,callback){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Id_ClienteProveedor,
+            Cod_Licitacion,
+            Nro_Detalle,
+            id_ComprobantePago,
+            Flag_Cancelado,
+            Obs_LicitacionesM
+        })
+    }
+ 
+    fetch(URL + '/comprobantes_pago_api/guardar_licitacion_comprobante', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                callback(true)
+            }else{
+                callback(false)
+            }
+        })
+}
+
+function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,callback){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Id_ClienteProveedor,
+            Cod_Licitacion,
+            Id_Producto
+        })
+    }
+ 
+    fetch(URL + '/comprobantes_pago_api/get_nro_detalle_by_licitacion_producto', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                var Nro_Detalle = res.data.nro_detalle[0].Nro_Detalle
+                callback(Nro_Detalle)
+            }else{
+                callback(-1)
+            }
+        })
+}
+
+function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,callback){
+   
+    if(indiceDetalle < $("#tablaBody > tr").length){
+        //if($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0){ 
+            var id_Detalle = indiceDetalle + 1
+            var Id_Producto = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?0:parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())
+            var Cantidad = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(8).find('input').val())
+            var Despachado = 0
+            if($("#optDescargar").is(":checked")){
+                Despachado = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(9).text())
+            }
+            var Descripcion = $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(4).find('input').val()
+            var PrecioUnitario = 0
+            var Sub_Total = 0
+            if($("#ckbIncluyeIGV").is(":checked")){
+                PrecioUnitario = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val())
+                Sub_Total = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val()).toFixed(2)
+            }else{
+                PrecioUnitario = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(10).find('input').val()) * (1+parseFloat(variables.empresa.Por_Impuesto)/100)
+                Sub_Total = (parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val()) * (1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2)
+            }
+            var Descuento = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').attr("data-value"))
+            var Obs_ComprobanteD = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(15).text()
+            var Cod_Manguera = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(13).text()
+            var Cod_Almacen = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(5).find('input').attr("data-id")
+            var Cod_UnidadMedida = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(6).find('input').attr("data-id")
+            var Flag_AplicaImpuesto = $("#ckbAplicaImpuesto").is(":checked")
+            var Formalizado = 0
+            var Tipo = $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(14).text()
+            var Valor_NoOneroso = 0
+            var Cod_TipoISC = ''
+            var Porcentaje_ISC = 0
+            var ISC = 0
+            //DeterminarTipoIGV(flagImpuesto,flagExportacion,Por_Impuesto,Tipo,SubTotal,callback)
+            var Flag_Exportacion = ($("#divExportacion").css("display")=="block" &&  $("#optExportacion").is(":checked"))?true:false
+            DeterminarTipoIGV(variables.empresa.Flag_ExoneradoImpuesto,Flag_Exportacion,variables.empresa.Por_Impuesto,$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(14).text(),parseFloat(parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val()).toFixed(2)),function(IGV,Cod_TipoIGV){
+                var Porcentaje_IGV = parseFloat(variables.empresa.Por_Impuesto)
+                
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        id_ComprobantePago:idComprobante,
+                        id_Detalle,
+                        Id_Producto,
+                        Cod_Almacen,
+                        Cantidad,
+                        Cod_UnidadMedida,
+                        Despachado,
+                        Descripcion,
+                        PrecioUnitario,
+                        Descuento,
+                        Sub_Total,
+                        Tipo,
+                        Obs_ComprobanteD,
+                        Cod_Manguera,
+                        Flag_AplicaImpuesto,
+                        Formalizado,
+                        Valor_NoOneroso,
+                        Cod_TipoISC,
+                        Porcentaje_ISC,
+                        ISC,
+                        Cod_TipoIGV,   
+                        Porcentaje_IGV,
+                        IGV
+                    })
+                }
+             
+                fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago_detalle', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        console.log(res)
+                        if (res.respuesta == 'ok') {
+                           if($("#divLicitacion").css("display")=="block" && $("#optLicitacion").is(":checked")){
+                                var Id_ClienteProveedor = $("#Cliente").attr("data-id")
+                                var Cod_Licitacion = $("#Cod_Licitacion").val()
+                                RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,function(result){
+                                    if(result!=-1){
+                                        var Nro_Detalle = result
+                                        var id_ComprobantePago = idComprobante
+                                        var Flag_Cancelado = false
+                                        var Obs_LicitacionesM = ""
+                                        GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_ComprobantePago,Flag_Cancelado,Obs_LicitacionesM,function(flag){
+                                            if(flag){
+                                                EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante)
+                                            }else{
+                                                callback(false)
+                                            }
+                                        })
+                                        
+                                    }else{
+                                        callback(false)
+                                    }
+                                })
+                           }else{
+                                EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante)
+                           }
+                        }else{
+                            callback(false)
+                        }
+                    })
+            })
+        //} 
+    }else{
+        callback(true)
+    }
+}
+
 function EmisionCompleta(CodLibro,variables){
     GuardarCamposEntidadComprobante(CodLibro,variables)
 }
 
 async function GuardarCamposEntidadComprobante(CodLibro,variables){
-    AsyncCalcularTotal()
+    AsyncCalcularTotal(CodLibro,variables)
     .then(data => 
-        RecuperarParametrosEmisionCompleta(CodLibro,variables)
+        RecuperarParametrosEmisionCompleta(CodLibro,variables,data)
     )
 }
 
-function RecuperarParametrosEmisionCompleta(CodLibro,variables){
+function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
+    H5_loading.show()
     var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
     var Cod_TipoOperacion = Cod_TipoDocReferencia
     var Serie = $("#Serie option:selected").text()
@@ -2125,7 +2381,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables){
     var Otros_Tributos = 0 
     var Obs_Comprobante = obs_xml
     var Cod_Plantilla = null 
-
+    
     const parametros = {
         method: 'POST',
         headers: {
@@ -2175,12 +2431,24 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables){
             Otros_Tributos
         })
     }
+ 
     fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log(res)
             if (res.respuesta == 'ok') {
-               console.log(res)
-            } 
+               EmisionCompletaDetalles(0,CodLibro,variables,idComprobante,res.data,function(flag){
+                   if(flag){
+                        toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                        $("#modal-proceso").modal("hide")
+                   }else{
+                        toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
+                   }
+               })
+            }else{
+                toastr.error('Ocurrio un error al momento de guardar el comprobante.','Error',{timeOut: 5000})
+            }
+            H5_loading.hide()
         })
 
 }
@@ -2232,7 +2500,7 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
             })
     }else{
         
-        if($("#Nom_Producto").attr("data-id")!=null && $("#Nom_Producto").attr("data-id")!=""){
+        if(!arrayValidacion.includes($("#Nom_Producto").attr("data-id"))){
             const parametros = {
                 method: 'POST',
                 headers: {
@@ -2435,18 +2703,19 @@ function CambioGastos(){
 }
 
 function FocusOutSerie() {
-    
-    if ($("#Serie").parent().find('input.ui-widget').val().length < 4) {
-        var cadenaCeros = ""
-        var cantidadCeros = 4 - $("#Serie").parent().find('input.ui-widget').val().length
-        for (var i = 0; i < cantidadCeros; i++)
-            cadenaCeros = cadenaCeros + "0"
-        $("#Serie").parent().find('input.ui-widget').val(cadenaCeros + $("#Serie").parent().find('input.ui-widget').val())
-    }
+    if ($("#Serie").parent().find('input.ui-widget').val().trim().length > 0){
+        if ($("#Serie").parent().find('input.ui-widget').val().length < 4) {
+            var cadenaCeros = ""
+            var cantidadCeros = 4 - $("#Serie").parent().find('input.ui-widget').val().length
+            for (var i = 0; i < cantidadCeros; i++)
+                cadenaCeros = cadenaCeros + "0"
+            $("#Serie").parent().find('input.ui-widget').val(cadenaCeros + $("#Serie").parent().find('input.ui-widget').val())
+        }
 
-    var nuevoValor = $("<option value="+$("#Serie").parent().find('input.ui-widget').val()+">"+$("#Serie").parent().find('input.ui-widget').val()+"</option>");
-    $("#Serie").append(nuevoValor);
-    $("#Serie option:last").attr("selected", "selected");
+        var nuevoValor = $("<option value="+$("#Serie").parent().find('input.ui-widget').val()+">"+$("#Serie").parent().find('input.ui-widget').val()+"</option>");
+        $("#Serie").append(nuevoValor);
+        $("#Serie option:last").attr("selected", "selected");
+    }
 
 }
 
@@ -2457,19 +2726,23 @@ function CambioNumero_(event,CodLibro){
 }
 
 function CambioNumero(){
-    if($("#Numero").val().length<8){
-      var cadenaCeros=""
-      var cantidadCeros = 8 - $("#Numero").val().length
-      for(var i=0;i<cantidadCeros;i++)
-        cadenaCeros=cadenaCeros+"0"
-      $("#Numero").val(cadenaCeros+$("#Numero").val())
+    if($("#Numero").val().trim()>0){
+        if($("#Numero").val().length<8){
+        var cadenaCeros=""
+        var cantidadCeros = 8 - $("#Numero").val().length
+        for(var i=0;i<cantidadCeros;i++)
+            cadenaCeros=cadenaCeros+"0"
+        $("#Numero").val(cadenaCeros+$("#Numero").val())
+        }
+    }else{
+        toastr.error('Ingrese un numero correcto y vuelva a intentarlo','Error',{timeOut: 5000})
     }
 }
  
 
 function CambioDespachado(){
     if(!$("#optDescargar").is(":checked")){
-        $("#DescripcionDespachado").text("No se Aplicara la descarga de los Productos en el almacen selecionado.")
+        $("#DescripcionDespachado").text("No se Aplicara la descarga de los Productos en el almacen seleccionado.")
     }else{
         $("#DescripcionDespachado").text("")
     }
@@ -2545,7 +2818,7 @@ function CambioExportacion(CodLibro,variables){
     CalcularTotal(CodLibro,variables)
 }
 
-async function RecorrerTablaDetalles_Series(indiceDetalle){
+function RecorrerTablaDetalles_Series(indiceDetalle,callback){
     if(indiceDetalle < $("#tablaBody > tr").length){
         var Id_Producto =   $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val()
         const parametros = {
@@ -2565,17 +2838,18 @@ async function RecorrerTablaDetalles_Series(indiceDetalle){
                 if(series.length>0){
                     var Series = JSON.parse( $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(16).find('input').val())
                     if(Series.length==0){
-                        return Promise.resolve(false)
+                        callback(false)
+                        //return false
                     }else{
-                        RecorrerTablaDetalles_Series(indiceDetalle+1) 
+                        RecorrerTablaDetalles_Series(indiceDetalle+1,callback) 
                     }
                 }else{
-                    RecorrerTablaDetalles_Series(indiceDetalle+1) 
+                    RecorrerTablaDetalles_Series(indiceDetalle+1,callback) 
                 }
                
             })
     }else{
-        return  Promise.resolve(true) 
+        callback(true)
     }
 }
 
@@ -2622,7 +2896,7 @@ function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,ind
 
 function CambioCreditoContado(){
     $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val())
-    if($("#Cod_FormaPago").val()!="" && $("#Cod_FormaPago").val()!=null){
+    if(!arrayValidacion.includes($("#Cod_FormaPago").val())){
         if($("#Cod_FormaPago").val()!="008" || $('input[name=optCredito]:checked').val()=="credito"){
             $("#divOperacion").css("display","block")
             $("#divCuentaCajaBancos").css("display","block")
@@ -2689,7 +2963,7 @@ function CambioLicitacion(){
 
  
 function CambioUnidadMedida() {
-    if ($("#Nom_Producto").attr("data-id") != null && $("#Nom_Producto").attr("data-id") != '' && $("#Cod_Almacen").val()!=null && $("#Cod_Almacen").val()!='') {
+    if (!arrayValidacion.includes($("#Nom_Producto").attr("data-id"))  &&  !arrayValidacion.includes($("#Cod_Almacen").val())) {
         const parametros = {
             method: 'POST',
             headers: {
@@ -2729,7 +3003,7 @@ function CambioComprobantes(){
 }
 
 function CambioFormasPago(CodLibro){
-    if($("#Cod_FormaPago").val()!=null && $("#Cod_FormaPago").val()!=""){
+    if(!arrayValidacion.includes($("#Cod_FormaPago").val())){
         var flagDisplay="none"
         if($("#Cod_FormaPago").val()!="008")
             flagDisplay = "block"
@@ -2811,7 +3085,7 @@ function CambioTipoDocumento(){
 }
 
 function CambioMoneda(CodLibro){
-    if($("#Cod_Moneda").val()!=null && $("#Cod_Moneda").val()!=""){
+    if(!arrayValidacion.includes($("#Cod_Moneda").val())){
         if($("#Cod_Moneda").val()=="USD"){
             $("#divTC").css("display","block")
             TraerTipoCambio(CodLibro)
@@ -3036,6 +3310,7 @@ function BuscarClienteDoc(CodLibro) {
                     $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
                     $("#Cliente").val(global.objCliente.Cliente)
                     $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                    $("#Direccion").val(global.objCliente.Direccion)
                     $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
                     if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
                         $("input[name=optCredito][value='credito']").prop("checked",true);

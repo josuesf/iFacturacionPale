@@ -193,6 +193,47 @@ router.post('/get_monedas', function (req, res) {
 });
 
 
+router.post('/guardar_licitacion_comprobante', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Id_Movimiento', valor_parametro: -1},
+        {nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor},
+        {nom_parametro: 'Cod_Licitacion', valor_parametro: input.Cod_Licitacion},
+        {nom_parametro: 'Nro_Detalle', valor_parametro: input.Nro_Detalle},
+        {nom_parametro: 'id_ComprobantePago', valor_parametro: input.id_ComprobantePago},
+        {nom_parametro: 'Flag_Cancelado', valor_parametro: input.Flag_Cancelado},
+        {nom_parametro: 'Obs_LicitacionesM', valor_parametro: input.Obs_LicitacionesM},
+        {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'licitaciones', sp_name: 'USP_PRI_LICITACIONES_M_G', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+});
+
+
+router.post('/get_nro_detalle_by_licitacion_producto', function (req, res) {
+    
+    input = req.body 
+
+    parametros = [
+        {nom_parametro: 'Id_ClienteProveedor', valor_parametro: input.Id_ClienteProveedor},
+        {nom_parametro: 'Cod_Licitacion', valor_parametro: input.Cod_Licitacion},
+        {nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto},
+    ]
+     
+    procedimientos = [
+        { nom_respuesta: 'nro_detalle', sp_name: 'USP_PRI_LICITACIONES_NroDetalleXClienteLicitacionProducto', parametros}
+        
+    ]  
+    Ejecutar_Procedimientos(req,res, procedimientos)
+});
+
+
 router.post('/guardar_comprobante_pago', function (req, res) {
     var input = req.body
     var parametros = [
@@ -247,9 +288,49 @@ router.post('/guardar_comprobante_pago', function (req, res) {
         if (dataComprobante.err){
             return res.json({respuesta:"error",detalle_error:dataComprobante.err})  
         }else{
-            return res.json({respuesta:"ok"})
+            return res.json({respuesta:"ok",data:dataComprobante.result[0].valor})
         }
     })
+})
+
+
+
+router.post('/guardar_comprobante_pago_detalle', function (req, res) {
+    var input = req.body
+    var parametrosComprobanteDetalles = [
+        { nom_parametro: 'id_ComprobantePago', valor_parametro: input.id_Comprobante,tipo_parametro:sql.Int},
+        { nom_parametro: 'id_Detalle', valor_parametro: input.id_Detalle,tipo_parametro:sql.Int},
+        { nom_parametro: 'Id_Producto', valor_parametro: input.Id_Producto,tipo_parametro:sql.Int},
+        { nom_parametro: 'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        { nom_parametro: 'Cantidad', valor_parametro: input.Cantidad},
+        { nom_parametro: 'Cod_UnidadMedida', valor_parametro: input.Cod_UnidadMedida},
+        { nom_parametro: 'Despachado', valor_parametro: input.Despachado},
+        { nom_parametro: 'Descripcion', valor_parametro: input.Descripcion},
+        { nom_parametro: 'PrecioUnitario', valor_parametro: input.PrecioUnitario},
+        { nom_parametro: 'Descuento', valor_parametro: input.Descuento},
+        { nom_parametro: 'Sub_Total', valor_parametro: input.Sub_Total},
+        { nom_parametro: 'Tipo', valor_parametro: input.Tipo},
+        { nom_parametro: 'Obs_ComprobanteD', valor_parametro:  input.Obs_ComprobanteD},
+        { nom_parametro: 'Cod_Manguera', valor_parametro: input.Cod_Manguera},
+        { nom_parametro: 'Flag_AplicaImpuesto', valor_parametro: input.Flag_ExoneradoImpuesto},
+        { nom_parametro: 'Formalizado', valor_parametro: input.Formalizado},
+        { nom_parametro: 'Valor_NoOneroso', valor_parametro: input.Valor_NoOneroso},
+        { nom_parametro: 'Cod_TipoISC', valor_parametro: input.Cod_TipoISC},
+        { nom_parametro: 'Porcentaje_ISC', valor_parametro: input.Porcentaje_ISC},
+        { nom_parametro: 'ISC', valor_parametro: input.ISC},
+        { nom_parametro: 'Cod_TipoIGV', valor_parametro: input.Cod_TipoIGV},
+        { nom_parametro: 'Porcentaje_IGV', valor_parametro: input.Por_Impuesto},
+        { nom_parametro: 'IGV', valor_parametro: input.IGV},
+        { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+    ]
+
+    EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
+        if (dataComprobanteDetalle.err){
+            return res.json({respuesta:"error",detalle_error:dataComprobanteDetalle.err})  
+        }else{
+            return res.json({respuesta:"ok"})
+        }   
+    }) 
 })
 
 router.post('/venta_simple', function (req, res) {
@@ -478,9 +559,6 @@ function DeterminarImpuesto(i,req,impuesto,total,flagImpuesto,callback){
         if(flagImpuesto && req.body.Detalles[i].Tipo=="GRA"){
             impuesto += ((parseFloat(SubTotal) / (1+parseFloat(req.app.locals.empresa[0].Por_Impuesto))) * (parseFloat(req.app.locals.empresa[0].Por_Impuesto)/100))
         }
-        console.log(SubTotal)
-        console.log(total)
-        console.log(impuesto)
         DeterminarImpuesto(i+1,req,impuesto,total,flagImpuesto,callback)
     }else{ 
         callback(impuesto,total)
