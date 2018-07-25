@@ -522,14 +522,23 @@ var jsreport = require('jsreport')
 var reportingApp = express(),
     jsreportInstance;
 
-app.get('/comprobante', function(req, res) {
+app.get('/generar_documento', function(req, res) {
 
 
   jsreport.render({
+    extensions: {
+      assets: {
+        publicAccessEnabled: true
+      }
+    },
     template: {
-      name:'factura',
-      recipe: "phantom-pdf",
-      engine: 'handlebars'
+      name:'FacturaComprobante',
+      recipe: "chrome-pdf",
+      engine: 'handlebars',
+      chrome: { 
+        width:'8.27in',
+        height: '11.7in'
+      }
     },
     data:{
       "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
@@ -537,68 +546,70 @@ app.get('/comprobante', function(req, res) {
       "NOMBRE":"GRIFO MARCELO'S S.R.L.",
       "DIRECCION":"AV. HUAYRUROPATA NRO. 1700 CUSCO-CUSCO-WANCHAQ",
       "RUC":"20357768269",
+      "COD_TIPOCOMPROBANTE": "01",
       "DOCUMENTO": "FACTURA ELECTRONICA",
-      "SERIE": "SERIE   F001",
-      "NUMERO": "Nº   00005591",
+      "SERIE": "F001",
+      "NUMERO": "00005591",
+      "FLAG_ANULADO":false,
+      "MOTIVO_ANULACION":"ERROR DE EMISION",
+      "COMP_AFECTADO":"F001-00000098",
       "CLIENTE": "PALE CONSULTORES E.I.R.L",
+      "COD_DOCCLIENTE":"6",
+      "RUC_CLIENTE": "20491228297",
       "DIRECCION_CLIENTE": "MZA. U LOTE.20 ASC. TUPAC AMARU CUSCO - CUSCO - SAN SEBASTIAN",
-      "FECHA_EMISION": "25/04/2018",
-      "NRO_COMPROBANTE": "87140",
-      "OBSERVACIONES": "POR LA VENTA DE MERCADERIA",
-      "CAJERO": "CAJERO",
-      "CONDICION": "EFECTIVO",
-      "PLACA_VEHICULAR":"",
-      "ESCRITURA_MONTO":"SON: NOVENTA Y CINCO CON 11/100 SOLES",
-      "GRAVADAS":"80.62",
+      "FECHA_EMISION": "24-06-2018",
+      "FECHA_VENCIMIENTO": "24-06-2018",
+      "FORMA_PAGO": "EFECTIVO",
+      "GLOSA": "POR LA VENTA DE MERCADERIA",
+      "OBSERVACIONES":"O/C RS-2165-2018",
+      "USUARIO": "CAJERO",
+      "PLACA_VEHICULAR":"X3U466",
+      "ESCRITURA_MONTO":"SON: CIENTO VEINTE SIETE CON 52/100 SOLES ",
+      "GRAVADAS":"108.07",
       "EXONERADAS":"0.00",
       "GRATUITAS":"0.00",
       "INAFECTAS":"0.00",
+      "DESCUENTO":"0.00",
       "IGV":"14.50",
       "TOTAL":"95.11",
+      "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+      "VERSION_SISTEMA":"F|9.1.4",
       "DETALLES": [{
-           "DESCRIPCION": "GASOHOL 84 OCTANOS",
-           "UNIDAD": "GALONES",
-           "CANTIDAD": "2.00",
-           "PRECIO_UNITARIO":"11.78",
-           "DESCUENTO":"0.00",
-           "SUBTOTAL":"23.56"
-       }, {
-           "DESCRIPCION": "GASOHOL 90 OCTANOS",
-           "UNIDAD": "GALONES",
-           "CANTIDAD": "4.50",
-           "PRECIO_UNITARIO":"11.99",
-           "DESCUENTO":"0.00",
-           "SUBTOTAL":"53.96"
-       }]
+            "DESCRIPCION": "GASEOSA COCACOLA 2.5L",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "5.00",
+            "PRECIO_UNITARIO":"7.90",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"39.50"
+        }, {
+            "DESCRIPCION": "SIXPACK CERVEZA CUSQUEÑA TRIGO 330ML",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "1.00",
+            "PRECIO_UNITARIO":"19.70",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"19.70"
+        },{
+            "DESCRIPCION": "ALTOMAYO CAFE GOURMET 180GR"    ,
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "3.00",
+            "PRECIO_UNITARIO":"24.99",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"74.97"
+        },{
+            "DESCRIPCION": "DONOFRIO CHOCOTON PANETON 500GR",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "1.00",
+            "PRECIO_UNITARIO":"13.70",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"13.70"
+        }]
    }
   }).then(function (o) {
     o.result.pipe(res);
   }).catch(function (e) {
     console.error(e)
   })
-
-    /*jsreport.render({
-      template: {
-        content: "<h1>Test</h1>",
-        recipe: 'html',
-        engine: 'none'
-    }
-    }).then(function (o) {
-      o.result.pipe(res);
-    }).catch(function (e) {
-      console.error(e)
-    })*/ 
-
-
-    /*jsreport.render({
-        template: {
-            content: '<h1>Test</h1>',
-            engine: 'none',
-            recipe: 'phantom-pdf'
-        }
-    }).then(function(resp){
-        resp.stream.pipe(res);
-    })*/
+ 
 });
   
 app.use('/reporting', reportingApp);

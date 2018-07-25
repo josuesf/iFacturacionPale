@@ -18,9 +18,11 @@
         ]
     },
     "modificationDate": {
-        "$$date": 1532476793257
+        "$$date": 1532540579853
     },
     "htmlToXlsx": {
         "htmlEngine": "chrome"
-    }
+    },
+    "$entitySet": "templates",
+    "name": "FacturaComprobante"
 }

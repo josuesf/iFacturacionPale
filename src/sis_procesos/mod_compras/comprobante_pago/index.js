@@ -2149,6 +2149,180 @@ function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_Com
         })
 }
 
+function GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,Cod_Plantilla,Obs_FormaPago,Fecha,callback){
+     
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            id_ComprobantePago,
+            Item,
+            Des_FormaPago,
+            Cod_TipoFormaPago,
+            Cuenta_CajaBanco,
+            Id_Movimiento,
+            TipoCambio,
+            Cod_Moneda,
+            Monto,
+            Cod_Plantilla,
+            Obs_FormaPago,
+            Fecha
+        })
+    }
+ 
+    fetch(URL + '/formas_pago_api/guardar_forma_pago', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                callback(true)
+            }else{
+                callback(false)
+            }
+        })
+}
+
+function GuardarFormaPagoRecursivo(indiceFormaPago,idComprobante,callback){
+     
+   if(indiceFormaPago<listaFormaPago.length){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                id_ComprobantePago:idComprobante,
+                Item:listaFormaPago[indiceFormaPago].Item,
+                Des_FormaPago:listaFormaPago[indiceFormaPago].DesFormaPago,
+                Cod_TipoFormaPago:listaFormaPago[indiceFormaPago].CodTipoFormaPago,
+                Cuenta_CajaBanco:listaFormaPago[indiceFormaPago].CuentaCajaBanco,
+                Id_Movimiento:listaFormaPago[indiceFormaPago].IdMovimiento,
+                TipoCambio:listaFormaPago[indiceFormaPago].TipoCambio,
+                Cod_Moneda:listaFormaPago[indiceFormaPago].CodMoneda,
+                Monto:listaFormaPago[indiceFormaPago].Monto,
+                Cod_Plantilla:null,
+                Obs_FormaPago:null,
+                Fecha:listaFormaPago[indiceFormaPago].Fecha
+            })
+        }
+    
+        fetch(URL + '/formas_pago_api/guardar_forma_pago', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=='ok'){
+                    GuardarFormaPagoRecursivo(indiceFormaPago+1,idComprobante,callback)
+                }else{
+                    callback(false)
+                }
+            })
+   }else{
+       callback(true)
+   }
+}
+
+function GuardarOperacionBancaria(callback){
+    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria").val()
+    var Nro_Operacion = $("#Cuenta_CajaBancos option:selected").text()
+    var Des_Movimiento = $("#Cod_FormaPago option:selected").text()
+    var Cod_TipoOperacionBancaria = ''
+    if($("#Cod_FormaPago").val()=="007"){
+        Cod_TipoOperacionBancaria ="006"
+    }else{
+        Cod_TipoOperacionBancaria ="001"
+    }
+    var Fecha = $("#Fecha").val()
+    var Monto = (CodLibro=="08"?-1:1)* parseFloat($("#Gran_Total").val())
+    var TipoCambio = $("#Tipo_Cambio").val()
+    var Beneficiario = $("#Cliente").val()
+    var Nro_Cheque = ''
+    var Cod_Plantilla = ''
+    if($("#Cod_FormaPago").val()=="007"){
+        Nro_Cheque = "00000000"+parseInt( $("#Cuenta_CajaBancos option:selected").text())
+    }
+    var Id_ComprobantePago = idComprobante
+    var Obs_Movimiento = ''
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_CuentaBancaria,
+            Nro_Operacion,
+            Des_Movimiento,
+            Cod_TipoOperacionBancaria,
+            Fecha,
+            Monto,
+            TipoCambio,
+            Cod_Plantilla,
+            Nro_Cheque,
+            Beneficiario,
+            Id_ComprobantePago,
+            Obs_Movimiento
+        })
+    }
+ 
+    fetch(URL + '/cuentas_bancarias_api/guardar_cuenta_movimiento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                callback(true)
+            }else{
+                callback(false)
+            }
+        })
+    
+}
+
+function GuardarSeries(indiceSerie,idComprobante,idDetalle,arraySeries,callback){
+    if(indiceSerie<arraySeries.length){
+        var Cod_Tabla = "CAJ_COMPROBANTE_PAGO"
+        var Id_Tabla = idComprobante
+        var Item = idDetalle
+        var Serie = arraySeries[indiceSerie].Serie
+        var Fecha_Vencimiento = arraySeries[indiceSerie].Fecha
+        var Obs_Serie = arraySeries[indiceSerie].Observacion
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Cod_Tabla,
+                Id_Tabla,
+                Item,
+                Serie,
+                Fecha_Vencimiento,
+                Obs_Serie
+            })
+        }
+     
+        fetch(URL + '/series_api/guardar_serie', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=='ok'){
+                    GuardarSeries(indiceSerie+1,idComprobante,idDetalle,arraySeries,callback)
+                }else{
+                    callback(false)
+                }
+            })
+
+    }else{
+        callback(true)
+    }
+}
+
 function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,callback){
     const parametros = {
         method: 'POST',
@@ -2252,6 +2426,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                     .then(req => req.json())
                     .then(res => {
                         console.log(res)
+                        //callback(false)
                         if (res.respuesta == 'ok') {
                            if($("#divLicitacion").css("display")=="block" && $("#optLicitacion").is(":checked")){
                                 var Id_ClienteProveedor = $("#Cliente").attr("data-id")
@@ -2264,7 +2439,15 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                                         var Obs_LicitacionesM = ""
                                         GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_ComprobantePago,Flag_Cancelado,Obs_LicitacionesM,function(flag){
                                             if(flag){
-                                                EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante)
+                                                let Series = JSON.parse($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(16).find("input").val())
+                                                GuardarSeries(0,idComprobante,id_Detalle,Series,function(flag){
+                                                    if(flag){
+                                                        EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante,callback)
+                                                    }else{
+                                                        callback(false)
+                                                    }
+                                                })
+                                                //EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante)
                                             }else{
                                                 callback(false)
                                             }
@@ -2275,7 +2458,14 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                                     }
                                 })
                            }else{
-                                EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante)
+                                let Series = JSON.parse($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(16).find("input").val())
+                                GuardarSeries(0,idComprobante,id_Detalle,Series,function(flag){
+                                    if(flag){
+                                        EmisionCompletaDetalles(indiceDetalle+1,CodLibro,variables,idComprobante,callback)
+                                    }else{
+                                        callback(false)
+                                    }
+                                })
                            }
                         }else{
                             callback(false)
@@ -2325,7 +2515,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
     var FechaDiasMas_ = FechaDiasMas.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
     var FechaVencimiento = $('input[name=optCredito]:checked').val()=="credito"? FechaDiasMas_:$("#Fecha").val()
     var FechaCancelacion = $("#Fecha").val()
-    var TipoCambio = $("#Tipo_Cambio").val()
+    var TipoCambio =  $("#Tipo_Cambio").val()
     var Flag_Anulado = false
     var Glosa = ''
     if($("#optEsGasto").is(":checked")){
@@ -2349,7 +2539,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
         Impuesto = 0
     }
     
-    var Total = $("#Gran_Total").val(parseFloat($("#Gran_Total").val()).toFixed(2))
+     $("#Gran_Total").val(parseFloat($("#Gran_Total").val()).toFixed(2))
+    var Total = parseFloat($("#Gran_Total").val()).toFixed(2)
     var Id_GuiaRemision = 0
     var GuiaRemision = null
     var Nro_Ticketera = ''
@@ -2434,13 +2625,220 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
  
     fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
-               EmisionCompletaDetalles(0,CodLibro,variables,idComprobante,res.data,function(flag){
+                var idComprobante = res.data
+                EmisionCompletaDetalles(0,CodLibro,variables,res.data,function(flag){
                    if(flag){
-                        toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                        $("#modal-proceso").modal("hide")
+
+                        if(listaFormaPago.length==0){
+                            if ($('input[name=optCredito]:checked').val() == 'contado') {
+                                var id_ComprobantePago = idComprobante
+                                var Item = 1
+                                var Monto = $("#Gran_Total").val()
+                                var Cod_Moneda = $("#Cod_Moneda").val()
+                                var TipoCambio = $("#Tipo_Cambio").val()
+                                var Des_FormaPago = $("#Cod_FormaPago option:selected").text()
+                                var Cod_TipoFormaPago = $("#Cod_FormaPago").val()
+                                var Cuenta_CajaBanco = ''
+                                var Id_Movimiento = null
+                                var Fecha = $("#Fecha").val()
+                                
+                                if($("#Cod_FormaPago").val()=="998"){
+                                    Id_Movimiento = parseInt($("#Cuenta_CajaBancos").val())
+                                }
+
+                                if($("#Cod_FormaPago").val()=="008"){
+                                    Cuenta_CajaBanco = ''
+                                    GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                        if(flagFP){
+                                            toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                            $("#modal-alerta").modal("hide")
+                                            $("#modal-proceso").modal("hide")
+                                        }else{
+                                            toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                        }
+                                    })
+
+                                }else{
+                                    if($("#Cod_FormaPago").val()=="011" || $("#Cod_FormaPago").val()=="033"){
+                                        Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
+                                        GuardarOperacionBancaria(function(flag){
+                                            if(flag){ 
+
+                                                GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                                    if(flagFP){
+                                                        toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                        $("#modal-alerta").modal("hide")
+                                                        $("#modal-proceso").modal("hide")
+                                                    }else{
+                                                        toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                    }
+                                                })
+
+                                            }else{
+                                                toastr.error('Ocurrio un error al momento de la guardar operacion bancaria.','Error',{timeOut: 5000})
+                                            }
+                                        })
+                                    }else{
+                                        Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
+                                        GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                            if(flagFP){
+                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                $("#modal-proceso").modal("hide")
+                                            }else{
+                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                        }else{
+                            if(listaFormaPago.length==1){
+
+                                GuardarFormaPago(idComprobante,listaFormaPago[0].Item,listaFormaPago[0].DesFormaPago,listaFormaPago[0].CodTipoFormaPago,listaFormaPago[0].CuentaCajaBanco,listaFormaPago[0].IdMovimiento,listaFormaPago[0].TipoCambio,listaFormaPago[0].CodMoneda,listaFormaPago[0].Monto,null,null,listaFormaPago[0].Fecha,function(flagFP){
+                                    if(flagFP){
+                                        const parametros1 = {
+                                            method: 'POST',
+                                            headers: {
+                                                Accept: 'application/json',
+                                                'Content-Type': 'application/json',
+                                            },
+                                            credentials: 'same-origin',
+                                            body: JSON.stringify({
+                                                Cod_Libro:CodLibro,
+                                                Cod_TipoOperacion,
+                                                Cod_TipoComprobante,
+                                                Serie,
+                                                Numero,
+                                                Id_Cliente,
+                                                Cod_TipoDoc,
+                                                Doc_Cliente,
+                                                Nom_Cliente,
+                                                Direccion_Cliente,
+                                                FechaEmision,
+                                                FechaVencimiento,
+                                                FechaCancelacion,
+                                                Glosa,
+                                                TipoCambio,
+                                                Flag_Anulado,
+                                                Flag_Despachado,
+                                                Cod_FormaPago:listaFormaPago[0].CodTipoFormaPago,
+                                                Descuento_Total,
+                                                Cod_Moneda,
+                                                Impuesto,   
+                                                Total,
+                                                Obs_Comprobante,
+                                                Id_GuiaRemision,
+                                                GuiaRemision,
+                                                id_ComprobanteRef,
+                                                Cod_Plantilla,
+                                                Nro_Ticketera,
+                                                Cod_RegimenPercepcion,
+                                                Tasa_Percepcion,
+                                                Placa_Vehiculo,
+                                                Cod_TipoDocReferencia,
+                                                Nro_DocReferencia,
+                                                Valor_Resumen,
+                                                Valor_Firma,
+                                                Cod_EstadoComprobante,
+                                                Motivo_Anulacion,
+                                                Otros_Cargos,
+                                                Otros_Tributos
+                                            })
+                                        }
+                                     
+                                        fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros1)
+                                        .then(req => req.json())
+                                        .then(res => {
+                                            if(res.respuesta=='ok'){
+                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                $("#modal-proceso").modal("hide")
+                                            }else{
+                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                            }
+                                        })
+                                       
+                                    }else{
+                                        toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                    }
+                                })
+ 
+                            }else{
+
+                                const parametros2 = {
+                                    method: 'POST',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    credentials: 'same-origin',
+                                    body: JSON.stringify({
+                                        Cod_Libro:CodLibro,
+                                        Cod_TipoOperacion,
+                                        Cod_TipoComprobante,
+                                        Serie,
+                                        Numero,
+                                        Id_Cliente,
+                                        Cod_TipoDoc,
+                                        Doc_Cliente,
+                                        Nom_Cliente,
+                                        Direccion_Cliente,
+                                        FechaEmision,
+                                        FechaVencimiento,
+                                        FechaCancelacion,
+                                        Glosa,
+                                        TipoCambio,
+                                        Flag_Anulado,
+                                        Flag_Despachado,
+                                        Cod_FormaPago:'999',
+                                        Descuento_Total,
+                                        Cod_Moneda,
+                                        Impuesto,   
+                                        Total,
+                                        Obs_Comprobante,
+                                        Id_GuiaRemision,
+                                        GuiaRemision,
+                                        id_ComprobanteRef,
+                                        Cod_Plantilla,
+                                        Nro_Ticketera,
+                                        Cod_RegimenPercepcion,
+                                        Tasa_Percepcion,
+                                        Placa_Vehiculo,
+                                        Cod_TipoDocReferencia,
+                                        Nro_DocReferencia,
+                                        Valor_Resumen,
+                                        Valor_Firma,
+                                        Cod_EstadoComprobante,
+                                        Motivo_Anulacion,
+                                        Otros_Cargos,
+                                        Otros_Tributos
+                                    })
+                                }
+                             
+                                fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros2)
+                                .then(req => req.json())
+                                .then(res => {
+                                    if(res.respuesta=='ok'){
+                                        GuardarFormaPagoRecursivo(0,idComprobante,function(flag){
+                                            if(flag){
+                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                $("#modal-proceso").modal("hide")
+                                            }else{
+                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000}) 
+                                            }
+                                        })
+                                      
+                                    }else{
+                                        toastr.error('Ocurrio un error al momento de guardar la comprobante de pago.','Error',{timeOut: 5000})
+                                    }
+                                })
+
+                            }
+                        }
                    }else{
                         toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
                    }

@@ -1,22 +1,34 @@
 {
+  "extensions": {
+    "authentication": {
+      "cookieSession": {
+        "secret": "<your strong secret here>"
+      },
+      "admin": {
+        "username": "admin",
+        "password": "password"
+      },
+      "enabled": false
+    },
+    "scripts": {
+      "timeout": 40000,
+      "strategy": "http-server"
+    },
+    "sample-template": {
+      "createSamples": true
+    }
+  },
   "httpPort": 5488,
   "httpsPort": 5489,
   "certificate": {
     "key": "certificates/server.key",
     "cert": "certificates/server.cert"
   },
-  "authentication": {
-    "cookieSession": {
-      "secret": "<your strong secret here>"
-    },
-    "admin": {
-      "username": "admin",
-      "password": "password"
-    },
-    "enabled": false
+  "store": {
+    "provider": "fs"
   },
-  "connectionString": {
-    "name": "fs"
+  "blobStorage": {
+    "provider": "fs"
   },
   "logger": {
     "console": {
@@ -34,31 +46,12 @@
       "filename": "logs/error.log"
     }
   },
-  "blobStorage": "fileSystem",
-  "tasks": {
-    "allowedModules": "*",
-    "strategy": "http-server",
-    "timeout": 10000
+  "allowLocalFilesAccess": true,
+  "templatingEngines": {
+    "timeout": 10000,
+    "strategy": "http-server"
   },
-  "scripts": {
-    "allowedModules": "*",
+  "chrome": {
     "timeout": 40000
-  },
-  "assets": {
-    "allowedFiles": "*.*",
-    "searchOnDiskIfNotFoundInStore": true
-  },
-  "phantom": {
-    "allowLocalFilesAccess": true,
-    "strategy": "phantom-server",
-    "timeout": 40000
-  },
-  "electron": {
-    "allowLocalFilesAccess": true,
-    "strategy": "electron-ipc",
-    "timeout": 40000
-  },
-  "sample-template": {
-    "createSamples": true
   }
 }

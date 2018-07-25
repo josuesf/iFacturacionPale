@@ -546,62 +546,62 @@ function DataCliente(input,callback){
     var Nom_Cliente = input.Nom_Cliente
     var Direccion_Cliente = input.Direccion_Cliente
 
-    if(Id_Cliente== -1){
-        if(Cod_TipoDoc=='99'){
-            Id_Cliente = 1 
-            Doc_Cliente = '00000001'
-            Nom_Cliente = 'CLIENTES VARIOS'
-            Direccion_Cliente = ''
-            callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
-        }else{
-            var parametrosCliente = [
-                { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
-                { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDoc },
-                { nom_parametro: 'Nro_Documento', valor_parametro: input.Doc_Cliente },
-                { nom_parametro: 'Cliente', valor_parametro: input.Nom_Cliente },
-                { nom_parametro: 'Ap_Paterno', valor_parametro: '' },
-                { nom_parametro: 'Ap_Materno', valor_parametro: '' },
-                { nom_parametro: 'Nombres', valor_parametro: input.Nom_Cliente },
-                { nom_parametro: 'DireccioN', valor_parametro: input.Direccion_Cliente },
-                { nom_parametro: 'Cod_EstadoCliente', valor_parametro: '001' },
-                { nom_parametro: 'Cod_CondicionCliente', valor_parametro: '01' },
-                { nom_parametro: 'Cod_TipoCliente', valor_parametro: '003' },
-                { nom_parametro: 'RUC_Natural', valor_parametro: '' },
-                { nom_parametro: 'Foto', tipo_parametro: sql.VarBinary,valor_parametro: null },
-                { nom_parametro: 'Firma', tipo_parametro: sql.VarBinary,valor_parametro: null },
-                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'TKB' },
-                { nom_parametro: 'Cod_Nacionalidad', valor_parametro: '156' },
-                { nom_parametro: 'Fecha_Nacimiento', valor_parametro: null },
-                { nom_parametro: 'Cod_Sexo', valor_parametro: '01' },
-                { nom_parametro: 'Email1', valor_parametro: '' },
-                { nom_parametro: 'Email2', valor_parametro: '' },
-                { nom_parametro: 'Telefono1', valor_parametro: '' },
-                { nom_parametro: 'Telefono2', valor_parametro: ''},
-                { nom_parametro: 'Fax', valor_parametro: '' },
-                { nom_parametro: 'PaginaWeb', valor_parametro: '' },
-                { nom_parametro: 'Cod_Ubigeo', valor_parametro: '080101' },
-                { nom_parametro: 'Cod_FormaPago', valor_parametro: '008' },
-                { nom_parametro: 'Limite_Credito', valor_parametro: 0 },
-                { nom_parametro: 'Obs_Cliente', valor_parametro: null},
-                { nom_parametro: 'Num_DiaCredito', valor_parametro: 0 },
-                { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario }
-            ]
+    //if(Id_Cliente== -1){
+    /*if(Cod_TipoDoc=='99'){
+        Id_Cliente = 1 
+        Doc_Cliente = '00000001'
+        Nom_Cliente = 'CLIENTES VARIOS'
+        Direccion_Cliente = ''
+        callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)*/
+    //}else{
+        var parametrosCliente = [
+            { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
+            { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDoc },
+            { nom_parametro: 'Nro_Documento', valor_parametro: input.Doc_Cliente },
+            { nom_parametro: 'Cliente', valor_parametro: input.Nom_Cliente },
+            { nom_parametro: 'Ap_Paterno', valor_parametro: '' },
+            { nom_parametro: 'Ap_Materno', valor_parametro: '' },
+            { nom_parametro: 'Nombres', valor_parametro: input.Nom_Cliente },
+            { nom_parametro: 'DireccioN', valor_parametro: input.Direccion_Cliente },
+            { nom_parametro: 'Cod_EstadoCliente', valor_parametro: '001' },
+            { nom_parametro: 'Cod_CondicionCliente', valor_parametro: '01' },
+            { nom_parametro: 'Cod_TipoCliente', valor_parametro: '003' },
+            { nom_parametro: 'RUC_Natural', valor_parametro: '' },
+            { nom_parametro: 'Foto', tipo_parametro: sql.VarBinary,valor_parametro: null },
+            { nom_parametro: 'Firma', tipo_parametro: sql.VarBinary,valor_parametro: null },
+            { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'TKB' },
+            { nom_parametro: 'Cod_Nacionalidad', valor_parametro: '156' },
+            { nom_parametro: 'Fecha_Nacimiento', valor_parametro: null },
+            { nom_parametro: 'Cod_Sexo', valor_parametro: '01' },
+            { nom_parametro: 'Email1', valor_parametro: '' },
+            { nom_parametro: 'Email2', valor_parametro: '' },
+            { nom_parametro: 'Telefono1', valor_parametro: '' },
+            { nom_parametro: 'Telefono2', valor_parametro: ''},
+            { nom_parametro: 'Fax', valor_parametro: '' },
+            { nom_parametro: 'PaginaWeb', valor_parametro: '' },
+            { nom_parametro: 'Cod_Ubigeo', valor_parametro: '080101' },
+            { nom_parametro: 'Cod_FormaPago', valor_parametro: '008' },
+            { nom_parametro: 'Limite_Credito', valor_parametro: 0 },
+            { nom_parametro: 'Obs_Cliente', valor_parametro: null},
+            { nom_parametro: 'Num_DiaCredito', valor_parametro: 0 },
+            { nom_parametro: 'Cod_Usuario', valor_parametro: input.Cod_Usuario }
+        ]
 
-            EXEC_SQL_OUTPUT('USP_PRI_CLIENTE_PROVEEDOR_G',parametrosCliente, function (dataCliente) {
-                if (dataCliente.err)
-                    return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
-                
-                Id_Cliente = dataCliente.result[0].valor
-                Cod_TipoDoc = input.Cod_TipoDoc
-                Doc_Cliente = input.Doc_Cliente
-                Nom_Cliente = input.Nom_Cliente
-                Direccion_Cliente = input.Direccion_Cliente 
-                callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
-            })
-        }
-    }else{
-        callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
-    }
+        EXEC_SQL_OUTPUT('USP_PRI_CLIENTE_PROVEEDOR_G',parametrosCliente, function (dataCliente) {
+            if (dataCliente.err)
+                return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
+            
+            Id_Cliente = dataCliente.result[0].valor
+            Cod_TipoDoc = input.Cod_TipoDoc
+            Doc_Cliente = input.Doc_Cliente
+            Nom_Cliente = input.Nom_Cliente
+            Direccion_Cliente = input.Direccion_Cliente 
+            callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
+        })
+    //}
+    //}else{
+    //    callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
+    //}
 
 }
  

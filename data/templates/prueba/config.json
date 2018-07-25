@@ -1,0 +1,14 @@
+{
+    "shortid": "rJyG378N7",
+    "name": "prueba",
+    "recipe": "fop-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1532537871337
+    },
+    "_id": "yKHP3JBxYEPK2YVn",
+    "$entitySet": "templates"
+}
