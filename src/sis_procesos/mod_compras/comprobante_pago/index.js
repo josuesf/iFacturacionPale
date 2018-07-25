@@ -2372,10 +2372,10 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                 Sub_Total = (parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val()) * (1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2)
             }
             var Descuento = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').attr("data-value"))
-            var Obs_ComprobanteD = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(15).text()
-            var Cod_Manguera = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(13).text()
-            var Cod_Almacen = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(5).find('input').attr("data-id")
-            var Cod_UnidadMedida = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?'':$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(6).find('input').attr("data-id")
+            var Obs_ComprobanteD = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(15).text()
+            var Cod_Manguera = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(13).text()
+            var Cod_Almacen = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(5).find('input').attr("data-id")
+            var Cod_UnidadMedida = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(6).find('input').attr("data-id")
             var Flag_AplicaImpuesto = $("#ckbAplicaImpuesto").is(":checked")
             var Formalizado = 0
             var Tipo = $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(14).text()
@@ -3688,17 +3688,18 @@ function BuscarClienteDoc(CodLibro) {
     var Nro_Documento = document.getElementById('Nro_Documento').value
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
-        })
-    }
-    fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
+    if(Nro_Documento!=''){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
+            })
+        }
+        fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
@@ -3739,6 +3740,7 @@ function BuscarClienteDoc(CodLibro) {
             }
             H5_loading.hide()
         })
+    }
 }
 
 function AbrirModalObsComprobantePago(){

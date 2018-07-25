@@ -654,14 +654,14 @@ function DataCliente(req,res,callback){
     var Nom_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Nom_Cliente
     var Direccion_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Direccion_Cliente
 
-    if(Id_Cliente== -1){
+    /*if(Id_Cliente== -1){
         if(Cod_TipoDoc=='99'){
             Id_Cliente = 1 
             Doc_Cliente = '00000001'
             Nom_Cliente = 'CLIENTES VARIOS'
             Direccion_Cliente = ''
             callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
-        }else{
+        }else{*/
             var parametrosCliente = [
                 { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
                 { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente.Cod_TipoDoc },
@@ -706,10 +706,10 @@ function DataCliente(req,res,callback){
                 Direccion_Cliente = req.body.Cliente.Direccion_Cliente 
                 callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
             })
-        }
+        /*}
     }else{
         callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
-    }
+    }*/
 
 }
 
