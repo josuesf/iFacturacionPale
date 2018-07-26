@@ -1,11 +1,11 @@
 
 var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
 
-var sUnidades = ["", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciseis", "diecisiete", "dieciocho", "diecinueve", "veinte", "veintiún", "veintidos", "veintitres", "veinticuatro", "veinticinco", "veintiseis", "veintisiete", "veintiocho", "veintinueve"];
+var sUnidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE", "VEINTIUN", "VEINTIDOS", "VEINTITRES", "VEINTICUATRO", "VEINTICINCO", "VEINTISEIS", "VEINTISIETE", "VEINTIOCHO", "VEINTINUEVE"];
 
-var sDecenas = [ "", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" ];
+var sDecenas = [ "", "DIEZ", "VEINTE", "TREINTE", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA" ];
 
-var sCentenas = [ "", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos" ];
+var sCentenas = [ "", "CIENTO", "DOCIENTOS", "TRESCIENTOS", "CUATROCIENTOS", "QUINIENTOS", "SEISCIENTOS", "SETECIENTOS", "OCHOCIENTOS", "NOVECIENTOS" ];
 
 function Numeros(dNumAux,dFactor){
     var dCociente = dNumAux / dFactor
@@ -72,19 +72,19 @@ function ConvertirCadena(sNumero){
 
     if (dNumero > 999999999){
         dNumAux = dNumero % 1000000000000;
-        sResultado += Numeros(dNumAux, 1000000000) + " mil "
+        sResultado += Numeros(dNumAux, 1000000000) + " MIL "
     }
 
     if (dNumero > 999999)
     {
         dNumAux = dNumero % 1000000000
-        sResultado += Numeros(dNumAux, 1000000) + " millones "
+        sResultado += Numeros(dNumAux, 1000000) + " MILLONES "
     }
 
     if (dNumero > 999)
     {
         dNumAux = dNumero % 1000000
-        sResultado += Numeros(dNumAux, 1000) + " mil "
+        sResultado += Numeros(dNumAux, 1000) + " MIL "
     }
 
     dNumAux = dNumero % 1000
@@ -114,17 +114,17 @@ function ConvertirCadena(dNumero, TipoMoneda){
 
     if (dNumero > 999999999){
         dNumAux = dNumero % 1000000000000
-        sResultado += Numeros(dNumAux, 1000000000) + " mil "
+        sResultado += Numeros(dNumAux, 1000000000) + " MIL "
     }
 
     if (dNumero > 999999){
         dNumAux = dNumero % 1000000000
-        sResultado += Numeros(dNumAux, 1000000) + " millones "
+        sResultado += Numeros(dNumAux, 1000000) + " MILLONES "
     }
 
     if (dNumero > 999){
         dNumAux = dNumero % 1000000
-        sResultado += Numeros(dNumAux, 1000) + " mil "
+        sResultado += Numeros(dNumAux, 1000) + " MIL "
     }
 
     dNumAux = dNumero % 1000
@@ -146,7 +146,7 @@ function ConvertirCadena(dNumero, TipoMoneda){
     {
         Numero = 0
     }
-    sResultado += "con "
+    sResultado += "CON "
     sResultado += Numero + "00"
 
     sResultado += "/100 " + TipoMoneda

@@ -23,6 +23,7 @@
     "express-session": "^1.15.6",
     "file-extension": "^2.0.1",
     "jsreport": "^2.0.0",
+    "jsreport-cli": "^2.0.3",
     "jsreport-fop-pdf": "^2.0.0",
     "md5": "^2.2.1",
     "mssql": "^3.3.0",

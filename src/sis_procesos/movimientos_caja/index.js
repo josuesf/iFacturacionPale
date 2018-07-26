@@ -5,6 +5,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
     var el = yo`
         <div>
             <section class="content-header" id="sectionModals">
+                 
                 <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -310,6 +311,7 @@ function VerModalJustificacion(titulo,descripcion) {
 function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     var sectionModals = yo`
                 <div>
+                    
                     <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
                         <div class="modal-dialog">
                             <div class="modal-content">

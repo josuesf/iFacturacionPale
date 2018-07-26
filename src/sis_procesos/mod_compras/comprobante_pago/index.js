@@ -1,5 +1,5 @@
 var empty = require('empty-element');
-var yo = require('yo-yo'); 
+var yo = require('yo-yo');  
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
@@ -2489,6 +2489,166 @@ async function GuardarCamposEntidadComprobante(CodLibro,variables){
     )
 }
 
+/*
+function CargarConfirmacionComprobante(){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <iframe class="embed-responsive-item" src="${URL+'/media/documento.pdf'}"
+                webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-danger">Cancelar</button>
+            </div>
+        </div> 
+    </div>`
+
+
+    var modal_alerta = document.getElementById('modal-alerta');
+    empty(modal_alerta).appendChild(el);
+    $('#modal-alerta').modal()
+}
+
+function CargarIframe(){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <iframe class="embed-responsive-item" src="${URL+'/media/documento.pdf'}"
+                webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-danger">Cancelar</button>
+            </div>
+        </div> 
+    </div>`
+
+
+    var modal_alerta = document.getElementById('modal-alerta');
+    empty(modal_alerta).appendChild(el);
+    $('#modal-alerta').modal()
+}*/
+
+function ConvertTabletoJson(callback){
+    var myRows = [];
+    var $headers = $("th");
+    var $rows = $("#tablaBody tr").each(function(index) {
+        var $cells = $(this).find("td");
+        myRows[index] = {};
+        $cells.each(function(cellIndex) {
+            switch(cellIndex){
+                case 4:
+                    myRows[index]['DESCRIPCION'] = $(this).find('input').val();
+                    break
+                case 6:
+                    myRows[index]['UNIDAD'] = $(this).find('input').val();
+                    break
+                case 8:
+                    myRows[index]['CANTIDAD'] = $(this).find('input').val();
+                    break
+                case 10:
+                    myRows[index]['PRECIO_UNITARIO'] = $(this).find('input').val();
+                    break
+                case 11:
+                    myRows[index]['DESCUENTO'] = $(this).find('input').val();
+                    break
+                case 12:
+                    myRows[index]['SUBTOTAL'] = $(this).find('input').val();
+                    break
+            } 
+        });    
+    });
+    callback(myRows)
+}
+
+function EnviarImpresion(   TIPO_DOC,
+                            COD_TIPOCOMPROBANTE,
+                            DOCUMENTO,
+                            SERIE,
+                            NUMERO,
+                            FLAG_ANULADO,
+                            CLIENTE,
+                            COD_DOCCLIENTE,
+                            RUC_CLIENTE,
+                            DIRECCION_CLIENTE,
+                            FECHA_EMISION,
+                            FECHA_VENCIMIENTO,
+                            FORMA_PAGO,
+                            GLOSA,
+                            OBSERVACIONES,
+                            PLACA_VEHICULAR,
+                            ESCRITURA_MONTO,
+                            GRAVADAS,
+                            EXONERADAS,
+                            GRATUITAS,
+                            INAFECTAS,
+                            DESCUENTO,
+                            IGV,
+                            TOTAL   ){
+
+    //CargarIframe() 
+
+    ConvertTabletoJson(function(arrayJSON){
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                TIPO_DOC,
+                COD_TIPOCOMPROBANTE,
+                DOCUMENTO,
+                SERIE,
+                NUMERO,
+                FLAG_ANULADO,
+                CLIENTE,
+                COD_DOCCLIENTE,
+                RUC_CLIENTE,
+                DIRECCION_CLIENTE,
+                FECHA_EMISION,
+                FECHA_VENCIMIENTO,
+                FORMA_PAGO,
+                GLOSA,
+                OBSERVACIONES,
+                PLACA_VEHICULAR,
+                ESCRITURA_MONTO,
+                GRAVADAS,
+                EXONERADAS,
+                GRATUITAS,
+                INAFECTAS,
+                DESCUENTO,
+                IGV,
+                TOTAL,
+                DETALLES:JSON.stringify(arrayJSON)
+            })
+        }
+     
+        fetch(URL + '/generar_documento', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                console.log(res)
+                 
+            })
+
+    })
+}
+
 function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
     H5_loading.show()
     var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
@@ -2653,10 +2813,39 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                     GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
                                         if(flagFP){
                                             toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                            $("#modal-alerta").modal("hide")
                                             $("#modal-proceso").modal("hide")
+                                            EnviarImpresion(
+                                                            1,
+                                                            Cod_TipoComprobante,
+                                                            $("#Cod_TipoComprobante option:selected").text(),
+                                                            Serie,
+                                                            Numero,
+                                                            false,
+                                                            Nom_Cliente,
+                                                            Cod_TipoDoc,
+                                                            Doc_Cliente,
+                                                            Direccion_Cliente,
+                                                            FechaEmision,
+                                                            FechaVencimiento,
+                                                            Des_FormaPago,
+                                                            Glosa,
+                                                            Obs_Comprobante,
+                                                            Placa_Vehiculo,
+                                                            $("#laSON").text(),
+                                                            $("#subtotal").val(),
+                                                            $("#Exoneradas").val(),
+                                                            $("#Gratuitas").val(),
+                                                            0,
+                                                            Descuento_Total,
+                                                            Impuesto,
+                                                            Total
+                                                            )
+                                            $("#modal-alerta").modal("hide")
+                                            H5_loading.hide()
                                         }else{
                                             toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                            $("#modal-alerta").modal("hide")
+                                            H5_loading.hide()
                                         }
                                     })
 
@@ -2669,15 +2858,46 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
                                                     if(flagFP){
                                                         toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                        $("#modal-alerta").modal("hide")
                                                         $("#modal-proceso").modal("hide")
+                                                        EnviarImpresion(
+                                                            1,
+                                                            Cod_TipoComprobante,
+                                                            $("#Cod_TipoComprobante option:selected").text(),
+                                                            Serie,
+                                                            Numero,
+                                                            false,
+                                                            Nom_Cliente,
+                                                            Cod_TipoDoc,
+                                                            Doc_Cliente,
+                                                            Direccion_Cliente,
+                                                            FechaEmision,
+                                                            FechaVencimiento,
+                                                            Des_FormaPago,
+                                                            Glosa,
+                                                            Obs_Comprobante,
+                                                            Placa_Vehiculo,
+                                                            $("#laSON").text(),
+                                                            $("#subtotal").val(),
+                                                            $("#Exoneradas").val(),
+                                                            $("#Gratuitas").val(),
+                                                            0,
+                                                            Descuento_Total,
+                                                            Impuesto,
+                                                            Total
+                                                            )
+                                                            $("#modal-alerta").modal("hide")
+                                                            H5_loading.hide()
                                                     }else{
                                                         toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                        $("#modal-alerta").modal("hide")
+                                                        H5_loading.hide()
                                                     }
                                                 })
 
                                             }else{
                                                 toastr.error('Ocurrio un error al momento de la guardar operacion bancaria.','Error',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide()
                                             }
                                         })
                                     }else{
@@ -2685,10 +2905,40 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                         GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
                                             if(flagFP){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
                                                 $("#modal-proceso").modal("hide")
+                                                
+                                                EnviarImpresion(
+                                                    1,
+                                                    Cod_TipoComprobante,
+                                                    $("#Cod_TipoComprobante option:selected").text(),
+                                                    Serie,
+                                                    Numero,
+                                                    false,
+                                                    Nom_Cliente,
+                                                    Cod_TipoDoc,
+                                                    Doc_Cliente,
+                                                    Direccion_Cliente,
+                                                    FechaEmision,
+                                                    FechaVencimiento,
+                                                    Des_FormaPago,
+                                                    Glosa,
+                                                    Obs_Comprobante,
+                                                    Placa_Vehiculo,
+                                                    $("#laSON").text(),
+                                                    $("#subtotal").val(),
+                                                    $("#Exoneradas").val(),
+                                                    $("#Gratuitas").val(),
+                                                    0,
+                                                    Descuento_Total,
+                                                    Impuesto,
+                                                    Total
+                                                    )
+                                                    $("#modal-alerta").modal("hide")
+                                                    H5_loading.hide()
                                             }else{
                                                 toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide()
                                             }
                                         })
                                     }
@@ -2754,15 +3004,46 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                         .then(res => {
                                             if(res.respuesta=='ok'){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
                                                 $("#modal-proceso").modal("hide")
+                                                EnviarImpresion(
+                                                    1,
+                                                    Cod_TipoComprobante,
+                                                    $("#Cod_TipoComprobante option:selected").text(),
+                                                    Serie,
+                                                    Numero,
+                                                    false,
+                                                    Nom_Cliente,
+                                                    Cod_TipoDoc,
+                                                    Doc_Cliente,
+                                                    Direccion_Cliente,
+                                                    FechaEmision,
+                                                    FechaVencimiento,
+                                                    Des_FormaPago,
+                                                    Glosa,
+                                                    Obs_Comprobante,
+                                                    Placa_Vehiculo,
+                                                    $("#laSON").text(),
+                                                    $("#subtotal").val(),
+                                                    $("#Exoneradas").val(),
+                                                    $("#Gratuitas").val(),
+                                                    0,
+                                                    Descuento_Total,
+                                                    Impuesto,
+                                                    Total
+                                                    )
+                                                    $("#modal-alerta").modal("hide")
+                                                    H5_loading.hide()
                                             }else{
                                                 toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide()
                                             }
                                         })
                                        
                                     }else{
                                         toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                        $("#modal-alerta").modal("hide")
+                                        H5_loading.hide()
                                     }
                                 })
  
@@ -2825,15 +3106,46 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                         GuardarFormaPagoRecursivo(0,idComprobante,function(flag){
                                             if(flag){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
                                                 $("#modal-proceso").modal("hide")
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide()
+                                                EnviarImpresion(
+                                                    1,
+                                                    Cod_TipoComprobante,
+                                                    $("#Cod_TipoComprobante option:selected").text(),
+                                                    Serie,
+                                                    Numero,
+                                                    false,
+                                                    Nom_Cliente,
+                                                    Cod_TipoDoc,
+                                                    Doc_Cliente,
+                                                    Direccion_Cliente,
+                                                    FechaEmision,
+                                                    FechaVencimiento,
+                                                    Des_FormaPago,
+                                                    Glosa,
+                                                    Obs_Comprobante,
+                                                    Placa_Vehiculo,
+                                                    $("#laSON").text(),
+                                                    $("#subtotal").val(),
+                                                    $("#Exoneradas").val(),
+                                                    $("#Gratuitas").val(),
+                                                    0,
+                                                    Descuento_Total,
+                                                    Impuesto,
+                                                    Total
+                                                    )
                                             }else{
-                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000}) 
+                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide() 
                                             }
                                         })
                                       
                                     }else{
                                         toastr.error('Ocurrio un error al momento de guardar la comprobante de pago.','Error',{timeOut: 5000})
+                                        $("#modal-alerta").modal("hide")
+                                        H5_loading.hide()
                                     }
                                 })
 
@@ -2841,12 +3153,16 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                         }
                    }else{
                         toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
+                        $("#modal-alerta").modal("hide")
+                        H5_loading.hide()
                    }
                })
             }else{
                 toastr.error('Ocurrio un error al momento de guardar el comprobante.','Error',{timeOut: 5000})
-            }
-            H5_loading.hide()
+                $("#modal-alerta").modal("hide")
+                H5_loading.hide()
+            } 
+            
         })
 
 }

@@ -13,7 +13,7 @@ var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
 var session = require('express-session');
-var PDFGeneratorAPI = require('pdf-generator-api');
+var PDFGeneratorAPI = require('pdf-generator-api');    
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,8 +26,8 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
 var errores = '';
-app.set('view engine', 'pug');
-app.use(express.static('public'));
+app.set('view engine', 'pug'); 
+app.use(express.static('public')); 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
@@ -43,6 +43,7 @@ app.locals.caja = { Cod_Caja : null }
 app.locals.turno = null
 app.locals.sucursal = null
 app.locals.arqueo = null
+ 
 
 function CargarVariables(req,res){
   p = [
@@ -153,8 +154,7 @@ function CargarVariables(req,res){
   })
 
 }
-
-
+ 
 app.get('/', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
@@ -173,6 +173,7 @@ app.get('/', function (req, res) {
     }
   }
 })
+
 app.get('/administracion', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
@@ -519,11 +520,41 @@ var server = app.listen(3000, function (err) {
 })
 
 var jsreport = require('jsreport')
+var fs = require('fs')
 var reportingApp = express(),
     jsreportInstance;
 
-app.get('/generar_documento', function(req, res) {
-
+app.post('/generar_documento', function(req, res) {
+  var input = req.body
+  var NOMBRE = app.locals.empresa[0].RazonSocial
+  var DIRECCION = app.locals.empresa[0].Direccion
+  var RUC = app.locals.empresa[0].RUC
+  var COD_TIPOCOMPROBANTE = input.COD_TIPOCOMPROBANTE
+  var DOCUMENTO = input.DOCUMENTO
+  var SERIE = input.SERIE
+  var NUMERO = input.NUMERO
+  var CLIENTE = input.CLIENTE
+  var COD_DOCCLIENTE = input.COD_DOCCLIENTE
+  var RUC_CLIENTE = input.RUC_CLIENTE
+  var FLAG_ANULADO = input.FLAG_ANULADO
+  var DIRECCION_CLIENTE = input.DIRECCION_CLIENTE
+  var FECHA_EMISION = input.FECHA_EMISION
+  var FECHA_VENCIMIENTO = input.FECHA_VENCIMIENTO
+  var FORMA_PAGO = input.FORMA_PAGO
+  var GLOSA = input.GLOSA
+  var OBSERVACIONES = input.OBSERVACIONES
+  var USUARIO = req.session.username
+  var PLACA_VEHICULAR = input.PLACA_VEHICULAR
+  var ESCRITURA_MONTO = input.ESCRITURA_MONTO
+  var GRAVADAS = input.GRAVADAS
+  var EXONERADAS = input.EXONERADAS
+  var GRATUITAS = input.GRATUITAS
+  var INAFECTAS = input.INAFECTAS
+  var DESCUENTO = input.DESCUENTO
+  var IGV = input.IGV
+  var TOTAL = input.TOTAL
+   
+  console.log(JSON.parse(input.DETALLES))
 
   jsreport.render({
     extensions: {
@@ -542,72 +573,47 @@ app.get('/generar_documento', function(req, res) {
     },
     data:{
       "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-      "FLAG":true,
-      "NOMBRE":"GRIFO MARCELO'S S.R.L.",
-      "DIRECCION":"AV. HUAYRUROPATA NRO. 1700 CUSCO-CUSCO-WANCHAQ",
-      "RUC":"20357768269",
-      "COD_TIPOCOMPROBANTE": "01",
-      "DOCUMENTO": "FACTURA ELECTRONICA",
-      "SERIE": "F001",
-      "NUMERO": "00005591",
-      "FLAG_ANULADO":false,
-      "MOTIVO_ANULACION":"ERROR DE EMISION",
-      "COMP_AFECTADO":"F001-00000098",
-      "CLIENTE": "PALE CONSULTORES E.I.R.L",
-      "COD_DOCCLIENTE":"6",
-      "RUC_CLIENTE": "20491228297",
-      "DIRECCION_CLIENTE": "MZA. U LOTE.20 ASC. TUPAC AMARU CUSCO - CUSCO - SAN SEBASTIAN",
-      "FECHA_EMISION": "24-06-2018",
-      "FECHA_VENCIMIENTO": "24-06-2018",
-      "FORMA_PAGO": "EFECTIVO",
-      "GLOSA": "POR LA VENTA DE MERCADERIA",
-      "OBSERVACIONES":"O/C RS-2165-2018",
-      "USUARIO": "CAJERO",
-      "PLACA_VEHICULAR":"X3U466",
-      "ESCRITURA_MONTO":"SON: CIENTO VEINTE SIETE CON 52/100 SOLES ",
-      "GRAVADAS":"108.07",
-      "EXONERADAS":"0.00",
-      "GRATUITAS":"0.00",
-      "INAFECTAS":"0.00",
-      "DESCUENTO":"0.00",
-      "IGV":"14.50",
-      "TOTAL":"95.11",
+      "FLAG":false,
+      "NOMBRE":NOMBRE,
+      "DIRECCION":DIRECCION,
+      "RUC":RUC,
+      "COD_TIPOCOMPROBANTE": COD_TIPOCOMPROBANTE,
+      "DOCUMENTO": DOCUMENTO,
+      "SERIE": SERIE,
+      "NUMERO": NUMERO,
+      "FLAG_ANULADO": FLAG_ANULADO, 
+      "CLIENTE": CLIENTE,
+      "COD_DOCCLIENTE":COD_DOCCLIENTE,
+      "RUC_CLIENTE": RUC_CLIENTE,
+      "DIRECCION_CLIENTE": DIRECCION_CLIENTE,
+      "FECHA_EMISION": FECHA_EMISION,
+      "FECHA_VENCIMIENTO": FECHA_VENCIMIENTO,
+      "FORMA_PAGO": FORMA_PAGO,
+      "GLOSA": GLOSA,
+      "OBSERVACIONES": OBSERVACIONES,
+      "CAJERO": USUARIO,
+      "PLACA_VEHICULAR": PLACA_VEHICULAR,
+      "ESCRITURA_MONTO": "SON: "+ESCRITURA_MONTO,
+      "GRAVADAS": GRAVADAS,
+      "EXONERADAS": EXONERADAS,
+      "GRATUITAS": GRATUITAS,
+      "INAFECTAS": INAFECTAS,
+      "DESCUENTO": DESCUENTO,
+      "IGV": IGV,
+      "TOTAL": TOTAL,
       "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
       "VERSION_SISTEMA":"F|9.1.4",
-      "DETALLES": [{
-            "DESCRIPCION": "GASEOSA COCACOLA 2.5L",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "5.00",
-            "PRECIO_UNITARIO":"7.90",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"39.50"
-        }, {
-            "DESCRIPCION": "SIXPACK CERVEZA CUSQUEÑA TRIGO 330ML",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "1.00",
-            "PRECIO_UNITARIO":"19.70",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"19.70"
-        },{
-            "DESCRIPCION": "ALTOMAYO CAFE GOURMET 180GR"    ,
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "3.00",
-            "PRECIO_UNITARIO":"24.99",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"74.97"
-        },{
-            "DESCRIPCION": "DONOFRIO CHOCOTON PANETON 500GR",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "1.00",
-            "PRECIO_UNITARIO":"13.70",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"13.70"
-        }]
+      "DETALLES": JSON.parse(input.DETALLES)
    }
-  }).then(function (o) {
-    o.result.pipe(res);
+  }).then(function (resp) {
+ 
+      var fs = require('fs')
+      fs.writeFileSync('public/media/documento.pdf', resp.content)
+      return res.json({respuesta:'ok'})
+    //o.result.pipe(res);
   }).catch(function (e) {
-    console.error(e)
+    return res.json({respuesta:'error'})
+    //console.error(e)
   })
  
 });
