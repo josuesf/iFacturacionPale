@@ -281,6 +281,7 @@ function BloquearControles(event){
 function LimpiarVariablesGlobales(){
     global.objClienteVenta = ''
     global.objProductoVentas = ''
+    global.objProducto = ''
 }
 
 function CambiarCadenaConexion(cadena){
