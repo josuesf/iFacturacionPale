@@ -16,6 +16,36 @@ router.post('/get_comprobante_pago', function (req, res) {
 });
  
 
+router.post('/extornar_comprobante_pago', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'id_ComprobantePago',valor_parametro:input.id_ComprobantePago},
+        {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
+        {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro:'Fecha',valor_parametro:input.Fecha},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
+        {nom_parametro:'MotivoAnulacion',valor_parametro:input.MotivoAnulacion},
+    ]
+    procedimientos =[
+        {nom_respuesta:'comprobante_pago',sp_name:'USP_CAJ_COMPROBANTE_PAGO_EXTORNAR',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
+
+
+router.post('/get_detalle_by_comprobante_pago', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'id_ComprobantePago',valor_parametro:input.id_ComprobantePago},
+    ]
+    procedimientos =[
+        {nom_respuesta:'detalles_comprobante_pago',sp_name:'USP_CAJ_COMPROBANTE_PAGO_TDetalleXIdComprobantePago',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+ 
+
 router.post('/get_variable_comprobante_pago', function (req, res) {
     input = req.body
 

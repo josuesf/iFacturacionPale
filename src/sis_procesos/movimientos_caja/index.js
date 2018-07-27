@@ -27,108 +27,8 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                     </div>
                     <!-- /.modal-dialog -->
                 </div>
-
-                <div class="modal modal-default fade" id="modal-turno" style="display: none;">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h4 class="modal-title">Seleccione el turno </h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                        <label for="Gestion">Gestion</label>
-                                            <input type="number" id="Gestion" class="form-control" onkeyup=${()=>TraerPeriodos()} onchange=${()=>TraerPeriodos()}>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                        <label for="Periodo">Periodo</label>
-                                            <select id="Periodo" class="form-control" onchange=${()=>TraerTurnos()}>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                        <label for="Turno">Turno</label>
-                                            <select id="Turno" class="form-control">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarCambioTurno()}>Aceptar</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
-
-
-                <div class="modal modal-default fade" id="modal-manguera" style="display: none;">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h4 class="modal-title" id="txtTitulo">Cambiar Manguera </h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="Manguera">Seleccione una manguera</label>
-                                            <select id="Manguera" class="form-control">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                 
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarManguera()}>Aceptar</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
-
-                <div class="modal fade" id="modal-confirmacion" style="z-index: 999999;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h4 class="modal-title" id="txtTituloConfirmacion"> </h4>
-                            </div>
-                            <div class="modal-body">
-                                <p id="txtDescripcionConfirmacion"></p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacion()}>Aceptar</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
-
+ 
+ 
                 <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
                 </div>
@@ -166,7 +66,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                         <!-- /.box-header -->
                                         <div class="box-body">
                                             <div class="table-responsive">
-                                            <table id="example1" class="table table-bordered table-striped">
+                                            <table id="tablaMovimientos" class="table table-bordered table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>E</th>
@@ -205,8 +105,8 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                                             </button>
                                                             <ul class="dropdown-menu">
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                                                <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
-                                                                <li><a href="javascript:void(0)"   ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
+                                                                <li><a href="javascript:void(0)" ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                                             </ul>
@@ -267,9 +167,18 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
     empty(container).appendChild(el);
     var footer = document.getElementById('content_footer')
     empty(footer).appendChild(footer_element);
+    $('#tablaMovimientos').DataTable({
+        "lengthChange": false,
+        "order": [[ 1, "desc" ]],
+        "oLanguage": {
+            "sSearch": "Buscar:"
+        }
+    });
+ 
+
 }
 
-function VerModalJustificacion(titulo,descripcion) {
+function VerModalJustificacion(titulo,descripcion,movimiento,flag) {
     var el = yo` 
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -296,7 +205,7 @@ function VerModalJustificacion(titulo,descripcion) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="btnExtornarAnular" onclick=${()=>ExtornarAnular()}>Aceptar</button>
+                        <button type="button" class="btn btn-primary" id="btnExtornarAnular" onclick=${()=>ExtornarAnular(movimiento,flag)}>Aceptar</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -333,110 +242,10 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
-
-                    <div class="modal modal-default fade" id="modal-turno" style="display: none;">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    <h4 class="modal-title">Seleccione el turno </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="Gestion">Gestion</label>
-                                                <input type="number" id="Gestion" class="form-control" onkeyup=${()=>TraerPeriodos()} onchange=${()=>TraerPeriodos()}>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="Periodo">Periodo</label>
-                                                <select id="Periodo" class="form-control" onchange=${()=>TraerTurnos()}>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                            <label for="Turno">Turno</label>
-                                                <select id="Turno" class="form-control">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarCambioTurno()}>Aceptar</button>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
-
-
-                    <div class="modal modal-default fade" id="modal-manguera" style="display: none;">
-                        <div class="modal-dialog modal-sm">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    <h4 class="modal-title" id="txtTitulo">Cambiar Manguera </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label for="Manguera">Seleccione una manguera</label>
-                                                <select id="Manguera" class="form-control">
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarManguera()}>Aceptar</button>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
+ 
 
                     <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
-                    </div>
-
-                    <div class="modal fade" id="modal-confirmacion">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    <h4 class="modal-title" id="txtTituloConfirmacion"> </h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p id="txtDescripcionConfirmacion"></p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacion()}>Aceptar</button>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
                     </div>
 
                     <div class="modal modal-default fade" id="modal-justificacion" style="display: none;overflow: auto;">
@@ -462,7 +271,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="table-responsive">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="tablaMovimientos" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>E</th>
@@ -502,7 +311,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                            <li><a href="javascript:void(0)"><i class="fa fa-print"></i>Re-Imprimir</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
                                             <li><a href="javascript:void(0)"  ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
@@ -561,7 +370,159 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     empty(container).appendChild(el);
     $("#tab_1").click()
     $('#content_footer').html(sectionFooter);
+
+    $('#tablaMovimientos').DataTable({
+        "lengthChange": false,
+        "order": [[ 1, "desc" ]],
+        "oLanguage": {
+            "sSearch": "Buscar:"
+        }
+    });
+ 
+
 }
+
+function AbrirModalManguera(movimiento){
+    var el = yo`
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title" id="txtTitulo">Cambiar Manguera </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="Manguera">Seleccione una manguera</label>
+                                <select id="Manguera" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                        
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarManguera(movimiento)}>Aceptar</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>`
+        var modal_proceso = document.getElementById('modal-alerta');
+        empty(modal_proceso).appendChild(el);
+        $('#modal-alerta').modal()
+}
+
+
+function AbrirModalCambiarTurno(movimiento){
+
+    const fecha = new Date()
+    var anio = fecha.getFullYear() 
+
+    var el = yo`
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Seleccione el turno </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="Gestion">Gestion</label>
+                            <input type="number" id="Gestion" value=${anio} class="form-control" onkeyup=${()=>TraerPeriodos()} onchange=${()=>TraerPeriodos()}>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="Periodo">Periodo</label>
+                            <select id="Periodo" class="form-control" onchange=${()=>TraerTurnos()}>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="Turno">Turno</label>
+                            <select id="Turno" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarCambioTurno(movimiento)}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+    TraerPeriodos()
+}
+
+
+function AbrirModalConfirmacion(flag,movimiento){
+    var el=''
+    if(flag=="eliminar"){
+        el = yo`
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Se eliminara el dato seleccionado</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Esta seguro de eliminar este comprobante?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick=${()=>AceptarConfirmacion(flag,movimiento)}>Aceptar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>`
+    }else{ 
+        el = yo`
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Se eliminara el dato seleccionado</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Esta seguro de extornar este comprobante?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" onclick=${()=>AceptarConfirmacion(flag,movimiento)}>Aceptar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>` 
+    }
+
+
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+}
+
 
 
 function LlenarPeriodo(periodos,idSelect){
@@ -589,24 +550,6 @@ function LlenarManguera(mangueras,idSelect){
     `)}`   
     $("#"+idSelect).html('')
     $("#"+idSelect).html(el) 
-}
-
-var flagOpciones = ''
-var movimiento_elegido = null
-
-function AbrirModalManguera(movimiento){
-    movimiento_elegido = movimiento
-    $("#modal-manguera").modal("show")
-}
-
-
-function AbrirModalCambiarTurno(movimiento){
-    movimiento_elegido = movimiento
-    $("#modal-turno").modal("show")
-    const fecha = new Date()
-    var anio = fecha.getFullYear() 
-    $("#Gestion").val(anio)
-    TraerPeriodos()
 }
 
 
@@ -652,8 +595,8 @@ function TraerTurnos(){
         })
 }
 
-function GuardarCambioTurno(){ 
-    var id_ComprobantePago = movimiento_elegido.ID
+function GuardarCambioTurno(movimiento){ 
+    var id_ComprobantePago = movimiento.ID
     const parametros = {
         method: 'POST',
         headers: {
@@ -665,10 +608,10 @@ function GuardarCambioTurno(){
             id_ComprobantePago
         })
     }
-    switch (movimiento_elegido.Entidad) {
+    switch (movimiento.Entidad) {
         case "CAJ_COMPROBANTE_PAGO":
 
-            var id_ComprobantePago = movimiento_elegido.ID
+            var id_ComprobantePago = movimiento.ID
             var Cod_Turno = $("#Turno").val()
             const parametrosCP = {
                 method: 'POST',
@@ -686,7 +629,7 @@ function GuardarCambioTurno(){
             fetch(URL + '/turnos_api/cambiar_comprobante_by_turno', parametrosCP)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-turno").modal("hide") 
+                    $("#modal-alerta").modal("hide") 
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -697,7 +640,7 @@ function GuardarCambioTurno(){
             break;
         case "CAJ_CAJA_MOVIMIENTOS":
             
-            var Id_MovimientoCaja = movimiento_elegido.ID
+            var Id_MovimientoCaja = movimiento.ID
             var Cod_TurnoActual = $("#Turno").val()
             const parametrosCM = {
                 method: 'POST',
@@ -715,7 +658,7 @@ function GuardarCambioTurno(){
             fetch(URL + '/turnos_api/cambiar_movimientos_by_turno', parametrosCM)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-turno").modal("hide") 
+                    $("#modal-alerta").modal("hide") 
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -726,7 +669,7 @@ function GuardarCambioTurno(){
             break;
         case "ALM_ALMACEN_MOV":
             
-            var Id_AlmacenMov = movimiento_elegido.ID
+            var Id_AlmacenMov = movimiento.ID
             var Cod_TurnoActual = $("#Turno").val()
             const parametrosAM = {
                 method: 'POST',
@@ -744,7 +687,7 @@ function GuardarCambioTurno(){
             fetch(URL + '/turnos_api/cambiar_almacen_by_turno', parametrosAM)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-turno").modal("hide") 
+                    $("#modal-alerta").modal("hide") 
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -756,41 +699,35 @@ function GuardarCambioTurno(){
     }
 }
 
+ 
+ 
 
-
-function AbrirModalConfirmacion(flag,movimiento){
-    $("#modal-confirmacion").modal("show")
-    movimiento_elegido = movimiento
-    flagOpciones = flag
+function AceptarConfirmacion(flag,movimiento){
+    $("#modal-alerta").modal("hide")
     if(flag=="eliminar"){
-        $("#txtTituloConfirmacion").text("Se eliminaran el dato seleccionado")
-        $("#txtDescripcionConfirmacion").text("¿Esta seguro de extornar este comprobante?")
-    }else{
-        if(flag=="extornar"){
-            $("#txtTituloConfirmacion").text("Se eliminaran el dato seleccionado")
-            $("#txtDescripcionConfirmacion").text("¿Esta seguro de eliminar este comprobante?")
-        }
+        VerModalJustificacion("Ingrese una justificacion de eliminacion","Por ejemplo : Por error de ingreso en monto",movimiento,flag)
+    }else{ 
+        VerModalJustificacion("Ingrese una justificacion del extorno / anulacion","Por ejemplo : Por error de ingreso en",movimiento,flag)
     }
 }
 
-function AceptarConfirmacion(){
-    $("#modal-confirmacion").modal("hide")
-    if(flagOpciones=="eliminar"){
-        VerModalJustificacion("Ingrese una justificacion de eliminacion","Por ejemplo : Por error de ingreso en monto")
-    }else{
-        if(flagOpciones=="extornar"){
-            VerModalJustificacion("Ingrese una justificacion del extorno / anulacion","Por ejemplo : Por error de ingreso en")
-        }
-    }
+function VerFormatoDocumento(u){
+
 }
  
 
-function ExtornarAnular() {
-    var id_Movimiento = movimiento_elegido.ID
-    var entidad = movimiento_elegido.Entidad
-    var parametros = {}
+function ExtornarAnular(movimiento,flag) {
+    var id_Movimiento = movimiento.ID
+    var entidad = movimiento.Entidad
+    var MotivoAnulacion = $("#txtJustificacion").val()
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate() 
+    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia) + ' '+ [(fecha.getHours()>9?fecha.getHours():'0'+fecha.getHours()), (fecha.getMinutes()>9?fecha.getMinutes():'0'+fecha.getMinutes())].join(':');
+    
+    var parametros = {} 
     if(ValidacionCampos('modal_error','modal_form')){ 
-        if(flagOpciones=="extornar"){ 
+        if(flag=="extornar"){ 
             switch (entidad){
                 case "CAJ_CAJA_MOVIMIENTOS":
                     parametros = {
@@ -811,13 +748,112 @@ function ExtornarAnular() {
                             //refrescar_movimientos_caja()
                             if (res.respuesta == 'ok') { 
                                 refrescar_movimientos_caja()
-                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                toastr.success('Se anulo correctamente el movimiento','Confirmacion',{timeOut: 5000})
                             }else{
-                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
                         })
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
+                    parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            id_ComprobantePago:id_Movimiento
+                        })
+                    }
+                    fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            var comprobante_pago = res.data.comprobante_pago[0]
+                            var id_ComprobantePago = comprobante_pago.id_ComprobantePago
+                            if(comprobante_pago.Cod_TipoComprobante=='TKF' || comprobante_pago.Cod_TipoComprobante=='TKB'){
+                                parametros = {
+                                    method: 'POST',
+                                    headers: {
+                                        Accept: 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    credentials: 'same-origin',
+                                    body: JSON.stringify({
+                                        id_ComprobantePago:id_Movimiento,
+                                        Fecha:fecha_format,
+                                        MotivoAnulacion
+                                    })
+                                }
+                                fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                    .then(req => req.json())
+                                    .then(res => {
+                                        if(res.respuesta=='ok'){
+                                            toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                        }else{
+                                            toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                        }
+                                    })
+                            }else{
+                                if(comprobante_pago.Cod_TipoComprobante=='FE' || comprobante_pago.Cod_TipoComprobante=='BE'){
+                                    parametros = {
+                                        method: 'POST',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json',
+                                        },
+                                        credentials: 'same-origin',
+                                        body: JSON.stringify({
+                                            id_ComprobantePago:id_Movimiento,
+                                            Fecha:fecha_format,
+                                            MotivoAnulacion
+                                        })
+                                    }
+                                    fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                        .then(req => req.json())
+                                        .then(res => {
+                                            if(res.respuesta=='ok'){
+                                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                            }else{
+                                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                            }
+                                        })
+                                }else{
+                                    
+                                    parametros = {
+                                        method: 'POST',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json',
+                                        },
+                                        credentials: 'same-origin',
+                                        body: JSON.stringify({
+                                            id_ComprobantePago:id_Movimiento,
+                                            Fecha:fecha_format,
+                                            MotivoAnulacion
+                                        })
+                                    }
+                                    fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                        .then(req => req.json())
+                                        .then(res => {
+                                            if(res.respuesta=='ok'){
+                                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                            }else{
+                                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                            }
+                                        })
+
+
+                                }
+                            }
+                            /*$("#modal-justificacion").modal("hide")  
+                            if (res.respuesta == 'ok') { 
+                                refrescar_movimientos_caja()
+                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                            }else{
+                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                            }*/
+                        })
                     break;
                 case "ALM_ALMACEN_MOV":
                     var Id_Almacen_Mov = id_Movimiento 
@@ -839,15 +875,15 @@ function ExtornarAnular() {
                             //refrescar_movimientos_caja()
                             if (res.respuesta == 'ok') { 
                                 refrescar_movimientos_caja()
-                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                toastr.success('Se anulo correctamente el movimiento','Confirmacion',{timeOut: 5000})
                             }else{
-                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
                         })
                     break;
                 case "CAJ_FORMA_PAGO":
                     var id_ComprobantePago = id_Movimiento 
-                    var Item = movimiento_elegido.Item
+                    var Item = movimiento.Item
                     parametros = {
                         method: 'POST',
                         headers: {
@@ -867,9 +903,9 @@ function ExtornarAnular() {
                             //refrescar_movimientos_caja()
                             if (res.respuesta == 'ok') { 
                                 refrescar_movimientos_caja()
-                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                toastr.success('Se anulo correctamente el movimiento','Confirmacion',{timeOut: 5000})
                             }else{
-                                toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
+                                toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
                         })
                     break;

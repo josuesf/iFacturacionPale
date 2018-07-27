@@ -443,7 +443,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="form-group">
                                             <b id="laExonerado"  style="display:none">EXONERADO </b>
-                                            <input type="number" class="form-control input-sm" style="display:none"alue="0.00" id="Exonerado">
+                                            <input type="number" class="form-control input-sm" style="display:none" value="0.00" id="Exonerado">
                                         </div>
                                         <div class="form-group">
                                             <b id="laGratuitas"  style="display:none">GRATUITAS: </b>

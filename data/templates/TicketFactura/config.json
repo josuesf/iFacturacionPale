@@ -1,7 +1,7 @@
 {
     "_id": "qjdimnaEHHKPU4OR",
     "shortid": "B16qSehQm",
-    "recipe": "phantom-pdf",
+    "recipe": "chrome-pdf",
     "engine": "handlebars",
     "chrome": {
         "printBackground": true,
@@ -19,6 +19,8 @@
         ]
     },
     "modificationDate": {
-        "$$date": 1532530396046
-    }
+        "$$date": 1532708972102
+    },
+    "$entitySet": "templates",
+    "name": "TicketFactura"
 }

@@ -526,6 +526,7 @@ var reportingApp = express(),
 
 app.post('/generar_documento', function(req, res) {
   var input = req.body
+  var TIPO = input.TIPO
   var NOMBRE = app.locals.empresa[0].RazonSocial
   var DIRECCION = app.locals.empresa[0].Direccion
   var RUC = app.locals.empresa[0].RUC
@@ -553,9 +554,7 @@ app.post('/generar_documento', function(req, res) {
   var DESCUENTO = input.DESCUENTO
   var IGV = input.IGV
   var TOTAL = input.TOTAL
-   
-  console.log(JSON.parse(input.DETALLES))
-
+  
   jsreport.render({
     extensions: {
       assets: {
@@ -563,12 +562,12 @@ app.post('/generar_documento', function(req, res) {
       }
     },
     template: {
-      name:'FacturaComprobante',
+      name: TIPO!='TK'?'FacturaComprobante':'TicketFactura',
       recipe: "chrome-pdf",
       engine: 'handlebars',
       chrome: { 
-        width:'8.27in',
-        height: '11.7in'
+        width: TIPO!='TK'?'8.27in':'2.00in',
+        height: TIPO!='TK'?'11.7in':'5.5in'
       }
     },
     data:{
