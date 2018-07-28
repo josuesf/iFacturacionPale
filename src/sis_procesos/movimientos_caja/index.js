@@ -788,7 +788,9 @@ function ExtornarAnular(movimiento,flag) {
                                 fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
                                     .then(req => req.json())
                                     .then(res => {
+                                        $("#modal-justificacion").modal("hide")
                                         if(res.respuesta=='ok'){
+                                            refrescar_movimientos_caja()
                                             toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                         }else{
                                             toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
@@ -812,7 +814,9 @@ function ExtornarAnular(movimiento,flag) {
                                     fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
                                         .then(req => req.json())
                                         .then(res => {
+                                            $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
+                                                refrescar_movimientos_caja()
                                                 toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
@@ -836,7 +840,9 @@ function ExtornarAnular(movimiento,flag) {
                                     fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
                                         .then(req => req.json())
                                         .then(res => {
+                                            $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
+                                                refrescar_movimientos_caja()
                                                 toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
