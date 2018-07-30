@@ -465,7 +465,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <label>
                                                 <input type="checkbox" id="cbAplicaServicios"  checked="checked"> SERVICIOS
                                             </label>
-                                            <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos" onkeypress=${CalcularTotal(CodLibro,variables)} onchange=${CalcularTotal(CodLibro,variables)}>
+                                            <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos" onkeypress=${()=>CalcularTotal(CodLibro,variables)} onchange=${()=>CalcularTotal(CodLibro,variables)}>
                                         </div>
                                         <div class="form-group" style="display:none">
                                             <label>
@@ -475,7 +475,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="form-group">
                                             <strong>DESCUENTO GLOBAL</strong>
-                                            <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global" onkeypress=${CalcularTotal(CodLibro,variables)} onchange=${CalcularTotal(CodLibro,variables)}>
+                                            <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global" onkeypress=${()=>CalcularTotal(CodLibro,variables)} onchange=${()=>CalcularTotal(CodLibro,variables)}>
                                         </div>
                                         <div class="form-group">
                                             <strong>GRAN TOTAL</strong>
@@ -1414,10 +1414,10 @@ function KeyEnterImporte(event,CodLibro,variables){
  
     try{
        $("#Cantidad").val(parseFloat($("#Importe").val())/parseFloat($("#Precio_Unitario").val()))
-       CalcularTotal(CodLibro,variables)
+       //CalcularTotal(CodLibro,variables)
     }catch(e){
         $("#Cantidad").val("0")
-        CalcularTotal(CodLibro,variables)
+        //CalcularTotal(CodLibro,variables)
     }
 
     event.stopImmediatePropagation();
@@ -2240,7 +2240,7 @@ function GuardarOperacionBancaria(callback){
     var TipoCambio = $("#Tipo_Cambio").val()
     var Beneficiario = $("#Cliente").val()
     var Nro_Cheque = ''
-    var Cod_Plantilla = ''
+    var Cod_Plantilla = null
     if($("#Cod_FormaPago").val()=="007"){
         Nro_Cheque = "00000000"+parseInt( $("#Cuenta_CajaBancos option:selected").text())
     }
@@ -2342,8 +2342,12 @@ function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitaci
         .then(req => req.json())
         .then(res => {
             if(res.respuesta=='ok'){
-                var Nro_Detalle = res.data.nro_detalle[0].Nro_Detalle
-                callback(Nro_Detalle)
+                if(res.data.nro_detalle.length>0){
+                    var Nro_Detalle = res.data.nro_detalle[0].Nro_Detalle
+                    callback(Nro_Detalle)
+                }else{
+                    callback(-1)
+                }
             }else{
                 callback(-1)
             }
@@ -2372,8 +2376,8 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                 Sub_Total = (parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(12).find('input').val()) * (1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2)
             }
             var Descuento = parseFloat($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(11).find('input').attr("data-value"))
-            var Obs_ComprobanteD = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(15).text()
-            var Cod_Manguera = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(13).text()
+            var Obs_ComprobanteD = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null: $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(15).text()
+            var Cod_Manguera = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null: $('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(13).text()
             var Cod_Almacen = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(5).find('input').attr("data-id")
             var Cod_UnidadMedida = ($("#optEsGasto").is(":checked") || parseInt($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())==0)?null:$('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(6).find('input').attr("data-id")
             var Flag_AplicaImpuesto = $("#ckbAplicaImpuesto").is(":checked")
@@ -2574,7 +2578,7 @@ function ConvertTabletoJson(callback){
     callback(myRows)
 }
 
-function EnviarImpresion(   TIPO_DOC,
+function EnviarImpresion(   COD_LIBRO, 
                             COD_TIPOCOMPROBANTE,
                             DOCUMENTO,
                             SERIE,
@@ -2600,53 +2604,59 @@ function EnviarImpresion(   TIPO_DOC,
                             TOTAL   ){
 
     //CargarIframe() 
+     if(COD_LIBRO=='14' && (COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE')){
+        ConvertTabletoJson(function(arrayJSON){
 
-    ConvertTabletoJson(function(arrayJSON){
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    COD_LIBRO, 
+                    COD_TIPOCOMPROBANTE,
+                    DOCUMENTO,
+                    SERIE,
+                    NUMERO,
+                    FLAG_ANULADO,
+                    CLIENTE,
+                    COD_DOCCLIENTE,
+                    RUC_CLIENTE,
+                    DIRECCION_CLIENTE,
+                    FECHA_EMISION,
+                    FECHA_VENCIMIENTO,
+                    FORMA_PAGO,
+                    GLOSA,
+                    OBSERVACIONES,
+                    PLACA_VEHICULAR,
+                    ESCRITURA_MONTO,
+                    GRAVADAS,
+                    EXONERADAS,
+                    GRATUITAS,
+                    INAFECTAS,
+                    DESCUENTO,
+                    IGV,
+                    TOTAL,
+                    DETALLES:JSON.stringify(arrayJSON)
+                })
+            }
+        
+            fetch(URL + '/generar_documento', parametros)
+                .then(req => req.json())
+                .then(res => { 
+                    console.log(res)
+                    
+                })
 
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            credentials: 'same-origin',
-            body: JSON.stringify({
-                TIPO_DOC,
-                COD_TIPOCOMPROBANTE,
-                DOCUMENTO,
-                SERIE,
-                NUMERO,
-                FLAG_ANULADO,
-                CLIENTE,
-                COD_DOCCLIENTE,
-                RUC_CLIENTE,
-                DIRECCION_CLIENTE,
-                FECHA_EMISION,
-                FECHA_VENCIMIENTO,
-                FORMA_PAGO,
-                GLOSA,
-                OBSERVACIONES,
-                PLACA_VEHICULAR,
-                ESCRITURA_MONTO,
-                GRAVADAS,
-                EXONERADAS,
-                GRATUITAS,
-                INAFECTAS,
-                DESCUENTO,
-                IGV,
-                TOTAL,
-                DETALLES:JSON.stringify(arrayJSON)
-            })
-        }
-     
-        fetch(URL + '/generar_documento', parametros)
-            .then(req => req.json())
-            .then(res => { 
-                console.log(res)
-                 
-            })
+        })
+    }
+   
 
-    })
+    /*if((CodLibro=="14") && (Cod_TipoComprobante=="TKB" || Cod_TipoComprobante=="TKF" || Cod_TipoComprobante=="BE" || Cod_TipoComprobante=="FE" || Cod_TipoComprobante=="NP")){
+        
+    }*/
 }
 
 function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
@@ -2815,7 +2825,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                             toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                             $("#modal-proceso").modal("hide")
                                             EnviarImpresion(
-                                                            1,
+                                                            CodLibro,
                                                             Cod_TipoComprobante,
                                                             $("#Cod_TipoComprobante option:selected").text(),
                                                             Serie,
@@ -2860,7 +2870,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                         $("#modal-proceso").modal("hide")
                                                         EnviarImpresion(
-                                                            1,
+                                                            CodLibro,
                                                             Cod_TipoComprobante,
                                                             $("#Cod_TipoComprobante option:selected").text(),
                                                             Serie,
@@ -2908,7 +2918,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 $("#modal-proceso").modal("hide")
                                                 
                                                 EnviarImpresion(
-                                                    1,
+                                                    CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),
                                                     Serie,
@@ -3006,7 +3016,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
                                                 EnviarImpresion(
-                                                    1,
+                                                    CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),
                                                     Serie,
@@ -3110,7 +3120,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 $("#modal-alerta").modal("hide")
                                                 H5_loading.hide()
                                                 EnviarImpresion(
-                                                    1,
+                                                    CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),
                                                     Serie,
@@ -3319,9 +3329,7 @@ function CargarAlmacenes(Id_Producto,Cod_Almacen){
             }else{
                 LlenarAlmacenes([])
             }
-        })
-
-    CambioComprobantes()    
+        })  
 }
 
 function CambioMonedaFormaPagoMasterCard(){

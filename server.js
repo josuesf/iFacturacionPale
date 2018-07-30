@@ -526,7 +526,7 @@ var reportingApp = express(),
 
 app.post('/generar_documento', function(req, res) {
   var input = req.body
-  var TIPO = input.TIPO
+  var COD_LIBRO = input.COD_LIBRO 
   var NOMBRE = app.locals.empresa[0].RazonSocial
   var DIRECCION = app.locals.empresa[0].Direccion
   var RUC = app.locals.empresa[0].RUC
@@ -554,66 +554,67 @@ app.post('/generar_documento', function(req, res) {
   var DESCUENTO = input.DESCUENTO
   var IGV = input.IGV
   var TOTAL = input.TOTAL
+  if(COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'){
+    jsreport.render({
+      extensions: {
+        assets: {
+          publicAccessEnabled: true
+        }
+      },
+      template: {
+        name: COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'?'FacturaComprobante':'TicketFactura',
+        recipe: "chrome-pdf",
+        engine: 'handlebars',
+        chrome: { 
+          width: TIPO!='TK'?'8.27in':'2.00in',
+          height: TIPO!='TK'?'11.7in':'5.5in'
+        }
+      },
+      data:{
+        "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+        "FLAG":false,
+        "NOMBRE":NOMBRE,
+        "DIRECCION":DIRECCION,
+        "RUC":RUC,
+        "COD_TIPOCOMPROBANTE": COD_TIPOCOMPROBANTE,
+        "DOCUMENTO": DOCUMENTO,
+        "SERIE": SERIE,
+        "NUMERO": NUMERO,
+        "FLAG_ANULADO": FLAG_ANULADO, 
+        "CLIENTE": CLIENTE,
+        "COD_DOCCLIENTE":COD_DOCCLIENTE,
+        "RUC_CLIENTE": RUC_CLIENTE,
+        "DIRECCION_CLIENTE": DIRECCION_CLIENTE,
+        "FECHA_EMISION": FECHA_EMISION,
+        "FECHA_VENCIMIENTO": FECHA_VENCIMIENTO,
+        "FORMA_PAGO": FORMA_PAGO,
+        "GLOSA": GLOSA,
+        "OBSERVACIONES": OBSERVACIONES,
+        "CAJERO": USUARIO,
+        "PLACA_VEHICULAR": PLACA_VEHICULAR,
+        "ESCRITURA_MONTO": "SON: "+ESCRITURA_MONTO,
+        "GRAVADAS": GRAVADAS,
+        "EXONERADAS": EXONERADAS,
+        "GRATUITAS": GRATUITAS,
+        "INAFECTAS": INAFECTAS,
+        "DESCUENTO": DESCUENTO,
+        "IGV": IGV,
+        "TOTAL": TOTAL,
+        "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+        "VERSION_SISTEMA":"F|9.1.4",
+        "DETALLES": JSON.parse(input.DETALLES)
+    }
+    }).then(function (resp) {
   
-  jsreport.render({
-    extensions: {
-      assets: {
-        publicAccessEnabled: true
-      }
-    },
-    template: {
-      name: TIPO!='TK'?'FacturaComprobante':'TicketFactura',
-      recipe: "chrome-pdf",
-      engine: 'handlebars',
-      chrome: { 
-        width: TIPO!='TK'?'8.27in':'2.00in',
-        height: TIPO!='TK'?'11.7in':'5.5in'
-      }
-    },
-    data:{
-      "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-      "FLAG":false,
-      "NOMBRE":NOMBRE,
-      "DIRECCION":DIRECCION,
-      "RUC":RUC,
-      "COD_TIPOCOMPROBANTE": COD_TIPOCOMPROBANTE,
-      "DOCUMENTO": DOCUMENTO,
-      "SERIE": SERIE,
-      "NUMERO": NUMERO,
-      "FLAG_ANULADO": FLAG_ANULADO, 
-      "CLIENTE": CLIENTE,
-      "COD_DOCCLIENTE":COD_DOCCLIENTE,
-      "RUC_CLIENTE": RUC_CLIENTE,
-      "DIRECCION_CLIENTE": DIRECCION_CLIENTE,
-      "FECHA_EMISION": FECHA_EMISION,
-      "FECHA_VENCIMIENTO": FECHA_VENCIMIENTO,
-      "FORMA_PAGO": FORMA_PAGO,
-      "GLOSA": GLOSA,
-      "OBSERVACIONES": OBSERVACIONES,
-      "CAJERO": USUARIO,
-      "PLACA_VEHICULAR": PLACA_VEHICULAR,
-      "ESCRITURA_MONTO": "SON: "+ESCRITURA_MONTO,
-      "GRAVADAS": GRAVADAS,
-      "EXONERADAS": EXONERADAS,
-      "GRATUITAS": GRATUITAS,
-      "INAFECTAS": INAFECTAS,
-      "DESCUENTO": DESCUENTO,
-      "IGV": IGV,
-      "TOTAL": TOTAL,
-      "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-      "VERSION_SISTEMA":"F|9.1.4",
-      "DETALLES": JSON.parse(input.DETALLES)
-   }
-  }).then(function (resp) {
- 
-      var fs = require('fs')
-      fs.writeFileSync('public/media/documento.pdf', resp.content)
-      return res.json({respuesta:'ok'})
-    //o.result.pipe(res);
-  }).catch(function (e) {
-    return res.json({respuesta:'error'})
-    //console.error(e)
-  })
+        var fs = require('fs')
+        fs.writeFileSync('public/media/documento.pdf', resp.content)
+        return res.json({respuesta:'ok'})
+      //o.result.pipe(res);
+    }).catch(function (e) {
+      return res.json({respuesta:'error'})
+      //console.error(e)
+    })
+  }
  
 });
   

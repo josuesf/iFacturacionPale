@@ -785,7 +785,7 @@ function ExtornarAnular(movimiento,flag) {
                                         MotivoAnulacion
                                     })
                                 }
-                                fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                     .then(req => req.json())
                                     .then(res => {
                                         $("#modal-justificacion").modal("hide")
@@ -811,7 +811,7 @@ function ExtornarAnular(movimiento,flag) {
                                             MotivoAnulacion
                                         })
                                     }
-                                    fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                    fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                         .then(req => req.json())
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
@@ -837,7 +837,7 @@ function ExtornarAnular(movimiento,flag) {
                                             MotivoAnulacion
                                         })
                                     }
-                                    fetch(URL + '/comprobantes_pago_api/get_comprobante_pago', parametros)
+                                    fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                         .then(req => req.json())
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
