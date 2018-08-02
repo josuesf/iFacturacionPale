@@ -538,6 +538,7 @@ app.post('/generar_documento', function(req, res) {
   var COD_DOCCLIENTE = input.COD_DOCCLIENTE
   var RUC_CLIENTE = input.RUC_CLIENTE
   var FLAG_ANULADO = input.FLAG_ANULADO
+  var MOTIVO_ANULACION = input.MOTIVO_ANULACION
   var DIRECCION_CLIENTE = input.DIRECCION_CLIENTE
   var FECHA_EMISION = input.FECHA_EMISION
   var FECHA_VENCIMIENTO = input.FECHA_VENCIMIENTO
@@ -545,7 +546,7 @@ app.post('/generar_documento', function(req, res) {
   var GLOSA = input.GLOSA
   var OBSERVACIONES = input.OBSERVACIONES
   var USUARIO = req.session.username
-  var PLACA_VEHICULAR = input.PLACA_VEHICULAR
+  var MONEDA = input.MONEDA
   var ESCRITURA_MONTO = input.ESCRITURA_MONTO
   var GRAVADAS = input.GRAVADAS
   var EXONERADAS = input.EXONERADAS
@@ -580,7 +581,8 @@ app.post('/generar_documento', function(req, res) {
         "DOCUMENTO": DOCUMENTO,
         "SERIE": SERIE,
         "NUMERO": NUMERO,
-        "FLAG_ANULADO": FLAG_ANULADO, 
+        "FLAG_ANULADO": FLAG_ANULADO,
+        "MOTIVO_ANULACION" : MOTIVO_ANULACION,
         "CLIENTE": CLIENTE,
         "COD_DOCCLIENTE":COD_DOCCLIENTE,
         "RUC_CLIENTE": RUC_CLIENTE,
@@ -591,7 +593,7 @@ app.post('/generar_documento', function(req, res) {
         "GLOSA": GLOSA,
         "OBSERVACIONES": OBSERVACIONES,
         "CAJERO": USUARIO,
-        "PLACA_VEHICULAR": PLACA_VEHICULAR,
+        "MONEDA": MONEDA,
         "ESCRITURA_MONTO": "SON: "+ESCRITURA_MONTO,
         "GRAVADAS": GRAVADAS,
         "EXONERADAS": EXONERADAS,

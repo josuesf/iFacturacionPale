@@ -1,21 +1,20 @@
 
-var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
+var { EXEC_SQL_DBMaster } = require('./exec_sp_sql')
 
 var sUnidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE", "VEINTIUN", "VEINTIDOS", "VEINTITRES", "VEINTICUATRO", "VEINTICINCO", "VEINTISEIS", "VEINTISIETE", "VEINTIOCHO", "VEINTINUEVE"];
 
-var sDecenas = [ "", "DIEZ", "VEINTE", "TREINTE", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA" ];
+var sDecenas = ["", "DIEZ", "VEINTE", "TREINTE", "CUARENTA", "CINCUENTA", "SESENTA", "SETENTA", "OCHENTA", "NOVENTA"];
 
-var sCentenas = [ "", "CIENTO", "DOCIENTOS", "TRESCIENTOS", "CUATROCIENTOS", "QUINIENTOS", "SEISCIENTOS", "SETECIENTOS", "OCHOCIENTOS", "NOVECIENTOS" ];
+var sCentenas = ["", "CIENTO", "DOCIENTOS", "TRESCIENTOS", "CUATROCIENTOS", "QUINIENTOS", "SEISCIENTOS", "SETECIENTOS", "OCHOCIENTOS", "NOVECIENTOS"];
 
-function Numeros(dNumAux,dFactor){
+function Numeros(dNumAux, dFactor) {
     var dCociente = dNumAux / dFactor
     var dNumero = 0
     var iNumero = 0
     var sNumero = ""
     var sTexto = ""
 
-    if (dCociente >= 100)
-    {
+    if (dCociente >= 100) {
         dNumero = dCociente / 100
         sNumero = dNumero.toString()
         iNumero = parseInt(sNumero[0].toString())
@@ -23,8 +22,7 @@ function Numeros(dNumAux,dFactor){
     }
 
     dCociente = dCociente % 100;
-    if (dCociente >= 30)
-    {
+    if (dCociente >= 30) {
         dNumero = dCociente / 10;
         sNumero = dNumero.toString()
         iNumero = parseInt(sNumero[0].toString())
@@ -38,8 +36,7 @@ function Numeros(dNumAux,dFactor){
             sTexto += "y " + sUnidades[iNumero] + " ";
     }
 
-    else
-    {
+    else {
         dNumero = dCociente
         sNumero = dNumero.toString()
         if (sNumero.Length > 1)
@@ -55,34 +52,32 @@ function Numeros(dNumAux,dFactor){
     return sTexto;
 }
 
-function ConvertirCadena(sNumero){
+function ConvertirCadena(sNumero) {
     var dNumero
     var dNumAux = 0
     var x
     var sAux
     var sResultado = " "
-    try{
-        dNumero =  parseFloat(sNumero)
-    }catch(e){
+    try {
+        dNumero = parseFloat(sNumero)
+    } catch (e) {
         return ""
     }
 
     if (dNumero > 999999999999)
         return "";
 
-    if (dNumero > 999999999){
+    if (dNumero > 999999999) {
         dNumAux = dNumero % 1000000000000;
         sResultado += Numeros(dNumAux, 1000000000) + " MIL "
     }
 
-    if (dNumero > 999999)
-    {
+    if (dNumero > 999999) {
         dNumAux = dNumero % 1000000000
         sResultado += Numeros(dNumAux, 1000000) + " MILLONES "
     }
 
-    if (dNumero > 999)
-    {
+    if (dNumero > 999) {
         dNumAux = dNumero % 1000000
         sResultado += Numeros(dNumAux, 1000) + " MIL "
     }
@@ -95,16 +90,16 @@ function ConvertirCadena(sNumero){
 
     if (sAux.indexOf(".") >= 0)
         sResultado += ObtenerDecimales(sAux)
-        sAux = sResultado
-        x = sResultado[1].toString()
-        sResultado = x.toString()
+    sAux = sResultado
+    x = sResultado[1].toString()
+    sResultado = x.toString()
 
-        for (var i = 2; i < sAux.Length; i++)
-            sResultado += sAux[i].toString()
-            return sResultado;
+    for (var i = 2; i < sAux.Length; i++)
+        sResultado += sAux[i].toString()
+    return sResultado;
 }
 
-function ConvertirCadena(dNumero, TipoMoneda){
+function ConvertirCadena(dNumero, TipoMoneda) {
     var dNumAux = 0
     var sAux
     var sResultado = " "
@@ -112,17 +107,17 @@ function ConvertirCadena(dNumero, TipoMoneda){
     if (dNumero > 999999999999)
         return ""
 
-    if (dNumero > 999999999){
+    if (dNumero > 999999999) {
         dNumAux = dNumero % 1000000000000
         sResultado += Numeros(dNumAux, 1000000000) + " MIL "
     }
 
-    if (dNumero > 999999){
+    if (dNumero > 999999) {
         dNumAux = dNumero % 1000000000
         sResultado += Numeros(dNumAux, 1000000) + " MILLONES "
     }
 
-    if (dNumero > 999){
+    if (dNumero > 999) {
         dNumAux = dNumero % 1000000
         sResultado += Numeros(dNumAux, 1000) + " MIL "
     }
@@ -135,15 +130,13 @@ function ConvertirCadena(dNumero, TipoMoneda){
 
     sNumPuntos = sAux.split('.')
 
-    try{
+    try {
         Numero = parseInt(sNumPuntos[1]);
-        if (sNumPuntos[1].Length == 1)
-        {
+        if (sNumPuntos[1].Length == 1) {
             Numero *= 10;
         }
 
-    }catch(e)
-    {
+    } catch (e) {
         Numero = 0
     }
     sResultado += "CON "
@@ -153,8 +146,8 @@ function ConvertirCadena(dNumero, TipoMoneda){
     return sResultado
 }
 
-function UnObfuscateString(cadena){
-    if(cadena!=null && cadena!=""){ 
+function UnObfuscateString(cadena) {
+    if (cadena != null && cadena != "") {
         var sTemp = ""
         var sEnd = ""
         var sStart = ""
@@ -167,187 +160,187 @@ function UnObfuscateString(cadena){
         var iRemainder = iLen % 2
         var iMiddle = parseInt(iLen / 2)
 
-        for (iLoop = iMiddle + iRemainder; iLoop >= 1; iLoop += -1){ 
-            if (iRemainder == 0){
-                sTemp += cadena.substr( (iLoop + iMiddle)-1 ,1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
+        for (iLoop = iMiddle + iRemainder; iLoop >= 1; iLoop += -1) {
+            if (iRemainder == 0) {
+                sTemp += cadena.substr((iLoop + iMiddle) - 1, 1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
             }
-        
-            sTemp += cadena.substr(iLoop-1,1) //Strings.Mid(cadena, iLoop, 1);
-            if (iRemainder == 1 & iLoop != 1){
-                sTemp += cadena.substr((iLoop+iMiddle)-1,1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
+
+            sTemp += cadena.substr(iLoop - 1, 1) //Strings.Mid(cadena, iLoop, 1);
+            if (iRemainder == 1 & iLoop != 1) {
+                sTemp += cadena.substr((iLoop + iMiddle) - 1, 1) //Strings.Mid(cadena, iLoop + iMiddle, 1);
             }
         }
         return sTemp;
-    }else{
+    } else {
         return "";
     }
 }
 
 function getObjectArrayJsonVentas(arrayJson, pIdTab) {
     var objects = [];
-    for (var i in arrayJson) { 
-        if(arrayJson[i].idTab == pIdTab){
+    for (var i in arrayJson) {
+        if (arrayJson[i].idTab == pIdTab) {
             objects.push({
-                    idTab:arrayJson[i].idTab,
-                    Total:arrayJson[i].Total,
-                    TotalDescuentos:arrayJson[i].TotalDescuentos,
-                    TipodeCambio:arrayJson[i].TipodeCambio,
-                    _CantidadOriginal:arrayJson[i]._CantidadOriginal,
-                    SimboloMoneda:arrayJson[i].SimboloMoneda,
-                    SimboloMonedaExtra:arrayJson[i].SimboloMonedaExtra,
-                    Cliente:arrayJson[i].Cliente,
-                    Detalles:arrayJson[i].Detalles
-                })
+                idTab: arrayJson[i].idTab,
+                Total: arrayJson[i].Total,
+                TotalDescuentos: arrayJson[i].TotalDescuentos,
+                TipodeCambio: arrayJson[i].TipodeCambio,
+                _CantidadOriginal: arrayJson[i]._CantidadOriginal,
+                SimboloMoneda: arrayJson[i].SimboloMoneda,
+                SimboloMonedaExtra: arrayJson[i].SimboloMonedaExtra,
+                Cliente: arrayJson[i].Cliente,
+                Detalles: arrayJson[i].Detalles
+            })
             break
-        } 
-      
+        }
+
     }
     return objects;
 }
 
 
-function changeArrayJsonVentas(arrayJson, pIdTab,arrayCambios) { 
-    for (var i in global.variablesVentas) { 
-        if(global.variablesVentas[i].idTab == pIdTab){
-            global.variablesVentas[i].Total = ( arrayCambios[0]!=null)?arrayCambios[0]:global.variablesVentas[i].Total
-            global.variablesVentas[i].TotalDescuentos =  ( arrayCambios[1]!=null)?arrayCambios[1]:global.variablesVentas[i].TotalDescuentos
-            global.variablesVentas[i].TipodeCambio = ( arrayCambios[2]!=null)?arrayCambios[2]:global.variablesVentas[i].TipodeCambio
-            global.variablesVentas[i]._CantidadOriginal = ( arrayCambios[3]!=null)?arrayCambios[3]:global.variablesVentas[i]._CantidadOriginal
-            global.variablesVentas[i].SimboloMoneda = ( arrayCambios[4]!=null)?arrayCambios[4]:global.variablesVentas[i].SimboloMoneda
-            global.variablesVentas[i].SimboloMonedaExtra = ( arrayCambios[5]!=null)?arrayCambios[5]:global.variablesVentas[i].SimboloMonedaExtra
-            global.variablesVentas[i].Cliente = ( arrayCambios[6]!=null)?arrayCambios[6]:global.variablesVentas[i].Cliente
-            global.variablesVentas[i].Detalles = ( arrayCambios[7]!=null)?arrayCambios[7]:global.variablesVentas[i].Detalles
+function changeArrayJsonVentas(arrayJson, pIdTab, arrayCambios) {
+    for (var i in global.variablesVentas) {
+        if (global.variablesVentas[i].idTab == pIdTab) {
+            global.variablesVentas[i].Total = (arrayCambios[0] != null) ? arrayCambios[0] : global.variablesVentas[i].Total
+            global.variablesVentas[i].TotalDescuentos = (arrayCambios[1] != null) ? arrayCambios[1] : global.variablesVentas[i].TotalDescuentos
+            global.variablesVentas[i].TipodeCambio = (arrayCambios[2] != null) ? arrayCambios[2] : global.variablesVentas[i].TipodeCambio
+            global.variablesVentas[i]._CantidadOriginal = (arrayCambios[3] != null) ? arrayCambios[3] : global.variablesVentas[i]._CantidadOriginal
+            global.variablesVentas[i].SimboloMoneda = (arrayCambios[4] != null) ? arrayCambios[4] : global.variablesVentas[i].SimboloMoneda
+            global.variablesVentas[i].SimboloMonedaExtra = (arrayCambios[5] != null) ? arrayCambios[5] : global.variablesVentas[i].SimboloMonedaExtra
+            global.variablesVentas[i].Cliente = (arrayCambios[6] != null) ? arrayCambios[6] : global.variablesVentas[i].Cliente
+            global.variablesVentas[i].Detalles = (arrayCambios[7] != null) ? arrayCambios[7] : global.variablesVentas[i].Detalles
             break
         }
-      
-    } 
+
+    }
 }
 
 
-function changeDetallesArrayJsonVentas(pIdTab,pCodigo,arrayCambios) { 
-    for (var i in global.variablesVentas) { 
-        if(global.variablesVentas[i].idTab == pIdTab){
-            for (var j in global.variablesVentas[i].Detalles) { 
-                if(global.variablesVentas[i].Detalles[j].Codigo == pCodigo){ 
-                    global.variablesVentas[i].Detalles[j].id_ComprobantePago = ( arrayCambios[0]!=null)?arrayCambios[0]:global.variablesVentas[i].Detalles[j].id_ComprobantePago
-                    global.variablesVentas[i].Detalles[j].id_Detalle = ( arrayCambios[1]!=null)?arrayCambios[1]:global.variablesVentas[i].Detalles[j].id_Detalle
-                    global.variablesVentas[i].Detalles[j].Id_Producto = ( arrayCambios[2]!=null)?arrayCambios[2]:global.variablesVentas[i].Detalles[j].Id_Producto
-                    global.variablesVentas[i].Detalles[j].Codigo = ( arrayCambios[3]!=null)?arrayCambios[3]:global.variablesVentas[i].Detalles[j].Codigo
-                    global.variablesVentas[i].Detalles[j].Descripcion = ( arrayCambios[4]!=null)?arrayCambios[4]:global.variablesVentas[i].Detalles[j].Descripcion
-                    global.variablesVentas[i].Detalles[j].Almacen = ( arrayCambios[5]!=null)?arrayCambios[5]:global.variablesVentas[i].Detalles[j].Almacen
-                    global.variablesVentas[i].Detalles[j].UM = ( arrayCambios[6]!=null)?arrayCambios[6]:global.variablesVentas[i].Detalles[j].UM
-                    global.variablesVentas[i].Detalles[j].Stock = ( arrayCambios[7]!=null)?arrayCambios[7]:global.variablesVentas[i].Detalles[j].Stock
-                    global.variablesVentas[i].Detalles[j].Cantidad = ( arrayCambios[8]!=null)?arrayCambios[8]:global.variablesVentas[i].Detalles[j].Cantidad
-                    global.variablesVentas[i].Detalles[j].Despachado = ( arrayCambios[9]!=null)?arrayCambios[9]:global.variablesVentas[i].Detalles[j].Despachado
-                    global.variablesVentas[i].Detalles[j].PU = ( arrayCambios[10]!=null)?arrayCambios[10]:global.variablesVentas[i].Detalles[j].PU
-                    global.variablesVentas[i].Detalles[j].Descuento = ( arrayCambios[11]!=null)?arrayCambios[11]:global.variablesVentas[i].Detalles[j].Descuento
-                    global.variablesVentas[i].Detalles[j].Importe = ( arrayCambios[12]!=null)?arrayCambios[12]:global.variablesVentas[i].Detalles[j].Importe
-                    global.variablesVentas[i].Detalles[j].Cod_Manguera = ( arrayCambios[13]!=null)?arrayCambios[13]:global.variablesVentas[i].Detalles[j].Cod_Manguera
-                    global.variablesVentas[i].Detalles[j].Tipo = ( arrayCambios[14]!=null)?arrayCambios[14]:global.variablesVentas[i].Detalles[j].Tipo
-                    global.variablesVentas[i].Detalles[j].Obs_ComprobanteD = ( arrayCambios[15]!=null)?arrayCambios[15]:global.variablesVentas[i].Detalles[j].Obs_ComprobanteD
+function changeDetallesArrayJsonVentas(pIdTab, pCodigo, arrayCambios) {
+    for (var i in global.variablesVentas) {
+        if (global.variablesVentas[i].idTab == pIdTab) {
+            for (var j in global.variablesVentas[i].Detalles) {
+                if (global.variablesVentas[i].Detalles[j].Codigo == pCodigo) {
+                    global.variablesVentas[i].Detalles[j].id_ComprobantePago = (arrayCambios[0] != null) ? arrayCambios[0] : global.variablesVentas[i].Detalles[j].id_ComprobantePago
+                    global.variablesVentas[i].Detalles[j].id_Detalle = (arrayCambios[1] != null) ? arrayCambios[1] : global.variablesVentas[i].Detalles[j].id_Detalle
+                    global.variablesVentas[i].Detalles[j].Id_Producto = (arrayCambios[2] != null) ? arrayCambios[2] : global.variablesVentas[i].Detalles[j].Id_Producto
+                    global.variablesVentas[i].Detalles[j].Codigo = (arrayCambios[3] != null) ? arrayCambios[3] : global.variablesVentas[i].Detalles[j].Codigo
+                    global.variablesVentas[i].Detalles[j].Descripcion = (arrayCambios[4] != null) ? arrayCambios[4] : global.variablesVentas[i].Detalles[j].Descripcion
+                    global.variablesVentas[i].Detalles[j].Almacen = (arrayCambios[5] != null) ? arrayCambios[5] : global.variablesVentas[i].Detalles[j].Almacen
+                    global.variablesVentas[i].Detalles[j].UM = (arrayCambios[6] != null) ? arrayCambios[6] : global.variablesVentas[i].Detalles[j].UM
+                    global.variablesVentas[i].Detalles[j].Stock = (arrayCambios[7] != null) ? arrayCambios[7] : global.variablesVentas[i].Detalles[j].Stock
+                    global.variablesVentas[i].Detalles[j].Cantidad = (arrayCambios[8] != null) ? arrayCambios[8] : global.variablesVentas[i].Detalles[j].Cantidad
+                    global.variablesVentas[i].Detalles[j].Despachado = (arrayCambios[9] != null) ? arrayCambios[9] : global.variablesVentas[i].Detalles[j].Despachado
+                    global.variablesVentas[i].Detalles[j].PU = (arrayCambios[10] != null) ? arrayCambios[10] : global.variablesVentas[i].Detalles[j].PU
+                    global.variablesVentas[i].Detalles[j].Descuento = (arrayCambios[11] != null) ? arrayCambios[11] : global.variablesVentas[i].Detalles[j].Descuento
+                    global.variablesVentas[i].Detalles[j].Importe = (arrayCambios[12] != null) ? arrayCambios[12] : global.variablesVentas[i].Detalles[j].Importe
+                    global.variablesVentas[i].Detalles[j].Cod_Manguera = (arrayCambios[13] != null) ? arrayCambios[13] : global.variablesVentas[i].Detalles[j].Cod_Manguera
+                    global.variablesVentas[i].Detalles[j].Tipo = (arrayCambios[14] != null) ? arrayCambios[14] : global.variablesVentas[i].Detalles[j].Tipo
+                    global.variablesVentas[i].Detalles[j].Obs_ComprobanteD = (arrayCambios[15] != null) ? arrayCambios[15] : global.variablesVentas[i].Detalles[j].Obs_ComprobanteD
                     break
-                } 
+                }
             }
         }
-      
-    } 
+
+    }
 }
 
-function deleteElementArrayJsonVentas(arrayJson, pIdTab, pCodigo) { 
-    for (var i in arrayJson) { 
-        if(arrayJson[i].idTab == pIdTab){
-            if(pCodigo!=undefined){
-                for (var j in arrayJson[i].Detalles){  
-                    if(arrayJson[i].Detalles[j].Codigo == pCodigo){
-                        arrayJson[i].Detalles.splice(j,1)
+function deleteElementArrayJsonVentas(arrayJson, pIdTab, pCodigo) {
+    for (var i in arrayJson) {
+        if (arrayJson[i].idTab == pIdTab) {
+            if (pCodigo != undefined) {
+                for (var j in arrayJson[i].Detalles) {
+                    if (arrayJson[i].Detalles[j].Codigo == pCodigo) {
+                        arrayJson[i].Detalles.splice(j, 1)
                         break
                     }
                 }
-            }else{
-                arrayJson.splice(i,1)
+            } else {
+                arrayJson.splice(i, 1)
                 break
             }
-        } 
+        }
     }
 }
- 
 
 
-function BloquearControles(event){
+
+function BloquearControles(event) {
     event.preventDefault();
-    event.stopPropagation(); 
+    event.stopPropagation();
 }
 
-function LimpiarVariablesGlobales(){
+function LimpiarVariablesGlobales() {
     global.objClienteVenta = ''
     global.objProductoVentas = ''
     global.objProducto = ''
 }
 
-function CambiarCadenaConexion(cadena){
+function CambiarCadenaConexion(cadena) {
     console.log(cadena)
     var posicionDataSource = cadena.search("Data Source=")
     var posicionInitial = cadena.search(";Initial Catalog=")
     var posicionUser = cadena.search(";user id=")
-    var posicionPassword = cadena.search("; password=") 
-   
-    if(cadena!=null && cadena!=""){
-        global.userDB = cadena.substring(posicionUser+";user id=".length,posicionPassword)
-        global.passwordDB = cadena.substring(posicionPassword+"; password=".length,cadena.length-1)
-        global.serverDB = cadena.substring(posicionDataSource+"Data Source=".length,posicionInitial).indexOf('.\\')!=-1?'localhost':cadena.substring(posicionDataSource+"Data Source=".length,posicionInitial)
-        global.DB = cadena.substring(posicionInitial+";Initial Catalog=".length,posicionUser)
-    }else{
+    var posicionPassword = cadena.search("; password=")
+
+    if (cadena != null && cadena != "") {
+        global.userDB = cadena.substring(posicionUser + ";user id=".length, posicionPassword)
+        global.passwordDB = cadena.substring(posicionPassword + "; password=".length, cadena.length - 1)
+        global.serverDB = cadena.substring(posicionDataSource + "Data Source=".length, posicionInitial).indexOf('.\\') != -1 ? 'localhost' : cadena.substring(posicionDataSource + "Data Source=".length, posicionInitial)
+        global.DB = cadena.substring(posicionInitial + ";Initial Catalog=".length, posicionUser)
+    } else {
         global.userDB = ''
         global.passwordDB = ''
         global.serverDB = ''
         global.DB = ''
     }
-    
+
 }
 
- 
-function TraerConexion(req, res, callback){
+
+function TraerConexion(req, res, callback) {
     parametros = [
         { nom_parametro: 'RUC', valor_parametro: req.body.RUC },
-    ] 
+    ]
 
     EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {
         if (m.err) {
             return false;
-        }else{
-            if(m.result.length>0){
-                if(m.result[0].CadenaConexion!=null){
+        } else {
+            if (m.result.length > 0) {
+                if (m.result[0].CadenaConexion != null) {
                     CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion));
-                    callback(true) 
-                }else{
-                    callback(false) 
+                    callback(true)
+                } else {
+                    callback(false)
                 }
-            }else{
-                callback(false) 
+            } else {
+                callback(false)
             }
         }
-    }) 
+    })
 }
 
 function RUCValido(ruc) {
     //11 dígitos y empieza en 10,15,16,17 o 20
     if (!(ruc >= 1e10 && ruc < 11e9
-       || ruc >= 15e9 && ruc < 18e9
-       || ruc >= 2e10 && ruc < 21e9))
+        || ruc >= 15e9 && ruc < 18e9
+        || ruc >= 2e10 && ruc < 21e9))
         return false;
-    
-    for (var suma = -(ruc%10<2), i = 0; i<11; i++, ruc = ruc/10|0)
-        suma += (ruc % 10) * (i % 7 + (i/7|0) + 1);
-    return suma % 11 === 0;    
+
+    for (var suma = -(ruc % 10 < 2), i = 0; i < 11; i++ , ruc = ruc / 10 | 0)
+        suma += (ruc % 10) * (i % 7 + (i / 7 | 0) + 1);
+    return suma % 11 === 0;
 }
 
 function EmailValido(valor) {
-    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)) {
         return true
     } else {
         return false
     }
-  }
+}
 
 
-module.exports = { ConvertirCadena , UnObfuscateString , CambiarCadenaConexion,  TraerConexion, BloquearControles, getObjectArrayJsonVentas , changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido}
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido }
