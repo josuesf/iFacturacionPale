@@ -1,0 +1,14 @@
+{
+    "shortid": "H1fUPTeHX",
+    "name": "ExcelPrueba",
+    "recipe": "xlsx",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1533233217023
+    },
+    "_id": "34MYdmGsUWydPNXF",
+    "$entitySet": "templates"
+}

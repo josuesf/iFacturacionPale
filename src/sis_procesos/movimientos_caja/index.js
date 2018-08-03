@@ -1,6 +1,9 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
 import {URL} from '../../constantes_entorno/constantes'
+import { EnviarImpresion } from '../../../utility/tools' 
+
+
 function Ver(Flag_Cerrado,movimientos,saldos) {
     var el = yo`
         <div>
@@ -790,8 +793,12 @@ function ExtornarAnular(movimiento,flag) {
                                     .then(res => {
                                         $("#modal-justificacion").modal("hide")
                                         if(res.respuesta=='ok'){
-                                            refrescar_movimientos_caja()
-                                            toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                            PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                                if(flag)
+                                                    toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                refrescar_movimientos_caja()
+                                            })
+                                            
                                         }else{
                                             toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                         }
@@ -816,8 +823,11 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                refrescar_movimientos_caja()
-                                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                                    if(flag)
+                                                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    refrescar_movimientos_caja()
+                                                })
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
@@ -842,8 +852,11 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                refrescar_movimientos_caja()
-                                                toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                                    if(flag)
+                                                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    refrescar_movimientos_caja()
+                                                })
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
@@ -1014,7 +1027,114 @@ function ExtornarAnular(movimiento,flag) {
     }
 }
 
- function refrescar_movimientos_caja(){
+function RecuperarNombreComprobante(CodTipoComprobante){
+    switch (CodTipoComprobante){
+        case "BE":
+            return "BOLETA ELECTRONICA";
+        case "FE":
+            return "FACTURA ELECTRONICA";
+        case "NCE":
+            return "NOTA DE CREDITO ELECTRONICA";
+        case "NDE":
+            return "NOTA DE DEBITO ELECTRONICO";
+        case "TKB":
+            return "TICKET BOLETA";
+        case "TKF":
+            return "TICKET FACTURA";
+        case "NP":
+            return "NOTA DE PEDIDO";
+        default:
+            return " ";
+    }
+}
+
+function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback){
+    if(indiceDetalles<arrayDetalles.length){
+        arrayNuevo.push({
+            'DESCRIPCION':arrayDetalles[indiceDetalles].Descripcion,
+            'UNIDAD':arrayDetalles[indiceDetalles].Nom_UnidadMedida,
+            'CANTIDAD':arrayDetalles[indiceDetalles].Cantidad,
+            'PRECIO_UNITARIO':arrayDetalles[indiceDetalles].PrecioUnitario,
+            'DESCUENTO':arrayDetalles[indiceDetalles].Descuento,
+            'SUBTOTAL':arrayDetalles[indiceDetalles].Sub_Total
+        })
+        FormatearDataDetalles(indiceDetalles+1,arrayDetalles,arrayNuevo,callback)
+    }else{
+        callback(arrayNuevo)
+    }
+
+}
+
+function PrepararImpresion(id_ComprobantePago,MotivoAnulacion,callback){
+    const parametrosC = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id_ComprobantePago:id_ComprobantePago
+        })
+    }
+    fetch(URL+'/comprobantes_pago_api/get_comprobante_pago', parametrosC)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var dataComprobante = res.data.comprobante_pago[0]
+
+                const parametrosDC = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_ComprobantePago:id_ComprobantePago
+                    })
+                }
+                fetch(URL+'/comprobantes_pago_api/get_comprobante_pago', parametrosDC)
+                    .then(req => req.json())
+                    .then(res => {
+                        if(res.respuesta=='ok'){
+                            callback(true)
+                            var dataDetallesComprobante = res.data.detalles_comprobante_pago
+                            var arrayNuevo = []
+                            FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arryJson){
+                                EnviarImpresion(dataComprobante.Cod_Libro,
+                                                dataComprobante.Cod_TipoComprobante,
+                                                RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
+                                                dataComprobante.Serie,
+                                                dataComprobante.Numero,
+                                                true,
+                                                dataComprobante.MotivoAnulacion,
+                                                dataComprobante.Nom_Cliente,
+                                                dataComprobante.COd_TipoDoc,
+                                                dataComprobante.Doc_Cliente,
+                                                dataComprobante.Direccion_Cliente,
+                                                dataComprobante.FechaEmision,
+                                                dataComprobante.FechaVencimiento,
+                                                dataComprobante.Cod_FormaPago,
+                                                dataComprobante.Glosa, 
+
+
+
+                            })
+                        }else{
+                            toastr.error('No se pudo recuperar los detalles del comprobante','Error',{timeOut: 5000})  
+                            callback(false)
+                        }
+                    })
+
+            }
+            else{
+                toastr.error('No se pudo recuperar el comprobante','Error',{timeOut: 5000}) 
+                callback(false)
+            }
+          
+        }) 
+}
+
+function refrescar_movimientos_caja(){
     H5_loading.show();
     const parametros = {
         method: 'POST',

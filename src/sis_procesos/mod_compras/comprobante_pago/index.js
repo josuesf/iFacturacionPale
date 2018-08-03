@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
-import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
+import { ConvertirCadena,BloquearControles, EnviarImpresion } from '../../../../utility/tools' 
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','']
@@ -2579,7 +2579,7 @@ function ConvertTabletoJson(callback){
     callback(myRows)
 }
 
-function EnviarImpresion(   COD_LIBRO, 
+function PrepararImpresion( COD_LIBRO, 
                             COD_TIPOCOMPROBANTE,
                             DOCUMENTO,
                             SERIE,
@@ -2604,61 +2604,40 @@ function EnviarImpresion(   COD_LIBRO,
                             DESCUENTO,
                             IGV,
                             TOTAL   ){
-
-    //CargarIframe() 
-     if(COD_LIBRO=='14' && (COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE')){
+ 
+     
         ConvertTabletoJson(function(arrayJSON){
 
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'same-origin',
-                body: JSON.stringify({
-                    COD_LIBRO, 
-                    COD_TIPOCOMPROBANTE,
-                    DOCUMENTO,
-                    SERIE,
-                    NUMERO,
-                    FLAG_ANULADO,
-                    CLIENTE,
-                    COD_DOCCLIENTE,
-                    RUC_CLIENTE,
-                    DIRECCION_CLIENTE,
-                    FECHA_EMISION,
-                    FECHA_VENCIMIENTO,
-                    FORMA_PAGO,
-                    GLOSA,
-                    OBSERVACIONES,
-                    MONEDA,
-                    ESCRITURA_MONTO,
-                    GRAVADAS,
-                    EXONERADAS,
-                    GRATUITAS,
-                    INAFECTAS,
-                    DESCUENTO,
-                    IGV,
-                    TOTAL,
-                    DETALLES:JSON.stringify(arrayJSON)
-                })
-            }
-        
-            fetch(URL + '/generar_documento', parametros)
-                .then(req => req.json())
-                .then(res => { 
-                    console.log(res)
-                    
-                })
 
+            EnviarImpresion(COD_LIBRO, 
+                            COD_TIPOCOMPROBANTE,
+                            DOCUMENTO,
+                            SERIE,
+                            NUMERO,
+                            FLAG_ANULADO,
+                            MOTIVO_ANULACION,
+                            CLIENTE,
+                            COD_DOCCLIENTE,
+                            RUC_CLIENTE,
+                            DIRECCION_CLIENTE,
+                            FECHA_EMISION,
+                            FECHA_VENCIMIENTO,
+                            FORMA_PAGO,
+                            GLOSA,
+                            OBSERVACIONES,
+                            MONEDA,
+                            ESCRITURA_MONTO,
+                            GRAVADAS,
+                            EXONERADAS,
+                            GRATUITAS,
+                            INAFECTAS,
+                            DESCUENTO,
+                            IGV,
+                            TOTAL,
+                            JSON.stringify(arrayJSON))
+ 
         })
-    }
-   
-
-    /*if((CodLibro=="14") && (Cod_TipoComprobante=="TKB" || Cod_TipoComprobante=="TKF" || Cod_TipoComprobante=="BE" || Cod_TipoComprobante=="FE" || Cod_TipoComprobante=="NP")){
-        
-    }*/
+    
 }
 
 function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
@@ -2826,7 +2805,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                         if(flagFP){
                                             toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                             $("#modal-proceso").modal("hide")
-                                            EnviarImpresion(
+                                            PrepararImpresion(
                                                             CodLibro,
                                                             Cod_TipoComprobante,
                                                             $("#Cod_TipoComprobante option:selected").text(),
@@ -2872,7 +2851,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     if(flagFP){
                                                         toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                         $("#modal-proceso").modal("hide")
-                                                        EnviarImpresion(
+                                                        PrepararImpresion(
                                                             CodLibro,
                                                             Cod_TipoComprobante,
                                                             $("#Cod_TipoComprobante option:selected").text(),
@@ -2921,7 +2900,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
                                                 
-                                                EnviarImpresion(
+                                                PrepararImpresion(
                                                     CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),
@@ -3020,7 +2999,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                             if(res.respuesta=='ok'){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
-                                                EnviarImpresion(
+                                                PrepararImpresion(
                                                     CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),
@@ -3125,7 +3104,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 $("#modal-proceso").modal("hide")
                                                 $("#modal-alerta").modal("hide")
                                                 H5_loading.hide()
-                                                EnviarImpresion(
+                                                PrepararImpresion(
                                                     CodLibro,
                                                     Cod_TipoComprobante,
                                                     $("#Cod_TipoComprobante option:selected").text(),

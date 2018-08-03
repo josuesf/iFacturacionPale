@@ -1,5 +1,7 @@
 
-var { EXEC_SQL_DBMaster } = require('./exec_sp_sql')
+import {URL} from '../src/constantes_entorno/constantes'
+var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
+
 
 var sUnidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE", "VEINTIUN", "VEINTIDOS", "VEINTITRES", "VEINTICUATRO", "VEINTICINCO", "VEINTISEIS", "VEINTISIETE", "VEINTIOCHO", "VEINTINUEVE"];
 
@@ -342,5 +344,76 @@ function EmailValido(valor) {
     }
 }
 
+function EnviarImpresion(   COD_LIBRO, 
+                            COD_TIPOCOMPROBANTE,
+                            DOCUMENTO,
+                            SERIE,
+                            NUMERO,
+                            FLAG_ANULADO,
+                            MOTIVO_ANULACION,
+                            CLIENTE,
+                            COD_DOCCLIENTE,
+                            RUC_CLIENTE,
+                            DIRECCION_CLIENTE,
+                            FECHA_EMISION,
+                            FECHA_VENCIMIENTO,
+                            FORMA_PAGO,
+                            GLOSA,
+                            OBSERVACIONES,
+                            MONEDA,
+                            ESCRITURA_MONTO,
+                            GRAVADAS,
+                            EXONERADAS,
+                            GRATUITAS,
+                            INAFECTAS,
+                            DESCUENTO,
+                            IGV,
+                            TOTAL,
+                            DETALLES   ){
+ 
+    if(COD_LIBRO=='14' && (COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE')){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                COD_LIBRO, 
+                COD_TIPOCOMPROBANTE,
+                DOCUMENTO,
+                SERIE,
+                NUMERO,
+                FLAG_ANULADO,
+                CLIENTE,
+                COD_DOCCLIENTE,
+                RUC_CLIENTE,
+                DIRECCION_CLIENTE,
+                FECHA_EMISION,
+                FECHA_VENCIMIENTO,
+                FORMA_PAGO,
+                GLOSA,
+                OBSERVACIONES,
+                MONEDA,
+                ESCRITURA_MONTO,
+                GRAVADAS,
+                EXONERADAS,
+                GRATUITAS,
+                INAFECTAS,
+                DESCUENTO,
+                IGV,
+                TOTAL,
+                DETALLES:DETALLES
+            })
+        }
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido }
+        fetch(URL + '/generar_documento', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                console.log(res)
+            })
+    }
+}
+
+module.exports = { EnviarImpresion, ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido }
