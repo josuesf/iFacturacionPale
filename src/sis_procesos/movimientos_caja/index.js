@@ -714,8 +714,22 @@ function AceptarConfirmacion(flag,movimiento){
     }
 }
 
-function VerFormatoDocumento(u){
-
+function VerFormatoDocumento(movimiento){
+    var entidad = movimiento.Entidad
+    switch (entidad){
+        case 'CAJ_CAJA_MOVIMIENTOS':
+            var descripcion = movimiento.Descripcion
+            if(descripcion!='REQUIERE DE AUTORIZACION'){
+                
+            }else{
+                toastr.error('No Puede imprimir un documento que Requiere de Autorizacion. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+            }
+            break
+        case 'CAJ_COMPROBANTE_PAGO':
+            break
+        case 'ALM_ALMACEN_MOV':
+            break
+    }
 }
  
 
@@ -758,6 +772,7 @@ function ExtornarAnular(movimiento,flag) {
                         })
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
+                    console.log("CAJ_COMPROBANTE_PAGO")
                     parametros = {
                         method: 'POST',
                         headers: {

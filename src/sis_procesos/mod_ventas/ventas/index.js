@@ -86,90 +86,63 @@ function VerNuevaVenta(variables,CodLibro) {
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="box box-default">
-                                        <div class="box-header">
-                                            <h4> Monedas </h4>
-                                        </div>
-                                        <div class="box-body"> 
-                                                <div class="cc-selector-2 text-center row" id="divMonedas_${idTabVenta}" >
-                                                    ${variables.formaspago.map(e=>yo`
-                                                        ${e.Cod_FormaPago=="008"?
-                                                            variables.monedas.map(m=>
-                                                                m.Cod_Moneda!="PEN"?
-                                                                m.Cod_Moneda!="USD"?
-                                                                m.Cod_Moneda!="EUR"?
-                                                                yo``
-                                                                :
-                                                                yo`
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="euros" onchange=${()=>CambioMonedaFormaPagoEuros(idTabVenta)}/>
-                                                                        <label class="drinkcard-cc euros" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
-                                                                    </div>
-                                                                </div>`
-                                                                :
-                                                                yo`
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="dolares" onchange=${()=>CambioMonedaFormaPagoDolares(idTabVenta)}/>
-                                                                        <label class="drinkcard-cc dolares" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
-                                                                    </div>
-                                                                </div>`
-                                                                :
-                                                                yo`
-                                                                <div class="row">
-                                                                    <div class="col-md-12">
-                                                                        <input type="radio" name="Cod_Moneda_Forma_Pago_${idTabVenta}" value="soles" checked="checked" onchange=${()=>CambioMonedaFormaPagoSoles(idTabVenta)}/>
-                                                                        <label class="drinkcard-cc soles" for="Cod_Moneda_Forma_Pago_${idTabVenta}"></label>
-                                                                    </div>
-                                                                </div>`
-                                                            )
-                                                        :
-                                                        yo``
-                                                        }
-                                                    `)}
-
-                                                </div>
-                                                ${MostrarCampos(0,variables.formaspago,1,idTabVenta)}
-                                               
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12"> 
+                                                ${variables.formaspago.map(e=>yo`
+                                                    ${e.Cod_FormaPago=="008"? 
+                                                        yo`<div class="form-group">
+                                                                <label>Moneda</label> 
+                                                                <select id='Cod_Moneda_Forma_Pago_${idTabVenta}' class="form-control" onchange=${()=>CambioMonedaVentas(idTabVenta)}>
+                                                                    ${variables.monedas.map(m=>
+                                                                        yo`<option value=${m.Cod_Moneda}>${m.Nom_Moneda}</option>`
+                                                                    )}
+                                                                </select>
+                                                            </div>`
+                                                        :yo``
+                                                    }
+                                                `)}
+                                             
                                         </div>
                                     </div>
+
+                                    ${MostrarCampos(0,variables.formaspago,1,idTabVenta)}
+                                                
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="box box-default">
-                                        <div class="box-header">
-                                            <h4> Tarjetas </h4>
+                                   
+                                    <div class="row">
+                                         
+                                        <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
+                                            <label> Tarjetas </label>
+                                            ${variables.formaspago.map(e=>yo`
+                                                ${  e.Cod_FormaPago!="005"?
+                                                    e.Cod_FormaPago!="006"?
+                                                    yo``
+                                                    :
+                                                    yo`
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <input  checked="checked" id="Cod_FormaPago_MasterCard_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard(idTabVenta)}/>
+                                                            <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
+                                                        </div>
+                                                    </div>`
+                                                    :
+                                                    yo`
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <input  checked="checked" id="Cod_FormaPago_Visa_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa(idTabVenta)}/>
+                                                            <label class="drinkcard-cc visa" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
+                                                        </div>
+                                                    </div>`
+                                                }
+                                            `)}
+                                                
                                         </div>
-                                        <div class="box-body">
-                                                <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
-                                                    ${variables.formaspago.map(e=>yo`
-                                                        ${  e.Cod_FormaPago!="005"?
-                                                            e.Cod_FormaPago!="006"?
-                                                            yo``
-                                                            :
-                                                            yo`
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <input  checked="checked" id="Cod_FormaPago_MasterCard_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard(idTabVenta)}/>
-                                                                    <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
-                                                                </div>
-                                                            </div>`
-                                                            :
-                                                            yo`
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <input  checked="checked" id="Cod_FormaPago_Visa_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa(idTabVenta)}/>
-                                                                    <label class="drinkcard-cc visa" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
-                                                                </div>
-                                                            </div>`
-                                                        }
-                                                    `)}
-                                                     
-                                                </div>
 
-                                                ${MostrarCampos(0,variables.formaspago,2,idTabVenta)}
-                                                 
-                                        </div>
+                                        ${MostrarCampos(0,variables.formaspago,2,idTabVenta)}
+                                            
+
                                     </div>
                                 </div>
                             </div>
@@ -290,9 +263,10 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
     TraerSimboloSOLES(variables.monedas,'PEN',idTabVenta)
-    CambioMonedaFormaPagoSoles(idTabVenta)
-    CambioMonedaFormaPagoDolares(idTabVenta)
-    CambioMonedaFormaPagoEuros(idTabVenta)
+    //CambioMonedaFormaPagoSoles(idTabVenta)
+    //CambioMonedaFormaPagoDolares(idTabVenta)
+    //CambioMonedaFormaPagoEuros(idTabVenta)
+    CambioMonedaVentas(idTabVenta)
     CambioMonedaFormaPagoMasterCard(idTabVenta)
     CambioMonedaFormaPagoVisa(idTabVenta)
 
@@ -548,7 +522,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
             if(arreglo[indice].Cod_FormaPago=='008'){
                 return yo`
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label>Tipo Cambio</label>
                                 <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
@@ -766,7 +740,8 @@ function RecalcularDescuentosTotales(idTab){
 }
 
 function CalcularVuelto(idTab){
-    if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    //if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
         $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
         $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
@@ -775,7 +750,8 @@ function CalcularVuelto(idTab){
 
     if(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val())>0){
         $("#lbVuelto_"+idTab).text("VUELTO:")
-        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+        //if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
             $("#Vuelto_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
         }else{
            
@@ -791,7 +767,8 @@ function CalcularVuelto(idTab){
         }
     }else{
         $("#lbVuelto_"+idTab).text("FALTA:")
-        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+        //if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
             $("#Vuelto_"+idTab).val(parseFloat($("#TotalRecibidos_"+idTab).val())-parseFloat($("#TotalCobrar_"+idTab).val()))
         }else{
             $("#Vuelto_"+idTab).val('0.00')
@@ -813,7 +790,8 @@ function KeyCalcularVuelto(event,idTab){
 function CalcularVueltoEspecial(idTab){
     
     if(parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#TotalCobrar_"+idTab).val()) > 0 ){
-        if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        //if($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
             $("#TotalRecibidos_"+idTab).val(parseFloat($("#TotalCobrar_"+idTab).val())+parseFloat($("#Vuelto_"+idTab)))
             CalcularVuelto(idTab)
         }else{
@@ -848,7 +826,8 @@ function CalcularTotal(idTab){
     changeArrayJsonVentas(global.variablesVentas,idTab,[_total,null,null,null,null,null,null,null])
     //Total = _total
     $("#btnTotal_"+idTab).html('<i class="fa fa-money text-green"></i> TOTAL: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total).toFixed(2))
-    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros') {
+    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+    //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros') {
         if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
             $("#btnConversion_"+idTab).css("display","block")
             $("#btnConversion_"+idTab).html('<i class="fa fa-refresh text-green"></i> EN EUROS: '+getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMonedaExtra+' '+(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio)).toFixed(2))
@@ -985,7 +964,8 @@ function CambioMonedaFormaPagoEuros(idTab){
                                 }
                             }
 
-                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
+                            if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+                            //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'euros'){
                                 $("#lbTotalCobrar_"+idTab).attr("data-value","EUR")
                                 $("#lbTotalRecibidos_"+idTab).attr("data-value","EUR")
                                 $("#lbVuelto_"+idTab).attr("data-value","EUR")
@@ -1000,7 +980,8 @@ function CambioMonedaFormaPagoEuros(idTab){
                             CalcularTotal(idTab)
                             CalcularTotalDescuentos(idTab)
 
-                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+                            //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+                            if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
                                 $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
                             }else{
                                 $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
@@ -1065,7 +1046,8 @@ function CambioMonedaFormaPagoDolares(idTab){
                                 }
                             }
 
-                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares'){
+                            //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'dolares'){
+                            if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD'){
                                 $("#lbTotalCobrar_"+idTab).attr("data-value","USD")
                                 $("#lbTotalRecibidos_"+idTab).attr("data-value","USD")
                                 $("#lbVuelto_"+idTab).attr("data-value","USD")
@@ -1080,7 +1062,8 @@ function CambioMonedaFormaPagoDolares(idTab){
                             CalcularTotal(idTab)
                             CalcularTotalDescuentos(idTab)
 
-                            if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+                            if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+                            //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
                                 $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
                             }else{
                                 $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
@@ -1096,8 +1079,25 @@ function CambioMonedaFormaPagoDolares(idTab){
  
 }
 
+
+function CambioMonedaVentas(idTab){
+    switch($('#Cod_Moneda_Forma_Pago_'+idTab).val()){
+        case 'PEN':
+            CambioMonedaFormaPagoSoles(idTab)
+            break
+        case 'USD':
+            CambioMonedaFormaPagoDolares(idTab)
+            break
+        case 'EUR':
+            CambioMonedaFormaPagoEuros(idTab)
+            break
+    }
+ 
+}
+
 function CambioMonedaFormaPagoSoles(idTab){
-    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
         $("#lbTotalCobrar_"+idTab).attr("data-value","PEN")
         $("#lbTotalRecibidos_"+idTab).attr("data-value","PEN")
         $("#lbVuelto_"+idTab).attr("data-value","PEN")
@@ -1108,7 +1108,8 @@ function CambioMonedaFormaPagoSoles(idTab){
         $("#lbVuelto_"+idTab).val(parseFloat($("#lbVuelto_"+idTab).val()).toFixed(2))
     }
 
-    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+    //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
         $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
         $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
@@ -1191,7 +1192,8 @@ function CambioTipoCambioVenta(idTab){
     changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()),null,null,null,null,null])
     CalcularTotal(idTab)
     CalcularTotalDescuentos(idTab)
-    if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+    //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
         $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
     }else{
         $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
@@ -1533,7 +1535,8 @@ function VentaSimple(){
             if(rows>0){
                 // verificar cierre z ???
                 if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)<=700){
-                    if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
+                    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+                    //if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                         if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
                             VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
                         }else{ 
@@ -1547,7 +1550,8 @@ function VentaSimple(){
                         LimpiarVariablesGlobales()
                         ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
                     }else{
-                        if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
+                        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+                        //if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                             if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
                                 VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
                             }else{ 

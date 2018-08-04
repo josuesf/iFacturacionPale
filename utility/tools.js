@@ -1,5 +1,4 @@
-
-import { URL } from '../src/constantes_entorno/constantes'  
+//import { URL } from '../src/constantes_entorno/constantes'  
 var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
 
 
@@ -412,7 +411,7 @@ function EnviarImpresion(   COD_LIBRO,
             })
         }
 
-        fetch(URL + '/generar_documento', parametros)
+        fetch('/generar_documento', parametros)
             .then(req => req.json())
             .then(res => { 
                 console.log(res)

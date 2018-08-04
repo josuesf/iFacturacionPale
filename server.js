@@ -609,7 +609,7 @@ app.post('/generar_documento', function(req, res) {
     }).then(function (resp) {
   
         var fs = require('fs')
-        fs.writeFileSync('public/media/documento.pdf', resp.content)
+        fs.writeFileSync('public/media/documento1.pdf', resp.content)
         return res.json({respuesta:'ok'})
       //o.result.pipe(res);
     }).catch(function (e) {
