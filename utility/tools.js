@@ -1,5 +1,5 @@
 
-import {URL} from '../src/constantes_entorno/constantes'
+import { URL } from '../src/constantes_entorno/constantes'  
 var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
 
 
@@ -367,6 +367,8 @@ function EnviarImpresion(   COD_LIBRO,
                             GRATUITAS,
                             INAFECTAS,
                             DESCUENTO,
+                            DES_IMPUESTO,
+                            IMPUESTO,
                             IGV,
                             TOTAL,
                             DETALLES   ){
@@ -402,6 +404,8 @@ function EnviarImpresion(   COD_LIBRO,
                 GRATUITAS,
                 INAFECTAS,
                 DESCUENTO,
+                DES_IMPUESTO,
+                IMPUESTO,
                 IGV,
                 TOTAL,
                 DETALLES:DETALLES

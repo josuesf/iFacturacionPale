@@ -3,8 +3,7 @@ var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal } from '../../modales/series'
-import { BuscarCuentasPendientes } from '../../modales/cuentas'
-import { ConvertirCadena } from '../../../../utility/tools'
+import { BuscarCuentasPendientes } from '../../modales/cuentas' 
 
 var listaFormaPago = []
 var obs_xml = null

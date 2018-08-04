@@ -567,8 +567,8 @@ app.post('/generar_documento', function(req, res) {
         recipe: "chrome-pdf",
         engine: 'handlebars',
         chrome: { 
-          width: TIPO!='TK'?'8.27in':'2.00in',
-          height: TIPO!='TK'?'11.7in':'5.5in'
+          width: (COD_TIPOCOMPROBANTE!='FE' && COD_TIPOCOMPROBANTE!='BE')?'8.27in':'2.00in',
+          height:(COD_TIPOCOMPROBANTE!='FE' && COD_TIPOCOMPROBANTE!='BE')?'11.7in':'5.5in'
         }
       },
       data:{

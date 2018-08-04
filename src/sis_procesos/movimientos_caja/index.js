@@ -1,7 +1,7 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
 import {URL} from '../../constantes_entorno/constantes'
-import { EnviarImpresion } from '../../../utility/tools' 
+import { EnviarImpresion, ConvertirCadena } from '../../../utility/tools' 
 
 
 function Ver(Flag_Cerrado,movimientos,saldos) {
@@ -793,7 +793,7 @@ function ExtornarAnular(movimiento,flag) {
                                     .then(res => {
                                         $("#modal-justificacion").modal("hide")
                                         if(res.respuesta=='ok'){
-                                            PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                            PrepararImpresion(id_ComprobantePago,function(flag){
                                                 if(flag)
                                                     toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 refrescar_movimientos_caja()
@@ -823,7 +823,7 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                                PrepararImpresion(id_ComprobantePago,function(flag){
                                                     if(flag)
                                                         toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     refrescar_movimientos_caja()
@@ -852,7 +852,7 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresion(id_ComprobantePago,MotivoAnulacion,function(flag){
+                                                PrepararImpresion(id_ComprobantePago,function(flag){
                                                     if(flag)
                                                         toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     refrescar_movimientos_caja()
@@ -1062,10 +1062,21 @@ function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback)
     }else{
         callback(arrayNuevo)
     }
-
 }
 
-function PrepararImpresion(id_ComprobantePago,MotivoAnulacion,callback){
+function FormatearDataObservaciones(obs_string,indiceObs,obs_xml,callback){
+    var xml = obs_xml!=null?obs_xml:'' 
+    var xmlDoc = parser.parseFromString(xml, "text/xml");
+    if (xmlDoc.getElementsByTagName('REGISTRO').length > 0 && indiceObs<xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes.length > 0) {
+        obs_string = obs_string + ' '+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeName + ':'+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue
+        FormatearDataObservaciones(obs_string,indexedDB+1,obs_xml,callback)
+       // return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
+    } else {
+        callback(obs_string)
+    }
+}
+
+function PrepararImpresion(id_ComprobantePago,callback){
     const parametrosC = {
         method: 'POST',
         headers: {
@@ -1098,9 +1109,39 @@ function PrepararImpresion(id_ComprobantePago,MotivoAnulacion,callback){
                         if(res.respuesta=='ok'){
                             callback(true)
                             var dataDetallesComprobante = res.data.detalles_comprobante_pago
+                            var dataEmpresa = res.empresa[0]
                             var arrayNuevo = []
-                            FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arryJson){
-                                EnviarImpresion(dataComprobante.Cod_Libro,
+                            var obs_string = ''
+                            FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
+                                FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
+                                    EnviarImpresion(dataComprobante.Cod_Libro,
+                                        'TK',
+                                        RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
+                                        dataComprobante.Serie,
+                                        dataComprobante.Numero,
+                                        true,
+                                        dataComprobante.MotivoAnulacion,
+                                        dataComprobante.Nom_Cliente,
+                                        dataComprobante.Cod_TipoDoc,
+                                        dataComprobante.Doc_Cliente,
+                                        dataComprobante.Direccion_Cliente,
+                                        dataComprobante.FechaEmision,
+                                        dataComprobante.FechaVencimiento,
+                                        dataComprobante.Cod_FormaPago,
+                                        dataComprobante.Glosa,
+                                        data_string,
+                                        dataComprobante.Cod_Moneda,
+                                        ConvertirCadena(parseFloat(dataComprobante.Total),dataComprobante.Cod_Moneda=="PEN" ? "S/" : "$"),
+                                        (parseFloat(dataComprobante.Total) - parseFloat(dataComprobante.Impuesto)).toFixed(2),'0','0','0','0',
+                                        dataEmpresa.Des_Impuesto,
+                                        dataEmpresa.Por_Impuesto,
+                                        parseFloat(dataComprobante.Impuesto).toFixed(2),
+                                        parseFloat(dataComprobante.Total).toFixed(2),
+                                        arrayJson)
+
+                                })
+                                
+                                /*EnviarImpresion(dataComprobante.Cod_Libro,
                                                 dataComprobante.Cod_TipoComprobante,
                                                 RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
                                                 dataComprobante.Serie,
@@ -1114,7 +1155,7 @@ function PrepararImpresion(id_ComprobantePago,MotivoAnulacion,callback){
                                                 dataComprobante.FechaEmision,
                                                 dataComprobante.FechaVencimiento,
                                                 dataComprobante.Cod_FormaPago,
-                                                dataComprobante.Glosa, 
+                                                dataComprobante.Glosa,*/
 
 
 

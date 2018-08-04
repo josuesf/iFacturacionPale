@@ -19,7 +19,7 @@
         ]
     },
     "modificationDate": {
-        "$$date": 1532708972102
+        "$$date": 1533314261543
     },
     "$entitySet": "templates",
     "name": "TicketFactura"

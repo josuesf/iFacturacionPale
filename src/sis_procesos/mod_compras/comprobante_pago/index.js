@@ -2602,6 +2602,8 @@ function PrepararImpresion( COD_LIBRO,
                             GRATUITAS,
                             INAFECTAS,
                             DESCUENTO,
+                            DES_IMPUESTO,
+                            IMPUESTO,
                             IGV,
                             TOTAL   ){
  
@@ -2632,6 +2634,8 @@ function PrepararImpresion( COD_LIBRO,
                             GRATUITAS,
                             INAFECTAS,
                             DESCUENTO,
+                            DES_IMPUESTO,
+                            IMPUESTO,
                             IGV,
                             TOTAL,
                             JSON.stringify(arrayJSON))
@@ -2829,6 +2833,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                             $("#Gratuitas").val(),
                                                             0,
                                                             Descuento_Total,
+                                                            variables.empresa.Des_Impuesto,
+                                                            variables.empresa.Por_Impuesto,
                                                             Impuesto,
                                                             Total
                                                             )
@@ -2875,6 +2881,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                             $("#Gratuitas").val(),
                                                             0,
                                                             Descuento_Total,
+                                                            variables.empresa.Des_Impuesto,
+                                                            variables.empresa.Por_Impuesto,
                                                             Impuesto,
                                                             Total
                                                             )
@@ -2924,6 +2932,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     $("#Gratuitas").val(),
                                                     0,
                                                     Descuento_Total,
+                                                    variables.empresa.Des_Impuesto,
+                                                    variables.empresa.Por_Impuesto,
                                                     Impuesto,
                                                     Total
                                                     )
@@ -3023,6 +3033,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     $("#Gratuitas").val(),
                                                     0,
                                                     Descuento_Total,
+                                                    variables.empresa.Des_Impuesto,
+                                                    variables.empresa.Por_Impuesto,
                                                     Impuesto,
                                                     Total
                                                     )
@@ -3128,6 +3140,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     $("#Gratuitas").val(),
                                                     0,
                                                     Descuento_Total,
+                                                    variables.empresa.Des_Impuesto,
+                                                    variables.empresa.Por_Impuesto,
                                                     Impuesto,
                                                     Total
                                                     )

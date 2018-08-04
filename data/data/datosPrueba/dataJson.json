@@ -27,6 +27,8 @@
    "EXONERADAS":"0.00",
    "GRATUITAS":"0.00",
    "INAFECTAS":"0.00",
+   "DES_IMPUESTO":"IGV",
+   "IMPUESTO":"18",
    "DESCUENTO":"0.00",
    "IGV":"19.45",
    "TOTAL":"127.52",
