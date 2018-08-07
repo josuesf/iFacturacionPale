@@ -716,6 +716,7 @@ function AceptarConfirmacion(flag,movimiento){
 
 function VerFormatoDocumento(movimiento){
     var entidad = movimiento.Entidad
+    var id_Movimiento = movimiento.ID
     switch (entidad){
         case 'CAJ_CAJA_MOVIMIENTOS':
             var descripcion = movimiento.Descripcion
@@ -726,6 +727,11 @@ function VerFormatoDocumento(movimiento){
             }
             break
         case 'CAJ_COMPROBANTE_PAGO':
+            PrepararImpresion(id_Movimiento,function(flag){
+                if(!flag){
+                    toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+                }
+            })
             break
         case 'ALM_ALMACEN_MOV':
             break
@@ -1130,7 +1136,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
                                     EnviarImpresion(dataComprobante.Cod_Libro,
-                                        'TK',
+                                        dataComprobante.Cod_TipoComprobante,
                                         RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
                                         dataComprobante.Serie,
                                         dataComprobante.Numero,

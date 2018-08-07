@@ -1357,35 +1357,37 @@ function BuscarProductoCP(event,tipo,idTab) {
 
 function BuscarClienteDoc(CodLibro,idTab) {
     var Nro_Documento = document.getElementById('Nro_Documento_'+idTab).value
-    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc_'+idTab).value
-    var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
-        })
+    if(Nro_Documento.trim().length>3){
+        var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc_'+idTab).value
+        var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
+            })
+        }
+        
+        fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
+                    global.objClienteVenta = res.data.cliente[0]
+                    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,global.objClienteVenta,null])
+                    if(global.objClienteVenta !='' && global.objClienteVenta){
+                        $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
+                        $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
+                        $("#Direccion_"+idTab).val(global.objClienteVenta.Direccion)
+                        $("#Nro_Documento_"+idTab).val(global.objClienteVenta.Nro_Documento)
+                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)                   
+                    } 
+                }
+                H5_loading.hide()
+            })
     }
-     
-    fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
-        .then(req => req.json())
-        .then(res => { 
-            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                global.objClienteVenta = res.data.cliente[0]
-                changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,global.objClienteVenta,null])
-                if(global.objClienteVenta !='' && global.objClienteVenta){
-                    $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
-                    $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
-                    $("#Direccion_"+idTab).val(global.objClienteVenta.Direccion)
-                    $("#Nro_Documento_"+idTab).val(global.objClienteVenta.Nro_Documento)
-                    $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)                   
-                } 
-            }
-            H5_loading.hide()
-        })
 }
 
 function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
@@ -1535,7 +1537,7 @@ function VentaSimple(){
             if(rows>0){
                 // verificar cierre z ???
                 if(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)<=700){
-                    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+                    if($('#Cod_Moneda_Forma_Pago_'+IdTabSeleccionado).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+IdTabSeleccionado).val() == 'EUR'){
                     //if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                         if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
                             VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
@@ -1550,7 +1552,7 @@ function VentaSimple(){
                         LimpiarVariablesGlobales()
                         ComprobantePago('14',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles)
                     }else{
-                        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'EUR'){
+                        if($('#Cod_Moneda_Forma_Pago_'+IdTabSeleccionado).val() == 'USD' || $('#Cod_Moneda_Forma_Pago_'+IdTabSeleccionado).val() == 'EUR'){
                         //if($('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'dolares' || $('input[name=Cod_Moneda_Forma_Pago_'+IdTabSeleccionado+']:checked').val() == 'euros'){
                             if(parseFloat($("#TotalRecibidos_"+IdTabSeleccionado).val())>0){
                                 VentaSimpleConME(IdTabSeleccionado, _CodTipoComprobante)
