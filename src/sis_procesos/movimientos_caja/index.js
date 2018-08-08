@@ -1,6 +1,6 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
-import {URL_REPORT} from '../../constantes_entorno/constantes'
+import {URL,URL_REPORT} from '../../constantes_entorno/constantes'
 import { EnviarImpresion, ConvertirCadena } from '../../../utility/tools' 
 
 
@@ -8,29 +8,6 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
     var el = yo`
         <div>
             <section class="content-header" id="sectionModals">
-                 
-                <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                                <h4 class="modal-title">¿Esta seguro que desea eliminar este cliente/proveedor?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>Al eliminar el cliente no podra recuperarlo. Desea continuar de todas maneras?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
-                            </div>
-                        </div>
-                        <!-- /.modal-content -->
-                    </div>
-                    <!-- /.modal-dialog -->
-                </div>
- 
  
                 <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
@@ -183,56 +160,105 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
 
 }
 
-function generarPDF(){ 
-    jsreport.serverUrl = URL_REPORT; 
-    var request = {
-        template: {
-          name:  'TicketFactura',
-          recipe: "chrome-pdf",
-          engine: 'handlebars',
-          chrome: { 
-            width:  '2.00in',
-            height: '5.5in'
-          }
-        },
-        data:{
-          "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-          "FLAG":false,
-          "NOMBRE":"NOMBRE",
-          "DIRECCION":"DIRECCION",
-          "RUC":"RUC",
-          "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
-          "DOCUMENTO": "DOCUMENTO",
-          "SERIE": "SERIE",
-          "NUMERO": "NUMERO",
-          "FLAG_ANULADO": "FLAG_ANULADO",
-          "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
-          "CLIENTE": "CLIENTE",
-          "COD_DOCCLIENTE":"COD_DOCCLIENTE",
-          "RUC_CLIENTE": "RUC_CLIENTE",
-          "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
-          "FECHA_EMISION": "FECHA_EMISION",
-          "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
-          "FORMA_PAGO": "FORMA_PAGO",
-          "GLOSA": "GLOSA",
-          "OBSERVACIONES": "OBSERVACIONES",
-          "CAJERO": "USUARIO",
-          "MONEDA": "MONEDA",
-          "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
-          "GRAVADAS": "GRAVADAS",
-          "EXONERADAS": "EXONERADAS",
-          "GRATUITAS": "GRATUITAS",
-          "INAFECTAS": "INAFECTAS",
-          "DESCUENTO": "DESCUENTO",
-          "IGV": "IGV",
-          "TOTAL": "TOTAL",
-          "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-          "VERSION_SISTEMA":"F|9.1.4"
-        }
-      };
-    
 
-    jsreport.render('_blank', request)
+function CargarPDFModal(titulo,subtitulo,callback){
+    var el = yo`
+    
+        <div class="modal-dialog" style="height: 80%;">
+            <div class="modal-content modal-lg" style="height: 100%;">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">${titulo}</h4>
+                    <h4 class="modal-title">${subtitulo}</h4>
+                </div>
+                <div class="modal-body text-center" id="divPDF" style="height: 78%;">
+                    <i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>
+                    <label>Cargando vista previa....</label>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-toolbar pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>`
+
+
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+
+    $("#modal-alerta").off('shown.bs.modal').on("shown.bs.modal", function () {
+        callback(true)
+    });
+
+}
+
+
+function generarPDF(){ 
+     
+    CargarPDFModal("FACTURA","SERIE-NUMERO",function(flag){
+        if(flag){
+            jsreport.serverUrl = URL_REPORT; 
+            var request = {
+                template: {
+                name:  'TicketFactura',
+                recipe: "chrome-pdf",
+                engine: 'handlebars',
+                chrome: { 
+                    width:  '2.00in',
+                    height: '5.5in'
+                }
+                },
+                data:{
+                "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+                "FLAG":false,
+                "NOMBRE":"NOMBRE",
+                "DIRECCION":"DIRECCION",
+                "RUC":"RUC",
+                "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
+                "DOCUMENTO": "DOCUMENTO",
+                "SERIE": "SERIE",
+                "NUMERO": "NUMERO",
+                "FLAG_ANULADO": "FLAG_ANULADO",
+                "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
+                "CLIENTE": "CLIENTE",
+                "COD_DOCCLIENTE":"COD_DOCCLIENTE",
+                "RUC_CLIENTE": "RUC_CLIENTE",
+                "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
+                "FECHA_EMISION": "FECHA_EMISION",
+                "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
+                "FORMA_PAGO": "FORMA_PAGO",
+                "GLOSA": "GLOSA",
+                "OBSERVACIONES": "OBSERVACIONES",
+                "CAJERO": "USUARIO",
+                "MONEDA": "MONEDA",
+                "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
+                "GRAVADAS": "GRAVADAS",
+                "EXONERADAS": "EXONERADAS",
+                "GRATUITAS": "GRATUITAS",
+                "INAFECTAS": "INAFECTAS",
+                "DESCUENTO": "DESCUENTO",
+                "IGV": "IGV",
+                "TOTAL": "TOTAL",
+                "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+                "VERSION_SISTEMA":"F|9.1.4"
+                }
+            };
+            
+            jsreport.renderAsync(request).then(function(res) {
+                jsreport.render(document.getElementById('divPDF'), request);
+                
+            });
+        }
+    })
+   
+    
 }
 
 function VerModalJustificacion(titulo,descripcion,movimiento,flag) {
@@ -278,29 +304,6 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     var sectionModals = yo`
                 <div>
                     
-                    <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                    <h4 class="modal-title">¿Esta seguro que desea eliminar este cliente/proveedor?</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Al eliminar el cliente no podra recuperarlo. Desea continuar de todas maneras?</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                                    <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
- 
-
                     <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
                     </div>
