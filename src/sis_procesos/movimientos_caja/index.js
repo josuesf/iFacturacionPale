@@ -1,6 +1,6 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
-import {URL} from '../../constantes_entorno/constantes'
+import {URL_REPORT} from '../../constantes_entorno/constantes'
 import { EnviarImpresion, ConvertirCadena } from '../../../utility/tools' 
 
 
@@ -64,7 +64,9 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                     
                                     <div class="box box-primary">
                                         <div class="box-header">
-                                            <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}</h3>
+                                        <input type="button" title="test" onclick=${()=>generarPDF()} value="Get PDF Report"/>
+                                            <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}>  
+                                             </h3>
                                         </div>
                                         <!-- /.box-header -->
                                         <div class="box-body">
@@ -177,8 +179,60 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
             "sSearch": "Buscar:"
         }
     });
- 
+     
 
+}
+
+function generarPDF(){ 
+    jsreport.serverUrl = URL_REPORT; 
+    var request = {
+        template: {
+          name:  'TicketFactura',
+          recipe: "chrome-pdf",
+          engine: 'handlebars',
+          chrome: { 
+            width:  '2.00in',
+            height: '5.5in'
+          }
+        },
+        data:{
+          "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+          "FLAG":false,
+          "NOMBRE":"NOMBRE",
+          "DIRECCION":"DIRECCION",
+          "RUC":"RUC",
+          "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
+          "DOCUMENTO": "DOCUMENTO",
+          "SERIE": "SERIE",
+          "NUMERO": "NUMERO",
+          "FLAG_ANULADO": "FLAG_ANULADO",
+          "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
+          "CLIENTE": "CLIENTE",
+          "COD_DOCCLIENTE":"COD_DOCCLIENTE",
+          "RUC_CLIENTE": "RUC_CLIENTE",
+          "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
+          "FECHA_EMISION": "FECHA_EMISION",
+          "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
+          "FORMA_PAGO": "FORMA_PAGO",
+          "GLOSA": "GLOSA",
+          "OBSERVACIONES": "OBSERVACIONES",
+          "CAJERO": "USUARIO",
+          "MONEDA": "MONEDA",
+          "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
+          "GRAVADAS": "GRAVADAS",
+          "EXONERADAS": "EXONERADAS",
+          "GRATUITAS": "GRATUITAS",
+          "INAFECTAS": "INAFECTAS",
+          "DESCUENTO": "DESCUENTO",
+          "IGV": "IGV",
+          "TOTAL": "TOTAL",
+          "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+          "VERSION_SISTEMA":"F|9.1.4"
+        }
+      };
+    
+
+    jsreport.render('_blank', request)
 }
 
 function VerModalJustificacion(titulo,descripcion,movimiento,flag) {

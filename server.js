@@ -524,8 +524,71 @@ var fs = require('fs')
 var reportingApp = express(),
     jsreportInstance;
 
-app.post('/generar_documento', function(req, res) {
-  var input = req.body
+app.post('/api/report', function(req, res) {
+
+  console.log(req.body)
+
+  var request = {
+    template: {
+      name:  'TicketFactura',
+      recipe: "chrome-pdf",
+      engine: 'handlebars',
+      chrome: { 
+        width:  '2.00in',
+        height: '5.5in'
+      }
+    },
+    data:{
+      "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+      "FLAG":false,
+      "NOMBRE":"NOMBRE",
+      "DIRECCION":"DIRECCION",
+      "RUC":"RUC",
+      "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
+      "DOCUMENTO": "DOCUMENTO",
+      "SERIE": "SERIE",
+      "NUMERO": "NUMERO",
+      "FLAG_ANULADO": "FLAG_ANULADO",
+      "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
+      "CLIENTE": "CLIENTE",
+      "COD_DOCCLIENTE":"COD_DOCCLIENTE",
+      "RUC_CLIENTE": "RUC_CLIENTE",
+      "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
+      "FECHA_EMISION": "FECHA_EMISION",
+      "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
+      "FORMA_PAGO": "FORMA_PAGO",
+      "GLOSA": "GLOSA",
+      "OBSERVACIONES": "OBSERVACIONES",
+      "CAJERO": "USUARIO",
+      "MONEDA": "MONEDA",
+      "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
+      "GRAVADAS": "GRAVADAS",
+      "EXONERADAS": "EXONERADAS",
+      "GRATUITAS": "GRATUITAS",
+      "INAFECTAS": "INAFECTAS",
+      "DESCUENTO": "DESCUENTO",
+      "IGV": "IGV",
+      "TOTAL": "TOTAL",
+      "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+      "VERSION_SISTEMA":"F|9.1.4"
+    }
+  };
+  console.log(jsreport)
+  
+  jsreport.render(request).then(function (o) {
+  
+        //var fs = require('fs')
+        //fs.writeFileSync('public/media/documento1.pdf', resp.content)
+        //return res.json({respuesta:'ok'})
+       o.result.pipe(res);
+    }).catch(function (e) {
+     
+      console.error(e)
+      return res.json({respuesta:'error'})
+    })
+ 
+
+  /*var input = req.body
   var COD_LIBRO = input.COD_LIBRO 
   var NOMBRE = app.locals.empresa[0].RazonSocial
   var DIRECCION = app.locals.empresa[0].Direccion
@@ -555,8 +618,8 @@ app.post('/generar_documento', function(req, res) {
   var DESCUENTO = input.DESCUENTO
   var IGV = input.IGV
   var TOTAL = input.TOTAL
-  if(COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'){
-    jsreport.render({
+  if(COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'){*/
+    /*jsreport.render({
       extensions: {
         assets: {
           publicAccessEnabled: true
@@ -605,18 +668,18 @@ app.post('/generar_documento', function(req, res) {
         "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
         "VERSION_SISTEMA":"F|9.1.4",
         "DETALLES": JSON.parse(input.DETALLES)
-    }
-    }).then(function (resp) {
+      }*/
+    /*}).then(function (resp) {
   
-        var fs = require('fs')
-        fs.writeFileSync('public/media/documento1.pdf', resp.content)
-        return res.json({respuesta:'ok'})
-      //o.result.pipe(res);
+        //var fs = require('fs')
+        //fs.writeFileSync('public/media/documento1.pdf', resp.content)
+        //return res.json({respuesta:'ok'})
+        o.result.pipe(res);
     }).catch(function (e) {
       return res.json({respuesta:'error'})
       //console.error(e)
-    })
-  }
+    })*/
+  //}
  
 });
   

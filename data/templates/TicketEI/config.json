@@ -1,0 +1,17 @@
+{
+    "shortid": "rJQiZSPBm",
+    "name": "TicketEI",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1533657990480
+    },
+    "_id": "5AxdX1pGX04l4ET8",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rkt2fBPrQ"
+    }
+}

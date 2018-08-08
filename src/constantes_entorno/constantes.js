@@ -1,4 +1,4 @@
 const ENV_WEB = true
 var URL=ENV_WEB?'':'http://localhost:3000'
-
-export {ENV_WEB,URL}
+var URL_REPORT = 'http://localhost:3000'
+export {ENV_WEB,URL,URL_REPORT}
