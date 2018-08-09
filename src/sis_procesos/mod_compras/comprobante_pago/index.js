@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
-import { ConvertirCadena,BloquearControles, EnviarImpresion } from '../../../../utility/tools' 
+import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','']
@@ -2590,7 +2590,7 @@ function PrepararImpresion( COD_LIBRO,
         ConvertTabletoJson(function(arrayJSON){
 
 
-            EnviarImpresion(COD_LIBRO, 
+            /*EnviarImpresion(COD_LIBRO, 
                             COD_TIPOCOMPROBANTE,
                             DOCUMENTO,
                             SERIE,
@@ -2617,7 +2617,7 @@ function PrepararImpresion( COD_LIBRO,
                             IMPUESTO,
                             IGV,
                             TOTAL,
-                            JSON.stringify(arrayJSON))
+                            JSON.stringify(arrayJSON))*/
  
         })
     

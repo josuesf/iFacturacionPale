@@ -1,7 +1,7 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
-import {URL,URL_REPORT} from '../../constantes_entorno/constantes'
-import { EnviarImpresion, ConvertirCadena } from '../../../utility/tools' 
+import {URL,URL_REPORT,NOMBRES_DOC} from '../../constantes_entorno/constantes'
+import { ConvertirCadena } from '../../../utility/tools' 
 
 
 function Ver(Flag_Cerrado,movimientos,saldos) {
@@ -41,7 +41,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                     
                                     <div class="box box-primary">
                                         <div class="box-header">
-                                        <input type="button" title="test" onclick=${()=>generarPDF()} value="Get PDF Report"/>
+                                        <input type="button" title="test" onclick=${()=>GenerarPDF()} value="Get PDF Report"/>
                                             <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}>  
                                              </h3>
                                         </div>
@@ -173,7 +173,7 @@ function CargarPDFModal(titulo,subtitulo,callback){
                     <h4 class="modal-title">${titulo}</h4>
                     <h4 class="modal-title">${subtitulo}</h4>
                 </div>
-                <div class="modal-body text-center" id="divPDF" style="height: 78%;">
+                <div class="modal-body text-center" id="divPDF" style="height: 80%;">
                     <i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>
                     <label>Cargando vista previa....</label>
                 </div>
@@ -200,60 +200,62 @@ function CargarPDFModal(titulo,subtitulo,callback){
 }
 
 
-function generarPDF(){ 
-     
+function GenerarPDF(arrayData){ 
     CargarPDFModal("FACTURA","SERIE-NUMERO",function(flag){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
             var request = {
                 template: {
-                name:  'TicketFactura',
-                recipe: "chrome-pdf",
-                engine: 'handlebars',
-                chrome: { 
-                    width:  '2.00in',
-                    height: '5.5in'
-                }
+                    name:  arrayData.nombreTemplate,
+                    recipe: "chrome-pdf",
+                    engine: 'handlebars',
+                    chrome: { 
+                        width:  arrayData.ancho,
+                        height: arrayData.alto
+                    }
                 },
                 data:{
-                "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-                "FLAG":false,
-                "NOMBRE":"NOMBRE",
-                "DIRECCION":"DIRECCION",
-                "RUC":"RUC",
-                "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
-                "DOCUMENTO": "DOCUMENTO",
-                "SERIE": "SERIE",
-                "NUMERO": "NUMERO",
-                "FLAG_ANULADO": "FLAG_ANULADO",
-                "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
-                "CLIENTE": "CLIENTE",
-                "COD_DOCCLIENTE":"COD_DOCCLIENTE",
-                "RUC_CLIENTE": "RUC_CLIENTE",
-                "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
-                "FECHA_EMISION": "FECHA_EMISION",
-                "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
-                "FORMA_PAGO": "FORMA_PAGO",
-                "GLOSA": "GLOSA",
-                "OBSERVACIONES": "OBSERVACIONES",
-                "CAJERO": "USUARIO",
-                "MONEDA": "MONEDA",
-                "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
-                "GRAVADAS": "GRAVADAS",
-                "EXONERADAS": "EXONERADAS",
-                "GRATUITAS": "GRATUITAS",
-                "INAFECTAS": "INAFECTAS",
-                "DESCUENTO": "DESCUENTO",
-                "IGV": "IGV",
-                "TOTAL": "TOTAL",
-                "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-                "VERSION_SISTEMA":"F|9.1.4"
+                    "URL_LOGO":"https://www.sparksuite.com/images/logo.png333333",
+                    "FLAG":false,
+                    "NOMBRE":"NOMBRE",
+                    "DIRECCION":"DIRECCION",
+                    "RUC":"RUC",
+                    "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
+                    "DOCUMENTO": "DOCUMENTO",
+                    "SERIE": "SERIE",
+                    "NUMERO": "NUMERO",
+                    "FLAG_ANULADO": "FLAG_ANULADO",
+                    "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
+                    "CLIENTE": "CLIENTE",
+                    "COD_DOCCLIENTE":"COD_DOCCLIENTE",
+                    "RUC_CLIENTE": "RUC_CLIENTE",
+                    "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
+                    "FECHA_EMISION": "FECHA_EMISION",
+                    "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
+                    "FORMA_PAGO": "FORMA_PAGO",
+                    "GLOSA": "GLOSA",
+                    "OBSERVACIONES": "OBSERVACIONES",
+                    "CAJERO": "USUARIO",
+                    "MONEDA": "MONEDA",
+                    "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
+                    "GRAVADAS": "GRAVADAS",
+                    "EXONERADAS": "EXONERADAS",
+                    "GRATUITAS": "GRATUITAS",
+                    "INAFECTAS": "INAFECTAS",
+                    "DESCUENTO": "DESCUENTO",
+                    "IGV": "IGV",
+                    "TOTAL": "TOTAL",
+                    "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+                    "VERSION_SISTEMA":"F|9.1.4"
                 }
             };
             
             jsreport.renderAsync(request).then(function(res) {
                 jsreport.render(document.getElementById('divPDF'), request);
                 
+            }).catch(function (e) { 
+                toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
+                $('#modal-alerta').modal('hide')
             });
         }
     })
@@ -1192,30 +1194,18 @@ function PrepararImpresion(id_ComprobantePago,callback){
                             var obs_string = ''
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
-                                    EnviarImpresion(dataComprobante.Cod_Libro,
-                                        dataComprobante.Cod_TipoComprobante,
-                                        RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
-                                        dataComprobante.Serie,
-                                        dataComprobante.Numero,
-                                        true,
-                                        dataComprobante.MotivoAnulacion,
-                                        dataComprobante.Nom_Cliente,
-                                        dataComprobante.Cod_TipoDoc,
-                                        dataComprobante.Doc_Cliente,
-                                        dataComprobante.Direccion_Cliente,
-                                        dataComprobante.FechaEmision,
-                                        dataComprobante.FechaVencimiento,
-                                        dataComprobante.Cod_FormaPago,
-                                        dataComprobante.Glosa,
-                                        data_string,
-                                        dataComprobante.Cod_Moneda,
-                                        ConvertirCadena(parseFloat(dataComprobante.Total),dataComprobante.Cod_Moneda=="PEN" ? "S/" : "$"),
-                                        (parseFloat(dataComprobante.Total) - parseFloat(dataComprobante.Impuesto)).toFixed(2),'0','0','0','0',
-                                        dataEmpresa.Des_Impuesto,
-                                        dataEmpresa.Por_Impuesto,
-                                        parseFloat(dataComprobante.Impuesto).toFixed(2),
-                                        parseFloat(dataComprobante.Total).toFixed(2),
-                                        arrayJson)
+                                    var dataArray = {}
+                                    if(dataComprobante.Cod_Libro=='14'){
+                                        if( dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB'){
+                                            dataArray['nombreTemplate']=NOMBRES_DOC[0].TKF
+                                        }else{
+                                            if(dataComprobante.Cod_TipoComprobante=='FE' ||  dataComprobante.Cod_TipoComprobante=='BE')
+                                                dataArray['nombreTemplate']=NOMBRES_DOC[0].FE
+                                        }
+                                        dataArray['ancho']=NOMBRES_DOC[0].ancho
+                                        dataArray['alto']=NOMBRES_DOC[0].alto
+                                        GenerarPDF(dataArray)
+                                    }
 
                                 })
                                 
