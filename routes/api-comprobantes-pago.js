@@ -318,7 +318,7 @@ router.post('/guardar_comprobante_pago', function (req, res) {
         if (dataComprobante.err){
             return res.json({respuesta:"error",detalle_error:dataComprobante.err})  
         }else{
-            return res.json({respuesta:"ok",data:dataComprobante.result[0].valor})
+            return res.json({respuesta:"ok",data:dataComprobante.result})
         }
     })
 })

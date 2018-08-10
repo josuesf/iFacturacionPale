@@ -8,6 +8,7 @@ import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 
 var cantidad_tabs = 1
 var IdTabSeleccionado = null
+var arrayValidacion = [null,'null','']
 
 //var Total = 0
 //var TotalDescuentos = 0
@@ -176,7 +177,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                         <div class="form-group">
                                             <label>Almacen</label>
                                             <select class="form-control" id="Cod_Almacen_${idTabVenta}">
-                                                <option value=''>Seleccione un almacen</option>
+                                                <option value="">Seleccione un almacen</option>
                                                 ${variables.almacenes.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Almacen}">${e.Des_Almacen}</option>`)}
                                             </select>
                                         </div>
@@ -560,7 +561,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
 }
 
 function CrearBotonesProductos(c,idTab,callback){
-    if($("#Cod_Almacen_"+idTab).val()!=''){
+    if(!arrayValidacion.includes($("#Cod_Almacen_"+idTab).val())){
         const parametros = {
             method: 'POST',
             headers: {
@@ -1203,7 +1204,7 @@ function CambioTipoCambioVenta(idTab){
 
 
 function AgregarProducto(producto,favoritos,idTab){ 
-    if($("#Cod_Almacen_"+idTab).val()!=''){
+    if(!arrayValidacion.includes($("#Cod_Almacen_"+idTab).val())){
         const parametros = {
             method: 'POST',
             headers: {

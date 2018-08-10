@@ -1,6 +1,7 @@
 var yo = require('yo-yo')
 var empty = require('empty-element');
-import {URL,URL_REPORT,NOMBRES_DOC} from '../../constantes_entorno/constantes'
+import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
+import { CargarPDFModal } from '../modales/pdf'
 import { ConvertirCadena } from '../../../utility/tools' 
 
 
@@ -40,8 +41,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                 <div class="tab-pane active" id="tab_1">
                                     
                                     <div class="box box-primary">
-                                        <div class="box-header">
-                                        <input type="button" title="test" onclick=${()=>GenerarPDF()} value="Get PDF Report"/>
+                                        <div class="box-header"> 
                                             <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}>  
                                              </h3>
                                         </div>
@@ -156,52 +156,12 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
             "sSearch": "Buscar:"
         }
     });
-     
-
-}
-
-
-function CargarPDFModal(titulo,subtitulo,callback){
-    var el = yo`
     
-        <div class="modal-dialog" style="height: 80%;">
-            <div class="modal-content modal-lg" style="height: 100%;">
-                <div class="modal-header text-center">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title">${titulo}</h4>
-                    <h4 class="modal-title">${subtitulo}</h4>
-                </div>
-                <div class="modal-body text-center" id="divPDF" style="height: 80%;">
-                    <i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>
-                    <label>Cargando vista previa....</label>
-                </div>
-                <div class="modal-footer">
-                    <div class="btn-toolbar pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button> 
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>`
-
-
-    var modal_proceso = document.getElementById('modal-alerta');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-alerta').modal()
-
-    $("#modal-alerta").off('shown.bs.modal').on("shown.bs.modal", function () {
-        callback(true)
-    });
-
 }
 
 
-function GenerarPDF(arrayData){ 
-    CargarPDFModal("FACTURA","SERIE-NUMERO",function(flag){
+function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){ 
+    CargarPDFModal(titulo,subtitulo,subtitulo_extra,function(flag){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
             var request = {
@@ -214,40 +174,7 @@ function GenerarPDF(arrayData){
                         height: arrayData.alto
                     }
                 },
-                data:{
-                    "URL_LOGO":"https://www.sparksuite.com/images/logo.png333333",
-                    "FLAG":false,
-                    "NOMBRE":"NOMBRE",
-                    "DIRECCION":"DIRECCION",
-                    "RUC":"RUC",
-                    "COD_TIPOCOMPROBANTE": "COD_TIPOCOMPROBANTE",
-                    "DOCUMENTO": "DOCUMENTO",
-                    "SERIE": "SERIE",
-                    "NUMERO": "NUMERO",
-                    "FLAG_ANULADO": "FLAG_ANULADO",
-                    "MOTIVO_ANULACION" : "MOTIVO_ANULACION",
-                    "CLIENTE": "CLIENTE",
-                    "COD_DOCCLIENTE":"COD_DOCCLIENTE",
-                    "RUC_CLIENTE": "RUC_CLIENTE",
-                    "DIRECCION_CLIENTE": "DIRECCION_CLIENTE",
-                    "FECHA_EMISION": "FECHA_EMISION",
-                    "FECHA_VENCIMIENTO": "FECHA_VENCIMIENTO",
-                    "FORMA_PAGO": "FORMA_PAGO",
-                    "GLOSA": "GLOSA",
-                    "OBSERVACIONES": "OBSERVACIONES",
-                    "CAJERO": "USUARIO",
-                    "MONEDA": "MONEDA",
-                    "ESCRITURA_MONTO": "SON: "+"ESCRITURA_MONTO",
-                    "GRAVADAS": "GRAVADAS",
-                    "EXONERADAS": "EXONERADAS",
-                    "GRATUITAS": "GRATUITAS",
-                    "INAFECTAS": "INAFECTAS",
-                    "DESCUENTO": "DESCUENTO",
-                    "IGV": "IGV",
-                    "TOTAL": "TOTAL",
-                    "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-                    "VERSION_SISTEMA":"F|9.1.4"
-                }
+                data:arrayData.cuerpo
             };
             
             jsreport.renderAsync(request).then(function(res) {
@@ -1183,7 +1110,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                         id_ComprobantePago:id_ComprobantePago
                     })
                 }
-                fetch(URL+'/comprobantes_pago_api/get_comprobante_pago', parametrosDC)
+                fetch(URL+'/comprobantes_pago_api/get_detalle_by_comprobante_pago', parametrosDC)
                     .then(req => req.json())
                     .then(res => {
                         if(res.respuesta=='ok'){
@@ -1194,17 +1121,44 @@ function PrepararImpresion(id_ComprobantePago,callback){
                             var obs_string = ''
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
-                                    var dataArray = {}
                                     if(dataComprobante.Cod_Libro=='14'){
-                                        if( dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB'){
-                                            dataArray['nombreTemplate']=NOMBRES_DOC[0].TKF
-                                        }else{
-                                            if(dataComprobante.Cod_TipoComprobante=='FE' ||  dataComprobante.Cod_TipoComprobante=='BE')
-                                                dataArray['nombreTemplate']=NOMBRES_DOC[0].FE
+                                        var arrayData = {
+                                            nombreTemplate:(dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].TKF:dataArray['nombreTemplate']=NOMBRES_DOC[1].FE,
+                                            ancho: (dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].ancho:NOMBRES_DOC[1].ancho,
+                                            alto: (dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].alto:NOMBRES_DOC[1].alto,
+                                            cuerpo:{
+                                                COD_TIPOCOMPROBANTE:dataComprobante.Cod_TipoComprobante,
+                                                DOCUMENTO:RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
+                                                SERIE:dataComprobante.Serie,
+                                                NUMERO:dataComprobante.Numero,
+                                                FLAG_ANULADO:dataComprobante.Flag_Anulado,
+                                                MOTIVO_ANULACION:dataComprobante.MotivoAnulacion,
+                                                CLIENTE:dataComprobante.Nom_Cliente,
+                                                COD_DOCCLIENTE:dataComprobante.Cod_TipoDoc,
+                                                RUC_CLIENTE:dataComprobante.Doc_Cliente,
+                                                DIRECCION_CLIENTE:dataComprobante.Direccion_Cliente,
+                                                FECHA_EMISION:dataComprobante.FechaEmision,
+                                                FECHA_VENCIMIENTO:dataComprobante.FechaVencimiento,
+                                                FORMA_PAGO:dataComprobante.Cod_FormaPago,
+                                                GLOSA:dataComprobante.Glosa,
+                                                OBSERVACIONES:data_string,
+                                                MONEDA_ABREV:dataComprobante.Cod_Moneda=="PEN" ? "S/" :dataComprobante.Cod_Moneda=="USD"? "$":"€",
+                                                MONEDA:dataComprobante.Cod_Moneda=="PEN" ? "SOLES" :dataComprobante.Cod_Moneda=="USD"? "DOLARES":"EUROS",
+                                                ESCRITURA_MONTO:"SON: "+ConvertirCadena(parseFloat(dataComprobante.Total),dataComprobante.Cod_Moneda=="PEN" ? "S/" :dataComprobante.Cod_Moneda=="USD"? "$":"€"),
+                                                GRAVADAS:(parseFloat(dataComprobante.Total) - parseFloat(dataComprobante.Impuesto)).toFixed(2),
+                                                EXONERADAS:'0',
+                                                GRATUITAS:'0',
+                                                INAFECTAS:'0',
+                                                DESCUENTO:'0',
+                                                DES_IMPUESTO:dataEmpresa.Des_Impuesto,
+                                                IMPUESTO:dataEmpresa.Por_Impuesto,
+                                                IGV:parseFloat(dataComprobante.Impuesto).toFixed(2),
+                                                TOTAL:parseFloat(dataComprobante.Total).toFixed(2),
+                                                DETALLES:arrayJson
+                                            }
                                         }
-                                        dataArray['ancho']=NOMBRES_DOC[0].ancho
-                                        dataArray['alto']=NOMBRES_DOC[0].alto
-                                        GenerarPDF(dataArray)
+                                        
+                                        GenerarPDF(arrayData.detalle.DOCUMENTO.toString().toUpperCase(),arrayData.detalle.SERIE+"-"+arrayData.detalle.NUMERO,"TOTAL: "+arrayData.detalle.MONEDA_ABREV+" "+arrayData.detalle.TOTAL,arrayData)
                                     }
 
                                 })

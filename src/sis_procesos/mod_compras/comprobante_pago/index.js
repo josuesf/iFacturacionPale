@@ -1,8 +1,9 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');  
-import { URL } from '../../../constantes_entorno/constantes'
+import { URL, URL_REPORT,NOMBRES_DOC } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
+import { CargarPDFModal } from '../../modales/pdf'
 import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 
 var listaFormaPago = []
@@ -14,9 +15,11 @@ var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
+var pCodTipoComprobanteUltimo = ''
  
 
 function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
+
     CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
     obs_xml = null
@@ -27,6 +30,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     global.arraySeries = ''
     contador = 0
     contadorPercepcion = 0
+    pCodTipoComprobanteUltimo = ''
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -124,13 +128,14 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         <div class="form-group">
                                             <select id="Cod_TipoComprobante" class="form-control selectPalerp" onchange=${()=>CargarSeries(CodLibro)}>
                                                 ${variables.tipocomprobantes.map(e=>
-                                                    (CodLibro=='08' && e.Flag_Compras==1)? 
-                                                        yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`
-                                                        :
-                                                        (CodLibro=='14' && e.Flag_Ventas==1)?
-                                                            yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`
-                                                            : 
-                                                            yo``)}
+                                                    (CodLibro=='08' && e.Flag_Compras==true)? 
+                                                    AgregarTipoComprobante(e)
+                                                    :
+                                                    (CodLibro=='14' && e.Flag_Ventas==true)?
+                                                        AgregarTipoComprobante(e)
+                                                        : 
+                                                        yo``
+                                                    )}
                                             </select>
                                         </div>
                                     </div>
@@ -148,7 +153,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-6" id="divNumero">
                                         <div class="form-group">
-                                            <input type=${CodLibro=='08'?"number":"text"} class="form-control input-sm required" id="Numero" onblur=${()=>CambioNumero()} onkeypress=${()=>CambioNumero_(event,CodLibro)}>
+                                            <input type=${CodLibro=='08'?"number":"text"} class="form-control input-sm required" id="Numero" onblur=${()=>CambioNumero()}>
                                         </div>
                                     </div>
                                 </div> 
@@ -1397,8 +1402,16 @@ function KeyEnterImporte(event,CodLibro,variables){
     if( event.which == 13 ){
         AgregarFilaTabla(CodLibro,variables)  
     }
+}
 
-
+function AgregarTipoComprobante(e){
+     
+    if(e.Cod_TipoComprobante!=pCodTipoComprobanteUltimo){
+        pCodTipoComprobanteUltimo= e.Cod_TipoComprobante
+        return  yo`<option style="text-transform:uppercase" value="${e.Cod_TipoComprobante}">${e.Nom_TipoComprobante}</option>`
+    }else{
+        return  yo``
+    }
 }
 
 function AbrirModalFormasPago(variables,fecha_actual){
@@ -1591,7 +1604,7 @@ function CalcularTotal(CodLibro,variables){
     }
  
 
-    $("#laSON").text(ConvertirCadena(parseFloat($("#Gran_Total").val()),$("#Cod_Moneda option:selected").text()))
+    $("#laSON").text("SON: "+ConvertirCadena(parseFloat($("#Gran_Total").val()),$("#Cod_Moneda option:selected").text()))
     return true
 }
 
@@ -2048,19 +2061,23 @@ function GenerarComprobante(CodLibro,variables){
 
 
 
-function RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComprobante){
-    if(indiceVariables < variables.length){
-        if(variables[indiceVariables].Serie.toString() == Serie && variables[indiceVariables].Cod_TipoComprobante.toString()==Cod_TipoComprobante){
-            if(Cod_TipoComprobante=='TKB' || Cod_TipoComprobante=='TKF'){
-                return variables[indiceVariables].Nro_SerieTicketera.toString()
+function RecuperarNroTicketera(CodLibro,indiceVariables,variables,Serie,Cod_TipoComprobante,callback){
+    if(CodLibro=="14"){
+        if(indiceVariables < variables.length){
+            if(variables[indiceVariables].Serie.toString() == Serie && variables[indiceVariables].Cod_TipoComprobante.toString()==Cod_TipoComprobante){
+                if(Cod_TipoComprobante=='TKB' || Cod_TipoComprobante=='TKF'){
+                    callback(variables[indiceVariables].Nro_SerieTicketera.toString())
+                }else{
+                    RecuperarNroTicketera(CodLibro,indiceVariables+1,variables,Serie,Cod_TipoComprobante,callback)
+                }
             }else{
-                RecuperarNroTicketera(indiceVariables+1,variables,Serie,Cod_TipoComprobante)
-            }
+                RecuperarNroTicketera(CodLibro,indiceVariables+1,variables,Serie,Cod_TipoComprobante,callback)
+            }  
         }else{
-            RecuperarNroTicketera(indiceVariables+1,variables,Serie,Cod_TipoComprobante)
-        }  
+            callback("")
+        }
     }else{
-        return ""
+        callback("")
     }
 }
 
@@ -2558,66 +2575,36 @@ function ConvertTabletoJson(callback){
     callback(myRows)
 }
 
-function PrepararImpresion( COD_LIBRO, 
-                            COD_TIPOCOMPROBANTE,
-                            DOCUMENTO,
-                            SERIE,
-                            NUMERO,
-                            FLAG_ANULADO,
-                            MOTIVO_ANULACION,
-                            CLIENTE,
-                            COD_DOCCLIENTE,
-                            RUC_CLIENTE,
-                            DIRECCION_CLIENTE,
-                            FECHA_EMISION,
-                            FECHA_VENCIMIENTO,
-                            FORMA_PAGO,
-                            GLOSA,
-                            OBSERVACIONES,
-                            MONEDA,
-                            ESCRITURA_MONTO,
-                            GRAVADAS,
-                            EXONERADAS,
-                            GRATUITAS,
-                            INAFECTAS,
-                            DESCUENTO,
-                            DES_IMPUESTO,
-                            IMPUESTO,
-                            IGV,
-                            TOTAL   ){
- 
+function PrepararImpresion(arrayData){
      
         ConvertTabletoJson(function(arrayJSON){
 
-
-            /*EnviarImpresion(COD_LIBRO, 
-                            COD_TIPOCOMPROBANTE,
-                            DOCUMENTO,
-                            SERIE,
-                            NUMERO,
-                            FLAG_ANULADO,
-                            MOTIVO_ANULACION,
-                            CLIENTE,
-                            COD_DOCCLIENTE,
-                            RUC_CLIENTE,
-                            DIRECCION_CLIENTE,
-                            FECHA_EMISION,
-                            FECHA_VENCIMIENTO,
-                            FORMA_PAGO,
-                            GLOSA,
-                            OBSERVACIONES,
-                            MONEDA,
-                            ESCRITURA_MONTO,
-                            GRAVADAS,
-                            EXONERADAS,
-                            GRATUITAS,
-                            INAFECTAS,
-                            DESCUENTO,
-                            DES_IMPUESTO,
-                            IMPUESTO,
-                            IGV,
-                            TOTAL,
-                            JSON.stringify(arrayJSON))*/
+            arrayData.cuerpo.DETALLES = arrayJSON 
+            CargarPDFModal(arrayData.cuerpo.DOCUMENTO,arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,function(flag){
+                if(flag){
+                    jsreport.serverUrl = URL_REPORT; 
+                    var request = {
+                        template: {
+                            name:  arrayData.nombreTemplate,
+                            recipe: "chrome-pdf",
+                            engine: 'handlebars',
+                            chrome: { 
+                                width:  arrayData.ancho,
+                                height: arrayData.alto
+                            }
+                        },
+                        data:arrayData.cuerpo
+                    };
+                    
+                    jsreport.renderAsync(request).then(function(res) {
+                        jsreport.render(document.getElementById('divPDF'), request);
+                        
+                    }).catch(function (e) { 
+                        toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
+                        $('#modal-alerta').modal('hide')
+                    });
+                }
+            }) 
  
         })
     
@@ -2686,13 +2673,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
         }
         GuiaRemision = $("#Guia").val() 
     }
-    
     var id_ComprobanteRef = 0
-    if(CodLibro=="14"){
-        Nro_Ticketera= RecuperarNroTicketera(indiceVariables,variables,Serie,Cod_TipoComprobante)
-    }else{
-        Nro_Ticketera = ''
-    }
     var Cod_RegimenPercepcion = ''
     var Tasa_Percepcion = 0
     var Placa_Vehiculo = $("#placaVehiculo").val().trim()
@@ -2706,454 +2687,382 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
     var Otros_Tributos = 0 
     var Obs_Comprobante = obs_xml
     var Cod_Plantilla = null 
-    
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            Cod_Libro:CodLibro,
-            Cod_TipoOperacion,
-            Cod_TipoComprobante,
-            Serie,
-            Numero,
-            Id_Cliente,
-            Cod_TipoDoc,
-            Doc_Cliente,
-            Nom_Cliente,
-            Direccion_Cliente,
-            FechaEmision,
-            FechaVencimiento,
-            FechaCancelacion,
-            Glosa,
-            TipoCambio,
-            Flag_Anulado,
-            Flag_Despachado,
-            Cod_FormaPago,
-            Descuento_Total,
-            Cod_Moneda,
-            Impuesto,   
-            Total,
-            Obs_Comprobante,
-            Id_GuiaRemision,
-            GuiaRemision,
-            id_ComprobanteRef,
-            Cod_Plantilla,
-            Nro_Ticketera,
-            Cod_RegimenPercepcion,
-            Tasa_Percepcion,
-            Placa_Vehiculo,
-            Cod_TipoDocReferencia,
-            Nro_DocReferencia,
-            Valor_Resumen,
-            Valor_Firma,
-            Cod_EstadoComprobante,
-            Motivo_Anulacion,
-            Otros_Cargos,
-            Otros_Tributos
-        })
-    }
+
+    RecuperarNroTicketera(CodLibro,0,variables,Serie,Cod_TipoComprobante,function(Nro_Ticketera){
+        
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Cod_Libro:CodLibro,
+                Cod_TipoOperacion,
+                Cod_TipoComprobante,
+                Serie,
+                Numero,
+                Id_Cliente,
+                Cod_TipoDoc,
+                Doc_Cliente,
+                Nom_Cliente,
+                Direccion_Cliente,
+                FechaEmision,
+                FechaVencimiento,
+                FechaCancelacion,
+                Glosa,
+                TipoCambio,
+                Flag_Anulado,
+                Flag_Despachado,
+                Cod_FormaPago,
+                Descuento_Total,
+                Cod_Moneda,
+                Impuesto,   
+                Total,
+                Obs_Comprobante,
+                Id_GuiaRemision,
+                GuiaRemision,
+                id_ComprobanteRef,
+                Cod_Plantilla,
+                Nro_Ticketera,
+                Cod_RegimenPercepcion,
+                Tasa_Percepcion,
+                Placa_Vehiculo,
+                Cod_TipoDocReferencia,
+                Nro_DocReferencia,
+                Valor_Resumen,
+                Valor_Firma,
+                Cod_EstadoComprobante,
+                Motivo_Anulacion,
+                Otros_Cargos,
+                Otros_Tributos
+            })
+        }
+
+        //---- json pdf
+        var dataArray = {
+            nombreTemplate:(Cod_TipoComprobante=='TKF' || Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].TKF:NOMBRES_DOC[1].FE,
+            ancho: (Cod_TipoComprobante=='TKF' || Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].ancho:NOMBRES_DOC[1].ancho,
+            alto: (Cod_TipoComprobante=='TKF' || Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].alto:NOMBRES_DOC[1].alto,
+            cuerpo:{
+
+                COD_TIPOCOMPROBANTE:Cod_TipoComprobante,
+                DOCUMENTO:$("#Cod_TipoComprobante option:selected").text(),
+                SERIE:Serie,
+                NUMERO:Numero,
+                FLAG_ANULADO:false,
+                MOTIVO_ANULACION:'',
+                CLIENTE:Nom_Cliente,
+                COD_DOCCLIENTE:Cod_TipoDoc,
+                RUC_CLIENTE:Doc_Cliente,
+                DIRECCION_CLIENTE:Direccion_Cliente,
+                FECHA_EMISION:FechaEmision,
+                FECHA_VENCIMIENTO:FechaVencimiento,
+                FORMA_PAGO:'',
+                GLOSA:Glosa,
+                OBSERVACIONES:Obs_Comprobante,
+                MONEDA_ABREV:Cod_Moneda=="PEN" ? "S/" :Cod_Moneda=="USD"? "$":"€",
+                MONEDA:Cod_Moneda=="PEN" ? "SOLES" :Cod_Moneda=="USD"? "DOLARES":"EUROS",
+                ESCRITURA_MONTO:$("#laSON").text(),
+                GRAVADAS:$("#subtotal").val(),
+                EXONERADAS: $("#Exoneradas").val(),
+                GRATUITAS:$("#Gratuitas").val(),
+                INAFECTAS:'0',
+                DESCUENTO:Descuento_Total,
+                DES_IMPUESTO:variables.empresa.Des_Impuesto,
+                IMPUESTO:variables.empresa.Por_Impuesto,
+                IGV:Impuesto,
+                TOTAL:Total,
+                DETALLES:{}
+            }
+        }
+        //-----------------
+
  
-    fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
-        .then(req => req.json())
-        .then(res => { 
-            if (res.respuesta == 'ok') {
-                var idComprobante = res.data
-                EmisionCompletaDetalles(0,CodLibro,variables,res.data,function(flag){
-                   if(flag){
+        fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                console.log(res)
+                if (res.respuesta == 'ok') {
+                    var idComprobante = res.data[0].valor
+                    var Numero = res.data[1].valor
+                    dataArray.cuerpo.NUMERO = Numero
 
-                        if(listaFormaPago.length==0){
-                            if ($('input[name=optCredito]:checked').val() == 'contado') {
-                                var id_ComprobantePago = idComprobante
-                                var Item = 1
-                                var Monto = $("#Gran_Total").val()
-                                var Cod_Moneda = $("#Cod_Moneda").val()
-                                var TipoCambio = $("#Tipo_Cambio").val()
-                                var Des_FormaPago = $("#Cod_FormaPago option:selected").text()
-                                var Cod_TipoFormaPago = $("#Cod_FormaPago").val()
-                                var Cuenta_CajaBanco = ''
-                                var Id_Movimiento = null
-                                var Fecha = $("#Fecha").val()
-                                
-                                if($("#Cod_FormaPago").val()=="998"){
-                                    Id_Movimiento = parseInt($("#Cuenta_CajaBancos").val())
+                    EmisionCompletaDetalles(0,CodLibro,variables,res.data[0].valor,function(flag){
+                    if(flag){
+
+                            if(listaFormaPago.length==0){
+                                if ($('input[name=optCredito]:checked').val() == 'contado') {
+                                    var id_ComprobantePago = idComprobante
+                                    var Item = 1
+                                    var Monto = $("#Gran_Total").val()
+                                    var Cod_Moneda = $("#Cod_Moneda").val()
+                                    var TipoCambio = $("#Tipo_Cambio").val()
+                                    var Des_FormaPago = $("#Cod_FormaPago option:selected").text()
+                                    var Cod_TipoFormaPago = $("#Cod_FormaPago").val()
+                                    var Cuenta_CajaBanco = ''
+                                    var Id_Movimiento = null
+                                    var Fecha = $("#Fecha").val()
+                                    
+                                    if($("#Cod_FormaPago").val()=="998"){
+                                        Id_Movimiento = parseInt($("#Cuenta_CajaBancos").val())
+                                    }
+
+                                    if($("#Cod_FormaPago").val()=="008"){
+                                        Cuenta_CajaBanco = ''
+                                        GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                            if(flagFP){
+                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                $("#modal-proceso").modal("hide")
+                                                H5_loading.hide()
+    
+                                                if(CodLibro=='14'){
+                                                    dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
+                                                    PrepararImpresion(dataArray)
+                                                }
+
+                                                
+                                            }else{
+                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                $("#modal-alerta").modal("hide")
+                                                H5_loading.hide()
+                                            }
+                                        })
+
+                                    }else{
+                                        if($("#Cod_FormaPago").val()=="011" || $("#Cod_FormaPago").val()=="033"){
+                                            Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
+                                            GuardarOperacionBancaria(function(flag){
+                                                if(flag){ 
+
+                                                    GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                                        if(flagFP){
+                                                            toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                            $("#modal-proceso").modal("hide")
+                                                            H5_loading.hide() 
+
+                                                            if(CodLibro=='14'){
+                                                                dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
+                                                                PrepararImpresion(dataArray)
+                                                            }
+                                                                
+                                                        }else{
+                                                            toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                            $("#modal-alerta").modal("hide")
+                                                            H5_loading.hide()
+                                                        }
+                                                    })
+
+                                                }else{
+                                                    toastr.error('Ocurrio un error al momento de la guardar operacion bancaria.','Error',{timeOut: 5000})
+                                                    $("#modal-alerta").modal("hide")
+                                                    H5_loading.hide()
+                                                }
+                                            })
+                                        }else{
+                                            Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
+                                            GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                                if(flagFP){
+                                                    toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    $("#modal-proceso").modal("hide")
+                                                    H5_loading.hide()
+
+                                                    if(CodLibro=='14'){
+                                                        dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
+                                                        PrepararImpresion(dataArray)
+                                                    } 
+                                                        
+                                                }else{
+                                                    toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                    $("#modal-alerta").modal("hide")
+                                                    H5_loading.hide()
+                                                }
+                                            })
+                                        }
+                                    }
                                 }
+                            }else{
+                                if(listaFormaPago.length==1){
 
-                                if($("#Cod_FormaPago").val()=="008"){
-                                    Cuenta_CajaBanco = ''
-                                    GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
+                                    GuardarFormaPago(idComprobante,listaFormaPago[0].Item,listaFormaPago[0].DesFormaPago,listaFormaPago[0].CodTipoFormaPago,listaFormaPago[0].CuentaCajaBanco,listaFormaPago[0].IdMovimiento,listaFormaPago[0].TipoCambio,listaFormaPago[0].CodMoneda,listaFormaPago[0].Monto,null,null,listaFormaPago[0].Fecha,function(flagFP){
                                         if(flagFP){
-                                            toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                            $("#modal-proceso").modal("hide")
-                                            PrepararImpresion(
-                                                            CodLibro,
-                                                            Cod_TipoComprobante,
-                                                            $("#Cod_TipoComprobante option:selected").text(),
-                                                            Serie,
-                                                            Numero,
-                                                            false,
-                                                            '',
-                                                            Nom_Cliente,
-                                                            Cod_TipoDoc,
-                                                            Doc_Cliente,
-                                                            Direccion_Cliente,
-                                                            FechaEmision,
-                                                            FechaVencimiento,
-                                                            Des_FormaPago,
-                                                            Glosa,
-                                                            Obs_Comprobante,
-                                                            Cod_Moneda,
-                                                            $("#laSON").text(),
-                                                            $("#subtotal").val(),
-                                                            $("#Exoneradas").val(),
-                                                            $("#Gratuitas").val(),
-                                                            0,
-                                                            Descuento_Total,
-                                                            variables.empresa.Des_Impuesto,
-                                                            variables.empresa.Por_Impuesto,
-                                                            Impuesto,
-                                                            Total
-                                                            )
-                                            $("#modal-alerta").modal("hide")
-                                            H5_loading.hide()
+                                            const parametros1 = {
+                                                method: 'POST',
+                                                headers: {
+                                                    Accept: 'application/json',
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                credentials: 'same-origin',
+                                                body: JSON.stringify({
+                                                    Cod_Libro:CodLibro,
+                                                    Cod_TipoOperacion,
+                                                    Cod_TipoComprobante,
+                                                    Serie,
+                                                    Numero,
+                                                    Id_Cliente,
+                                                    Cod_TipoDoc,
+                                                    Doc_Cliente,
+                                                    Nom_Cliente,
+                                                    Direccion_Cliente,
+                                                    FechaEmision,
+                                                    FechaVencimiento,
+                                                    FechaCancelacion,
+                                                    Glosa,
+                                                    TipoCambio,
+                                                    Flag_Anulado,
+                                                    Flag_Despachado,
+                                                    Cod_FormaPago:listaFormaPago[0].CodTipoFormaPago,
+                                                    Descuento_Total,
+                                                    Cod_Moneda,
+                                                    Impuesto,   
+                                                    Total,
+                                                    Obs_Comprobante,
+                                                    Id_GuiaRemision,
+                                                    GuiaRemision,
+                                                    id_ComprobanteRef,
+                                                    Cod_Plantilla,
+                                                    Nro_Ticketera,
+                                                    Cod_RegimenPercepcion,
+                                                    Tasa_Percepcion,
+                                                    Placa_Vehiculo,
+                                                    Cod_TipoDocReferencia,
+                                                    Nro_DocReferencia,
+                                                    Valor_Resumen,
+                                                    Valor_Firma,
+                                                    Cod_EstadoComprobante,
+                                                    Motivo_Anulacion,
+                                                    Otros_Cargos,
+                                                    Otros_Tributos
+                                                })
+                                            }
+                                        
+                                            fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros1)
+                                            .then(req => req.json())
+                                            .then(res => {
+                                                if(res.respuesta=='ok'){
+                                                    toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    $("#modal-proceso").modal("hide")
+                                                    H5_loading.hide()
+
+                                                    if(CodLibro=='14'){
+                                                        dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
+                                                        PrepararImpresion(dataArray)
+                                                    } 
+                                                    
+                                                }else{
+                                                    toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
+                                                    $("#modal-alerta").modal("hide")
+                                                    H5_loading.hide()
+                                                }
+                                            })
+                                        
                                         }else{
                                             toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                             $("#modal-alerta").modal("hide")
                                             H5_loading.hide()
                                         }
                                     })
-
+    
                                 }else{
-                                    if($("#Cod_FormaPago").val()=="011" || $("#Cod_FormaPago").val()=="033"){
-                                        Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
-                                        GuardarOperacionBancaria(function(flag){
-                                            if(flag){ 
 
-                                                GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
-                                                    if(flagFP){
-                                                        toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                        $("#modal-proceso").modal("hide")
-                                                        PrepararImpresion(
-                                                            CodLibro,
-                                                            Cod_TipoComprobante,
-                                                            $("#Cod_TipoComprobante option:selected").text(),
-                                                            Serie,
-                                                            Numero,
-                                                            false,
-                                                            '',
-                                                            Nom_Cliente,
-                                                            Cod_TipoDoc,
-                                                            Doc_Cliente,
-                                                            Direccion_Cliente,
-                                                            FechaEmision,
-                                                            FechaVencimiento,
-                                                            Des_FormaPago,
-                                                            Glosa,
-                                                            Obs_Comprobante,
-                                                            Cod_Moneda,
-                                                            $("#laSON").text(),
-                                                            $("#subtotal").val(),
-                                                            $("#Exoneradas").val(),
-                                                            $("#Gratuitas").val(),
-                                                            0,
-                                                            Descuento_Total,
-                                                            variables.empresa.Des_Impuesto,
-                                                            variables.empresa.Por_Impuesto,
-                                                            Impuesto,
-                                                            Total
-                                                            )
-                                                            $("#modal-alerta").modal("hide")
-                                                            H5_loading.hide()
-                                                    }else{
-                                                        toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
-                                                        $("#modal-alerta").modal("hide")
-                                                        H5_loading.hide()
+                                    const parametros2 = {
+                                        method: 'POST',
+                                        headers: {
+                                            Accept: 'application/json',
+                                            'Content-Type': 'application/json',
+                                        },
+                                        credentials: 'same-origin',
+                                        body: JSON.stringify({
+                                            Cod_Libro:CodLibro,
+                                            Cod_TipoOperacion,
+                                            Cod_TipoComprobante,
+                                            Serie,
+                                            Numero,
+                                            Id_Cliente,
+                                            Cod_TipoDoc,
+                                            Doc_Cliente,
+                                            Nom_Cliente,
+                                            Direccion_Cliente,
+                                            FechaEmision,
+                                            FechaVencimiento,
+                                            FechaCancelacion,
+                                            Glosa,
+                                            TipoCambio,
+                                            Flag_Anulado,
+                                            Flag_Despachado,
+                                            Cod_FormaPago:'999',
+                                            Descuento_Total,
+                                            Cod_Moneda,
+                                            Impuesto,   
+                                            Total,
+                                            Obs_Comprobante,
+                                            Id_GuiaRemision,
+                                            GuiaRemision,
+                                            id_ComprobanteRef,
+                                            Cod_Plantilla,
+                                            Nro_Ticketera,
+                                            Cod_RegimenPercepcion,
+                                            Tasa_Percepcion,
+                                            Placa_Vehiculo,
+                                            Cod_TipoDocReferencia,
+                                            Nro_DocReferencia,
+                                            Valor_Resumen,
+                                            Valor_Firma,
+                                            Cod_EstadoComprobante,
+                                            Motivo_Anulacion,
+                                            Otros_Cargos,
+                                            Otros_Tributos
+                                        })
+                                    }
+                                
+                                    fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros2)
+                                    .then(req => req.json())
+                                    .then(res => {
+                                        if(res.respuesta=='ok'){
+                                            GuardarFormaPagoRecursivo(0,idComprobante,function(flag){
+                                                if(flag){
+                                                    toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    $("#modal-proceso").modal("hide")
+                                                    H5_loading.hide()
+                                                    if(CodLibro=='14'){
+                                                        dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
+                                                        PrepararImpresion(dataArray)
                                                     }
-                                                })
-
-                                            }else{
-                                                toastr.error('Ocurrio un error al momento de la guardar operacion bancaria.','Error',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
-                                                H5_loading.hide()
-                                            }
-                                        })
-                                    }else{
-                                        Cuenta_CajaBanco = $("#Cuenta_CajaBancos option:selected").text()
-                                        GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,null,null,Fecha,function(flagFP){
-                                            if(flagFP){
-                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-proceso").modal("hide")
-                                                
-                                                PrepararImpresion(
-                                                    CodLibro,
-                                                    Cod_TipoComprobante,
-                                                    $("#Cod_TipoComprobante option:selected").text(),
-                                                    Serie,
-                                                    Numero,
-                                                    false,
-                                                    '',
-                                                    Nom_Cliente,
-                                                    Cod_TipoDoc,
-                                                    Doc_Cliente,
-                                                    Direccion_Cliente,
-                                                    FechaEmision,
-                                                    FechaVencimiento,
-                                                    Des_FormaPago,
-                                                    Glosa,
-                                                    Obs_Comprobante,
-                                                    Cod_Moneda,
-                                                    $("#laSON").text(),
-                                                    $("#subtotal").val(),
-                                                    $("#Exoneradas").val(),
-                                                    $("#Gratuitas").val(),
-                                                    0,
-                                                    Descuento_Total,
-                                                    variables.empresa.Des_Impuesto,
-                                                    variables.empresa.Por_Impuesto,
-                                                    Impuesto,
-                                                    Total
-                                                    )
+                                                    
+                                                }else{
+                                                    toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                     $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide()
-                                            }else{
-                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
-                                                H5_loading.hide()
-                                            }
-                                        })
-                                    }
-                                }
-                            }
-                        }else{
-                            if(listaFormaPago.length==1){
-
-                                GuardarFormaPago(idComprobante,listaFormaPago[0].Item,listaFormaPago[0].DesFormaPago,listaFormaPago[0].CodTipoFormaPago,listaFormaPago[0].CuentaCajaBanco,listaFormaPago[0].IdMovimiento,listaFormaPago[0].TipoCambio,listaFormaPago[0].CodMoneda,listaFormaPago[0].Monto,null,null,listaFormaPago[0].Fecha,function(flagFP){
-                                    if(flagFP){
-                                        const parametros1 = {
-                                            method: 'POST',
-                                            headers: {
-                                                Accept: 'application/json',
-                                                'Content-Type': 'application/json',
-                                            },
-                                            credentials: 'same-origin',
-                                            body: JSON.stringify({
-                                                Cod_Libro:CodLibro,
-                                                Cod_TipoOperacion,
-                                                Cod_TipoComprobante,
-                                                Serie,
-                                                Numero,
-                                                Id_Cliente,
-                                                Cod_TipoDoc,
-                                                Doc_Cliente,
-                                                Nom_Cliente,
-                                                Direccion_Cliente,
-                                                FechaEmision,
-                                                FechaVencimiento,
-                                                FechaCancelacion,
-                                                Glosa,
-                                                TipoCambio,
-                                                Flag_Anulado,
-                                                Flag_Despachado,
-                                                Cod_FormaPago:listaFormaPago[0].CodTipoFormaPago,
-                                                Descuento_Total,
-                                                Cod_Moneda,
-                                                Impuesto,   
-                                                Total,
-                                                Obs_Comprobante,
-                                                Id_GuiaRemision,
-                                                GuiaRemision,
-                                                id_ComprobanteRef,
-                                                Cod_Plantilla,
-                                                Nro_Ticketera,
-                                                Cod_RegimenPercepcion,
-                                                Tasa_Percepcion,
-                                                Placa_Vehiculo,
-                                                Cod_TipoDocReferencia,
-                                                Nro_DocReferencia,
-                                                Valor_Resumen,
-                                                Valor_Firma,
-                                                Cod_EstadoComprobante,
-                                                Motivo_Anulacion,
-                                                Otros_Cargos,
-                                                Otros_Tributos
+                                                    H5_loading.hide() 
+                                                }
                                             })
+                                        
+                                        }else{
+                                            toastr.error('Ocurrio un error al momento de guardar la comprobante de pago.','Error',{timeOut: 5000})
+                                            $("#modal-alerta").modal("hide")
+                                            H5_loading.hide()
                                         }
-                                     
-                                        fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros1)
-                                        .then(req => req.json())
-                                        .then(res => {
-                                            if(res.respuesta=='ok'){
-                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-proceso").modal("hide")
-                                                PrepararImpresion(
-                                                    CodLibro,
-                                                    Cod_TipoComprobante,
-                                                    $("#Cod_TipoComprobante option:selected").text(),
-                                                    Serie,
-                                                    Numero,
-                                                    false,
-                                                    '',
-                                                    Nom_Cliente,
-                                                    Cod_TipoDoc,
-                                                    Doc_Cliente,
-                                                    Direccion_Cliente,
-                                                    FechaEmision,
-                                                    FechaVencimiento,
-                                                    Des_FormaPago,
-                                                    Glosa,
-                                                    Obs_Comprobante,
-                                                    Cod_Moneda,
-                                                    $("#laSON").text(),
-                                                    $("#subtotal").val(),
-                                                    $("#Exoneradas").val(),
-                                                    $("#Gratuitas").val(),
-                                                    0,
-                                                    Descuento_Total,
-                                                    variables.empresa.Des_Impuesto,
-                                                    variables.empresa.Por_Impuesto,
-                                                    Impuesto,
-                                                    Total
-                                                    )
-                                                    $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide()
-                                            }else{
-                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
-                                                H5_loading.hide()
-                                            }
-                                        })
-                                       
-                                    }else{
-                                        toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
-                                        $("#modal-alerta").modal("hide")
-                                        H5_loading.hide()
-                                    }
-                                })
- 
-                            }else{
-
-                                const parametros2 = {
-                                    method: 'POST',
-                                    headers: {
-                                        Accept: 'application/json',
-                                        'Content-Type': 'application/json',
-                                    },
-                                    credentials: 'same-origin',
-                                    body: JSON.stringify({
-                                        Cod_Libro:CodLibro,
-                                        Cod_TipoOperacion,
-                                        Cod_TipoComprobante,
-                                        Serie,
-                                        Numero,
-                                        Id_Cliente,
-                                        Cod_TipoDoc,
-                                        Doc_Cliente,
-                                        Nom_Cliente,
-                                        Direccion_Cliente,
-                                        FechaEmision,
-                                        FechaVencimiento,
-                                        FechaCancelacion,
-                                        Glosa,
-                                        TipoCambio,
-                                        Flag_Anulado,
-                                        Flag_Despachado,
-                                        Cod_FormaPago:'999',
-                                        Descuento_Total,
-                                        Cod_Moneda,
-                                        Impuesto,   
-                                        Total,
-                                        Obs_Comprobante,
-                                        Id_GuiaRemision,
-                                        GuiaRemision,
-                                        id_ComprobanteRef,
-                                        Cod_Plantilla,
-                                        Nro_Ticketera,
-                                        Cod_RegimenPercepcion,
-                                        Tasa_Percepcion,
-                                        Placa_Vehiculo,
-                                        Cod_TipoDocReferencia,
-                                        Nro_DocReferencia,
-                                        Valor_Resumen,
-                                        Valor_Firma,
-                                        Cod_EstadoComprobante,
-                                        Motivo_Anulacion,
-                                        Otros_Cargos,
-                                        Otros_Tributos
                                     })
+
                                 }
-                             
-                                fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros2)
-                                .then(req => req.json())
-                                .then(res => {
-                                    if(res.respuesta=='ok'){
-                                        GuardarFormaPagoRecursivo(0,idComprobante,function(flag){
-                                            if(flag){
-                                                toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                $("#modal-proceso").modal("hide")
-                                                $("#modal-alerta").modal("hide")
-                                                H5_loading.hide()
-                                                PrepararImpresion(
-                                                    CodLibro,
-                                                    Cod_TipoComprobante,
-                                                    $("#Cod_TipoComprobante option:selected").text(),
-                                                    Serie,
-                                                    Numero,
-                                                    false,
-                                                    '',
-                                                    Nom_Cliente,
-                                                    Cod_TipoDoc,
-                                                    Doc_Cliente,
-                                                    Direccion_Cliente,
-                                                    FechaEmision,
-                                                    FechaVencimiento,
-                                                    Des_FormaPago,
-                                                    Glosa,
-                                                    Obs_Comprobante,
-                                                    Cod_Moneda,
-                                                    $("#laSON").text(),
-                                                    $("#subtotal").val(),
-                                                    $("#Exoneradas").val(),
-                                                    $("#Gratuitas").val(),
-                                                    0,
-                                                    Descuento_Total,
-                                                    variables.empresa.Des_Impuesto,
-                                                    variables.empresa.Por_Impuesto,
-                                                    Impuesto,
-                                                    Total
-                                                    )
-                                            }else{
-                                                toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
-                                                $("#modal-alerta").modal("hide")
-                                                H5_loading.hide() 
-                                            }
-                                        })
-                                      
-                                    }else{
-                                        toastr.error('Ocurrio un error al momento de guardar la comprobante de pago.','Error',{timeOut: 5000})
-                                        $("#modal-alerta").modal("hide")
-                                        H5_loading.hide()
-                                    }
-                                })
-
                             }
-                        }
-                   }else{
-                        toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
-                        $("#modal-alerta").modal("hide")
-                        H5_loading.hide()
-                   }
-               })
-            }else{
-                toastr.error('Ocurrio un error al momento de guardar el comprobante.','Error',{timeOut: 5000})
-                $("#modal-alerta").modal("hide")
-                H5_loading.hide()
-            } 
-            
-        })
+                    }else{
+                            toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
+                            $("#modal-alerta").modal("hide")
+                            H5_loading.hide()
+                    }
+                })
+                }else{
+                    toastr.error('Ocurrio un error al momento de guardar el comprobante.','Error',{timeOut: 5000})
+                    $("#modal-alerta").modal("hide")
+                    H5_loading.hide()
+                } 
+                
+            })
 
+
+    })
+     
 }
 
 
@@ -3454,6 +3363,7 @@ function CambioNumero(){
         $("#Numero").val(cadenaCeros+$("#Numero").val())
         }
     }else{
+        $("#Numero").val("")
         toastr.error('Ingrese un numero correcto y vuelva a intentarlo','Error',{timeOut: 5000})
     }
 }
@@ -3713,11 +3623,31 @@ function CambioUnidadMedida() {
 
 function CambioComprobantes(){
     if($("#Cod_TipoComprobante").val()=="TKB" || $("#Cod_TipoComprobante").val()=="TKF" || $("#Cod_TipoComprobante").val()=="BE" || $("#Cod_TipoComprobante").val()=="FE"){
-        $("#Numero").prop("disabled",true)
-        $("#Fecha").prop("disabled",true)
+        
+        $("#Numero").bind("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+        $('#Fecha').get(0).type = 'text';
+
+        $("#Fecha").bind("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+         
+        /*document.getElementById("Numero").addEventListener("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });*/
+        //$("#Numero").prop("disabled",true)
+        //$("#Fecha").prop("disabled",true)
     }else{
-        $("#Numero").prop("disabled",false)
-        $("#Fecha").prop("disabled",false)
+        $("#Numero").unbind("keypress");
+        $("#Fecha").unbind("keypress");
+        $('#Fecha').get(0).type = 'date';
+        //$("#Numero").prop("disabled",false)
+        //$("#Fecha").prop("disabled",false)
     }
 }
 

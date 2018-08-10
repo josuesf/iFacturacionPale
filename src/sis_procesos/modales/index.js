@@ -6,6 +6,7 @@ import { LimpiarVariablesGlobales } from '../../../utility/tools'
 var aRequiereStock = true
 var aIdClienteProveedor = 0
 var aCodTipoProducto = null
+var arrayValidacion = [null,'null','']
 
 
 function BuscarProducto(_RequiereStock,text_busqueda) {
@@ -278,14 +279,13 @@ function AgregarTablaProductos(productos){
 }
 
 function LlenarCategorias(categorias){
-    var html = ''
+    var html = '<option value=null>Seleccione una Categoria</option>'
     for(var i=0; i<categorias.length; i++){
         html = html+'<option value="'+categorias[i].Cod_Categoria+'">'+categorias[i].Des_Categoria+'</option>'
     }
      
     $("#Cod_Categoria").html('')
-    $("#Cod_Categoria").html(html) 
-    $("#Cod_Categoria").val(null)
+    $("#Cod_Categoria").html(html)  
 }
 
 
@@ -460,7 +460,7 @@ function BusquedaProducto(){
     if($("#txtBusquedaProducto").val().trim().length>=2){
         var Buscar = $("#txtBusquedaProducto").val().replace(/" "/g ,"%")
         var Cod_Precio = $("#Cod_Precio").val()
-        var Cod_Categoria = $("#Cod_Categoria").val()
+        var Cod_Categoria = arrayValidacion.includes($("#Cod_Categoria").val())?null:$("#Cod_Categoria").val()
 
         const parametros = {
             method: 'POST',

@@ -524,14 +524,23 @@ var fs = require('fs')
 var reportingApp = express(),
     jsreportInstance;
 
-app.post('/api/report', function(req, res) {
+app.post('/api/report', function(req, res) { 
+   
 
-  console.log(req.body)
+  req.body.data['URL_LOGO'] = ''
+  req.body.data['FLAG'] = false
+  req.body.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
+  req.body.data['DIRECCION'] = app.locals.empresa[0].Direccion
+  req.body.data['RUC'] = app.locals.empresa[0].RUC
+  req.body.data['USUARIO'] = req.session.username
+  req.body.data['FLAG_ANULADO'] = req.body.data['FLAG_ANULADO']=='true'?true:false
 
   var request = {
     template: req.body.template,
     data: req.body.data
   }; 
+
+  console.log(request) 
   
   jsreport.render(request).then(function (o) { 
     o.result.pipe(res);
