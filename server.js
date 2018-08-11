@@ -542,7 +542,7 @@ app.post('/api/report', function(req, res) {
 
   console.log(request) 
   
-  jsreport.render(request).then(function (o) { 
+  jsreport.render(request).then(function (o) {  
     o.result.pipe(res);
   }).catch(function (e) { 
     console.error(e)
