@@ -2582,6 +2582,7 @@ function PrepararImpresion(arrayData){
             arrayData.cuerpo.DETALLES = arrayJSON 
             CargarPDFModal(arrayData.cuerpo.DOCUMENTO,arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,function(flag){
                 if(flag){
+
                     jsreport.serverUrl = URL_REPORT; 
                     var request = {
                         template: {
@@ -2600,6 +2601,7 @@ function PrepararImpresion(arrayData){
                         jsreport.render(document.getElementById('divPDF'), request);
                         
                     }).catch(function (e) { 
+                        console.log(e)
                         toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
                         $('#modal-alerta').modal('hide')
                     });
@@ -2820,6 +2822,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(CodLibro=='14'){
                                                     dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                     PrepararImpresion(dataArray)
+                                                }else{
+                                                    $("#modal-alerta").modal("hide")
                                                 }
 
                                                 
@@ -2845,6 +2849,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                             if(CodLibro=='14'){
                                                                 dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                                 PrepararImpresion(dataArray)
+                                                            }else{
+                                                                $("#modal-alerta").modal("hide")
                                                             }
                                                                 
                                                         }else{
@@ -2871,6 +2877,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                         PrepararImpresion(dataArray)
+                                                    }else{
+                                                        $("#modal-alerta").modal("hide")
                                                     } 
                                                         
                                                 }else{
@@ -2948,6 +2956,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                         PrepararImpresion(dataArray)
+                                                    }else{
+                                                        $("#modal-alerta").modal("hide")
                                                     } 
                                                     
                                                 }else{
@@ -3028,6 +3038,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                         PrepararImpresion(dataArray)
+                                                    }else{
+                                                        $("#modal-alerta").modal("hide")
                                                     }
                                                     
                                                 }else{

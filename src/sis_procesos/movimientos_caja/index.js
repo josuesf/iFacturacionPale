@@ -96,9 +96,12 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
                                                     :
                                                     yo`
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Elegir una accion <span class="caret"></span>
                                                         </button>
+                                                        <ul class="dropdown-menu"> 
+                                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
+                                                        </ul>
                                                     </div>
                                                     `}
                                                     </td>

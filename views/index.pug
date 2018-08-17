@@ -19,7 +19,7 @@ html
     link(rel='stylesheet', href='bower_components/Ionicons/css/ionicons.min.css')
     // Theme style
     link(rel='stylesheet', href='dist/css/AdminLTE.min.css')
-    link(href='dist/css/loading.css', rel='stylesheet')
+    link(href='dist/css/waitMe.min.css', rel='stylesheet')
     link(rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css")
     link(rel='stylesheet', href='dist/css/skins/_all-skins.min.css')
     // Morris chart
@@ -27,6 +27,7 @@ html
     // Date Picker
     link(rel='stylesheet', href='bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')
     link(rel='stylesheet', href='/plugins/timepicker/bootstrap-timepicker.min.css')
+    link(rel='stylesheet', href='dist/css/custom.css')
 
     // bootstrap wysihtml5 - text editor
     link(rel='stylesheet', href='plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css')
@@ -36,64 +37,32 @@ html
     link(rel='stylesheet', href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic')
 
     title=title
-  body.hold-transition.sidebar-mini.fixed.skin-red
-    section#H5_loading.H5_loading(style='background-color: rgba(0, 0, 0, 0.2);')
-      .H5_loading_process
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-        div(style='background: rgb(102, 102, 102);')
-
-
+  body.layout-top-nav.fixed.skin-red
     .wrapper
       header.main-header
-        // Logo
-        a.logo(href='/')
-          // mini logo for sidebar mini 50x50 pixels
-          span.logo-mini
-            b P
-            | ale
-          // logo for regular state and mobile devices
-          span.logo-lg
-            b Pal
-            | ERP
-        // Header Navbar: style can be found in header.less
         nav.navbar.navbar-static-top
-          // Sidebar toggle button
-          a.sidebar-toggle(href='#', data-toggle='push-menu', role='button')
-            span.sr-only Toggle navigation
-          .navbar-custom-menu
-            ul.nav.navbar-nav
-              // User Account: style can be found in dropdown.less
-              li.dropdown.user.user-menu
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  img.user-image(src='images/default_profile_image.png', alt='User Image')
-                  span.hidden-xs #{Cod_Usuarios}
-                ul.dropdown-menu
-                  // Menu Footer
-                  li.user-footer
-                    a(href='logout') Cerrar Sesion
-      // Left side column. contains the logo and sidebar                  
-
-      aside.main-sidebar
-        // sidebar: style can be found in sidebar.less
-        section.sidebar
-          // Sidebar user panel
-          .user-panel
-            .pull-left.image
-              img.img-circle(src='images/default_profile_image.png', alt='User Image')
-            .pull-left.info
-              p #{Nick}
-          // sidebar menu: : style can be found in sidebar.less
-          div#nav-container
-        // /.sidebar
+          div.container
+            div.navbar-header
+              a.navbar-brand
+                b Pal
+                | ERP
+              button.navbar-toggle.collapsed(data-toggle='collapse', data-target='#navbar-collapse')
+                i.fa.fa-bars
+            div.collapse.navbar-collapse.pull-left#navbar-collapse
+            div.navbar-custom-menu
+              ul.nav.navbar-nav
+                // User Account: style can be found in dropdown.less
+                li.dropdown.user.user-menu
+                  a.dropdown-toggle(href='#', data-toggle='dropdown')
+                    img.user-image(src='images/default_profile_image.png', alt='User Image')
+                    span.hidden-xs #{Cod_Usuarios}
+                  ul.dropdown-menu
+                    // Menu Footer
+                    li.user-footer
+                      a(href='logout') Cerrar Sesion   
       // Content Wrapper. Contains page content
       .content-wrapper
-        div#main-contenido
+        div.container#main-contenido
           
       // /.content-wrapper
       footer.main-footer
@@ -128,9 +97,9 @@ html
     // AdminLTE App
     script(src='dist/js/adminlte.min.js')
     script(src='dist/js/demo.js')
-    script(src='dist/js/loading.js')
+    script(src='dist/js/waitMe.min.js')
 
     // Custom Validacion
-    script(src='dist/js/customvalidation.js')
+    script(src='dist/js/custom.js')
 
     script(type='application/javascript' src='/app.js')

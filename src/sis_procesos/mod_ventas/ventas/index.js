@@ -1392,7 +1392,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
 }
 
 function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
-
+    console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente)
     H5_loading.show();
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

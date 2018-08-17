@@ -367,7 +367,7 @@ router.post('/venta_simple', function (req, res) {
     var input = req.body
       
     var parametros = [
-        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDoc },
+        { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDocumento},
         { nom_parametro: 'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja }
     ]
 
@@ -679,7 +679,7 @@ function DataDetalles(i,req,res,idComprobante,callback){
 
 function DataCliente(req,res,callback){
     var Id_Cliente = req.body.Cliente == null? -1:req.body.Cliente.Id_Cliente
-    var Cod_TipoDoc = req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDoc//input.Cod_TipoDoc
+    var Cod_TipoDoc = req.body.Cliente == null? '99':req.body.Cliente.Cod_TipoDocumento//input.Cod_TipoDoc
     var Doc_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Doc_Cliente
     var Nom_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Nom_Cliente
     var Direccion_Cliente =  req.body.Cliente == null? '':req.body.Cliente.Direccion_Cliente
@@ -694,7 +694,7 @@ function DataCliente(req,res,callback){
         }else{*/
             var parametrosCliente = [
                 { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
-                { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente.Cod_TipoDoc },
+                { nom_parametro: 'Cod_TipoDocumento', valor_parametro: req.body.Cliente.Cod_TipoDocumento },
                 { nom_parametro: 'Nro_Documento', valor_parametro: req.body.Cliente.Doc_Cliente },
                 { nom_parametro: 'Cliente', valor_parametro: req.body.Cliente.Nom_Cliente },
                 { nom_parametro: 'Ap_Paterno', valor_parametro: '' },

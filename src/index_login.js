@@ -60,6 +60,7 @@ function CrearTurnoSiguiente(){
 }
 
 function TraerPeriodos(){
+    run_waitMe($('#Periodo'), 3, "ios","cargando");
     var Gestion = $("#Gestion").val()
     const parametros = {
         method: 'POST',
@@ -81,6 +82,7 @@ function TraerPeriodos(){
 }
 
 function TraerTurnos(){
+    run_waitMe($('#Turno'), 3, "ios","cargando");
     var Cod_Periodo = $("#Periodo").val()
     const parametros = {
         method: 'POST',
@@ -127,6 +129,7 @@ function LlenarTurnos(turnos,idSelect){
 
 
 function CambioRUC(flag){
+    run_waitMe($('#empresa'), 3, "ios","cargando");
     if(flag=="1"){
         var RUC = $("#empresa").val()
         const parametros = {

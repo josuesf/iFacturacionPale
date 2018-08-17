@@ -24,200 +24,123 @@ function Ver(Flag_Cerrado) {
    
     var el = yo`
         ${!Flag_Cerrado?
-            yo`<ul class="sidebar-menu" data-widget="tree">
+            yo`<ul class="nav navbar-nav">
                 
-
-                <li class="header">Movimientos de caja</li>
-                <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
-                <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEgreso()}><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
-                <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a></li>
-                <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
-                <li class=""><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><i class="fa fa-circle-o"></i> <span>Recepcion de Efectivo</span></a></li>
-                    
-                <li class="header">Ventas</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Documentos de Ventas</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class=""><a href="javascript:void(0);" onclick=${() => NuevaVenta()}><i class="fa fa-cart-plus"></i> <span> Nueva Venta</span></a></li>
-                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaSimple()}><i class="fa fa-shopping-basket"></i> <span> Venta Simple</span></a></li>
-                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaCompleta()}><i class="fa fa-opencart"></i> <span> Venta Completa</span></a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-refresh"></i> Movimientos de caja <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoIngreso()}>Recibo de Ingresos</a></li>
+                        <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEgreso()}> Recibo de Egresos</a></li>
+                        <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}> Compra y Venta de Dolares</a></li>
+                        <li class=""><a  href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}> Envio Efectivo</a></li> 
+                        <li class=""><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}> <span>Recepcion de Efectivo</span></a></li>
                     </ul>
-                </li>  
+                </li>
 
-                <li class="header">Compras</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Documentos de Compras</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-opencart"></i> Ventas<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class=""><a href="javascript:void(0);" onclick=${() => NuevaVenta()}><span> Nueva Venta</span></a></li>
+                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaSimple()}><span> Venta Simple</span></a></li>
+                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaCompleta()}><span> Venta Completa</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-shopping-basket"></i> Compras<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
                         <li>
                             <a href="javascript:void(0);" onclick=${() => ComprobantePago('08')}>
-                                <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
+                                <span>Facturas Recibidas</span>
                             </a>
                         </li>
                     </ul>
-                </li>  
+                </li>
 
-
-                <li class="header">Almacen</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Movimientos</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-industry"></i> Almacen<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
                         <li class=""><a href="javascript:void(0);" onclick=${() => EntradasSalidas('NE')}><i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span></a></li>
                         <li class=""><a href="javascript:void(0);" onclick=${() => EntradasSalidas('NS')}><i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span></a></li>
                     </ul>
-                </li>  
-            
+                </li>
 
-                <li class="header">Administracion</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Cobros</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="javascript:void(0);" onclick=${() => Cuentas('14')}>
-                            <span> Cuentas por Cobrar</span>   
-                            </a>
-                        </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-cogs"></i> Administracion<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);" onclick=${() => Cuentas('14')}><span> Cuentas por Cobrar</span></a></li>
+                        <li><a href="javascript:void(0);" onclick=${() => Cuentas('08')}><span> Cuentas por Pagar</span></a></li>
                     </ul>
-                </li>  
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Pagos</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="javascript:void(0);" onclick=${() => Cuentas('08')}>
-                            <span> Cuentas por Pagar</span>   
-                            </a>
-                        </li>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-laptop"></i> Sistema<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a></li>  
                     </ul>
-                </li>  
-            
-
-                <li class="header">Sistema</li>
-                <li><a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a></li>  
-
+                </li>
+ 
             </ul>`
             :yo`
-            <ul class="sidebar-menu" data-widget="tree">
+            <ul class="nav navbar-nav">
                 
-
-                <li class="header">Movimientos de caja</li>
-                <li class=""><a  href="javascript:void(0)" class="not-active"><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
-                <li class=""><a  href="javascript:void(0)" class="not-active"><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
-                <li class=""><a  href="javascript:void(0)" class="not-active"><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a></li>
-                <li class=""><a  href="javascript:void(0)" class="not-active"><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
-                <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-circle-o"></i> <span>Recepcion de Efectivo</span></a></li>
-                    
-                <li class="header">Ventas</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Documentos de Ventas</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-cart-plus"></i> <span> Nueva Venta</span></a></li>
-                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-shopping-basket"></i> <span> Venta Simple</span></a></li>
-                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-opencart"></i> <span> Venta Completa</span></a></li>
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Movimientos de caja <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Ingresos</a></li>
+                        <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Egresos</a></li>
+                        <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a></li>
+                        <li class=""><a  href="javascript:void(0)"><i class="fa fa-circle-o"></i> Envio Efectivo</a></li> 
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-circle-o"></i> <span>Recepcion de Efectivo</span></a></li>
                     </ul>
-                </li>  
+                </li>
 
-                <li class="header">Compras</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Documentos de Compras</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Ventas<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-cart-plus"></i> <span> Nueva Venta</span></a></li>
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-shopping-basket"></i> <span> Venta Simple</span></a></li>
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-opencart"></i> <span> Venta Completa</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Compras<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="javascript:void(0);" class="not-active">
+                            <a href="javascript:void(0);">
                                 <i class="fa fa-circle-o"></i> <span>Facturas Recibidas</span>
                             </a>
                         </li>
                     </ul>
-                </li>  
+                </li>
 
-
-                <li class="header">Almacen</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Movimientos</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span></a></li>
-                        <li class=""><a href="javascript:void(0);" class="not-active"><i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span></a></li>
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Almacen<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-arrow-circle-down"></i> <span> Registro de Entradas</span></a></li>
+                        <li class=""><a href="javascript:void(0);"><i class="fa fa-arrow-circle-up"></i> <span> Registro de Salidas</span></a></li>
                     </ul>
-                </li>  
-            
+                </li>
 
-                <li class="header">Administracion</li>
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Cobros</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="javascript:void(0);" class="not-active">
-                            <span> Cuentas por Cobrar</span>   
-                            </a>
-                        </li>
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Administracion<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);"><span> Cuentas por Cobrar</span></a></li>
+                        <li><a href="javascript:void(0);"><span> Cuentas por Pagar</span></a></li>
                     </ul>
-                </li>  
-                <li class="treeview">
-                    <a href="javascript:void(0);">
-                        <span>Pagos</span>
-                        <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li>
-                            <a href="javascript:void(0);" class="not-active">
-                            <span> Cuentas por Cobrar</span>   
-                            </a>
-                        </li>
+                </li>
+
+                <li class="dropdown not-active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Administracion<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="javascript:void(0);"><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a></li>  
                     </ul>
-                </li>  
-            
-
-                <li class="header">Sistema</li>
-                <li><a href="javascript:void(0);" class="not-active"><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a></li>  
-
+                </li>
+ 
             </ul>
-            
             `}`;
-    var container = document.getElementById('nav-container')
+    var container = document.getElementById('navbar-collapse')
     empty(container).appendChild(el);
 }
 

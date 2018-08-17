@@ -44,7 +44,6 @@ app.locals.turno = null
 app.locals.sucursal = null
 app.locals.arqueo = null
  
-
 function CargarVariables(req,res){
   p = [
     { nom_parametro: 'Cod_Turno', valor_parametro: req.session.turno }
@@ -518,172 +517,46 @@ var server = app.listen(3000, function (err) {
   if (err) return console.log('Hubo un error'), process.exit(1);
   console.log('Escuchando en el puerto 3000');
 })
-
-var jsreport = require('jsreport')
-var fs = require('fs')
-var reportingApp = express(),
-    jsreportInstance;
-
+ 
+ 
 app.post('/api/report', function(req, res) { 
-   
-
-  req.body.data['URL_LOGO'] = ''
-  req.body.data['FLAG'] = false
-  req.body.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
-  req.body.data['DIRECCION'] = app.locals.empresa[0].Direccion
-  req.body.data['RUC'] = app.locals.empresa[0].RUC
-  req.body.data['USUARIO'] = req.session.username
-  req.body.data['FLAG_ANULADO'] = req.body.data['FLAG_ANULADO']=='true'?true:false
-
-  var request = {
-    template: req.body.template,
-    data: req.body.data
-  }; 
-
-  console.log(request) 
-  
-  jsreport.render(request).then(function (o) {  
-    o.result.pipe(res);
-  }).catch(function (e) { 
-    console.error(e)
-    return res.json({respuesta:'error'})
-  })
  
-
-  /*var input = req.body
-  var COD_LIBRO = input.COD_LIBRO 
-  var NOMBRE = app.locals.empresa[0].RazonSocial
-  var DIRECCION = app.locals.empresa[0].Direccion
-  var RUC = app.locals.empresa[0].RUC
-  var COD_TIPOCOMPROBANTE = input.COD_TIPOCOMPROBANTE
-  var DOCUMENTO = input.DOCUMENTO
-  var SERIE = input.SERIE
-  var NUMERO = input.NUMERO
-  var CLIENTE = input.CLIENTE
-  var COD_DOCCLIENTE = input.COD_DOCCLIENTE
-  var RUC_CLIENTE = input.RUC_CLIENTE
-  var FLAG_ANULADO = input.FLAG_ANULADO
-  var MOTIVO_ANULACION = input.MOTIVO_ANULACION
-  var DIRECCION_CLIENTE = input.DIRECCION_CLIENTE
-  var FECHA_EMISION = input.FECHA_EMISION
-  var FECHA_VENCIMIENTO = input.FECHA_VENCIMIENTO
-  var FORMA_PAGO = input.FORMA_PAGO
-  var GLOSA = input.GLOSA
-  var OBSERVACIONES = input.OBSERVACIONES
-  var USUARIO = req.session.username
-  var MONEDA = input.MONEDA
-  var ESCRITURA_MONTO = input.ESCRITURA_MONTO
-  var GRAVADAS = input.GRAVADAS
-  var EXONERADAS = input.EXONERADAS
-  var GRATUITAS = input.GRATUITAS
-  var INAFECTAS = input.INAFECTAS
-  var DESCUENTO = input.DESCUENTO
-  var IGV = input.IGV
-  var TOTAL = input.TOTAL
-  if(COD_TIPOCOMPROBANTE=='TKF' || COD_TIPOCOMPROBANTE=='TKB' || COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'){*/
-    /*jsreport.render({
-      extensions: {
-        assets: {
-          publicAccessEnabled: true
-        }
-      },
-      template: {
-        name: COD_TIPOCOMPROBANTE=='FE' || COD_TIPOCOMPROBANTE=='BE'?'FacturaComprobante':'TicketFactura',
-        recipe: "chrome-pdf",
-        engine: 'handlebars',
-        chrome: { 
-          width: (COD_TIPOCOMPROBANTE!='FE' && COD_TIPOCOMPROBANTE!='BE')?'8.27in':'2.00in',
-          height:(COD_TIPOCOMPROBANTE!='FE' && COD_TIPOCOMPROBANTE!='BE')?'11.7in':'5.5in'
-        }
-      },
-      data:{
-        "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-        "FLAG":false,
-        "NOMBRE":NOMBRE,
-        "DIRECCION":DIRECCION,
-        "RUC":RUC,
-        "COD_TIPOCOMPROBANTE": COD_TIPOCOMPROBANTE,
-        "DOCUMENTO": DOCUMENTO,
-        "SERIE": SERIE,
-        "NUMERO": NUMERO,
-        "FLAG_ANULADO": FLAG_ANULADO,
-        "MOTIVO_ANULACION" : MOTIVO_ANULACION,
-        "CLIENTE": CLIENTE,
-        "COD_DOCCLIENTE":COD_DOCCLIENTE,
-        "RUC_CLIENTE": RUC_CLIENTE,
-        "DIRECCION_CLIENTE": DIRECCION_CLIENTE,
-        "FECHA_EMISION": FECHA_EMISION,
-        "FECHA_VENCIMIENTO": FECHA_VENCIMIENTO,
-        "FORMA_PAGO": FORMA_PAGO,
-        "GLOSA": GLOSA,
-        "OBSERVACIONES": OBSERVACIONES,
-        "CAJERO": USUARIO,
-        "MONEDA": MONEDA,
-        "ESCRITURA_MONTO": "SON: "+ESCRITURA_MONTO,
-        "GRAVADAS": GRAVADAS,
-        "EXONERADAS": EXONERADAS,
-        "GRATUITAS": GRATUITAS,
-        "INAFECTAS": INAFECTAS,
-        "DESCUENTO": DESCUENTO,
-        "IGV": IGV,
-        "TOTAL": TOTAL,
-        "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-        "VERSION_SISTEMA":"F|9.1.4",
-        "DETALLES": JSON.parse(input.DETALLES)
-      }*/
-    /*}).then(function (resp) {
+    req.body.data['URL_LOGO'] = ''
+    req.body.data['FLAG'] = false
+    req.body.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
+    req.body.data['DIRECCION'] = app.locals.empresa[0].Direccion
+    req.body.data['RUC'] = app.locals.empresa[0].RUC
+    req.body.data['USUARIO'] = req.session.username
+    req.body.data['FLAG_ANULADO'] = req.body.data['FLAG_ANULADO']=='true'?true:false
   
-        //var fs = require('fs')
-        //fs.writeFileSync('public/media/documento1.pdf', resp.content)
-        //return res.json({respuesta:'ok'})
-        o.result.pipe(res);
-    }).catch(function (e) {
+    var request = {
+      template: req.body.template,
+      data: req.body.data
+    }; 
+  
+    console.log(request) 
+    
+    jsreport.render(request).then(function (o) {  
+      o.result.pipe(res);
+    }).catch(function (e) { 
+      console.error(e)
       return res.json({respuesta:'error'})
-      //console.error(e)
-    })*/
-  //}
- 
-});
-  
+    })
+    
+  });
+
+const reportingApp = express();
 app.use('/reporting', reportingApp);
 
-
-jsreportInstance = jsreport({
-  express: { app :reportingApp, server: server },
+const jsreport = require('jsreport')({
+  extensions: {
+      express: { app: reportingApp, server: server },
+  },
   appPath: "/reporting"
 });
 
-jsreportInstance.init().catch(function (e) {
-  console.error('error initializing jsreport:', e);
-});
-
-/* var reportingApp = express();
- app.use('/reporting', reportingApp);
- var jsreport = require('jsreport')({
-   express: { app :reportingApp, server: server },
-   appPath: "/reporting"
- });
- jsreport.init().then(() => {
+jsreport.init().then(() => {
   console.log('jsreport server started')
-  
-
-})
-
-app.use('/reporting/api',function(req,res){
-  
-          jsreport.render({
-            template: {
-              "shortid":"HJh43EuzQ",
-              "engine": "handlebars",
-              "recipe": "phantom-pdf",
-            },
-            data:{
-              "hola":"sssssssssssss"
-            }
-          }).then(function(out) {										
-            
-          }).catch(function(err){
-         
-            console.log(err)
-          });
-        })*/
+}).catch((e) => {
+  console.error(e);
+});

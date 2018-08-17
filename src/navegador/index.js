@@ -23,53 +23,41 @@ import { ListarClientes } from '../sis_admin/mod_inicio/clientes_prov/listar'
 //View Contabilidad
 import {ListarCuentasBancarias} from '../sis_admin/mod_contabilidad/cuentas_bancarias/listar'
 var el = yo`
-<ul class="sidebar-menu" data-widget="tree">
-    <li class="header">Mantenimientos</li>
-    <li class="treeview">
-        <a href="#"W>
-            <i class="fa fa-home"></i> <span>Inicio</span>
-            <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
+<ul class="nav navbar-nav">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Mantenimientos <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
             <li class=""><a href="#" onclick=${() => ListarProductosServ(true)}><i class="fa fa-circle-o"></i> Productos y servicios</a></li>
             <li class=""><a href="#" onclick=${() => ListarClientes(true)}><i class="fa fa-circle-o"></i> Cliente/Proveedor</a></li>
         </ul>
     </li>
-    <li class="treeview">
-        <a href="#"W>
-            <i class="fa fa-table"></i> <span>Contabilidad</span>
-            <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Contabilidad <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
             <li class=""><a href="#" onclick=${() => ListarCuentasBancarias(true)}><i class="fa fa-circle-o"></i> Cuentas Bancarias</a></li>
         </ul>
     </li>
-    <li class="treeview">
-        <a href="#"W>
-            <i class="fa fa-bus"></i> <span>Logistica</span>
-            <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Logistica <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
+            <li class=""><a href="#" onclick=${() => ListarCuentasBancarias(true)}><i class="fa fa-circle-o"></i> Cuentas Bancarias</a></li>
+        </ul>
+    </li>
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Logistica <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
             <li class=""><a href="#" onclick=${() => ListarCategorias(true)}><i class="fa fa-circle-o"></i> Categorias</a></li>
             <li class=""><a href="#" onclick=${() => ListarTurnos(true)}><i class="fa fa-circle-o"></i> Turnos de Atencion</a></li>
             <li class=""><a href="#" onclick=${() => ListarAlmacenes(true)}><i class="fa fa-circle-o"></i> Almacenes</a></li>
             <li class=""><a href="#" onclick=${() => ListarConceptos(true)}><i class="fa fa-circle-o"></i> Conceptos</a></li>
         </ul>
     </li>
-    <li class="treeview">
-        <a href="#"W>
-            <i class="fa fa-cog"></i> <span>Configuracion</span>
-            <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Configuracion <span class="caret"></span></a>
+        <ul class="dropdown-menu" role="menu">
             <li class=""><a href="#" onclick=${() => ListarEmpresa(true)}><i class="fa fa-circle-o"></i> Empresa</a></li>
             <li class=""><a href="#" onclick=${() => ListarUsuarios(true)}><i class="fa fa-circle-o"></i> Usuarios</a></li>
             <li class=""><a href="#" onclick=${() => ListarCajas(true)}><i class="fa fa-circle-o"></i> Cajas</a></li>
@@ -79,10 +67,11 @@ var el = yo`
             <li class=""><a href="#" onclick=${() => ListarParametros(true)}><i class="fa fa-circle-o"></i> Parametros</a></li>
         </ul>
     </li>
+    
 </ul>`;
 
 module.exports = function navegador(ctx, next) {
-    var container = document.getElementById('nav-container')
+    var container = document.getElementById('navbar-collapse')
     empty(container).appendChild(el);
     // next();
 }

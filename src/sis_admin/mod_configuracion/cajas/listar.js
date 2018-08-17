@@ -114,7 +114,7 @@ function EliminarCaja(_escritura, caja){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "bounce");
         var Cod_Caja = caja.Cod_Caja
         const parametros = {
             method: 'POST',
@@ -137,14 +137,13 @@ function EliminarCaja(_escritura, caja){
                 else{
 
                     this.removeEventListener('click', EliminarCaja)
-                }
-                H5_loading.hide()
+                } 
             })
     })
 }
 
 function ListarCajas(escritura, NumeroPagina){
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "bounce");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -173,8 +172,7 @@ function ListarCajas(escritura, NumeroPagina){
                 Ver(res.data.cajas, paginas, NumeroPagina|| 0, _escritura, _sucursales)
             }
             else
-                Ver([])
-            H5_loading.hide()
+                Ver([]) 
         })
 }
 

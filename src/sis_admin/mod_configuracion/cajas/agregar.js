@@ -172,7 +172,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         <label for="Cod_UsuarioCajero">Usuario o vendedor responsable</label>
                                         <div class="input-group">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable">Buscar responsable</button>
+                                                <button type="button" class="btn btn-info" onclick=${()=>{$("#modal-buscar-responsable").modal()}}>Buscar responsable</button>
                                             </div>
                                             <input type="text" class="form-control required" id="Cod_Usuario" value="${caja? caja.Cod_UsuarioCajero:''}" disabled>
                                         </div>
@@ -416,7 +416,7 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
 function GuardarCaja(_escritura,caja) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
     if(ValidacionCampos()){
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "bounce");
         var Cod_Caja = null
         if (caja != undefined)
             Cod_Caja = caja.Cod_Caja
@@ -455,8 +455,7 @@ function GuardarCaja(_escritura,caja) {
                 }
                 else {
                     console.log('Error')
-                }
-                H5_loading.hide()
+                } 
             })
     }
 }
@@ -465,7 +464,7 @@ function GuardarCaja(_escritura,caja) {
 function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, u){
     var btnEliminar = document.getElementById('btnEliminar-documento')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "bounce");
         var Cod_Caja = caja.Cod_Caja
         var Item = u.Item
         const parametros = {
@@ -489,8 +488,7 @@ function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,c
                 }
                 else{
                     this.removeEventListener('click', Eliminar)
-                }
-                H5_loading.hide()
+                } 
             })
     })
 }
@@ -544,7 +542,7 @@ function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
 }
 
 function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento){
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "bounce");
     const parametros = {
         method: 'POST',
         headers: {
@@ -566,8 +564,7 @@ function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
 
         }else{
             console.log("ERR")
-        }
-        H5_loading.hide()
+        } 
     })
 }
 
@@ -633,7 +630,7 @@ function SeleccionarUsuario(usuario){
 }
 
 function AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja){
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "bounce");
     const parametros = {
         method: 'POST',
         headers: {
@@ -652,8 +649,7 @@ function AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caj
 
         }else{
             console.log("ERR")
-        }
-        H5_loading.hide()
+        } 
     })
 }
 
@@ -739,7 +735,7 @@ function BuscarProductos(_escritura, caja){
     var Cod_Categoria = document.getElementById('Cod_Categoria').value
     var Cod_Precio = document.getElementById('Cod_Precio').value
     var Flag_RequiereStock = document.getElementById('Flag_RequiereStock').checked?'1':'0'
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "bounce");
     const parametros = {
         method: 'POST',
         headers: {
@@ -764,8 +760,7 @@ function BuscarProductos(_escritura, caja){
             }
             else {
                 console.log('Error')
-            }
-            H5_loading.hide();
+            } 
         })
 }
 
@@ -809,7 +804,7 @@ function GuardarFavorito(_escritura, caja, producto){
     var Cod_Almacen = producto.Cod_Almacen
     var Cod_UnidadMedida = producto.Cod_UnidadMedida          
     var Cod_Precio = document.getElementById('Cod_Precio').value
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "bounce");
     const parametros = {
         method: 'POST',
         headers: {
@@ -859,8 +854,7 @@ function GuardarFavorito(_escritura, caja, producto){
             }
             else {
                 console.log('Error')
-            }
-            H5_loading.hide();
+            } 
         })
     
 }
@@ -870,7 +864,7 @@ function EliminarFavorito(_escritura, caja, producto){
     btnEliminar.addEventListener('click', function Eliminar(ev) {
         var Cod_Caja = caja.Cod_Caja
     var Id_Producto = producto.Id_Producto
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "bounce");
     const parametros = {
         method: 'POST',
         headers: {
@@ -917,8 +911,7 @@ function EliminarFavorito(_escritura, caja, producto){
             }
             else {
                 console.log('Error')
-            }
-            H5_loading.hide();
+            } 
         })
     })
     
@@ -928,7 +921,7 @@ function EliminarFavorito(_escritura, caja, producto){
 
 function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
     if (caja != undefined) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "bounce");
         const parametros = {
             method: 'POST',
             headers: {
@@ -946,7 +939,6 @@ function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide();
             })
     } else Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, [], [])
 }

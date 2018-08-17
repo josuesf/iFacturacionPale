@@ -171,6 +171,12 @@ table.dataTable.no-footer {
     color: #626467;
 }
 
+div.container {
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
 
 @media only screen and (max-width: 1950px) {
     .divDP {

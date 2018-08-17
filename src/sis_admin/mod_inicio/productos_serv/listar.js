@@ -117,7 +117,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
  function EliminarProductoServ(_escritura, Id_Producto){
      var btnEliminar = document.getElementById('btnEliminar')
      btnEliminar.addEventListener('click', function del(ev){ 
-         H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "bounce");
          const parametros = {
              method: 'POST',
              headers: {
@@ -133,13 +133,12 @@ function Ver(variables, paginas, pagina_actual, _escritura){
              .then(res => {
                  ListarProductosServ(_escritura,0)
                  this.removeEventListener('click', del)
-                 H5_loading.hide()
              })
      })
 }
 
 function ListarProductosServ(escritura,NumeroPagina) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "bounce");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -165,7 +164,6 @@ function ListarProductosServ(escritura,NumeroPagina) {
             }
             else
                 Ver([])
-            H5_loading.hide()
         })
 }
 
