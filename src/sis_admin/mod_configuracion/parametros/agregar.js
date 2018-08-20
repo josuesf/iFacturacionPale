@@ -88,7 +88,7 @@ function BusquedaDeUsuario(){
             }
             else
                 empty(document.getElementById('contenedorTablaUsuarios'));
-            H5_loading.hide()
+            $('#main-contenido').waitMe('hide');
         })
     }else{
         empty(document.getElementById('contenedorTablaUsuarios'));
@@ -123,7 +123,7 @@ function SeleccionarUsuario(usuario){
 
 function Guardar(_escritura, sucursal){
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios","Guardando parametro");
     var Cod_Sucursal = sucursal?sucursal.Cod_Sucursal:document.getElementById('Cod_Sucursal').value.toUpperCase()
     var Nom_Sucursal = document.getElementById('Nom_Sucursal').value.toUpperCase()
     var Dir_Sucursal = document.getElementById('Dir_Sucursal').value.toUpperCase()
@@ -165,6 +165,10 @@ function Guardar(_escritura, sucursal){
             else{
                 console.log('Error')
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }

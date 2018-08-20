@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
+import {BloquearControles} from '../../../../utility/tools'
 import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
 import { AsignarSeriesModal } from '../../modales/series'
 import { BuscarCuentasPendientes } from '../../modales/cuentas' 
@@ -39,7 +40,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8" id="div-cliente-cuentas">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4> Cliente/Proveedor </h4>
@@ -84,7 +85,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="panel panel-default" style="pointer-events:none;" id="divCabecera">
+                        <div class="panel panel-default" id="divCabecera">
                             <div class="panel-heading text-center">
                                 <div class="row">
                                     <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC}</strong></h4>
@@ -92,7 +93,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <select id="Cod_TipoComprobante" class="form-control selectPalerp">
+                                            <select id="Cod_TipoComprobante" class="form-control selectPalerp" onchange=${()=>BloquearControles(event)}>
                                                  <option style="text-transform:uppercase" value=${CodLibro=='08'?'RI':'RE'}>${CodLibro=='08'?'RECIBO DE EGRESO':'RECIBO DE INGRESO'}</option>
                                             </select>
                                         </div>
@@ -103,14 +104,14 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                     <div class="col-md-5" id="divSerie">
                                         <div class="form-group">
  
-                                            <select class="form-control input-sm" id="Serie">
+                                            <select class="form-control input-sm" id="Serie" onchange=${()=>BloquearControles(event)}>
                                                 ${variables.dataComprobante.map(e=>yo`<option style="text-transform:uppercase" value="${e.Serie}">${e.Serie}</option>`)}
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-7" id="divNumero">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-sm required" id="Numero" value="00000000${variables.dataMov[0].Numero}">
+                                            <input type="text" class="form-control input-sm required" id="Numero" value="00000000${variables.dataMov[0].Numero}" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                     </div>
                                 </div> 
@@ -870,6 +871,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
 }
 
 function BuscarClienteDoc(CodLibro) {
+    run_waitMe($('#div-cliente-cuentas'), 1, "ios","Buscando cliente...");
     var Nro_Documento = document.getElementById('Nro_Documento').value
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
@@ -898,8 +900,12 @@ function BuscarClienteDoc(CodLibro) {
                     CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
                 }
             }
-            H5_loading.hide()
-        })
+            $('#div-cliente-cuentas').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#div-cliente-cuentas').waitMe('hide');
+        });
 }
 
 
@@ -1276,7 +1282,7 @@ function AceptarConfirmacionCuenta(CodLibro){
 }
  
 function Cuentas(Cod_Libro) {
-    H5_loading.show(); 
+    run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate()
@@ -1315,9 +1321,13 @@ function Cuentas(Cod_Libro) {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa
                     VerCuentas(variables,fecha_format,Cod_Libro)
-                    H5_loading.hide()
+                    $('#main-contenido').waitMe('hide');
     
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    $('#main-contenido').waitMe('hide');
+                });
 
         }) 
 }

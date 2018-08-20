@@ -16,8 +16,7 @@ function CargarPDFModal(titulo,subtitulo,subtitulo_extra,callback){
                     <h4 class="modal-title"><strong>${subtitulo_extra}</strong></h4>
                 </div>
                 <div class="modal-body text-center" id="divPDF" style="height: 80%;">
-                    <i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>
-                    <label>Cargando vista previa....</label>
+                    
                 </div>
                 <div class="modal-footer">
                     <div class="btn-toolbar pull-right">

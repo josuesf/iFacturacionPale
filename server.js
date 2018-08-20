@@ -1,8 +1,5 @@
 var { LOGIN_SQL,
-      Ejecutar_Procedimientos_DBMaster, 
-      EXEC_SQL_DBMaster, 
-      EXEC_QUERY_DBMaster,
-      EXEC_QUERY,
+      EXEC_SQL_DBMaster,
       EXEC_SQL,
       EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
 
@@ -12,8 +9,7 @@ var express = require('express');
 var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
-var session = require('express-session');
-var PDFGeneratorAPI = require('pdf-generator-api');    
+var session = require('express-session');    
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -36,6 +32,7 @@ app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUn
  
 
 // configuration default
+
 app.locals.isla = false
 app.locals.apertura = false
 app.locals.CierreCompleto = true
@@ -43,6 +40,7 @@ app.locals.caja = { Cod_Caja : null }
 app.locals.turno = null
 app.locals.sucursal = null
 app.locals.arqueo = null
+app.locals.cajasUsuarios =[]
  
 function CargarVariables(req,res){
   p = [
@@ -191,8 +189,10 @@ app.get('/administracion', function (req, res) {
 app.get('/login', function (req, res) {
   if (req.session && req.session.authenticated) {
     return res.redirect('/');
+  }else{
+    res.render('login.ejs', { title: 'iFacturacion - Usuarios ', err:errores});
   }  
-  const fecha = new Date()
+  /*const fecha = new Date()
   var anio = fecha.getFullYear() 
 
   EXEC_QUERY_DBMaster('SELECT * FROM PRI_EMPRESA', [], function (o) {
@@ -204,7 +204,7 @@ app.get('/login', function (req, res) {
       return o.result
     }
     
-  }) 
+  }) */
 })
 
 
@@ -220,7 +220,9 @@ app.post('/login', function (req, res) {
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
+
         CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
+        
         EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
           if (e.err){
             errores = "Ocurrio un error. Vuelva a intentarlo mas tarde"
@@ -236,14 +238,14 @@ app.post('/login', function (req, res) {
             app.locals.empresa = e.result 
             global.empresa = e.result
             
-            if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
+            //if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
               LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
                 if (e.err) {
                   errores = e.err
                   return res.redirect('/login');
                 }
           
-                if (app.locals.isla){
+                /*if (app.locals.isla){
           
                   pIsla = [
                     { nom_parametro: 'Cod_Usuario', valor_parametro: e.Cod_Usuarios },
@@ -281,14 +283,16 @@ app.post('/login', function (req, res) {
                       return res.redirect('/login');
                     }
                   })
-                }else{
+                }else{*/
           
                   req.session.authenticated = true;
                   req.session.username = e.Cod_Usuarios
                   req.session.nick = e.Nick
-                  req.session.turno = req.body.Turno
-                  req.session.periodo = req.body.Periodo
-                  req.session.gestion = req.body.Gestion
+                  const fecha = new Date()
+                  var anio = fecha.getFullYear()
+                  //req.session.turno = req.body.Turno
+                  //req.session.periodo = req.body.Periodo
+                  //req.session.gestion = req.body.Gestion
                   
                   p = [
                     { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
@@ -296,12 +300,14 @@ app.post('/login', function (req, res) {
           
                   EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
                     if(e.result.length>0){
-                      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result ,mensaje:'Seleccione una de las cajas asignadas a este usuario'});
+                      app.locals.cajasUsuarios = e.result 
+                      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:e.result });
                     }else{
           
                       EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
                         if(m.result.length>0){
-                          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result ,mensaje:'El usuario no tiene ninguna caja asignada. Seleccione una caja activa de la lista e inicie sesion'});
+                          app.locals.cajasUsuarios = m.result 
+                          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:m.result });
                         }else{
                           errores = 'No existen cajas activas'
                           app.locals.isla = false
@@ -311,6 +317,7 @@ app.post('/login', function (req, res) {
                           app.locals.turno = null
                           app.locals.sucursal = null
                           app.locals.arqueo = null
+                          app.locals.cajasUsuarios=[]
                           delete req.session.authenticated;
                           return res.redirect('/login');
                         }                     
@@ -319,13 +326,13 @@ app.post('/login', function (req, res) {
                     }                
                   })
                   
-                }
+                //}
           
               })
-            }else{
-              errores = "Todos los campos son necesarios"
-              return res.redirect('/login');
-            }
+            //}else{
+            //  errores = "Todos los campos son necesarios"
+            //  return res.redirect('/login');
+            //}
         
           })
         })
@@ -340,12 +347,26 @@ app.post('/login', function (req, res) {
  
 
 app.post('/logincajas', function (req, res) {
-  if (!req.session || !req.session.authenticated) {
-    return res.redirect('/');
+  if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
+    if (!req.session || !req.session.authenticated) {
+      return res.redirect('/');
+    }else{
+      req.session.caja = req.body.Caja
+      req.session.turno = req.body.Turno
+      req.session.periodo = req.body.Periodo
+      req.session.gestion = req.body.Gestion
+      return res.redirect('/');
+    } 
   }else{
-    req.session.caja = req.body.Caja
-    return res.redirect('/');
-  } 
+    if(app.locals.cajasUsuarios.length>0){
+      const fecha = new Date()
+      var anio = fecha.getFullYear() 
+      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:"Es necesario ingresar todos los campos"});
+    }else{
+      errores = ""
+      return res.redirect('/login');
+    }
+  }
 })
 
 app.post('/loginarqueo', function (req, res) {
@@ -453,6 +474,7 @@ app.get('/logout', function (req, res) {
   app.locals.turno = null
   app.locals.sucursal = null
   app.locals.arqueo = null
+  app.locals.cajasUsuarios = []
   delete req.session.authenticated;
   res.redirect('/');
 });

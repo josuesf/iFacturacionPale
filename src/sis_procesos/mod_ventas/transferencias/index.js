@@ -196,7 +196,7 @@ function CambioRadios(){
 function GuardarEnvio(variables){
     if(ValidacionCampos("modal_error","modal_form")){
 
-        H5_loading.show();
+        run_waitMe($('#modal-proceso'), 1, "ios","Registrando operación...");
         var Cod_Caja = '100'//caja.Cod_Caja
         var Cod_Turno = 'T0002'
         var Id_Concepto = 11000
@@ -270,9 +270,13 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
                 GuardarMovCuentaBancaria(variables)
             }
             else {  
-                H5_loading.hide() 
+                $('#modal-proceso').waitMe('hide');
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
 }
 
 
@@ -358,7 +362,7 @@ function GuardarMovCuentaBancaria(variables){
                     .then(req => req.json())
                     .then(res => { 
                         $('#modal-proceso').modal('hide')
-                        H5_loading.hide() 
+                        $('#modal-proceso').waitMe('hide');
                         if (res.respuesta == 'ok') {
                             toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000})
                             refrescar_movimientos()
@@ -366,18 +370,26 @@ function GuardarMovCuentaBancaria(variables){
                         else {
                             toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        $('#modal-proceso').waitMe('hide');
+                    });
 
                 }else{
                     $('#modal-proceso').modal('hide')
-                    H5_loading.hide() 
+                    $('#modal-proceso').waitMe('hide');
                 } 
             }
             else {
                 toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
-                H5_loading.hide() 
+                $('#modal-proceso').waitMe('hide');
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
 }
 
 
@@ -433,9 +445,13 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                 }
                 else {
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
-                    H5_loading.hide() 
+                    $('#modal-proceso').waitMe('hide');
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#modal-proceso').waitMe('hide');
+            });
 }
 
 function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
@@ -470,7 +486,7 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
         .then(req => req.json())
         .then(res => {
             $('#modal-proceso').modal('hide')
-            H5_loading.hide() 
+            $('#modal-proceso').waitMe('hide');
             if (res.respuesta == 'ok') {
                 toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
                 refrescar_movimientos()
@@ -478,13 +494,17 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
             else {
                 toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
 }
 
 
 
 function NuevoEnvioEfectivo(_escritura, caja) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     var Cod_Sucursal = '0001'
     const parametros = {
@@ -513,8 +533,12 @@ function NuevoEnvioEfectivo(_escritura, caja) {
             else { 
                 
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 

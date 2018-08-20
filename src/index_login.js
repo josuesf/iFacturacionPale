@@ -60,7 +60,7 @@ function CrearTurnoSiguiente(){
 }
 
 function TraerPeriodos(){
-    run_waitMe($('#Periodo'), 3, "ios","cargando");
+    run_waitMe($('#select-periodo'), 2, "ios","");
     var Gestion = $("#Gestion").val()
     const parametros = {
         method: 'POST',
@@ -78,11 +78,14 @@ function TraerPeriodos(){
         .then(res => {
             LlenarPeriodo(res.data.periodos,'Periodo')
             TraerTurnos()
+        }).catch(function (e) {  
+            console.log(e)
+            $('#select-periodo').waitMe('hide');
         })
 }
 
 function TraerTurnos(){
-    run_waitMe($('#Turno'), 3, "ios","cargando");
+    run_waitMe($('#select-turno'), 2, "ios","");
     var Cod_Periodo = $("#Periodo").val()
     const parametros = {
         method: 'POST',
@@ -99,6 +102,9 @@ function TraerTurnos(){
         .then(req => req.json())
         .then(res => { 
             LlenarTurnos(res.data.turnos,'Turno')
+        }).catch(function (e) {  
+            console.log(e)
+            $('#select-turno').waitMe('hide');
         })
 }
 
@@ -114,6 +120,7 @@ function LlenarPeriodo(periodos,idSelect){
     const mes = fecha.getMonth() + 1 
     var periodo = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes)
     $("#"+idSelect).val(periodo) 
+    $('#select-periodo').waitMe('hide');
 }
 
 function LlenarTurnos(turnos,idSelect){
@@ -125,11 +132,11 @@ function LlenarTurnos(turnos,idSelect){
     $("#"+idSelect).html('')
     $("#"+idSelect).html(html)
     $("#"+idSelect+" option:last").attr("selected", "selected"); 
+    $('#select-turno').waitMe('hide');
 }
 
 
 function CambioRUC(flag){
-    run_waitMe($('#empresa'), 3, "ios","cargando");
     if(flag=="1"){
         var RUC = $("#empresa").val()
         const parametros = {
@@ -183,48 +190,4 @@ function CambioRUC(flag){
             })
     }
 } 
-
-function obtenerDatosSUNAT(ruc) {
-    //Init
-    var url = "https://cors-anywhere.herokuapp.com/wmtechnology.org/Consultar-RUC/?modo=1&btnBuscar=Buscar&nruc=" + ruc,
-        existente = document.getElementById("existente"),
-        xhr = false;
-    if (window.XMLHttpRequest) //Crear XHR
-        xhr = new XMLHttpRequest();
-    else if (window.ActiveXObject)
-        xhr = new ActiveXObject("Microsoft.XMLHTTP");
-    else return false;
-    //handler para respuesta
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) { //200 OK
-            var doc = document.implementation.createHTMLDocument()
-                .documentElement,
-                res = "",
-                txt, campos,
-                ok = false;
-
-            doc.innerHTML = xhr.responseText;
-            //Sólo el texto de las clases que nos interesa
-            campos = doc.querySelectorAll(".list-group-item");
-            if (campos.length) {
-                for (txt of campos)
-                    res += txt.innerText + "\n";
-                //eliminar blancos por demás
-                res = res.replace(/^\s+\n*|(:) *\n| +$/gm, "$1");
-                //buscar si está el texto "ACTIVO" en el estado
-                ok = /^Estado: *ACTIVO *$/m.test(res);
-            } else
-                res = "RUC: " + ruc + "\nNo existe.";
-
-            //mostrar el texto formateado
-            if (ok)
-                existente.classList.add("ok");
-            else
-                existente.classList.remove("ok");
-            existente.innerText = res;
-        }
-    } //falta verificar errores en conexión
-    xhr.open("POST", url, true);
-    xhr.send(null);
-}
-
+ 

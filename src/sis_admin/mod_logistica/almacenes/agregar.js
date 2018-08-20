@@ -193,7 +193,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
 function EliminarCajaAlmacen(_escritura, tipo_almacenes, almacen, u) {
     var btnEliminar = document.getElementById('btnEliminar-caja_almacen')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         var Cod_Caja = u.Cod_Caja
         var Cod_Almacen = almacen.Cod_Almacen
         const parametros = {
@@ -218,14 +218,18 @@ function EliminarCajaAlmacen(_escritura, tipo_almacenes, almacen, u) {
                 else {
                     this.removeEventListener('click', Eliminar)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 
 
 function AgregarCaja(_escritura, tipo_almacenes, almacen, caja_almacen) {
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -244,8 +248,12 @@ function AgregarCaja(_escritura, tipo_almacenes, almacen, caja_almacen) {
             } else {
                 console.log("ERR")
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 function FormularioAgregaCaja(_escritura, tipo_almacenes, almacen, cajas_activas, caja_almacen) {
@@ -308,7 +316,7 @@ function GuardarCajaAlmacen(_escritura, tipo_almacenes, almacen) {
     var Cod_Caja = document.getElementById('CA_Cod_Caja').value
     var Flag_Principal = document.getElementById('CA_Flag_Principal').checked
     var Cod_Usuario = 'ADMINISTRADOR'
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
     const parametros = {
         method: 'POST',
         headers: {
@@ -332,15 +340,19 @@ function GuardarCajaAlmacen(_escritura, tipo_almacenes, almacen) {
             else {
                 console.log('Error')
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 
 function GuardarAlmacen(_escritura, almacen) {
     if (ValidacionCampos()) {
         //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         var Cod_Almacen = almacen ? almacen.Cod_Almacen : document.getElementById('Cod_Almacen').value.toUpperCase()
         var Des_Almacen = document.getElementById('Des_Almacen').value.toUpperCase()
         var Des_CortaAlmacen = document.getElementById('Des_CortaAlmacen').value.toUpperCase()
@@ -373,14 +385,18 @@ function GuardarAlmacen(_escritura, almacen) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 
 function NuevoAlmacen(_escritura, tipo_almacenes, almacen) {
     if (almacen != undefined) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios");
         const parametros = {
             method: 'POST',
             headers: {
@@ -398,8 +414,12 @@ function NuevoAlmacen(_escritura, tipo_almacenes, almacen) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     } else Ver(_escritura, tipo_almacenes, almacen, [])
 }
 export { NuevoAlmacen }

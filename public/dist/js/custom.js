@@ -56,8 +56,7 @@ function ValidacionCampos(id_divError,id_divParent){
         maxSize = '';
         textPos = 'vertical';
         break;
-        case 2:
-        text = '';
+        case 2: 
         maxSize = 30;
         textPos = 'vertical';
         break;
@@ -73,8 +72,7 @@ function ValidacionCampos(id_divError,id_divParent){
         bg: 'rgba(255,255,255,0.7)',
         color: '#000',
         maxSize: maxSize,
-        waitTime: -1,
-        source: 'img.svg',
+        waitTime : -1,
         textPos: textPos,
         fontSize: fontSize,
         onClose: function(el) {}

@@ -14,8 +14,8 @@
     <!-- Ionicons-->
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style-->
-    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
-    <link href="/dist/css/loading.css" rel="stylesheet">
+    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css"> 
+    <link href="/dist/css/waitMe.min.css" rel="stylesheet">
     <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <title>iFacturacion Pale</title>
@@ -29,15 +29,41 @@
         </div>
         
         <div class="login-box-body">
-           
             <form action="logincajas" method="post">
 
+                <% if(typeof err != 'undefined' && err!='') { %>
+                    <div class="callout callout-danger" id="divError" data-value="0">
+                        <h4>Hubo un error!</h4>
+                        <p id="textError"><%=err%></p>
+                    </div>
+                <% }else{ %>
+                    <div class="callout callout-danger" id="divError" data-value="1" style="display: none;">
+                        <h4>Hubo un error!</h4>
+                        <p id="textError"></p>
+                    </div>
+                <% } %>
+                <p class="login-box-msg">Selecciona la caja y el turno para iniciar el sistema</p>
+ 
                 <div class="form-group row">
-                    <h5 class="col-sm-12 col-form-label"><%=mensaje%></h5>
+                    <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
+                    <div class="col-sm-9">
+                        <% if(typeof gestion != 'undefined') { %>
+                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion">
+                        <% } %>
+                    </div>
                 </div>
-               
+
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="empresa">Seleccione una caja</label>
+                    <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
+                    <div class="col-sm-9" id="select-periodo">
+                        <select id="Periodo" name="Periodo" class="form-control"> 
+                            
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="Caja">Caja</label>
                     <div class="col-sm-9">
                         <select id="Caja" name="Caja" class="form-control"> 
                             <% if(typeof cajas != 'undefined') { %>
@@ -46,6 +72,22 @@
                                 <% }) %>
                             <% } %>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="turno">Turno</label>
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" id="btnTurnoSiguiente"><i class="fa fa-arrow-right text-success"></i></button>
+                            </span>
+                            <div id="select-turno">
+                                <select id="Turno" name="Turno" class="form-control"> 
+                                    
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                  
@@ -68,10 +110,10 @@
     </div>
     
     <script src='/bower_components/jquery/dist/jquery.min.js'></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/dist/js/loading.js"></script>
-    
-    
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script> 
+    <script src="/dist/js/waitMe.min.js"></script>
+    <script src="/dist/js/custom.js"></script>
+    <script src="/app_login.js"></script>
 </body>
 
 </html>

@@ -24,8 +24,7 @@ function VerBuscarCuentasPendientes(CodLibro,cuentas){
                                   
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnAceptar" >Aceptar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`

@@ -106,7 +106,7 @@ function Eliminar(_escritura, almacen){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         var Cod_Almacen = almacen.Cod_Almacen
         const parametros = {
             method: 'POST',
@@ -130,13 +130,17 @@ function Eliminar(_escritura, almacen){
                     console.log('Error')
                     this.removeEventListener('click', Eliminar)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 
 function ListarAlmacenes(escritura,NumeroPagina) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -165,8 +169,12 @@ function ListarAlmacenes(escritura,NumeroPagina) {
             }
             else
                 Ver([])
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export {ListarAlmacenes}

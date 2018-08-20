@@ -1,6 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
+import {BloquearControles} from '../../../../utility/tools'
 import { BuscarProducto } from '../../modales'
 import { BuscarComprobantePago } from '../../modales/comprobante_pago'
 import { AsignarSeriesModal } from '../../modales/series'
@@ -134,7 +135,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                     </div>
                                     <div class="col-md-7" id="divNumero">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-sm required" value="00000000${variables.dataMov[0]['']}" id="Numero">
+                                            <input type="text" class="form-control input-sm required" value="00000000${variables.dataMov[0]['']}" id="Numero" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                     </div>
                                 </div> 
@@ -548,7 +549,7 @@ function IniciarElementos(fecha_actual){
 }
 
 function RecuperarProductos(CodTipoComprobante,fecha_actual){
-    H5_loading.show();
+    run_waitMe($('#divTablaProductos'), 1, "ios");
     var Cod_Almacen = $("#Cod_Almacen").val()
     const parametros = {
         method: 'POST',
@@ -564,9 +565,12 @@ function RecuperarProductos(CodTipoComprobante,fecha_actual){
         .then(req => req.json())
         .then(res => { 
             LlenarProductos(res.data.productos,CodTipoComprobante,fecha_actual)
-            H5_loading.hide()
-
-        })
+            $('#divTablaProductos').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#divTablaProductos').waitMe('hide');
+        });
 }
 
 function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual){
@@ -603,11 +607,11 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual){
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual){
     if($("#divDestino").css("display")=="block" && $("#Cod_Destino").val()!=null && $("#Cod_Destino").val().trim()!="21"){
-        H5_loading.show();
+        run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
 
     }else{
         if(EsValido()){
-            H5_loading.show();
+            run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
             var Cod_Almacen = $("#Cod_Almacen").val()
             var Cod_TipoOperacion = $("#Cod_Operacion").val()
             var Cod_TipoComprobante = CodTipoComprobante//$("#Id_ComprobantePago").attr("data-id")
@@ -678,8 +682,13 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual){
                         toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
                     }
                     $('#modal-proceso').modal('hide')  
-                    H5_loading.hide()
-                })
+                    $('#modal-superior').modal('hide') 
+                    $('#modal-superior').waitMe('hide');
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    $('#modal-superior').waitMe('hide');
+                });
 
         }
     }
@@ -719,7 +728,7 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante){
 }
 
 function EntradasSalidas(Cod_TipoComprobante) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate()
@@ -755,10 +764,18 @@ function EntradasSalidas(Cod_TipoComprobante) {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa 
                     VerEntradasSalidas(variables,Cod_TipoComprobante,fecha_format)
-                    H5_loading.hide()
+                    $('#main-contenido').waitMe('hide');
         
-                })
-        })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    $('#main-contenido').waitMe('hide');
+                });
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { EntradasSalidas }

@@ -107,7 +107,7 @@ function Eliminar(_escritura, cliente){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         var Id_ClienteProveedor = cliente.Id_ClienteProveedor
         const parametros = {
             method: 'POST',
@@ -131,12 +131,16 @@ function Eliminar(_escritura, cliente){
                     console.log('Error')
                     this.removeEventListener('click', Eliminar)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 function EditarCliente(_escritura, mas_variables, Id_ClienteProveedor){
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -157,12 +161,16 @@ function EditarCliente(_escritura, mas_variables, Id_ClienteProveedor){
             else{
                 alert('Ocurrio un error ')
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 function ListarClientes(escritura,NumeroPagina) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -201,8 +209,12 @@ function ListarClientes(escritura,NumeroPagina) {
             }
             else
                 Ver([])
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export {ListarClientes}

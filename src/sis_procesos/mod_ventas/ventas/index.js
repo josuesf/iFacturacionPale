@@ -31,8 +31,22 @@ function VerNuevaVenta(variables,CodLibro) {
     var tabContent = yo`
         <div class="tab-pane" id="tab_${idTabVenta}">
             <div class="row">
+                <div class="col-md-9">
+                    <span class="badge bg-red" style="margin-bottom:  4px;"> Favoritos</span>
+                    <div class="scroll-horizontal">
+                        ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)} 
+                    </div>
+                </div>
                 <div class="col-md-3">
-                    <div class="box box-success box-solid">
+                    <div class="btn-group-horizontal pull-right" style="padding-top:  20px;">
+                        <button type="button" class="btn bg-green" onclick=${() => VentaSimple()}>Venta Simple</button>
+                        <button type="button" class="btn bg-olive" onclick=${() => VentaCompleta()}>Venta Completa</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="box box-success box-solid" id="div-cliente">
                         <div class="box-header with-border text-center">
                             <h4>Datos del cliente</h4>
                         </div>
@@ -224,19 +238,6 @@ function VerNuevaVenta(variables,CodLibro) {
 
                         </div>
                         <div class="box-footer" id="divFooter_${idTabVenta}">
-                            <div class="row"> 
-                                
-                                <div class="col-md-12">
-                                    <div class="box box-warning">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title"><i class="fa fa-star text-orange"></i> Favoritos</h3>
-                                        </div>
-                                        <div class="box-body" id="divFavoritos_${idTabVenta}">
-                                            ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="box box-warning">
@@ -263,6 +264,7 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs").append(tab)
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
+
     TraerSimboloSOLES(variables.monedas,'PEN',idTabVenta)
     //CambioMonedaFormaPagoSoles(idTabVenta)
     //CambioMonedaFormaPagoDolares(idTabVenta)
@@ -371,20 +373,7 @@ function VerNuevaVenta(variables,CodLibro) {
 }
 
 function CrearDivFavoritos(variables,idTab){
-    var div = yo`
-                <div>
-                    <div class="row">              
-                        <div class="col-md-12">
-                            <div class="box box-warning">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title"><i class="fa fa-star text-orange"></i> Favoritos</h3>
-                                </div>
-                                <div class="box-body" id="divFavoritos_${idTab}">
-                                    ${CrearBotonesFavoritos(variables.favoritos,idTab)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    var div = yo` 
                     <div class="row">
                         <div class="col-md-12">
                             <div class="box box-warning">
@@ -401,8 +390,7 @@ function CrearDivFavoritos(variables,idTab){
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>`
+                    </div> `
     var divFV = document.getElementById('divFooter_'+idTab);
     empty(divFV).appendChild(div);
 }
@@ -625,9 +613,12 @@ function CrearBotonesCategoriasXSeleccion(categorias,CodPadre,idTab){
 
 
 function CrearBotonesFavoritos(favoritos,idTab){
-    return  yo`<div> 
+    return yo`<ul> 
+                ${favoritos.map(e=>yo`<li><a class="btn btn-block btn-social btn-default" onclick=${()=>AgregarProducto(e,favoritos,idTab)}><i class="fa fa-star text-orange"></i>  ${e.Nom_Producto}</a></li>`)}       
+            </ul>` 
+    /*return  yo`<div> 
                 ${favoritos.map(e=>yo`<a class="btn btn-app" onclick=${()=>AgregarProducto(e,favoritos,idTab)} style="height:80px"><i class="fa fa-star text-orange"></i> ${e.Nom_Producto}<p></p> ${parseFloat(e.Valor).toFixed(4)}</a>`)}
-            </div>`
+            </div>`*/
 }
 
 function TieneHijos(c,categorias,callback){
@@ -1359,6 +1350,7 @@ function BuscarProductoCP(event,tipo,idTab) {
 function BuscarClienteDoc(CodLibro,idTab) {
     var Nro_Documento = document.getElementById('Nro_Documento_'+idTab).value
     if(Nro_Documento.trim().length>3){
+        run_waitMe($('#div-cliente'), 1, "ios","Buscando cliente...");
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc_'+idTab).value
         var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
         const parametros = {
@@ -1386,14 +1378,18 @@ function BuscarClienteDoc(CodLibro,idTab) {
                         $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)                   
                     } 
                 }
-                H5_loading.hide()
-            })
+                $('#div-cliente').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#div-cliente').waitMe('hide');
+            });
     }
 }
 
 function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
     console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente)
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate() 
@@ -1427,8 +1423,12 @@ function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
             }else{
                 toastr.error(res.detalle_error,'Error',{timeOut: 5000}) 
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 
 }
@@ -1498,7 +1498,7 @@ function VentaSimpleConME(idTab,_CodTipoComprobante){
 
 
 function NuevaVenta() {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -1518,8 +1518,12 @@ function NuevaVenta() {
             }else{
                 toastr.error(res.detalle_error,'Error',{timeOut: 5000})
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
  
 

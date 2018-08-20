@@ -118,7 +118,7 @@ function Eliminar(_escritura, turno){
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function del(ev){
         var Cod_Turno = turno.Cod_Turno
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         const parametros = {
             method: 'POST',
             headers: {
@@ -134,13 +134,17 @@ function Eliminar(_escritura, turno){
             .then(res => {
                 ListarTurnos(_escritura,0)
                 this.removeEventListener('click', del)
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 
 function ListarTurnos(escritura,NumeroPagina) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -165,8 +169,12 @@ function ListarTurnos(escritura,NumeroPagina) {
             }
             else
                 Ver([])
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export {ListarTurnos}

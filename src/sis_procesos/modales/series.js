@@ -62,8 +62,7 @@ function VerBuscarPorSerie(almacenes) {
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info">Aceptar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`

@@ -94,7 +94,7 @@ function Ver(_escritura, variables, producto){
 
 function NuevoProductoServ(_escritura, variables, Id_Producto){
     if(Id_Producto != undefined){
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios");
         const parametros = {
             method: 'POST',
             headers: {
@@ -118,8 +118,12 @@ function NuevoProductoServ(_escritura, variables, Id_Producto){
                     Ver(_escritura, variables, producto)
                     tabDatosGenerales(_escritura, variables)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }else{
         Ver(_escritura, variables)
         tabDatosGenerales(_escritura, variables)

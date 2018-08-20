@@ -114,7 +114,7 @@ function EliminarCaja(_escritura, caja){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        run_waitMe($('#main-contenido'), 1, "bounce");
+        run_waitMe($('#main-contenido'), 3, "ios");
         var Cod_Caja = caja.Cod_Caja
         const parametros = {
             method: 'POST',
@@ -138,12 +138,17 @@ function EliminarCaja(_escritura, caja){
 
                     this.removeEventListener('click', EliminarCaja)
                 } 
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 
 function ListarCajas(escritura, NumeroPagina){
-    run_waitMe($('#main-contenido'), 1, "bounce");
+    run_waitMe($('#main-contenido'), 3, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -172,8 +177,14 @@ function ListarCajas(escritura, NumeroPagina){
                 Ver(res.data.cajas, paginas, NumeroPagina|| 0, _escritura, _sucursales)
             }
             else
-                Ver([]) 
-        })
+                Ver([])
+            
+            $('#main-contenido').waitMe('hide'); 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export {ListarCajas}

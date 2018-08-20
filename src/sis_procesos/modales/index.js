@@ -10,7 +10,6 @@ var arrayValidacion = [null,'null','']
 
 
 function BuscarProducto(_RequiereStock,text_busqueda) {
-    H5_loading.show()
     LimpiarVariablesGlobales()
     aRequiereStock = _RequiereStock
     var el = yo`
@@ -69,7 +68,6 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnSeleccionarProducto">Seleccionar</button>
                 </div>
             </div>
         </div>`
@@ -80,7 +78,6 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
     CargarTipoPrecio()
     CargarCategoria()
     Buscar()
-    H5_loading.hide()
 }
 
 
@@ -133,8 +130,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" data-dismiss="modal">Aceptar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`
@@ -367,7 +363,7 @@ function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
 
 function GuardarNuevoCliente(){
     if(ValidacionCampos("modal_error_nuevo_cliente","modal_form_nuevo_cliente")){
-        H5_loading.show();
+        run_waitMe($('#modal-superior'), 1, "ios","Registrando cliente...");
         var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
         var Nro_Documento = $("#Nro_Documento_NC").val()
         var Cliente = $("#Cliente_NC").val()
@@ -394,7 +390,7 @@ function GuardarNuevoCliente(){
         .then(req => req.json())
         .then(res => {
             $('#modal-superior').modal('hide')
-            H5_loading.hide()
+            $('#modal-superior').waitMe('hide');
             if (res.respuesta == 'ok') { 
                 toastr.success('Se registro correctamente el cliente','Confirmacion',{timeOut: 5000})              
                 $('#modal-superior').modal('hide')
@@ -402,7 +398,11 @@ function GuardarNuevoCliente(){
             else{
                 toastr.error('No se pudo registrar correctamente el cliente','Error',{timeOut: 5000})
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-superior').waitMe('hide');
+        });
     }
 }
 
@@ -444,7 +444,10 @@ function CargarTipoPrecio(){
             LlenarPrecios(res.data.precios)
         else
             LlenarPrecios([])
-    })
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+    });
 }
 
 
@@ -488,7 +491,10 @@ function BusquedaProducto(){
             }
             else
                 empty(document.getElementById('contenedorTablaProductos'));
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }else{
         console.log("busqueda de producto con lenght mayor a 2")
     }
@@ -525,7 +531,10 @@ function BusquedaXIdClienteProveedor(){
             }
             else
                 empty(document.getElementById('contenedorTablaProductos'));
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }
 }
 
@@ -558,7 +567,10 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
         }else{
             var Nro_Documento = txtBuscarCliente
             var Cod_TipoDocumento = ''
@@ -586,7 +598,10 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
         }
     }
 }

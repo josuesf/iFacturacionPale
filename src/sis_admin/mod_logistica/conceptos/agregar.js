@@ -122,7 +122,7 @@ function ValidacionesExtras(concepto) {
 }
 function Guardar(_escritura, concepto) {
     if (ValidacionCampos() && ValidacionesExtras(concepto)) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         var Id_Concepto = concepto ? concepto.Id_Concepto : document.getElementById('Id_Concepto').value.toUpperCase()
         var Des_Concepto = document.getElementById('Des_Concepto').value.toUpperCase()
         var Cod_ClaseConcepto = document.getElementById('Cod_ClaseConcepto').value
@@ -155,8 +155,12 @@ function Guardar(_escritura, concepto) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 

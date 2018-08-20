@@ -201,7 +201,7 @@ function VerAgregarPresentacionUbicacion(variables, _escritura, producto,present
 
 
 function AgregarPresentacion(variables, _escritura, producto, presentacion) {
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "ios");
     var Id_Producto = producto.Id_Producto
     var Cod_Categoria = producto.Cod_Categoria
     const parametros = {
@@ -233,13 +233,17 @@ function AgregarPresentacion(variables, _escritura, producto, presentacion) {
             } else {
                 console.log("ERR")
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 function GuardarPresentacionUbicacion(variables,_escritura, producto){
     if(ValidacionCampos()){
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         var Id_Producto = producto.Id_Producto
         var Cod_UnidadMedida = document.getElementById('Cod_UnidadMedida').value
         var Cod_Almacen = document.getElementById('Cod_Almacen').value
@@ -289,9 +293,13 @@ function GuardarPresentacionUbicacion(variables,_escritura, producto){
                 else{
                     console.log('Error')
                 }
-                H5_loading.hide()
+                $('#main-contenido').waitMe('hide');
                 $("#modal-nuevo-general").modal('hide')
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 
@@ -299,7 +307,7 @@ function GuardarPresentacionUbicacion(variables,_escritura, producto){
 function EliminarPresentacionUbicacion(variables, _escritura, producto, u) {
     var btnEliminar = document.getElementById('btnEliminar-presentacion-ubicacion')
     btnEliminar.addEventListener('click', function () {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         var Id_Producto = producto.Id_Producto
         var Cod_UnidadMedida = u.Cod_UnidadMedida
         var Cod_Almacen = u.Cod_Almacen
@@ -319,41 +327,17 @@ function EliminarPresentacionUbicacion(variables, _escritura, producto, u) {
             .then(req => req.json())
             .then(res => {
                 tabPresentacionUbicacion(variables, _escritura, producto)
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
-
-/*function AgregarPresentacionUbicacion(_escritura, variables, presentacionubicacion){
-    H5_loading.show()
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({})
-    }
-    fetch(URL+'/cajas_api/get_comprobantes', parametros)
-    .then(req => req.json())
-    .then(res => {
-        if (res.respuesta == 'ok') {
-            var comprobantes = res.data.comprobantes
-            
-            if(documento == undefined) 
-                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes)
-            else
-                VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja, comprobantes, documento)
-
-        }else{
-            console.log("ERR")
-        }
-        H5_loading.hide()
-    })
-}*/
-
+ 
 function tabPresentacionUbicacion(variables, _escritura, producto) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var Id_Producto = producto.Id_Producto
     const parametros = {
         method: 'POST',
@@ -375,8 +359,12 @@ function tabPresentacionUbicacion(variables, _escritura, producto) {
             }
             else
                 Ver(variables, _escritura, producto)
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { tabPresentacionUbicacion }

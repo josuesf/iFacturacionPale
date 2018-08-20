@@ -152,7 +152,7 @@ function CargarFormulario(_escritura, tipos_padrones, Id_ClienteProveedor, e) {
     empty(form).appendChild(el);
 }
 function AbrirPadron(_escritura, Id_ClienteProveedor, padron) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -169,15 +169,19 @@ function AbrirPadron(_escritura, Id_ClienteProveedor, padron) {
             } else {
                 CargarFormulario(_escritura, [], Id_ClienteProveedor, padron)
             }
-            H5_loading.hide();
+            $('#main-contenido').waitMe('hide');
             $('#modal-abrir').modal()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 function GuardarPadron(_escritura, Id_ClienteProveedor, padron) {
     if (ValidacionCampos('divErrors_P')) {
         $('#modal-abrir').modal("hide")
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando padron...");
         const Cod_Padron = padron ? padron.Cod_Padron : document.getElementById('P_Cod_Padron').value.toUpperCase()
         const Cod_TipoPadron = document.getElementById('P_Cod_TipoPadron').value.toUpperCase()
         const Des_Padron = document.getElementById('P_Des_Padron').value.toUpperCase()
@@ -201,15 +205,19 @@ function GuardarPadron(_escritura, Id_ClienteProveedor, padron) {
             .then(r => r.json())
             .then(res => {
                 Padrones(_escritura, Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 
 }
 function Eliminar(_escritura, padron) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         const Id_ClienteProveedor = padron.Id_ClienteProveedor
         const Cod_Padron = padron.Cod_Padron
 
@@ -227,14 +235,18 @@ function Eliminar(_escritura, padron) {
             .then(r => r.json())
             .then(res => {
                 Padrones(_escritura, padron.Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 
 }
 
 function Padrones(_escritura, Id_ClienteProveedor) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -253,7 +265,11 @@ function Padrones(_escritura, Id_ClienteProveedor) {
             } else {
                 Ver(_escritura, [], Id_ClienteProveedor)
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 export { Padrones }

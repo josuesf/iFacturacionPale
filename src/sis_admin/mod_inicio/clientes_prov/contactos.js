@@ -214,7 +214,7 @@ function CargarFormulario(_escritura, tipos_relaciones, cod_telefonos, documento
 }
 function AbrirContacto(_escritura, Id_ClienteProveedor, documentos, Id_ClienteContacto) {
 
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -233,15 +233,19 @@ function AbrirContacto(_escritura, Id_ClienteProveedor, documentos, Id_ClienteCo
             } else {
                 CargarFormulario(_escritura, [], [], documentos, Id_ClienteProveedor)
             }
-            H5_loading.hide();
+            $('#main-contenido').waitMe('hide');
             $('#modal-abrir').modal()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 function GuardarContacto(_escritura, Id_ClienteProveedor, documentos, contacto) {
     if (ValidacionCampos('divErrors_C')) {
         $('#modal-abrir').modal("hide")
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando contacto...");
         const Id_ClienteContacto = contacto ? contacto.Id_ClienteContacto : '-1'
         const Cod_TipoRelacion = document.getElementById('C_Cod_TipoRelacion').value
         const Cod_TipoDocumento = document.getElementById('C_Cod_TipoDocumento').value
@@ -275,15 +279,19 @@ function GuardarContacto(_escritura, Id_ClienteProveedor, documentos, contacto) 
             .then(r => r.json())
             .then(res => {
                 Contactos(_escritura, Id_ClienteProveedor, documentos)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 
 }
 function Eliminar(_escritura, contacto, documentos) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando contacto...");
         const Id_ClienteProveedor = contacto.Id_ClienteProveedor
         const Id_ClienteContacto = contacto.Id_ClienteContacto
 
@@ -301,13 +309,17 @@ function Eliminar(_escritura, contacto, documentos) {
             .then(r => r.json())
             .then(res => {
                 Contactos(_escritura, contacto.Id_ClienteProveedor, documentos)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 
 }
 function Contactos(_escritura, Id_ClienteProveedor, documentos) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -326,8 +338,12 @@ function Contactos(_escritura, Id_ClienteProveedor, documentos) {
             } else {
                 Ver(_escritura, [], Id_ClienteProveedor, documentos)
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { Contactos }

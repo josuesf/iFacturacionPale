@@ -148,7 +148,7 @@ function Ver(_escritura, variables, cuenta) {
 
 function GuardarCuentaBancaria(_escritura, cuenta) {
     if (ValidacionCampos()) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardar cuenta bancaria...");
         var Cod_CuentaBancaria = cuenta ? cuenta.Cod_CuentaBancaria : document.getElementById('Cod_CuentaBancaria').value.toUpperCase()
         var Cod_Sucursal = document.getElementById('Cod_Sucursal').value
         var Cod_EntidadFinanciera = document.getElementById('Cod_EntidadFinanciera').value
@@ -181,14 +181,18 @@ function GuardarCuentaBancaria(_escritura, cuenta) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 
 function NuevaCuentaBancaria(_escritura, variables, cuenta) {
     if (cuenta != undefined) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios");
         const parametros = {
             method: 'POST',
             headers: {
@@ -206,8 +210,12 @@ function NuevaCuentaBancaria(_escritura, variables, cuenta) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     } else Ver(_escritura, variables)
 }
 export { NuevaCuentaBancaria }

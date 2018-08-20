@@ -172,7 +172,7 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
 }
 function AbrirCuenta(_escritura, Id_ClienteProveedor, cuenta) {
 
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -189,15 +189,19 @@ function AbrirCuenta(_escritura, Id_ClienteProveedor, cuenta) {
             } else {
                 CargarFormulario(_escritura, [], [], Id_ClienteProveedor, cuenta)
             }
-            H5_loading.hide();
+            $('#main-contenido').waitMe('hide');
             $('#modal-abrir').modal()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 function GuardarCuenta(_escritura, Id_ClienteProveedor, cuenta) {
     if (ValidacionCampos('divErrors_CB')) {
         $('#modal-abrir').modal("hide")
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando cuenta...");
         const NroCuenta_Bancaria = cuenta ? cuenta.NroCuenta_Bancaria : document.getElementById('CB_NroCuenta_Bancaria').value
         const Cod_EntidadFinanciera = document.getElementById('CB_Cod_EntidadFinanciera').value
         const Cod_TipoCuentaBancaria = document.getElementById('CB_Cod_TipoCuentaBancaria').value
@@ -223,15 +227,19 @@ function GuardarCuenta(_escritura, Id_ClienteProveedor, cuenta) {
             .then(r => r.json())
             .then(res => {
                 CuentasBancarias(_escritura, Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 
 }
 function Eliminar(_escritura, cuenta) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando cuenta...");
         const Id_ClienteProveedor = cuenta.Id_ClienteProveedor
         const NroCuenta_Bancaria = cuenta.NroCuenta_Bancaria
 
@@ -249,13 +257,17 @@ function Eliminar(_escritura, cuenta) {
             .then(r => r.json())
             .then(res => {
                 CuentasBancarias(_escritura, cuenta.Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 
 }
 function CuentasBancarias(_escritura, Id_ClienteProveedor) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -274,8 +286,12 @@ function CuentasBancarias(_escritura, Id_ClienteProveedor) {
             } else {
                 Ver(_escritura, [], Id_ClienteProveedor)
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 

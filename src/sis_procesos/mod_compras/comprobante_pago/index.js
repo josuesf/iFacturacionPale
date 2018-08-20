@@ -52,7 +52,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8" id="div-cliente-comprobante-pago">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4> Cliente/Proveedor </h4>
@@ -1415,7 +1415,7 @@ function AgregarTipoComprobante(e){
 }
 
 function AbrirModalFormasPago(variables,fecha_actual){
-    H5_loading.show();
+    run_waitMe($('#main-proceso'), 1, "ios");
     var FechaHora = $("#Fecha").val()
     var Cod_Moneda = $("#Cod_Moneda").val()
     var Tipo_Cambio = $("#Tipo_Cambio").val()
@@ -1439,8 +1439,12 @@ function AbrirModalFormasPago(variables,fecha_actual){
             if (res.respuesta == 'ok') {
                 VerModalFormasPago(variables,0,Tipo_Cambio,parseFloat(Gran_Total)/parseFloat(Tipo_Cambio),Cod_Moneda)
             } 
-            H5_loading.hide();
-        })
+            $('#modal-proceso').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
 }
 
 
@@ -2582,7 +2586,7 @@ function PrepararImpresion(arrayData){
             arrayData.cuerpo.DETALLES = arrayJSON 
             CargarPDFModal(arrayData.cuerpo.DOCUMENTO,arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,function(flag){
                 if(flag){
-
+                    run_waitMe($('#divPDF'), 1, "ios","Cargando vista previa pdf");
                     jsreport.serverUrl = URL_REPORT; 
                     var request = {
                         template: {
@@ -2599,11 +2603,13 @@ function PrepararImpresion(arrayData){
                     
                     jsreport.renderAsync(request).then(function(res) {
                         jsreport.render(document.getElementById('divPDF'), request);
+                        $('#divPDF').waitMe('hide');
                         
                     }).catch(function (e) { 
                         console.log(e)
                         toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
                         $('#modal-alerta').modal('hide')
+                        $('#divPDF').waitMe('hide');
                     });
                 }
             }) 
@@ -2613,7 +2619,7 @@ function PrepararImpresion(arrayData){
 }
 
 function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
-    H5_loading.show()
+    run_waitMe($('#modal-proceso'), 1, "ios","Realizando operación...");
     var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
     var Cod_TipoOperacion = Cod_TipoDocReferencia
     var Serie = $("#Serie option:selected").text()
@@ -2817,7 +2823,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                             if(flagFP){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
-                                                H5_loading.hide()
+                                                $('#modal-proceso').waitMe('hide');
     
                                                 if(CodLibro=='14'){
                                                     dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
@@ -2830,7 +2836,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                             }else{
                                                 toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                 $("#modal-alerta").modal("hide")
-                                                H5_loading.hide()
+                                                $('#modal-proceso').waitMe('hide');
                                             }
                                         })
 
@@ -2844,7 +2850,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         if(flagFP){
                                                             toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                             $("#modal-proceso").modal("hide")
-                                                            H5_loading.hide() 
+                                                            $('#modal-proceso').waitMe('hide');
 
                                                             if(CodLibro=='14'){
                                                                 dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
@@ -2856,14 +2862,14 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         }else{
                                                             toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                             $("#modal-alerta").modal("hide")
-                                                            H5_loading.hide()
+                                                            $('#modal-proceso').waitMe('hide');
                                                         }
                                                     })
 
                                                 }else{
                                                     toastr.error('Ocurrio un error al momento de la guardar operacion bancaria.','Error',{timeOut: 5000})
                                                     $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
                                                 }
                                             })
                                         }else{
@@ -2872,7 +2878,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(flagFP){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
 
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
@@ -2884,7 +2890,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 }else{
                                                     toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                     $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
                                                 }
                                             })
                                         }
@@ -2951,7 +2957,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(res.respuesta=='ok'){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
 
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
@@ -2963,14 +2969,14 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 }else{
                                                     toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                     $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
                                                 }
                                             })
                                         
                                         }else{
                                             toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                             $("#modal-alerta").modal("hide")
-                                            H5_loading.hide()
+                                            $('#modal-proceso').waitMe('hide');
                                         }
                                     })
     
@@ -3034,7 +3040,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(flag){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
-                                                    H5_loading.hide()
+                                                    $('#modal-proceso').waitMe('hide');
                                                     if(CodLibro=='14'){
                                                         dataArray.cuerpo.FORMA_PAGO=Des_FormaPago
                                                         PrepararImpresion(dataArray)
@@ -3045,14 +3051,14 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 }else{
                                                     toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
                                                     $("#modal-alerta").modal("hide")
-                                                    H5_loading.hide() 
+                                                    $('#modal-proceso').waitMe('hide');
                                                 }
                                             })
                                         
                                         }else{
                                             toastr.error('Ocurrio un error al momento de guardar la comprobante de pago.','Error',{timeOut: 5000})
                                             $("#modal-alerta").modal("hide")
-                                            H5_loading.hide()
+                                            $('#modal-proceso').waitMe('hide');
                                         }
                                     })
 
@@ -3061,13 +3067,13 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                     }else{
                             toastr.error('Ocurrio un error al momento de guardar los detalles del comprobante.','Error',{timeOut: 5000})
                             $("#modal-alerta").modal("hide")
-                            H5_loading.hide()
+                            $('#modal-proceso').waitMe('hide');
                     }
                 })
                 }else{
                     toastr.error('Ocurrio un error al momento de guardar el comprobante.','Error',{timeOut: 5000})
                     $("#modal-alerta").modal("hide")
-                    H5_loading.hide()
+                    $('#modal-proceso').waitMe('hide');
                 } 
                 
             })
@@ -3948,6 +3954,7 @@ function BuscarProductoCP(CodLibro,tipo) {
 
 
 function BuscarClienteDoc(CodLibro) {
+    run_waitMe($('#div-cliente-comprobante-pago'), 1, "ios","Buscando cliente...");
     var Nro_Documento = document.getElementById('Nro_Documento').value
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
@@ -4001,8 +4008,12 @@ function BuscarClienteDoc(CodLibro) {
                 CambioLicitacion()
 
             }
-            H5_loading.hide()
-        })
+            $('#div-cliente-comprobante-pago').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#div-cliente-comprobante-pago').waitMe('hide');
+        });
     }
 }
 
@@ -4032,7 +4043,7 @@ async function AsyncCalcularTotal(CodLibro,variables) {
  
 
 function ComprobantePago(Cod_Libro,Cliente,Detalles) {
-    H5_loading.show(); 
+    run_waitMe($('#main-contenido'), 1, "ios","Cargando ventana para el comprobante...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate()
@@ -4067,9 +4078,13 @@ function ComprobantePago(Cod_Libro,Cliente,Detalles) {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa   
                     VerRegistroComprobante(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01',Cliente,Detalles)
-                    H5_loading.hide() 
+                    $('#main-contenido').waitMe('hide');
                      
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    $('#main-contenido').waitMe('hide');
+                });
 
         }) 
 }

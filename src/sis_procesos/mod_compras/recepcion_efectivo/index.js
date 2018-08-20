@@ -182,7 +182,7 @@ function RegistrarRecepcion(u,idInputCliente){
     var Recibido = $("#R"+idInputCliente).val()
     var Diferencia = $("#D"+idInputCliente).text()
     if(EsValido(idInputCliente)){
-        H5_loading.show();
+        run_waitMe($('#modal-proceso'), 1, "ios","Registrando recepción...");
         var id_Movimiento = u.id_Movimiento
         const parametros = {
             method: 'POST',
@@ -209,8 +209,12 @@ function RegistrarRecepcion(u,idInputCliente){
                     toastr.error('No se pudo recepcionar correctamente el movimiento de dinero','Error',{timeOut: 5000})
                 }
                 $('#modal-proceso').modal('hide')
-                H5_loading.hide()
-            })
+                $('#modal-proceso').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#modal-proceso').waitMe('hide');
+            });
         
     }else{
         toastr.error('No Existe un Responsable asignado para la Diferencia','Error',{timeOut: 5000})
@@ -218,8 +222,8 @@ function RegistrarRecepcion(u,idInputCliente){
 }
 
 
-function Reactivar(u,idInputCliente){ 
-    H5_loading.show();
+function Reactivar(u,idInputCliente){
+    run_waitMe($('#modal-proceso'), 1, "ios"); 
     var id_Movimiento = u.id_Movimiento
     var Recibido = $("#R"+idInputCliente).val()
     const parametros = {
@@ -244,13 +248,17 @@ function Reactivar(u,idInputCliente){
                 toastr.error('No se pudo colocar como pendiente a esta recepcion','Error',{timeOut: 5000})
             }
             console.log(res.data)
-            H5_loading.hide()
-        })
+            $('#modal-proceso').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
 }
 
 function Recepcionados(){
     if(!flag_button){
-        H5_loading.show();
+        run_waitMe($('#modal-proceso'), 1, "ios","Realizando operación...");
         const parametros = {
             method: 'POST',
             headers: {
@@ -272,8 +280,12 @@ function Recepcionados(){
                 else { 
                     refrescarTabla([])
                 }
-                H5_loading.hide()
-            })
+                $('#modal-proceso').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#modal-proceso').waitMe('hide');
+            });
         
         flag_button = true
     }else{
@@ -286,7 +298,7 @@ function NuevaRecepcion() {
     totalRecibido = 0
     total = 0
     flag_button = false
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -308,8 +320,12 @@ function NuevaRecepcion() {
             else { 
                 
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 

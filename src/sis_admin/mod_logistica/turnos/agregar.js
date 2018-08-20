@@ -180,7 +180,7 @@ function Guardar(_escritura, turno){
         var Fecha_Fin = toFechaSQL(document.getElementById('Fecha_Fin').value,document.getElementById('Hora_Fin').value)
         var Flag_Cerrado = document.getElementById('Flag_Cerrado').checked?'1':'0'
         var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         const parametros = {
             method: 'POST',
             headers: {
@@ -205,8 +205,12 @@ function Guardar(_escritura, turno){
                 }else{
                     NuevoTurno(_escritura, turno)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 
 }

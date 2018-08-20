@@ -9,7 +9,7 @@ import { NuevoEnvioEfectivo } from '../sis_procesos/mod_ventas/transferencias'
 
 import { NuevoIngreso } from '../sis_procesos/mod_ventas/recibo_ingreso'
 import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
-import { NuevaVenta, VentaSimple,VentaCompleta } from '../sis_procesos/mod_ventas/ventas'
+import { NuevaVenta } from '../sis_procesos/mod_ventas/ventas'
 import { NuevoArqueoCaja } from '../sis_procesos/mod_ventas/arqueo_caja'
 
 
@@ -41,8 +41,6 @@ function Ver(Flag_Cerrado) {
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-opencart"></i> Ventas<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li class=""><a href="javascript:void(0);" onclick=${() => NuevaVenta()}><span> Nueva Venta</span></a></li>
-                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaSimple()}><span> Venta Simple</span></a></li>
-                        <li class=""><a href="javascript:void(0);" onclick=${() => VentaCompleta()}><span> Venta Completa</span></a></li>
                     </ul>
                 </li>
 

@@ -41,9 +41,11 @@
                     <p id="textError"></p>
                 </div>
             <% } %>
+            <h3 class="login-box-msg">Iniciar Sesión</h3>
             <form action="login" method="post">
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="empresa">Empresa</label>
+               
+                <!--<div class="form-group row">
+                    <label class="col-sm-3 col-form-label" for="empresa">Empresa</label> 
                     <div class="col-sm-9">
                         <select id="empresa" name="RUC" class="form-control"> 
                         <% if(typeof empresa != 'undefined') { %>
@@ -51,24 +53,26 @@
                                 <option value="<%=e.RUC%>"><%=e.Nom_Comercial%></option> 
                             <% }) %>
                         <% } %>
-                        </select>
+                        </select> 
                     </div>
+                </div>-->
+
+
+                <div class="form-group has-feedback"> 
+                    <input type="text" name="RUC" class="form-control" id="empresa" required placeholder="RUC">
+                    <span class="glyphicon glyphicon-stats form-control-feedback"></span>
                 </div>
                 
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="usuario">Usuario</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
-                    </div>
+                <div class="form-group has-feedback"> 
+                    <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
 
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="usuario">Password</label>
-                    <div class="col-sm-9">
-                        <input type="password" name="password" class="form-control" required placeholder="Password">
-                    </div>
+                <div class="form-group has-feedback"> 
+                    <input type="password" name="password" class="form-control" required placeholder="Contraseña">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span> 
                 </div>
-  
+                <!--
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
                     <div class="col-sm-9">
@@ -80,7 +84,7 @@
 
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
-                    <div class="col-sm-9">
+                    <div class="col-sm-9" id="select-periodo">
                         <select id="Periodo" name="Periodo" class="form-control"> 
                             
                         </select>
@@ -94,17 +98,19 @@
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" id="btnTurnoSiguiente"><i class="fa fa-arrow-right text-success"></i></button>
                             </span>
-                            <select id="Turno" name="Turno" class="form-control"> 
-                                
-                            </select>
+                            <div id="select-turno">
+                                <select id="Turno" name="Turno" class="form-control"> 
+                                    
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="row">
                     <!-- /.col -->
                     <div class="col-xs-12">
-                        <button type="submit" class="btn btn-warning btn-block btn-flat">Entrar</button>
+                        <button type="submit" class="btn btn-warning btn-block btn-flat"><i class="fa fa-check"></i> Entrar</button>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -112,7 +118,7 @@
                 <div class="row">
                     <!-- /.col -->
                     <div class="col-xs-12">
-                        <a href="/register" class="btn btn-primary btn-block btn-flat">Registrarse</a>
+                        <a href="/register" class="btn btn-primary btn-block btn-flat"><i class="fa fa-user-plus"></i> Registrarse</a>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -125,9 +131,6 @@
     <script src='/bower_components/jquery/dist/jquery.min.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/dist/js/waitMe.min.js"></script>
-    <script src="/dist/js/custom.js"></script>
-    <script src="/app_login.js"></script>
-    
     
 </body>
 

@@ -102,7 +102,7 @@ function Guardar(_escritura, categoriasPadre, categoria){
         var Foto = null
         var Cod_CategoriaPadre = document.getElementById('Cod_CategoriaPadre').value.toUpperCase()
         var Cod_Usuario = 'ADMINISTRADOR'.toUpperCase()
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         const parametros = {
             method: 'POST',
             headers: {
@@ -125,13 +125,17 @@ function Guardar(_escritura, categoriasPadre, categoria){
                 }else{
                     Ver(_escritura, categoriasPadre, categoria)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 
 function NuevaCategoria(_escritura, categoria){
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -151,8 +155,12 @@ function NuevaCategoria(_escritura, categoria){
             }else{
                 Ver(_escritura, [], categoria)
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { NuevaCategoria }

@@ -92,7 +92,7 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
 
 function Guardar(_escritura, modulo) {
     if (ValidacionCampos()) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando modulos...");
         var Cod_Modulo = modulo ? modulo.Cod_Modulo : document.getElementById('Cod_Modulo').value.toUpperCase()
         var Des_Modulo = document.getElementById('Des_Modulo').value.toUpperCase()
         var Padre_Modulo = document.getElementById('Padre_Modulo').value
@@ -122,7 +122,11 @@ function Guardar(_escritura, modulo) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }

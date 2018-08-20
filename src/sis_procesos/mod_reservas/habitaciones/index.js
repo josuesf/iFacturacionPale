@@ -112,7 +112,7 @@ function GuardarHabitacion(){
     //console.log($(".select-multiple").val())
 
     if (ValidacionCampos("modal_error_habitacion","modal_form_habitacion")){
-        H5_loading.show()
+        run_waitMe($('#modal-proceso'), 1, "ios","Registrando habitacion....");
         var Cod_Habitacion = $("#Cod_Habitacion").val()
         var Des_Habitacion = $("#Descripcion").val()
         var Id_Producto = -1
@@ -158,41 +158,23 @@ function GuardarHabitacion(){
             }else{
                 toastr.error('No se pudo registrar correctamente la habitacion','Error',{timeOut: 5000})
             }
-            H5_loading.hide()
+            $('#modal-proceso').waitMe('hide');
             
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
+
 
 
     }
 }
 
 function NuevaHabitacion() {
-    H5_loading.show()
+    run_waitMe($('#main-contenido'), 1, "ios");
     Ver()
-    H5_loading.hide()
-    /*const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-        })
-    }
-    fetch(URL + '/recepciones_api/get_variables_recepcion_transferencia', parametros)
-        .then(req => req.json())
-        .then(res => {
-            var variables = res.data
-            console.log(variables)
-            if (res.respuesta == 'ok') {
-                
-                Ver(variables)
-            }
-            else { 
-                
-            }
-            H5_loading.hide()
-        })*/
+    $('#main-contenido').waitMe('hide');
 }
 
 

@@ -730,8 +730,7 @@ function BuscarClienteDoc() {
                      
                 } 
 
-            }
-            H5_loading.hide()
+            } 
         })
 }
 
@@ -1041,40 +1040,8 @@ function DataHabitaciones(data,callback){
     callback(listTipos)
 }
 
-function LibroReservas(pCargarEfectivo) {
-    H5_loading.show();
-    Ver()
-    H5_loading.hide();
-    
-    /*aCargarEfectivo = true
-    const fecha = new Date()
-    const mes = fecha.getMonth() + 1
-    const dia = fecha.getDate() 
-    var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-        })
-    }
-    fetch(URL + '/cajas_api/get_caja_actual', parametros)
-        .then(req => req.json())
-        .then(res => {
-            var caja = res.caja
-            var turno = res.turno
-            var arqueo = res.arqueo
-            
-            fetch(URL + '/cajas_api/arqueo_caja', parametros)
-            .then(req => req.json())
-            .then(res => { 
-                Ver(fecha_format,caja,turno,arqueo,res.data.resumenpen,res.data.resumenusd)
-                H5_loading.hide();
-            })
-
-        })*/
+function LibroReservas(pCargarEfectivo) { 
+    Ver()  
 
 }
 

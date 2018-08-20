@@ -549,7 +549,7 @@ function ArquearCaja(){
 }
 
 function AceptarConfirmacion(){
-    H5_loading.show();
+    run_waitMe($('#modal-alerta'), 1, "ios","Realizando operación...");
     var Fecha = $("#FechaHora").val().replace('T',' ')
     var dataFormTS = $("#formSumaTotalSoles").serializeArray()
     var dataFormTD = $("#formSumaTotalDolares").serializeArray() 
@@ -582,14 +582,18 @@ function AceptarConfirmacion(){
             }else{
                 toastr.error('Ocurrio un erro en el arqueo, comuniquese con el administrador de sistemas','Error',{timeOut: 5000})
                 $('#modal-alerta').modal('hide')
-                H5_loading.hide();
+                $('#modal-alerta').waitMe('hide');
             }
            
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-alerta').waitMe('hide');
+        });
 }
 
 function NuevoArqueoCaja(pCargarEfectivo) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     aCargarEfectivo = true
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -612,9 +616,13 @@ function NuevoArqueoCaja(pCargarEfectivo) {
             var turno = res.turno
             var arqueo = res.arqueo 
             Ver(fecha_format,caja,turno,arqueo,res.data.resumenpen,res.data.resumenusd)
-            H5_loading.hide(); 
+            $('#main-contenido').waitMe('hide');
 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 

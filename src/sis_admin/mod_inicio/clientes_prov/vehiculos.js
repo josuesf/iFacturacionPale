@@ -160,7 +160,7 @@ function AbrirVehiculo(_escritura, Id_ClienteProveedor, vehiculo) {
 function GuardarVehiculo(_escritura, Id_ClienteProveedor, vehiculo) {
     if (ValidacionCampos('divErrors_V')) {
         $('#modal-abrir').modal("hide")
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando...");
         const Cod_Placa = vehiculo ? vehiculo.Cod_Placa : document.getElementById('V_Cod_Placa').value.toUpperCase()
         const Color = document.getElementById('V_Color').value.toUpperCase()
         const Marca = document.getElementById('V_Marca').value.toUpperCase()
@@ -185,14 +185,18 @@ function GuardarVehiculo(_escritura, Id_ClienteProveedor, vehiculo) {
             .then(r => r.json())
             .then(res => {
                 Vehiculos(_escritura, Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 function Eliminar(_escritura, vehiculo) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando...");
         const Id_ClienteProveedor = vehiculo.Id_ClienteProveedor
         const Cod_Placa = vehiculo.Cod_Establecimientos
 
@@ -210,14 +214,18 @@ function Eliminar(_escritura, vehiculo) {
             .then(r => r.json())
             .then(res => {
                 Vehiculos(_escritura, vehiculo.Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 
 }
 
 function Vehiculos(_escritura, Id_ClienteProveedor) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -236,8 +244,12 @@ function Vehiculos(_escritura, Id_ClienteProveedor) {
             } else {
                 Ver(_escritura, [], Id_ClienteProveedor)
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { Vehiculos }

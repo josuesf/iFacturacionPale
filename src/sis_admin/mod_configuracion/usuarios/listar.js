@@ -111,7 +111,7 @@ function EliminarUsuario(_escritura, usuario){
     
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Eliminando usuario...");
         var Cod_Usuarios = usuario.Cod_Usuarios
         const parametros = {
             method: 'POST',
@@ -136,13 +136,17 @@ function EliminarUsuario(_escritura, usuario){
 
                     this.removeEventListener('click', Eliminar)
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 }
 
 function ListarUsuarios(escritura, NumeroPagina) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -173,8 +177,12 @@ function ListarUsuarios(escritura, NumeroPagina) {
             }
             else
                 Ver([])
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 

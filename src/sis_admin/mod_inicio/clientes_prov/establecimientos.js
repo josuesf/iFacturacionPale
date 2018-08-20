@@ -153,7 +153,7 @@ function CargarFormulario(_escritura, tipos_establecimientos, Id_ClienteProveedo
 }
 function AbrirEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) {
 
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -170,15 +170,19 @@ function AbrirEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) 
             } else {
                 CargarFormulario(_escritura, [], Id_ClienteProveedor, establecimiento)
             }
-            H5_loading.hide();
+            $('#main-contenido').waitMe('hide');
             $('#modal-abrir').modal()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 function GuardarEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) {
     if (ValidacionCampos('divErrors_E')) {
         $('#modal-abrir').modal("hide")
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando establecimiento...");
         const Cod_Establecimientos = establecimiento ? establecimiento.Cod_Establecimientos : document.getElementById('E_Cod_Establecimientos').value.toUpperCase()
         const Des_Establecimiento = document.getElementById('E_Des_Establecimiento').value.toUpperCase()
         const Cod_TipoEstablecimiento = document.getElementById('E_Cod_TipoEstablecimiento').value
@@ -203,14 +207,18 @@ function GuardarEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento
             .then(r => r.json())
             .then(res => {
                 Establecimientos(_escritura, Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 function Eliminar(_escritura, establecimiento) {
     var btnEliminar = document.getElementById('btnEliminar')
     btnEliminar.addEventListener('click', function Eliminar(ev) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando establecimiento...");
         const Id_ClienteProveedor = establecimiento.Id_ClienteProveedor
         const Cod_Establecimientos = establecimiento.Cod_Establecimientos
 
@@ -228,13 +236,17 @@ function Eliminar(_escritura, establecimiento) {
             .then(r => r.json())
             .then(res => {
                 Establecimientos(_escritura, establecimiento.Id_ClienteProveedor)
-                H5_loading.hide();
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     })
 
 }
 function Establecimientos(_escritura, Id_ClienteProveedor) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -253,8 +265,12 @@ function Establecimientos(_escritura, Id_ClienteProveedor) {
             } else {
                 Ver(_escritura, [], Id_ClienteProveedor)
             }
-            H5_loading.hide();
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { Establecimientos }

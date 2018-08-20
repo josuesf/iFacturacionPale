@@ -497,7 +497,7 @@ function CambioProvincia(Cod_Ubigeo) {
 
 function Guardar(_escritura, diagramas, cliente) {
     if (ValidacionCampos()) {
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando cliente proveedor...");
         var Id_ClienteProveedor = cliente ? cliente.Id_ClienteProveedor : '-1'
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDocumento').value
         var Nro_Documento = document.getElementById('Nro_Documento').value
@@ -555,8 +555,12 @@ function Guardar(_escritura, diagramas, cliente) {
                 else {
                     alert('Ocurrio un error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 

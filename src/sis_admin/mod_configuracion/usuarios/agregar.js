@@ -183,7 +183,7 @@ function ValidacionesExtras(usuario){
 function Guardar(_escritura, Cajas, usuario) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
     if(ValidacionCampos() && ValidacionesExtras(usuario)){
-        H5_loading.show();
+        run_waitMe($('#main-contenido'), 1, "ios","Guardando usuario...");
         for (var j = 0; j < Cajas.length; j++) {
             Cajas[j].Relacion = document.getElementById(Cajas[j].Cod_Caja).checked
         }
@@ -228,8 +228,12 @@ function Guardar(_escritura, Cajas, usuario) {
                 else {
                     console.log('Error')
                 }
-                H5_loading.hide()
-            })
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
     }
 }
 
@@ -254,8 +258,12 @@ function NuevoUsuario(_escritura, _estados, _perfiles, usuario) {
                 cajas = res.data.cajas
             }
             Ver(_escritura, _estados, _perfiles, cajas, usuario)
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 
 }

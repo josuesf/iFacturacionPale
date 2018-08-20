@@ -324,7 +324,7 @@ function SeleccionarCliente(cliente){
 
 function GuardarCompraVentaME(variables,fecha_actual){
     if(ValidacionCampos("modal_error","modal_form")){
-        H5_loading.show()
+        run_waitMe($('#modal-proceso'), 1, "ios","Registrando operación...");
         if ($('input[name=TipoDestino]:checked').val() == 'c') {
             var OBS = '<Registro>'
             for (var i = 0; i < variables.diagramas.length; i++) {
@@ -403,7 +403,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
             .then(req => req.json())
             .then(res => {
                 $('#modal-proceso').modal('hide')
-                H5_loading.hide()
+                $('#modal-proceso').waitMe('hide');
                 if (res.respuesta == 'ok') {               
                     toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
                     refrescar_movimientos()
@@ -411,7 +411,11 @@ function GuardarCompraVentaME(variables,fecha_actual){
                 else{
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#modal-proceso').waitMe('hide');
+            });
         }else{
             var OBS = '<Registro>'
             for (var i = 0; i < variables.diagramas.length; i++) {
@@ -508,7 +512,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     .then(req => req.json())
                     .then(res => {
                         $('#modal-proceso').modal('hide')
-                        H5_loading.hide()
+                        $('#modal-proceso').waitMe('hide');
                         if (res.respuesta == 'ok') {             
                             toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
                             refrescar_movimientos()
@@ -516,22 +520,30 @@ function GuardarCompraVentaME(variables,fecha_actual){
                         else{
                             toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        $('#modal-proceso').waitMe('hide');
+                    });
         
 
                 }
                 else{
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
                 }
-                H5_loading.hide()
-            })
+                $('#modal-proceso').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#modal-proceso').waitMe('hide');
+            });
 
         }
     }
 }
  
 function NuevoCompraVentaME(_escritura, caja) { 
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {
         method: 'POST',
@@ -550,9 +562,13 @@ function NuevoCompraVentaME(_escritura, caja) {
                 TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie==undefined?0:res.data.comprobante_caja[0].Serie)
             }
             else {
-                H5_loading.hide()
+                $('#main-contenido').waitMe('hide');
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 function TraerSiguienteNumeroComprobante(_escritura, Serie) {
@@ -581,8 +597,12 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
             }
             else { 
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 
@@ -608,8 +628,12 @@ function TraerCuentaBancariaEntidadFinanciera() {
             }
             else {
             }
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 

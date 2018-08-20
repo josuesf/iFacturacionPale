@@ -5,7 +5,7 @@ import { CargarPDFModal } from '../modales/pdf'
 import { ConvertirCadena } from '../../../utility/tools' 
 
 
-function Ver(Flag_Cerrado,movimientos,saldos) {
+function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var el = yo`
         <div>
             <section class="content-header" id="sectionModals">
@@ -159,7 +159,7 @@ function Ver(Flag_Cerrado,movimientos,saldos) {
             "sSearch": "Buscar:"
         }
     });
-    
+    callback(true)
 }
 
 
@@ -1201,7 +1201,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
 }
 
 function refrescar_movimientos_caja(){
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -1216,17 +1216,24 @@ function refrescar_movimientos_caja(){
         .then(res => {
             if (res.respuesta == 'ok') {
 
-                VerTabCaja(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos)
+                VerTabCaja(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
+                    $('#main-contenido').waitMe('hide');
+                })
             }
-            else
-                VerTabCaja([])
-            H5_loading.hide()
-        }) 
+            else{
+                toastr.error('Ocurrio un error. Actualice la pagina e intentelo nuevamente','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            } 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 
 module.exports = function movimientos_caja(ctx, next) {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -1240,12 +1247,20 @@ module.exports = function movimientos_caja(ctx, next) {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos)
+                Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
+                    $('#main-contenido').waitMe('hide');
+                })
             }
-            else
-                Ver([])
-            H5_loading.hide()
-        })
+            else{
+                toastr.error('Ocurrio un error. Actualice la pagina e intentelo nuevamente','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            }
+            
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
     next();
 }
 

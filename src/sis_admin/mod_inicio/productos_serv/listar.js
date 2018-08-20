@@ -117,7 +117,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
  function EliminarProductoServ(_escritura, Id_Producto){
      var btnEliminar = document.getElementById('btnEliminar')
      btnEliminar.addEventListener('click', function del(ev){ 
-        run_waitMe($('#main-contenido'), 1, "bounce");
+        run_waitMe($('#main-contenido'), 3, "ios");
          const parametros = {
              method: 'POST',
              headers: {
@@ -131,14 +131,19 @@ function Ver(variables, paginas, pagina_actual, _escritura){
          fetch(URL+'/productos_serv_api/eliminar_producto', parametros)
              .then(req => req.json())
              .then(res => {
-                 ListarProductosServ(_escritura,0)
-                 this.removeEventListener('click', del)
-             })
+                ListarProductosServ(_escritura,0)
+                this.removeEventListener('click', del)
+                $('#main-contenido').waitMe('hide');
+             }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
      })
 }
 
 function ListarProductosServ(escritura,NumeroPagina) {
-    run_waitMe($('#main-contenido'), 1, "bounce");
+    run_waitMe($('#main-contenido'), 3, "ios");
     var _escritura=escritura;
     const parametros = {
         method: 'POST',
@@ -164,7 +169,13 @@ function ListarProductosServ(escritura,NumeroPagina) {
             }
             else
                 Ver([])
-        })
+            
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export {ListarProductosServ}

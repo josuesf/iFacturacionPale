@@ -27,7 +27,7 @@ function CargarFormulario(variables, fecha_actual) {
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8" id="div-cliente-recibo-ingreso">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <p>A favor de :</p>
@@ -280,6 +280,7 @@ function SeleccionarCliente(cliente){
 
 
 function BuscarCliente() { 
+    run_waitMe($('#div-cliente-recibo-ingreso'), 1, "ios","Buscando cliente...");
     var Nro_Documento = document.getElementById('Nro_Documento').value
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     const parametros = {
@@ -301,8 +302,12 @@ function BuscarCliente() {
                 $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
                 Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
             }
-            H5_loading.hide()
-        })
+            $('#div-cliente-recibo-ingreso').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#div-cliente-recibo-ingreso').waitMe('hide');
+        });
 }
 function getValueXML(xmlDoc, TAG) {
     if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
@@ -419,7 +424,7 @@ function Guardar() {
     const MontoEgreso = 0
     const Cod_Moneda = document.getElementById('Cod_Moneda').value
     const Obs_Movimiento = Obs_Recibo
-    H5_loading.show()
+    run_waitMe($('#modal-proceso'), 1, "ios","Registrando operación...");
     const parametros = {
         method: 'POST',
         headers: {
@@ -438,18 +443,22 @@ function Guardar() {
         .then(req => req.json())
         .then(res => {
             $('#modal-proceso').modal('hide')
-            H5_loading.hide()
+            $('#modal-proceso').waitMe('hide');
             if (res.respuesta == 'ok') {
                 toastr.success('Se registro correctamente el ingreso','Confirmacion',{timeOut: 5000})
                 refrescar_movimientos()
             }else{
                 toastr.error('No se pudo registrar correctamente el ingreso','Error',{timeOut: 5000})
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-proceso').waitMe('hide');
+        });
     }
 }
 function NuevoIngreso() {
-    H5_loading.show();
+    run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_TipoComprobante = 'RI'
     var Cod_ClaseConcepto = '007'
     const parametros = {
@@ -475,8 +484,12 @@ function NuevoIngreso() {
             }
             else
                 CargarFormulario({})
-            H5_loading.hide()
-        })
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 
 }
 
