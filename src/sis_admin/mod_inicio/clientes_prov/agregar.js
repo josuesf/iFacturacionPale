@@ -465,7 +465,10 @@ function CambioDepartamento(Cod_Ubigeo) {
                 $('#Cod_Provincia').append(provincias_items)
                 CambioProvincia(Cod_Ubigeo)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 function CambioProvincia(Cod_Ubigeo) {
     $('#Cod_Distrito').html('<option value="">Seleccione Distrito</option>')
@@ -492,7 +495,10 @@ function CambioProvincia(Cod_Ubigeo) {
                 }
                 $('#Cod_Distrito').append(distritos_items)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function Guardar(_escritura, diagramas, cliente) {

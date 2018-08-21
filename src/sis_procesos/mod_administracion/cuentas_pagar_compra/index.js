@@ -605,7 +605,10 @@ function BuscarPorFecha(CodLibro){
             if (res.respuesta == 'ok') {
                 AgregarTabla(res.data.cuentas)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     
 }
 
@@ -665,7 +668,10 @@ function CambioCodCuentaBancaria(CodLibro){
                 var cheques = res.data.cheques 
                 LlenarCheques(cheques)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CambioAmortizar(){
@@ -760,7 +766,10 @@ function TraerPorCuentaOperacion(){
                     $("#Cuenta_CajaBancos").focus()
                 }
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function TraerTipoCambio(CodLibro){
@@ -793,7 +802,10 @@ function TraerTipoCambio(CodLibro){
                             $("#Tipo_Cambio").val(1)
                         }
                     } 
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
 
         }catch(e){
             $("#Tipo_Cambio").val(1)
@@ -825,7 +837,10 @@ function TraerSaldoPagoAdelantado(){
                     $("#divCuentaCajaBancos").css("display","none")
                 } 
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
@@ -846,7 +861,10 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria_(cuentas,CodLibro)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 
@@ -867,7 +885,10 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria(cuentas,CodLibro)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function BuscarClienteDoc(CodLibro) {
@@ -936,7 +957,10 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
                     $("#optLicitacion").attr("checked",false)   
                 }
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function VerGuardar(CodLibro){
@@ -999,7 +1023,10 @@ function GuardarMovimientoBancario(Facturas,CodLibro){
         .then(req => req.json())
         .then(res => {
             console.log(res)
-        }) 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        }); 
 
 }
 
@@ -1061,7 +1088,10 @@ function GuardarMovimientoCaja(Facturas,CodLibro){
         .then(req => req.json())
         .then(res => {
             console.log(res)
-        }) 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        }); 
  
 }
 
@@ -1166,7 +1196,10 @@ function AceptarConfirmacionCuenta(CodLibro){
                             })        
  
                         }
-                    }) 
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    }); 
 
 
                 Facturas += $(this).find("td").eq(5).text() + ", "
@@ -1270,11 +1303,17 @@ function AceptarConfirmacionCuenta(CodLibro){
                                 if(res.respuesta=="ok"){
                                     
                                 }
-                            }) 
+                            }).catch(function (e) {
+                                console.log(e);
+                                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            }); 
                         
 
                     }
-                }) 
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                }); 
             
         }         
     });

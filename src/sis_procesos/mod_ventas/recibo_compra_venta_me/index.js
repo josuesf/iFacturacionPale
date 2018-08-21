@@ -294,7 +294,10 @@ function RecuperarDatosClientePorNroDoc(){
         else{
             BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
         }
-    })
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+    });
 }
  
 

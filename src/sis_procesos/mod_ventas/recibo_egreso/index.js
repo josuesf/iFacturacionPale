@@ -310,7 +310,10 @@ function BusquedaClienteModal(e){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
         }else{
             var Nro_Documento = txtBuscarCliente
             var Cod_TipoDocumento = ''
@@ -337,7 +340,10 @@ function BusquedaClienteModal(e){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
         }
     }
 }

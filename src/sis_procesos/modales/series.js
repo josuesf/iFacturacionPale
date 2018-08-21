@@ -322,8 +322,8 @@ function BuscarSerie(evente){
     }
 }
 
-function TraerTOPXSerie(){
-    H5_loading.show()
+function TraerTOPXSerie(){ 
+    run_waitMe($('#modal-otros-procesos'), 3, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -341,9 +341,13 @@ function TraerTOPXSerie(){
         .then(res => {
             if (res.respuesta == 'ok') {
                 LlenarTablaSeries(res.data.productos)
-                H5_loading.hide()
             }
-        })
+            $('#modal-otros-procesos').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-otros-procesos').waitMe('hide');
+        });
 }
 
 function AceptarGenerarSerie() {
@@ -469,7 +473,7 @@ function EsValido() {
 }
 
 function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series, fecha, Stock) {
-    H5_loading.show()
+    $('#modal-otros-procesos').waitMe('hide');
     const parametros = {
         method: 'POST',
         headers: {
@@ -497,15 +501,19 @@ function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series
                 const dia = _fecha.getDate()
                 var fecha_now = _fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
                 VerAsignarSeries(_Series, fecha_now, Stock, Cantidad)
-                H5_loading.hide()
+                $('#modal-otros-procesos').waitMe('hide');
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-otros-procesos').waitMe('hide');
+        });
 
     //VerAsignarSeries(CodAlmacen, IdProducto,Cantidad,NroDias)
 }
 
 function BuscarPorSerie(){
-    H5_loading.show()
+    run_waitMe($('#modal-otros-procesos'), 3, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -522,9 +530,13 @@ function BuscarPorSerie(){
             if (res.respuesta == 'ok') {
                 var almacenes = res.data.almacenes
                 VerBuscarPorSerie(almacenes)
-                H5_loading.hide()
+                $('#modal-otros-procesos').waitMe('hide');
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $('#modal-otros-procesos').waitMe('hide');
+        });
 }
 
 export { AsignarSeriesModal, BuscarPorSerie }

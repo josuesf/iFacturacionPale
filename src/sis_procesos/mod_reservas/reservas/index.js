@@ -731,7 +731,10 @@ function BuscarClienteDoc() {
                 } 
 
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CambioCantidad(precio){
@@ -850,7 +853,11 @@ function ConfirmarReserva(variables){
             }else{
                 toastr.error('No se pudo registrar correctamente la reserva','Error',{timeOut: 5000})
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            $('#modal-proceso').modal("hide")
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function RegistroReserva(args){ 
@@ -890,7 +897,10 @@ function RegistroReserva(args){
             variables['args'] = args
             variables['datos_habitacion'] = datos_habitacion
             VerRegistroReserva(variables)
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CargarResources() {
@@ -916,7 +926,10 @@ function CargarResources() {
                 dp.update()
             })
            
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
  
 function CargarEvents() {
@@ -943,7 +956,10 @@ function CargarEvents() {
                 dp.events.list = list;
                 dp.update()
             })
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 
     /*var start = dp.visibleStart();
     var end = dp.visibleEnd();

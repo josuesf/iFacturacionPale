@@ -503,7 +503,10 @@ function CargarBilletes(arqueo){
                 //console.log("billetes")
                 //console.log(res)
                 LlenarTabla(res.data.billetes)
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
 
     }else{
 
@@ -523,7 +526,10 @@ function CargarBilletes(arqueo){
                 //console.log("billetes1")
                 //console.log(res)
                  LlenarTabla(res.data.billetes)
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
 
     }
 }

@@ -564,7 +564,10 @@ function TraerPeriodos(){
         .then(res => {
             LlenarPeriodo(res.data.periodos,'Periodo')
             TraerTurnos()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function TraerTurnos(){
@@ -584,7 +587,10 @@ function TraerTurnos(){
         .then(req => req.json())
         .then(res => { 
             LlenarTurnos(res.data.turnos,'Turno')
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function GuardarCambioTurno(movimiento){ 
@@ -628,7 +634,10 @@ function GuardarCambioTurno(movimiento){
                     }else{
                         toastr.error('No se pudo modificar el turno','Error',{timeOut: 5000})
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
             break;
         case "CAJ_CAJA_MOVIMIENTOS":
             
@@ -657,7 +666,10 @@ function GuardarCambioTurno(movimiento){
                     }else{
                         toastr.error('No se pudo modificar el turno','Error',{timeOut: 5000})
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
             break;
         case "ALM_ALMACEN_MOV":
             
@@ -686,7 +698,10 @@ function GuardarCambioTurno(movimiento){
                     }else{
                         toastr.error('No se pudo modificar el turno','Error',{timeOut: 5000})
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
             break;
     }
 }
@@ -764,7 +779,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
                     console.log("CAJ_COMPROBANTE_PAGO")
@@ -812,7 +830,10 @@ function ExtornarAnular(movimiento,flag) {
                                         }else{
                                             toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                         }
-                                    })
+                                    }).catch(function (e) {
+                                        console.log(e);
+                                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                    });
                             }else{
                                 if(comprobante_pago.Cod_TipoComprobante=='FE' || comprobante_pago.Cod_TipoComprobante=='BE'){
                                     parametros = {
@@ -841,7 +862,10 @@ function ExtornarAnular(movimiento,flag) {
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
-                                        })
+                                        }).catch(function (e) {
+                                            console.log(e);
+                                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                        });
                                 }else{
                                     
                                     parametros = {
@@ -870,7 +894,10 @@ function ExtornarAnular(movimiento,flag) {
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
-                                        })
+                                        }).catch(function (e) {
+                                            console.log(e);
+                                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                        });
 
 
                                 }
@@ -882,7 +909,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                             }*/
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
                 case "ALM_ALMACEN_MOV":
                     var Id_Almacen_Mov = id_Movimiento 
@@ -908,7 +938,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
                 case "CAJ_FORMA_PAGO":
                     var id_ComprobantePago = id_Movimiento 
@@ -936,7 +969,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo anular correctamente el movimiento','Error',{timeOut: 5000})
                             }
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
 
 
@@ -972,7 +1008,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo eliminar correctamente el movimiento','Error',{timeOut: 5000})
                             } 
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
                     var Justificacion = $("#txtJustificacion").val() 
@@ -1000,7 +1039,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo eliminar correctamente el comprobante','Error',{timeOut: 5000})
                             } 
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
                 case "ALM_ALMACEN_MOV": 
                     var Id_AlmacenMov = id_Movimiento
@@ -1026,7 +1068,10 @@ function ExtornarAnular(movimiento,flag) {
                             }else{
                                 toastr.error('No se pudo eliminar correctamente el movimiento','Error',{timeOut: 5000})
                             } 
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     break;
 
             }
@@ -1189,7 +1234,10 @@ function PrepararImpresion(id_ComprobantePago,callback){
                             toastr.error('No se pudo recuperar los detalles del comprobante','Error',{timeOut: 5000})  
                             callback(false)
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    });
 
             }
             else{
@@ -1197,7 +1245,10 @@ function PrepararImpresion(id_ComprobantePago,callback){
                 callback(false)
             }
           
-        }) 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function refrescar_movimientos_caja(){

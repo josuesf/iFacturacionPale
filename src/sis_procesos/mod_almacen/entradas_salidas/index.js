@@ -430,7 +430,10 @@ function CambioOperacion(CodTipoComprobante){
             .then(res => {               
                 LlenarAlmacenesDestinos(res.data.almacenes)
     
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
              
     }else{
         if($("#Cod_Operacion").val()=="21"){
@@ -451,7 +454,10 @@ function CambioOperacion(CodTipoComprobante){
                 .then(res => { 
                     LlenarPendientesRecepcionar(res.data.pendientes)
         
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
             
         }
     }
@@ -497,7 +503,10 @@ function CargarDatosAControles(CodTipoComprobante,fecha_actual){
             }else{
                 IniciarElementos(fecha_actual)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual){
@@ -536,7 +545,10 @@ function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual){
         .then(req => req.json())
         .then(res => { 
             LlenarDetallesMovAlmacen(CodTipoComprobante,res.data.movimientos_detalle_almacen,fecha_actual)
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function IniciarElementos(fecha_actual){
@@ -677,7 +689,10 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual){
                         .then(res => {
                             toastr.success('Se guardo correctamente el registro','Confirmacion',{timeOut: 5000})
                             refrescar_movimientos()
-                        })
+                        }).catch(function (e) {
+                            console.log(e);
+                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        });
                     }else{
                         toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
                     }

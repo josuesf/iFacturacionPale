@@ -104,7 +104,10 @@ function BuscarCuentasPendientes(Cod_Libro,Id_Cliente,FechaInicio,FechaFin){
             var cuentas = res.data.cuentas
             VerBuscarCuentasPendientes(Cod_Libro,cuentas)
         }
-    })
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+    });
     //VerBuscarCuentasPendientes(CodLibro)
 }
 

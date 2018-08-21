@@ -89,7 +89,11 @@ function BusquedaDeUsuario(){
             else
                 empty(document.getElementById('contenedorTablaUsuarios'));
             $('#main-contenido').waitMe('hide');
-        })
+        }).catch(function (e) {
+            console.log(e);
+            $('#main-contenido').waitMe('hide');
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }else{
         empty(document.getElementById('contenedorTablaUsuarios'));
     }

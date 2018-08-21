@@ -362,7 +362,10 @@ function GuardarProducto(_escritura, producto){
             }else{
                 ListarProductosServ(_escritura)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }
 }
 
@@ -400,7 +403,10 @@ function BusquedaCuenta (id){
             }
             else
                 empty(document.getElementById('contenedorTablaCuentas'));
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }else{
         empty(document.getElementById('contenedorTablaCuentas'));
     }

@@ -9,7 +9,19 @@ var express = require('express');
 var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
-var session = require('express-session');    
+var session = require('express-session'); 
+var localStorage = require('localStorage')
+
+const fs = require('fs');  
+ 
+var nodemailer = require('nodemailer')
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+          user: 'omar.muniz48@gmail.com',
+          pass: '12345678'
+      }
+});
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -444,26 +456,48 @@ app.get('/register',function(req,res){
 })
 
 app.post('/register',function(req,res){
-  var input = req.body
-  if(!RUCValido(input.RUC)){
+  
+  var input = req.body 
+
+  if(!RUCValido(input.ruc)){
     res.render('register.ejs', {err:'El RUC es inválido'});
   }else{
     if(!EmailValido(input.email)){
       res.render('register.ejs', {err:'El email es inválido'});
     }else{
-      if(input.password==input.repeatpassword && input.repeatpassword!='' && input.password!=''){
-        if(input.nombre!='' && input.telefono!='' && input.password!='' && input.password==input.repeatpassword){
+       
+      if(input.razon!='' && input.ruc!='' && input.celular!='' && input.direccion!='' && input.email!=''){
 
-        }else{
-          res.render('register.ejs', {err:'Existe campos vacios'});
-        }
+        enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
+          if(flag){
+            res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
+          }else{
+            res.render('register.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
+          }
+        })
+
       }else{
-        res.render('register.ejs', {err:'Las contraseñas no coinciden'});
+        res.render('register.ejs', {err:'Existe campos vacios'});
       }
+      
     }
-  }
-   
+  } 
 })
+
+app.get('/verificacion_correo',function(req,res){  
+    jsonData = localStorage.getItem(req.query.id); 
+    if(jsonData!=null){
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+              '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>Su correo ha sido verificado exitosamente. En breves momentos nos comunicaremos con usted a traves del numero telefonico brindado para generarle un usuario y password para que pueda ingresar al sistema</span></h3></div>')
+    }else{ 
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
+    } 
+    
+});
+  
  
 app.get('/logout', function (req, res) {
   errores = ''
@@ -582,3 +616,25 @@ jsreport.init().then(() => {
 }).catch((e) => {
   console.error(e);
 });
+
+function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
+   
+    rand=Math.floor((Math.random() * 100) + 54) 
+    link="http://"+host+"/verificacion_correo?id="+rand;
+    var mailOptions={
+      to : toEmail,
+      subject : "PALERP CONSULTORES",
+      html : "<img alt='PALE CONSULTORES' style='display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000;' src='http://palerp.com/images/logo.png'><br><h3><strong> PALE CONSULTORES le agradece su preferencia.</strong></h3><p> Para seguir con el proceso de registro necesitamos la confirmacion de su correo,<br> por favor haga click en el enlace para verificar su correo.<br><a href="+link+">CLICK AQUI PARA VERIFICAR CORREO</a></p>" 
+    }
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err){
+        callback(false)
+      }
+      else{ 
+        localStorage.setItem(rand, JSON.stringify({email:toEmail,ruc:ruc,rand:rand}));
+        callback(true)
+        
+      }
+  });
+}
+ 

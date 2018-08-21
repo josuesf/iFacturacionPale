@@ -94,7 +94,10 @@ function BuscarComprobantePago(CodLibro){
             var tipos_comprobantes = res.data.tipos_comprobantes 
             VerBuscarComprobatePago(CodLibro,tipos_comprobantes)
         }
-    })
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+    });
 }
 
 function AceptarComprobante(CodLibro){
@@ -134,7 +137,10 @@ function AceptarComprobante(CodLibro){
                     $("#NumeroModalBusquedaComprobante").focus()
                 }
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 
     }else{
 
@@ -173,7 +179,10 @@ function AceptarComprobante(CodLibro){
                     $("#NumeroModalBusquedaComprobante").focus()
                 }
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 
     }
 }

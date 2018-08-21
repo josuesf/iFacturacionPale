@@ -157,6 +157,9 @@ module.exports = function navegador(ctx, next) {
     .then(req => req.json())
     .then(res => { 
         Ver(res.arqueo[0].Flag_Cerrado)
-    })
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+    });
   
 }

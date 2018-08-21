@@ -14,7 +14,7 @@
     <!-- Ionicons-->
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style-->
-    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css"> 
     <link href="/dist/css/waitMe.min.css" rel="stylesheet">
     <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -31,13 +31,11 @@
          
         <div class="login-box-body"> 
             <% if(typeof err != 'undefined' && err!='') { %>
-                <div class="callout callout-danger" id="divError" data-value="0">
-                    <h4>Hubo un error!</h4>
+                <div class="callout callout-danger" id="divError" data-value="0"> 
                     <p id="textError"><%=err%></p>
                 </div>
             <% }else{ %>
                 <div class="callout callout-danger" id="divError" data-value="1" style="display: none;">
-                    <h4>Hubo un error!</h4>
                     <p id="textError"></p>
                 </div>
             <% } %>
@@ -64,12 +62,12 @@
                 </div>
                 
                 <div class="form-group has-feedback"> 
-                    <input type="text" name="usuario" class="form-control" required placeholder="Usuario">
+                    <input type="text" name="usuario" id="usuario" class="form-control" required placeholder="Usuario">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
 
                 <div class="form-group has-feedback"> 
-                    <input type="password" name="password" class="form-control" required placeholder="Contraseña">
+                    <input type="password" name="password" id="password" class="form-control" required placeholder="Contraseña">
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span> 
                 </div>
                 <!--
@@ -108,9 +106,18 @@
                 </div>-->
 
                 <div class="row">
+                    <div class="col-xs-7">
+                        <div class="form-check form-check-inline">
+                             
+                            <label class="form-check-label" for="chbRecordar">
+                                <input class="form-check-input" type="checkbox" id="chbRecordar">
+                                 Recuerdame
+                            </label>
+                        </div>
+                    </div>
                     <!-- /.col -->
-                    <div class="col-xs-12">
-                        <button type="submit" class="btn btn-warning btn-block btn-flat"><i class="fa fa-check"></i> Entrar</button>
+                    <div class="col-xs-5">
+                        <button type="submit" class="btn btn-warning btn-block btn-flat" id="login"><i class="fa fa-check"></i> Entrar</button>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -128,10 +135,49 @@
         <!-- /.login-box-body -->
     </div>
     
-    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
+    <script src='/dist/js/jquery-1.9.1.js'></script>
+    <script src='/dist/js/jquery.cookie.js'></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/dist/js/waitMe.min.js"></script>
+    <script src="/dist/js/waitMe.min.js"></script> 
+
+    <script>
+        
+        $(document).ready(function() {
+
+            var remember = $.cookie('remember');
+            if (remember == 'true') {
+                var usuario = $.cookie('usuario');
+                var password = $.cookie('password');
+                // autofill the fields
+                $('#usuario').val(usuario);
+                $('#password').val(password);
+            }
+
+
+            $("#login").click(function() { 
+                if ($('#chbRecordar').is(':checked')) { 
+                    var usuario = $('#usuario').val();
+                    var password = $('#password').val();
+
+                    // set cookies to expire in 14 days
+                    $.cookie('usuario', usuario, { expires: 14 });
+                    $.cookie('password', password, { expires: 14 });
+                    $.cookie('remember', true, { expires: 14 });                
+                }
+                else
+                {
+                    // reset cookies
+                    $.cookie('usuario', null);
+                    $.cookie('password', null);
+                    $.cookie('remember', null);
+                }
+            });
+        });
     
+    
+    </script>
+    
+
 </body>
 
 </html>

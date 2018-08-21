@@ -548,7 +548,10 @@ function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
             else{
                 console.log('Error')
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento){
@@ -611,7 +614,10 @@ function BusquedaDeUsuario(){
             }
             else
                 empty(document.getElementById('contenedorTablaUsuarios'));
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     }else{
         empty(document.getElementById('contenedorTablaUsuarios'));
     }

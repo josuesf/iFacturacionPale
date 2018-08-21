@@ -3,24 +3,7 @@ import {URL} from './constantes_entorno/constantes'
 
 $(document).ready(function(){
     CambioRUC("0")
-
-    $('#repeatpassword').keyup(function(e){
-        //get values 
-        var pass = $('#password').val();
-        var confpass = $(this).val();
-        
-        //check the strings
-        if(pass == confpass){
-            //if both are same remove the error and allow to submit
-            $('#divError').css("display","none")
-            $('#textError').text('');
-        }else{
-            //if not matching show error and not allow to submit
-            $('#divError').css("display","block")
-            $('#textError').text('Las contraseñas no coinciden');
-        }
-    });
-
+ 
     $("#RUC").change(function(){
         CambioRUC("1")
     })
@@ -55,8 +38,14 @@ function CrearTurnoSiguiente(){
     fetch(URL +'/empresa_api/crear_siguiente_turno', parametros)
         .then(req => req.json())
         .then(res => {
+            $('#divError').css("display","none")
+            $('#textError').text(''); 
             TraerTurnos()
-        })
+        }).catch(function (e) {
+            console.log(e);
+            $('#divError').css("display","block")
+            $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+        });
 }
 
 function TraerPeriodos(){
@@ -164,7 +153,13 @@ function CambioRUC(flag){
                     $("#Turno").html('')
                     $("#Periodo").html('') 
                 }
-            })
+                $('#divError').css("display","none")
+                $('#textError').text('');
+            }).catch(function (e) {
+                console.log(e);
+                $('#divError').css("display","block")
+                $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+            });
     }else{
         var RUC = $("#empresa").val()
         const parametros = {
@@ -187,7 +182,13 @@ function CambioRUC(flag){
                     $("#Turno").html('')
                     $("#Periodo").html('') 
                 }
-            })
+                $('#divError').css("display","none")
+                $('#textError').text(''); 
+            }).catch(function (e) {
+                console.log(e);
+                $('#divError').css("display","block")
+                $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+            });
     }
 } 
  

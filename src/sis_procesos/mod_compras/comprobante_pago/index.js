@@ -68,7 +68,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" onkeypress=${()=>KeyPressClienteDoc()} class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
                                                     <i class="fa fa-globe"></i>
@@ -2147,7 +2147,10 @@ function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_Com
             }else{
                 callback(false)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,Cod_Plantilla,Obs_FormaPago,Fecha,callback){
@@ -2183,7 +2186,10 @@ function GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPag
             }else{
                 callback(false)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function GuardarFormaPagoRecursivo(indiceFormaPago,idComprobante,callback){
@@ -2220,7 +2226,10 @@ function GuardarFormaPagoRecursivo(indiceFormaPago,idComprobante,callback){
                 }else{
                     callback(false)
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
    }else{
        callback(true)
    }
@@ -2279,7 +2288,10 @@ function GuardarOperacionBancaria(callback){
             }else{
                 callback(false)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
     
 }
 
@@ -2317,7 +2329,10 @@ function GuardarSeries(indiceSerie,idComprobante,idDetalle,arraySeries,callback)
                 }else{
                     callback(false)
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
 
     }else{
         callback(true)
@@ -2352,7 +2367,10 @@ function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitaci
             }else{
                 callback(-1)
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,callback){
@@ -2475,7 +2493,10 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                         }else{
                             callback(false)
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    });
             })
         //} 
     }else{
@@ -2971,7 +2992,10 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     $("#modal-alerta").modal("hide")
                                                     $('#modal-proceso').waitMe('hide');
                                                 }
-                                            })
+                                            }).catch(function (e) {
+                                                console.log(e);
+                                                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                            });
                                         
                                         }else{
                                             toastr.error('Ocurrio un error al momento de guardar la forma de pago.','Error',{timeOut: 5000})
@@ -3060,7 +3084,10 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                             $("#modal-alerta").modal("hide")
                                             $('#modal-proceso').waitMe('hide');
                                         }
-                                    })
+                                    }).catch(function (e) {
+                                        console.log(e);
+                                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                    });
 
                                 }
                             }
@@ -3076,7 +3103,10 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                     $('#modal-proceso').waitMe('hide');
                 } 
                 
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
 
 
     })
@@ -3104,7 +3134,10 @@ function CargarTipoPrecio(){
                var tipos_precios = res.data.productos
                LlenarTipoPrecio(tipos_precios)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CargarUnidadMedida(Id_Producto,Cod_Almacen){
@@ -3127,7 +3160,10 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
                     var unidades_medidas = res.data.unidades_medidas
                     LlenarUnidadMedida(unidades_medidas)
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
     }else{
         
         if(!arrayValidacion.includes($("#Nom_Producto").attr("data-id"))){
@@ -3149,7 +3185,10 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
                         var unidades_medidas = res.data.unidades_medidas
                         LlenarUnidadMedida(unidades_medidas)
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
         }
     }
 }
@@ -3181,7 +3220,10 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
                     $("#optLicitacion").attr("checked",false)   
                 }
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CargarSeries(CodLibro){
@@ -3210,7 +3252,10 @@ function CargarSeries(CodLibro){
                         toastr.error('No se cuenta con ninguna Serie Autorizada para este tipo de Comprobante.\n\n Solicite al Administrador Autorice una serie para Continuar.','Error',{timeOut: 5000})
                     }
                 } 
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
 
         CambioComprobantes() 
     }
@@ -3235,7 +3280,10 @@ function CargarAlmacenes(Id_Producto,Cod_Almacen){
             }else{
                 LlenarAlmacenes([])
             }
-        })  
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });  
 }
 
 function CambioMonedaFormaPagoMasterCard(){
@@ -3329,7 +3377,10 @@ function CambioCodCuentaBancaria(CodLibro){
                 var cheques = res.data.cheques 
                 LlenarCheques(cheques)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function CambioGastos(){
@@ -3424,7 +3475,10 @@ function CambioExportacion(CodLibro,variables){
                             $(this).find("td").eq(4).find("input").val(producto.Nom_Producto+' / '+producto.Des_CortaProducto)
                         }
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
  
         });
 
@@ -3457,7 +3511,10 @@ function CambioExportacion(CodLibro,variables){
                             $(this).find("td").eq(4).find("input").val(producto.Nom_Producto)
                         }
                     }
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
            
      
         }); 
@@ -3494,7 +3551,10 @@ function RecorrerTablaDetalles_Series(indiceDetalle,callback){
                     RecorrerTablaDetalles_Series(indiceDetalle+1,callback) 
                 }
                
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
     }else{
         callback(true)
     }
@@ -3593,7 +3653,10 @@ function CambioSelectLicitacion(CodLibro,variables){
                         }else{
                             toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    });
 
             }
         }
@@ -3633,7 +3696,10 @@ function CambioUnidadMedida() {
                         CargarTipoPrecio()
                     }
                 }
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
     }
 }
 
@@ -3793,7 +3859,10 @@ function TraerTipoCambio(CodLibro){
                             $("#Tipo_Cambio").val(1)
                         }
                     } 
-                })
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                });
 
         }catch(e){
             $("#Tipo_Cambio").val(1)
@@ -3828,7 +3897,10 @@ function TraerSiguienteNumero(CodLibro){
                         $("#Numero").val("")
                     }
                 } 
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
     }
 }
 
@@ -3856,7 +3928,10 @@ function TraerSaldoPagoAdelantado(){
                     $("#divCuentaCajaBancos").css("display","none")
                 } 
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 
@@ -3877,7 +3952,10 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria(cuentas,CodLibro)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
@@ -3898,7 +3976,10 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria_(cuentas,CodLibro)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 function TraerCredito(CodLibro,callback){
@@ -3933,7 +4014,10 @@ function TraerCredito(CodLibro,callback){
             }else{
                 callback(true)
             } 
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 
@@ -3952,13 +4036,28 @@ function BuscarProductoCP(CodLibro,tipo) {
     }
 }
 
+function KeyPressClienteDoc(){
+    switch($('#Nro_Documento').val().trim().length){
+        case 8:
+            $("#Cod_TipoDoc").val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDoc").val("6")
+            break;
+        case 0:
+            $("#Cliente").attr("data-id",null)
+            $("#Cliente").val("")
+            $("#Direccion").val("")
+            break;
+    }
+}
 
 function BuscarClienteDoc(CodLibro) {
-    run_waitMe($('#div-cliente-comprobante-pago'), 1, "ios","Buscando cliente...");
-    var Nro_Documento = document.getElementById('Nro_Documento').value
+    var Nro_Documento = $('#Nro_Documento').val().trim()
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
     if(Nro_Documento!=''){
+        run_waitMe($('#div-cliente-comprobante-pago'), 1, "ios","Buscando cliente...");
         const parametros = {
             method: 'POST',
             headers: {
@@ -4034,7 +4133,10 @@ function AbrirModalObsComprobantePago(){
         .then(res => {
             var variables = res.data
             AbrirModalObs(variables.diagramas,obs_xml,"modal_observaciones","modal_obs_body")
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
 }
 
 async function AsyncCalcularTotal(CodLibro,variables) {

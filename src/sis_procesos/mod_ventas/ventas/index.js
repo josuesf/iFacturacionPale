@@ -571,7 +571,10 @@ function CrearBotonesProductos(c,idTab,callback){
                     callback(c,[])
                 }
         
-            }) 
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            }); 
     }else{
         toastr.error('Es necesario seleccionar un almacen','Error',{timeOut: 5000})
     }
@@ -981,11 +984,17 @@ function CambioMonedaFormaPagoEuros(idTab){
                             CalcularVuelto(idTab)
 
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    });
 
 
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
  
 }
 
@@ -1063,11 +1072,17 @@ function CambioMonedaFormaPagoDolares(idTab){
                             CalcularVuelto(idTab)
 
                         }
-                    })
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    });
 
 
             }
-        })
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
  
 }
 
@@ -1146,7 +1161,10 @@ function CambioCantidadVenta(idFila,idTab){
                     $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                 }
 
-            }) 
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            }); 
     } 
     RecalcularSubtotales(idTab)
     RecalcularDescuentosTotales(idTab)
@@ -1317,7 +1335,10 @@ function AgregarProducto(producto,favoritos,idTab){
                     }
                 }
         
-            })
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            });
     }else{
         toastr.error('Es necesario seleccionar un almacen.','Error',{timeOut: 5000})
     }
