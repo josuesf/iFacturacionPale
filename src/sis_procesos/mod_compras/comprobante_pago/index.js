@@ -2606,8 +2606,7 @@ function PrepararImpresion(arrayData){
 
             arrayData.cuerpo.DETALLES = arrayJSON 
             CargarPDFModal(arrayData.cuerpo.DOCUMENTO,arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,function(flag){
-                if(flag){
-                    run_waitMe($('#divPDF'), 1, "ios","Cargando vista previa pdf");
+                if(flag){ 
                     jsreport.serverUrl = URL_REPORT; 
                     var request = {
                         template: {
@@ -2623,9 +2622,8 @@ function PrepararImpresion(arrayData){
                     };
                     
                     jsreport.renderAsync(request).then(function(res) {
-                        jsreport.render(document.getElementById('divPDF'), request);
+                        jsreport.render(document.getElementById('divPDF'), request); 
                         $('#divPDF').waitMe('hide');
-                        
                     }).catch(function (e) { 
                         console.log(e)
                         toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})

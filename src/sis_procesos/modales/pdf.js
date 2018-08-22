@@ -32,6 +32,7 @@ function CargarPDFModal(titulo,subtitulo,subtitulo_extra,callback){
 
     var modal_proceso = document.getElementById('modal-alerta');
     empty(modal_proceso).appendChild(el);
+    run_waitMe($('#divPDF'), 1, "ios","Cargando vista previa comprobante...");
 
     if($('#modal-alerta').hasClass('in')){
         callback(true)

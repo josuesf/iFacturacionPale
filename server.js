@@ -19,7 +19,7 @@ var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
           user: 'omar.muniz48@gmail.com',
-          pass: '12345678'
+          pass: 'sas3tigres'
       }
 });
 
@@ -604,12 +604,88 @@ app.post('/api/report', function(req, res) {
 const reportingApp = express();
 app.use('/reporting', reportingApp);
 
-const jsreport = require('jsreport')({
+/*var jsreport =  require ('jsreport-core')({
+  extensions: {
+      express: { app: reportingApp, server: server },
+  },
+  appPath: "/reporting"
+})
+jsreport.use(require('jsreport-fop-pdf')())
+jsreport.use(require('jsreport-jsrender')())
+jsreport.use(require ('jsreport-fs-store') ({dataDirectory :  __dirname+'/formatos/', syncModifications :  true }))
+
+jsreport.init().then(() => {
+  console.log('jsreport server started')
+}).catch((e) => {
+  console.error(e);
+});*/
+
+/*const jsreport = require('jsreport')({
   extensions: {
       express: { app: reportingApp, server: server },
   },
   appPath: "/reporting"
 });
+ 
+jsreport.init().then(() => {
+  console.log('jsreport server started')
+}).catch((e) => {
+  console.error(e);
+});*/
+
+var jsreport = require('jsreport-core')(
+  {
+    store: {
+      provider: 'fs'
+    },
+    logger: {
+      'console': { 'transport': 'console', 'level': 'debug' }
+    },
+    httpPort: 5488,
+    extensions: {
+        express: { app: reportingApp, server: server },
+        'fs-store': {
+          dataDirectory: require('path').join(__dirname, 'formatos')
+        }
+    },
+    appPath: "/reporting"
+  }
+);
+ 
+jsreport.use(require('jsreport-import-export')());
+jsreport.use(require('jsreport-tags')());
+jsreport.use(require('jsreport-templates')());
+jsreport.use(require('jsreport-jsrender')());
+jsreport.use(require('jsreport-authentication')());
+jsreport.use(require('jsreport-handlebars')());
+jsreport.use(require('jsreport-cli')());
+jsreport.use(require('jsreport-freeze')());
+jsreport.use(require('jsreport-debug')()); 
+jsreport.use(require('jsreport-express')({app: reportingApp})); 
+jsreport.use(require('jsreport-fop-pdf')());
+jsreport.use(require('jsreport-pdf-utils')());
+jsreport.use(require('jsreport-data')());
+jsreport.use(require('jsreport-chrome-pdf')());
+jsreport.use(require('jsreport-html-to-xlsx')());
+jsreport.use(require('jsreport-child-templates')());
+jsreport.use(require('jsreport-browser-client')());
+jsreport.use(require('jsreport-licensing')());
+jsreport.use(require('jsreport-authorization')());
+jsreport.use(require('jsreport-version-control')());
+jsreport.use(require('jsreport-assets')());
+jsreport.use(require('jsreport-reports')());
+jsreport.use(require('jsreport-text')());
+jsreport.use(require('jsreport-base')()); 
+jsreport.use(require('jsreport-studio')());
+jsreport.use(require('jsreport-fs-store')())
+jsreport.use(require('jsreport-scripts')());
+ 
+jsreport.use(require('jsreport-scheduling')());
+jsreport.use(require('jsreport-xlsx')());
+jsreport.use(require('jsreport-sample-template')());
+jsreport.use(require('jsreport-resources')());
+jsreport.use(require('jsreport-public-templates')()); 
+
 
 jsreport.init().then(() => {
   console.log('jsreport server started')
