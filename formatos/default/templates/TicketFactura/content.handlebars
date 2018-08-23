@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="utf-8">
+     <style>
+         {#asset styles-ticket.css @encoding=utf8}
+     </style>
+     <script>{#asset qrcode.min.js @encoding=utf8}</script>
+</head>
+<body > 
+  <div class="ticket">    
+    <div class="encabezado"> 
+      <p class="nombre-empresa">{{NOMBRE}}</p> 
+      <p class="direccion-empresa">{{DIRECCION}}</p>
+      <p class="ruc-emisor">RUC: {{RUC}}</p>
+      <p class="tipo-doc">{{DOCUMENTO}}</p>
+      <p class="correlativo">{{SERIE}}-{{NUMERO}}</p>
+      <p class="fecha-emision">FECHA EMISIÓN: {{FECHA_EMISION}}</p>
+      <p class = "cliente" >
+        <span>RUC: {{RUC_CLIENTE}}</span><br>
+        <span>SEÑOR(ES): {{CLIENTE}}</span><br>
+        <span>DIRECCION: {{DIRECCION_CLIENTE}}</span><br>
+      </p>
+    </div>
+    {{#if FLAG_ANULADO}}
+        <div class="anulacion">
+            <span>MOTIVO O SUSTENTO:</span><br>
+            <span>{{MOTIVO_ANULACION}}</span><br>
+            <span>COMPROBANTE AFECTADO:</span><br>
+            <span>{{COMP_AFECTADO}}</span><br><br>
+            </div>  
+        {{else}}
+            
+    {{/if}}
+    <table>
+        <tr class = "titulos_tabla">              
+          <th>CANT.</th>          
+          <th style="padding-left:15px;">U.M.</th>
+          <th style="padding-right:8px;">PRECIO</th>
+          <th style="padding-right:15px;">DESC.</th>          
+          <th>IMPORTE</th>
+        </tr>  
+        {{#each DETALLES}}
+            <tr>
+                <td colspan="3">{{DESCRIPCION}}</td>
+            </tr>
+            <tr>         
+                <td>{{CANTIDAD}}</td>
+                <td >{{UNIDAD}}</td>
+                <td >{{PRECIO_UNITARIO}}</td>
+                <td >{{DESCUENTO}}</td>          
+                <td style="padding-left:23px">{{SUBTOTAL}}</td>
+            </tr>    
+        {{/each}}
+    </table>
+    <table class="sumatorias">
+      <tr>
+        <td class="sumatorias-titulos">SUB TOTAL: </td>
+        <td>S/</td>
+        <td class="sub-total-item">{{GRAVADAS}}</td>
+      </tr>
+      <tr>
+        <td class="sumatorias-titulos">{{DES_IMPUESTO}}({{IMPUESTO}}%): </td>
+        <td>S/</td>
+        <td class="sub-total-item">{{IGV}}</td>
+      </tr>
+      <tr>          
+        <td class="sumatorias-titulos">TOTAL: </td>
+        <td>S/</td>
+        <td class="sub-total-item" style="font-weight: bold;"> {{TOTAL}}</td>
+      </tr>
+    </table>     
+    <p class="monto_letras">{{ESCRITURA_MONTO}}</p><BR>     
+    <div class = "codigo" >
+      <input id="comp" type="text" value="{{RUC}}|{{COD_TIPOCOMPROBANTE}}|{{SERIE}}|{{NUMERO}}|{{IGV}}|{{TOTAL}}|{{FECHA_EMISION}}|{{COD_DOCCLIENTE}}|{{RUC_CLIENTE}}"
+      style = "display:none;"/><br />
+      <div id="qrcode" style = "padding: 10px;
+      margin-top: -32px;
+      margin-left: 77px;
+      position: absolute;
+      " ></div>
+      <script>
+          var qrcode = new QRCode("qrcode");
+          function makeCode () {		
+              var elText = document.getElementById("comp");
+              qrcode.makeCode(elText.value);  
+          }
+          makeCode();
+      </script>            
+  </div>
+  <div class="pie-pagina">
+    <span>USUARIO: {{USUARIO}}</span>
+    <span>v.:{{VERSION_SISTEMA}}</span><br>
+    <p style="text-align: center;">{{PIE_DE_PAGINA}}</p>    
+  </div>
+</div>
+  <script>
+       
+        window.JSREPORT_CHROME_PDF_OPTIONS = {
+            width:  '80mm',
+            height: '297mm'
+        }
+    </script>
+</body>
+
+</html>

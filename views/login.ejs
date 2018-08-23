@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style-->
     <link rel="stylesheet" href="/dist/css/AdminLTE.min.css"> 
+    <link rel="stylesheet" href="/dist/css/custom.css"> 
     <link href="/dist/css/waitMe.min.css" rel="stylesheet">
     <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -107,13 +108,12 @@
 
                 <div class="row">
                     <div class="col-xs-7">
-                        <div class="form-check form-check-inline">
-                             
-                            <label class="form-check-label" for="chbRecordar">
-                                <input class="form-check-input" type="checkbox" id="chbRecordar">
-                                 Recordar Contraseña
-                            </label>
+
+                        <div class="custom-checkbox">
+                            <input type="checkbox" id="chbRecordar">
+                            <label for="chbRecordar">Recordar Contraseña</label>
                         </div>
+ 
                     </div>
                     <!-- /.col -->
                     <div class="col-xs-5">
@@ -125,7 +125,7 @@
                 <div class="row">
                     <!-- /.col -->
                     <div class="col-xs-12">
-                        <a href="/register" class="btn btn-primary btn-block btn-flat"><i class="fa fa-user-plus"></i> Registrarse</a>
+                        <a href="/empresa_api/register" class="btn btn-primary btn-block btn-flat"><i class="fa fa-user-plus"></i> Registrarse</a>
                     </div>
                     <!-- /.col -->
                 </div>

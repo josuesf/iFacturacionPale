@@ -1,4 +1,5 @@
 var { LOGIN_SQL,
+      EXEC_QUERY_DBMaster,
       EXEC_SQL_DBMaster,
       EXEC_SQL,
       EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
@@ -12,16 +13,8 @@ var bodyParser = require("body-parser");
 var session = require('express-session'); 
 var localStorage = require('localStorage')
 
-const fs = require('fs');  
+const fs = require('fs');   
  
-var nodemailer = require('nodemailer')
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-          user: 'omar.muniz48@gmail.com',
-          pass: 'sas3tigres'
-      }
-});
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -53,7 +46,82 @@ app.locals.turno = null
 app.locals.sucursal = null
 app.locals.arqueo = null
 app.locals.cajasUsuarios =[]
- 
+
+// configuration init jsreport
+const reportingApp = express();
+app.use('/reporting', reportingApp);
+
+jsreport = require('jsreport-core')(
+  {
+    store: {
+      provider: 'fs'
+    },
+    logger: {
+      'console': { 'transport': 'console', 'level': 'debug' }
+    },
+    extensions: {
+        express: { app: reportingApp, server: server },
+        'fs-store': {
+          dataDirectory: require('path').join(__dirname, 'formatos/default'),
+          syncModifications: true
+        },
+        'authentication' : {
+            "cookieSession": {
+                "secret": "dasd321as56d1sd5s61vdv32"        
+            },
+            "admin": {
+                "username" : "palerp",
+                "password": "palerp123"
+            }
+        }
+    },
+    appPath: "/reporting"
+  }
+);
+
+jsreport.use(require('jsreport-import-export')());
+jsreport.use(require('jsreport-tags')());
+jsreport.use(require('jsreport-templates')());
+jsreport.use(require('jsreport-jsrender')());
+jsreport.use(require('jsreport-authentication')());
+jsreport.use(require('jsreport-handlebars')());
+jsreport.use(require('jsreport-cli')());
+jsreport.use(require('jsreport-freeze')());
+jsreport.use(require('jsreport-debug')()); 
+jsreport.use(require('jsreport-express')()); 
+jsreport.use(require('jsreport-fop-pdf')());
+jsreport.use(require('jsreport-pdf-utils')());
+jsreport.use(require('jsreport-data')());
+jsreport.use(require('jsreport-chrome-pdf')());
+jsreport.use(require('jsreport-html-to-xlsx')());
+jsreport.use(require('jsreport-child-templates')());
+jsreport.use(require('jsreport-browser-client')());
+jsreport.use(require('jsreport-licensing')());
+jsreport.use(require('jsreport-authorization')());
+jsreport.use(require('jsreport-version-control')());
+jsreport.use(require('jsreport-assets')());
+jsreport.use(require('jsreport-reports')());
+jsreport.use(require('jsreport-text')());
+jsreport.use(require('jsreport-base')()); 
+jsreport.use(require('jsreport-studio')());
+jsreport.use(require('jsreport-fs-store')())
+jsreport.use(require('jsreport-scripts')());
+
+jsreport.use(require('jsreport-scheduling')());
+jsreport.use(require('jsreport-xlsx')());
+jsreport.use(require('jsreport-sample-template')());
+jsreport.use(require('jsreport-resources')());
+jsreport.use(require('jsreport-public-templates')()); 
+
+
+jsreport.init().then(() => { 
+  console.log('jsreport server started')
+}).catch((e) => { 
+  console.error(e);
+});
+
+// others configurations login
+
 function CargarVariables(req,res){
   p = [
     { nom_parametro: 'Cod_Turno', valor_parametro: req.session.turno }
@@ -367,7 +435,15 @@ app.post('/logincajas', function (req, res) {
       req.session.turno = req.body.Turno
       req.session.periodo = req.body.Periodo
       req.session.gestion = req.body.Gestion
-      return res.redirect('/');
+      
+      iniciarJsReport(app.locals.empresa[0].RUC,function(flag){
+        if(flag){
+          return res.redirect('/');
+        }else{
+          errores = "Ocurrio un error. Comuniquese con el administrador de sistema "
+          return res.redirect('/login');
+        } 
+      })
     } 
   }else{
     if(app.locals.cajasUsuarios.length>0){
@@ -450,54 +526,6 @@ app.post('/loginarqueo', function (req, res) {
     })
   } 
 })
-
-app.get('/register',function(req,res){
-  res.render('register.ejs', { });
-})
-
-app.post('/register',function(req,res){
-  
-  var input = req.body 
-
-  if(!RUCValido(input.ruc)){
-    res.render('register.ejs', {err:'El RUC es inválido'});
-  }else{
-    if(!EmailValido(input.email)){
-      res.render('register.ejs', {err:'El email es inválido'});
-    }else{
-       
-      if(input.razon!='' && input.ruc!='' && input.celular!='' && input.direccion!='' && input.email!=''){
-
-        enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
-          if(flag){
-            res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
-          }else{
-            res.render('register.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
-          }
-        })
-
-      }else{
-        res.render('register.ejs', {err:'Existe campos vacios'});
-      }
-      
-    }
-  } 
-})
-
-app.get('/verificacion_correo',function(req,res){  
-    jsonData = localStorage.getItem(req.query.id); 
-    if(jsonData!=null){
-      localStorage.removeItem(req.query.id) 
-      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-              '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>Su correo ha sido verificado exitosamente. En breves momentos nos comunicaremos con usted a traves del numero telefonico brindado para generarle un usuario y password para que pueda ingresar al sistema</span></h3></div>')
-    }else{ 
-      localStorage.removeItem(req.query.id) 
-      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
-    } 
-    
-});
-  
  
 app.get('/logout', function (req, res) {
   errores = ''
@@ -508,7 +536,7 @@ app.get('/logout', function (req, res) {
   app.locals.turno = null
   app.locals.sucursal = null
   app.locals.arqueo = null
-  app.locals.cajasUsuarios = []
+  app.locals.cajasUsuarios = []  
   delete req.session.authenticated;
   res.redirect('/');
 });
@@ -599,118 +627,229 @@ app.post('/api/report', function(req, res) {
       return res.json({respuesta:'error'})
     })
     
-  });
-
-const reportingApp = express();
-app.use('/reporting', reportingApp);
-
-/*var jsreport =  require ('jsreport-core')({
-  extensions: {
-      express: { app: reportingApp, server: server },
-  },
-  appPath: "/reporting"
-})
-jsreport.use(require('jsreport-fop-pdf')())
-jsreport.use(require('jsreport-jsrender')())
-jsreport.use(require ('jsreport-fs-store') ({dataDirectory :  __dirname+'/formatos/', syncModifications :  true }))
-
-jsreport.init().then(() => {
-  console.log('jsreport server started')
-}).catch((e) => {
-  console.error(e);
-});*/
-
-/*const jsreport = require('jsreport')({
-  extensions: {
-      express: { app: reportingApp, server: server },
-  },
-  appPath: "/reporting"
-});
- 
-jsreport.init().then(() => {
-  console.log('jsreport server started')
-}).catch((e) => {
-  console.error(e);
-});*/
-
-var jsreport = require('jsreport-core')(
-  {
-    store: {
-      provider: 'fs'
-    },
-    logger: {
-      'console': { 'transport': 'console', 'level': 'debug' }
-    },
-    httpPort: 5488,
-    extensions: {
-        express: { app: reportingApp, server: server },
-        'fs-store': {
-          dataDirectory: require('path').join(__dirname, 'formatos')
-        }
-    },
-    appPath: "/reporting"
-  }
-);
- 
-jsreport.use(require('jsreport-import-export')());
-jsreport.use(require('jsreport-tags')());
-jsreport.use(require('jsreport-templates')());
-jsreport.use(require('jsreport-jsrender')());
-jsreport.use(require('jsreport-authentication')());
-jsreport.use(require('jsreport-handlebars')());
-jsreport.use(require('jsreport-cli')());
-jsreport.use(require('jsreport-freeze')());
-jsreport.use(require('jsreport-debug')()); 
-jsreport.use(require('jsreport-express')({app: reportingApp})); 
-jsreport.use(require('jsreport-fop-pdf')());
-jsreport.use(require('jsreport-pdf-utils')());
-jsreport.use(require('jsreport-data')());
-jsreport.use(require('jsreport-chrome-pdf')());
-jsreport.use(require('jsreport-html-to-xlsx')());
-jsreport.use(require('jsreport-child-templates')());
-jsreport.use(require('jsreport-browser-client')());
-jsreport.use(require('jsreport-licensing')());
-jsreport.use(require('jsreport-authorization')());
-jsreport.use(require('jsreport-version-control')());
-jsreport.use(require('jsreport-assets')());
-jsreport.use(require('jsreport-reports')());
-jsreport.use(require('jsreport-text')());
-jsreport.use(require('jsreport-base')()); 
-jsreport.use(require('jsreport-studio')());
-jsreport.use(require('jsreport-fs-store')())
-jsreport.use(require('jsreport-scripts')());
- 
-jsreport.use(require('jsreport-scheduling')());
-jsreport.use(require('jsreport-xlsx')());
-jsreport.use(require('jsreport-sample-template')());
-jsreport.use(require('jsreport-resources')());
-jsreport.use(require('jsreport-public-templates')()); 
-
-
-jsreport.init().then(() => {
-  console.log('jsreport server started')
-}).catch((e) => {
-  console.error(e);
 });
 
-function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
-   
-    rand=Math.floor((Math.random() * 100) + 54) 
-    link="http://"+host+"/verificacion_correo?id="+rand;
-    var mailOptions={
-      to : toEmail,
-      subject : "PALERP CONSULTORES",
-      html : "<img alt='PALE CONSULTORES' style='display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000;' src='http://palerp.com/images/logo.png'><br><h3><strong> PALE CONSULTORES le agradece su preferencia.</strong></h3><p> Para seguir con el proceso de registro necesitamos la confirmacion de su correo,<br> por favor haga click en el enlace para verificar su correo.<br><a href="+link+">CLICK AQUI PARA VERIFICAR CORREO</a></p>" 
+app.get('/report', function(req, res) { 
+  
+  var request = {
+    template: {
+      name:  "TicketFactura",
+      recipe: "chrome-pdf",
+      engine: 'handlebars',
+      chrome: { 
+          width: "2.2in",
+          height: "5.5in"
+      }
+  },
+  };  
+
+  /*let jsreport = require('jsreport-core')(
+    {
+      store: {
+        provider: 'fs'
+      },
+      logger: {
+        'console': { 'transport': 'console', 'level': 'debug' }
+      },
+      extensions: {
+          express: { app: reportingApp, server: server },
+          'fs-store': {
+            dataDirectory: require('path').join(__dirname, 'formatos/default'),
+            syncModifications: true
+          }
+      },
+      appPath: "/reporting"
     }
-    transporter.sendMail(mailOptions, function (err, info) {
-      if(err){
-        callback(false)
-      }
-      else{ 
-        localStorage.setItem(rand, JSON.stringify({email:toEmail,ruc:ruc,rand:rand}));
-        callback(true)
+  ); */
+
+  //jsreport.options.extensions['fs-store'].dataDirectory = require('path').join(__dirname, 'formatos/asdasds')
+
+  //jsreport._initOptions()
+
+  /*jsreport.close().then(() => { 
+    jsreport.init().then(() => { 
+      
+      jsreport.render(request).then(function (o) {  
+        o.result.pipe(res);
+      }).catch(function (e) { 
+        console.log(e)
+        return res.json({respuesta:'error'})
+      })
+
+    }).catch((e) => { 
+      console.log(e);
+    });
+  })*/
+
+  
+  //console.log(jsreport.options.extensions['fs-store'].dataDirectory)
+  //jsreport._initOptions()
+
+  jsreport.render({
+    template: {
+        content: fs.readFileSync(require('path').join(__dirname, 'formatos/default/templates/FacturaComprobante', 'content.handlebars'), 'utf8'),
+        recipe: "html",
+        engine: 'jsrender'
+    },
+    data: {
+    }
+}).then(function(e) {
+  console.log(e)
+});
+
+  /*jsreport.render(request).then(function (o) {  
+    o.result.pipe(res);
+  }).catch(function (e) { 
+    console.log(e)
+    return res.json({respuesta:'error'})
+  })*/
+ 
+    
+  //console.log(jsreport)  
+  /*jsreport = require('jsreport-core')(
+    {
+      store: {
+        provider: 'fs'
+      },
+      logger: {
+        'console': { 'transport': 'console', 'level': 'debug' }
+      },
+      extensions: {
+          express: { app: reportingApp, server: server },
+          'fs-store': {
+            dataDirectory: require('path').join(__dirname, 'formatos/default'),
+            syncModifications: true
+          }
+      },
+      appPath: "/reporting"
+    }
+  ); 
+  jsreport.init().then(() => { 
+     
+    jsreport.render(request).then(function (o) {  
+      o.result.pipe(res);
+    }).catch(function (e) { 
+      console.log(e)
+      return res.json({respuesta:'error'})
+    })
+
+  }).catch((e) => { 
+    console.log(e);
+  });*/
+
+  /*jsreport.render(request).then(function (o) {  
+    o.result.pipe(res);
+  }).catch(function (e) { 
+    console.error(e)
+    return res.json({respuesta:'error'})
+  })*/ 
+});
+
+ 
+/* FUNCTIONS PRIVATES */
+
+function iniciarJsReport(ruc,callback){
+  crearDirectorioEmpresa(ruc,function(flag){
+    if(flag){
+      callback(true)
+      /*if(jsreport==null){
+        jsreport = require('jsreport-core')(
+          {
+            store: {
+              provider: 'fs'
+            },
+            logger: {
+              'console': { 'transport': 'console', 'level': 'debug' }
+            },
+            extensions: {
+                express: { app: reportingApp, server: server },
+                'fs-store': {
+                  dataDirectory: require('path').join(__dirname, 'formatos/'+ruc),
+                  syncModifications: true
+                },
+                'authentication' : {
+                    "cookieSession": {
+                        "secret": "dasd321as56d1sd5s61vdv32"        
+                    },
+                    "admin": {
+                        "username" : "palerp",
+                        "password": "palerp123"
+                    }
+                }
+            },
+            appPath: "/reporting"
+          }
+        );
         
-      }
-  });
+        jsreport.use(require('jsreport-import-export')());
+        //jsreport.use(require('jsreport-tags')());
+        jsreport.use(require('jsreport-templates')());
+        jsreport.use(require('jsreport-jsrender')());
+        jsreport.use(require('jsreport-authentication')());
+        jsreport.use(require('jsreport-handlebars')());
+        jsreport.use(require('jsreport-cli')());
+        //jsreport.use(require('jsreport-freeze')());
+        jsreport.use(require('jsreport-debug')()); 
+        jsreport.use(require('jsreport-express')()); 
+        jsreport.use(require('jsreport-fop-pdf')());
+        //jsreport.use(require('jsreport-pdf-utils')());
+        jsreport.use(require('jsreport-data')());
+        jsreport.use(require('jsreport-chrome-pdf')());
+        jsreport.use(require('jsreport-html-to-xlsx')());
+        //jsreport.use(require('jsreport-child-templates')());
+        //jsreport.use(require('jsreport-browser-client')());
+        //jsreport.use(require('jsreport-licensing')());
+        //jsreport.use(require('jsreport-authorization')());
+        //jsreport.use(require('jsreport-version-control')());
+        jsreport.use(require('jsreport-assets')());
+        jsreport.use(require('jsreport-reports')());
+        //jsreport.use(require('jsreport-text')());
+        //jsreport.use(require('jsreport-base')()); 
+        jsreport.use(require('jsreport-studio')());
+        jsreport.use(require('jsreport-fs-store')())
+        jsreport.use(require('jsreport-scripts')());
+        
+        jsreport.use(require('jsreport-scheduling')());
+        jsreport.use(require('jsreport-xlsx')());
+        //jsreport.use(require('jsreport-sample-template')());
+        jsreport.use(require('jsreport-resources')());
+        //jsreport.use(require('jsreport-public-templates')()); 
+      
+      
+        jsreport.init().then(() => {
+          callback(true)
+          console.log('jsreport server started')
+        }).catch((e) => {
+          callback(false)
+          console.error(e);
+        });
+      }else{
+        
+        callback(true)
+      }*/
+       
+
+    }else{
+      callback(false)
+    }
+  })
+ 
 }
+ 
+
+function crearDirectorioEmpresa(ruc,callback){
+  try{
+    var dir = require('path').join(__dirname, 'formatos/'+ruc);
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+        
+        callback(true)
+    }else{
+      callback(true)
+    }
+  }catch(e){
+    callback(false)
+  }
+}
+ 
  

@@ -1,5 +1,14 @@
 //import { URL } from '../src/constantes_entorno/constantes'  
 var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
+var localStorage = require('localStorage')
+var nodemailer = require('nodemailer')
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+          user: 'omar.muniz48@gmail.com',
+          pass: 'sas3tigres'
+      }
+});
 
 
 var sUnidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE", "VEINTIUN", "VEINTIDOS", "VEINTITRES", "VEINTICUATRO", "VEINTICINCO", "VEINTISEIS", "VEINTISIETE", "VEINTIOCHO", "VEINTINUEVE"];
@@ -352,6 +361,28 @@ function EmailValido(valor) {
         return false
     }
 }
+
+
+function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
+   
+    rand=Math.floor((Math.random() * 100) + 54) 
+    link="http://"+host+"/empresa_api/verificacion_correo?id="+rand;
+    var mailOptions={
+      to : toEmail,
+      subject : "PALERP CONSULTORES",
+      html : "<img alt='PALE CONSULTORES' style='display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000;' src='http://palerp.com/images/logo.png'><br><h3><strong> PALE CONSULTORES le agradece su preferencia.</strong></h3><p> Para seguir con el proceso de registro necesitamos la confirmacion de su correo,<br> por favor haga click en el enlace para verificar su correo.<br><a href="+link+">CLICK AQUI PARA VERIFICAR CORREO</a></p>" 
+    }
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err){
+        callback(false)
+      }
+      else{ 
+        localStorage.setItem(rand, JSON.stringify({email:toEmail,ruc:ruc,rand:rand}));
+        callback(true)
+        
+      }
+  });
+}
  
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido }
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion }

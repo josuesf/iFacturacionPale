@@ -2,8 +2,9 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
+var localStorage = require('localStorage')
 var {Ejecutar_Procedimientos,EXEC_SQL_DBMaster} = require('../utility/exec_sp_sql')
-var { UnObfuscateString, CambiarCadenaConexion } = require('../utility/tools')
+var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido,enviarCorreoConfirmacion } = require('../utility/tools')
 // define the home page route
 router.post('/get_unica_empresa', function (req, res) {
     input = req.body
@@ -94,6 +95,51 @@ router.post('/change_ruc', function (req, res) {
     })
 });
 
+/* functions private register new */
 
+router.get('/register',function(req,res){
+    res.render('register.ejs', { });
+})
+
+
+router.get('/verificacion_correo',function(req,res){  
+    jsonData = localStorage.getItem(req.query.id); 
+    if(jsonData!=null){
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+              '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>Su correo ha sido verificado exitosamente. En breves momentos nos comunicaremos con usted a traves del numero telefonico brindado para generarle un usuario y password para que pueda ingresar al sistema</span></h3></div>')
+    }else{ 
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
+    }
+});
+
+router.post('/register',function(req,res){
+    var input = req.body 
+    if(!RUCValido(input.ruc)){
+      res.render('register.ejs', {err:'El RUC es inválido'});
+    }else{
+      if(!EmailValido(input.email)){
+        res.render('register.ejs', {err:'El email es inválido'});
+      }else{
+         
+        if(input.razon!='' && input.ruc!='' && input.celular!='' && input.direccion!='' && input.email!=''){
+  
+          enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
+            if(flag){
+              res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
+            }else{
+              res.render('register.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
+            }
+          })
+  
+        }else{
+          res.render('register.ejs', {err:'Existe campos vacios'});
+        }
+        
+      }
+    } 
+})
 
 module.exports = router;
