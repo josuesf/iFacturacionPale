@@ -158,7 +158,7 @@ var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof na
     }
 
     var xhr = new XMLHttpRequest()
-    var data = JSON.stringify(request)
+    var data = JSON.stringify(request) 
     xhr.open('POST', this.serverUrl + '/api/report', true)
     xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8')
 

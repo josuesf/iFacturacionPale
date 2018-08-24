@@ -87,8 +87,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                             </button>
                                                             <ul class="dropdown-menu">
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                                                <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
-                                                                <li><a href="javascript:void(0)" ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li> 
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                                             </ul>
@@ -168,19 +167,11 @@ function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
             var request = {
-                template: {
-                    name:  arrayData.nombreTemplate,
-                    recipe: "chrome-pdf",
-                    engine: 'handlebars',
-                    chrome: { 
-                        width:  arrayData.ancho,
-                        height: arrayData.alto
-                    }
-                },
                 data:arrayData.cuerpo
             };
             
             jsreport.renderAsync(request).then(function(res) {
+                console.log(res)
                 jsreport.render(document.getElementById('divPDF'), request);
                 
             }).catch(function (e) { 
@@ -303,8 +294,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
-                                            <li><a href="javascript:void(0)"  ><i class="fa fa-refresh"></i>Cambiar Plan</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li> 
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                         </ul>
@@ -314,6 +304,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                                     Elegir una accion <span class="caret"></span>
+                                    <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
                                     </button>
                                 </div>
                                 `}
@@ -566,7 +557,7 @@ function TraerPeriodos(){
             TraerTurnos()
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }
 
@@ -589,7 +580,7 @@ function TraerTurnos(){
             LlenarTurnos(res.data.turnos,'Turno')
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }
 
@@ -636,7 +627,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
         case "CAJ_CAJA_MOVIMIENTOS":
@@ -668,7 +659,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
         case "ALM_ALMACEN_MOV":
@@ -700,7 +691,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
     }
@@ -781,7 +772,7 @@ function ExtornarAnular(movimiento,flag) {
                             }
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
@@ -832,7 +823,7 @@ function ExtornarAnular(movimiento,flag) {
                                         }
                                     }).catch(function (e) {
                                         console.log(e);
-                                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                                     });
                             }else{
                                 if(comprobante_pago.Cod_TipoComprobante=='FE' || comprobante_pago.Cod_TipoComprobante=='BE'){
@@ -864,7 +855,7 @@ function ExtornarAnular(movimiento,flag) {
                                             }
                                         }).catch(function (e) {
                                             console.log(e);
-                                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                                         });
                                 }else{
                                     
@@ -896,7 +887,7 @@ function ExtornarAnular(movimiento,flag) {
                                             }
                                         }).catch(function (e) {
                                             console.log(e);
-                                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                                         });
 
 
@@ -911,7 +902,7 @@ function ExtornarAnular(movimiento,flag) {
                             }*/
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
                 case "ALM_ALMACEN_MOV":
@@ -940,7 +931,7 @@ function ExtornarAnular(movimiento,flag) {
                             }
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
                 case "CAJ_FORMA_PAGO":
@@ -971,7 +962,7 @@ function ExtornarAnular(movimiento,flag) {
                             }
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
 
@@ -1010,7 +1001,7 @@ function ExtornarAnular(movimiento,flag) {
                             } 
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
                 case "CAJ_COMPROBANTE_PAGO":
@@ -1041,7 +1032,7 @@ function ExtornarAnular(movimiento,flag) {
                             } 
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
                 case "ALM_ALMACEN_MOV": 
@@ -1070,7 +1061,7 @@ function ExtornarAnular(movimiento,flag) {
                             } 
                         }).catch(function (e) {
                             console.log(e);
-                            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
 
@@ -1121,6 +1112,7 @@ function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback)
 
 function FormatearDataObservaciones(obs_string,indiceObs,obs_xml,callback){
     var xml = obs_xml!=null?obs_xml:'' 
+    var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(xml, "text/xml");
     if (xmlDoc.getElementsByTagName('REGISTRO').length > 0 && indiceObs<xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes.length > 0) {
         obs_string = obs_string + ' '+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeName + ':'+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue
@@ -1164,16 +1156,13 @@ function PrepararImpresion(id_ComprobantePago,callback){
                         if(res.respuesta=='ok'){
                             callback(true)
                             var dataDetallesComprobante = res.data.detalles_comprobante_pago
-                            var dataEmpresa = res.empresa[0]
+                            var dataEmpresa = res.empresa 
                             var arrayNuevo = []
                             var obs_string = ''
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
                                     if(dataComprobante.Cod_Libro=='14'){
                                         var arrayData = {
-                                            nombreTemplate:(dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].TKF:dataArray['nombreTemplate']=NOMBRES_DOC[1].FE,
-                                            ancho: (dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].ancho:NOMBRES_DOC[1].ancho,
-                                            alto: (dataComprobante.Cod_TipoComprobante=='TKF' || dataComprobante.Cod_TipoComprobante=='TKB')?NOMBRES_DOC[0].alto:NOMBRES_DOC[1].alto,
                                             cuerpo:{
                                                 COD_TIPOCOMPROBANTE:dataComprobante.Cod_TipoComprobante,
                                                 DOCUMENTO:RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
@@ -1206,7 +1195,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                                             }
                                         }
                                         
-                                        GenerarPDF(arrayData.detalle.DOCUMENTO.toString().toUpperCase(),arrayData.detalle.SERIE+"-"+arrayData.detalle.NUMERO,"TOTAL: "+arrayData.detalle.MONEDA_ABREV+" "+arrayData.detalle.TOTAL,arrayData)
+                                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,arrayData)
                                     }
 
                                 })
@@ -1236,7 +1225,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                     });
 
             }
@@ -1247,7 +1236,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
           
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }
 
@@ -1267,9 +1256,8 @@ function refrescar_movimientos_caja(){
         .then(res => {
             if (res.respuesta == 'ok') {
 
-                VerTabCaja(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
-                    $('#main-contenido').waitMe('hide');
-                })
+                VerTabCaja(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos) 
+                $('#main-contenido').waitMe('hide'); 
             }
             else{
                 toastr.error('Ocurrio un error. Actualice la pagina e intentelo nuevamente','Error',{timeOut: 5000})
@@ -1277,7 +1265,7 @@ function refrescar_movimientos_caja(){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }
@@ -1309,7 +1297,7 @@ module.exports = function movimientos_caja(ctx, next) {
             
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
     next();

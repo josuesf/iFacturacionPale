@@ -16,7 +16,10 @@ function CargarPDFModal(titulo,subtitulo,subtitulo_extra,callback){
                     <h4 class="modal-title"><strong>${subtitulo_extra}</strong></h4>
                 </div>
                 <div class="modal-body text-center" id="divPDF" style="height: 80%;">
-                    
+                    <i class="fa fa-file-pdf-o fa-5x"></i>
+                    <br/><br/>
+                    <i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>
+                    <label>Cargando vista previa....</label>
                 </div>
                 <div class="modal-footer">
                     <div class="btn-toolbar pull-right">
@@ -31,8 +34,7 @@ function CargarPDFModal(titulo,subtitulo,subtitulo_extra,callback){
 
 
     var modal_proceso = document.getElementById('modal-alerta');
-    empty(modal_proceso).appendChild(el);
-    run_waitMe($('#divPDF'), 1, "ios","Cargando vista previa comprobante...");
+    empty(modal_proceso).appendChild(el); 
 
     if($('#modal-alerta').hasClass('in')){
         callback(true)

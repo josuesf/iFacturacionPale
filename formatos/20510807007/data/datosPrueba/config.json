@@ -1,0 +1,10 @@
+{
+    "_id": "apKObMkKQt7u2ZYV",
+    "shortid": "r1S4pGFz7",
+    "creationDate": "2018-07-03T15:59:13.859Z",
+    "modificationDate": {
+        "$$date": 1534949658749
+    },
+    "name": "datosPrueba",
+    "$entitySet": "data"
+}

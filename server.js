@@ -5,6 +5,7 @@ var { LOGIN_SQL,
       EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
 
 var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido } = require('./utility/tools')
+var  GETCONFIG  = require('./src/constantes_entorno/constantes')
 
 var express = require('express');
 var multer = require('multer');
@@ -79,7 +80,7 @@ jsreport = require('jsreport-core')(
   }
 );
 
-jsreport.use(require('jsreport-import-export')());
+/*jsreport.use(require('jsreport-import-export')());
 jsreport.use(require('jsreport-tags')());
 jsreport.use(require('jsreport-templates')());
 jsreport.use(require('jsreport-jsrender')());
@@ -111,7 +112,7 @@ jsreport.use(require('jsreport-scheduling')());
 jsreport.use(require('jsreport-xlsx')());
 jsreport.use(require('jsreport-sample-template')());
 jsreport.use(require('jsreport-resources')());
-jsreport.use(require('jsreport-public-templates')()); 
+jsreport.use(require('jsreport-public-templates')()); */
 
 
 jsreport.init().then(() => { 
@@ -434,8 +435,7 @@ app.post('/logincajas', function (req, res) {
       req.session.caja = req.body.Caja
       req.session.turno = req.body.Turno
       req.session.periodo = req.body.Periodo
-      req.session.gestion = req.body.Gestion
-      
+      req.session.gestion = req.body.Gestion 
       iniciarJsReport(app.locals.empresa[0].RUC,function(flag){
         if(flag){
           return res.redirect('/');
@@ -602,46 +602,130 @@ var server = app.listen(3000, function (err) {
   console.log('Escuchando en el puerto 3000');
 })
  
+
+app.get('/prueba',function(req,res){ 
+  res.sendFile(require('path').join(__dirname+'/views/index.html'));
+
+});
+
+
  
 app.post('/api/report', function(req, res) { 
- 
-    req.body.data['URL_LOGO'] = ''
-    req.body.data['FLAG'] = false
-    req.body.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
-    req.body.data['DIRECCION'] = app.locals.empresa[0].Direccion
-    req.body.data['RUC'] = app.locals.empresa[0].RUC
-    req.body.data['USUARIO'] = req.session.username
-    req.body.data['FLAG_ANULADO'] = req.body.data['FLAG_ANULADO']=='true'?true:false
-  
-    var request = {
-      template: req.body.template,
-      data: req.body.data
-    }; 
-  
-    console.log(request) 
+  //console.log("request")
+  //console.log(req.body) 
+  if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){
+     
+    req.body.template.data['URL_LOGO'] = ''
+    req.body.template.data['FLAG'] = false
+    req.body.template.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
+    req.body.template.data['DIRECCION'] = app.locals.empresa[0].Direccion
+    req.body.template.data['RUC'] = app.locals.empresa[0].RUC
+    req.body.template.data['USUARIO'] = req.session.username
+    req.body.template.data['FLAG_ANULADO'] = req.body.template.data['FLAG_ANULADO']=='true'?true:false
     
+    var request = {
+      template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPOCOMPROBANTE],
+      data: req.body.template.data
+    }; 
+    
+    jsreport.render(request).then(function (o) {  
+      o.result.pipe(res);
+    }).catch(function (e) { 
+      console.error(e)
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '  <i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>Ocurrio un error. Parece que no tienes configurado el formato para este tipo de documento</span></h3></div>')
+      //return res.json({respuesta:'error'})
+    })
+  }else{
+    res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado. Se registro correctamente la operacion pero no se genero el documento digital correspondiente por falta de configuraciones</span></h3></div>')
+  }
+    
+});
+
+app.get('/report', function(req, res) { 
+  //console.log(Object.keys(GETCONFIG('default')).length)
+  if(Object.keys(GETCONFIG('default')).length>0){
+    var request = {
+      template:  GETCONFIG('defauslt')['TKF'],
+      data:{
+        "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
+        "FLAG":false,
+        "NOMBRE":"GRIFO MARCELO'S S.R.L.  ",
+        "DIRECCION":"AV. HUAYRUROPATA NRO. 1700 CUSCO-CUSCO-WANCHAQ ",
+        "RUC":"20357768269",
+        "COD_TIPOCOMPROBANTE": "01",
+        "DOCUMENTO": "FACTURA ELECTRONICA",
+        "SERIE": "F001",
+        "NUMERO": "00005591",
+        "FLAG_ANULADO":false,
+        "MOTIVO_ANULACION":"ERROR DE EMISION",
+        "COMP_AFECTADO":"F001-00000098",
+        "CLIENTE": "omar",
+        "COD_DOCCLIENTE":"6",
+        "RUC_CLIENTE": "20491228297",
+        "DIRECCION_CLIENTE": "MZA. U LOTE.20 ASC. TUPAC AMARU CUSCO - CUSCO - SAN SEBASTIAN  ",
+        "FECHA_EMISION": "24-06-2018",
+        "FECHA_VENCIMIENTO": "24-06-2018",
+        "FORMA_PAGO": "EFECTIVO",
+        "GLOSA": "POR LA VENTA DE MERCADERIA",
+        "OBSERVACIONES":"O/C RS-2165-2018",
+        "USUARIO": "CAJERO",
+        "MONEDA":"SOLES",
+        "ESCRITURA_MONTO":"SON: CIENTO VEINTE SIETE CON 52/100 SOLES ",
+        "GRAVADAS":"108.07",
+        "EXONERADAS":"0.00",
+        "GRATUITAS":"0.00",
+        "INAFECTAS":"0.00",
+        "DES_IMPUESTO":"IGV",
+        "IMPUESTO":"18",
+        "DESCUENTO":"0.00",
+        "IGV":"19.45",
+        "TOTAL":"127.52",
+        "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
+        "VERSION_SISTEMA":"F|9.1.4",
+        "DETALLES": [{
+            "DESCRIPCION": "GASEOSA COCACOLA 2.5L",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "5.00",
+            "PRECIO_UNITARIO":"7.90",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"39.50"
+        }, {
+            "DESCRIPCION": "SIXPACK CERVEZA CUSQUEÑA TRIGO 330ML",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "1.00",
+            "PRECIO_UNITARIO":"19.70",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"19.70"
+        },{
+            "DESCRIPCION": "ALTOMAYO CAFE GOURMET 180GR"    ,
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "3.00",
+            "PRECIO_UNITARIO":"24.99",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"74.97"
+        },{
+            "DESCRIPCION": "DONOFRIO CHOCOTON PANETON 500GR",
+            "UNIDAD": "UNIDADES",
+            "CANTIDAD": "1.00",
+            "PRECIO_UNITARIO":"13.70",
+            "DESCUENTO":"0.00",
+            "SUBTOTAL":"13.70"
+        }]
+    }
+    };  
     jsreport.render(request).then(function (o) {  
       o.result.pipe(res);
     }).catch(function (e) { 
       console.error(e)
       return res.json({respuesta:'error'})
     })
-    
-});
+  }else{
+    res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+    '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado. Se registro correctamente la operacion pero no se genero el documento digital correspondiente por falta de configuraciones</span></h3></div>')
 
-app.get('/report', function(req, res) { 
-  
-  var request = {
-    template: {
-      name:  "TicketFactura",
-      recipe: "chrome-pdf",
-      engine: 'handlebars',
-      chrome: { 
-          width: "2.2in",
-          height: "5.5in"
-      }
-  },
-  };  
+  }
 
   /*let jsreport = require('jsreport-core')(
     {
@@ -684,19 +768,7 @@ app.get('/report', function(req, res) {
   
   //console.log(jsreport.options.extensions['fs-store'].dataDirectory)
   //jsreport._initOptions()
-
-  jsreport.render({
-    template: {
-        content: fs.readFileSync(require('path').join(__dirname, 'formatos/default/templates/FacturaComprobante', 'content.handlebars'), 'utf8'),
-        recipe: "html",
-        engine: 'jsrender'
-    },
-    data: {
-    }
-}).then(function(e) {
-  console.log(e)
-});
-
+ 
   /*jsreport.render(request).then(function (o) {  
     o.result.pipe(res);
   }).catch(function (e) { 
@@ -750,100 +822,24 @@ app.get('/report', function(req, res) {
 
 function iniciarJsReport(ruc,callback){
   crearDirectorioEmpresa(ruc,function(flag){
-    if(flag){
-      callback(true)
-      /*if(jsreport==null){
-        jsreport = require('jsreport-core')(
-          {
-            store: {
-              provider: 'fs'
-            },
-            logger: {
-              'console': { 'transport': 'console', 'level': 'debug' }
-            },
-            extensions: {
-                express: { app: reportingApp, server: server },
-                'fs-store': {
-                  dataDirectory: require('path').join(__dirname, 'formatos/'+ruc),
-                  syncModifications: true
-                },
-                'authentication' : {
-                    "cookieSession": {
-                        "secret": "dasd321as56d1sd5s61vdv32"        
-                    },
-                    "admin": {
-                        "username" : "palerp",
-                        "password": "palerp123"
-                    }
-                }
-            },
-            appPath: "/reporting"
-          }
-        );
-        
-        jsreport.use(require('jsreport-import-export')());
-        //jsreport.use(require('jsreport-tags')());
-        jsreport.use(require('jsreport-templates')());
-        jsreport.use(require('jsreport-jsrender')());
-        jsreport.use(require('jsreport-authentication')());
-        jsreport.use(require('jsreport-handlebars')());
-        jsreport.use(require('jsreport-cli')());
-        //jsreport.use(require('jsreport-freeze')());
-        jsreport.use(require('jsreport-debug')()); 
-        jsreport.use(require('jsreport-express')()); 
-        jsreport.use(require('jsreport-fop-pdf')());
-        //jsreport.use(require('jsreport-pdf-utils')());
-        jsreport.use(require('jsreport-data')());
-        jsreport.use(require('jsreport-chrome-pdf')());
-        jsreport.use(require('jsreport-html-to-xlsx')());
-        //jsreport.use(require('jsreport-child-templates')());
-        //jsreport.use(require('jsreport-browser-client')());
-        //jsreport.use(require('jsreport-licensing')());
-        //jsreport.use(require('jsreport-authorization')());
-        //jsreport.use(require('jsreport-version-control')());
-        jsreport.use(require('jsreport-assets')());
-        jsreport.use(require('jsreport-reports')());
-        //jsreport.use(require('jsreport-text')());
-        //jsreport.use(require('jsreport-base')()); 
-        jsreport.use(require('jsreport-studio')());
-        jsreport.use(require('jsreport-fs-store')())
-        jsreport.use(require('jsreport-scripts')());
-        
-        jsreport.use(require('jsreport-scheduling')());
-        jsreport.use(require('jsreport-xlsx')());
-        //jsreport.use(require('jsreport-sample-template')());
-        jsreport.use(require('jsreport-resources')());
-        //jsreport.use(require('jsreport-public-templates')()); 
-      
-      
-        jsreport.init().then(() => {
-          callback(true)
-          console.log('jsreport server started')
-        }).catch((e) => {
-          callback(false)
-          console.error(e);
-        });
-      }else{
-        
-        callback(true)
-      }*/
-       
-
-    }else{
-      callback(false)
-    }
+    callback(flag)
   })
  
 }
  
 
 function crearDirectorioEmpresa(ruc,callback){
+  console.log(ruc)
   try{
     var dir = require('path').join(__dirname, 'formatos/'+ruc);
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
-        
-        callback(true)
+        const fse = require('fs-extra')
+        fse.copy(require('path').join(__dirname, 'formatos/default'), require('path').join(__dirname, 'formatos/'+ruc), err => {
+          if (err)  callback(false)
+          callback(true)
+        })
+        //callback(true)
     }else{
       callback(true)
     }

@@ -1,0 +1,20 @@
+<html>
+    <header>
+
+    </header>
+    <body>
+            <script src="dist/js/jsreport.js"></script>
+            <script>
+                  jsreport.serverUrl = 'http://127.0.0.1:3000'; 
+                    var request = {
+                        data:{prueba:1}
+                    };
+                    
+                    jsreport.renderAsync(request).then(function(res) {
+                         console.log(res)
+                    }).catch(function (e) { 
+                        console.log(e)                        
+                    });
+            </script>
+    </body>
+</html>

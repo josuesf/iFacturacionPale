@@ -835,25 +835,25 @@ function CalcularTotal(idTab){
     }
 }
 
-function LimpiarVenta(idTab){
-    $("#tablaBodyProductosVentas_"+idTab).html('')
-    $("#txtBusqueda_"+idTab).val('')
-    $("#txtBusqueda_"+idTab).focus()
-    $("#btnConversion_"+idTab).css("display","none")
-    $("#Direccion_"+idTab).val('')
-    $("#Nro_Documento_"+idTab).val('')
-    $("#Cliente_"+idTab).val('')
-    $("#Cliente_"+idTab).attr("data-id",null)
+function LimpiarVenta(){
+    $("#tablaBodyProductosVentas_"+IdTabSeleccionado).html('')
+    $("#txtBusqueda_"+IdTabSeleccionado).val('')
+    $("#txtBusqueda_"+IdTabSeleccionado).focus()
+    $("#btnConversion_"+IdTabSeleccionado).css("display","none")
+    $("#Direccion_"+IdTabSeleccionado).val('')
+    $("#Nro_Documento_"+IdTabSeleccionado).val('')
+    $("#Cliente_"+IdTabSeleccionado).val('')
+    $("#Cliente_"+IdTabSeleccionado).attr("data-id",null)
 
-    deleteElementArrayJsonVentas(global.variablesVentas,idTab)
-    global.variablesVentas.push({idTab:idTab,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
-    if($("#btnTotal_"+idTab).hasClass('active')){
-        $("#btnTotal_"+idTab).click()
+    deleteElementArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)
+    global.variablesVentas.push({idTab:IdTabSeleccionado,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
+    if($("#btnTotal_"+IdTabSeleccionado).hasClass('active')){
+        $("#btnTotal_"+IdTabSeleccionado).click()
     }
 
      
-    CalcularTotal(idTab)
-    CalcularTotalDescuentos(idTab)
+    CalcularTotal(IdTabSeleccionado)
+    CalcularTotalDescuentos(IdTabSeleccionado)
 }
 
 function TabVentaSeleccionado(idTab){
@@ -1618,4 +1618,4 @@ function VentaCompleta(){
 }
 
 
-export { NuevaVenta, VentaSimple, VentaCompleta }
+export { NuevaVenta, VentaSimple, VentaCompleta, LimpiarVenta }

@@ -74,6 +74,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
 
     var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
+
     $('#modal-superior').modal()
     CargarTipoPrecio()
     CargarCategoria()
@@ -164,14 +165,14 @@ function NuevoCliente(documentos) {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required">
+                                <select id="Cod_TipoDocumento"  class="form-control required" onchange=${()=>CambioClienteDoc()}>
                                     ${documentos.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="Nro_Documento_NC">Numero de Documento *</label>
+                                <label for="Nro_Documento_NC">Numero de Documento </label>
                                 <input type="number"  class="form-control required" id="Nro_Documento_NC">
                             </div>
                         </div>
@@ -361,7 +362,18 @@ function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
     $("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
 }
 
+function CambioClienteDoc(){
+    if($("#Cod_TipoDocumento").val()=="1" || $("#Cod_TipoDocumento").val()=="6"){
+        $("#Nro_Documento_NC").addClass("required")
+        $("#Nro_Documento_NC").css("border-color","red");
+    }else{
+        $("#Nro_Documento_NC").css("border-color","");
+        $("#Nro_Documento_NC").removeClass("required",false)
+    }
+}
+
 function GuardarNuevoCliente(){
+     
     if(ValidacionCampos("modal_error_nuevo_cliente","modal_form_nuevo_cliente")){
         run_waitMe($('#modal-superior'), 1, "ios","Registrando cliente...");
         var Cod_TipoDocumento = $("#Cod_TipoDocumento").val()
@@ -464,6 +476,7 @@ function Buscar(){
 
 function BusquedaProducto(){
     if($("#txtBusquedaProducto").val().trim().length>=2){
+        run_waitMe($('#contenedorTablaProductos'), 1, "ios","Buscando productos..."); 
         var Buscar = $("#txtBusquedaProducto").val().replace(/" "/g ,"%")
         var Cod_Precio = $("#Cod_Precio").val()
         var Cod_Categoria = arrayValidacion.includes($("#Cod_Categoria").val())?null:$("#Cod_Categoria").val()
@@ -494,8 +507,10 @@ function BusquedaProducto(){
             }
             else
                 empty(document.getElementById('contenedorTablaProductos'));
+            $('#contenedorTablaProductos').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
+            $('#contenedorTablaProductos').waitMe('hide');
             toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
     }else{
@@ -504,7 +519,7 @@ function BusquedaProducto(){
 }
 
 
-function BusquedaXIdClienteProveedor(){
+function BusquedaXIdClienteProveedor(){ 
     if($("#txtBusquedaProducto").val().trim().length>=2){
         var Buscar = $("#txtBusquedaProducto").val().replace(/" "/g ,"%")
         var Cod_Categoria = $("#Cod_Categoria").val()
@@ -542,8 +557,10 @@ function BusquedaXIdClienteProveedor(){
 }
 
 function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
+     
     var txtBuscarCliente = $("#txtBuscarCliente").val()
     if(txtBuscarCliente.length>=4){
+        run_waitMe($('#contenedorTablaClientes'), 1, "ios","Buscando cliente..."); 
         if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
             var Cliente = txtBuscarCliente
             const parametros = {
@@ -570,11 +587,14 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
+                $('#contenedorTablaClientes').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+                $('#contenedorTablaClientes').waitMe('hide');
                 toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
             });
         }else{
+            
             var Nro_Documento = txtBuscarCliente
             var Cod_TipoDocumento = ''
             const parametros = {
@@ -601,8 +621,10 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
                 }
                 else
                     empty(document.getElementById('contenedorTablaClientes'));
+                $('#contenedorTablaClientes').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+                $('#contenedorTablaClientes').waitMe('hide');
                 toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
             });
         }
