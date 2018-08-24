@@ -36,7 +36,7 @@ function CargarFormulario(variables, fecha_actual) {
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <select id="Cod_TipoDoc" class="form-control">
+                                            <select id="Cod_TipoDoc" class="form-control" onchange=${()=>CambioClienteDoc()}>
                                                 ${variables.documentos.map(e => yo`
                                                     <option value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>
                                                     `)}
@@ -271,6 +271,18 @@ function AgregarTabla(clientes){
 var Id_ClienteProveedor = null
 var Obs_Recibo = null
 
+
+function CambioClienteDoc(){
+    if($("#Cod_TipoDoc").val()=="1" || $("#Cod_TipoDoc").val()=="6"){
+        $("#Nro_Documento").addClass("required")
+        $("#Nro_Documento").css("border-color","red");
+    }else{
+        $("#Nro_Documento").css("border-color","");
+        $("#Nro_Documento").removeClass("required",false)
+    }
+}
+
+
 function SeleccionarCliente(cliente){
     $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
     $("#Cliente").val(cliente.Cliente)
@@ -280,34 +292,36 @@ function SeleccionarCliente(cliente){
 
 
 function BuscarCliente() { 
-    run_waitMe($('#div-cliente-recibo-ingreso'), 1, "ios","Buscando cliente...");
-    var Nro_Documento = document.getElementById('Nro_Documento').value
-    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Nro_Documento, Cod_TipoDocumento
-        })
+    if($("#Nro_Documento").val().trim().length>0){
+        run_waitMe($('#div-cliente-recibo-ingreso'), 1, "ios","Buscando cliente...");
+        var Nro_Documento = document.getElementById('Nro_Documento').value
+        var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Nro_Documento, Cod_TipoDocumento
+            })
+        }
+        fetch(URL + '/recibo_iegreso_api/get_cliente_by_nro_documento', parametros)
+            .then(req => req.json())
+            .then(res => {
+                console.log(res)
+                if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
+                    $("#Cliente").val(res.data.cliente[0].Cliente)
+                    $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
+                    Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+                }
+                $('#div-cliente-recibo-ingreso').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                $('#div-cliente-recibo-ingreso').waitMe('hide');
+            });
     }
-    fetch(URL + '/recibo_iegreso_api/get_cliente_by_nro_documento', parametros)
-        .then(req => req.json())
-        .then(res => {
-            console.log(res)
-            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                $("#Cliente").val(res.data.cliente[0].Cliente)
-                $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
-                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
-            }
-            $('#div-cliente-recibo-ingreso').waitMe('hide');
-        }).catch(function (e) {
-            console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
-            $('#div-cliente-recibo-ingreso').waitMe('hide');
-        });
 }
 function getValueXML(xmlDoc, TAG) {
     if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
@@ -347,7 +361,7 @@ function BusquedaClienteModal(e){
                     empty(document.getElementById('contenedorTablaClientes'));
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
         }else{
             var Nro_Documento = txtBuscarCliente
@@ -377,7 +391,7 @@ function BusquedaClienteModal(e){
                     empty(document.getElementById('contenedorTablaClientes'));
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
         }
     }
@@ -458,7 +472,7 @@ function Guardar() {
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
     }
@@ -493,7 +507,7 @@ function NuevoIngreso() {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 

@@ -1,0 +1,18 @@
+{
+    "shortid": "HyMJVrPHm",
+    "name": "TicketCV",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1535127690680
+    },
+    "_id": "Z8UhUdc8U5hhynvb",
+    "data": {
+        "shortid": "BJXIErwBX"
+    },
+    "pdfOperations": [],
+    "$entitySet": "templates"
+}

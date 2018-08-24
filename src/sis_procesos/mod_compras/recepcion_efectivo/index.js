@@ -82,9 +82,6 @@ function Ver(variables) {
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-inverse"><i class="fa fa-print"></i> Re-Imprimir</button>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
@@ -212,7 +209,7 @@ function RegistrarRecepcion(u,idInputCliente){
                 $('#modal-proceso').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#modal-proceso').waitMe('hide');
             });
         
@@ -251,7 +248,7 @@ function Reactivar(u,idInputCliente){
             $('#modal-proceso').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
 }
@@ -283,7 +280,7 @@ function Recepcionados(){
                 $('#modal-proceso').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#modal-proceso').waitMe('hide');
             });
         
@@ -323,7 +320,7 @@ function NuevaRecepcion() {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }

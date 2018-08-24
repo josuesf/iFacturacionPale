@@ -22,6 +22,19 @@ router.post('/get_movimientos', function (req, res) {
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
+router.post('/get_movimiento_by_pk', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'id_Movimiento',valor_parametro: input.id_Movimiento }
+    ]
+   
+    procedimientos =[
+        {nom_respuesta:'movimiento',sp_name:'USP_CAJ_CAJA_MOVIMIENTOS_TXPK',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
+
 
 router.post('/guardar_movimiento_caja', function (req, res) {
     

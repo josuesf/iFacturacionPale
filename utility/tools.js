@@ -285,6 +285,7 @@ function LimpiarVariablesGlobales() {
     global.objClienteVenta = ''
     global.objProductoVentas = ''
     global.objProducto = ''
+    global.objCliente = ''
 }
 
 function CambiarCadenaConexion(cadena) {

@@ -162,7 +162,8 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
 }
 
 
-function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){ 
+function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){  
+    console.log(arrayData)
     CargarPDFModal(titulo,subtitulo,subtitulo_extra,function(flag){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
@@ -172,11 +173,10 @@ function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){
             
             jsreport.renderAsync(request).then(function(res) {
                 console.log(res)
-                jsreport.render(document.getElementById('divPDF'), request);
-                
+                jsreport.render(document.getElementById('divPDF'), request); 
             }).catch(function (e) { 
                 toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
-                $('#modal-alerta').modal('hide')
+                $('#modal-alerta').modal('hide') 
             });
         }
     })
@@ -713,16 +713,17 @@ function VerFormatoDocumento(movimiento){
     var entidad = movimiento.Entidad
     console.log(movimiento)
     var id_Movimiento = movimiento.ID
-    /*PrepararImpresion(id_Movimiento,function(flag){
-        if(!flag){
-            toastr.error('No Puede imprimir el documento. Comuniquese con su Administrador.','Error',{timeOut: 5000})
-        }
-    })*/
+    
     switch (entidad){
         case 'CAJ_CAJA_MOVIMIENTOS':
             var descripcion = movimiento.Descripcion
-            if(descripcion!='REQUIERE DE AUTORIZACION'){
-                
+            if(descripcion!='REQUIERE DE AUTORIZACION'){ 
+                PrepararImpresionMovimientos(id_Movimiento,function(flag){
+                    if(!flag){
+                        toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+                    }
+                })
+
             }else{
                 toastr.error('No Puede imprimir un documento que Requiere de Autorizacion. Comuniquese con su Administrador.','Error',{timeOut: 5000})
             }
@@ -735,6 +736,13 @@ function VerFormatoDocumento(movimiento){
             })
             break
         case 'ALM_ALMACEN_MOV':
+
+            PrepararImpresionAlmacen(id_Movimiento,function(flag){
+                if(!flag){
+                    toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+                }
+            })
+
             break
     }
 }
@@ -1099,7 +1107,7 @@ function RecuperarNombreComprobante(CodTipoComprobante){
             return " ";
     }
 }
-
+ 
 function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback){
     if(indiceDetalles<arrayDetalles.length){
         arrayNuevo.push({
@@ -1128,6 +1136,230 @@ function FormatearDataObservaciones(obs_string,indiceObs,obs_xml,callback){
         callback(obs_string)
     }
 }
+
+function RecorrerDataSeries(indiceSeries,arraySeries,Serie,callback){
+    if(indiceSeries<arraySeries.length){
+        if(arraySeries[indiceSeries].Serie==Serie){
+            
+            callback(true,arraySeries[indiceSeries].Nom_TipoComprobante)
+        }else{
+            RecorrerDataSeries(indiceSeries+1,arraySeries,Serie,callback)
+        }
+        
+    }else{
+        callback(false,[])
+    }
+}
+
+function TraerSerieAutorizada(Cod_TipoComprobante,Serie,callback){
+    const parametrosC = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_TipoComprobante:Cod_TipoComprobante
+        })
+    }
+    fetch(URL+'/cajas_api/get_series_by_cod_caja_comprobante', parametrosC)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                console.log(res)
+                RecorrerDataSeries(0,res.data.series,Serie,function(flag,nombreDoc){
+                    callback(flag,nombreDoc)
+                })
+               
+            }else{
+                callback(false,'')
+            }
+        }).catch(function (e) {
+            callback(false,'')
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+function PrepararImpresionAlmacen(id_Movimiento,callback){
+    const parametrosC = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_Almacen_Mov:id_Movimiento
+        })
+    }
+    fetch(URL+'/almacenes_api/get_almacen_mov_by_id', parametrosC)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok' && res.data.movimiento.length>0) {
+                TraerSerieAutorizada(res.data.movimiento[0].Cod_TipoComprobante,res.data.movimiento[0].Serie,function(flag,nombreDoc){
+                     
+                    if(flag){
+                        var dataAlmacen = res.data.movimientos_almacen[0]
+
+                        const parametrosDA = {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                Id_Almacen_Mov:id_Movimiento
+                            })
+                        }
+                        fetch(URL+'/almacenes_api/get_almacen_mov_detalle_by_id', parametrosDA)
+                            .then(req => req.json())
+                            .then(res => {
+
+                                if(res.respuesta=='ok'){ 
+                                    callback(true)
+                                    var dataDetallesMovimiento= res.data.movimientos_detalle_almacen 
+                                    var arrayNuevo = [] 
+                                    var obs_string = ''
+                                    FormatearDataDetalles(0,dataDetallesMovimiento,arrayNuevo,function(arrayJson){
+
+                                        FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_AlmacenMov,function(data_string){
+
+                                            var arrayData = {
+                                                cuerpo:{
+                                                    COD_TIPO_DOCUMENTO: dataAlmacen.Cod_TipoComprobante,
+                                                    FECHA_EMISION: (new Date(dataAlmacen.Fecha)).toLocaleDateString(),
+                                                    DOCUMENTO: nombreDoc, 
+                                                    SERIE: dataAlmacen.Serie,
+                                                    NUMERO: dataAlmacen.Numero, 
+                                                    MOTIVO:dataAlmacen.Motivo,
+                                                    TIPO:dataAlmacen.Cod_TipoOperacion,
+                                                    OBSERVACIONES: data_string,
+                                                    DETALLES: arrayJson
+                                                }
+                                            }
+                                            GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
+
+                                        })
+
+                                        /*var arrayData = {
+                                            cuerpo:{
+                                                COD_TIPO_DOCUMENTO: dataAlmacen.Cod_TipoComprobante,
+                                                FECHA_EMISION: dataAlmacen.Fecha,
+                                                DOCUMENTO: nombreDoc, 
+                                                SERIE: dataAlmacen.Serie,
+                                                NUMERO: dataAlmacen.Numero, 
+                                                MOTIVO:dataAlmacen.Motivo,
+                                                TIPO:dataAlmacen.Cod_TipoOperacion,
+                                                "OBSERVACIONES": "PRUEBA DE TICKET",
+                                                DETALLES: arrayJson
+                                            }
+                                        }
+                                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"")*/
+
+                                    })
+
+                                }else{
+                                    toastr.error('No se pudo recuperar los detalles del movimiento','Error',{timeOut: 5000})  
+                                    callback(false)
+                                }   
+
+                            }).catch(function (e) {
+                                console.log(e);
+                                callback(false)
+                                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente','Error',{timeOut: 5000})
+                            });
+
+                        /*TraerSerieAutorizada(res.data.movimiento[0].Cod_TipoComprobante,res.data.movimiento[0].Serie,function(flag,nombreDoc){
+                            if(flag){
+
+                                FormatearDataDetalles 
+                            }else{
+                                toastr.error('No tiene autorizada la serie del documento','Error',{timeOut: 5000})
+                            }
+                        })*/
+                    }else{
+                        callback(false)
+                        toastr.error('No tiene autorizada la serie del documento','Error',{timeOut: 5000})
+                    }
+                })
+        
+            }
+            else{
+                toastr.error('No se pudo recuperar el movimiento','Error',{timeOut: 5000}) 
+                callback(false)
+            }
+          
+        }).catch(function (e) {
+            console.log(e);
+            callback(false)
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+
+
+function PrepararImpresionMovimientos(id_Movimiento,callback){
+    const parametrosC = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id_Movimiento:id_Movimiento
+        })
+    }
+    fetch(URL+'/movimientos_caja_api/get_movimiento_by_pk', parametrosC)
+        .then(req => req.json())
+        .then(res => { 
+            if (res.respuesta == 'ok' && res.data.movimiento.length>0) {  
+                TraerSerieAutorizada(res.data.movimiento[0].Cod_TipoComprobante,res.data.movimiento[0].Serie,function(flag,nombreDoc){ 
+                    if(flag){
+                        callback(true)
+                        var arrayData = {
+                            cuerpo:{
+                                COD_TIPO_DOCUMENTO: res.data.movimiento[0].Cod_TipoComprobante,
+                                FECHA_EMISION: (new Date(res.data.movimiento[0].Fecha)).toLocaleDateString(),
+                                DOCUMENTO: nombreDoc, 
+                                NOM_SOLICITANTE: res.data.movimiento[0].Cliente,
+                                NUM_CUENTA: res.data.movimiento[0].Id_Concepto, 
+                                MONEDA: (res.data.movimiento[0].Cod_MonedaIng=='PEN'?'S/':(res.data.movimiento[0].Cod_MonedaIng=='USD'?'$':'€')),
+                                IMPORTE : (parseFloat(res.data.movimiento[0].Ingreso)+parseFloat(res.data.movimiento[0].Egreso)).toFixed(2),
+                                SERIE: res.data.movimiento[0].Serie,
+                                NUMERO: res.data.movimiento[0].Numero, 
+                                CONCEPTO:res.data.movimiento[0].Des_Movimiento,
+                                MONEDA_NACIONAL: (res.data.movimiento[0].Cod_MonedaIng=='PEN'?'SOLES':(res.data.movimiento[0].Cod_MonedaIng=='USD'?'DOLARES':'EUROS')),
+                                MONEDA_EXTRANJERA: (res.data.movimiento[0].Cod_MonedaIng=='PEN'?'SOLES':(res.data.movimiento[0].Cod_MonedaIng=='USD'?'DOLARES':'EUROS')),
+                                DETALLES: [{
+                                    NACIONAL: (res.data.movimiento[0].Cod_MonedaIng=='PEN'?'S/':(res.data.movimiento[0].Cod_MonedaIng=='USD'?'$':'€'))+parseFloat(res.data.movimiento[0].Ingreso).toFixed(2),
+                                    TC:  parseFloat(res.data.movimiento[0].Tipo_Cambio).toFixed(4),
+                                    EXTRANJERO: (res.data.movimiento[0].Cod_MonedaEgr=='PEN'?'S/':(res.data.movimiento[0].Cod_MonedaEgr=='USD'?'$':'€'))+parseFloat(res.data.movimiento[0].Egreso).toFixed(2)
+                                    
+                                }]
+
+                            }
+                        }
+                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
+                    }else{
+                        callback(false)
+                        toastr.error('No tiene autorizada la serie del documento','Error',{timeOut: 5000})
+                    }
+                })
+ 
+            }
+            else{
+                toastr.error('No se pudo recuperar el movimiento','Error',{timeOut: 5000}) 
+                callback(false)
+            }
+          
+        }).catch(function (e) {
+            console.log(e);
+            callback(false)
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+
 
 function PrepararImpresion(id_ComprobantePago,callback){
     const parametrosC = {
@@ -1159,7 +1391,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                 fetch(URL+'/comprobantes_pago_api/get_detalle_by_comprobante_pago', parametrosDC)
                     .then(req => req.json())
                     .then(res => {
-                        if(res.respuesta=='ok'){
+                        if(res.respuesta=='ok'){ 
                             callback(true)
                             var dataDetallesComprobante = res.data.detalles_comprobante_pago
                             var dataEmpresa = res.empresa 
@@ -1170,7 +1402,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                                     if(dataComprobante.Cod_Libro=='14'){
                                         var arrayData = {
                                             cuerpo:{
-                                                COD_TIPOCOMPROBANTE:dataComprobante.Cod_TipoComprobante,
+                                                COD_TIPO_DOCUMENTO:dataComprobante.Cod_TipoComprobante,
                                                 DOCUMENTO:RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
                                                 SERIE:dataComprobante.Serie,
                                                 NUMERO:dataComprobante.Numero,
@@ -1180,8 +1412,8 @@ function PrepararImpresion(id_ComprobantePago,callback){
                                                 COD_DOCCLIENTE:dataComprobante.Cod_TipoDoc,
                                                 RUC_CLIENTE:dataComprobante.Doc_Cliente,
                                                 DIRECCION_CLIENTE:dataComprobante.Direccion_Cliente,
-                                                FECHA_EMISION:dataComprobante.FechaEmision,
-                                                FECHA_VENCIMIENTO:dataComprobante.FechaVencimiento,
+                                                FECHA_EMISION: (new Date(dataComprobante.FechaEmision)).toLocaleDateString(),
+                                                FECHA_VENCIMIENTO:(new Date(dataComprobante.FechaVencimiento)).toLocaleDateString(),
                                                 FORMA_PAGO:dataComprobante.Cod_FormaPago,
                                                 GLOSA:dataComprobante.Glosa,
                                                 OBSERVACIONES:data_string,
@@ -1213,6 +1445,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                         }
                     }).catch(function (e) {
                         console.log(e);
+                        callback(false)
                         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                     });
 
@@ -1224,6 +1457,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
           
         }).catch(function (e) {
             console.log(e);
+            callback(false)
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }

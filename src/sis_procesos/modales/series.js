@@ -345,7 +345,7 @@ function TraerTOPXSerie(){
             $('#modal-otros-procesos').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-otros-procesos').waitMe('hide');
         });
 }
@@ -505,7 +505,7 @@ function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-otros-procesos').waitMe('hide');
         });
 
@@ -534,7 +534,7 @@ function BuscarPorSerie(){
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-otros-procesos').waitMe('hide');
         });
 }

@@ -168,7 +168,7 @@ function GuardarEmpresa(_escritura, usuario) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     })
@@ -211,7 +211,7 @@ function ListarEmpresa(escritura) {
                         $('#main-contenido').waitMe('hide');
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                         $('#main-contenido').waitMe('hide');
                     });
             }
@@ -220,7 +220,7 @@ function ListarEmpresa(escritura) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }

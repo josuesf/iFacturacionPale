@@ -44,7 +44,7 @@ function CrearTurnoSiguiente(){
         }).catch(function (e) {
             console.log(e);
             $('#divError').css("display","block")
-            $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+            $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
         });
 }
 
@@ -158,7 +158,7 @@ function CambioRUC(flag){
             }).catch(function (e) {
                 console.log(e);
                 $('#divError').css("display","block")
-                $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+                $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
             });
     }else{
         var RUC = $("#empresa").val()
@@ -187,7 +187,7 @@ function CambioRUC(flag){
             }).catch(function (e) {
                 console.log(e);
                 $('#divError').css("display","block")
-                $('#textError').text('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla'); 
+                $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
             });
     }
 } 

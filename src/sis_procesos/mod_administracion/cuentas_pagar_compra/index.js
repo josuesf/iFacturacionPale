@@ -607,7 +607,7 @@ function BuscarPorFecha(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
     
 }
@@ -670,7 +670,7 @@ function CambioCodCuentaBancaria(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -768,7 +768,7 @@ function TraerPorCuentaOperacion(){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -804,7 +804,7 @@ function TraerTipoCambio(CodLibro){
                     } 
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
 
         }catch(e){
@@ -839,7 +839,7 @@ function TraerSaldoPagoAdelantado(){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -863,7 +863,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -887,46 +887,48 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
 function BuscarClienteDoc(CodLibro) {
-    run_waitMe($('#div-cliente-cuentas'), 1, "ios","Buscando cliente...");
-    var Nro_Documento = document.getElementById('Nro_Documento').value
-    var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
-    var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
-        })
-    }
-    fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
-        .then(req => req.json())
-        .then(res => { 
-            if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
-                global.objCliente = res.data.cliente[0]
-                
-                if(global.objCliente !='' && global.objCliente){
-                    $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-                    $("#Cliente").val(global.objCliente.Cliente)
-                    $("#Direccion").val(global.objCliente.Direccion)
-                    $("#Nro_Documento").val(global.objCliente.Nro_Documento)
-                    $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
-                    CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+    if($("#Nro_Documento").val().trim().length>0){
+        run_waitMe($('#div-cliente-cuentas'), 1, "ios","Buscando cliente...");
+        var Nro_Documento = document.getElementById('Nro_Documento').value
+        var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
+        var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Nro_Documento, Cod_TipoDocumento,Cod_TipoCliente
+            })
+        }
+        fetch(URL + '/clientes_api/get_cliente_by_documento', parametros)
+            .then(req => req.json())
+            .then(res => { 
+                if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
+                    global.objCliente = res.data.cliente[0]
+                    
+                    if(global.objCliente !='' && global.objCliente){
+                        $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
+                        $("#Cliente").val(global.objCliente.Cliente)
+                        $("#Direccion").val(global.objCliente.Direccion)
+                        $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                        $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
+                        CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                    }
                 }
-            }
-            $('#div-cliente-cuentas').waitMe('hide');
-        }).catch(function (e) {
-            console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
-            $('#div-cliente-cuentas').waitMe('hide');
-        });
+                $('#div-cliente-cuentas').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                $('#div-cliente-cuentas').waitMe('hide');
+            });
+    }
 }
 
 
@@ -959,7 +961,7 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -1025,7 +1027,7 @@ function GuardarMovimientoBancario(Facturas,CodLibro){
             console.log(res)
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         }); 
 
 }
@@ -1090,7 +1092,7 @@ function GuardarMovimientoCaja(Facturas,CodLibro){
             console.log(res)
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         }); 
  
 }
@@ -1198,7 +1200,7 @@ function AceptarConfirmacionCuenta(CodLibro){
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     }); 
 
 
@@ -1305,14 +1307,14 @@ function AceptarConfirmacionCuenta(CodLibro){
                                 }
                             }).catch(function (e) {
                                 console.log(e);
-                                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                             }); 
                         
 
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 }); 
             
         }         
@@ -1364,7 +1366,7 @@ function Cuentas(Cod_Libro) {
     
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     $('#main-contenido').waitMe('hide');
                 });
 

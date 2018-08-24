@@ -412,7 +412,7 @@ function GuardarNuevoCliente(){
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-superior').waitMe('hide');
         });
     }
@@ -438,7 +438,7 @@ function CargarCategoria(){
             LlenarCategorias([])
     }).catch(function (e) {
         console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }
 
@@ -461,7 +461,7 @@ function CargarTipoPrecio(){
             LlenarPrecios([])
     }).catch(function (e) {
         console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }
 
@@ -511,7 +511,7 @@ function BusquedaProducto(){
         }).catch(function (e) {
             console.log(e);
             $('#contenedorTablaProductos').waitMe('hide');
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
     }else{
         console.log("busqueda de producto con lenght mayor a 2")
@@ -551,7 +551,7 @@ function BusquedaXIdClienteProveedor(){
                 empty(document.getElementById('contenedorTablaProductos'));
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
     }
 }
@@ -591,7 +591,7 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
             }).catch(function (e) {
                 console.log(e);
                 $('#contenedorTablaClientes').waitMe('hide');
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
         }else{
             
@@ -625,7 +625,7 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
             }).catch(function (e) {
                 console.log(e);
                 $('#contenedorTablaClientes').waitMe('hide');
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
         }
     }

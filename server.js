@@ -624,7 +624,7 @@ app.post('/api/report', function(req, res) {
     req.body.template.data['FLAG_ANULADO'] = req.body.template.data['FLAG_ANULADO']=='true'?true:false
     
     var request = {
-      template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPOCOMPROBANTE],
+      template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],
       data: req.body.template.data
     }; 
     

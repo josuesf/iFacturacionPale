@@ -8,7 +8,7 @@ import { CargarPDFModal } from '../../modales/pdf'
 import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 
 var listaFormaPago = []
-var arrayValidacion = [null,'null','']
+var arrayValidacion = [null,'null','',undefined]
 var obs_xml = null
 var aSaldo = 0
 var aMonto = 0 
@@ -69,7 +69,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" onkeypress=${()=>KeyPressClienteDoc()} class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
                                                     <i class="fa fa-globe"></i>
@@ -346,9 +346,9 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <th>
                                                     <div class="input-group">
                                                         <label>UM</label>
-                                                        <span class="input-group-btn">
+                                                        <!--<span class="input-group-btn">
                                                             <button type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh"></i></button>
-                                                        </span>
+                                                        </span>-->
                                                     </div>
                                                 </th>
                                                 <th>Cantidad</th>
@@ -603,9 +603,16 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente)
             $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-            $("#Cliente").val(global.objCliente.Cliente)
-            $("#Nro_Documento").val(global.objCliente.Nro_Documento)
-            $("#Direccion").val(global.objCliente.Direccion)
+            //$("#Cliente").val(global.objCliente.Cliente)
+            //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            //$("#Direccion").val(global.objCliente.Direccion)
+            $("#Nro_Documento").tagsinput('removeAll') 
+            $("#Cliente").tagsinput('removeAll') 
+            $("#Direccion").tagsinput('removeAll') 
+
+            $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
+            $("#Cliente").tagsinput('add',global.objCliente.Cliente)
+            $("#Direccion").tagsinput('add',global.objCliente.Direccion)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
             if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
                 $("input[name=optCredito][value='credito']").prop("checked",true);
@@ -673,7 +680,41 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
    
     if (Detalles!=undefined){
         AgregarFilaTabla_(CodLibro,variables,Detalles)
-    }   
+    }  
+
+    $("#Nro_Documento").tagsinput({
+        maxTags: 1
+    });
+
+    $("#Cliente").tagsinput({
+        maxTags: 1
+    })
+
+    $("#Direccion").tagsinput({
+        maxTags: 1
+    })
+
+    $('#Nro_Documento').on('itemAdded', function(event) { 
+        if($("#Nro_Documento").val().trim()!=''){
+            BuscarClienteDoc(CodLibro)
+        }  
+     });
+
+     $('#Nro_Documento').on('itemRemoved', function(event) { 
+        console.log("remove item")
+        KeyPressClienteDoc()
+     });
+
+     $('#Cliente').on('itemRemoved', function(event) { 
+         console.log($("#Cliente").attr("data-id"))
+         if(!arrayValidacion.includes($("#Cliente").attr("data-id"))) 
+            RemoveTagCliente()
+    });
+
+
+    $('input[type="number"]').blur(function(){
+        $(this).val(parseFloat($(this).val()).toFixed(2))
+    })
 
 }
  
@@ -1442,7 +1483,7 @@ function AbrirModalFormasPago(variables,fecha_actual){
             $('#modal-proceso').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
 }
@@ -2052,6 +2093,7 @@ function EsValido(CodLibro,callback){
  
 
 function GenerarComprobante(CodLibro,variables){ 
+    console.log($("#Cliente").val())
     try{
         
         EsValido(CodLibro,function(flag){ 
@@ -2149,7 +2191,7 @@ function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_Com
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -2188,7 +2230,7 @@ function GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPag
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -2228,7 +2270,7 @@ function GuardarFormaPagoRecursivo(indiceFormaPago,idComprobante,callback){
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
    }else{
        callback(true)
@@ -2290,7 +2332,7 @@ function GuardarOperacionBancaria(callback){
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
     
 }
@@ -2331,7 +2373,7 @@ function GuardarSeries(indiceSerie,idComprobante,idDetalle,arraySeries,callback)
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
 
     }else{
@@ -2369,7 +2411,7 @@ function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitaci
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -2495,7 +2537,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     });
             })
         //} 
@@ -2759,7 +2801,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
         var dataArray = {
             cuerpo:{
 
-                COD_TIPOCOMPROBANTE:Cod_TipoComprobante,
+                COD_TIPO_DOCUMENTO:Cod_TipoComprobante,
                 DOCUMENTO:$("#Cod_TipoComprobante option:selected").text(),
                 SERIE:Serie,
                 NUMERO:Numero,
@@ -2769,8 +2811,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                 COD_DOCCLIENTE:Cod_TipoDoc,
                 RUC_CLIENTE:Doc_Cliente,
                 DIRECCION_CLIENTE:Direccion_Cliente,
-                FECHA_EMISION:FechaEmision,
-                FECHA_VENCIMIENTO:FechaVencimiento,
+                FECHA_EMISION:(new Date(FechaEmision)).toLocaleDateString(),
+                FECHA_VENCIMIENTO:(new Date(FechaVencimiento)).toLocaleDateString(),
                 FORMA_PAGO:'',
                 GLOSA:Glosa,
                 OBSERVACIONES:Obs_Comprobante,
@@ -2989,7 +3031,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 $("#modal-proceso").modal("hide")
                                                 $('#modal-alerta').waitMe('hide')
                                                 $("#modal-alerta").modal("hide")
-                                                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                                             });
                                         
                                         }else{
@@ -3089,7 +3131,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                         $("#modal-proceso").modal("hide")
                                         $('#modal-alerta').waitMe('hide')
                                         $("#modal-alerta").modal("hide")
-                                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                                     });
 
                                 }
@@ -3113,7 +3155,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                 $("#modal-proceso").modal("hide")
                 $('#modal-alerta').waitMe('hide')
                 $("#modal-alerta").modal("hide")
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
 
 
@@ -3144,7 +3186,7 @@ function CargarTipoPrecio(){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -3170,7 +3212,7 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
     }else{
         
@@ -3195,7 +3237,7 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
         }
     }
@@ -3230,7 +3272,7 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -3262,7 +3304,7 @@ function CargarSeries(CodLibro){
                 } 
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
 
         CambioComprobantes() 
@@ -3290,7 +3332,7 @@ function CargarAlmacenes(Id_Producto,Cod_Almacen){
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });  
 }
 
@@ -3387,7 +3429,7 @@ function CambioCodCuentaBancaria(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -3485,7 +3527,7 @@ function CambioExportacion(CodLibro,variables){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
  
         });
@@ -3521,7 +3563,7 @@ function CambioExportacion(CodLibro,variables){
                     }
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
            
      
@@ -3561,7 +3603,7 @@ function RecorrerTablaDetalles_Series(indiceDetalle,callback){
                
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
     }else{
         callback(true)
@@ -3649,7 +3691,7 @@ function CambioSelectLicitacion(CodLibro,variables){
                     },
                     body: JSON.stringify({
                         Cod_Licitacion: $("#Cod_Licitacion").val(),
-                        Id_ClienteProveedor: global.objCliente.Id_ClienteProveedor
+                        Id_ClienteProveedor: parseInt($("#Cliente").attr("data-id"))// global.objCliente.Id_ClienteProveedor
                     })
                 }
                 fetch(URL + '/comprobantes_pago_api/get_licitacion_detallado', parametros)
@@ -3663,7 +3705,7 @@ function CambioSelectLicitacion(CodLibro,variables){
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     });
 
             }
@@ -3706,7 +3748,7 @@ function CambioUnidadMedida() {
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
     }
 }
@@ -3869,7 +3911,7 @@ function TraerTipoCambio(CodLibro){
                     } 
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
 
         }catch(e){
@@ -3907,7 +3949,7 @@ function TraerSiguienteNumero(CodLibro){
                 } 
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
     }
 }
@@ -3920,7 +3962,7 @@ function TraerSaldoPagoAdelantado(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
+            Id_ClienteProveedor: parseInt($("#Cliente").attr("data-id"))//global.objCliente.Id_ClienteProveedor
         })
     }
     fetch(URL + '/comprobantes_pago_api/get_pago_adelantado', parametros)
@@ -3938,7 +3980,7 @@ function TraerSaldoPagoAdelantado(){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -3962,7 +4004,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -3974,7 +4016,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Id_ClienteProveedor:global.objCliente.Id_ClienteProveedor
+            Id_ClienteProveedor: parseInt($("#Cliente").attr("data-id"))//global.objCliente.Id_ClienteProveedor
         })
     }
     fetch(URL + '/cuentas_bancarias_api/get_cuenta_by_id_cliente', parametros)
@@ -3986,7 +4028,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -4024,7 +4066,7 @@ function TraerCredito(CodLibro,callback){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -4044,24 +4086,36 @@ function BuscarProductoCP(CodLibro,tipo) {
     }
 }
 
-function KeyPressClienteDoc(){
-    switch($('#Nro_Documento').val().trim().length){
-        case 8:
-            $("#Cod_TipoDoc").val("1")
-            break;
-        case 11:
-            $("#Cod_TipoDoc").val("6")
-            break;
-        case 0:
-            $("#Cliente").attr("data-id",null)
-            $("#Cliente").val("")
-            $("#Direccion").val("")
-            break;
+function RemoveTagCliente(){
+    $("#Nro_Documento").tagsinput('removeAll')
+    $("#Cliente").attr("data-id",null)
+    $("#Direccion").tagsinput('removeAll')
+}
+
+function KeyPressClienteDoc(){ 
+    if($('#Nro_Documento').val().trim().length==0){
+        $("#Cliente").tagsinput('removeAll')
+        $("#Cliente").attr("data-id",null)
+        $("#Direccion").tagsinput('removeAll')
+    }else{
+        switch($('#Nro_Documento').val().trim().length){
+            case 8:
+                $("#Cod_TipoDoc").val("1")
+                break;
+            case 11:
+                $("#Cod_TipoDoc").val("6")
+                break;
+            case 0:
+                $("#Cliente").attr("data-id",null)
+                $("#Cliente").val("")
+                $("#Direccion").val("")
+                break;
+        }
     }
 }
 
 function BuscarClienteDoc(CodLibro) {
-    var Nro_Documento = $('#Nro_Documento').val().trim()
+    var Nro_Documento = $('#Nro_Documento').val().trim() 
     var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
     var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
     if(Nro_Documento!=''){
@@ -4084,9 +4138,13 @@ function BuscarClienteDoc(CodLibro) {
 
                 if(global.objCliente !='' && global.objCliente){
                     $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-                    $("#Cliente").val(global.objCliente.Cliente)
-                    $("#Nro_Documento").val(global.objCliente.Nro_Documento)
-                    $("#Direccion").val(global.objCliente.Direccion)
+                    //$("#Cliente").val(global.objCliente.Cliente)
+                    //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                    //$("#Direccion").val(global.objCliente.Direccion) 
+
+                    $("#Cliente").tagsinput('add',global.objCliente.Cliente)
+                    $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
+                    $("#Direccion").tagsinput('add',global.objCliente.Direccion)
                     $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
                     if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
                         $("input[name=optCredito][value='credito']").prop("checked",true);
@@ -4118,7 +4176,7 @@ function BuscarClienteDoc(CodLibro) {
             $('#div-cliente-comprobante-pago').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#div-cliente-comprobante-pago').waitMe('hide');
         });
     }
@@ -4143,7 +4201,7 @@ function AbrirModalObsComprobantePago(){
             AbrirModalObs(variables.diagramas,obs_xml,"modal_observaciones","modal_obs_body")
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -4192,7 +4250,7 @@ function ComprobantePago(Cod_Libro,Cliente,Detalles) {
                      
                 }).catch(function (e) {
                     console.log(e);
-                    toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     $('#main-contenido').waitMe('hide');
                 });
 

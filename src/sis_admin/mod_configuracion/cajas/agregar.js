@@ -459,7 +459,7 @@ function GuardarCaja(_escritura,caja) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     }
@@ -497,7 +497,7 @@ function EliminarDocumento(_escritura, sucursales, usuarios, cuentas_contables,c
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     })
@@ -550,7 +550,7 @@ function GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
@@ -581,7 +581,7 @@ function AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, c
         $('#main-contenido').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         $('#main-contenido').waitMe('hide');
     });
 }
@@ -616,7 +616,7 @@ function BusquedaDeUsuario(){
                 empty(document.getElementById('contenedorTablaUsuarios'));
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
     }else{
         empty(document.getElementById('contenedorTablaUsuarios'));
@@ -674,7 +674,7 @@ function AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caj
         $('#main-contenido').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         $('#main-contenido').waitMe('hide');
     });
 }
@@ -790,7 +790,7 @@ function BuscarProductos(_escritura, caja){
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }
@@ -889,7 +889,7 @@ function GuardarFavorito(_escritura, caja, producto){
              $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
     
@@ -950,7 +950,7 @@ function EliminarFavorito(_escritura, caja, producto){
             } 
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
     })
@@ -982,7 +982,7 @@ function NuevaCaja(_escritura, sucursales, usuarios, cuentas_contables, caja) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     } else Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, [], [])

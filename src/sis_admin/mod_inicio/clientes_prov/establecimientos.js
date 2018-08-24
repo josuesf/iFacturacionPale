@@ -174,7 +174,7 @@ function AbrirEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento) 
             $('#modal-abrir').modal()
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 
@@ -210,7 +210,7 @@ function GuardarEstablecimiento(_escritura, Id_ClienteProveedor, establecimiento
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     }
@@ -239,7 +239,7 @@ function Eliminar(_escritura, establecimiento) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     })
@@ -268,7 +268,7 @@ function Establecimientos(_escritura, Id_ClienteProveedor) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }

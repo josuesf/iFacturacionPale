@@ -274,7 +274,7 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
 }
@@ -372,7 +372,7 @@ function GuardarMovCuentaBancaria(variables){
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                         $('#modal-proceso').waitMe('hide');
                     });
 
@@ -387,7 +387,7 @@ function GuardarMovCuentaBancaria(variables){
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
 }
@@ -449,7 +449,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#modal-proceso').waitMe('hide');
             });
 }
@@ -496,7 +496,7 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#modal-proceso').waitMe('hide');
         });
 }
@@ -536,7 +536,7 @@ function NuevoEnvioEfectivo(_escritura, caja) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }

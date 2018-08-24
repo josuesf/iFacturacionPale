@@ -31,7 +31,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <select class="form-control" id="Cod_TipoDocumentoBuscar">
+                                                <select class="form-control" id="Cod_TipoDocumentoBuscar" onchange=${()=>CambioClienteDoc()}>
                                                     ${variables.tipos_documento.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                                 </select>
                                             </div>
@@ -172,7 +172,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                                         <label class="radio-inline">
                                                             <input type="radio" id="optionCV" name="optionCV" value="v" onclick="${() => CambioCompraVentaME()}"> Venta ME
                                                         </label>
-                                                </div>
+                                                </div> 
                                             </div> 
                                             <br><br><br>
                                             <div class="form-group">
@@ -229,6 +229,17 @@ function LlenarCuenta(cuenta,idSelect){
 
 var Id_ClienteProveedor = null
 
+function CambioClienteDoc(){
+    if($("#Cod_TipoDocumentoBuscar").val()=="1" || $("#Cod_TipoDocumentoBuscar").val()=="6"){
+        $("#Nro_DocumentoBuscar").addClass("required")
+        $("#Nro_DocumentoBuscar").css("border-color","red");
+    }else{
+        $("#Nro_DocumentoBuscar").css("border-color","");
+        $("#Nro_DocumentoBuscar").removeClass("required",false)
+    }
+}
+
+
 function CambioSoles(){ 
     $("#Soles").val(parseFloat($("#Monto").val())*parseFloat($("#TipoCambio").val()))
 }
@@ -269,35 +280,37 @@ function ObservacionesXML(diagrama) {
 
 
 function RecuperarDatosClientePorNroDoc(){
-    var Nro_Documento = $("#Nro_DocumentoBuscar").val()
-    var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar").val()
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({ 
-            Nro_Documento,
-            Cod_TipoDocumento
-        })
+    if($("#Nro_DocumentoBuscar").val().trim().length>0){
+        var Nro_Documento = $("#Nro_DocumentoBuscar").val()
+        var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar").val()
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({ 
+                Nro_Documento,
+                Cod_TipoDocumento
+            })
+        }
+        fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
+                $("#txtNombreCliente").focus()
+                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+            }
+            else{
+                BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
+            }
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
     }
-    fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
-    .then(req => req.json())
-    .then(res => {
-        if (res.respuesta == 'ok') {
-            $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
-            $("#txtNombreCliente").focus()
-            Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
-        }
-        else{
-            BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
-        }
-    }).catch(function (e) {
-        console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
-    });
 }
  
 
@@ -416,7 +429,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                 }
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#modal-proceso').waitMe('hide');
             });
         }else{
@@ -525,7 +538,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                         $('#modal-proceso').waitMe('hide');
                     });
         
@@ -537,7 +550,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                 $('#modal-proceso').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#modal-proceso').waitMe('hide');
             });
 
@@ -561,15 +574,20 @@ function NuevoCompraVentaME(_escritura, caja) {
     fetch(URL + '/compra_venta_moneda_extranjera_api/get_comprobante_by_caja', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log(res)
             if (res.respuesta == 'ok') {
-                TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie==undefined?0:res.data.comprobante_caja[0].Serie)
+                if(res.data.comprobante_caja.length>0)
+                    TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie)
+                else  
+                    TraerSiguienteNumeroComprobante(_escritura,'') 
+
             }
             else {
                 $('#main-contenido').waitMe('hide');
             }
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }
@@ -603,7 +621,7 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }
@@ -634,7 +652,7 @@ function TraerCuentaBancariaEntidadFinanciera() {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }

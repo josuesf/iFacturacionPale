@@ -221,7 +221,7 @@ function EliminarCajaAlmacen(_escritura, tipo_almacenes, almacen, u) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     })
@@ -251,7 +251,7 @@ function AgregarCaja(_escritura, tipo_almacenes, almacen, caja_almacen) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 }
@@ -343,7 +343,7 @@ function GuardarCajaAlmacen(_escritura, tipo_almacenes, almacen) {
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
-            toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
         });
 
@@ -388,7 +388,7 @@ function GuardarAlmacen(_escritura, almacen) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     }
@@ -417,7 +417,7 @@ function NuevoAlmacen(_escritura, tipo_almacenes, almacen) {
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
-                toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#main-contenido').waitMe('hide');
             });
     } else Ver(_escritura, tipo_almacenes, almacen, [])

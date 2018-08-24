@@ -65,6 +65,26 @@ var GETCONFIG = function GET(ruc){
                                 width: "80mm",
                                 height: "297mm"
                             }
+                        },
+                        'RI':
+                        {
+                            content: fs.readFileSync(require('path').join('formatos/'+ruc+'/templates/TicketEI', 'content.handlebars'), 'utf8'),
+                            recipe: "chrome-pdf",
+                            engine: 'handlebars',
+                            chrome: { 
+                                width: "80mm",
+                                height: "297mm"
+                            }
+                        },
+                        'RE':
+                        {
+                            content: fs.readFileSync(require('path').join('formatos/'+ruc+'/templates/TicketEI', 'content.handlebars'), 'utf8'),
+                            recipe: "chrome-pdf",
+                            engine: 'handlebars',
+                            chrome: { 
+                                width: "80mm",
+                                height: "297mm"
+                            }
                         }
                     };
     }catch(e){

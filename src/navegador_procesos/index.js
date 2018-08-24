@@ -24,95 +24,203 @@ function Ver(Flag_Cerrado) {
    
     var el = yo`
         ${!Flag_Cerrado?
-            yo`
-            <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">TABLE OF CONTENTS</li>
-            <li>
-                <a href="/docs/2.4/installation"><i class="fa fa-microchip"></i> <span>Installation</span></a>
-            </li>
-            <li>
-                <a href="/docs/2.4/dependencies"><i class="fa fa-handshake-o"></i>
-                    <span>Dependencies & plugins</span></a></li>
-            <li>
-                <a href="/docs/2.4/layout"><i class="fa fa-files-o"></i> <span>Layout</span></a></li>
-            <li class="treeview ">
-                <a href="#"><i class="fa fa-th"></i> <span>Components</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="/docs/2.4/main-header"><i class="fa fa-circle-o"></i> Main Header</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/sidebar"><i class="fa fa-circle-o"></i> Sidebar</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/control-sidebar"><i class="fa fa-circle-o"></i> Control Sidebar</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/boxes"><i class="fa fa-circle-o"></i> Box</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/info-box"><i class="fa fa-circle-o"></i> Info Box</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/direct-chat"><i class="fa fa-circle-o"></i> Direct Chat</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview active">
-                <a href="#"><i class="fa fa-code"></i> <span>JavaScript</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="/docs/2.4/js-layout"><i class="fa fa-circle-o"></i> Layout</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/js-push-menu"><i class="fa fa-circle-o"></i> Push Menu</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/js-tree"><i class="fa fa-circle-o"></i> Tree</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/js-control-sidebar"><i class="fa fa-circle-o"></i> Control Sidebar</a>
-                    </li>
-                    <li class="active">
-                        <a href="/docs/2.4/js-box-widget"><i class="fa fa-circle-o"></i> Box Widget</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/js-box-refresh"><i class="fa fa-circle-o"></i> Box Refresh</a>
-                    </li>
-                    <li>
-                        <a href="/docs/2.4/js-todo-list"><i class="fa fa-circle-o"></i> Todo List</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="/docs/2.4/browser-support"><i class="fa fa-chrome"></i><span>Browser Support</span></a>
-            </li>
-            <li>
-                <a href="/docs/2.4/upgrade-guide"><i class="fa fa-hand-o-up"></i><span>Upgrade Guide</span></a>
-            </li>
-            <li>
-                <a href="/docs/2.4/implementations"><i class="fa fa-bookmark-o"></i><span>Implementations</span></a>
-            </li>
-            <li>
-                <a href="/docs/2.4/faq"><i class="fa fa-question-circle-o"></i> <span>FAQ</span></a>
-            </li>
-            <li>
-                <a href="/docs/2.4/license"><i class="fa fa-file-text-o"></i> <span>License</span></a>
-            </li>
-        </ul>
-            
-            `
-            :yo`
+            yo` 
+            <ul class="sidebar-menu" data-widget="tree"> 
              
-            `}`;
+            <li class="treeview active">
+                <a href="#"><i class="fa fa-th"></i> <span>Movimientos de Caja</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingreso</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><i class="fa fa-circle-o"></i> Recibo de Egreso</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><i class="fa fa-circle-o"></i> Recepcion de Efectivo</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="javascript:void(0);"><i class="fa fa-opencart"></i> <span> Ventas</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => NuevaVenta()}><i class="fa fa-circle-o"></i> Nueva Venta</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="javascript:void(0);"><i class="fa fa-shopping-basket"></i> <span> Compras</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => ComprobantePago('08')}><i class="fa fa-circle-o"></i> Facturas Recibidas</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <li class="treeview">
+                <a href="javascript:void(0);"><i class="fa fa-industry"></i> <span> Almacen</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => EntradasSalidas('NE')}><i class="fa fa-circle-o"></i><span> Registro de Entradas</span></a> 
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => EntradasSalidas('NS')}><i class="fa fa-circle-o"></i><span> Registro de Salidas</span></a> 
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="javascript:void(0);"><i class="fa fa-cogs"></i> <span> Administracion</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => Cuentas('14')}><i class="fa fa-circle-o"></i><span> Cuentas por Cobrar</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => Cuentas('08')}><i class="fa fa-circle-o"></i><span> Cuentas por Pagar</span></a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="javascript:void(0);"><i class="fa fa-laptop"></i> <span> Sistema</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>`
+            :yo`
+        <ul class="sidebar-menu" data-widget="tree"> 
+             
+            <li class="treeview" class="not-active">
+                <a href="#"><i class="fa fa-th"></i> <span>Movimientos de Caja</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Ingreso</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Egreso</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Envio Efectivo</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Recepcion de Efectivo</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview" class="not-active">
+                <a href="javascript:void(0);"><i class="fa fa-opencart"></i> <span> Ventas</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Nueva Venta</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview" class="not-active">
+                <a href="javascript:void(0);"><i class="fa fa-shopping-basket"></i> <span> Compras</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Facturas Recibidas</a>
+                    </li>
+                </ul>
+            </li>
+            
+            <li class="treeview" class="not-active">
+                <a href="javascript:void(0);"><i class="fa fa-industry"></i> <span> Almacen</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Registro de Entradas</span></a> 
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Registro de Salidas</span></a> 
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview" class="not-active">
+                <a href="javascript:void(0);"><i class="fa fa-cogs"></i> <span> Administracion</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Cuentas por Cobrar</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Cuentas por Pagar</span></a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="treeview" class="not-active">
+                <a href="javascript:void(0);"><i class="fa fa-laptop"></i> <span> Sistema</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a>
+                    </li>
+                </ul>
+            </li>
+ 
+
+        </ul>`}`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
 }
@@ -134,7 +242,7 @@ module.exports = function navegador(ctx, next) {
         Ver(res.arqueo[0].Flag_Cerrado)
     }).catch(function (e) {
         console.log(e);
-        toastr.error('La conexion esta muy lenta. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
   
 }
