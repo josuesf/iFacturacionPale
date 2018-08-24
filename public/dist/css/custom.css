@@ -169,14 +169,6 @@ table.dataTable.no-footer {
 .skin-red .sidebar a.not-active {
     color: #626467;
 }
-
-
-div.container {
-    width: 100%;
-    padding-left: 30px;
-    padding-right: 30px;
-}
- 
   
 .scroll-horizontal ul{
     display: inline-block;

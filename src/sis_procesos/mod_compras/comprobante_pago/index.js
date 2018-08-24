@@ -1371,7 +1371,6 @@ function KeyPressPrecioUnitario(){
      }catch(e){
       $("#Importe").val("0.00")
      }
-     $("#Importe").focus()
 }
 
 function KeyPressCantidad(CodLibro){

@@ -711,7 +711,13 @@ function AceptarConfirmacion(flag,movimiento){
 
 function VerFormatoDocumento(movimiento){
     var entidad = movimiento.Entidad
+    console.log(movimiento)
     var id_Movimiento = movimiento.ID
+    /*PrepararImpresion(id_Movimiento,function(flag){
+        if(!flag){
+            toastr.error('No Puede imprimir el documento. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+        }
+    })*/
     switch (entidad){
         case 'CAJ_CAJA_MOVIMIENTOS':
             var descripcion = movimiento.Descripcion
@@ -1199,25 +1205,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
                                     }
 
                                 })
-                                
-                                /*EnviarImpresion(dataComprobante.Cod_Libro,
-                                                dataComprobante.Cod_TipoComprobante,
-                                                RecuperarNombreComprobante(dataComprobante.Cod_TipoComprobante),
-                                                dataComprobante.Serie,
-                                                dataComprobante.Numero,
-                                                true,
-                                                dataComprobante.MotivoAnulacion,
-                                                dataComprobante.Nom_Cliente,
-                                                dataComprobante.COd_TipoDoc,
-                                                dataComprobante.Doc_Cliente,
-                                                dataComprobante.Direccion_Cliente,
-                                                dataComprobante.FechaEmision,
-                                                dataComprobante.FechaVencimiento,
-                                                dataComprobante.Cod_FormaPago,
-                                                dataComprobante.Glosa,*/
-
-
-
+                               
                             })
                         }else{
                             toastr.error('No se pudo recuperar los detalles del comprobante','Error',{timeOut: 5000})  

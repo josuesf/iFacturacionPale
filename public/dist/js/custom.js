@@ -78,8 +78,6 @@ function ValidacionCampos(id_divError,id_divParent){
         onClose: function(el) {}
     });
 }
-
- 
  
  window.alert = function() {};
   
