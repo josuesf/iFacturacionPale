@@ -131,7 +131,8 @@
 
       // add a tag element
 
-      var $tag = $('<span class="tag ' + htmlEncode(tagClass) + (itemTitle !== null ? ('" title="' + itemTitle) : '') + '">' + htmlEncode(itemText) + '<span data-role="remove"><i class="fa fa-close text-red"></i></span><span data-role="edit"><i class="fa fa-pencil text-blue"></i></span></span>');
+      var $tag = $('<span class="tag ' + htmlEncode(tagClass) + (itemTitle !== null ? ('" title="' + itemTitle) : '') + '">' + htmlEncode(itemText) + '<span data-role="remove"><i class="fa fa-close text-red"></i></span></span>');
+      
       $tag.data('item', item);
       self.findInputWrapper().before($tag);
       $tag.after(' ');
@@ -459,14 +460,7 @@
         }
         self.remove($(event.target).closest('.tag').data('item'));
       }, self));
-
-
-      self.$container.on('click', '[data-role=edit]', $.proxy(function(event) {
-        //$(event.target).closest('.tag').data('item')="holaaaaaa"
-        //this.refresh
-        //self.remove($(event.target).closest('.tag').data('item'));
-        //self.add("hola");
-      }, self));
+ 
 
       // Only add existing value as tags when using strings as tags
       if (self.options.itemValue === defaultOptions.itemValue) {

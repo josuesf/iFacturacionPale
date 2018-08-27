@@ -1,9 +1,10 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
-import { BuscarCliente } from './index'
 import { URL } from '../../constantes_entorno/constantes'
+import { LimpiarVariablesGlobales } from '../../../utility/tools'
 
 function VerBuscarCuentasPendientes(CodLibro,cuentas){ 
+    LimpiarVariablesGlobales()
     var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">

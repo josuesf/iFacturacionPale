@@ -6,7 +6,7 @@ import { LimpiarVariablesGlobales } from '../../../utility/tools'
 var aRequiereStock = true
 var aIdClienteProveedor = 0
 var aCodTipoProducto = null
-var arrayValidacion = [null,'null','']
+var arrayValidacion = [null,'null','',undefined]
 
 
 function BuscarProducto(_RequiereStock,text_busqueda) {

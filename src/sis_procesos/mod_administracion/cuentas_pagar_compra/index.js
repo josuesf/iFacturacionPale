@@ -1,24 +1,11 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles} from '../../../../utility/tools'
-import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '../../modales'
-import { AsignarSeriesModal } from '../../modales/series'
+import {BloquearControles} from '../../../../utility/tools' 
 import { BuscarCuentasPendientes } from '../../modales/cuentas' 
 
-var listaFormaPago = []
-var obs_xml = null
-var aSaldo = 0
-var contador = 0
-var contadorPercepcion = 0
-var idFilaSeleccionadaSerie = 0
-
 function VerCuentas(variables,fecha_actual,CodLibro) {
-    global.objCliente = ''
-    global.objProducto = ''
-    global.arraySeries = ''
-    contador = 0
-    contadorPercepcion = 0
+    global.objCliente = '' 
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -393,8 +380,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
 
     
     $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
-         
-        if(global.objCliente!='' && global.arraySeries){ 
+        if(global.objCliente!=''){ 
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente").val(global.objCliente.Nom_Cliente)
             $("#Nro_Documento").val(global.objCliente.Doc_Cliente)

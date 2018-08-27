@@ -8,7 +8,7 @@ import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 
 var cantidad_tabs = 1
 var IdTabSeleccionado = null
-var arrayValidacion = [null,'null','']
+var arrayValidacion = [null,'null','',undefined]
 
 //var Total = 0
 //var TotalDescuentos = 0

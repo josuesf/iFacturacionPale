@@ -78,9 +78,14 @@ function ValidacionCampos(id_divError,id_divParent){
         onClose: function(el) {}
     });
 }
+ 
 
- 
- 
+$(document).on('hidden.bs.modal', function (event) { 
+    if ($('.modal:visible').length) {
+      $('body').addClass('modal-open');
+    }
+  });
+
  window.alert = function() {};
   
 

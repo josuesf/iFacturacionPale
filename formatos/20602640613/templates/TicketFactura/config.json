@@ -1,0 +1,26 @@
+{
+    "_id": "qjdimnaEHHKPU4OR",
+    "shortid": "B16qSehQm",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true,
+        "displayHeaderFooter": false
+    },
+    "data": {
+        "shortid": "r1S4pGFz7"
+    },
+    "resources": {
+        "items": [
+            {
+                "shortid": "r1S4pGFz7",
+                "entitySet": "data"
+            }
+        ]
+    },
+    "modificationDate": {
+        "$$date": 1535307736833
+    },
+    "name": "TicketFactura",
+    "$entitySet": "templates"
+}

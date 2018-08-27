@@ -723,7 +723,7 @@ app.get('/report', function(req, res) {
     })
   }else{
     res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-    '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado. Se registro correctamente la operacion pero no se genero el documento digital correspondiente por falta de configuraciones</span></h3></div>')
+    '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
 
   }
 

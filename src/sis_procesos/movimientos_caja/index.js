@@ -14,19 +14,19 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                      
                 </div>
 
-                <div class="modal modal-default fade" id="modal-justificacion" style="display: none;overflow: auto;">
+                <div class="modal modal-default fade" id="modal-justificacion" style="display: none;">
                      
                 </div>
 
-                <div class="modal fade" id="modal-superior" style="display: none;z-index: 1052;overflow: auto;" >
+                <div class="modal fade" id="modal-superior" style="display: none;z-index: 1052;" >
                      
                 </div> 
 
-                <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;overflow: auto;" >
+                <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;" >
                      
                 </div>
 
-                <div class="modal fade" id="modal-proceso" style="overflow: auto;">
+                <div class="modal fade" id="modal-proceso" >
                     
                 </div>
             </section>
@@ -231,18 +231,18 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                      
                     </div>
 
-                    <div class="modal modal-default fade" id="modal-justificacion" style="display: none;overflow: auto;">
+                    <div class="modal modal-default fade" id="modal-justificacion" style="display: none;">
                         
                     </div>
 
-                    <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;overflow: auto;">
+                    <div class="modal fade" id="modal-otros-procesos" style="display: none;z-index: 1051;">
                      
                     </div>
 
-                    <div class="modal fade" id="modal-superior" style="display: none;z-index: 1051;overflow: auto;" >
+                    <div class="modal fade" id="modal-superior" style="display: none;z-index: 1051" >
                         
                     </div>
-                    <div class="modal fade" id="modal-proceso" style="overflow: auto;">
+                    <div class="modal fade" id="modal-proceso">
                         
                     </div>
                 </div>`
