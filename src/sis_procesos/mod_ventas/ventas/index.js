@@ -71,7 +71,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Nombres completos</label>
-                                        <div class="input-group">
+                                        <div class="input-group input-group-sm">
                                             <div class="input-group-btn">
                                                 <button type="button" id="AgregarCliente" class="btn btn-success" onclick=${()=>NuevoCliente(variables.documentos)}>
                                                     <i class="fa fa-plus"></i>
@@ -272,6 +272,71 @@ function VerNuevaVenta(variables,CodLibro) {
     CambioMonedaVentas(idTabVenta)
     CambioMonedaFormaPagoMasterCard(idTabVenta)
     CambioMonedaFormaPagoVisa(idTabVenta)
+    
+
+    $("#Nro_Documento_"+idTabVenta).tagsinput({
+        maxTags: 1
+    });
+
+    $("#Cliente_"+idTabVenta).tagsinput({
+        maxTags: 1
+    })
+
+    $("#Direccion_"+idTabVenta).tagsinput({
+        maxTags: 1
+    })
+
+    $('#Nro_Documento_'+idTabVenta).on('beforeItemRemove',function(event) {
+        if(!arrayValidacion.includes($("#Cliente_"+idTabVenta).attr("data-id"))){ 
+            $("#Cliente_"+idTabVenta).tagsinput('removeAll')
+            $("#Cliente_"+idTabVenta).attr("data-id",null)
+            $("#Direccion_"+idTabVenta).tagsinput('removeAll') 
+        }
+    });
+
+    $('#Nro_Documento_'+idTabVenta).on('beforeItemAdd', function(event) {
+        global.objClienteVenta = ''
+        getObjectArrayJsonVentas(global.variablesVentas,idTabVenta)[0].Cliente={}
+        $("#Nro_Documento_"+idTabVenta).tagsinput('removeAll') 
+        $("#Cliente_"+idTabVenta).tagsinput('removeAll') 
+        $("#Cliente_"+idTabVenta).attr("data-id",null)
+        $("#Direccion_"+idTabVenta).tagsinput('removeAll') 
+    });
+
+    $('#Nro_Documento_'+idTabVenta).on('itemAdded', function(event) { 
+        console.log("add item")
+        if($("#Nro_Documento_"+idTabVenta).val().trim()!=''){
+            BuscarClienteDoc(CodLibro,idTabVenta) 
+        }  
+        KeyPressClienteDoc(idTabVenta)
+    });
+
+    $('#Cliente_'+idTabVenta).on('itemAdded', function(event) { 
+        console.log("add item cliente")
+        //global.objClienteVenta.Cliente = $('#Cliente_'+idTabVenta).val()
+        let cl={
+            Id_ClienteProveedor:null,
+            Nro_Documento:$('#Nro_Documento_'+idTabVenta).val(),
+            Cliente : $('#Cliente_'+idTabVenta).val(),
+            Direccion: $('#Direccion_'+idTabVenta).val(),
+            Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTabVenta).val()
+        }
+        
+        changeArrayJsonVentas(global.variablesVentas,idTabVenta,[null,null,null,null,null,null,cl,null])
+    });
+
+    $('#Direccion_'+idTabVenta).on('itemAdded', function(event) { 
+        console.log("add item direccion")
+        //global.objClienteVenta.Direccion = $('#Direccion_'+idTabVenta).val()
+        let cl={
+            Id_ClienteProveedor:null,
+            Nro_Documento:$('#Nro_Documento_'+idTabVenta).val(),
+            Cliente : $('#Cliente_'+idTabVenta).val(),
+            Direccion: $('#Direccion_'+idTabVenta).val(),
+            Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTabVenta).val(),
+        }
+        changeArrayJsonVentas(global.variablesVentas,idTabVenta,[null,null,null,null,null,null,cl,null])
+    });
 
     
 
@@ -315,6 +380,15 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </td>
                             </tr>`
                             $('#tablaBodyProductosVentas_'+IdTabSeleccionado).append(fila)
+                            $('input[type="number"]').blur(function(){
+                                $(this).val(parseFloat($(this).val()).toFixed(2))
+                            })
+
+                            $('input[type="number"]').keypress(function(e){
+                                if(e.which == 13) {
+                                    $(this).val(parseFloat($(this).val()).toFixed(2))
+                                }
+                            })
                               
                              getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles.push({ 
                                 id_ComprobantePago:0,
@@ -351,7 +425,16 @@ function VerNuevaVenta(variables,CodLibro) {
         }
 
 
-        if(global.objClienteVenta!=''){
+        if(global.objClienteVenta!=''){ 
+            console.log(global.objClienteVenta)
+            $("#Nro_Documento_"+IdTabSeleccionado).tagsinput('removeAll') 
+            $("#Cliente_"+IdTabSeleccionado).tagsinput('removeAll') 
+            $("#Direccion_"+IdTabSeleccionado).tagsinput('removeAll') 
+
+            $("#Nro_Documento_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Nro_Documento)
+            $("#Cliente_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Cliente)
+            $("#Direccion_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Direccion)
+            $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objCliente.Id_ClienteProveedor)
             changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[null,null,null,null,null,null,global.objClienteVenta,null])
         }
 
@@ -370,6 +453,7 @@ function VerNuevaVenta(variables,CodLibro) {
     });
 
     IdTabSeleccionado = idTabVenta
+
 }
 
 function CrearDivFavoritos(variables,idTab){
@@ -495,6 +579,7 @@ function CargarModalConfirmacion(idTab,_CodTipoComprobante){
 function AceptarConfirmacion(idTab,_CodTipoComprobante){
     VentaSimpleSinME(idTab,_CodTipoComprobante)
 }
+
 
 
 function VerVuelto(variables,idTab){
@@ -774,6 +859,16 @@ function CalcularVuelto(idTab){
     //$("#txtBusqueda_"+idTab).focus()
     //$("#TotalRecibidos_"+idTab).focus() 
 
+}
+function KeyPressClienteDoc(idTab){ 
+    switch($('#Nro_Documento_'+idTab).val().trim().length){
+        case 8:
+            $("#Cod_TipoDoc_"+idTab).val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDoc_"+idTab).val("6")
+            break;
+    } 
 }
 
 function KeyCalcularVuelto(event,idTab){
@@ -1266,6 +1361,16 @@ function AgregarProducto(producto,favoritos,idTab){
                                          
                                         $('#tablaBodyProductosVentas_'+idTab).append(fila)
 
+                                        $('input[type="number"]').blur(function(){
+                                            $(this).val(parseFloat($(this).val()).toFixed(2))
+                                        })
+
+                                        $('input[type="number"]').keypress(function(e){
+                                            if(e.which == 13) {
+                                                $(this).val(parseFloat($(this).val()).toFixed(2))
+                                            }
+                                        })
+
                                         getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Detalles.push({
                                             id_ComprobantePago:0,
                                             id_Detalle:0,
@@ -1368,7 +1473,7 @@ function BuscarProductoCP(event,tipo,idTab) {
 
 
 
-function BuscarClienteDoc(CodLibro,idTab) {
+function BuscarClienteDoc(CodLibro,idTab) { 
     var Nro_Documento = document.getElementById('Nro_Documento_'+idTab).value
     if(Nro_Documento.trim().length>3){
         run_waitMe($('#div-cliente'), 1, "ios","Buscando cliente...");
@@ -1393,15 +1498,41 @@ function BuscarClienteDoc(CodLibro,idTab) {
                     changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,global.objClienteVenta,null])
                     if(global.objClienteVenta !='' && global.objClienteVenta){
                         $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
-                        $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
+
+                        $("#Cliente_"+idTab).tagsinput('add',global.objClienteVenta.Cliente)
+                        $("#Nro_Documento_"+idTab).tagsinput('add',global.objClienteVenta.Nro_Documento)
+                        $("#Direccion_"+idTab).tagsinput('add',global.objClienteVenta.Direccion)
+                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)
+
+                        /*$("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
                         $("#Direccion_"+idTab).val(global.objClienteVenta.Direccion)
                         $("#Nro_Documento_"+idTab).val(global.objClienteVenta.Nro_Documento)
-                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)                   
+                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor) */                  
                     } 
+                }else{ 
+                    global.objClienteVenta = ''
+                    let cl = {
+                        Id_ClienteProveedor:null,
+                        Nro_Documento :Nro_Documento,
+                        Cliente : $('#Cliente_'+idTab).val(),
+                        Direccion: $('#Direccion_'+idTab).val(),
+                        Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTab).val(),
+                    }
+                    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,cl,null])
+                    /*getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Cliente={
+                        Id_ClienteProveedor:null,
+                        Nro_Documento :Nro_Documento,
+                        Cliente : $('#Cliente_'+idTab).val(),
+                        Direccion: $('#Direccion_'+idTab).val(),
+                        Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTab).val(),
+                    }*/
                 }
                 $('#div-cliente').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+                global.objClienteVenta = ''
+                let cl = {}
+                changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,cl,null]) 
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#div-cliente').waitMe('hide');
             });

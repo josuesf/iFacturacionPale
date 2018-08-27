@@ -170,9 +170,9 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                         <div class="col-md-4">
                                             <button class="btn btn-sm btn-info btn-block" onclick=${()=>RecuperarProductos(CodTipoComprobante,fecha_actual)}>Recuperar Productos</button>
                                         </div>
-                                        <div class="col-md-4">
+                                        <!--<div class="col-md-4">
                                             <button class="btn btn-sm btn-danger btn-block">Agregar por serie</button>
-                                        </div>
+                                        </div>-->
                                     </div>
                                 </div>
                             </div>

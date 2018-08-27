@@ -16,7 +16,7 @@ var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
-var pCodTipoComprobanteUltimo = ''
+var pCodTipoComprobanteUltimo = '' 
  
 
 function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
@@ -346,9 +346,9 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <th>
                                                     <div class="input-group">
                                                         <label>UM</label>
-                                                        <!--<span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-xs"><i class="fa fa-refresh"></i></button>
-                                                        </span>-->
+                                                        <span class="input-group-btn">
+                                                            <button type="button" class="btn btn-default btn-xs"  onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-refresh"></i></button>
+                                                        </span>
                                                     </div>
                                                 </th>
                                                 <th>Cantidad</th>
@@ -601,19 +601,22 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     $('#modal-superior').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
-            //console.log(global.objCliente)
+            //console.log(global.objCliente) 
             $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
             //$("#Cliente").val(global.objCliente.Cliente)
             //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
             //$("#Direccion").val(global.objCliente.Direccion)
             $("#Nro_Documento").tagsinput('removeAll') 
             $("#Cliente").tagsinput('removeAll') 
-            $("#Direccion").tagsinput('removeAll') 
+            $("#Direccion").tagsinput('removeAll')  
+             
 
             $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
             $("#Cliente").tagsinput('add',global.objCliente.Cliente)
             $("#Direccion").tagsinput('add',global.objCliente.Direccion)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+ 
+
             if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
                 $("input[name=optCredito][value='credito']").prop("checked",true);
                 $("#divCredito").css("display","block")
@@ -694,23 +697,29 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
         maxTags: 1
     })
 
-    $('#Nro_Documento').on('itemAdded', function(event) { 
-        if($("#Nro_Documento").val().trim()!=''){
-            BuscarClienteDoc(CodLibro)
-        }  
-     });
-
-     $('#Nro_Documento').on('itemRemoved', function(event) { 
-        console.log("remove item")
-        KeyPressClienteDoc()
-     });
-
-     $('#Cliente').on('itemRemoved', function(event) { 
-         console.log($("#Cliente").attr("data-id"))
-         if(!arrayValidacion.includes($("#Cliente").attr("data-id"))) 
-            RemoveTagCliente()
+    $('#Nro_Documento').on('beforeItemRemove',function(event) {
+        if(!arrayValidacion.includes($("#Cliente").attr("data-id"))){ 
+            $("#Cliente").tagsinput('removeAll')
+            $("#Cliente").attr("data-id",null)
+            $("#Direccion").tagsinput('removeAll') 
+        }
     });
 
+    $('#Nro_Documento').on('beforeItemAdd', function(event) {
+        $("#Nro_Documento").tagsinput('removeAll') 
+        $("#Cliente").tagsinput('removeAll') 
+        $("#Cliente").attr("data-id",null)
+        $("#Direccion").tagsinput('removeAll') 
+    });
+
+    $('#Nro_Documento').on('itemAdded', function(event) { 
+        console.log("add item")
+        if($("#Nro_Documento").val().trim()!=''){
+            BuscarClienteDoc(CodLibro) 
+        }  
+        KeyPressClienteDoc()
+     });
+ 
 
     $('input[type="number"]').blur(function(){
         $(this).val(parseFloat($(this).val()).toFixed(2))
@@ -4086,32 +4095,16 @@ function BuscarProductoCP(CodLibro,tipo) {
     }
 }
 
-function RemoveTagCliente(){
-    $("#Nro_Documento").tagsinput('removeAll')
-    $("#Cliente").attr("data-id",null)
-    $("#Direccion").tagsinput('removeAll')
-}
-
 function KeyPressClienteDoc(){ 
-    if($('#Nro_Documento').val().trim().length==0){
-        $("#Cliente").tagsinput('removeAll')
-        $("#Cliente").attr("data-id",null)
-        $("#Direccion").tagsinput('removeAll')
-    }else{
-        switch($('#Nro_Documento').val().trim().length){
-            case 8:
-                $("#Cod_TipoDoc").val("1")
-                break;
-            case 11:
-                $("#Cod_TipoDoc").val("6")
-                break;
-            case 0:
-                $("#Cliente").attr("data-id",null)
-                $("#Cliente").val("")
-                $("#Direccion").val("")
-                break;
-        }
+    switch($('#Nro_Documento').val().trim().length){
+        case 8:
+            $("#Cod_TipoDoc").val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDoc").val("6")
+            break;
     }
+   
 }
 
 function BuscarClienteDoc(CodLibro) {
@@ -4137,6 +4130,11 @@ function BuscarClienteDoc(CodLibro) {
                 global.objCliente = res.data.cliente[0]
 
                 if(global.objCliente !='' && global.objCliente){
+
+                    //$("#Nro_Documento").tagsinput('removeAll') 
+                    //$("#Cliente").tagsinput('removeAll') 
+                    //$("#Direccion").tagsinput('removeAll') 
+
                     $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
                     //$("#Cliente").val(global.objCliente.Cliente)
                     //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
@@ -4254,7 +4252,11 @@ function ComprobantePago(Cod_Libro,Cliente,Detalles) {
                     $('#main-contenido').waitMe('hide');
                 });
 
-        }) 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        }); 
 }
 
 export { ComprobantePago }

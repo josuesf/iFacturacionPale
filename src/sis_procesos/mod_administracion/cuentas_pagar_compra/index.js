@@ -4,6 +4,8 @@ import { URL } from '../../../constantes_entorno/constantes'
 import {BloquearControles} from '../../../../utility/tools' 
 import { BuscarCuentasPendientes } from '../../modales/cuentas' 
 
+var arrayValidacion = [null,'null','',undefined]
+
 function VerCuentas(variables,fecha_actual,CodLibro) {
     global.objCliente = '' 
     var el = yo`
@@ -364,14 +366,53 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     var ingreso = document.getElementById('modal-proceso')
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal()  
+
+    $("#Nro_Documento").tagsinput({
+        maxTags: 1
+    });
+
+    $("#Cliente").tagsinput({
+        maxTags: 1
+    })
+
+    $("#Direccion").tagsinput({
+        maxTags: 1
+    })
+
+    $('#Nro_Documento').on('beforeItemRemove',function(event) {
+        if(!arrayValidacion.includes($("#Cliente").attr("data-id"))){ 
+            $("#Cliente").tagsinput('removeAll')
+            $("#Cliente").attr("data-id",null)
+            $("#Direccion").tagsinput('removeAll') 
+        }
+    });
+
+    $('#Nro_Documento').on('beforeItemAdd', function(event) {
+        $("#Nro_Documento").tagsinput('removeAll') 
+        $("#Cliente").tagsinput('removeAll') 
+        $("#Cliente").attr("data-id",null)
+        $("#Direccion").tagsinput('removeAll') 
+    });
+
+    $('#Nro_Documento').on('itemAdded', function(event) { 
+        console.log("add item")
+        if($("#Nro_Documento").val().trim()!=''){
+            BuscarClienteDoc(CodLibro)
+        }  
+        KeyPressClienteDoc()
+     });
+
     CambioFormasPago(CodLibro)
     if(global.objCliente =='')
         BuscarCuentasPendientes(CodLibro,0,'1753-01-01 00:00:00','9999-12-31 23:59:59.997')
     else{
         $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-        $("#Cliente").val(global.objCliente.Nom_Cliente)
-        $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-        $("#Direccion").val(global.objCliente.Direccion_Cliente)
+        $("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
+        $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
+        $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)
+        //$("#Cliente").val(global.objCliente.Nom_Cliente)
+        //$("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+        //$("#Direccion").val(global.objCliente.Direccion_Cliente)
         $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
         $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
         CargarLicitacionesCliente(global.objCliente.Id_Cliente)
@@ -382,9 +423,17 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
         if(global.objCliente!=''){ 
             $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-            $("#Cliente").val(global.objCliente.Nom_Cliente)
-            $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-            $("#Direccion").val(global.objCliente.Direccion_Cliente)
+            //$("#Cliente").val(global.objCliente.Nom_Cliente)
+            //$("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+            //$("#Direccion").val(global.objCliente.Direccion_Cliente)
+            $("#Cliente").tagsinput('removeAll')
+            $("#Nro_Documento").tagsinput('removeAll')
+            $("#Direccion").tagsinput('removeAll')
+
+            $("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
+            $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
+            $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)
+
             $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
             $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
             CargarLicitacionesCliente(global.objCliente.Id_Cliente)
@@ -490,6 +539,18 @@ function LlenarCheques(cheques){
      
     $("#Cuenta_CajaBancos").html('')
     $("#Cuenta_CajaBancos").html(html) 
+}
+
+function KeyPressClienteDoc(){ 
+    switch($('#Nro_Documento').val().trim().length){
+        case 8:
+            $("#Cod_TipoDocumento").val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDocumento").val("6")
+            break;
+    }
+   
 }
 
 function EsValido(){
@@ -880,7 +941,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
 function BuscarClienteDoc(CodLibro) {
     if($("#Nro_Documento").val().trim().length>0){
         run_waitMe($('#div-cliente-cuentas'), 1, "ios","Buscando cliente...");
-        var Nro_Documento = document.getElementById('Nro_Documento').value
+        var Nro_Documento = $("#Nro_Documento").val()
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
         var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
         const parametros = {
@@ -901,9 +962,13 @@ function BuscarClienteDoc(CodLibro) {
                     
                     if(global.objCliente !='' && global.objCliente){
                         $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-                        $("#Cliente").val(global.objCliente.Cliente)
-                        $("#Direccion").val(global.objCliente.Direccion)
-                        $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                        //$("#Cliente").val(global.objCliente.Cliente)
+                        //$("#Direccion").val(global.objCliente.Direccion)
+                        //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                        $("#Cliente").tagsinput('add',global.objCliente.Cliente)
+                        $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
+                        $("#Direccion").tagsinput('add',global.objCliente.Direccion)
+
                         $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
                         CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
                     }
