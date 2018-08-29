@@ -1,182 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width-->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.7-->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <!-- Font Awesome-->
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
-    <!-- Ionicons-->
-    <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
-    <!-- Theme style-->
-    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css"> 
-    <link rel="stylesheet" href="/dist/css/custom.css"> 
-    <link href="/dist/css/waitMe.min.css" rel="stylesheet">
-    <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <title>iFacturacion Pale</title>
+
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="your,keywords">
+    <meta name="description" content="Short explanation about this website">
+    <!-- END META -->
+
+    <!-- BEGIN STYLESHEETS -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet'
+        type='text/css' />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/bootstrap0f9f.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/materialadmin6b47.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/font-awesome.min5914.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/material-design-iconic-font.min5730.css" />
+    <style>
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            -webkit-animation: square 25s infinite;
+            animation: square 25s infinite;
+            transition-timing-function: linear;
+        }
+        .bg-bubbles li:nth-child(1) {
+            left: 10%;
+        }
+        .bg-bubbles li:nth-child(2) {
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            -webkit-animation-delay: 2s;
+                    animation-delay: 2s;
+            -webkit-animation-duration: 17s;
+                    animation-duration: 17s;
+        }
+        .bg-bubbles li:nth-child(3) {
+            left: 25%;
+            -webkit-animation-delay: 4s;
+                    animation-delay: 4s;
+        }
+        .bg-bubbles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            -webkit-animation-duration: 22s;
+                    animation-duration: 22s;
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .bg-bubbles li:nth-child(5) {
+            left: 70%;
+        }
+        .bg-bubbles li:nth-child(6) {
+            left: 80%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation-delay: 3s;
+                    animation-delay: 3s;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .bg-bubbles li:nth-child(7) {
+            left: 32%;
+            width: 160px;
+            height: 160px;
+            -webkit-animation-delay: 7s;
+                    animation-delay: 7s;
+        }
+        .bg-bubbles li:nth-child(8) {
+            left: 55%;
+            width: 20px;
+            height: 20px;
+            -webkit-animation-delay: 15s;
+                    animation-delay: 15s;
+            -webkit-animation-duration: 40s;
+                    animation-duration: 40s;
+        }
+        .bg-bubbles li:nth-child(9) {
+            left: 25%;
+            width: 10px;
+            height: 10px;
+            -webkit-animation-delay: 2s;
+                    animation-delay: 2s;
+            -webkit-animation-duration: 40s;
+                    animation-duration: 40s;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .bg-bubbles li:nth-child(10) {
+            left: 90%;
+            width: 160px;
+            height: 160px;
+            -webkit-animation-delay: 11s;
+                    animation-delay: 11s;
+        }
+        @-webkit-keyframes square {
+            0% {
+                -webkit-transform: translateY(0);
+                        transform: translateY(0);
+            }
+            100% {
+                -webkit-transform: translateY(-700px) rotate(600deg);
+                        transform: translateY(-700px) rotate(600deg);
+            }
+        }
+        @keyframes square {
+            0% {
+                -webkit-transform: translateY(0);
+                        transform: translateY(0);
+            }
+            100% {
+                -webkit-transform: translateY(-700px) rotate(600deg);
+                        transform: translateY(-700px) rotate(600deg);
+            }
+        }
+
+        </style>
+    <!-- END STYLESHEETS -->
+
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="javascript:void(0);">
-                <b>Pal</b>ERP</a>
-        </div>
-        <!-- /.login-logo -->
-         
-        <div class="login-box-body"> 
-            <% if(typeof err != 'undefined' && err!='') { %>
-                <div class="callout callout-danger" id="divError" data-value="0"> 
-                    <p id="textError"><%=err%></p>
-                </div>
-            <% }else{ %>
-                <div class="callout callout-danger" id="divError" data-value="1" style="display: none;">
-                    <p id="textError"></p>
-                </div>
-            <% } %>
-            <h3 class="login-box-msg">Iniciar Sesión</h3>
-            <form action="login" method="post">
-               
-                <!--<div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="empresa">Empresa</label> 
-                    <div class="col-sm-9">
-                        <select id="empresa" name="RUC" class="form-control"> 
-                        <% if(typeof empresa != 'undefined') { %>
-                            <% empresa.forEach(function(e){ %>
-                                <option value="<%=e.RUC%>"><%=e.Nom_Comercial%></option> 
-                            <% }) %>
-                        <% } %>
-                        </select> 
-                    </div>
-                </div>-->
+<body class="menubar-hoverable header-fixed" style="background: #4e525b;">
 
-
-                <div class="form-group has-feedback"> 
-                    <input type="text" name="RUC" class="form-control" id="empresa" required placeholder="RUC">
-                    <span class="glyphicon glyphicon-stats form-control-feedback"></span>
-                </div>
-                
-                <div class="form-group has-feedback"> 
-                    <input type="text" name="usuario" id="usuario" class="form-control" required placeholder="Usuario">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-
-                <div class="form-group has-feedback"> 
-                    <input type="password" name="password" id="password" class="form-control" required placeholder="Contraseña">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span> 
-                </div>
-                <!--
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
-                    <div class="col-sm-9">
-                        <% if(typeof gestion != 'undefined') { %>
-                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion">
-                        <% } %>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
-                    <div class="col-sm-9" id="select-periodo">
-                        <select id="Periodo" name="Periodo" class="form-control"> 
-                            
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="turno">Turno</label>
-                    <div class="col-sm-9">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="btnTurnoSiguiente"><i class="fa fa-arrow-right text-success"></i></button>
-                            </span>
-                            <div id="select-turno">
-                                <select id="Turno" name="Turno" class="form-control"> 
-                                    
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-
-                <div class="row">
-                    <div class="col-xs-7">
-
-                        <div class="custom-checkbox">
-                            <input type="checkbox" id="chbRecordar">
-                            <label for="chbRecordar">Recordar Contraseña</label>
-                        </div>
+    <!-- BEGIN LOGIN SECTION -->
+    <section class="section-account">
  
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-5">
-                        <button type="submit" class="btn btn-warning btn-block btn-flat" id="login"><i class="fa fa-check"></i> Entrar</button>
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <p></p>
+        <div class="card contain-sm style-default-bright" style="z-index: 2;margin-top:50px">
+            <div class="card-body">
                 <div class="row">
-                    <!-- /.col -->
-                    <div class="col-xs-12">
-                        <a href="/empresa_api/register" class="btn btn-primary btn-block btn-flat"><i class="fa fa-user-plus"></i> Registrarse</a>
+                    <div class="col-sm-6">
+                        <% if(typeof err != 'undefined' && err!='') { %>
+                        <div class="alert alert-callout alert-danger" id="divError" data-value="0">
+                            <p id="textError" class="text-danger">
+                                <%=err%>
+                            </p>
+                        </div>
+                        <% }else{ %>
+                        <div class="alert alert-callout alert-danger" id="divError" data-value="1" style="display: none;">
+                            <p id="textError" class="text-danger"></p>
+                        </div>
+                        <% } %>
+                        <br />
+                        <span class="text-lg text-bold text-default"> IFACTURACION LOGIN</a></span>
+                        <br /><br />
+                        <form class="form form-validate" accept-charset="utf-8" action="login" method="post">
+                            <div class="form-group floating-label">
+                                <input type="text" class="form-control" id="empresa" name="RUC" required>
+                                <label for="empresa">RUC</label>
+                            </div>
+                            <div class="form-group floating-label">
+                                <input type="text" class="form-control" id="usuario" name="usuario" required>
+                                <label for="usuario">Usuario</label>
+                            </div>
+                            <div class="form-group floating-label">
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <label for="password">Contraseña</label>
+                                <p class="help-block"><a href="#">¿Olvidaste tu contraseña?</a></p>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-6 text-left">
+                                    <div class="checkbox checkbox-inline checkbox-styled">
+                                        <label>
+                                            <input type="checkbox" id="chbRecordar"> <span>Recordar datos</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <!--end .col -->
+                                <div class="col-xs-6 text-right">
+                                    <button class="btn btn-info btn-raised" type="submit" id="login">Iniciar sesión</button>
+                                </div>
+                                <!--end .col -->
+                            </div>
+                            <!--end .row -->
+                        </form>
                     </div>
-                    <!-- /.col -->
+                    <!--end .col -->
+                    <div class="col-sm-5 col-sm-offset-1 text-center">
+                        <br><br>
+                        <h3 class="text-light">
+                            ¿No estas registrado?
+                        </h3>
+                        <a class="btn btn-block btn-raised btn-info" href="/empresa_api/register">Registrate aqui</a>
+                    </div>
+                    <!--end .row -->
                 </div>
-            </form>
+                <!--end .card-body -->
+            </div>
+            <!--end .card -->
+    </section>
+    <ul class="bg-bubbles" style="overflow-x:  hidden;overflow-y:  hidden;">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <!-- END LOGIN SECTION -->
 
-        </div>
-        <!-- /.login-box-body -->
-    </div>
-    
-    <script src='/dist/js/jquery-1.9.1.js'></script>
-    <script src='/dist/js/jquery.cookie.js'></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/dist/js/waitMe.min.js"></script> 
-
+    <!-- BEGIN JAVASCRIPT -->
+    <script src="/assets/js/libs/jquery/jquery-1.11.2.min.js"></script>
+    <script src="/assets/js/libs/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script src='/assets/js/libs/jquery/jquery.cookie.js'></script>
+    <script src="/assets/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/js/core/source/AppForm.js"></script>
     <script>
-        
-        $(document).ready(function() {
+        $(document).ready(function () {
 
             var remember = $.cookie('remember');
             if (remember == 'true') {
                 var usuario = $.cookie('usuario');
-                var password = $.cookie('password');
+                var ruc = $.cookie('ruc');
                 // autofill the fields
                 $('#usuario').val(usuario);
-                $('#password').val(password);
+                $('#empresa').val(ruc);
             }
 
 
-            $("#login").click(function() { 
-                if ($('#chbRecordar').is(':checked')) { 
+            $("#login").click(function () {
+                if ($('#chbRecordar').is(':checked')) {
                     var usuario = $('#usuario').val();
-                    var password = $('#password').val();
+                    var ruc = $('#empresa').val();
 
                     // set cookies to expire in 14 days
-                    $.cookie('usuario', usuario, { expires: 14 });
-                    $.cookie('password', password, { expires: 14 });
-                    $.cookie('remember', true, { expires: 14 });                
-                }
-                else
-                {
+                    $.cookie('usuario', usuario, {
+                        expires: 14
+                    });
+                    $.cookie('ruc', ruc, {
+                        expires: 14
+                    });
+                    $.cookie('remember', true, {
+                        expires: 14
+                    });
+                } else {
                     // reset cookies
                     $.cookie('usuario', null);
-                    $.cookie('password', null);
+                    $.cookie('ruc', null);
                     $.cookie('remember', null);
                 }
             });
         });
-    
-    
     </script>
-    
+
+    <!-- END JAVASCRIPT -->
 
 </body>
 

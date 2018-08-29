@@ -158,7 +158,33 @@ router.post('/get_almacenes_by_caja', function (req, res) {
     Ejecutar_Procedimientos(req,res, procedimientos)
          
 }); 
- 
+
+router.post('/guardar_mov_almacen_', function (req, res){ 
+    input = req.body
+    parametros = [
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
+        {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro:'Serie', valor_parametro: input.Serie},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Fecha', valor_parametro: input.Fecha},
+        {nom_parametro:'Motivo', valor_parametro: input.Motivo},
+        {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
+        {nom_parametro:'Flag_Anulado', valor_parametro: input.Flag_Anulado},
+        {nom_parametro:'Obs_AlmacenMov', valor_parametro: input.Obs_AlmacenMov},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+    ] 
+    
+
+    EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
+         
+    })
+})
+
+
+
 
 router.post('/guardar_mov_almacen', function (req, res){ 
     input = req.body

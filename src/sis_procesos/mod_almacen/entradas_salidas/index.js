@@ -144,7 +144,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                 <div class="row">
                                     <div class="col-md-12">  
                                         <div class="col-md-6" id="divRechazar">  
-                                            <button class="btn btn-danger btn-sm">Rechazar Envio</button>
+                                            <button class="btn btn-danger btn-sm" onclick=${()=>RechazarEnvio()}>Rechazar Envio</button>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -616,10 +616,26 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual){
     
 }
 
+function RechazarEnvio(){
+    
+}
+
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual){
-    if($("#divDestino").css("display")=="block" && $("#Cod_Destino").val()!=null && $("#Cod_Destino").val().trim()!="21"){
+    if($("#divDestino").css("display")=="block" && $("#Cod_Destino").val()!=null && $("#Cod_Destino").val().trim()=="21"){
         run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
+
+        $("#Cod_Operacion").val(movimientos_almacen.Cod_TipoOperacion)
+        $("#Serie").val(movimientos_almacen.Serie)
+        $("#Numero").val(movimientos_almacen.Numero)
+        $("#Fecha").val(movimientos_almacen.Fecha)
+        $("#Motivo").val(movimientos_almacen.Motivo)
+        $("#Id_ComprobantePago").attr("data-id",movimientos_almacen.Id_ComprobantePago)
+
+
+        var Motivo = $("#Motivo").val()
+        var Fecha = fecha_actual
+
 
     }else{
         if(EsValido()){
@@ -653,7 +669,7 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual){
                 body: JSON.stringify({
                     Cod_Almacen,
                     Cod_TipoOperacion,
-                    Cod_TipoComprobante,
+                    Cod_TipoComprobante, 
                     Serie,
                     Numero,
                     Motivo,

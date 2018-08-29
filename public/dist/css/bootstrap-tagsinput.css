@@ -1,7 +1,7 @@
 .bootstrap-tagsinput {
   background-color: #fff;
   border: 1px solid #98999c;
-  display: inline-block;
+  display: grid;
   padding: 4px 2px;
   color: #555;
   vertical-align: middle;
@@ -37,6 +37,11 @@
   margin-right: 2px;
   font-size: 100%;
   color: white;
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
 }
 .bootstrap-tagsinput .tag [data-role="remove"] {
   margin-left: 8px;

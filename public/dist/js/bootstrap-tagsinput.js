@@ -453,6 +453,13 @@
          $input.attr('size', Math.max(this.inputSize, $input.val().length));
       }, self));
 
+
+      self.$container.on('blur', 'input', $.proxy(function(event) {
+        console.log("prueba")
+        var $input = $(event.target);
+        $input.attr('size', 0);
+     }, self));
+
       // Remove icon clicked
       self.$container.on('click', '[data-role=remove]', $.proxy(function(event) {
         if (self.$element.attr('disabled')) {

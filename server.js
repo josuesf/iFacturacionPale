@@ -1,10 +1,9 @@
 var { LOGIN_SQL,
-      EXEC_QUERY_DBMaster,
       EXEC_SQL_DBMaster,
       EXEC_SQL,
       EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
 
-var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido } = require('./utility/tools')
+var { UnObfuscateString, CambiarCadenaConexion } = require('./utility/tools')
 var  GETCONFIG  = require('./src/constantes_entorno/constantes')
 
 var express = require('express');
@@ -12,7 +11,6 @@ var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
 var session = require('express-session'); 
-var localStorage = require('localStorage')
 
 const fs = require('fs');   
  
@@ -28,7 +26,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
 var errores = '';
-app.set('view engine', 'pug'); 
+app.set('view engine', 'ejs'); 
 app.use(express.static('public')); 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
