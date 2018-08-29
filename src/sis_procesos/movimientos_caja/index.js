@@ -33,18 +33,21 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
             <section class="content">
                 <div class="row">
                     <div class="col-md-12"> 
-                        <div class="nav-tabs-custom">
-                            <ul class="nav nav-tabs" id="tabs">
-                                <li class="active"><a href="#tab_1" id="id_1" data-toggle="tab" aria-expanded="true" onclick=${()=>refrescar_movimientos_caja()}>Movimientos</a></li>
-                            </ul>
-                            <div class="tab-content" id="tabs_contents">
+                        <div class="card">
+                            <div  class="card-head">
+                                <ul class="nav nav-tabs" id="tabs">
+                                    <li class="active"><a href="#tab_1" id="id_1" data-toggle="tab" aria-expanded="true" onclick=${()=>refrescar_movimientos_caja()}>Movimientos caja</a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body tab-content" id="tabs_contents">
                                 <div class="tab-pane active" id="tab_1">
                                     
                                     <div class="box box-primary">
-                                        <div class="box-header"> 
-                                            <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}>  
-                                             </h3>
-                                        </div>
+                                        ${Flag_Cerrado?yo`
+                                        <div class="alert alert-callout alert-danger" role="alert">
+                                            <strong><h3>EL TURNO ESTA CERRADO</h3></strong>
+                                        </div>`:yo``}
+                                        
                                         <!-- /.box-header -->
                                         <div class="box-body">
                                             <div class="table-responsive">
@@ -1494,7 +1497,7 @@ function refrescar_movimientos_caja(){
 
 
 module.exports = function movimientos_caja(ctx, next) {
-    run_waitMe($('#main-contenido'), 1, "ios");
+    run_waitMe($('#base'), 1, "ios");
     const parametros = {
         method: 'POST',
         headers: {
@@ -1509,18 +1512,20 @@ module.exports = function movimientos_caja(ctx, next) {
         .then(res => {
             if (res.respuesta == 'ok') {
                 Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
-                    $('#main-contenido').waitMe('hide');
+                    $('#base').waitMe('hide');
                 })
             }
             else{
+                
                 toastr.error('Ocurrio un error. Actualice la pagina e intentelo nuevamente','Error',{timeOut: 5000})
-                $('#main-contenido').waitMe('hide');
+                $('#base').waitMe('hide');
             }
             
         }).catch(function (e) {
             console.log(e);
+            
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
-            $('#main-contenido').waitMe('hide');
+            $('#base').waitMe('hide');
         });
     next();
 }

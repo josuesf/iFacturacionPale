@@ -25,103 +25,79 @@ function Ver(Flag_Cerrado) {
     var el = yo`
         ${!Flag_Cerrado?
             yo` 
-            <ul class="sidebar-menu" data-widget="tree"> 
-             
-            <li class="treeview active">
-                <a href="#"><i class="fa fa-th"></i> <span>Movimientos de Caja</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><i class="fa fa-circle-o"></i> Recibo de Ingreso</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><i class="fa fa-circle-o"></i> Recibo de Egreso</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><i class="fa fa-circle-o"></i> Envio Efectivo</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><i class="fa fa-circle-o"></i> Recepcion de Efectivo</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="javascript:void(0);"><i class="fa fa-opencart"></i> <span> Ventas</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => NuevaVenta()}><i class="fa fa-circle-o"></i> Nueva Venta</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview">
-                <a href="javascript:void(0);"><i class="fa fa-shopping-basket"></i> <span> Compras</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => ComprobantePago('08')}><i class="fa fa-circle-o"></i> Facturas Recibidas</a>
-                    </li>
-                </ul>
-            </li>
-            
-            <li class="treeview">
-                <a href="javascript:void(0);"><i class="fa fa-industry"></i> <span> Almacen</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => EntradasSalidas('NE')}><i class="fa fa-circle-o"></i><span> Registro de Entradas</span></a> 
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => EntradasSalidas('NS')}><i class="fa fa-circle-o"></i><span> Registro de Salidas</span></a> 
-                    </li>
-                </ul>
-            </li>
+            <ul id="main-menu" class="gui-controls"> 
 
-            <li class="treeview">
-                <a href="javascript:void(0);"><i class="fa fa-cogs"></i> <span> Administracion</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => Cuentas('14')}><i class="fa fa-circle-o"></i><span> Cuentas por Cobrar</span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => Cuentas('08')}><i class="fa fa-circle-o"></i><span> Cuentas por Pagar</span></a>
-                    </li>
-                </ul>
-            </li>
+                <li class="gui-folder expanded">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-th"></i></div>
+                        <span class="title">Movimientos de Caja</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><span class="title">Recibo de Ingreso</span></a></li>
 
-            <li class="treeview">
-                <a href="javascript:void(0);"><i class="fa fa-laptop"></i> <span> Sistema</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);" onclick=${() => NuevoArqueoCaja()}><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a>
-                    </li>
-                </ul>
-            </li>
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><span class="title">Recibo de Egreso</span></a></li>
 
-        </ul>`
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><span class="title">Compra y Venta de Dolares</span></a></li>
+
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><span class="title"> Envio Efectivo</span></a></li>
+
+                        <li><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><span class="title"> Recepcion de Efectivo</span></a></li>
+
+                    </ul> 
+                </li>
+
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
+                        <span class="title"> Ventas</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => NuevaVenta()}><span class="title">Nueva Venta</span></a></li>
+                    </ul> 
+                </li>
+
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
+                        <span class="title"> Compras</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => ComprobantePago('08')}><span class="title">Facturas recibidas</span></a></li>
+                    </ul> 
+                </li>
+
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
+                        <span class="title"> Almacen</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NE')}><span class="title"> Registro de Entradas</span></a></li>
+                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NS')}><span class="title"> Registro de Entradas</span></a></li>
+                    </ul> 
+                </li>
+
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-cogs"></i></div>
+                        <span class="title"> Administracion</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => Cuentas('14')}><span class="title"> Cuentas por Cobrar</span></a></li>
+                        <li><a href="javascript:void(0)" onclick=${() => Cuentas('08')}><span class="title"> Cuentas por Pagar</span></a></li>
+                    </ul> 
+                </li>
+
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-laptop"></i></div>
+                        <span class="title"> Sistema</span>
+                    </a> 
+                    <ul>
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoArqueoCaja()}><span class="title"> Arqueo de Caja</span></a></li> 
+                    </ul> 
+                </li>
+            </ul>`
             :yo`
         <ul class="sidebar-menu" data-widget="tree"> 
              
@@ -223,6 +199,10 @@ function Ver(Flag_Cerrado) {
         </ul>`}`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
+    
+    $.getScript("/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js", function( data, textStatus, jqxhr ) {
+    });
+
 }
 
 module.exports = function navegador(ctx, next) {
@@ -242,7 +222,7 @@ module.exports = function navegador(ctx, next) {
         Ver(res.arqueo[0].Flag_Cerrado)
     }).catch(function (e) {
         console.log(e);
-        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
   
 }

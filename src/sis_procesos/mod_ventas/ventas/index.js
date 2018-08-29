@@ -39,18 +39,18 @@ function VerNuevaVenta(variables,CodLibro) {
                 </div>
                 <div class="col-md-3">
                     <div class="btn-group-horizontal pull-right" style="padding-top:  20px;">
-                        <button type="button" class="btn bg-green" onclick=${() => VentaSimple()}>Venta Simple</button>
-                        <button type="button" class="btn bg-olive" onclick=${() => VentaCompleta()}>Venta Completa</button>
+                        <button type="button" class="btn btn-raised btn-primary" onclick=${() => VentaSimple()}>Venta Simple</button>
+                        <button type="button" class="btn btn-raised btn-success" onclick=${() => VentaCompleta()}>Venta Completa</button>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <div class="box box-success box-solid" id="div-cliente">
-                        <div class="box-header with-border text-center">
+                    <div class="card" id="div-cliente">
+                        <div class="card-head card-head-sm style-primary text-center">
                             <h4>Datos del cliente</h4>
                         </div>
-                        <div class="box-body">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -97,9 +97,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </div>
                             </div>
                         </div>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
 
-                            <div class="row">
+                            <div class="card-actionbar-row" style="text-align: left;">
                                 <div class="col-sm-6">
                                     
                                     <div class="row">
@@ -165,11 +165,11 @@ function VerNuevaVenta(variables,CodLibro) {
                     </div>
                 </div>
                 <div class="col-md-9">
-                    <div class="box box-success box-solid">
-                        <div class="box-header with-border text-center">
+                    <div class="card">
+                        <div class="card-head card-head-sm style-primary text-center">
                             <h4>Detalle de la venta</h4>
                         </div>
-                        <div class="box-body">
+                        <div class="card-body">
 
                             <div class="row">
                                 <div class="col-md-12">
@@ -237,8 +237,8 @@ function VerNuevaVenta(variables,CodLibro) {
                             
 
                         </div>
-                        <div class="box-footer" id="divFooter_${idTabVenta}">
-                            <div class="row">
+                        <div class="card-actionbar" id="divFooter_${idTabVenta}">
+                            <div class="card-actionbar-row" style="text-align: left;">
                                 <div class="col-md-12">
                                     <div class="box box-warning">
                                         <div class="box-header with-border">

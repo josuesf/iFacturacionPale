@@ -1,117 +1,244 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width-->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.7-->
-    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <!-- Font Awesome-->
-    <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.min.css">
-    <!-- Ionicons-->
-    <link rel="stylesheet" href="/bower_components/Ionicons/css/ionicons.min.css">
-    <!-- Theme style-->
-    <link rel="stylesheet" href="/dist/css/AdminLTE.min.css"> 
-    <link href="/dist/css/waitMe.min.css" rel="stylesheet">
-    <!-- WARNING: Respond.js doesn't work if you view the page via file://-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <title>iFacturacion Pale</title>
+
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="your,keywords">
+    <meta name="description" content="Short explanation about this website">
+    <!-- END META -->
+
+    <!-- BEGIN STYLESHEETS -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300italic,400italic,300,400,500,700,900' rel='stylesheet'
+        type='text/css' />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/bootstrap0f9f.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/materialadmin6b47.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/font-awesome.min5914.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/material-design-iconic-font.min5730.css" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/waitMe/waitMe.min.css" />
+    <!-- /assets/js/libs/waitMe/js/waitMe.min.js -->
+    <style>
+        .bg-bubbles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        .bg-bubbles li {
+            position: absolute;
+            list-style: none;
+            display: block;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.15);
+            bottom: -160px;
+            -webkit-animation: square 25s infinite;
+            animation: square 25s infinite;
+            transition-timing-function: linear;
+        }
+        .bg-bubbles li:nth-child(1) {
+            left: 10%;
+        }
+        .bg-bubbles li:nth-child(2) {
+            left: 20%;
+            width: 80px;
+            height: 80px;
+            -webkit-animation-delay: 2s;
+                    animation-delay: 2s;
+            -webkit-animation-duration: 17s;
+                    animation-duration: 17s;
+        }
+        .bg-bubbles li:nth-child(3) {
+            left: 25%;
+            -webkit-animation-delay: 4s;
+                    animation-delay: 4s;
+        }
+        .bg-bubbles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            -webkit-animation-duration: 22s;
+                    animation-duration: 22s;
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        .bg-bubbles li:nth-child(5) {
+            left: 70%;
+        }
+        .bg-bubbles li:nth-child(6) {
+            left: 80%;
+            width: 120px;
+            height: 120px;
+            -webkit-animation-delay: 3s;
+                    animation-delay: 3s;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .bg-bubbles li:nth-child(7) {
+            left: 32%;
+            width: 160px;
+            height: 160px;
+            -webkit-animation-delay: 7s;
+                    animation-delay: 7s;
+        }
+        .bg-bubbles li:nth-child(8) {
+            left: 55%;
+            width: 20px;
+            height: 20px;
+            -webkit-animation-delay: 15s;
+                    animation-delay: 15s;
+            -webkit-animation-duration: 40s;
+                    animation-duration: 40s;
+        }
+        .bg-bubbles li:nth-child(9) {
+            left: 25%;
+            width: 10px;
+            height: 10px;
+            -webkit-animation-delay: 2s;
+                    animation-delay: 2s;
+            -webkit-animation-duration: 40s;
+                    animation-duration: 40s;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        .bg-bubbles li:nth-child(10) {
+            left: 90%;
+            width: 160px;
+            height: 160px;
+            -webkit-animation-delay: 11s;
+                    animation-delay: 11s;
+        }
+        @-webkit-keyframes square {
+            0% {
+                -webkit-transform: translateY(0);
+                        transform: translateY(0);
+            }
+            100% {
+                -webkit-transform: translateY(-700px) rotate(600deg);
+                        transform: translateY(-700px) rotate(600deg);
+            }
+        }
+        @keyframes square {
+            0% {
+                -webkit-transform: translateY(0);
+                        transform: translateY(0);
+            }
+            100% {
+                -webkit-transform: translateY(-700px) rotate(600deg);
+                        transform: translateY(-700px) rotate(600deg);
+            }
+        }
+
+        </style>
+    <!-- END STYLESHEETS -->
+
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a href="javascript:void(0)">
-                <b>Pal</b>ERP</a>
-        </div>
-        
-        <div class="login-box-body">
-            <form action="logincajas" method="post">
+<body class="menubar-hoverable header-fixed" style="background: linear-gradient(to bottom right, #747979 0%, #5c6963 100%)">
 
-                <% if(typeof err != 'undefined' && err!='') { %>
-                    <div class="callout callout-danger" id="divError" data-value="0">
-                        <p id="textError"><%=err%></p>
-                    </div>
-                <% }else{ %>
-                    <div class="callout callout-danger" id="divError" data-value="1" style="display: none;">
-                        <p id="textError"></p>
-                    </div>
-                <% } %>
-                <p class="login-box-msg">Selecciona la caja y el turno para iniciar el sistema</p>
- 
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="Gestion">Gestion</label>
-                    <div class="col-sm-9">
-                        <% if(typeof gestion != 'undefined') { %>
-                            <input type="number" name="Gestion" id="Gestion" class="form-control" value="<%=gestion%>" required placeholder="Gestion">
+    <ul class="bg-bubbles" style="overflow-x:  hidden;overflow-y:  hidden;">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <!-- BEGIN LOGIN SECTION -->
+    <section class="section-account"> 
+        <div class="card contain-xs style-default-bright" style="z-index: 2;margin-top:50px">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-12">  
+                        <% if(typeof error !='undefined') { %>
+                            <div class="alert alert-callout alert-danger" id="divError" data-value="0">
+                                <p id="textError"><%=err%></p>
+                            </div>
+                        <% }else{ %>
+                            <div class="alert alert-callout alert-danger" id="divError" data-value="1" style="display: none;">
+                                <p id="textError"></p>
+                            </div>
                         <% } %>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="Periodo">Periodo</label>
-                    <div class="col-sm-9" id="select-periodo">
-                        <select id="Periodo" name="Periodo" class="form-control"> 
-                            
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="Caja">Caja</label>
-                    <div class="col-sm-9">
-                        <select id="Caja" name="Caja" class="form-control"> 
-                            <% if(typeof cajas != 'undefined') { %>
-                                <% cajas.forEach(function(e){ %>
-                                    <option value="<%=e.Cod_Caja%>"><%=e.Des_Caja%></option> 
-                                <% }) %>
-                            <% } %>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label" for="turno">Turno</label>
-                    <div class="col-sm-9">
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="btnTurnoSiguiente"><i class="fa fa-arrow-right text-success"></i></button>
-                            </span>
-                            <div id="select-turno">
-                                <select id="Turno" name="Turno" class="form-control"> 
+                        
+                        <br />
+                        <span class="text-lg text-bold text-default"> Selecciona la caja y el turno para iniciar el sistema </span>
+                        <br /><br />
+                        <form class="form form-validate" accept-charset="utf-8" action="logincajas" method="post">
+                            <div class="form-group floating-label">
+                                <% if(typeof gestion != 'undefined') { %>
+                                    <input type="number" class="form-control dirty" id="Gestion" name="Gestion" value="<%=gestion%>" required>
+                                <% } %>
+                                <label for="Gestion">Gestion</label>
+                            </div>
+                            <div class="form-group" id="select-periodo">
+                                <select id="Periodo" name="Periodo" class="form-control">
                                     
                                 </select>
+                                <label for="Periodo">Periodo</label>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                 
-                <div class="row">
-                    <!-- /.col -->
-                    <div class="col-xs-12">
-                        <div class="col-xs-6">
-                            <a class="btn btn-danger btn-block btn-flat" href="logout">Cerrar</a>
-                        </div>
-                        <div class="col-xs-6">
-                            <button type="submit" class="btn btn-block btn-warning  btn-flat">Aceptar</button>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                </div>
-            </form>
+                            
+                            <div class="form-group" id="select-periodo">
+                                <select id="Caja" name="Caja" class="form-control">
+                                        <% if(typeof cajas != 'undefined') { %>
+                                            <% cajas.forEach(function(e){ %>
+                                                <option value="<%=e.Cod_Caja%>"><%=e.Des_Caja%></option> 
+                                            <% }) %>
+                                        <% } %>
+                                </select>
+                                <label for="Caja">Caja</label>
+                            </div>
 
-        </div>
-        <!-- /.login-box-body -->
-    </div>
-    
-    <script src='/bower_components/jquery/dist/jquery.min.js'></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script> 
-    <script src="/dist/js/waitMe.min.js"></script>
-    <script src="/dist/js/custom.js"></script>
+                            <div class="form-group" id="select-turno">
+                                <select id="Turno" name="Turno" class="form-control">
+                                    
+                                </select>
+                                <label for="Turno">Turno</label>
+                            </div>
+                                
+
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-6 text-left">
+                                    <a class="btn btn-raised btn-danger" href="logout">Cerrar</a> 
+                                </div>
+                                <!--end .col -->
+                                <div class="col-xs-6 text-right">
+                                    <button class="btn btn-info btn-raised" type="submit">Aceptar</button>
+                                </div>
+                                <!--end .col -->
+                            </div>
+                            <!--end .row -->
+                        </form>
+                    </div>
+                    <!--end .col -->
+                     
+                    <!--end .row -->
+                </div>
+                <!--end .card-body -->
+            </div>
+            <!--end .card -->
+    </section>
+   
+    <!-- END LOGIN SECTION -->
+
+    <!-- BEGIN JAVASCRIPT -->
+    <script src="/assets/js/libs/jquery/jquery-1.9.1.js"></script>  
+    <script src="/assets/js/libs/bootstrap/bootstrap.min.js"></script>
+    <script src="/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js"></script> 
+    <script src="/assets/js/custom.js"></script>
+    <script src="/assets/js/libs/waitMe/waitMe.min.js"></script>
     <script src="/app_login.js"></script>
+     
+
+    <!-- END JAVASCRIPT -->
+
 </body>
 
 </html>

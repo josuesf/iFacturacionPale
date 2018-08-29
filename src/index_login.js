@@ -2,11 +2,12 @@ require('babel-polyfill');
 import {URL} from './constantes_entorno/constantes'
 
 $(document).ready(function(){
-    CambioRUC("0")
+    /*CambioRUC("0")
  
     $("#RUC").change(function(){
         CambioRUC("1")
-    })
+    })*/ 
+    TraerPeriodos()
     $("#Gestion").keypress(function(){
         TraerPeriodos()
     })

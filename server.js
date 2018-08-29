@@ -26,7 +26,7 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
 var errores = '';
-app.set('view engine', 'ejs'); 
+//app.set('view engine', 'ejs'); 
 app.use(express.static('public')); 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -190,7 +190,47 @@ function CargarVariables(req,res){
 
                       }else{
                         errores = "No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"
-                        app.locals.isla = false
+                        const fecha = new Date()
+                        var anio = fecha.getFullYear() 
+
+                        var pcajas= [
+                          { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
+                        ]  
+                
+                        EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', pcajas , function (e) {
+                          if (e.err) {
+                            errores = "Ocurrio un error. "+e.err
+                            return res.redirect('/login');
+                          }else{
+                            if(e.result.length>0){
+                              app.locals.cajasUsuarios = e.result 
+                              res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:e.result,err:errores});
+                            }else{
+                  
+                              EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
+                                if(m.result.length>0){
+                                  app.locals.cajasUsuarios = m.result 
+                                  res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:m.result,err:errores});
+                                }else{
+                                  errores = 'No existen cajas activas'
+                                  app.locals.isla = false
+                                  app.locals.apertura = false
+                                  app.locals.CierreCompleto = true
+                                  app.locals.caja = { Cod_Caja : null }
+                                  app.locals.turno = null
+                                  app.locals.sucursal = null
+                                  app.locals.arqueo = null
+                                  app.locals.cajasUsuarios=[]
+                                  delete req.session.authenticated;
+                                  return res.redirect('/login');
+                                }                     
+                              })
+                  
+                            }  
+                          }              
+                        })
+
+                        /*app.locals.isla = false
                         app.locals.apertura = false
                         app.locals.CierreCompleto = true
                         app.locals.caja = { Cod_Caja : null }
@@ -198,7 +238,7 @@ function CargarVariables(req,res){
                         app.locals.sucursal = null
                         app.locals.arqueo = null
                         delete req.session.authenticated;
-                        res.redirect('/login');
+                        res.redirect('/login');*/
                       }
                     }
                   }
@@ -214,7 +254,7 @@ function CargarVariables(req,res){
               
               EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
                   app.locals.arqueo = dataArqueo.result
-                  res.render('index_procesos', {  title: 'iFacturacion - Procesos',
+                  res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                               Cod_Usuarios:req.session.username,
                                               Nick:req.session.nick });
               })
@@ -243,7 +283,7 @@ app.get('/', function (req, res) {
         res.redirect('/logout');
       }
     }else{
-      res.render('index_procesos', {  title: 'iFacturacion - Procesos',
+      res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                                 Cod_Usuarios:req.session.username,
                                                 Nick:req.session.nick });
     }
@@ -295,7 +335,7 @@ app.post('/login', function (req, res) {
 
   EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {   
     if (m.err) {
-      errores = "Ocurrio un error. Vuelva a intentarlo mas tarde"
+      errores = "Ocurrio un error. "+m.err
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
@@ -304,7 +344,7 @@ app.post('/login', function (req, res) {
         
         EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
           if (e.err){
-            errores = "Ocurrio un error. Vuelva a intentarlo mas tarde"
+            errores = "Ocurrio un error. "+e.err
             return res.redirect('/login');
           } 
           var Cod_Empresa=e.result[0].Cod_Empresa
@@ -435,7 +475,7 @@ app.post('/logincajas', function (req, res) {
       req.session.periodo = req.body.Periodo
       req.session.gestion = req.body.Gestion 
       iniciarJsReport(app.locals.empresa[0].RUC,function(flag){
-        if(flag){
+        if(flag){ 
           return res.redirect('/');
         }else{
           errores = "Ocurrio un error. Comuniquese con el administrador de sistema "
