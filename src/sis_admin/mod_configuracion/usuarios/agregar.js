@@ -52,7 +52,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                         <form role="form">
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="callout callout-danger hidden" id="divErrors">
+                                    <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
                                     </div>
                                 </div>

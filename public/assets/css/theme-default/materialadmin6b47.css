@@ -1670,7 +1670,7 @@ body:not(.menubar-first) .menubar-fixed-panel {
   display: block;
   text-decoration: none;
   padding: 12px 0px;
-  font-size: 12px;
+  font-size: 14px;
   line-height: normal;
   border-radius: 0;
   padding-left: 0;

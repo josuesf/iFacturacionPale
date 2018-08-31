@@ -117,7 +117,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="txtBuscarCliente">
+                                <input type="text" class="form-control" id="txtBuscarCliente" onkeypress=${()=>KeyPressBusquedaCliente(event,idInputCliente,idInputDoc,Cod_TipoCliente)}>
                                 <div class="input-group-btn">
                                     <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)}><i class="fa fa-search"></i> Buscar</button>
                                 </div>
@@ -157,7 +157,7 @@ function NuevoCliente(documentos) {
                 </div>
                 <div class="modal-body" id="modal_form_nuevo_cliente">
                     <div class="row">
-                        <div id="modal_error_nuevo_cliente" class="callout callout-danger hidden">
+                        <div id="modal_error_nuevo_cliente" class="alert alert-callout alert-danger hidden">
                             <p> Es necesario llenar los campos marcados con rojo</p>
                         </div>
                     </div>
@@ -556,10 +556,16 @@ function BusquedaXIdClienteProveedor(){
     }
 }
 
+function KeyPressBusquedaCliente(event,idInputCliente,idInputDoc,Cod_TipoCliente){
+    if(event.which == 13) { 
+        BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)
+    }
+}
+
 function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
      
     var txtBuscarCliente = $("#txtBuscarCliente").val()
-    if(txtBuscarCliente.length>=4){
+    if(txtBuscarCliente.length>=4){ 
         run_waitMe($('#contenedorTablaClientes'), 1, "ios","Buscando cliente..."); 
         if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
             var Cliente = txtBuscarCliente

@@ -157,7 +157,6 @@ table.dataTable.no-footer {
     pointer-events: none;
     cursor: default;
     text-decoration: none;
-    color: #626467;
 }
 
 .skin-red .sidebar a.not-active {

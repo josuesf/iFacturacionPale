@@ -384,6 +384,27 @@ function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
       }
   });
 }
+
+function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
+   
+    rand=Math.floor((Math.random() * 100) + 54) 
+    link="http://"+host+"/empresa_api/cambiar_password_nueva?id="+rand;
+    var mailOptions={
+      to : toEmail,
+      subject : "PALERP CONSULTORES",
+      html : "<img alt='PALE CONSULTORES' style='display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000;' src='http://palerp.com/images/logo.png'><br><h3><strong> PALE CONSULTORES le agradece su preferencia.</strong></h3><p> Para seguir con el proceso de cambio de contraseña,<br> por favor haga click en el enlace <br><a href="+link+">CLICK AQUI PARA CAMBIAR PASSWORD</a></p>" 
+    }
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err){
+        callback(false)
+      }
+      else{ 
+        localStorage.setItem(rand, JSON.stringify({email:toEmail,ruc:ruc,rand:rand}));
+        callback(true)
+        
+      }
+  });
+}
  
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion }
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}

@@ -466,7 +466,7 @@ app.post('/login', function (req, res) {
  
 
 app.post('/logincajas', function (req, res) {
-  if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
+  if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){ 
     if (!req.session || !req.session.authenticated) {
       return res.redirect('/');
     }else{
@@ -484,11 +484,12 @@ app.post('/logincajas', function (req, res) {
       })
     } 
   }else{
-    if(app.locals.cajasUsuarios.length>0){
+    console.log("udefinede")
+    if(app.locals.cajasUsuarios.length>0){ 
       const fecha = new Date()
       var anio = fecha.getFullYear() 
-      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:"Es necesario ingresar todos los campos"});
-    }else{
+      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:'Es necesario ingresar todos los campos'});
+    }else{ 
       errores = ""
       return res.redirect('/login');
     }

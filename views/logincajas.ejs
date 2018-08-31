@@ -156,8 +156,8 @@
         <div class="card contain-xs style-default-bright" style="z-index: 2;margin-top:50px">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-12">  
-                        <% if(typeof error !='undefined') { %>
+                    <div class="col-sm-12"> 
+                        <% if(typeof err !='undefined' && err!='') { %>
                             <div class="alert alert-callout alert-danger" id="divError" data-value="0">
                                 <p id="textError"><%=err%></p>
                             </div>

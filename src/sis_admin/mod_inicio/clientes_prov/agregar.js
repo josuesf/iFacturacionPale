@@ -46,7 +46,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                     <div class="box box-default">
                         <div class="box-body">
                             <div class="row">
-                                <div class="callout callout-danger hidden" id="divErrors">
+                                <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                     <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                 </div>
                                             </div>
                                             <div class="tab-pane active" id="tab_1">
-                                                <div id="form_error" style="display: none;" class="callout callout-danger">
+                                                <div id="form_error" style="display: none;" class="alert alert-callout alert-danger">
                                                     <p id="error_text"></p>
                                                 </div>
                                                 <div class="row">

@@ -44,6 +44,8 @@
             function error(message, title, optionsOverride) {
                 return notify({
                     type: toastType.error,
+                    closeButton:true,
+                    positionClass:'toast-top-center',
                     iconClass: getOptions().iconClasses.error,
                     message: message,
                     optionsOverride: optionsOverride,
@@ -66,6 +68,8 @@
             function info(message, title, optionsOverride) {
                 return notify({
                     type: toastType.info,
+                    closeButton:true,
+                    positionClass:'toast-top-center',
                     iconClass: getOptions().iconClasses.info,
                     message: message,
                     optionsOverride: optionsOverride,
@@ -79,6 +83,8 @@
 
             function success(message, title, optionsOverride) {
                 return notify({
+                    closeButton:true,
+                    positionClass:'toast-top-center',
                     type: toastType.success,
                     iconClass: getOptions().iconClasses.success,
                     message: message,
@@ -89,7 +95,9 @@
 
             function warning(message, title, optionsOverride) {
                 return notify({
+                    closeButton:true,
                     type: toastType.warning,
+                    positionClass:'toast-top-center',
                     iconClass: getOptions().iconClasses.warning,
                     message: message,
                     optionsOverride: optionsOverride,
@@ -166,7 +174,7 @@
                     hideEasing: 'swing',
                     onHidden: undefined,
 
-                    extendedTimeOut: 1000,
+                    extendedTimeOut: 0,
                     iconClasses: {
                         error: 'toast-error',
                         info: 'toast-info',
@@ -174,11 +182,12 @@
                         warning: 'toast-warning'
                     },
                     iconClass: 'toast-info',
-                    positionClass: 'toast-top-right',
-                    timeOut: 5000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    positionClass: 'toast-top-center',
+                    timeOut: 0, // Set timeOut and extendedTimeOut to 0 to make it sticky
                     titleClass: 'toast-title',
                     messageClass: 'toast-message',
                     target: 'body',
+                    closeButton:true,
                     closeHtml: '<button type="button">&times;</button>',
                     newestOnTop: true,
                     preventDuplicates: false,

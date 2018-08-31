@@ -17,7 +17,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                 </div>
                 <div class="modal-body" id="modal_form">
                     <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
+                        <div id="modal_error" class="alert alert-callout alert-danger hidden">
                             <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                         </div>
                     </div>

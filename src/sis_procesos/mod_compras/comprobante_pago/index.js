@@ -48,17 +48,23 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="callout callout-danger hidden" id="modal_error_ingreso">
+                    <div class="alert alert-callout alert-danger hidden" id="modal_error_ingreso">
                         <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-8" id="div-cliente-comprobante-pago">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4> Cliente/Proveedor </h4>
+                        <div class="card">
+                            <div class="card-head">
+                                <header> Cliente/Proveedor </header>
+                                <div class="tools">
+                                    <div class="btn-group">
+                                        <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")}><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-3" id="divCodTipoDoc">
                                         <div class="form-group">
@@ -87,19 +93,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     <div class="col-md-12" id="divCliente">
                                         <div class="form-group">
                                             <label> Señor(es) : </label>
-                                            <div class="input-group input-group-sm">
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-success" id="AgregarCliente"  onclick=${()=>NuevoCliente(variables.documentos)}>
-                                                        <i class="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                                <input type="text" id="Cliente" class="form-control required" data-id=${Cliente?Cliente.Id_ClienteProveedor:null} value=${Cliente?Cliente.Cliente:''}>
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-info" id="BuscarCliente"  onclick=${()=>BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")}>
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <input type="text" id="Cliente" class="form-control required" data-id=${Cliente?Cliente.Id_ClienteProveedor:null} value=${Cliente?Cliente.Cliente:''}>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -189,7 +184,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <div class="col-sm-1" id="divMultiplesPagos">
                                                     <label></label>
                                                     <div class="radio">
-                                                        <button type="button" class="btn btn-success btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}" id="btnMultiplesPagos"><i class="fa fa-money"></i></button>
+                                                        <button type="button" class="btn btn-success btn-raised btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}" id="btnMultiplesPagos"><i class="fa fa-money"></i></button>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4" id="divOperacion">
@@ -224,11 +219,13 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4" id="divLicitacion" style="display:block">
-                                                <div class="checkbox">
+ 
+                                                <div class="checkbox checkbox-inline checkbox-styled">
                                                     <label>
-                                                        <input type="checkbox" id="optLicitacion" name="optLicitacion" onchange=${()=>CambioLicitacion()}> Licitacion
+                                                        <input type="checkbox" id="optLicitacion" name="optLicitacion" onchange=${()=>CambioLicitacion()}><span> Licitacion</span> 
                                                     </label>
-                                                </div>
+                                                </div> 
+ 
                                             </div>
                                             <div class="col-md-8" id="divCodigoLicitacion" style="display:none">
                                                 <div class="form-group">
@@ -241,9 +238,13 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     <div class="col-sm-6">
                                         <div class="row">
                                             <div class="col-sm-2" id="divEsGastos" style="display: ${CodLibro=='08'?'block':'none'}">
-                                                <div class="checkbox"> 
-                                                    <input type="checkbox" id="optEsGasto" name="optEsGasto" onchange="${()=>CambioGastos()}"> Es Gastos?
+
+                                                <div class="checkbox checkbox-inline checkbox-styled">
+                                                    <label>
+                                                        <input type="checkbox" id="optEsGasto" name="optEsGasto" onchange="${()=>CambioGastos()}"><span> Es Gastos?</span> 
+                                                    </label>
                                                 </div>
+                                                 
                                             </div>
                                             <div class="col-sm-3" id="divMoneda">
                                                 <div class="form-group">
@@ -283,13 +284,13 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                     <b>Guia de Remision: </b>
                                                     <div class="input-group input-group-sm">
                                                         <div class="input-group-btn">
-                                                            <button type="button" class="btn btn-success" id="AgregarGuia"  >
+                                                            <button type="button" class="btn btn-raised btn-success" id="AgregarGuia"  >
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>
                                                         <input type="text" id="Guia" class="form-control required input-sm">
                                                         <div class="input-group-btn">
-                                                            <button type="button" class="btn btn-info" id="BuscarGuia"  >
+                                                            <button type="button" class="btn btn-raised btn-info" id="BuscarGuia"  >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
                                                         </div>
@@ -298,18 +299,22 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="row" id="divDescargarProducto">
-                                                    <div class="checkbox">
+
+                                                    <div class="checkbox checkbox-inline checkbox-styled">
                                                         <label>
-                                                            <input type="checkbox" id="optDescargar" name="optDescargar" checked="checked" onchange=${()=>CambioDespachado()}> ${CodLibro=='08'?'Descargar Producto':'Descargar de Almacen(es)'}
+                                                            <input type="checkbox" id="optDescargar" name="optDescargar" checked="checked" onchange=${()=>CambioDespachado()}><span> ${CodLibro=='08'?'Descargar Producto':'Descargar de Almacen(es)'}</span>
                                                         </label>
                                                     </div>
+ 
                                                 </div>
                                                 <div class="row" id="divExportacion">
-                                                    <div class="checkbox">
+
+                                                    <div class="checkbox checkbox-inline checkbox-styled">
                                                         <label>
-                                                            <input type="checkbox" id="optExportacion" name="optExportacion" onchange=${()=>CambioExportacion(CodLibro,variables)}> Exportacion ? 
+                                                            <input type="checkbox" id="optExportacion" name="optExportacion" onchange=${()=>CambioExportacion(CodLibro,variables)}><span> Exportacion ? </span> 
                                                         </label>
                                                     </div>
+ 
                                                 </div>
                                             </div>
                                         </div>
@@ -326,7 +331,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12"> 
-                                        <button type="button" class="btn btn-success btn-sm" onclick="${()=>AgregarFilaTabla(CodLibro,variables)}"><i class="fa fa-plus"></i> Agregar Item</button>
+                                        <button type="button" class="btn btn-raised btn-success btn-sm" onclick="${()=>AgregarFilaTabla(CodLibro,variables)}"><i class="fa fa-plus"></i> Agregar Item</button>
                                     </div>
                                 </div>
 
@@ -338,7 +343,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                     <div class="input-group">
                                                         <label>Codigo/Producto/Servicio</label>
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-xs" onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-search"></i></button>
+                                                            <button type="button" class="btn btn-raised btn-default btn-xs" onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-search"></i></button>
                                                         </span>
                                                     </div>
                                                 </th>
@@ -347,7 +352,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                     <div class="input-group">
                                                         <label>UM</label>
                                                         <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-xs"  onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-refresh"></i></button>
+                                                            <button type="button" class="btn btn-raised btn-default btn-xs"  onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-refresh"></i></button>
                                                         </span>
                                                     </div>
                                                 </th>
@@ -403,13 +408,15 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 <div class="row">
                                     <div class="col-md-5">
                                         <div class="row">
+                                            
                                             <div class="col-md-12">
-                                                <div class="checkbox">
+                                                <div class="checkbox checkbox-inline checkbox-styled">
                                                     <label>
-                                                        <input type="checkbox" id="ckbIncluyeIGV" checked="checked" onchange="${()=>CalcularTotal(CodLibro,variables)}">Precio Unitario Incluye IGV?
+                                                        <input type="checkbox" id="ckbIncluyeIGV" checked="checked" onchange="${()=>CalcularTotal(CodLibro,variables)}"><span>Precio Unitario Incluye IGV?</span> 
                                                     </label>
                                                 </div>
                                             </div>
+ 
                                         </div>  
                                         <div class="row">
                                             <div class="col-md-4">
@@ -435,10 +442,10 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
+                                                <button type="button" class="btn btn-raised btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
                                             </div>
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-warning btn-sm btn-block" id="btnBuscarSeries" onclick="${()=>BuscarPorSerie()}">Buscar Series</button>
+                                                <button type="button" class="btn btn-raised btn-warning btn-sm btn-block" id="btnBuscarSeries" onclick="${()=>BuscarPorSerie()}">Buscar Series</button>
                                             </div>
                                         </div>  
                                     </div>
@@ -501,8 +508,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante(CodLibro,variables)}>${CodLibro=='08'?'Comprar':'Vender'}</button>
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button class="btn btn-raised btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante(CodLibro,variables)}>${CodLibro=='08'?'Comprar':'Vender'}</button>
+                <button type="button" class="btn btn-raised btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>`
@@ -603,10 +610,11 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
             $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-            //$("#Cliente").val(global.objCliente.Cliente)
-            //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
-            //$("#Direccion").val(global.objCliente.Direccion)
-            $("#Nro_Documento").tagsinput('removeAll') 
+            $("#Cliente").val(global.objCliente.Cliente)
+            $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+            $("#Direccion").val(global.objCliente.Direccion)
+            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+            /*$("#Nro_Documento").tagsinput('removeAll') 
             $("#Cliente").tagsinput('removeAll') 
             $("#Direccion").tagsinput('removeAll')  
              
@@ -614,7 +622,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
             $("#Cliente").tagsinput('add',global.objCliente.Cliente)
             $("#Direccion").tagsinput('add',global.objCliente.Direccion)
-            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+            $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)*/
  
 
             if(parseFloat(global.objCliente.Limite_Credito) > 0 ){ 
@@ -685,7 +693,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
         AgregarFilaTabla_(CodLibro,variables,Detalles)
     }  
 
-    $("#Nro_Documento").tagsinput({
+    /*$("#Nro_Documento").tagsinput({
         maxTags: 1
     });
 
@@ -718,7 +726,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             BuscarClienteDoc(CodLibro) 
         }  
         KeyPressClienteDoc()
-     });
+     });*/
  
 
     $('input[type="number"]').blur(function(){
@@ -818,7 +826,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             </div>
                                             <div class="col-md-6" id="divCompSaldo">
                                                 <div class="form-group">
-                                                    <button class="btn btn-default btn-sm" onclick=${()=>CompletarSaldo()} id="btnCompletarSaldo">Comp. Saldo</button>
+                                                    <button class="btn btn-raised btn-default btn-sm" onclick=${()=>CompletarSaldo()} id="btnCompletarSaldo">Comp. Saldo</button>
                                                 </div>
                                             </div>
                                         </div> 
@@ -831,7 +839,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <button class="btn btn-default btn-sm" id="btnAgregarMontoFormaPago" onclick=${()=>AgregarMontoFormaPago(Cod_Moneda,Tipo_Cambio)}>Agregar</button>
+                                                    <button class="btn btn-raised btn-default btn-sm" id="btnAgregarMontoFormaPago" onclick=${()=>AgregarMontoFormaPago(Cod_Moneda,Tipo_Cambio)}>Agregar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -897,11 +905,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                         <div class="col-md-4 col-md-offset-8">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <button class="btn btn-success" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
+                                                    <button class="btn btn-raised btn-success" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
                                                 </div>   
                                             </div>
                                             <div class="col-md-6">
-                                                <button class="btn btn-danger" id="btnTotal">TOTAL </button>
+                                                <button class="btn btn-raised btn-danger" id="btnTotal">TOTAL </button>
                                             </div>
                                         </div>
                                     </div>
@@ -911,8 +919,8 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-info" onclick="${()=>AceptarFormaPago(amodo)}" id="btnAceptarFormaPago">Aceptar</button>
-                    <button type="button" data-dismiss="modal" class="btn btn-danger pull-right">Cancelar</button>
+                    <button class="btn btn-raised btn-info" onclick="${()=>AceptarFormaPago(amodo)}" id="btnAceptarFormaPago">Aceptar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-raised btn-danger pull-right">Cancelar</button>
                 </div>
             </div>
         </div>`
@@ -955,8 +963,8 @@ function AbrirModalPercepcion(CodLibro,variables){
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnAceptar" onclick="${()=>AplicarPercepcion(CodLibro,variables)}">Aceptar</button>
+                    <button type="button" class="btn btn-raised btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-raised btn-info" id="btnAceptar" onclick="${()=>AplicarPercepcion(CodLibro,variables)}">Aceptar</button>
                 </div>
             </div>
         </div>`
@@ -991,8 +999,8 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
                                 <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify(u.Series)} name="Series"></td>
                                 <td>
                                 <div style="display:flex;">
-                                    <button type="button" onclick="${()=>AsignarSeries(index+ u.Id_Producto,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
-                                    <button type="button" onclick="${()=>EliminarFila(index+ u.Id_Producto,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                    <button type="button" onclick="${()=>AsignarSeries(index+ u.Id_Producto,CodLibro)}" class="btn btn-raised btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                                    <button type="button" onclick="${()=>EliminarFila(index+ u.Id_Producto,CodLibro,variables)}" class="btn btn-raised btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                 </div>
                                 </td>
                             </tr>`
@@ -1052,8 +1060,8 @@ function AbrirModalConfirmacion(CodLibro,variables){
                 <p>Esta seguro que desea guardar este comprobante?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables)}>Aceptar</button>
+                <button type="button" class="btn btn-raised btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-raised btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1094,8 +1102,8 @@ function AgregarFilaTabla(CodLibro,variables){
             <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
             <td>
             <div style="display:flex;">
-                <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
-                <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-raised btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-raised btn-danger btn-sm"><i class="fa fa-trash"></i></button>
             </div>
             </td>
         </tr>`
@@ -1145,8 +1153,8 @@ function AgregarFilaTabla(CodLibro,variables){
                     <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
                     <td>
                     <div style="display:flex;">
-                        <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
-                        <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                        <button type="button" onclick="${()=>AsignarSeries(idFila,CodLibro)}" class="btn btn-raised btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                        <button type="button" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}" class="btn btn-raised btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                     </div>
                     </td>
                 </tr>`
@@ -1240,7 +1248,7 @@ function AgregarFilaFormaPago(pDescFormaPago,pCodFormaPago,pCodMoneda,pMonto,pTi
         <td name="Total" class="Total" data-value="${(parseFloat(pMonto)*parseFloat(pTipoCambio)).toFixed(2)}">${((parseFloat((parseFloat(pMonto)*parseFloat(pTipoCambio)).toFixed(2)))*(parseFloat(pTipoCambio)/parseFloat(Tipo_Cambio))).toFixed(2)}</td>
         <td name="Fecha" class="Fecha"><input type="date" class="form-control input-sm" value="${fecha_actual}"></td>
         <td name="Referencia" class="Referencia"><input class="form-control input-sm" value="${pReferencia==null?"":pReferencia}"></td>
-        <td><button type="button" class="btn btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
+        <td><button type="button" class="btn btn-raised btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
     </tr>`
     $("#tablaBodyPagosMultiples").append(fila)
     $("#MontoFormaPago").val("0.00")
@@ -1261,8 +1269,8 @@ function CargarModalConfirmacionAsignarCredito(){
                 <p>Esta Seguro que desea asignar el credito</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacionAsignarCredito()}>Aceptar</button>
+                <button type="button" class="btn btn-raised btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-raised btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacionAsignarCredito()}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1306,7 +1314,7 @@ function LlenarFormasPago(Cod_Moneda,Tipo_Cambio){
                                     <td name="Total" class="Total" data-value="${(parseFloat(u.Monto)*parseFloat(u.TipoCambio)).toFixed(2)}">${((parseFloat((parseFloat(u.Monto)*parseFloat(u.TipoCambio)).toFixed(2)))*(parseFloat(u.TipoCambio)/parseFloat(Tipo_Cambio))).toFixed(2)}</td>
                                     <td name="Fecha" class="Fecha"><input type="date" class="form-control input-sm" value="${u.Fecha==null?fecha_actual:u.Fecha}"></td>
                                     <td name="Referencia" class="Referencia"><input  class="form-control input-sm" value="${u.CuentaCajaBanco==null?"":u.CuentaCajaBanco}"></td>
-                                    <td><button type="button" class="btn btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
+                                    <td><button type="button" class="btn btn-raised btn-danger btn-sm" onclick=${()=>EliminarFilaPagosMultiples(index,Cod_Moneda,Tipo_Cambio)}><i class="fa fa-trash"></i></button></td>
                                 </tr>`
                         )}
                     </tbody>
@@ -4136,13 +4144,13 @@ function BuscarClienteDoc(CodLibro) {
                     //$("#Direccion").tagsinput('removeAll') 
 
                     $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-                    //$("#Cliente").val(global.objCliente.Cliente)
-                    //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
-                    //$("#Direccion").val(global.objCliente.Direccion) 
+                    $("#Cliente").val(global.objCliente.Cliente)
+                    $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                    $("#Direccion").val(global.objCliente.Direccion) 
 
-                    $("#Cliente").tagsinput('add',global.objCliente.Cliente)
+                    /*$("#Cliente").tagsinput('add',global.objCliente.Cliente)
                     $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
-                    $("#Direccion").tagsinput('add',global.objCliente.Direccion)
+                    $("#Direccion").tagsinput('add',global.objCliente.Direccion)*/
                     $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
                     if(parseFloat(global.objCliente.Limite_Credito) > 0 ){
                         $("input[name=optCredito][value='credito']").prop("checked",true);
@@ -4170,10 +4178,21 @@ function BuscarClienteDoc(CodLibro) {
                 CambioCreditoContado()
                 CambioLicitacion()
 
+            }else{ 
+                global.objCliente=''
+                $("#Cliente").val("")
+                $("#Nro_Documento").val("")
+                $("#Direccion").val("") 
+                $("#Cliente").attr("data-id",null)
             }
             $('#div-cliente-comprobante-pago').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
+            global.objCliente=''
+            $("#Cliente").val("")
+            $("#Nro_Documento").val("")
+            $("#Direccion").val("") 
+            $("#Cliente").attr("data-id",null)
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#div-cliente-comprobante-pago').waitMe('hide');
         });

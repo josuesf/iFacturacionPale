@@ -91,7 +91,7 @@ function CargarFormulario(_escritura, entidades, tipos_cuenta, Id_ClienteProveed
     const el = yo`
     <div class="box-body" id="form_modal">
         <div class="row">
-            <div class="callout callout-danger hidden" id="divErrors_CB">
+            <div class="alert alert-callout alert-danger hidden" id="divErrors_CB">
                 <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
             </div>
         </div>

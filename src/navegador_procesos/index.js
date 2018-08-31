@@ -99,104 +99,80 @@ function Ver(Flag_Cerrado) {
                 </li>
             </ul>`
             :yo`
-        <ul class="sidebar-menu" data-widget="tree"> 
-             
-            <li class="treeview" class="not-active">
-                <a href="#"><i class="fa fa-th"></i> <span>Movimientos de Caja</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Ingreso</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Recibo de Egreso</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Compra y Venta de Dolares</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0)"><i class="fa fa-circle-o"></i> Envio Efectivo</a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Recepcion de Efectivo</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview" class="not-active">
-                <a href="javascript:void(0);"><i class="fa fa-opencart"></i> <span> Ventas</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Nueva Venta</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="treeview" class="not-active">
-                <a href="javascript:void(0);"><i class="fa fa-shopping-basket"></i> <span> Compras</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> Facturas Recibidas</a>
-                    </li>
-                </ul>
-            </li>
-            
-            <li class="treeview" class="not-active">
-                <a href="javascript:void(0);"><i class="fa fa-industry"></i> <span> Almacen</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Registro de Entradas</span></a> 
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Registro de Salidas</span></a> 
-                    </li>
-                </ul>
+            <ul id="main-menu" class="gui-controls"> 
+
+            <li class="gui-folder expanded not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-th"></i></div>
+                    <span class="title">Movimientos de Caja</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title">Recibo de Ingreso</span></a></li>
+
+                    <li><a href="javascript:void(0)"><span class="title">Recibo de Egreso</span></a></li>
+
+                    <li><a href="javascript:void(0)"><span class="title">Compra y Venta de Dolares</span></a></li>
+
+                    <li><a href="javascript:void(0)"><span class="title"> Envio Efectivo</span></a></li>
+
+                    <li><a href="javascript:void(0);"><span class="title"> Recepcion de Efectivo</span></a></li>
+
+                </ul> 
             </li>
 
-            <li class="treeview" class="not-active">
-                <a href="javascript:void(0);"><i class="fa fa-cogs"></i> <span> Administracion</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Cuentas por Cobrar</span></a>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i><span> Cuentas por Pagar</span></a>
-                    </li>
-                </ul>
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
+                    <span class="title"> Ventas</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title">Nueva Venta</span></a></li>
+                </ul> 
             </li>
 
-            <li class="treeview" class="not-active">
-                <a href="javascript:void(0);"><i class="fa fa-laptop"></i> <span> Sistema</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i> <span> Arqueo de Caja</span></a>
-                    </li>
-                </ul>
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
+                    <span class="title"> Compras</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title">Facturas recibidas</span></a></li>
+                </ul> 
             </li>
- 
 
-        </ul>`}`;
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
+                    <span class="title"> Almacen</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title"> Registro de Entradas</span></a></li>
+                    <li><a href="javascript:void(0)"><span class="title"> Registro de Entradas</span></a></li>
+                </ul> 
+            </li>
+
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-cogs"></i></div>
+                    <span class="title"> Administracion</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title"> Cuentas por Cobrar</span></a></li>
+                    <li><a href="javascript:void(0)"><span class="title"> Cuentas por Pagar</span></a></li>
+                </ul> 
+            </li>
+
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-laptop"></i></div>
+                    <span class="title"> Sistema</span>
+                </a> 
+                <ul>
+                    <li><a href="javascript:void(0)"><span class="title"> Arqueo de Caja</span></a></li> 
+                </ul> 
+            </li>
+        </ul>
+            `}`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     

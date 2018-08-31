@@ -53,8 +53,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                             <div class="table-responsive">
                                             <table id="tablaMovimientos" class="table table-bordered table-striped">
                                                 <thead>
-                                                    <tr>
-                                                        <th>E</th>
+                                                    <tr> 
                                                         <th>Fecha/Hora</th>
                                                         <th>D</th>
                                                         <th>Documento</th>
@@ -71,8 +70,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                 <tbody>
                                                 ${movimientos.map(u => yo`
                                                 <tr>
-                                                    <td>${u.ID}</td>
-                                                    <td>${u.Fecha_Reg.split('.')[0]}</td>
+                                                    <td>${u.Fecha_Reg.replace('T','')}</td>
                                                     <td>${u.ID}</td>
                                                     <td>${u.Documento}</td>
                                                     <td>${u.Cliente}</td>
@@ -259,8 +257,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                         <div class="table-responsive">
                         <table id="tablaMovimientos" class="table table-bordered table-striped">
                             <thead>
-                                <tr>
-                                    <th>E</th>
+                                <tr> 
                                     <th>Fecha/Hora</th>
                                     <th>D</th>
                                     <th>Documento</th>
@@ -276,9 +273,8 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                             </thead>
                             <tbody class="context-menu-one">
                             ${movimientos.map(u => yo`
-                            <tr>
-                                <td>${u.ID}</td>
-                                <td>${u.Fecha_Reg.split('.')[0]}</td>
+                            <tr> 
+                                <td>${u.Fecha_Reg.replace('T','')}</td>
                                 <td>${u.ID}</td>
                                 <td>${u.Documento}</td>
                                 <td>${u.Cliente}</td>

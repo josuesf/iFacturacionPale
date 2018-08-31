@@ -24,7 +24,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="callout callout-danger hidden" id="modal_error_ingreso">
+                    <div class="alert alert-callout alert-danger hidden" id="modal_error_ingreso">
                         <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                     </div>
                 </div>
@@ -1421,7 +1421,11 @@ function Cuentas(Cod_Libro) {
                     $('#main-contenido').waitMe('hide');
                 });
 
-        }) 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 export { Cuentas }

@@ -21,7 +21,7 @@ function CargarFormulario(variables, fecha_actual) {
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="callout callout-danger hidden" id="modal_error_egreso">
+                    <div class="alert alert-callout alert-danger hidden" id="modal_error_egreso">
                         <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                     </div>
                 </div>

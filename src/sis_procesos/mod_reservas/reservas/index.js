@@ -485,7 +485,7 @@ function VerRegistroReserva(variables) {
                 </div>
                 <div class="modal-body" id="modal_form">
                     <div class="row">
-                        <div id="modal_error" class="callout callout-danger hidden">
+                        <div id="modal_error" class="alert alert-callout alert-danger hidden">
                             <p> Es necesario llenar los campos marcados con rojo</p>
                         </div>
                     </div>

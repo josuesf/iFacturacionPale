@@ -21,7 +21,7 @@ function Ver() {
             </div>
             <div class="modal-body" id="modal_form_habitacion">
                 <div class="row">
-                    <div id="modal_error_habitacion" class="callout callout-danger hidden">
+                    <div id="modal_error_habitacion" class="alert alert-callout alert-danger hidden">
                         <p> Es necesario llenar los campos marcados con rojo</p>
                     </div>
                 </div>

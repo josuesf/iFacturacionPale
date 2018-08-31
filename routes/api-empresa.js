@@ -3,8 +3,8 @@ var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
 var localStorage = require('localStorage')
-var {Ejecutar_Procedimientos,EXEC_SQL_DBMaster} = require('../utility/exec_sp_sql')
-var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido,enviarCorreoConfirmacion } = require('../utility/tools')
+var {Ejecutar_Procedimientos,EXEC_SQL_DBMaster,EXEC_QUERY_DBMaster,EXEC_QUERY} = require('../utility/exec_sp_sql')
+var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido,enviarCorreoConfirmacion,enviarCorreoRestaurarPassword } = require('../utility/tools')
 // define the home page route
 router.post('/get_unica_empresa', function (req, res) {
     input = req.body
@@ -95,12 +95,76 @@ router.post('/change_ruc', function (req, res) {
     })
 });
 
+/* functions private change password new */
+
+
+router.get('/cambiar_password',function(req,res){
+    res.render('cambiar_password.ejs');
+})
+
+router.post('/cambiar_password',function(req,res){
+    var input = req.body 
+    console.log(input)
+    if(!RUCValido(input.ruc)){
+      res.render('cambiar_password.ejs', {err:'El RUC es inválido'});
+    }else{
+      if(!EmailValido(input.email)){
+        res.render('cambiar_password.ejs', {err:'El email es inválido'});
+      }else{
+         
+        if(input.ruc!='' && input.email!=''){
+  
+            enviarCorreoRestaurarPassword(req.get('host'),input.email,input.ruc,function(flag){
+            if(flag){
+              res.render('cambiar_password.ejs', {success:'Se envio el correo de verificacion a su correo. Para proceder a cambiar su contraseña es necesario verificar su correo.'});
+            }else{
+              res.render('cambiar_password.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
+            }
+          })
+  
+        }else{
+          res.render('cambiar_password.ejs', {err:'Existe campos vacios'});
+        }
+        
+      }
+    } 
+})
+
+
+router.get('/cambiar_password_nueva',function(req,res){  
+    jsonData = localStorage.getItem(req.query.id); 
+    if(jsonData!=null){
+      //localStorage.removeItem(req.query.id)    
+      res.render('cambiar_password_nueva.ejs',{id:req.query.id})
+    }else{ 
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
+    }
+});
+
+router.post('/cambiar_password_nueva',function(req,res){ 
+    var input = req.body 
+    jsonData = localStorage.getItem(input.id); 
+    if(jsonData!=null){ 
+        res.render('cambiar_password_nueva.ejs',{success:"Se cambio correctamente la contraseña, ahora puede iniciar sesion normalmente con la nueva contraseña"})
+    }else{ 
+      localStorage.removeItem(req.query.id) 
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
+    }
+});
+
+
+
+
+
 /* functions private register new */
+
 
 router.get('/register',function(req,res){
     res.render('register.ejs', { });
 })
-
 
 router.get('/verificacion_correo',function(req,res){  
     jsonData = localStorage.getItem(req.query.id); 
@@ -115,6 +179,8 @@ router.get('/verificacion_correo',function(req,res){
     }
 });
 
+
+
 router.post('/register',function(req,res){
     var input = req.body 
     if(!RUCValido(input.ruc)){
@@ -125,15 +191,27 @@ router.post('/register',function(req,res){
       }else{
          
         if(input.razon!='' && input.ruc!='' && input.celular!='' && input.direccion!='' && input.email!=''){
-  
-          enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
-            if(flag){
-              res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
-            }else{
-              res.render('register.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
-            }
-          })
-  
+            const fecha = new Date()
+            const mes = fecha.getMonth() + 1
+            const dia = fecha.getDate()
+            var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+ 
+            EXEC_QUERY_DBMaster("INSERT INTO PRI_EMPRESA(Cod_Empresa,RUC,RazonSocial, Direccion,CadenaPublico,Cod_UsuarioReg,Fecha_Reg) VALUES ('W"+input.ruc+"','"+input.ruc+"','"+input.razon+"','"+input.direccion+"','"+input.celular+"','MIGRACION','"+fecha_format+"')", [], function (o) {
+                if (o.err){ 
+                    res.render('register.ejs', {err:'No se pudo registrar la informacion de la empresa.'});
+                }
+                else{
+                    enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
+                        if(flag){
+                          res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
+                        }else{
+                          res.render('register.ejs', {err:'No se pudo enviar el correo de verificacion. Intentelo mas tarde'});
+                        }
+                    })
+                }
+                
+            })
+   
         }else{
           res.render('register.ejs', {err:'Existe campos vacios'});
         }

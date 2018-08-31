@@ -19,7 +19,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div id="modal_error" class="callout callout-danger hidden">
+                                <div id="modal_error" class="alert alert-callout alert-danger hidden">
                                     <p> Es necesario llenar los campos marcados con rojo</p>
                                 </div>
                             </div>
