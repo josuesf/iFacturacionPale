@@ -165,27 +165,18 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     <div class="col-sm-6">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="col-sm-3" id="divContado">
-                                                    <label></label>
-                                                    <div class="radio">
-                                                        <label>
-                                                            <input type="radio" value="contado" id="optCredito" name="optCredito" onchange=${()=>CambioCreditoContado()} checked> Contado
-                                                        </label>
-                                                    </div>
+                                                <div class="col-sm-3" id="divContado"> 
+                                                    <label class="radio-inline radio-styled radio-primary">
+                                                        <input type="radio" value="contado" id="optCredito" name="optCredito" onchange=${()=>CambioCreditoContado()} checked><span> Contado</span>
+                                                    </label> 
                                                 </div>
                                                 <div class="col-sm-4" id="divCredito" style="display:none">
-                                                    <label></label>
-                                                    <div class="radio">
-                                                        <label>
-                                                            <input type="radio" value="credito" id="optCredito" name="optCredito"  onchange=${()=>CambioCreditoContado()}> Credito
-                                                        </label>
-                                                    </div>
+                                                    <label class="radio-inline radio-styled radio-primary">
+                                                        <input type="radio" value="credito" id="optCredito" name="optCredito"  onchange=${()=>CambioCreditoContado()}><span> Credito</span>
+                                                    </label> 
                                                 </div>
                                                 <div class="col-sm-1" id="divMultiplesPagos">
-                                                    <label></label>
-                                                    <div class="radio">
-                                                        <button type="button" class="btn btn-success btn-raised btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}" id="btnMultiplesPagos"><i class="fa fa-money"></i></button>
-                                                    </div>
+                                                    <button type="button" class="btn btn-success btn-raised btn-xs" onclick="${()=>AbrirModalFormasPago(variables,fecha_actual)}" id="btnMultiplesPagos"><i class="fa fa-money"></i></button>
                                                 </div>
                                                 <div class="col-sm-4" id="divOperacion">
                                                     <label id="lbCuentaCajaBanco">#Operacion</label>
@@ -241,7 +232,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
 
                                                 <div class="checkbox checkbox-inline checkbox-styled">
                                                     <label>
-                                                        <input type="checkbox" id="optEsGasto" name="optEsGasto" onchange="${()=>CambioGastos()}"><span> Es Gastos?</span> 
+                                                        <input type="checkbox" id="optEsGasto" name="optEsGasto" onchange="${()=>CambioGastos()}"><span> Es Gastos</span> 
                                                     </label>
                                                 </div>
                                                  

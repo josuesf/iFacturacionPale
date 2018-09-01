@@ -159,8 +159,37 @@ table.dataTable.no-footer {
     text-decoration: none;
 }
 
+.scroll-horizontal ul{
+    display: inline-block;
+    overflow: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+    margin: 0 0 1em;
+    white-space: nowrap;
+    background: transparent;
+} 
+
+.scroll-horizontal ul li { 
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 4px;
+}
+
 .skin-red .sidebar a.not-active {
     color: #626467;
+}
+
+.scroll-horizontal ul::-webkit-scrollbar {
+    width: 12px;
+    height: 5px;
+}
+
+.scroll-horizontal ul::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+}
+
+.scroll-horizontal ul::-webkit-scrollbar-thumb { 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
    
 @media only screen and (min-width: 1050px) and (max-width: 1349px) {

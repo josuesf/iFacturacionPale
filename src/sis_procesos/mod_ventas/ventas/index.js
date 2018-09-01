@@ -26,18 +26,18 @@ function VerNuevaVenta(variables,CodLibro) {
     global.objProductoVentas = ''
     global.variablesVentas.push({idTab:idTabVenta,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
     var tab = yo`
-        <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <button style="padding-left: 10px;" type="button" class="close" onclick=${()=>CerrarTabVenta(idTabVenta)}><span aria-hidden="true"> ×</span></button></a></li>`
+        <li class="" onclick=${()=>TabVentaSeleccionado(idTabVenta)}><a href="#tab_${idTabVenta}" data-toggle="tab" aria-expanded="false" id="id_${idTabVenta}">Ventas <a style="padding-left: 10px;" onclick=${()=>CerrarTabVenta(idTabVenta)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
     var tabContent = yo`
         <div class="tab-pane" id="tab_${idTabVenta}">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-8">
                     <span class="badge bg-red" style="margin-bottom:  4px;"> Favoritos</span>
                     <div class="scroll-horizontal">
                         ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)} 
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="btn-group-horizontal pull-right" style="padding-top:  20px;">
                         <button type="button" class="btn btn-raised btn-primary" onclick=${() => VentaSimple()}>Venta Simple</button>
                         <button type="button" class="btn btn-raised btn-success" onclick=${() => VentaCompleta()}>Venta Completa</button>
@@ -242,7 +242,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="col-md-12">
                                     <div class="box box-warning">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title" style="margin-left:20px">Productos</h3>
+                                            <h3 class="box-title">Productos</h3>
                                             
                                             <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTabVenta}">
                                                 <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button>
@@ -462,7 +462,7 @@ function CrearDivFavoritos(variables,idTab){
                         <div class="col-md-12">
                             <div class="box box-warning">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title" style="margin-left:20px">Productos</h3>
+                                    <h3 class="box-title">Productos</h3>
                                     
                                     <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTab}">
                                         <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTab)}><i class="fa fa-arrow-left"></i></button>
@@ -670,7 +670,7 @@ function CrearBotonesCategorias(categorias,idTab){
     return yo`<div>
             ${categorias.map(e=> 
                 e.Cod_Padre==''?
-                    yo`<a class="btn btn-app" onclick=${()=>SeleccionarCategoria(e,categorias,idTab)}>${e.Des_Categoria}</a>`
+                    yo`<a class="btn btn-default btn-sm" onclick=${()=>SeleccionarCategoria(e,categorias,idTab)}>${e.Des_Categoria}</a>`
                 :
                     yo``)}
             </div>` 
@@ -682,7 +682,7 @@ function CrearBotonesCategoriasXSeleccion(categorias,CodPadre,idTab){
     var listaProductos= yo`<div>
             ${categorias.map(e=> 
                 e.Cod_Padre==CodPadre?
-                    yo`<a class="btn btn-app" onclick=${()=>SeleccionarCategoria(e,categorias,idTab)}>${e.Des_Categoria.toString().replace('-->','')}</a>`
+                    yo`<a class="btn btn-default btn-sm" onclick=${()=>SeleccionarCategoria(e,categorias,idTab)}>${e.Des_Categoria.toString().replace('-->','')}</a>`
                 :
                     yo``)}
             </div>`
@@ -702,7 +702,7 @@ function CrearBotonesCategoriasXSeleccion(categorias,CodPadre,idTab){
 
 function CrearBotonesFavoritos(favoritos,idTab){
     return yo`<ul> 
-                ${favoritos.map(e=>yo`<li><a class="btn btn-block btn-social btn-default" onclick=${()=>AgregarProducto(e,favoritos,idTab)}><i class="fa fa-star text-orange"></i>  ${e.Nom_Producto}</a></li>`)}       
+                ${favoritos.map(e=>yo`<li><a class="btn btn-block btn-default btn-sm" onclick=${()=>AgregarProducto(e,favoritos,idTab)}><i class="fa fa-star text-orange"></i>  ${e.Nom_Producto}</a></li>`)}       
             </ul>` 
     /*return  yo`<div> 
                 ${favoritos.map(e=>yo`<a class="btn btn-app" onclick=${()=>AgregarProducto(e,favoritos,idTab)} style="height:80px"><i class="fa fa-star text-orange"></i> ${e.Nom_Producto}<p></p> ${parseFloat(e.Valor).toFixed(4)}</a>`)}
@@ -748,7 +748,7 @@ function SeleccionarCategoria(c,categorias,idTab){
             CrearBotonesProductos(c,idTab,function(categoria,productos){
                 if(productos.length>0){ 
                     var listaProductos= yo`<div>
-                                            ${productos.map(e=> yo`<a class="btn btn-app" style="height:80px">${e.Nom_Producto}<p></p>${getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(categoria.Valor).toFixed(4)}</a>`)}
+                                            ${productos.map(e=> yo`<a class="btn btn-default btn-sm" style="height:80px">${e.Nom_Producto}<p></p>${getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].SimboloMoneda+' '+parseFloat(categoria.Valor).toFixed(4)}</a>`)}
                                         </div>`
                     var divProductos = document.getElementById('divProductos_'+idTab);
                     empty(divProductos).appendChild(listaProductos);
