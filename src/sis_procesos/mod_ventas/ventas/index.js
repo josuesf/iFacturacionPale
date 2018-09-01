@@ -32,7 +32,7 @@ function VerNuevaVenta(variables,CodLibro) {
         <div class="tab-pane" id="tab_${idTabVenta}">
             <div class="row">
                 <div class="col-md-8">
-                    <span class="badge bg-red" style="margin-bottom:  4px;"> Favoritos</span>
+                    <span class="badge style-primary" style="margin-bottom:  4px;"> Favoritos</span>
                     <div class="scroll-horizontal">
                         ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)} 
                     </div>
@@ -48,54 +48,53 @@ function VerNuevaVenta(variables,CodLibro) {
                 <div class="col-md-3">
                     <div class="card" id="div-cliente">
                         <div class="card-head card-head-sm style-primary text-center">
-                            <h4>Datos del cliente</h4>
+                            <header>Datos del cliente</header>
+
+                            <div class="tools">
+                                <div class="btn-group">
+                                    <a class="btn btn-icon-toggle text-white btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                    <a class="btn btn-icon-toggle text-white btn-refresh" onclick=${()=>BuscarCliente("Cliente_"+idTabVenta,"Nro_Documento_"+idTabVenta,null)}><i class="fa fa-search"></i></a>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <select class="form-control" id="Cod_TipoDoc_${idTabVenta}">
-                                            ${variables.documentos.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="text" id="Nro_Documento_${idTabVenta}" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Nombres completos</label>
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-btn">
-                                                <button type="button" id="AgregarCliente" class="btn btn-success" onclick=${()=>NuevoCliente(variables.documentos)}>
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
-                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control" data-id=null>
-                                            <div class="input-group-btn">
-                                                <button type="button" id="BuscarCliente" class="btn btn-info" onclick=${()=>BuscarCliente("Cliente_"+idTabVenta,"Nro_Documento_"+idTabVenta,null)}>
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
+                            <form class="form floating-label" novalidate="novalidate">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <select class="form-control" id="Cod_TipoDoc_${idTabVenta}">
+                                                ${variables.documentos.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <p></p>
-                            <div class="row">
-                                <div class="col-md-12"> 
-                                    <div class="form-group">
-                                        <label>Direccion</label>
-                                        <input type="text" class="form-control" id="Direccion_${idTabVenta}">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group floating-label">
+                                            <input type="text" id="Nro_Documento_${idTabVenta}" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" class="form-control dirty">
+                                            <label for="Nro_Documento_${idTabVenta}">Nro. Documento</label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group floating-label">
+                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control dirty" data-id=null>
+                                            <label>Nombres completos</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p></p>
+                                <div class="row">
+                                    <div class="col-md-12"> 
+                                        <div class="form-group floating-label">
+                                            <input type="text" class="form-control dirty" id="Direccion_${idTabVenta}">
+                                            <label>Direccion</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="card-actionbar">
 
@@ -202,7 +201,7 @@ function VerNuevaVenta(variables,CodLibro) {
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-hover">
+                                        <table class="table table-hover">
                                             <thead>
                                                 <tr> 
                                                     <th>Codigo</th>
@@ -221,9 +220,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td><button class="btn btn-default btn-lg" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
-                                                    <td><button class="btn btn-default btn-lg" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
-                                                    <td><button class="btn btn-default btn-lg" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
+                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
+                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
+                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
                                                 </tr>
                                             </tfoot>
 
@@ -238,23 +237,16 @@ function VerNuevaVenta(variables,CodLibro) {
 
                         </div>
                         <div class="card-actionbar" id="divFooter_${idTabVenta}">
-                            <div class="card-actionbar-row" style="text-align: left;">
-                                <div class="col-md-12">
-                                    <div class="box box-warning">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Productos</h3>
-                                            
-                                            <div class="box-tools" style="left: 10px;display:none" id="divTools_${idTabVenta}">
-                                                <button type="button" class="btn btn-box-tool" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button>
-                                            </div>
-
-                                        </div>
-                                        <div class="box-body" id="divProductos_${idTabVenta}">
-                                            ${CrearBotonesCategorias(variables.categorias,idTabVenta)}
-                                        </div>
+                            <div class="col-md-12">
+                                <div class="box box-warning">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title"><button id="divTools_${idTabVenta}" style="display:none"  type="button" class="btn btn-icon-toggle" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button> Productos</h3>
+                                    </div>
+                                    <div class="box-body" id="divProductos_${idTabVenta}">
+                                        ${CrearBotonesCategorias(variables.categorias,idTabVenta)}
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
@@ -690,7 +682,7 @@ function CrearBotonesCategoriasXSeleccion(categorias,CodPadre,idTab){
     if(CodPadre==''){
         $("#divTools_"+idTab).css("display","none")
     }else{
-        $("#divTools_"+idTab).css("display","block")
+        $("#divTools_"+idTab).css("display","inline-block")
     }
 
     var divProductos = document.getElementById('divProductos_'+idTab);

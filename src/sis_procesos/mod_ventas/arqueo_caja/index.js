@@ -65,9 +65,9 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                     <div class="row">
                         <div class="col-sm-6">
                             <label></label>
-                            <div class="checkbox">
+                            <div class="checkbox checkbox-inline checkbox-styled">
                                 <label>
-                                    <input type="checkbox" id="optEnvio" name="optEnvio"> Envio de Efectivo
+                                    <input type="checkbox" id="optEnvio" name="optEnvio"> <span>Envio de Efectivo</span>
                                 </label>
                             </div>
                         </div>
@@ -93,7 +93,7 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                     <li class="active"><a href="#tabSoles" data-toggle="tab" id="tSoles" aria-expanded="true" onclick="${()=>CalcularSumaTotalSoles(resumenpen)}">Soles S/</a></li>
                                                     <li><a href="#tabDolares" data-toggle="tab" id="tDolares" aria-expanded="true" onclick="${()=>CalcularSumaTotalDolares(resumenusd)}">Dolares $</a></li>
                                                 </ul>
-                                                <div class="tab-content">
+                                                <div class="card-body tab-content">
                                                     <div class="tab-pane active" id="tabSoles">
                                                         <div class="row">
                                                             <div class="box box-default">
@@ -186,7 +186,7 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                             <li class="active"><a href="#tabSolesBilletes" id="tbSoles" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalSoles(resumenpen)}">Soles S/</a></li>
                                                             <li ><a href="#tabDolaresBilletes" id="tbDolares" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalDolares(resumenusd)}">Dolares $</a></li>
                                                         </ul>
-                                                        <div class="tab-content">
+                                                        <div class="card-body tab-content">
                                                             <div class="tab-pane active" id="tabSolesBilletes">
                                                                 <div class="row">
                                                                     <div class="box box-default">

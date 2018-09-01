@@ -26,7 +26,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="Cod_Categoria" id="lbCod_Categoria">Categoria</label>
-                                <select id="Cod_Categoria" class="form-control" onchange=${()=>Buscar()}>
+                                <select id="Cod_Categoria" class="form-control input-sm" onchange=${()=>Buscar()}>
                                    
                                 </select>
                             </div>
@@ -34,7 +34,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                         <div  class="col-md-4">
                             <div class="form-group">
                                 <label for="Cod_Precio">Tipo Precio</label>
-                                <select id="Cod_Precio"  class="form-control">
+                                <select id="Cod_Precio"  class="form-control input-sm" onchange=${()=>Buscar()}>
                                 
                                 </select>
                             </div>
@@ -42,9 +42,9 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                         <div  class="col-md-4">
                             <div class="form-group">
                                 <label></label>
-                                <div class="checkbox" id="divSoloProductoStock">
+                                <div class="checkbox checkbox-inline checkbox-styled" id="divSoloProductoStock">
                                     <label>
-                                        <input type="checkbox" checked="checked" id="chbSoloProductoStock"> Solo productos con stock?
+                                        <input type="checkbox" checked="checked" id="chbSoloProductoStock"><span> Solo productos con stock?</span>
                                     </label>
                                 </div>
                             </div>
@@ -53,9 +53,9 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group">
-                                <input type="text" class="form-control" value="${text_busqueda}" id="txtBusquedaProducto">
+                                <input type="text" class="form-control input-sm" value="${text_busqueda}" id="txtBusquedaProducto" onkeypress=${()=>KeyPressBusquedaProducto(event)}>
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-success" onclick="${()=>Buscar()}"><i class="fa fa-search"></i> Buscar</button>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="${()=>Buscar()}"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>`
@@ -99,17 +99,17 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
                     <div class="row">
                         <div class="col-sm-6">
                             <label></label>
-                            <div class="radio">
+                            <div class="radio-inline radio-styled radio-primary">
                                 <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" value="nro"> Por Nro. Documento
+                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" value="nro"><span> Por Nro. Documento</span>
                                 </label>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <label></label>
-                            <div class="radio">
+                            <div class="radio-inline radio-styled radio-primary">
                                 <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" checked="checked" value="nombre"> Por Nombre o Cliente
+                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" checked="checked" value="nombre"><span> Por Nombre o Cliente</span>
                                 </label>
                             </div>
                         </div>
@@ -117,9 +117,9 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="txtBuscarCliente" onkeypress=${()=>KeyPressBusquedaCliente(event,idInputCliente,idInputDoc,Cod_TipoCliente)}>
+                                <input type="text" class="form-control input-sm" id="txtBuscarClienteModal" onkeypress=${()=>KeyPressBusquedaCliente(event,idInputCliente,idInputDoc,Cod_TipoCliente)}>
                                 <div class="input-group-btn">
-                                    <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)}><i class="fa fa-search"></i> Buscar</button>
+                                    <button type="button" id="BuscarClienteModal" class="btn btn-success btn-sm" onclick=${()=>BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)}><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +131,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
+                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`
@@ -139,7 +139,7 @@ function BuscarCliente(idInputCliente,idInputDoc,Cod_TipoCliente) {
     var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
     $('#modal-superior').modal()
-    $("#txtBuscarCliente").val($("#"+idInputCliente).val())
+    $("#txtBuscarClienteModal").val($("#"+idInputCliente).val())
     BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente)
 }
 
@@ -165,7 +165,7 @@ function NuevoCliente(documentos) {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Cod_TipoDocumento">Tipo de documento *</label>
-                                <select id="Cod_TipoDocumento"  class="form-control required" onchange=${()=>CambioClienteDoc()}>
+                                <select id="Cod_TipoDocumento"  class="form-control input-sm required" onchange=${()=>CambioClienteDoc()}>
                                     ${documentos.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                 </select>
                             </div>
@@ -244,7 +244,7 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc){
 }
 
 function AgregarTablaProductos(productos){
-    var el = yo`<tabla class="table table-bordered table-striped">
+    var el = yo`<tabla class="table table-hover">
     <thead>
         <tr>
             <th>Codigo</th>
@@ -420,6 +420,7 @@ function GuardarNuevoCliente(){
 
 
 function CargarCategoria(){
+    run_waitMe($('#Cod_Categoria'), 1, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {
@@ -436,13 +437,17 @@ function CargarCategoria(){
             LlenarCategorias(res.data.categoriaspadre)
         else
             LlenarCategorias([])
+        
+        $('#Cod_Precio').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
+        $('#Cod_Precio').waitMe('hide');
         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }
 
 function CargarTipoPrecio(){
+    run_waitMe($('#Cod_Precio'), 1, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {
@@ -459,8 +464,11 @@ function CargarTipoPrecio(){
             LlenarPrecios(res.data.precios)
         else
             LlenarPrecios([])
+        
+        $('#Cod_Precio').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
+        $('#Cod_Precio').waitMe('hide');
         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }
@@ -471,6 +479,12 @@ function Buscar(){
         BusquedaProducto() 
     }else{
         BusquedaXIdClienteProveedor()
+    }
+}
+
+function KeyPressBusquedaProducto(event){
+    if(event.which == 13) { 
+        Buscar()
     }
 }
 
@@ -513,9 +527,7 @@ function BusquedaProducto(){
             $('#contenedorTablaProductos').waitMe('hide');
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
-    }else{
-        console.log("busqueda de producto con lenght mayor a 2")
-    }
+    } 
 }
 
 
@@ -564,7 +576,7 @@ function KeyPressBusquedaCliente(event,idInputCliente,idInputDoc,Cod_TipoCliente
 
 function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
      
-    var txtBuscarCliente = $("#txtBuscarCliente").val()
+    var txtBuscarCliente = $("#txtBuscarClienteModal").val()
     if(txtBuscarCliente.length>=4){ 
         run_waitMe($('#contenedorTablaClientes'), 1, "ios","Buscando cliente..."); 
         if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
@@ -582,8 +594,7 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
             }
             fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
             .then(req => req.json())
-            .then(res => {
-                console.log(res)
+            .then(res => { 
                 if (res.respuesta == 'ok') {
                     var clientes = res.data.cliente
                     if(clientes.length > 0)
@@ -634,6 +645,7 @@ function BusquedaClienteModal(idInputCliente,idInputDoc,Cod_TipoCliente){
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             });
         }
+        $("#txtBuscarClienteModal").focus()
     }
 }
 

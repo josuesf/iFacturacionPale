@@ -108,7 +108,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 </div>
 
                             </div>
-                            <div class="box-footer">
+                            <div class="card-actions">
                                 
                             </div>
                         </div>
@@ -460,21 +460,27 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group" id="divAplicaImpuesto">
-                                            <label>
-                                                <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}> I.G.V 18%
-                                            </label>
+                                            <div class="checkbox checkbox-inline checkbox-styled">
+                                                <label>
+                                                    <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}><span>I.G.V 18% </span>
+                                                </label>
+                                            </div>
                                             <input type="text" class="form-control input-sm" value="0.00" id="Impuesto" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                         <div class="form-group">
-                                            <label>
-                                                <input type="checkbox" id="cbAplicaServicios"  checked="checked"> SERVICIOS
-                                            </label>
+                                            <div class="checkbox checkbox-inline checkbox-styled">
+                                                <label>
+                                                    <input type="checkbox" id="cbAplicaServicios"  checked="checked"><span>SERVICIOS</span>
+                                                </label>
+                                            </div>
                                             <input type="number" class="form-control input-sm" value="0.00" id="OtrosCargos" onkeypress=${()=>CalcularTotal(CodLibro,variables)} onchange=${()=>CalcularTotal(CodLibro,variables)}>
                                         </div>
                                         <div class="form-group" style="display:none">
-                                            <label>
-                                                <input type="checkbox"  checked="checked"> I.S.C 3%
-                                            </label>
+                                            <div class="checkbox checkbox-inline checkbox-styled">
+                                                <label>
+                                                    <input type="checkbox"  checked="checked"><span>I.S.C 3%</span>
+                                                </label>
+                                            </div>
                                             <input type="number" class="form-control input-sm" value="0.00" id="Servicios">
                                         </div>
                                         <div class="form-group">
@@ -739,14 +745,13 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                 </div>
                 <div class="modal-body">
                     <div class="row" id="divCreditoFormasPago">
-                     
-                    <div class="btn-group-toggle" data-toggle="buttons">
-                     <label class="btn btn-success">
-                       <input type="checkbox" checked autocomplete="off" id="btnCreditoFormaPagoHeader"  onchange=${() => AsignarCredito()}> Credito
-                     </label>
-                    </div>
-
- 
+                        <div class="col-sm-3">
+                            <div class="btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-success btn-sm">
+                                <input type="checkbox" checked autocomplete="off" id="btnCreditoFormaPagoHeader"  onchange=${() => AsignarCredito()}> Credito
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <p></p>
                     <div class="row">
@@ -756,7 +761,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                 ${e.Cod_FormaPago=="008"? 
                                     yo`<div class="form-group">
                                             <label>Moneda</label> 
-                                            <select id='Cod_Moneda_Forma_Pago' class="form-control" onchange=${()=>CambioMonedaComprobante(Cod_Moneda,variables,Tipo_Cambio)}>
+                                            <select id='Cod_Moneda_Forma_Pago' class="form-control input-sm" onchange=${()=>CambioMonedaComprobante(Cod_Moneda,variables,Tipo_Cambio)}>
                                                 ${variables.monedas.map(m=>
                                                     yo`<option value=${m.Cod_Moneda}>${m.Nom_Moneda}</option>`
                                                 )}
@@ -804,7 +809,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Monto</label>
-                                            <input type="number" class="form-control" value="0.00" id="MontoFormaPago">
+                                            <input type="number" class="form-control input-sm" value="0.00" id="MontoFormaPago">
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -812,7 +817,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             <div class="col-md-6" id="divReferencia">
                                                 <div class="form-group">
                                                     <label>Referencia</label>
-                                                    <input type="text" class="form-control" id="ReferenciaFormaPago">
+                                                    <input type="text" class="form-control input-sm" id="ReferenciaFormaPago">
                                                 </div>
                                             </div>
                                             <div class="col-md-6" id="divCompSaldo">
@@ -850,7 +855,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Moneda</label>
-                                                    <label type="text" class="form-control" id="Cod_MonedaGlobal"></label>
+                                                    <label type="text" class="form-control input-sm" id="Cod_MonedaGlobal"></label>
                                                 </div>
                                             </div>
                                         </div>
@@ -858,7 +863,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>T/C</label>
-                                                    <input type="number" class="form-control" id="Tipo_Cambio_Global" onkeypress=${()=>CambioTipoCambioGlobal(Cod_Moneda,Tipo_Cambio)}>
+                                                    <input type="number" class="form-control input-sm" id="Tipo_Cambio_Global" onkeypress=${()=>CambioTipoCambioGlobal(Cod_Moneda,Tipo_Cambio)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -871,7 +876,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                         <div class="box box-default">
                             <div class="box-body"> 
                                 <div class="table-responsive" id="contenedorPagosMultiples">
-                                <table id="tablaPagosMultiples" class="table table-bordered table-striped">
+                                <table id="tablaPagosMultiples" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Tipo</th>
@@ -894,13 +899,11 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-4 col-md-offset-8">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <button class="btn btn-raised btn-success" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
-                                                </div>   
+                                            <div class="col-md-6"> 
+                                                <button class="btn btn-raised btn-success btn-sm" id="btnSaldo" data-value="${Monto}">${Cod_Moneda + " " + (Monto/Tipo_Cambio).toFixed(2)}</button>
                                             </div>
                                             <div class="col-md-6">
-                                                <button class="btn btn-raised btn-danger" id="btnTotal">TOTAL </button>
+                                                <button class="btn btn-raised btn-danger btn-sm" id="btnTotal">TOTAL </button>
                                             </div>
                                         </div>
                                     </div>
@@ -910,8 +913,8 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-raised btn-info" onclick="${()=>AceptarFormaPago(amodo)}" id="btnAceptarFormaPago">Aceptar</button>
-                    <button type="button" data-dismiss="modal" class="btn btn-raised btn-danger pull-right">Cancelar</button>
+                    <button class="btn btn-raised btn-info btn-sm" onclick="${()=>AceptarFormaPago(amodo)}" id="btnAceptarFormaPago">Aceptar</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-raised btn-danger pull-right btn-sm">Cancelar</button>
                 </div>
             </div>
         </div>`
@@ -3869,10 +3872,14 @@ function CambioTipoCambioGlobal(Cod_Moneda,Tipo_Cambio){
 }
 
 function CambioTipoDocumento(){
-    if($("#Cod_TipoDoc").val()=="1" || $("#Cod_TipoDoc").val()=="6")
+    if($("#Cod_TipoDoc").val()=="1" || $("#Cod_TipoDoc").val()=="6"){
         $("#BuscarRENIEC").show()
-    else    
+        $("#Nro_Documento").addClass("required")
+    }
+    else{    
         $("#BuscarRENIEC").hide()
+        $("#Nro_Documento").removeClass("required")
+    }
 }
 
 function CambioMoneda(CodLibro){

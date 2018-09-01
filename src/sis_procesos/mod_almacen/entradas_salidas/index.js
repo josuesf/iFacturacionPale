@@ -616,9 +616,9 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual){
     
 }
 
-function RechazarEnvio(){
+function RechazarEnvio(){ 
     
-}
+} 
 
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual){
