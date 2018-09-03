@@ -2,7 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { NuevoCliente } from '../../modales'
+import { NuevoCliente,BuscarCliente } from '../../modales'
 
 function CargarFormulario(variables, fecha_actual) {
     var el = yo`
@@ -27,15 +27,21 @@ function CargarFormulario(variables, fecha_actual) {
                 </div>
                 <div class="row">
                     <div class="col-md-8" id="div-cliente-recibo-egreso">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <p>A favor de :</p>
+                        <div class="card">
+                            <div class="card-head">
+                                <header> A favor de </header>
+                                <div class="tools">
+                                    <div class="btn-group">
+                                        <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <select id="Cod_TipoDoc" class="form-control" onchange=${()=>CambioClienteDoc()}>
+                                            <select id="Cod_TipoDoc" class="form-control input-sm" onchange=${()=>CambioClienteDoc()}>
                                                 ${variables.documentos.map(e => yo`
                                                     <option value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>
                                                     `)}
@@ -44,9 +50,9 @@ function CargarFormulario(variables, fecha_actual) {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarCliente()}" class="form-control required">
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc()}" class="form-control required input-sm" placeholder="Nro Documento">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc">
+                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc">
                                                     <i class="fa fa-globe"></i>
                                                 </button>
                                             </div>
@@ -54,24 +60,15 @@ function CargarFormulario(variables, fecha_actual) {
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <button class="btn btn-info" onclick="${()=>AbrirModalObs(variables.diagrama)}">Mas Detalles</button>
+                                            <button class="btn btn-info btn-sm" onclick="${()=>AbrirModalObs(variables.diagrama)}">Mas Detalles</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="input-group">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>NuevoCliente(variables.documentos)}>
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
-                                            <input type="text" id="Cliente" class="form-control required">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>VerBuscarCliente(variables)}">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
+                                        <div class="form-group">
+                                            <input type="text" id="Cliente" class="form-control required input-sm"  placeholder="Nombre del cliente">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -117,7 +114,7 @@ function CargarFormulario(variables, fecha_actual) {
                     <div class="col-sm-3">
                         <div class="form-group">
                             <b>Moneda: </b>
-                            <select id="Cod_Moneda" id="" class="form-control">
+                            <select id="Cod_Moneda" id="" class="form-control input-sm">
                                 ${variables.monedas.map(e => yo`
                                     <option value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>
                                     `)}
@@ -127,22 +124,22 @@ function CargarFormulario(variables, fecha_actual) {
                     <div class="col-sm-3">
                         <div class="form-group">
                             <b>Fecha: </b>
-                            <input type="date" class="form-control" id="Fecha" value="${fecha_actual}">
+                            <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <p>Detalles</p>
+                        <div class="card">
+                            <div class="card-head">
+                                <header> Detalles</header>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-sm-9">
                                         <div class="form-group">
                                             <label for="">Cuenta</label>
-                                            <select id="Id_Concepto" class="form-control" id="">
+                                            <select id="Id_Concepto" class="form-control input-sm">
                                                 ${variables.conceptos.map(e => yo`
                                                     <option value="${e.Id_Concepto}">${e.Des_Concepto}</option>
                                                     `)}
@@ -154,13 +151,13 @@ function CargarFormulario(variables, fecha_actual) {
                                     <div class="col-sm-9">
                                         <div class="form-group">
                                             <label for="">Concepto:</label>
-                                            <textarea class="form-control" id="Des_Movimiento"></textarea>
+                                            <textarea class="form-control input-sm" id="Des_Movimiento"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-sm-3">
                                         <div class="form-group">
                                             <label for="">Importe :</label>
-                                            <input class="form-control required" type="number" id="Monto" value="0.00">
+                                            <input class="form-control required input-sm" type="number" id="Monto" value="0.00">
                                         </div>
                                     </div>
                                 </div>
@@ -174,8 +171,8 @@ function CargarFormulario(variables, fecha_actual) {
             </div>
     
             <div class="modal-footer">
-                <button onclick="${() => Guardar()}" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <button onclick="${() => Guardar()}" class="btn btn-primary btn-sm">Guardar</button>
+                <button type="button" class="btn btn-default pull-left btn-sm" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>`
@@ -184,68 +181,6 @@ function CargarFormulario(variables, fecha_actual) {
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal()
 }
-
-
- 
-
-function VerBuscarCliente(variables) {
-    var el = yo`
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Buscar Cliente - Proveedor</strong></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label></label>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" value="nro"> Por Nro. Documento
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <label></label>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="optionsRadiosBuscar" name="optionsRadiosBuscar" checked="checked" value="nombre"> Por Nombre o Cliente
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txtBuscarCliente">
-                                <div class="input-group-btn">
-                                    <button type="button" id="BuscarClienteModal" class="btn btn-success" onclick=${()=>BusquedaClienteModal()}><i class="fa fa-search"></i> Buscar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="table-responsive" id="contenedorTablaClientes">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" data-dismiss="modal">Aceptar</button>
-                </div>
-            </div>
-        </div>`
-
-    var modal_proceso = document.getElementById('modal-superior');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-superior').modal()
-    $("#txtBuscarCliente").val($("#Cliente").val())
-}
-
 
 
 var Id_ClienteProveedor = null
@@ -257,30 +192,7 @@ function SeleccionarCliente(cliente){
     $("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
     Id_ClienteProveedor = cliente.Id_ClienteProveedor
 }
-
-
-function AgregarTabla(clientes){
-    var el = yo`<table id="example1" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Documento</th>
-            <th>Cliente</th> 
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        ${clientes.map(u => yo`
-        <tr>
-            <td>${u.Nro_Documento}</td>
-            <td>${u.Cliente}</td> 
-            <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarCliente(u)}"><i class="fa fa-check"></i> Elegir</button></td>
-        </tr>`)}
-    </tbody>
-
-</table>`
-    empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
-}
-
+ 
 
 function CambioClienteDoc(){
     if($("#Cod_TipoDoc").val()=="1" || $("#Cod_TipoDoc").val()=="6"){
@@ -291,76 +203,10 @@ function CambioClienteDoc(){
         $("#Nro_Documento").removeClass("required",false)
     }
 }
-
-function BusquedaClienteModal(e){
-    var txtBuscarCliente = $("#txtBuscarCliente").val()
-    if(txtBuscarCliente.length>4){
-        if ($('input[name=optionsRadiosBuscar]:checked').val() == 'nombre') {
-            var Cliente = txtBuscarCliente
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Cliente
-                })
-            }
-            fetch(URL+'/clientes_api/get_cliente_by_nombre', parametros)
-            .then(req => req.json())
-            .then(res => {
-                console.log(res)
-                if (res.respuesta == 'ok') {
-                    var clientes = res.data.cliente
-                    if(clientes.length > 0)
-                        AgregarTabla(clientes)
-                    else  
-                        empty(document.getElementById('contenedorTablaClientes'));
-                }
-                else
-                    empty(document.getElementById('contenedorTablaClientes'));
-            }).catch(function (e) {
-                console.log(e);
-                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            });
-        }else{
-            var Nro_Documento = txtBuscarCliente
-            var Cod_TipoDocumento = ''
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Nro_Documento,
-                    Cod_TipoDocumento
-                })
-            }
-            fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
-            .then(req => req.json())
-            .then(res => {
-                if (res.respuesta == 'ok') {
-                    var clientes = res.data.cliente
-                    if(clientes.length > 0)
-                        AgregarTabla(clientes)
-                    else  
-                        empty(document.getElementById('contenedorTablaClientes'));
-                }
-                else
-                    empty(document.getElementById('contenedorTablaClientes'));
-            }).catch(function (e) {
-                console.log(e);
-                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            });
-        }
-    }
-}
+ 
 
 
-
-function BuscarCliente() {
+function BuscarClienteDoc() {
     if($("#Nro_Documento").val().trim().length>0){
         run_waitMe($('#div-cliente-recibo-egreso'), 1, "ios","Buscando cliente...");
         var Nro_Documento = document.getElementById('Nro_Documento').value

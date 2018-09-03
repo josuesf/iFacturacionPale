@@ -121,11 +121,12 @@ router.post('/get_cliente_by_documento', function (req, res) {
     ]
     Ejecutar_Procedimientos(req,res, procedimientos)
 });
+ 
 
 router.post('/get_cliente_by_nombre', function (req, res) {
     input = req.body
     parametros = [
-        { nom_parametro: 'Cod_TipoCliente', valor_parametro: input.Cod_TipoCliente },
+        { nom_parametro: 'Cod_TipoCliente', valor_parametro: input.Cod_TipoCliente,tipo_parametro:sql.VarChar },
         { nom_parametro: 'Cliente', valor_parametro: input.Cliente }
     ]
     procedimientos = [

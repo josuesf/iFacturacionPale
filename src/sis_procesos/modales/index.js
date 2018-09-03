@@ -327,7 +327,7 @@ function GuardarObs_Recibo(diagramas,obs_global_xml,id_modal) {
     for (var i = 0; i < diagramas.length; i++) {
         OBS += '<' + diagramas[i].Cod_Elemento + '>' + document.getElementById(diagramas[i].Cod_Elemento).value + '</' + diagramas[i].Cod_Elemento + '>'
     }
-    obs_global_xml = OBS+'</Registro>'
+    global.obs_xml = OBS+'</Registro>'
     $('#'+id_modal).modal('hide')
 }
 

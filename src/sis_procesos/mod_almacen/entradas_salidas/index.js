@@ -91,9 +91,9 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4" id="divDocRef">
-                                        <div class="checkbox">
+                                        <div class="checkbox checkbox-inline checkbox-styled">
                                             <label> 
-                                                <input type="checkbox" id="optDocRef" onchange=${()=>CambioDocRef()}> Con Doc Ref? 
+                                                <input type="checkbox" id="optDocRef" onchange=${()=>CambioDocRef()}><span> Con Doc Ref?</span> 
                                             </label>
                                         </div>
                                     </div>

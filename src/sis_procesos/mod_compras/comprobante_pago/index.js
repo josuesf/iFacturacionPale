@@ -9,7 +9,6 @@ import { ConvertirCadena,BloquearControles } from '../../../../utility/tools'
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','',undefined]
-var obs_xml = null
 var aSaldo = 0
 var aMonto = 0 
 var contador = 0
@@ -17,13 +16,13 @@ var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
 var pCodTipoComprobanteUltimo = '' 
- 
+global.obs_xml = ''
 
 function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
 
     CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
-    obs_xml = null
+    global.obs_xml = ''
     aMonto = 0 
     idFilaSeleccionadaSerie = 0
     global.objCliente = Cliente?Cliente:''
@@ -75,7 +74,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" placeholder="Nro Documento" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
                                                     <i class="fa fa-globe"></i>
@@ -91,18 +90,17 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" id="divCliente">
-                                        <div class="form-group">
-                                            <label> Señor(es) : </label>
-                                            <input type="text" id="Cliente" class="form-control required" data-id=${Cliente?Cliente.Id_ClienteProveedor:null} value=${Cliente?Cliente.Cliente:''}>
-                                           
+                                        <div class="form-group"> 
+                                            <input type="text" id="Cliente" placeholder="Nombre cliente" class="form-control required input-sm" data-id=${Cliente?Cliente.Id_ClienteProveedor:null} value=${Cliente?Cliente.Cliente:''}>
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" id="divDireccion">
-                                        <div class="form-group">
-                                            <label> Direccion : </label>
-                                            <input type="text" id="Direccion" class="form-control input-sm required" value=${Cliente?Cliente.Direccion:''}>
+                                        <div class="form-group"> 
+                                            <input type="text" id="Direccion" placeholder="Direccion" class="form-control input-sm required" value=${Cliente?Cliente.Direccion:''}>
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -316,7 +314,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="div-tabla-productos">
                     <div class="col-sm-12">
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -342,9 +340,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 <th>
                                                     <div class="input-group">
                                                         <label>UM</label>
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-raised btn-default btn-xs"  onclick=${()=>BuscarProductoCP(CodLibro,'click')}><i class="fa fa-refresh"></i></button>
-                                                        </span>
+                                                        
                                                     </div>
                                                 </th>
                                                 <th>Cantidad</th>
@@ -645,8 +641,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                 CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
             }
         }
-        CambioLicitacion()
-        CambioCreditoContado()
+        //CambioLicitacion()
+        //CambioCreditoContado()
 
         if(global.objProducto!='' && global.objProducto){
             $("#Nom_Producto").attr("data-id",global.objProducto.Id_Producto)
@@ -726,9 +722,10 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
      });*/
  
 
-    $('input[type="number"]').blur(function(){
+    $('#div-tabla-productos').find('input[type="number"]').blur(function(){
         $(this).val(parseFloat($(this).val()).toFixed(2))
     })
+ 
 
 }
  
@@ -932,7 +929,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
     CambioMonedaComprobante(Cod_Moneda,variables,Tipo_Cambio)
 
     CambioMonedaFormaPagoMasterCard()
-    CambioMonedaFormaPagoVisa()
+    CambioMonedaFormaPagoVisa()  
      
 }
 
@@ -1165,7 +1162,7 @@ function AgregarFilaTabla(CodLibro,variables){
 
                 //$("#Nom_Producto").attr("data-id",null)
                 $("#Cod_Producto").val(null)
-                $("#Cod_Almacen").val("")
+                $("#Cod_Almacen").text("")
                 $("#Cod_UnidadMedida").text("")
                 $("#Stock").val("")
                 $("#Nom_Producto").val("") 
@@ -1872,8 +1869,7 @@ function AceptarFormaPago(amodo){
     switch(amodo){
         case 0:
             $('#tablaBodyPagosMultiples tr').each(function (index) {
- 
-                listaFormaPago.push({
+                 listaFormaPago.push({
                     idComprobantePago:0,
                     Item:index+1,
                     IdMovimiento:0,
@@ -1884,7 +1880,8 @@ function AceptarFormaPago(amodo){
                     TipoCambio:$(this).find("td").eq(3).text(), 
                     CuentaCajaBanco:$(this).find("td").eq(7).find("input").val(), 
                     Fecha:$(this).find("td").eq(6).find("input").val(), 
-                })   
+                })
+                    
             });
             
             $("input[name=optCredito][value='credito']").prop("checked",true);
@@ -1892,6 +1889,7 @@ function AceptarFormaPago(amodo){
             $("#divCredito").css("display","none")
             $("#divNroDias").css("display","none")
             $("#divMoneda").css("display","none")
+            $("#divLicitacion").css("display","none")
             $("#divFormasPago").css("display","none")
             $("#divTC").css("display","none")
             $("#divMultiplesPagos").removeClass()
@@ -2038,7 +2036,7 @@ function EsValido(CodLibro,callback){
     var MontoMaximo = 0
     if(!arrayValidacion.includes($("#Cod_FormaPago").val()) && $("#Cod_FormaPago").val()=='998' &&  !arrayValidacion.includes($("#Cuenta_CajaBancos").val())){
         try{
-            MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[',']')[1])
+            MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[').join('').split(']')[0])//.split('[',']')[1])
         }catch(e){
             MontoMaximo = 0
         }
@@ -2753,7 +2751,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
     var Motivo_Anulacion = ''
     var Otros_Cargos = 0
     var Otros_Tributos = 0 
-    var Obs_Comprobante = obs_xml
+    var Obs_Comprobante = global.obs_xml
     var Cod_Plantilla = null 
 
     RecuperarNroTicketera(CodLibro,0,variables,Serie,Cod_TipoComprobante,function(Nro_Ticketera){
@@ -3274,11 +3272,13 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
                     $("#divCodigoLicitacion").css("display","block")
                     $("#divLicitacion").css("display","block")
                     $("#optLicitacion").attr("checked",true)
+                    $("#divCodigoLicitacion").css("display",true) 
                     LlenarLicitaciones(licitaciones)
                 }else{
                     $("#divCodigoLicitacion").css("display","none")
                     $("#divLicitacion").css("display","none")
-                    $("#optLicitacion").attr("checked",false)   
+                    $("#optLicitacion").attr("checked",false)
+                    $("#divCodigoLicitacion").css("display",false)    
                 }
             } 
         }).catch(function (e) {
@@ -4173,13 +4173,12 @@ function BuscarClienteDoc(CodLibro) {
                         CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
                     }
                 }
-                CambioCreditoContado()
-                CambioLicitacion()
+                //CambioCreditoContado()
+                //CambioLicitacion()
 
             }else{ 
                 global.objCliente=''
-                $("#Cliente").val("")
-                $("#Nro_Documento").val("")
+                $("#Cliente").val("") 
                 $("#Direccion").val("") 
                 $("#Cliente").attr("data-id",null)
             }
@@ -4213,7 +4212,7 @@ function AbrirModalObsComprobantePago(){
         .then(req => req.json())
         .then(res => {
             var variables = res.data
-            AbrirModalObs(variables.diagramas,obs_xml,"modal_observaciones","modal_obs_body")
+            AbrirModalObs(variables.diagramas,global.obs_xml,"modal_observaciones","modal_obs_body")
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})

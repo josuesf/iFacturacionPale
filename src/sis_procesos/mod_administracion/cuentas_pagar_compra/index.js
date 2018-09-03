@@ -30,11 +30,11 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                 </div>
                 <div class="row">
                     <div class="col-md-8" id="div-cliente-cuentas">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4> Cliente/Proveedor </h4>
+                        <div class="card">
+                            <div class="card-head">
+                                <header> Cliente/Proveedor </header>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-4" id="divCodTipoDoc">
                                         <div class="form-group">
@@ -45,7 +45,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                     </div>
                                     <div class="col-md-8" id="divNroDocumento">
                                         <div class="input-fromr">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required">
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" placeholder="Nro Documento">
                                         </div>
                                     </div>
                                
@@ -53,24 +53,23 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-12" id="divCliente">
                                         <div class="form-group">
-                                            <label> Señor(es) : </label>
-                                            <input type="text" id="Cliente" class="form-control input-sm required" data-id=null>
+                                            
+                                            <input type="text" id="Cliente" class="form-control input-sm required" data-id=null placeholder="Nombre cliente">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12" id="divDireccion">
-                                        <div class="form-group">
-                                            <label> Direccion : </label>
-                                            <input type="text" id="Direccion" class="form-control input-sm required">
+                                        <div class="form-group"> 
+                                            <input type="text" id="Direccion" class="form-control input-sm required" placeholder="Direccion">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-                            <div class="box-footer">
-                                
-                            </div>
+                             
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -117,9 +116,9 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="col-sm-4" id="divContado">
-                                                    <div class="radio">
+                                                    <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" value="contado" id="optCredito" name="optCredito"  checked> Contado
+                                                            <input type="radio" value="contado" id="optCredito" name="optCredito"  checked> <span> Contado</span>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -190,13 +189,13 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="panel-body">
                                                 <div class="row">
                                                     <div class="col-md-8 col-sm-8">
-                                                        <div class="checkbox">
+                                                        <div class="checkbox checkbox-inline checkbox-styled">
                                                             <label> 
-                                                                <input type="checkbox" id="optTodoFechas" checked onchange=${()=>CambioTodoFechas()}> Todo 
+                                                                <input type="checkbox" id="optTodoFechas" checked onchange=${()=>CambioTodoFechas()}> <span> Todo</span> 
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4 col-sm-4">
+                                                    <div class="col-md-4 col-sm-4">          
                                                         <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
                                                     </div>
                                                 </div>
@@ -222,9 +221,9 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="panel-body">
                                                 <div class="row">
                                                     <div class="col-md-8 col-sm-8">
-                                                        <div class="checkbox">
+                                                        <div class="checkbox checkbox-inline checkbox-styled">
                                                             <label> 
-                                                                <input type="checkbox" id="optTodoVencimiento" checked onchange=${()=>CambioTodoVencimiento()}> Todo 
+                                                                <input type="checkbox" id="optTodoVencimiento" checked onchange=${()=>CambioTodoVencimiento()}><span> Todo</span> 
                                                             </label>
                                                         </div>
                                                     </div>
@@ -234,16 +233,16 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-6 col-sm-6">
-                                                        <div class="radio">
+                                                        <div class="radio-inline radio-styled radio-primary">
                                                             <label> 
-                                                                <input type="radio" name="optRadios" id="optRadiosPorVencer" value="PorVencer"> Por vencer 
+                                                                <input type="radio" name="optRadios" id="optRadiosPorVencer" value="PorVencer"><span> Por vencer</span>
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6 col-sm-6">
-                                                        <div class="radio">
+                                                        <div class="radio-inline radio-styled radio-primary">
                                                             <label> 
-                                                                <input type="radio" name="optRadios" id="optRadiosVencidos" value="Vencidos"> Vencidos 
+                                                                <input type="radio" name="optRadios" id="optRadiosVencidos" value="Vencidos"><span> Vencidos</span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -256,16 +255,16 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="panel-body">
                                                 <div class="row">
                                                     <div class="col-md-4 col-sm-4">
-                                                        <div class="checkbox">
+                                                        <div class="checkbox checkbox-inline checkbox-styled">
                                                             <label> 
-                                                                <input type="checkbox" id="optTodoLicitacion" checked onchange=${()=>CambioTodoLicitacion()}> Todo 
+                                                                <input type="checkbox" id="optTodoLicitacion" checked onchange=${()=>CambioTodoLicitacion()}><span> Todo</span> 
                                                             </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8 col-sm-8">
-                                                        <div class="checkbox">
+                                                        <div class="checkbox checkbox-inline checkbox-styled">
                                                             <label> 
-                                                                <input type="checkbox"> Solo Documentos Formales 
+                                                                <input type="checkbox"><span> Solo Documentos Formales</span>
                                                             </label>
                                                         </div>
                                                     </div>
@@ -558,7 +557,7 @@ function EsValido(){
      
    if($("#divCuentaCajaBancos").css("display")=="block" && $("#Cuenta_CajaBancos").val()!='' && $("#Cuenta_CajaBancos").val()!=null){
        try{
-            MontoMaximo = parseFloat($("#Cuenta_CajaBancos").val().split('[', ']')[1])
+            MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[').join('').split(']')[0])//split('[', ']')[1])
        }catch(e){
             MontoMaximo = 0
        }

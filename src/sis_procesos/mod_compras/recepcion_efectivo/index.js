@@ -64,9 +64,9 @@ function Ver(variables) {
                         <div class="col-md-2">
                             <button type="button" class="btn btn-success" onclick=${()=>Recepcionados()}><i class="fa fa-arrow-circle-down"></i> Recepcionados</button>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-10">
                             <div class="row" id="divTotales">
-                                <div class="form-group">
+                                <div class="col-md-12">
                                     <div class="col-md-3">
                                         <label>Total Recepcion : </label>
                                     </div>
