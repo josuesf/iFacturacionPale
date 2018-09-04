@@ -76,6 +76,9 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         <div class="input-group">
                                             <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" placeholder="Nro Documento" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
+                                                <button type="button" class="btn btn-danger btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
                                                     <i class="fa fa-globe"></i>
                                                 </button>
@@ -607,6 +610,27 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             $("#Nro_Documento").val(global.objCliente.Nro_Documento)
             $("#Direccion").val(global.objCliente.Direccion)
             $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+
+            $("#Nro_Documento").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Direccion").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Nro_Documento").attr("disabled",true);
+            $("#Cliente").attr("disabled",true);
+            $("#Direccion").attr("disabled",true);
+            
             /*$("#Nro_Documento").tagsinput('removeAll') 
             $("#Cliente").tagsinput('removeAll') 
             $("#Direccion").tagsinput('removeAll')  
@@ -634,11 +658,12 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                 $("input[name=optCredito][value='credito']").prop("checked",false);
                 $("#Nro_Dias").val(0)
             }
-
+            CambioCreditoContado()
             if(CodLibro=="14"){
                 $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
                 CargarSeries(CodLibro)
                 CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                CambioLicitacion()
             }
         }
         //CambioLicitacion()
@@ -1496,6 +1521,16 @@ function AbrirModalFormasPago(variables,fecha_actual){
         });
 }
 
+
+function EditarCliente(){
+    $("#Nro_Documento").unbind("keypress");
+    $("#Cliente").unbind("keypress");
+    $("#Direccion").unbind("keypress");
+
+    $("#Nro_Documento").attr("disabled",false);
+    $("#Cliente").attr("disabled",false);
+    $("#Direccion").attr("disabled",false);
+}
 
 function EditarCantidad(idFila,CodLibro,variables){
     $("#"+idFila).find("td.Despachado").text($("#"+idFila).find("td.Cantidad").find('input').val())
@@ -4166,21 +4201,52 @@ function BuscarClienteDoc(CodLibro) {
                         $("input[name=optCredito][value='credito']").prop("checked",false);
                         $("#Nro_Dias").val(0)
                     }
+                    CambioCreditoContado()
         
                     if(CodLibro=="14"){
                         $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
                         CargarSeries(CodLibro)
                         CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                        CambioLicitacion()
                     }
                 }
                 //CambioCreditoContado()
                 //CambioLicitacion()
+
+                $("#Nro_Documento").bind("keypress", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+                $("#Cliente").bind("keypress", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+                $("#Direccion").bind("keypress", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+                $("#Nro_Documento").attr("disabled",true);
+                $("#Cliente").attr("disabled",true);
+                $("#Direccion").attr("disabled",true);
 
             }else{ 
                 global.objCliente=''
                 $("#Cliente").val("") 
                 $("#Direccion").val("") 
                 $("#Cliente").attr("data-id",null)
+
+                $("#Nro_Documento").unbind("keypress");
+                $("#Cliente").unbind("keypress");
+                $("#Direccion").unbind("keypress");
+
+                $("#Nro_Documento").attr("disabled",false);
+                $("#Cliente").attr("disabled",false);
+                $("#Direccion").attr("disabled",false);
+
+
             }
             $('#div-cliente-comprobante-pago').waitMe('hide');
         }).catch(function (e) {
@@ -4190,6 +4256,15 @@ function BuscarClienteDoc(CodLibro) {
             $("#Nro_Documento").val("")
             $("#Direccion").val("") 
             $("#Cliente").attr("data-id",null)
+
+            $("#Nro_Documento").unbind("keypress");
+            $("#Cliente").unbind("keypress");
+            $("#Direccion").unbind("keypress");
+
+            $("#Nro_Documento").attr("disabled",false);
+            $("#Cliente").attr("disabled",false);
+            $("#Direccion").attr("disabled",false);
+
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#div-cliente-comprobante-pago').waitMe('hide');
         });
