@@ -6,6 +6,7 @@ import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
 import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','',undefined]
@@ -15,11 +16,12 @@ var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
-var pCodTipoComprobanteUltimo = '' 
+var pCodTipoComprobanteUltimo = ''
+var flag_cliente = false 
 global.obs_xml = ''
 
 function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
-
+    flag_cliente = false
     CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
     global.obs_xml = ''
@@ -74,9 +76,9 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" placeholder="Nro Documento" class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" placeholder="Nro Documento" onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-danger btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
                                                     <i class="fa fa-pencil"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
@@ -630,6 +632,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             $("#Nro_Documento").attr("disabled",true);
             $("#Cliente").attr("disabled",true);
             $("#Direccion").attr("disabled",true);
+            $("#Cod_TipoDoc").attr("disabled",true);
             
             /*$("#Nro_Documento").tagsinput('removeAll') 
             $("#Cliente").tagsinput('removeAll') 
@@ -1522,7 +1525,13 @@ function AbrirModalFormasPago(variables,fecha_actual){
 }
 
 
-function EditarCliente(){
+function EditarCliente(){ 
+    if(!arrayValidacion.includes($("#Cliente").attr("data-id")))
+        flag_cliente = true
+    else
+        flag_cliente=false
+    
+
     $("#Nro_Documento").unbind("keypress");
     $("#Cliente").unbind("keypress");
     $("#Direccion").unbind("keypress");
@@ -1530,6 +1539,7 @@ function EditarCliente(){
     $("#Nro_Documento").attr("disabled",false);
     $("#Cliente").attr("disabled",false);
     $("#Direccion").attr("disabled",false);
+    $("#Cod_TipoDoc").attr("disabled",false);
 }
 
 function EditarCantidad(idFila,CodLibro,variables){
@@ -2687,7 +2697,7 @@ function ConvertTabletoJson(callback){
 }
 
 function PrepararImpresion(arrayData){
-
+        refrescar_movimientos()
         ConvertTabletoJson(function(arrayJSON){
 
             arrayData.cuerpo.DETALLES = arrayJSON 
@@ -3697,6 +3707,19 @@ function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,ind
     })*/
 }
 
+
+function CambioNroDocumento(e){ 
+    if(e.which == 46 || e.which == 8){ 
+        if(flag_cliente){
+            $("#Nro_Documento").val("");
+            $("#Cliente").val("");
+            $("#Cliente").attr("data-id",null);
+            $("#Direccion").val("");
+            flag_cliente=false
+        }
+    }   
+}
+
 function CambioCreditoContado(){
     $("#Cod_FormaPago").val($("#Cod_FormaPago option:first").val())
     if(!arrayValidacion.includes($("#Cod_FormaPago").val())){
@@ -4136,8 +4159,8 @@ function BuscarProductoCP(CodLibro,tipo) {
     }
 }
 
-function KeyPressClienteDoc(){ 
-    switch($('#Nro_Documento').val().trim().length){
+function KeyPressClienteDoc(){  
+    switch(($('#Nro_Documento').val().trim().length)+1){
         case 8:
             $("#Cod_TipoDoc").val("1")
             break;
@@ -4227,10 +4250,11 @@ function BuscarClienteDoc(CodLibro) {
                     event.preventDefault();
                     event.stopPropagation();
                 });
-
+ 
                 $("#Nro_Documento").attr("disabled",true);
                 $("#Cliente").attr("disabled",true);
                 $("#Direccion").attr("disabled",true);
+                $("#Cod_TipoDoc").attr("disabled",true);
 
             }else{ 
                 global.objCliente=''
@@ -4245,6 +4269,7 @@ function BuscarClienteDoc(CodLibro) {
                 $("#Nro_Documento").attr("disabled",false);
                 $("#Cliente").attr("disabled",false);
                 $("#Direccion").attr("disabled",false);
+                $("#Cod_TipoDoc").attr("disabled",false);
 
 
             }
@@ -4264,6 +4289,8 @@ function BuscarClienteDoc(CodLibro) {
             $("#Nro_Documento").attr("disabled",false);
             $("#Cliente").attr("disabled",false);
             $("#Direccion").attr("disabled",false);
+            $("#Cod_TipoDoc").attr("disabled",false);
+
 
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#div-cliente-comprobante-pago').waitMe('hide');

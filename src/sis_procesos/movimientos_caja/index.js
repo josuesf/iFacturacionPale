@@ -51,7 +51,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                         <!-- /.box-header -->
                                         <div class="box-body">
                                             <div class="table-responsive">
-                                            <table id="tablaMovimientos" class="table table-bordered table-striped">
+                                            <table id="tablaMovimientos" class="table table-hover">
                                                 <thead>
                                                     <tr> 
                                                         <th>Fecha/Hora</th>
@@ -70,7 +70,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                 <tbody>
                                                 ${movimientos.map(u => yo`
                                                 <tr>
-                                                    <td>${u.Fecha_Reg.replace('T','')}</td>
+                                                    <td>${(new Date(u.Fecha_Reg)).toLocaleDateString()+" "+(new Date(u.Fecha_Reg)).toLocaleTimeString()}</td>
                                                     <td>${u.ID}</td>
                                                     <td>${u.Documento}</td>
                                                     <td>${u.Cliente}</td>
@@ -87,9 +87,9 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                             Elegir una accion <span class="caret"></span>
                                                             </button>
                                                             <ul class="dropdown-menu">
-                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                                                <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li> 
-                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i> Anular</a></li>
+                                                                <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li> 
+                                                                <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i> Cambiar Turno</a></li>
                                                                 <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                                             </ul>
                                                         </div>`
@@ -100,7 +100,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                         Elegir una accion <span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu"> 
-                                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
+                                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li>
                                                         </ul>
                                                     </div>
                                                     `}
@@ -249,13 +249,14 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                 </div>`
 
     var el = yo`<div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Movimientos de Caja ${Flag_Cerrado?' - EL TURNO ESTA CERRADO':''}</h3>
-                    </div>
+                    ${Flag_Cerrado?yo`
+                    <div class="alert alert-callout alert-danger" role="alert">
+                        <strong><h3>EL TURNO ESTA CERRADO</h3></strong>
+                    </div>`:yo``}
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="table-responsive">
-                        <table id="tablaMovimientos" class="table table-bordered table-striped">
+                        <table id="tablaMovimientos" class="table table-hover">
                             <thead>
                                 <tr> 
                                     <th>Fecha/Hora</th>
@@ -274,7 +275,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                             <tbody class="context-menu-one">
                             ${movimientos.map(u => yo`
                             <tr> 
-                                <td>${u.Fecha_Reg.replace('T','')}</td>
+                                <td>${(new Date(u.Fecha_Reg)).toLocaleDateString()+" "+(new Date(u.Fecha_Reg)).toLocaleTimeString()}</td>
                                 <td>${u.ID}</td>
                                 <td>${u.Documento}</td>
                                 <td>${u.Cliente}</td>
@@ -292,9 +293,9 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                         Elegir una accion <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i>Anular</a></li>
-                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li> 
-                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i>Cambiar Turno</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('extornar',u)} ><i class="fa fa-times-circle"></i> Anular</a></li>
+                                            <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li> 
+                                            <li><a href="javascript:void(0)" onclick=${()=>AbrirModalCambiarTurno(u)}><i class="fa fa-calendar"></i> Cambiar Turno</a></li>
                                             <li><a href="javascript:void(0)" onclick=${()=>AbrirModalConfirmacion('eliminar',u)}><i class="fa fa-close"></i> Eliminar</a></li>
                                         </ul>
                                     </div>`
@@ -303,7 +304,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                                     Elegir una accion <span class="caret"></span>
-                                    <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i>Reimprimir</a></li>
+                                    <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li>
                                     </button>
                                 </div>
                                 `}
@@ -1124,14 +1125,17 @@ function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback)
 }
 
 function FormatearDataObservaciones(obs_string,indiceObs,obs_xml,callback){
+    
     var xml = obs_xml!=null?obs_xml:'' 
     var parser = new DOMParser();
-    var xmlDoc = parser.parseFromString(xml, "text/xml");
-    if (xmlDoc.getElementsByTagName('REGISTRO').length > 0 && indiceObs<xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes.length > 0) {
-        obs_string = obs_string + ' '+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeName + ':'+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue
-        FormatearDataObservaciones(obs_string,indexedDB+1,obs_xml,callback)
-       // return xmlDoc.getElementsByTagName(TAG)[0].childNodes[0].nodeValue
-    } else {
+    var xmlDoc = parser.parseFromString(xml.toUpperCase(), "text/xml"); 
+    if (xmlDoc.getElementsByTagName('REGISTRO').length > 0 && indiceObs<xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes.length ) { 
+        if(xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue!=null && xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue!=''){
+            obs_string = obs_string + ' '+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeName + ':'+ xmlDoc.getElementsByTagName('REGISTRO')[0].childNodes[indiceObs].nodeValue
+        } 
+        FormatearDataObservaciones(obs_string,indiceObs+1,obs_xml,callback)
+        
+    } else { 
         callback(obs_string)
     }
 }
@@ -1222,7 +1226,7 @@ function PrepararImpresionAlmacen(id_Movimiento,callback){
                                     FormatearDataDetalles(0,dataDetallesMovimiento,arrayNuevo,function(arrayJson){
 
                                         FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_AlmacenMov,function(data_string){
-
+                                             
                                             var arrayData = {
                                                 cuerpo:{
                                                     COD_TIPO_DOCUMENTO: dataAlmacen.Cod_TipoComprobante,
@@ -1376,6 +1380,7 @@ function PrepararImpresion(id_ComprobantePago,callback){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var dataComprobante = res.data.comprobante_pago[0]
+                
 
                 const parametrosDC = {
                     method: 'POST',
@@ -1396,8 +1401,9 @@ function PrepararImpresion(id_ComprobantePago,callback){
                             var dataEmpresa = res.empresa 
                             var arrayNuevo = []
                             var obs_string = ''
-                            FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){
+                            FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){  
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
+                                    console.log("despues de data observaciones",data_string)
                                     if(dataComprobante.Cod_Libro=='14'){
                                         var arrayData = {
                                             cuerpo:{

@@ -9,6 +9,7 @@ import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 var cantidad_tabs = 1
 var IdTabSeleccionado = null
 var arrayValidacion = [null,'null','',undefined]
+var flag_cliente = false 
 
 //var Total = 0
 //var TotalDescuentos = 0
@@ -21,6 +22,7 @@ global.variablesVentas = []
 
 function VerNuevaVenta(variables,CodLibro) {
     cantidad_tabs++
+    flag_cliente = false
     const idTabVenta = cantidad_tabs
     global.objClienteVenta = ''
     global.objProductoVentas = ''
@@ -71,26 +73,29 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group floating-label">
-                                            <input type="text" id="Nro_Documento_${idTabVenta}" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" class="form-control dirty">
-                                            <label for="Nro_Documento_${idTabVenta}">Nro. Documento</label>
+                                        <div class="input-group">
+                                            <input type="text" id="Nro_Documento_${idTabVenta}" placeholder="Nro Documento" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" onkeypress=${()=>KeyPressClienteDoc(idTabVenta)} onkeydown=${()=>CambioNroDocumento(event,idTabVenta)} class="form-control dirty">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-warning" onclick=${()=>EditarCliente(idTabVenta)} id="btnEditarCliente">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button> 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="form-group floating-label">
-                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control dirty" data-id=null>
-                                            <label>Nombres completos</label>
+                                        <div class="form-group">
+                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control" placeholder="Nombres completos" data-id=null>
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
-                                </div>
-                                <p></p>
+                                </div> 
                                 <div class="row">
                                     <div class="col-md-12"> 
-                                        <div class="form-group floating-label">
-                                            <input type="text" class="form-control dirty" id="Direccion_${idTabVenta}">
-                                            <label>Direccion</label>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Direccion" id="Direccion_${idTabVenta}"> 
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,6 +181,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                         <div class="form-group">
                                             <label>Codigo/Nombres Producto</label>
                                             <input type="text" class="form-control" id="txtBusqueda_${idTabVenta}" onblur=${()=>BuscarProductoCP(event,'blur',idTabVenta)} onkeypress=${()=>BuscarProductoCP(event,'key',idTabVenta)}>
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -266,7 +272,7 @@ function VerNuevaVenta(variables,CodLibro) {
     CambioMonedaFormaPagoVisa(idTabVenta)
     
 
-    $("#Nro_Documento_"+idTabVenta).tagsinput({
+    /*$("#Nro_Documento_"+idTabVenta).tagsinput({
         maxTags: 1
     });
 
@@ -301,7 +307,7 @@ function VerNuevaVenta(variables,CodLibro) {
             BuscarClienteDoc(CodLibro,idTabVenta) 
         }  
         KeyPressClienteDoc(idTabVenta)
-    });
+    });*/
 
     $('#Cliente_'+idTabVenta).on('itemAdded', function(event) { 
         console.log("add item cliente")
@@ -419,14 +425,40 @@ function VerNuevaVenta(variables,CodLibro) {
 
         if(global.objClienteVenta!=''){ 
             console.log(global.objClienteVenta)
-            $("#Nro_Documento_"+IdTabSeleccionado).tagsinput('removeAll') 
-            $("#Cliente_"+IdTabSeleccionado).tagsinput('removeAll') 
-            $("#Direccion_"+IdTabSeleccionado).tagsinput('removeAll') 
+            //$("#Nro_Documento_"+IdTabSeleccionado).tagsinput('removeAll') 
+            //$("#Cliente_"+IdTabSeleccionado).tagsinput('removeAll') 
+            //$("#Direccion_"+IdTabSeleccionado).tagsinput('removeAll') 
 
-            $("#Nro_Documento_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Nro_Documento)
-            $("#Cliente_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Cliente)
-            $("#Direccion_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Direccion)
+            //$("#Nro_Documento_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Nro_Documento)
+            //$("#Cliente_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Cliente)
+            //$("#Direccion_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Direccion)
+            $("#Cod_TipoDoc_"+IdTabSeleccionado).val(global.objCliente.Cod_TipoDocumento)
+            $("#Nro_Documento_"+IdTabSeleccionado).val(global.objCliente.Nro_Documento)
+            $("#Cliente_"+IdTabSeleccionado).val(global.objCliente.Cliente)
+            $("#Direccion_"+IdTabSeleccionado).val(global.objCliente.Direccion)
             $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+            $("#Nro_Documento_"+IdTabSeleccionado).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente_"+IdTabSeleccionado).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Direccion_"+IdTabSeleccionado).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Nro_Documento_"+IdTabSeleccionado).attr("disabled",true);
+            $("#Cliente_"+IdTabSeleccionado).attr("disabled",true);
+            $("#Direccion_"+IdTabSeleccionado).attr("disabled",true);
+            $("#Cod_TipoDoc_"+IdTabSeleccionado).attr("disabled",true);
+            
+
             changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[null,null,null,null,null,null,global.objClienteVenta,null])
         }
 
@@ -485,6 +517,7 @@ function CrearDivVuelto(idTab){
                                             <div class="form-group">
                                                 <label><h4 id="lbVuelto_${idTab}" style="font-weight: bold;">Vuelto</h4></label>
                                                 <input type="number" style="color: #dd4b39;font-weight: bold;font-size: 25px;" id="Vuelto_${idTab}" value="0.00" class="form-control" onblur=${()=>CalcularVueltoEspecial(idTab)}>
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div> 
                                     </div>
@@ -494,6 +527,7 @@ function CrearDivVuelto(idTab){
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbUSD_${idTab}">USD:</label>
                                                     <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="USD_${idTab}" class="form-control" onkeypress=${()=>BloquearControles(event)} >
+                                                    <div class="form-control-line"></div>
                                                 </div> 
                                             </div>
                                             <div class="col-md-4" id="divTC_${idTab}"> 
@@ -503,6 +537,7 @@ function CrearDivVuelto(idTab){
                                                 <div class="form-group">
                                                     <label style="font-weight: bold;" id="lbPEN_${idTab}">PEN:</label>
                                                     <input type="text" style="color: #dd4b39;font-weight: bold;font-size: 25px;" value="0.00" id="PEN_${idTab}" class="form-control"  onkeypress=${()=>BloquearControles(event)} >
+                                                    <div class="form-control-line"></div>
                                                 </div> 
                                             </div>
                                         </div>
@@ -516,16 +551,18 @@ function CrearDivVuelto(idTab){
                                     <div class="form-group">
                                         <label id="lbTotalCobrar_${idTab}" style="font-weight: bold;">Total a Cobrar</label>
                                         <input type="number" id="TotalCobrar_${idTab}" style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control">
+                                        <div class="form-control-line"></div>
                                     </div> 
                                     <div class="form-group">
                                         <label id="lbTotalRecibidos_${idTab}" style="font-weight: bold;">Total Recibidos</label>
                                         <input type="number" id="TotalRecibidos_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control" onblur=${()=>CalcularVuelto(idTab)} onkeypress=${()=>KeyCalcularVuelto(event,idTab)}>
+                                        <div class="form-control-line"></div>
                                     </div>
-                                    <div style="height: 1px;background: #00a65a;"></div> 
                                     <p></p>
                                     <div class="form-group">
                                         <label id="lbVueltoCalculado_${idTab}" style="font-weight: bold;">Vuelto calculado</label>
                                         <input type="text" id="VueltoCalculado_${idTab}"  style="color: #1a2226;font-weight: bold;font-size: 25px;" value="0.00" class="form-control"  onkeypress=${()=>BloquearControles(event)} >
+                                        <div class="form-control-line"></div>
                                     </div>
                                     <div class="form-group">
                                         <button type="button" class="btn btn-success btn-xs" onclick=${()=>CalcularVuelto(idTab)}>Calcular</button>
@@ -853,7 +890,7 @@ function CalcularVuelto(idTab){
 
 }
 function KeyPressClienteDoc(idTab){ 
-    switch($('#Nro_Documento_'+idTab).val().trim().length){
+    switch(($('#Nro_Documento_'+idTab).val().trim().length)+1){
         case 8:
             $("#Cod_TipoDoc_"+idTab).val("1")
             break;
@@ -867,6 +904,18 @@ function KeyCalcularVuelto(event,idTab){
     if(event.which==13){
         CalcularVuelto(idTab)
     }
+}
+
+function CambioNroDocumento(e,idTab){ 
+    if(e.which == 46 || e.which == 8){ 
+        if(flag_cliente){
+            $("#Nro_Documento_"+idTab).val("");
+            $("#Cliente_"+idTab).val("");
+            $("#Cliente_"+idTab).attr("data-id",null);
+            $("#Direccion_"+idTab).val("");
+            flag_cliente=false
+        }
+    }   
 }
 
 function CalcularVueltoEspecial(idTab){
@@ -923,6 +972,7 @@ function CalcularTotal(idTab){
 }
 
 function LimpiarVenta(){
+
     $("#tablaBodyProductosVentas_"+IdTabSeleccionado).html('')
     $("#txtBusqueda_"+IdTabSeleccionado).val('')
     $("#txtBusqueda_"+IdTabSeleccionado).focus()
@@ -938,6 +988,7 @@ function LimpiarVenta(){
         $("#btnTotal_"+IdTabSeleccionado).click()
     }
 
+    EditarCliente(IdTabSeleccionado)
      
     CalcularTotal(IdTabSeleccionado)
     CalcularTotalDescuentos(IdTabSeleccionado)
@@ -970,6 +1021,23 @@ function FocusInOutCantidadVenta(idFila,idTab){
         //_CantidadOriginal = parseFloat($('#'+idFila).find('td.Cantidad').find('input').val())
         changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()),null,null,null,null])
     }
+}
+
+function EditarCliente(idTab){ 
+    if(!arrayValidacion.includes($("#Cliente_"+idTab).attr("data-id")))
+        flag_cliente = true
+    else
+        flag_cliente=false
+    
+
+    $("#Nro_Documento_"+idTab).unbind("keypress");
+    $("#Cliente_"+idTab).unbind("keypress");
+    $("#Direccion_"+idTab).unbind("keypress");
+
+    $("#Nro_Documento_"+idTab).attr("disabled",false);
+    $("#Cliente_"+idTab).attr("disabled",false);
+    $("#Direccion_"+idTab).attr("disabled",false);
+    $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
 }
 
 function CambioMonedaFormaPagoMasterCard(idTab){
@@ -1491,17 +1559,50 @@ function BuscarClienteDoc(CodLibro,idTab) {
                     if(global.objClienteVenta !='' && global.objClienteVenta){
                         $("#Cod_TipoDoc_"+idTab).val(global.objClienteVenta.Cod_TipoDocumento)
 
-                        $("#Cliente_"+idTab).tagsinput('add',global.objClienteVenta.Cliente)
-                        $("#Nro_Documento_"+idTab).tagsinput('add',global.objClienteVenta.Nro_Documento)
-                        $("#Direccion_"+idTab).tagsinput('add',global.objClienteVenta.Direccion)
-                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)
+                        //$("#Cliente_"+idTab).tagsinput('add',global.objClienteVenta.Cliente)
+                        //$("#Nro_Documento_"+idTab).tagsinput('add',global.objClienteVenta.Nro_Documento)
+                        //$("#Direccion_"+idTab).tagsinput('add',global.objClienteVenta.Direccion)
+                        //$("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)
 
-                        /*$("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
+                        $("#Cliente_"+idTab).val(global.objClienteVenta.Cliente)
                         $("#Direccion_"+idTab).val(global.objClienteVenta.Direccion)
                         $("#Nro_Documento_"+idTab).val(global.objClienteVenta.Nro_Documento)
-                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor) */                  
+                        $("#Cliente_"+idTab).attr("data-id",global.objClienteVenta.Id_ClienteProveedor) 
+                        
+                        $("#Nro_Documento_"+idTab).bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Cliente_"+idTab).bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Direccion_"+idTab).bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Nro_Documento_"+idTab).attr("disabled",true);
+                        $("#Cliente_"+idTab).attr("disabled",true);
+                        $("#Direccion_"+idTab).attr("disabled",true);
+                        $("#Cod_TipoDoc_"+idTab).attr("disabled",true);
+                        
+
                     } 
                 }else{ 
+
+                    
+                    $("#Nro_Documento_"+idTab).unbind("keypress");
+                    $("#Cliente_"+idTab).unbind("keypress");
+                    $("#Direccion_"+idTab).unbind("keypress");
+                    
+                    $("#Nro_Documento_"+idTab).attr("disabled",false);
+                    $("#Cliente_"+idTab).attr("disabled",false);
+                    $("#Direccion_"+idTab).attr("disabled",false);
+                    $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
+
                     global.objClienteVenta = ''
                     let cl = {
                         Id_ClienteProveedor:null,
@@ -1522,8 +1623,22 @@ function BuscarClienteDoc(CodLibro,idTab) {
                 $('#div-cliente').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+                $("#Nro_Documento_"+idTab).unbind("keypress");
+                $("#Cliente_"+idTab).unbind("keypress");
+                $("#Direccion_"+idTab).unbind("keypress");
+                
+                $("#Nro_Documento_"+idTab).attr("disabled",false);
+                $("#Cliente_"+idTab).attr("disabled",false);
+                $("#Direccion_"+idTab).attr("disabled",false);
+                $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
                 global.objClienteVenta = ''
-                let cl = {}
+                let cl = {
+                    Id_ClienteProveedor:null,
+                    Nro_Documento :Nro_Documento,
+                    Cliente : $('#Cliente_'+idTab).val(),
+                    Direccion: $('#Direccion_'+idTab).val(),
+                    Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTab).val(),
+                }
                 changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,null,null,null,cl,null]) 
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#div-cliente').waitMe('hide');
@@ -1531,8 +1646,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
     }
 }
 
-function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
-    console.log(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente)
+function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){ 
     run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

@@ -5,9 +5,11 @@ import {BloquearControles} from '../../../../utility/tools'
 import { BuscarCuentasPendientes } from '../../modales/cuentas' 
 
 var arrayValidacion = [null,'null','',undefined]
+var flag_cliente = false 
 
 function VerCuentas(variables,fecha_actual,CodLibro) {
-    global.objCliente = '' 
+    global.objCliente = ''
+    flag_cliente = false 
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -44,8 +46,13 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                         </div>
                                     </div>
                                     <div class="col-md-8" id="divNroDocumento">
-                                        <div class="input-fromr">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" placeholder="Nro Documento">
+                                        <div class="input-group">
+                                            <input type="text" id="Nro_Documento"  onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" placeholder="Nro Documento">
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                
@@ -53,7 +60,6 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-12" id="divCliente">
                                         <div class="form-group">
-                                            
                                             <input type="text" id="Cliente" class="form-control input-sm required" data-id=null placeholder="Nombre cliente">
                                             <div class="form-control-line"></div>
                                         </div>
@@ -366,7 +372,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal()  
 
-    $("#Nro_Documento").tagsinput({
+    /*$("#Nro_Documento").tagsinput({
         maxTags: 1
     });
 
@@ -399,21 +405,46 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             BuscarClienteDoc(CodLibro)
         }  
         KeyPressClienteDoc()
-     });
+     });*/
 
     CambioFormasPago(CodLibro)
     if(global.objCliente =='')
         BuscarCuentasPendientes(CodLibro,0,'1753-01-01 00:00:00','9999-12-31 23:59:59.997')
     else{
-        $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-        $("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
+        $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+        
+        /*$("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
         $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
-        $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)
-        //$("#Cliente").val(global.objCliente.Nom_Cliente)
-        //$("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-        //$("#Direccion").val(global.objCliente.Direccion_Cliente)
+        $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)*/
+
+
+
+        $("#Cliente").val(global.objCliente.Nom_Cliente)
+        $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+        $("#Direccion").val(global.objCliente.Direccion_Cliente)
         $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
         $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
+
+        $("#Nro_Documento").bind("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+        
+        $("#Cliente").bind("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+        
+        $("#Direccion").bind("keypress", function(event){
+            event.preventDefault();
+            event.stopPropagation();
+        });
+        
+        $("#Nro_Documento").attr("disabled",true);
+        $("#Cliente").attr("disabled",true);
+        $("#Direccion").attr("disabled",true);
+        $("#Cod_TipoDoc").attr("disabled",true);
+
         CargarLicitacionesCliente(global.objCliente.Id_Cliente)
         BuscarPorFecha(CodLibro)
     }
@@ -421,17 +452,38 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     
     $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
         if(global.objCliente!=''){ 
-            $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-            //$("#Cliente").val(global.objCliente.Nom_Cliente)
-            //$("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-            //$("#Direccion").val(global.objCliente.Direccion_Cliente)
-            $("#Cliente").tagsinput('removeAll')
+            $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente").val(global.objCliente.Nom_Cliente)
+            $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
+            $("#Direccion").val(global.objCliente.Direccion_Cliente)
+
+            $("#Nro_Documento").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Direccion").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Nro_Documento").attr("disabled",true);
+            $("#Cliente").attr("disabled",true);
+            $("#Direccion").attr("disabled",true);
+            $("#Cod_TipoDoc").attr("disabled",true);
+
+            /*$("#Cliente").tagsinput('removeAll')
             $("#Nro_Documento").tagsinput('removeAll')
             $("#Direccion").tagsinput('removeAll')
 
             $("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
             $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
-            $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)
+            $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)*/
 
             $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
             $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
@@ -541,12 +593,13 @@ function LlenarCheques(cheques){
 }
 
 function KeyPressClienteDoc(){ 
-    switch($('#Nro_Documento').val().trim().length){
+    console.log("keypress",$('#Nro_Documento').val().trim().length)
+    switch(($('#Nro_Documento').val().trim().length)+1){
         case 8:
-            $("#Cod_TipoDocumento").val("1")
+            $("#Cod_TipoDoc").val("1")
             break;
         case 11:
-            $("#Cod_TipoDocumento").val("6")
+            $("#Cod_TipoDoc").val("6")
             break;
     }
    
@@ -616,8 +669,36 @@ function CalcularTotal(){
     }catch(e){
 
     }
+}
+
+function CambioNroDocumento(e){ 
+    if(e.which == 46 || e.which == 8){ 
+        if(flag_cliente){
+            $("#Nro_Documento").val("");
+            $("#Cliente").val("");
+            $("#Cliente").attr("data-id",null);
+            $("#Direccion").val("");
+            flag_cliente=false
+        }
+    }   
+}
 
 
+function EditarCliente(){ 
+    if(!arrayValidacion.includes($("#Cliente").attr("data-id")))
+        flag_cliente = true
+    else
+        flag_cliente=false
+    
+
+    $("#Nro_Documento").unbind("keypress");
+    $("#Cliente").unbind("keypress");
+    $("#Direccion").unbind("keypress");
+
+    $("#Nro_Documento").attr("disabled",false);
+    $("#Cliente").attr("disabled",false);
+    $("#Direccion").attr("disabled",false);
+    $("#Cod_TipoDoc").attr("disabled",false);
 }
 
 function BuscarPorFecha(CodLibro){
@@ -960,21 +1041,71 @@ function BuscarClienteDoc(CodLibro) {
                     global.objCliente = res.data.cliente[0]
                     
                     if(global.objCliente !='' && global.objCliente){
-                        $("#Cod_TipoDocumento").val(global.objCliente.Cod_TipoDocumento)
-                        //$("#Cliente").val(global.objCliente.Cliente)
-                        //$("#Direccion").val(global.objCliente.Direccion)
-                        //$("#Nro_Documento").val(global.objCliente.Nro_Documento)
-                        $("#Cliente").tagsinput('add',global.objCliente.Cliente)
+                        $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+                        $("#Cliente").val(global.objCliente.Cliente)
+                        $("#Direccion").val(global.objCliente.Direccion)
+                        $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+
+                        $("#Nro_Documento").bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Cliente").bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Direccion").bind("keypress", function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+                        });
+                        
+                        $("#Nro_Documento").attr("disabled",true);
+                        $("#Cliente").attr("disabled",true);
+                        $("#Direccion").attr("disabled",true);
+                        $("#Cod_TipoDoc").attr("disabled",true);
+
+                        /*$("#Cliente").tagsinput('add',global.objCliente.Cliente)
                         $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
-                        $("#Direccion").tagsinput('add',global.objCliente.Direccion)
+                        $("#Direccion").tagsinput('add',global.objCliente.Direccion)*/
 
                         $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
                         CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
                     }
+                }else{
+
+                    $("#Cliente").val("") 
+                    $("#Direccion").val("") 
+                    $("#Cliente").attr("data-id",null)
+        
+                    $("#Nro_Documento").unbind("keypress");
+                    $("#Cliente").unbind("keypress");
+                    $("#Direccion").unbind("keypress");
+        
+                    $("#Nro_Documento").attr("disabled",false);
+                    $("#Cliente").attr("disabled",false);
+                    $("#Direccion").attr("disabled",false);
+                    $("#Cod_TipoDoc").attr("disabled",false);
+
                 }
                 $('#div-cliente-cuentas').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+
+                $("#Cliente").val("") 
+                $("#Direccion").val("") 
+                $("#Cliente").attr("data-id",null)
+    
+                $("#Nro_Documento").unbind("keypress");
+                $("#Cliente").unbind("keypress");
+                $("#Direccion").unbind("keypress");
+    
+                $("#Nro_Documento").attr("disabled",false);
+                $("#Cliente").attr("disabled",false);
+                $("#Direccion").attr("disabled",false);
+                $("#Cod_TipoDoc").attr("disabled",false);
+
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#div-cliente-cuentas').waitMe('hide');
             });
