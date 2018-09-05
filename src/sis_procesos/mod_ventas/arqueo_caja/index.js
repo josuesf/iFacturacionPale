@@ -599,6 +599,7 @@ function AceptarConfirmacion(){
 }
 
 function NuevoArqueoCaja(pCargarEfectivo) {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     aCargarEfectivo = true
     const fecha = new Date()

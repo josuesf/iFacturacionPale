@@ -759,6 +759,7 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante){
 }
 
 function EntradasSalidas(Cod_TipoComprobante) {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

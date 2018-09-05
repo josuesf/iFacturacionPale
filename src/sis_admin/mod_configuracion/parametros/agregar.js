@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 
-import {ListarPerfiles} from './listar';
+import {ListarParametros} from './listar';
 import {URL} from '../../../constantes_entorno/constantes'
 
 
@@ -19,37 +19,34 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
                     <a href="#">
                         <i class="fa fa-cog"></i> Configuracion</a>
                 </li>
-                <li><a  onclick=${()=>ListarPerfiles(_escritura)} href="#">
+                <li><a  onclick=${()=>ListarParametros(_escritura)} href="#">
                 Perfiles</a></li>
                 <li class="active">${perfil?'Editar':'Nuevo'}</li>
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${()=>ListarPerfiles(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
-                    
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${()=>ListarParametros(_escritura)}
+                        class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i></a>
+                        ${perfil?'Editar':'Nuevo'} Perfil
+                    </header>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${perfil?'Editar':'Nuevo'} Perfil</h3>
-                        </div>
-                        <!-- /.box-header -->
+                
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 
                             </div>
                             <!-- /.box-body -->
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, sucursal)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

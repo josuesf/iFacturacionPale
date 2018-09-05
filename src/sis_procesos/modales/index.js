@@ -24,7 +24,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group" id="divCodCategoriaProducto">
                                 <label for="Cod_Categoria" id="lbCod_Categoria">Categoria</label>
                                 <select id="Cod_Categoria" class="form-control input-sm" onchange=${()=>Buscar()}>
                                    
@@ -32,7 +32,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
                             </div>
                         </div>
                         <div  class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group" id="divCodPrecioProducto">
                                 <label for="Cod_Precio">Tipo Precio</label>
                                 <select id="Cod_Precio"  class="form-control input-sm" onchange=${()=>Buscar()}>
                                 
@@ -76,6 +76,7 @@ function BuscarProducto(_RequiereStock,text_busqueda) {
     empty(modal_proceso).appendChild(el);
 
     $('#modal-superior').modal()
+
     CargarTipoPrecio()
     CargarCategoria()
     Buscar()
@@ -419,8 +420,8 @@ function GuardarNuevoCliente(){
 }
 
 
-function CargarCategoria(){
-    run_waitMe($('#Cod_Categoria'), 1, "ios",""); 
+function CargarCategoria(){ 
+    run_waitMe($('#divCodCategoriaProducto'), 1, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {
@@ -438,16 +439,16 @@ function CargarCategoria(){
         else
             LlenarCategorias([])
         
-        $('#Cod_Precio').waitMe('hide');
+        $('#divCodCategoriaProducto').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
-        $('#Cod_Precio').waitMe('hide');
+        $('#divCodCategoriaProducto').waitMe('hide');
         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }
 
 function CargarTipoPrecio(){
-    run_waitMe($('#Cod_Precio'), 1, "ios",""); 
+    run_waitMe($('#divCodPrecioProducto'), 1, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {
@@ -465,10 +466,10 @@ function CargarTipoPrecio(){
         else
             LlenarPrecios([])
         
-        $('#Cod_Precio').waitMe('hide');
+        $('#divCodPrecioProducto').waitMe('hide');
     }).catch(function (e) {
         console.log(e);
-        $('#Cod_Precio').waitMe('hide');
+        $('#divCodPrecioProducto').waitMe('hide');
         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
     });
 }

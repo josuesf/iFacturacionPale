@@ -504,6 +504,7 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
 
 
 function NuevoEnvioEfectivo(_escritura, caja) {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     var Cod_Sucursal = '0001'

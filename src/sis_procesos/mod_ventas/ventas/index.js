@@ -4,6 +4,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
 import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas,LimpiarVariablesGlobales } from '../../../../utility/tools'
 import { ComprobantePago } from '../../mod_compras/comprobante_pago'
+import { preparar_impresion_comprobante } from '../../movimientos_caja'
 
 
 var cantidad_tabs = 1
@@ -103,7 +104,7 @@ function VerNuevaVenta(variables,CodLibro) {
                         </div>
                         <div class="card-actionbar">
 
-                            <div class="card-actionbar-row" style="text-align: left;">
+                            <div class="row" style="text-align: left;">
                                 <div class="col-sm-6">
                                     
                                     <div class="row">
@@ -308,38 +309,11 @@ function VerNuevaVenta(variables,CodLibro) {
         }  
         KeyPressClienteDoc(idTabVenta)
     });*/
-
-    $('#Cliente_'+idTabVenta).on('itemAdded', function(event) { 
-        console.log("add item cliente")
-        //global.objClienteVenta.Cliente = $('#Cliente_'+idTabVenta).val()
-        let cl={
-            Id_ClienteProveedor:null,
-            Nro_Documento:$('#Nro_Documento_'+idTabVenta).val(),
-            Cliente : $('#Cliente_'+idTabVenta).val(),
-            Direccion: $('#Direccion_'+idTabVenta).val(),
-            Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTabVenta).val()
-        }
-        
-        changeArrayJsonVentas(global.variablesVentas,idTabVenta,[null,null,null,null,null,null,cl,null])
-    });
-
-    $('#Direccion_'+idTabVenta).on('itemAdded', function(event) { 
-        console.log("add item direccion")
-        //global.objClienteVenta.Direccion = $('#Direccion_'+idTabVenta).val()
-        let cl={
-            Id_ClienteProveedor:null,
-            Nro_Documento:$('#Nro_Documento_'+idTabVenta).val(),
-            Cliente : $('#Cliente_'+idTabVenta).val(),
-            Direccion: $('#Direccion_'+idTabVenta).val(),
-            Cod_TipoDocumento:  $('#Cod_TipoDoc_'+idTabVenta).val(),
-        }
-        changeArrayJsonVentas(global.variablesVentas,idTabVenta,[null,null,null,null,null,null,cl,null])
-    });
-
+ 
     
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
-        
+        console.log("producto seleccionado", global.objProductoVentas)
         if(global.objProductoVentas!=''){ 
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
@@ -913,6 +887,7 @@ function CambioNroDocumento(e,idTab){
             $("#Cliente_"+idTab).val("");
             $("#Cliente_"+idTab).attr("data-id",null);
             $("#Direccion_"+idTab).val("");
+            changeArrayJsonVentas(global.variablesVentas,IdTabSeleccionado,[null,null,null,null,null,null,'',null])
             flag_cliente=false
         }
     }   
@@ -971,27 +946,27 @@ function CalcularTotal(idTab){
     }
 }
 
-function LimpiarVenta(){
+function LimpiarVenta(idTab){
 
-    $("#tablaBodyProductosVentas_"+IdTabSeleccionado).html('')
-    $("#txtBusqueda_"+IdTabSeleccionado).val('')
-    $("#txtBusqueda_"+IdTabSeleccionado).focus()
-    $("#btnConversion_"+IdTabSeleccionado).css("display","none")
-    $("#Direccion_"+IdTabSeleccionado).val('')
-    $("#Nro_Documento_"+IdTabSeleccionado).val('')
-    $("#Cliente_"+IdTabSeleccionado).val('')
-    $("#Cliente_"+IdTabSeleccionado).attr("data-id",null)
+    $("#tablaBodyProductosVentas_"+idTab).html('')
+    $("#txtBusqueda_"+idTab).val('')
+    $("#txtBusqueda_"+idTab).focus()
+    $("#btnConversion_"+idTab).css("display","none")
+    $("#Direccion_"+idTab).val('')
+    $("#Nro_Documento_"+idTab).val('')
+    $("#Cliente_"+idTab).val('')
+    $("#Cliente_"+idTab).attr("data-id",null)
 
-    deleteElementArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)
-    global.variablesVentas.push({idTab:IdTabSeleccionado,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
-    if($("#btnTotal_"+IdTabSeleccionado).hasClass('active')){
-        $("#btnTotal_"+IdTabSeleccionado).click()
+    deleteElementArrayJsonVentas(global.variablesVentas,idTab)
+    global.variablesVentas.push({idTab:idTab,Total:0,TotalDescuentos:0,TipodeCambio:1,_CantidadOriginal:null,SimboloMoneda:'',SimboloMonedaExtra:'',Cod_FormaPago:null,Cliente:null,Detalles:[]})
+    if($("#btnTotal_"+idTab).hasClass('active')){
+        $("#btnTotal_"+idTab).click()
     }
 
-    EditarCliente(IdTabSeleccionado)
+    EditarCliente(idTab)
      
-    CalcularTotal(IdTabSeleccionado)
-    CalcularTotalDescuentos(IdTabSeleccionado)
+    CalcularTotal(idTab)
+    CalcularTotalDescuentos(idTab)
 }
 
 function TabVentaSeleccionado(idTab){
@@ -1646,7 +1621,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
     }
 }
 
-function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){ 
+function EmisionRapida(idTab,pCod_Moneda){ 
     run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1661,11 +1636,11 @@ function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
         },
         credentials: 'same-origin',
         body: JSON.stringify({
-            Cliente:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,
+            Cliente:getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Cliente,
             FormaPago: ObtenerFormaPago(idTab),
-            Detalles: getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,
-            Cod_Moneda: 'PEN',
-            Total:getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total,
+            Detalles: getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Detalles,
+            Cod_Moneda: pCod_Moneda,
+            Total:getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total,
             Obs_Comprobante:null,
             Fecha_Emision:fecha_format
 
@@ -1678,6 +1653,11 @@ function EmisionRapida(idTab,pDetalles,pCod_Moneda,pCliente,pCod_Comprobante){
             if(res.respuesta == 'ok'){
                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                 LimpiarVenta(idTab)
+                preparar_impresion_comprobante(res.data,function(flag){
+                    if(!flag){
+                        toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+                    }
+                })
             }else{
                 toastr.error(res.detalle_error,'Error',{timeOut: 5000}) 
             }
@@ -1702,7 +1682,7 @@ function ObtenerFormaPago(idTab){
                 Cod_FormaPago : '005',
                 Cod_Moneda : 'PEN',
                 TipoCambio : 1,
-                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
             })
             return listaFormaPago
@@ -1715,7 +1695,7 @@ function ObtenerFormaPago(idTab){
                 Cod_FormaPago : '006',
                 Cod_Moneda : 'PEN',
                 TipoCambio : 1,
-                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+                Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
             })
             return listaFormaPago
@@ -1730,7 +1710,7 @@ function ObtenerFormaPago(idTab){
             Cod_FormaPago : '008',
             Cod_Moneda : 'PEN',
             TipoCambio : 1,
-            Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Total)/1,
+            Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
             CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
         })
         return listaFormaPago
@@ -1742,7 +1722,7 @@ function VentaSimpleSinME(idTab,_CodTipoComprobante){
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)
+    EmisionRapida(idTab,'PEN',_CodTipoComprobante)
 }
 
 function VentaSimpleConME(idTab,_CodTipoComprobante){
@@ -1750,7 +1730,7 @@ function VentaSimpleConME(idTab,_CodTipoComprobante){
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Detalles,'PEN',getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente,_CodTipoComprobante)
+    EmisionRapida(idTab,'PEN',_CodTipoComprobante)
 }
 
 

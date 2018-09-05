@@ -111,7 +111,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 </div>
 
                             </div>
-                            <div class="card-actions">
+                            <div class="card-actionbar">
                                 
                             </div>
                         </div>
@@ -514,6 +514,32 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     var ingreso = document.getElementById('modal-proceso')
     empty(ingreso).appendChild(el)
     $('#modal-proceso').modal('show') 
+
+    if(Cliente){
+        if(Cliente.Cliente!=undefined){
+            $("#Nro_Documento").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Direccion").bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Nro_Documento").attr("disabled",true);
+            $("#Cliente").attr("disabled",true);
+            $("#Direccion").attr("disabled",true);
+            $("#Cod_TipoDoc").attr("disabled",true);
+        }
+    }
+    
+
     if(CodLibro=='08'){ 
  
         $("#Serie").combobox()
@@ -529,8 +555,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     $("#Cuenta_CajaBancos").combobox()
      
 
-    $("#modal-proceso").off('shown.bs.modal').on("shown.bs.modal", function () {
-        //console.log("cargando")
+    $("#modal-proceso").off('shown.bs.modal').on("shown.bs.modal", function () { 
+        //console.log("cargando proceso de comprobante de pago")
         CargarConfiguracionDefault(CodLibro,variables) 
     });
      
@@ -4327,6 +4353,7 @@ async function AsyncCalcularTotal(CodLibro,variables) {
  
 
 function ComprobantePago(Cod_Libro,Cliente,Detalles) {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios","Cargando ventana para el comprobante...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

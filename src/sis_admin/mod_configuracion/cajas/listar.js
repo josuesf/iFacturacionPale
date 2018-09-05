@@ -30,8 +30,8 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
               <p>Al eliminar el usuario se perderan todos los datos.</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Eliminar</button>
+              <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Eliminar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -51,14 +51,17 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Lista de Cajas</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevaCaja(_escritura, _sucursales, [], [])} class="btn btn-info pull-right">
-                    <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
+            <div class="card">
+                <div class="card-head">
+                    <header>Lista de Cajas</header>
+                    <div class="tools">
+                        <div class="btn-group">
+                            ${_escritura ? yo`<a onclick=${()=>NuevaCaja(_escritura, _sucursales, [], [])} class="btn btn-info pull-right">
+                            <i class="fa fa-plus"></i> Nueva Caja</a>`: yo``}
+                        </div>
+                    </div>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+                <div class="card-body">
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -88,19 +91,21 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
                         </tbody>
                     </table>
                     </div>
-                    <div class="box-footer clearfix">
-                        <ul class="pagination pagination-sm no-margin pull-right">
-                            <li>
-                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarCajas(_escritura,pagina_actual-1):null}>«</a>
-                            </li>
-                            ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="#" onclick=${()=>ListarCajas(_escritura,i)}>${i + 1}</a>
-                            </li>`)}
-                        
-                            <li>
-                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarCajas(_escritura,pagina_actual+1):null}>»</a>
-                            </li>
-                        </ul>
+                    <div class="card-actionbar">
+                        <div class="card-actionbar-row">
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <li>
+                                    <a href="#" onclick=${()=>(pagina_actual>0)?ListarCajas(_escritura,pagina_actual-1):null}>«</a>
+                                </li>
+                                ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
+                                <a href="#" onclick=${()=>ListarCajas(_escritura,i)}>${i + 1}</a>
+                                </li>`)}
+                            
+                                <li>
+                                    <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarCajas(_escritura,pagina_actual+1):null}>»</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

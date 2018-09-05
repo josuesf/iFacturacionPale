@@ -21,8 +21,8 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                         <p>Al eliminar el documento se perderan todos los datos.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-outline" id="btnEliminar-documento" data-dismiss="modal">Si, eliminar</button>
+                        <button type="button" class="btn btn-danger ink-reaction pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success ink-reaction" id="btnEliminar-documento" data-dismiss="modal">Si, eliminar</button>
                     </div>
                 </div>
             </div>
@@ -40,8 +40,8 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                         <p>Al eliminar el producto dejara de estar en la lista de favoritos.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-outline" id="btnEliminar-favorito" data-dismiss="modal">Si, eliminar</button>
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="btnEliminar-favorito" data-dismiss="modal">Si, eliminar</button>
                     </div>
                 </div>
             </div>
@@ -56,21 +56,20 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                         <h4 class="modal-title">Usuario o vendedor responsable</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                            <h3 class="box-title">Busqueda de usuario</h3>
+                        <div class="panel">
+                            <div class="panel-heading">
+                            <header>Busqueda de usuario</header>
                             </div>
-                            <!-- /.box-header -->
-                            <!-- form start -->
                             <form role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                 
                                     <label for="Cod_UsuarioCajero">Ingrese codigo o nombre de usuario</label>
                                     <div class="input-group">
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-primary" onclick="${()=> BusquedaDeUsuario()}">Buscar</button>
+                                            <button type="button" class="btn btn-primary ink-reaction" onclick="${()=> BusquedaDeUsuario()}">Buscar</button>
                                         </div>
                                         <input type="text" class="form-control" id="txtBuscarUsuario" onkeydown="${()=> BusquedaDeUsuario()}">
+                                        
                                     </div>
                                     <br>
                                     <div class="table-responsive" id="contenedorTablaUsuarios">
@@ -110,23 +109,16 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarCajas(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${caja ? 'Editar' : 'Nueva'} Caja</h3>
-                        </div>
+            <div class="card">
+                <div class="card-head">
+                    <header><a onclick=${() => ListarCajas(_escritura)} class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i> </a>${caja ? 'Editar' : 'Nueva'} Caja</header> 
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <div role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -137,15 +129,16 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                     <div class="form-group">
                                         <label for="Cod_Caja">Codigo Caja</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Caja" placeholder="Ingrese codigo caja">
+                                        <div class="form-control-line"></div>
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Flag_Activo"></label>
                                             
-                                            <div class="checkbox">
+                                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Activo" class="required" checked="${caja ? caja.Flag_Activo : 0}"> Es Activo?
+                                                    <input type="checkbox" id="Flag_Activo" class="required" checked="${caja ? caja.Flag_Activo : 0}"><span> Es Activo?</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -156,6 +149,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         <div class="form-group">
                                             <label for="Des_Caja">Nombre de la Caja</label>
                                             <input type="text"  style="text-transform:uppercase" class="form-control required" id="Des_Caja" placeholder="Ingrese Nombre de caja" value="${caja ? caja.Des_Caja : ''}">
+                                            <div class="form-control-line"></div>    
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -172,7 +166,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                         <label for="Cod_UsuarioCajero">Usuario o vendedor responsable</label>
                                         <div class="input-group">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info" onclick=${()=>{$("#modal-buscar-responsable").modal()}}>Buscar responsable</button>
+                                                <button type="button" class="btn btn-info ink-reaction" onclick=${()=>{$("#modal-buscar-responsable").modal()}}>Buscar responsable</button>
                                             </div>
                                             <input type="text" class="form-control required" id="Cod_Usuario" value="${caja? caja.Cod_UsuarioCajero:''}" disabled>
                                         </div>
@@ -189,7 +183,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <button onclick="${() => GuardarCaja(_escritura,caja)}" class="btn btn-primary">Guardar</button>
+                                        <button onclick="${() => GuardarCaja(_escritura,caja)}" class="btn btn-primary ink-reaction">Guardar</button>
                                     </div>
                                 </div>
                                 <p></p>
@@ -209,9 +203,13 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                     </ul>
                                                     <div class="tab-content">
                                                         <div class="tab-pane active" id="tab_1">
-                                                            <div class="box-header">
-                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
-                                                                <i class="fa fa-plus"></i> Agregar</a>
+                                                            <div class="card-head">
+                                                                <div class="tools">
+                                                                    <div class="btn-group">
+                                                                        <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-editar-documento" onclick="${()=>AgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
+                                                                        <i class="fa fa-plus"></i> Agregar</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-striped">
@@ -251,9 +249,13 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_2">
-                                                            <div class="box-header">
-                                                                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-favorito" onclick="${()=>AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
-                                                                <i class="fa fa-plus"></i> Agregar</a>
+                                                            <div class="card-head">
+                                                                <div class="tools">
+                                                                    <div class="btn-group">
+                                                                        <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-favorito" onclick="${()=>AgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables,caja)}">
+                                                                        <i class="fa fa-plus"></i> Agregar</a>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                             <div class="table-responsive" id="contenedorTablaFavoritos">
                                                                 <table class="table table-bordered table-striped">
@@ -325,14 +327,13 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                         <h4 class="modal-title">Documentos de una caja</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                            <h3 class="box-title">ADMINISTRACION</h3>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <header>ADMINISTRACION</header>
                             </div>
-                            <!-- /.box-header -->
                             <!-- form start -->
                             <form role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-6">
                                         <div class="form-group">
@@ -346,15 +347,18 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                                             <div class="form-group">
                                                 <label for="Serie">Serie</label>
                                                 <input type="text" class="form-control" id="Serie" placeholder="Serie" value="${documento?documento.Serie:''}">
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6"> 
-                                            <div class="checkbox form-group">
-                                                <label>
-                                                <input type="checkbox" id="Flag_Imprimir" ${documento?documento.Flag_Imprimir?'checked':'':''}><b> Se imprime?</b>
-                                                </label>
+                                            <div class="form-group">
+                                                <div class="checkbox-inline checkbox-styled checkbox-primary">
+                                                    <label>
+                                                    <input type="checkbox" id="Flag_Imprimir" ${documento?documento.Flag_Imprimir?'checked':'':''}><span> Se imprime?</span>
+                                                    </label>
+                                                </div>
                                                 <select class="form-control" id="Impresora">
                                                     ${impresoras.map(u=>yo`<option value="${u}" ${documento? u==documento.Impresora?'selected':'':''}>${u}</option>`)}
                                                 </select>
@@ -383,22 +387,23 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
                                             <div class="form-group">
                                                 <label for="Nro_SerieTicketera">Nro. de Serie</label>
                                                 <input type="email" class="form-control" id="Nro_SerieTicketera" placeholder="Nro. de Serie" value="${documento?documento.Nro_SerieTicketera:''}">
+                                                <div class="form-control-line"></div>
                                                 <p class="help-block">Solo en caso de tener un Tiketera</p>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                         <label for="Flag_Activo"></label>
-                                            <div class="checkbox">
+                                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                 <label>
-                                                <input type="checkbox" id="Flag_FacRapida" ${documento?documento.Flag_FacRapida?'checked':'':''}><b> Documento de facturacion rapida</b>
+                                                <input type="checkbox" id="Flag_FacRapida" ${documento?documento.Flag_FacRapida?'checked':'':''}><span> Documento de facturacion rapida</span>
                                                 </label>
                                             </div>  
                                         </div>
                                     </div>
                                 </div>
                             </form>
-                            <div class="box-footer">
-                                <button onclick="${() => GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento)}" data-dismiss="modal" class="btn btn-primary">Guardar</button>
+                            <div class="card-actionbar">
+                                <button onclick="${() => GuardarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, documento)}" data-dismiss="modal" class="btn btn-primary ink-reaction">Guardar</button>
                             </div>
                         </div>
                     </div>
@@ -688,14 +693,13 @@ function  VerAgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables
                         <h4 class="modal-title">Buscar producto</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                            <h3 class="box-title">Productos</h3>
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h3>Productos</h3>
                             </div>
-                            <!-- /.box-header -->
                             <!-- form start -->
                             <div role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-6">
                                         <div class="form-group">
@@ -719,13 +723,14 @@ function  VerAgregarFavorito(_escritura, sucursales, usuarios, cuentas_contables
                                             <div class="form-group">
                                                 <label for="textobuscar">Texto a buscar</label>
                                                 <input type="text" class="form-control" id="Buscar" placeholder="Helado">
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6"> 
                                             <label for="Flag_Activo"></label>
-                                            <div class="checkbox form-group">
+                                            <div class="checkbox-inline checkbox-styled checkbox-primary"> 
                                                 <label>
-                                                <input type="checkbox" id="Flag_RequiereStock" ><b> Solo productos con stock?</b>
+                                                <input type="checkbox" id="Flag_RequiereStock" ><span> Solo productos con stock?</span>
                                                 </label>
                                             </div>       
                                         </div>

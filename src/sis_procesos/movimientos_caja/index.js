@@ -197,7 +197,7 @@ function VerModalJustificacion(titulo,descripcion,movimiento,flag) {
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div id="modal_error" class="callout callout-danger hidden">
+                            <div id="modal_error" class="alert alert-callout alert-danger hidden">
                                 <p> Es necesario llenar los campos marcados con rojo</p>
                             </div>
                         </div>
@@ -206,6 +206,7 @@ function VerModalJustificacion(titulo,descripcion,movimiento,flag) {
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <input type="text" id="txtJustificacion" class="form-control required">
+                                    <div class="form-control-line"></div>
                                 </div>
                             </div>
                         </div>
@@ -347,8 +348,8 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                     </div>
                 </div>`;
      
-    var sectionModalsElement = document.getElementById('sectionModals')
-    empty(sectionModalsElement).appendChild(sectionModals);
+    //var sectionModalsElement = document.getElementById('sectionModals')
+    //empty(sectionModalsElement).appendChild(sectionModals);
     var container = document.getElementById('tab_1')
     empty(container).appendChild(el);
     $("#tab_1").click()
@@ -729,7 +730,7 @@ function VerFormatoDocumento(movimiento){
             }
             break
         case 'CAJ_COMPROBANTE_PAGO':
-            PrepararImpresion(id_Movimiento,function(flag){
+            PrepararImpresionComprobante(id_Movimiento,function(flag){
                 if(!flag){
                     toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
                 }
@@ -826,7 +827,7 @@ function ExtornarAnular(movimiento,flag) {
                                     .then(res => {
                                         $("#modal-justificacion").modal("hide")
                                         if(res.respuesta=='ok'){
-                                            PrepararImpresion(id_ComprobantePago,function(flag){
+                                            PrepararImpresionComprobante(id_ComprobantePago,function(flag){
                                                 if(flag)
                                                     toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 refrescar_movimientos_caja()
@@ -859,7 +860,7 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresion(id_ComprobantePago,function(flag){
+                                                PrepararImpresionComprobante(id_ComprobantePago,function(flag){
                                                     if(flag)
                                                         toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     refrescar_movimientos_caja()
@@ -891,7 +892,7 @@ function ExtornarAnular(movimiento,flag) {
                                         .then(res => {
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresion(id_ComprobantePago,function(flag){
+                                                PrepararImpresionComprobante(id_ComprobantePago,function(flag){
                                                     if(flag)
                                                         toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     refrescar_movimientos_caja()
@@ -1364,7 +1365,7 @@ function PrepararImpresionMovimientos(id_Movimiento,callback){
 
 
 
-function PrepararImpresion(id_ComprobantePago,callback){
+function PrepararImpresionComprobante(id_ComprobantePago,callback){
     const parametrosC = {
         method: 'POST',
         headers: {
@@ -1535,3 +1536,7 @@ module.exports = function movimientos_caja(ctx, next) {
 module.exports.refrescar_movimientos = function refrescar_movimientos(){
     refrescar_movimientos_caja()
 }
+
+module.exports.preparar_impresion_comprobante = function preparar_impresion_comprobante(id_ComprobantePago,callback){
+    PrepararImpresionComprobante(id_ComprobantePago,callback)
+} 

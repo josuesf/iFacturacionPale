@@ -19,8 +19,8 @@ function Ver(empresa, _escritura) {
               <p>Continuar de todas maneras?</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si, Guardar</button>
+              <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Si, Guardar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -40,23 +40,24 @@ function Ver(empresa, _escritura) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Datos de Empresa</h3>
+            <div class="card">
+                <div class="card-head">
+                    <header>Datos de Empresa</header>
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+                <div class="card-body">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Cod_Empresa">RUC Empresa</label>
                                 <input type="number" class="form-control" id="Cod_Empresa" placeholder="Ingrese RUC" value="${empresa ? empresa.Cod_Empresa : ''}" >
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="RazonSocial">Razon Social</label>
                                 <input type="text" style="text-transform:uppercase" class="form-control" id="RazonSocial" placeholder="Ingrese Razon Social" value="${empresa ? empresa.RazonSocial : ''}">
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                     </div>
@@ -65,12 +66,14 @@ function Ver(empresa, _escritura) {
                             <div class="form-group">
                                 <label for="Nom_Comercial">Nombre Comercial</label>
                                 <input type="text" class="form-control" id="Nom_Comercial" placeholder="Ingrese Nombre Comercial" value="${empresa ? empresa.Nom_Comercial : ''}" >
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Direccion">Direccion Fiscal</label>
                                 <textarea type="text" style="text-transform:uppercase" class="form-control" id="Direccion" placeholder="Ingrese Direccion Fiscal">${empresa ? empresa.Direccion : ''}</textarea>
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                     </div>
@@ -79,12 +82,14 @@ function Ver(empresa, _escritura) {
                             <div class="form-group">
                                 <label for="Telefonos">Telefono(s)</label>
                                 <input type="text" class="form-control" id="Telefonos" value="${empresa ? empresa.Telefonos : ''}">
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Web">Pagina Web</label>
                                 <input type="text" class="form-control" id="Web" value="${empresa ? empresa.Web : ''}">
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                     </div>
@@ -93,6 +98,7 @@ function Ver(empresa, _escritura) {
                             <div class="form-group">
                                 <label for="Version">Version</label>
                                 <input type="text" class="form-control" id="Version" value="${empresa ? empresa.Version : ''}">
+                                <div class="form-control-line"></div>
                             </div>
                         </div>
                     </div>
@@ -112,12 +118,14 @@ function Ver(empresa, _escritura) {
                                                 <div class="form-group">
                                                     <label for="Des_Impuesto">Descripcion del Impuesto</label>
                                                     <input type="text" class="form-control" id="Des_Impuesto" value="${empresa ? empresa.Des_Impuesto : ''}">
+                                                    <div class="form-control-line"></div>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label for="Por_Impuesto">Porcentaje del Impuesto</label>
                                                     <input type="number" class="form-control" id="Por_Impuesto" value="${empresa ? empresa.Por_Impuesto.toFixed(2) : ''}">
+                                                    <div class="form-control-line"></div>
                                                 </div>
                                             </div>
                                         </div>

@@ -1504,6 +1504,7 @@ function AceptarConfirmacionCuenta(CodLibro){
 }
  
 function Cuentas(Cod_Libro) {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

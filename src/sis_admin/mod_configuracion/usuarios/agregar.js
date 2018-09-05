@@ -33,24 +33,18 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarUsuarios(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
+            <div class="card">
+                <div class="card-head">
+                    <header><a onclick=${() => ListarUsuarios(_escritura)} class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i></a> Nuevo Usuario
+                   </header> 
                     
                 </div>
                 <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Nuevo Usuario</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <!-- form start -->
+                <div class="card-body">
+                    <div class="panel">
+                       
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -61,12 +55,14 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                     <div class="form-group" id="frm_Cod_Usuarios">
                                         <label for="exampleInputEmail1">Codigo Usuario *</label>
                                         <input type="text" style="text-transform:uppercase" class="form-control required" id="Cod_Usuarios" placeholder="Ingrese codigo usuario" >
+                                        <div class="form-control-line"></div>
                                     </div>
                                 </div>`}
                                     <div class="col-sm-6">
                                         <div class="form-group" id="frm_Nick">
                                             <label for="exampleInputEmail1">Nombres y Apellidos *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control required" id="Nick" placeholder="Ingrese Nombres" value="${usuario ? usuario.Nick : ''}">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -76,12 +72,14 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                             <div class="form-group" id="frm_Contrasena">
                                                 <label for="exampleInputEmail1">Elegir Contrasena *</label>
                                                 <input type="password" class="form-control required" id="Contrasena" placeholder="Ingrese Contrasena">
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group" id="frm_Contrasena2">
                                                 <label for="exampleInputEmail1">Repetir Contrasena *</label>
                                                 <input type="password" class="form-control required" id="Contrasena2" placeholder="Repita Contrasena">
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                     </div>`: yo``}
@@ -100,6 +98,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                         <div class="form-group" id="frm_Respuesta">
                                             <label for="exampleInputEmail1">Respuesta *</label>
                                             <input type="text" style="text-transform:uppercase" class="form-control required" id="Respuesta" placeholder="Respuesta" value="${usuario ? usuario.Respuesta : ''}">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -125,11 +124,11 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
-                                            <label for="">Cajas</label>
+                                            <label for=""> Cajas </label>
                                             ${cajas.map(c => yo`
-                                                <div class="checkbox">
+                                                <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                     <label>
-                                                        <input type="checkbox" id="${c.Cod_Caja}" checked="${c.Relacion}" > ${c.Des_Caja}
+                                                        <input type="checkbox" id="${c.Cod_Caja}" checked="${c.Relacion}" ><span> ${c.Des_Caja}</span>
                                                     </label>
                                                 </div>
                                             `)}
@@ -151,7 +150,7 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, cajas, usuario)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

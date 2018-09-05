@@ -4,7 +4,12 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { NuevoCliente,BuscarCliente } from '../../modales'
 
+
+var arrayValidacion = [null,'null','',undefined]
+var flag_cliente = false 
+
 function CargarFormulario(variables, fecha_actual) {
+    flag_cliente=false
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -50,8 +55,11 @@ function CargarFormulario(variables, fecha_actual) {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc()}" class="form-control required input-sm" placeholder="Nro Documento">
+                                            <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc()}"  onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} class="form-control required input-sm" placeholder="Nro Documento">
                                             <div class="input-group-btn">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
+                                                    <i class="fa fa-pencil"></i>
+                                                </button> 
                                                 <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc">
                                                     <i class="fa fa-globe"></i>
                                                 </button>
@@ -186,6 +194,45 @@ function CargarFormulario(variables, fecha_actual) {
 var Id_ClienteProveedor = null
 var Obs_Recibo = null
 
+function CambioNroDocumento(e){  
+    if(e.which == 46 || e.which == 8){ 
+        if(flag_cliente){
+            $("#Nro_Documento").val("");
+            $("#Cliente").val(""); 
+            Id_ClienteProveedor=null
+            flag_cliente=false
+        }
+    }   
+}
+
+function KeyPressClienteDoc(){  
+    switch(($('#Nro_Documento').val().trim().length)+1){
+        case 8:
+            $("#Cod_TipoDoc").val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDoc").val("6")
+            break;
+    }
+   
+}
+
+
+function EditarCliente(){ 
+    if(!arrayValidacion.includes(Id_ClienteProveedor))
+        flag_cliente = true
+    else
+        flag_cliente=false
+    
+
+    $("#Nro_Documento").unbind("keypress");
+    $("#Cliente").unbind("keypress");
+
+    $("#Nro_Documento").attr("disabled",false);
+    $("#Cliente").attr("disabled",false);
+    $("#Cod_TipoDoc").attr("disabled",false);
+}
+
 function SeleccionarCliente(cliente){
     $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
     $("#Cliente").val(cliente.Cliente)
@@ -226,12 +273,52 @@ function BuscarClienteDoc() {
             .then(res => {
                 if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
                     $("#Cliente").val(res.data.cliente[0].Cliente)
+                    $("#Cod_TipoDoc").val(res.data.cliente[0].Cod_TipoDoc)
                     $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
                     Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+
+                    $("#Nro_Documento").bind("keypress", function(event){
+                        event.preventDefault();
+                        event.stopPropagation();
+                    });
+    
+                    $("#Cliente").bind("keypress", function(event){
+                        event.preventDefault();
+                        event.stopPropagation();
+                    });
+    
+                  
+                    $("#Nro_Documento").attr("disabled",true);
+                    $("#Cliente").attr("disabled",true); 
+                    $("#Cod_TipoDoc").attr("disabled",true);
+
+                }else{
+                    Id_ClienteProveedor = null
+                    $("#Cliente").val("")  
+                    $("#Cliente").attr("data-id",null)
+
+                    $("#Nro_Documento").unbind("keypress");
+                    $("#Cliente").unbind("keypress"); 
+
+                    $("#Nro_Documento").attr("disabled",false);
+                    $("#Cliente").attr("disabled",false); 
+                    $("#Cod_TipoDoc").attr("disabled",false);
                 }
                 $('#div-cliente-recibo-egreso').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
+
+                Id_ClienteProveedor = null
+                $("#Cliente").val("")  
+                $("#Cliente").attr("data-id",null)
+
+                $("#Nro_Documento").unbind("keypress");
+                $("#Cliente").unbind("keypress"); 
+
+                $("#Nro_Documento").attr("disabled",false);
+                $("#Cliente").attr("disabled",false); 
+                $("#Cod_TipoDoc").attr("disabled",false);
+
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#div-cliente-recibo-egreso').waitMe('hide');
             });
@@ -324,6 +411,7 @@ function Guardar() {
     }
 }
 function NuevoEgreso() {
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_TipoComprobante = 'RE'
     var Cod_ClaseConcepto = '006'

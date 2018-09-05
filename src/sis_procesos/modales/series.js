@@ -26,19 +26,19 @@ function VerBuscarPorSerie(almacenes) {
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group"> 
-                                <select id="Cod_AlmacenBuscarSerie" class="form-control">
+                                <select id="Cod_AlmacenBuscarSerie" class="form-control input-sm">
                                     ${almacenes.map((e)=>yo`<option value=${e.Cod_Almacen}>${e.Des_Almacen}</option>`)}
                                 </select>
                             </div>
                         </div>
                         <div  class="col-md-6">
                             <div class="form-group">
-                                <input type="text" id="txtBuscarSerie"  placeholder="Ingrese la serie para realizar la busqueda" class="form-control" onkeypress=${()=>BuscarSerie(event)}>
+                                <input type="text" id="txtBuscarSerie"  placeholder="Ingrese la serie para realizar la busqueda" class="form-control input-sm" onkeypress=${()=>BuscarSerie(event)}>
                             </div>
                         </div>
                         <div  class="col-md-2">
                             <div class="form-group">
-                               <button class="btn btn-success" onclick=${()=>BuscarSerie(event)}><i class="fa fa-search"></i> Buscar</button>
+                               <button class="btn btn-success btn-sm" onclick=${()=>BuscarSerie(event)}><i class="fa fa-search"></i> Buscar</button>
                             </div>
                         </div>
                     </div>
@@ -62,7 +62,7 @@ function VerBuscarPorSerie(almacenes) {
                     </div>
                 </div>
                 <div class="modal-footer text-center"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button> 
+                    <button type="button" class="btn btn-danger input-sm" data-dismiss="modal">Cancelar</button> 
                 </div>
             </div>
         </div>`

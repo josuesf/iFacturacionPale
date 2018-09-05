@@ -5,6 +5,10 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { NuevoCliente,BuscarCliente } from '../../modales'
 
+
+var arrayValidacion = [null,'null','',undefined]
+var flag_cliente = false 
+
 function Ver(_escritura, Serie, variables,fecha_actual) {
     var el = yo`
         <div class="modal-dialog modal-lg">
@@ -23,24 +27,33 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                     </div>
                     <div class="row">
                         <div class="col-md-8">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <p>A favor de : </p>
+                            <div class="card">
+                                <div class="card-head">
+                                    <header>A favor de : </header>
+                                    <div class="tools">
+                                        <div class="btn-group">
+                                            <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></a>
+                                            <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")}><i class="fa fa-search"></i></a>
+                                        </div>
+                                    </div>
                                 </div> 
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <select class="form-control" id="Cod_TipoDocumentoBuscar" onchange=${()=>CambioClienteDoc()}>
+                                                <select class="form-control input-sm" id="Cod_TipoDocumentoBuscar" onchange=${()=>CambioClienteDoc()}>
                                                     ${variables.tipos_documento.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" id="Nro_DocumentoBuscar" onblur=${()=>RecuperarDatosClientePorNroDoc()}>
+                                                <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar" onblur=${()=>RecuperarDatosClientePorNroDoc()} onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)}>
                                                 <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc"
+                                                    <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </button> 
+                                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc"
                                                     ><i class="fa fa-globe"></i></button>
                                                 </div>
                                             </div>
@@ -48,14 +61,9 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="input-group">
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-success" id="AgregarCliente" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></button>
-                                                </div>
-                                                <input type="text" class="form-control" id="txtNombreCliente">
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-info" id="BuscarCliente" onclick=${()=>BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")}><i class="fa fa-search"></i></button>
-                                                </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm" id="txtNombreCliente" placeholder="Nombre del cliente"> 
+                                              
                                             </div>
                                         </div>
                                     </div>
@@ -94,19 +102,17 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="col-sm-3">
-                                <label></label>
-                                <div class="radio">
+                            <div class="col-sm-6"> 
+                                <div class="radio-inline radio-styled radio-primary">
                                     <label>
-                                        <input type="radio" value="c" id="TipoDestino" name="TipoDestino" checked onclick="${() => CambioTipoDestino()}" > En Caja
+                                        <input type="radio" value="c" id="TipoDestino" name="TipoDestino" checked onclick="${() => CambioTipoDestino()}" ><span> En Caja</span>
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <label></label>
-                                <div class="radio">
+                            <div class="col-sm-6"> 
+                                <div class="radio-inline radio-styled radio-primary">
                                     <label>
-                                        <input type="radio" value="b" id="TipoDestino" name="TipoDestino" onclick="${() => CambioTipoDestino()}"> En Banco
+                                        <input type="radio" value="b" id="TipoDestino" name="TipoDestino" onclick="${() => CambioTipoDestino()}"><span> En Banco</span>
                                     </label>
                                 </div>
                             </div>
@@ -164,14 +170,18 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                             <label>Tipo de Operacion</label>
                                             <div class="col-sm-12">
                                                 <div class="col-sm-6">
-                                                        <label class="radio-inline">
-                                                            <input type="radio" id="optionCV" name="optionCV" value="c"  onclick="${() => CambioCompraVentaME()}" checked> Compra ME
-                                                        </label> 
+                                                    <div class="radio-inline radio-styled radio-primary">
+                                                        <label>
+                                                            <input type="radio" id="optionCV" name="optionCV" value="c"  onclick="${() => CambioCompraVentaME()}" checked><span> Compra ME</span>
+                                                        </label>
+                                                    </div> 
                                                 </div>
                                                 <div class="col-sm-6">
-                                                        <label class="radio-inline">
-                                                            <input type="radio" id="optionCV" name="optionCV" value="v" onclick="${() => CambioCompraVentaME()}"> Venta ME
+                                                    <div class="radio-inline radio-styled radio-primary">
+                                                        <label>
+                                                            <input type="radio" id="optionCV" name="optionCV" value="v" onclick="${() => CambioCompraVentaME()}"><span> Venta ME</span>
                                                         </label>
+                                                    </div>
                                                 </div> 
                                             </div> 
                                             <br><br><br>
@@ -228,6 +238,44 @@ function LlenarCuenta(cuenta,idSelect){
 
 
 var Id_ClienteProveedor = null
+
+function CambioNroDocumento(e){  
+    if(e.which == 46 || e.which == 8){ 
+        if(flag_cliente){
+            $("#Nro_DocumentoBuscar").val("");
+            $("#txtNombreCliente").val(""); 
+            Id_ClienteProveedor=null
+            flag_cliente=false
+        }
+    }   
+}
+
+function KeyPressClienteDoc(){  
+    switch(($('#Nro_DocumentoBuscar').val().trim().length)+1){
+        case 8:
+            $("#Cod_TipoDocumentoBuscar").val("1")
+            break;
+        case 11:
+            $("#Cod_TipoDocumentoBuscar").val("6")
+            break;
+    }
+   
+}
+
+function EditarCliente(){ 
+    if(!arrayValidacion.includes(Id_ClienteProveedor))
+        flag_cliente = true
+    else
+        flag_cliente=false
+    
+
+    $("#Nro_DocumentoBuscar").unbind("keypress");
+    $("#txtNombreCliente").unbind("keypress");
+
+    $("#Nro_DocumentoBuscar").attr("disabled",false);
+    $("#txtNombreCliente").attr("disabled",false);
+    $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
+}
 
 function CambioClienteDoc(){
     if($("#Cod_TipoDocumentoBuscar").val()=="1" || $("#Cod_TipoDocumentoBuscar").val()=="6"){
@@ -298,15 +346,51 @@ function RecuperarDatosClientePorNroDoc(){
         fetch(URL+'/clientes_api/get_cliente_by_documento', parametros)
         .then(req => req.json())
         .then(res => {
-            if (res.respuesta == 'ok') {
+            if (res.respuesta == 'ok' && res.data.cliente.length>0) {
                 $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
                 $("#txtNombreCliente").focus()
                 Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+                $("#Nro_DocumentoBuscar").bind("keypress", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+                $("#txtNombreCliente").bind("keypress", function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+
+              
+                $("#Nro_DocumentoBuscar").attr("disabled",true);
+                $("#txtNombreCliente").attr("disabled",true); 
+                $("#Cod_TipoDocumentoBuscar").attr("disabled",true);
             }
             else{
-                BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
+
+                Id_ClienteProveedor = null
+                $("#txtNombreCliente").val("")  
+                $("#txtNombreCliente").attr("data-id",null)
+
+                $("#Nro_DocumentoBuscar").unbind("keypress");
+                $("#txtNombreCliente").unbind("keypress"); 
+
+                $("#Nro_DocumentoBuscar").attr("disabled",false);
+                $("#txtNombreCliente").attr("disabled",false); 
+                $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
+
+                //BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
             }
         }).catch(function (e) {
+            Id_ClienteProveedor = null
+            $("#txtNombreCliente").val("")  
+            $("#txtNombreCliente").attr("data-id",null)
+
+            $("#Nro_DocumentoBuscar").unbind("keypress");
+            $("#txtNombreCliente").unbind("keypress"); 
+
+            $("#Nro_DocumentoBuscar").attr("disabled",false);
+            $("#txtNombreCliente").attr("disabled",false); 
+            $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
@@ -559,6 +643,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
 }
  
 function NuevoCompraVentaME(_escritura, caja) { 
+    $("#modal-proceso").off('shown.bs.modal')
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {

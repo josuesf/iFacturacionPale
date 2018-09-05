@@ -295,7 +295,7 @@ app.get('/administracion', function (req, res) {
     res.redirect('/login');
   } else{
     if (req.session.caja) {
-      res.render('index', { title: 'iFacturacion',
+      res.render('index.ejs', { title: 'iFacturacion',
                             Cod_Usuarios:req.session.username,
                             Nick:req.session.nick });
     }else{

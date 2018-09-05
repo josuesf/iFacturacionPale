@@ -291,6 +291,7 @@ function Recepcionados(){
 }
 
 function NuevaRecepcion() {
+    $("#modal-proceso").off('shown.bs.modal')
     totalMonto = 0
     totalRecibido = 0
     total = 0
