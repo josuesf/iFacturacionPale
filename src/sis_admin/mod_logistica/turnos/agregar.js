@@ -23,23 +23,21 @@ function Ver(_escritura, turno){
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${()=>ListarTurnos(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${turno?'Editar':'Nuevo'} Turno</h3>
-                        </div>
-                        <!-- /.box-header -->
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${()=>ListarTurnos(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                            ${turno?'Editar':'Nuevo'} Turno
+                    </header>
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -125,21 +123,20 @@ function Ver(_escritura, turno){
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="checkbox">
+                                        <div class="checkbox checkbox-inline checkbox-styled">
                                             <label>
-                                            <input type="checkbox" id="Flag_Cerrado" ${turno?turno.Flag_Cerrado?'checked':'':''}><b> Cerrado?</b>
+                                            <input type="checkbox" id="Flag_Cerrado" ${turno?turno.Flag_Cerrado?'checked':'':''}><span> Cerrado?</span>
                                             </label>
                                             <p class="help-block">Cuando el turno esta cerrado no se puede realizar ningun movimiento</p>
                                         </div>  
                                     </div>
                                 </div>
                                 
-                            </div>
-                            <!-- /.box-body -->
+                            </div> 
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, turno)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

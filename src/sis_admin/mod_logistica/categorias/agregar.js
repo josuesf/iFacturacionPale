@@ -23,23 +23,22 @@ function Ver(_escritura, categoriasPadre, categoria){
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
+            <div class="card">
+                <div class="card-head">
+                    <header>
                     <a onclick=${()=>ListarCategorias(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
+                    class="btn btn-xs btn-icon-toggle">
+                        <i class="fa fa-arrow-left"></i> </a>
+                        ${categoria?'Editar':'Nueva'} Categoria
+                    </header>
                     
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${categoria?'Editar':'Nueva'} Categoria</h3>
-                        </div>
-                        <!-- /.box-header -->
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -77,12 +76,11 @@ function Ver(_escritura, categoriasPadre, categoria){
                                     </div>
                                 </div>
                                 
-                            </div>
-                            <!-- /.box-body -->
+                            </div> 
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, categoriasPadre, categoria)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

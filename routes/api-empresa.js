@@ -58,6 +58,19 @@ router.post('/get_turnos_by_periodo', function (req, res) {
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
+router.post('/get_turnos_by_cod_caja', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Caja', valor_parametro:input.Cod_Caja}
+    ]
+    procedimientos =[
+        {nom_respuesta:'turnos',sp_name:'USP_CAJ_TURNO_ATENCION_TXCAJA',parametros},
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
+
+
 
 router.post('/crear_siguiente_turno', function (req, res) {
     input = req.body

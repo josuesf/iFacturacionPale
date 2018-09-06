@@ -2,7 +2,8 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import {BloquearControles} from '../../../../utility/tools' 
-import { BuscarCuentasPendientes } from '../../modales/cuentas' 
+import { BuscarCuentasPendientes } from '../../modales/cuentas'
+import { NuevoCliente, BuscarCliente } from '../../modales' 
 
 var arrayValidacion = [null,'null','',undefined]
 var flag_cliente = false 
@@ -35,6 +36,12 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                         <div class="card">
                             <div class="card-head">
                                 <header> Cliente/Proveedor </header>
+                                <div class="tools">
+                                    <div class="btn-group">
+                                        <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.dataDocumentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
@@ -1541,6 +1548,7 @@ function Cuentas(Cod_Libro) {
             fetch(URL + '/cajas_api/get_empresa', parametros)
                 .then(req => req.json())
                 .then(res => {
+                    console.log("variables empresa",variables)
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa
                     VerCuentas(variables,fecha_format,Cod_Libro)

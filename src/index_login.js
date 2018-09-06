@@ -7,8 +7,13 @@ $(document).ready(function(){
     $("#RUC").change(function(){
         CambioRUC("1")
     })*/ 
-    TraerPeriodos()
-    $("#Gestion").keypress(function(){
+    //TraerPeriodos()
+    CrearTurnoSiguiente()
+
+    $("#Caja").change(function(){
+        TraerTurnos()
+    })
+    /*$("#Gestion").keypress(function(){
         TraerPeriodos()
     })
     $("#Gestion").change(function(){
@@ -20,10 +25,11 @@ $(document).ready(function(){
 
     $("#btnTurnoSiguiente").click(function(){
         CrearTurnoSiguiente()
-    })
+    })*/
 })
 
-function CrearTurnoSiguiente(){
+function CrearTurnoSiguiente(){ 
+    run_waitMe($('#select-turno'), 2, "ios","");
     var Cod_Usuario = 'MIGRACION'
     const parametros = {
         method: 'POST',
@@ -38,18 +44,56 @@ function CrearTurnoSiguiente(){
     }
     fetch(URL +'/empresa_api/crear_siguiente_turno', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             $('#divError').css("display","none")
             $('#textError').text(''); 
             TraerTurnos()
+            $('#select-turno').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
+            $('#select-turno').waitMe('hide');
             $('#divError').css("display","block")
             $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
         });
 }
 
-function TraerPeriodos(){
+function TraerTurnos(){
+    run_waitMe($('#select-turno'), 2, "ios","");
+    var Cod_Caja = $("#Caja").val() 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_Caja
+        })
+    }
+    fetch(URL +'/empresa_api/get_turnos_by_cod_caja', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            LlenarTurnos(res.data.turnos,'Turno')
+        }).catch(function (e) {  
+            console.log(e)
+            $('#select-turno').waitMe('hide');
+        })
+}
+
+function LlenarTurnos(turnos,idSelect){
+    var html = ''
+    for(var i=0; i<turnos.length; i++){
+        html = html+'<option value="'+turnos[i].Cod_Turno+'">'+turnos[i].Des_Turno+'</option>'
+    }
+
+    $("#"+idSelect).html('')
+    $("#"+idSelect).html(html)
+    $("#"+idSelect+" option:last").attr("selected", "selected"); 
+    $('#select-turno').waitMe('hide');
+}
+
+/*function TraerPeriodos(){
     run_waitMe($('#select-periodo'), 2, "ios","");
     var Gestion = $("#Gestion").val()
     const parametros = {
@@ -123,10 +167,10 @@ function LlenarTurnos(turnos,idSelect){
     $("#"+idSelect).html(html)
     $("#"+idSelect+" option:last").attr("selected", "selected"); 
     $('#select-turno').waitMe('hide');
-}
+}*/
 
 
-function CambioRUC(flag){
+/*function CambioRUC(flag){
     if(flag=="1"){
         var RUC = $("#empresa").val()
         const parametros = {
@@ -191,5 +235,5 @@ function CambioRUC(flag){
                 $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
             });
     }
-} 
+} */
  

@@ -24,23 +24,22 @@ function Ver(_escritura, variables, cuenta) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
+            <div class="card">
+                <div class="card-head">
+                    <header>
                     <a onclick=${() => ListarCuentasBancarias(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
+                    class="btn btn-xs btn-icon-toggle">
+                        <i class="fa fa-arrow-left"></i></a>
+                        ${cuenta ? 'Editar' : 'Nuevo'} Cuenta Bancaria
+                    </header>
                     
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${cuenta ? 'Editar' : 'Nuevo'} Cuenta Bancaria</h3>
-                        </div>
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <div role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -133,7 +132,7 @@ function Ver(_escritura, variables, cuenta) {
                         </div>
                     </div>
                 </div>
-                <div class="box-footer">
+                <div class="card-actionbar">
                         <button onclick="${() => GuardarCuentaBancaria(_escritura, cuenta)}" class="btn btn-primary">Guardar</button>
                     </div>
             </div>

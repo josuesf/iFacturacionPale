@@ -21,8 +21,8 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                         <p>Al eliminar se perderan este dato permanentemente.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-outline" id="btnEliminar-caja_almacen" data-dismiss="modal">Si, eliminar</button>
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="btnEliminar-caja_almacen" data-dismiss="modal">Si, eliminar</button>
                     </div>
                 </div>
             </div>
@@ -46,23 +46,21 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarAlmacenes(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${() => ListarAlmacenes(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                            ${almacen ? 'Editar' : 'Nuevo'} Almacen
+                    </header>   
                     
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${almacen ? 'Editar' : 'Nuevo'} Almacen</h3>
-                        </div>
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
                         <!-- form start -->
                         <div role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -177,7 +175,7 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                         </div>
                     </div>
                 </div>
-                <div class="box-footer">
+                <div class="card-actionbar">
                         <button onclick="${() => GuardarAlmacen(_escritura, almacen)}" class="btn btn-primary">Guardar</button>
                     </div>
             </div>
@@ -267,13 +265,10 @@ function FormularioAgregaCaja(_escritura, tipo_almacenes, almacen, cajas_activas
                 <h4 class="modal-title">Caja - Almacen</h4>
             </div>
             <div class="modal-body">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                    </div>
-                    <!-- /.box-header -->
+                <div class="panel">  
                     <!-- form start -->
                     <div role="form">
-                        <div class="box-body">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="form-group">
@@ -287,9 +282,9 @@ function FormularioAgregaCaja(_escritura, tipo_almacenes, almacen, cajas_activas
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <label for="CA_Flag_Principal"></label>
-                                        <div class="checkbox">
+                                        <div class="checkbox checkbox-inline checkbox-styled">
                                             <label>
-                                                <input type="checkbox" id="CA_Flag_Principal" checked="${caja_almacen ? caja_almacen.Flag_Principal : 0}"> Es Principal?
+                                                <input type="checkbox" id="CA_Flag_Principal" checked="${caja_almacen ? caja_almacen.Flag_Principal : 0}"><span> Es Principal?</span>
                                             </label>
                                         </div>
                                     </div>

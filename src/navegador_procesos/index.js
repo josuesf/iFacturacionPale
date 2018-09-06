@@ -179,6 +179,146 @@ function Ver(Flag_Cerrado) {
     $.getScript("/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js", function( data, textStatus, jqxhr ) {
     });
 
+    $(document).ready(function(){
+        $("#btnCambiarTurno").click(function(){
+            AbrirModalCambiarTurno()
+        })
+    })  
+}
+
+function AbrirModalCambiarTurno(){
+
+    const fecha = new Date()
+    var anio = fecha.getFullYear() 
+
+    var el = yo`
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Seleccione el turno </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                        <label for="Gestion">Gestion</label>
+                            <input type="number" id="Gestion" value=${anio} class="form-control" onkeyup=${()=>TraerPeriodos()} onchange=${()=>TraerPeriodos()}>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group" id="divPeriodos">
+                        <label for="Periodo">Periodo</label>
+                            <select id="Periodo" class="form-control" onchange=${()=>TraerTurnos()}>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group" id="divTurnos">
+                        <label for="Turno">Turno</label>
+                            <select id="Turno" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>CambiarTurnoSistema()}>Cambiar</button>
+            </div>
+        </div>
+    </div>`
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+    TraerPeriodos()
+}
+
+function LlenarPeriodo(periodos,idSelect){
+    var el = yo`
+        ${periodos.map(e => yo`
+             <option value="${e.Cod_Periodo}">${e.Nom_Periodo}</option>
+        `)}`   
+    $("#"+idSelect).html('')
+    $("#"+idSelect).html(el) 
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1 
+    var periodo = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes)
+    $("#"+idSelect).val(periodo) 
+}
+
+function LlenarTurnos(turnos,idSelect){
+    var el = yo`
+        ${turnos.map(e => yo`
+             <option value="${e.Cod_Turno}">${e.Des_Turno}</option>
+        `)}`   
+    $("#"+idSelect).html('')
+    $("#"+idSelect).html(el)
+    $("#"+idSelect+" option:last").attr("selected", "selected") 
+}
+
+
+function TraerPeriodos(){
+    run_waitMe($('#divPeriodos'), 1, "ios","");
+    var Gestion = $("#Gestion").val()  
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Gestion
+        })
+    }
+    fetch(URL + '/empresa_api/get_periodos_by_gestion', parametros)
+        .then(req => req.json())
+        .then(res => {
+            LlenarPeriodo(res.data.periodos,'Periodo')
+            TraerTurnos()
+            $('#divPeriodos').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            $('#divPeriodos').waitMe('hide');
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+function TraerTurnos(){
+    run_waitMe($('#divTurnos'), 1, "ios","");
+    var Cod_Periodo = $("#Periodo").val()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_Periodo
+        })
+    }
+    fetch(URL + '/empresa_api/get_turnos_by_periodo', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            LlenarTurnos(res.data.turnos,'Turno')
+            $('#divTurnos').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            $('#divTurnos').waitMe('hide');
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+function CambiarTurnoSistema(){
+    
 }
 
 module.exports = function navegador(ctx, next) {

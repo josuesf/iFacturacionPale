@@ -171,20 +171,8 @@
                         <span class="text-lg text-bold text-default"> Selecciona la caja y el turno para iniciar el sistema </span>
                         <br /><br />
                         <form class="form form-validate" accept-charset="utf-8" action="logincajas" method="post">
-                            <div class="form-group floating-label">
-                                <% if(typeof gestion != 'undefined') { %>
-                                    <input type="number" class="form-control dirty" id="Gestion" name="Gestion" value="<%=gestion%>" required>
-                                <% } %>
-                                <label for="Gestion">Gestion</label>
-                            </div>
-                            <div class="form-group" id="select-periodo">
-                                <select id="Periodo" name="Periodo" class="form-control">
-                                    
-                                </select>
-                                <label for="Periodo">Periodo</label>
-                            </div>
-                            
-                            <div class="form-group" id="select-periodo">
+                           
+                            <div class="form-group" id="select-caja">
                                 <select id="Caja" name="Caja" class="form-control">
                                         <% if(typeof cajas != 'undefined') { %>
                                             <% cajas.forEach(function(e){ %>
@@ -196,10 +184,17 @@
                             </div>
 
                             <div class="form-group" id="select-turno">
-                                <select id="Turno" name="Turno" class="form-control">
-                                    
-                                </select>
-                                <label for="Turno">Turno</label>
+
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-default btn-icon-toggle" type="button" id="btnTurnoSiguiente"><i class="fa fa-arrow-circle-o-right fa-2x"></i></button>
+                                    </div>
+                                    <div class="input-group-content">
+                                        <select id="Turno" name="Turno" class="form-control">
+                                        </select>
+                                        <label for="Turno">Turno</label>
+                                    </div>
+                                </div>
                             </div>
                                 
 

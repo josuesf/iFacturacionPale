@@ -18,8 +18,8 @@ function Ver(_escritura,actividades,Id_ClienteProveedor){
                             <p>Al eliminar esta actividad no podra recuperarla. Desea continuar de todas maneras?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->

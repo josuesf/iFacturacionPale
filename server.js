@@ -190,9 +190,7 @@ function CargarVariables(req,res){
 
                       }else{
                         errores = "No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"
-                        const fecha = new Date()
-                        var anio = fecha.getFullYear() 
-
+                       
                         var pcajas= [
                           { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
                         ]  
@@ -204,13 +202,13 @@ function CargarVariables(req,res){
                           }else{
                             if(e.result.length>0){
                               app.locals.cajasUsuarios = e.result 
-                              res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:e.result,err:errores});
+                              res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result,err:errores});
                             }else{
                   
                               EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
                                 if(m.result.length>0){
                                   app.locals.cajasUsuarios = m.result 
-                                  res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:m.result,err:errores});
+                                  res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result,err:errores});
                                 }else{
                                   errores = 'No existen cajas activas'
                                   app.locals.isla = false
@@ -407,8 +405,7 @@ app.post('/login', function (req, res) {
                   req.session.authenticated = true;
                   req.session.username = e.Cod_Usuarios
                   req.session.nick = e.Nick
-                  const fecha = new Date()
-                  var anio = fecha.getFullYear()
+            
                   //req.session.turno = req.body.Turno
                   //req.session.periodo = req.body.Periodo
                   //req.session.gestion = req.body.Gestion
@@ -420,13 +417,13 @@ app.post('/login', function (req, res) {
                   EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
                     if(e.result.length>0){
                       app.locals.cajasUsuarios = e.result 
-                      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:e.result });
+                      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result });
                     }else{
           
                       EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
                         if(m.result.length>0){
                           app.locals.cajasUsuarios = m.result 
-                          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:m.result });
+                          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result });
                         }else{
                           errores = 'No existen cajas activas'
                           app.locals.isla = false
@@ -466,14 +463,18 @@ app.post('/login', function (req, res) {
  
 
 app.post('/logincajas', function (req, res) {
-  if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){ 
+  if(req.body.Turno!=undefined){ 
     if (!req.session || !req.session.authenticated) {
       return res.redirect('/');
     }else{
+      const fecha = new Date()
+      var anio_format = fecha.getFullYear()
+      const mes = fecha.getMonth() + 1
+      var periodo_format = anio_format + '-' + (mes > 9 ? mes : '0' + mes)
       req.session.caja = req.body.Caja
       req.session.turno = req.body.Turno
-      req.session.periodo = req.body.Periodo
-      req.session.gestion = req.body.Gestion 
+      req.session.periodo = periodo_format
+      req.session.gestion = anio_format
       iniciarJsReport(app.locals.empresa[0].RUC,function(flag){
         if(flag){ 
           return res.redirect('/');
@@ -483,12 +484,11 @@ app.post('/logincajas', function (req, res) {
         } 
       })
     } 
-  }else{
-    console.log("udefinede")
+  }else{    
     if(app.locals.cajasUsuarios.length>0){ 
-      const fecha = new Date()
-      var anio = fecha.getFullYear() 
-      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:'Es necesario ingresar todos los campos'});
+      //const fecha = new Date()
+      //var anio = fecha.getFullYear() 
+      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:'Es necesario ingresar todos los campos'});
     }else{ 
       errores = ""
       return res.redirect('/login');

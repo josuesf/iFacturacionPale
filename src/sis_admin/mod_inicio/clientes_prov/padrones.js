@@ -18,8 +18,8 @@ function Ver(_escritura, padrones, Id_ClienteProveedor) {
                             <p>Al eliminar este padron no podra recuperarlo. Desea continuar de todas maneras?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
+                            <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -36,10 +36,8 @@ function Ver(_escritura, padrones, Id_ClienteProveedor) {
                             <h4 class="modal-title">Agregar o Editar Padron</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                </div>
-                                <div class="box-body" id="form_modal">
+                            <div class="panel">
+                                <div class="panel-body" id="form_modal">
                                     
                                 </div>
                             </div>
@@ -48,7 +46,7 @@ function Ver(_escritura, padrones, Id_ClienteProveedor) {
                     </div>
                 </div>
             </div>
-            <div class="box-header">
+            <div class="panel-heading">
                 <a class="btn btn-info pull-right" data-toggle="modal" onclick="${() => AbrirPadron(_escritura, Id_ClienteProveedor)}" data-target="#modal-nuevo">
                 <i class="fa fa-plus"></i> Agregar Padron</a>
             </div>
@@ -89,7 +87,7 @@ function Ver(_escritura, padrones, Id_ClienteProveedor) {
 }
 function CargarFormulario(_escritura, tipos_padrones, Id_ClienteProveedor, e) {
     const el = yo`
-    <div class="box-body" id="form_modal">
+    <div class="panel-body" id="form_modal">
         <div class="row">
             <div class="alert alert-callout alert-danger hidden" id="divErrors_P">
                 <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>

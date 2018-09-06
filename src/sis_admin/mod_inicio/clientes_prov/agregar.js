@@ -32,19 +32,20 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarClientes(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${() => ListarClientes(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                        ${cliente ? 'Editar' : 'Nuevo'} Cliente/Proveedor
+                    </header>
                     
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <h3 class="box-title">${cliente ? 'Editar' : 'Nuevo'} Cliente/Proveedor</h3>
-                    <div class="box box-default">
-                        <div class="box-body">
+                
+                <div class="card-body"> 
+                    <div class="panel">
+                        <div class="panel-body">
                             <div class="row">
                                 <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                     <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -292,7 +293,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                                                 <div class="col-sm-6">
                                                                                     <div class="form-group">
                                                                                         <label for="Fecha_Nacimiento">Fecha de Nacimiento</label>
-                                                                                        <input type="date" class="form-control" id="Fecha_Nacimiento" placeholder='dd/mm/aaaa' value="${cliente ? cliente.Fecha_Nacimiento.split('T')[0] : ''}">
+                                                                                        <input type="date" class="form-control" id="Fecha_Nacimiento" placeholder='dd/mm/aaaa' value="${(cliente && cliente.Fecha_Nacimiento!=null) ? cliente.Fecha_Nacimiento.split('T')[0] : ''}">
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col-sm-6">
@@ -366,7 +367,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="box-footer">
+                                                <div class="card-actionbar">
                                                     <button onclick="${() => Guardar(_escritura, mas_variables.diagramas, cliente)}" class="btn btn-primary">Guardar</button>
                                                 </div>
                                             </div>
