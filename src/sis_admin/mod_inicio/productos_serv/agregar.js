@@ -25,8 +25,8 @@ function Ver(_escritura, variables, producto){
                         <p>Al eliminar esta presentacion se perderan todos los datos.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-outline" id="btnEliminar-presentacion-ubicacion" data-dismiss="modal">Si, eliminar</button>
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="btnEliminar-presentacion-ubicacion" data-dismiss="modal">Si, eliminar</button>
                     </div>
                 </div>
             </div>
@@ -48,14 +48,16 @@ function Ver(_escritura, variables, producto){
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${()=>ListarProductosServ(_escritura)} class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                    <a onclick=${()=>ListarProductosServ(_escritura)} class="btn btn-xs btn-icon-toggle">
+                        <i class="fa fa-arrow-left"></i></a>
+                        Atras
+                    </header>
     
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+                </div> 
+                <div class="card-body">
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
                             <li class="active">

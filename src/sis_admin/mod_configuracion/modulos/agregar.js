@@ -25,24 +25,22 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarModulos(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${modulo ? 'Editar' : 'Nuevo'} Modulo</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <!-- form start -->
+            <div class="card">
+                <div class="card-head">
+                    <header>
+
+                        <a onclick=${() => ListarModulos(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                        ${modulo ? 'Editar' : 'Nuevo'} Modulo
+                    </header>
+                
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -78,7 +76,7 @@ module.exports = function NuevoModulo(_escritura, raices, modulo) {
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, modulo)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

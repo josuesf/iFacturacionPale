@@ -126,11 +126,13 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
                                         <div class="form-group">
                                             <label for=""> Cajas </label>
                                             ${cajas.map(c => yo`
+                                            <div class="row">
                                                 <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                     <label>
                                                         <input type="checkbox" id="${c.Cod_Caja}" checked="${c.Relacion}" ><span> ${c.Des_Caja}</span>
                                                     </label>
                                                 </div>
+                                            </div>
                                             `)}
                                         </div>
                                     </div>

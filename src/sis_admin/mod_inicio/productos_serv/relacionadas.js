@@ -6,15 +6,18 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 function Ver(variables, paginas, pagina_actual, _escritura){
     var el = yo`
-    <div>
-        <div class="box-header">
-            <h3 class="box-title">Lista de Elementos Relacionados</h3>
-            ${_escritura ? yo`
-            <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${() => AgregarElementosRelacionados(variables, _escritura, producto)}">
-                <i class="fa fa-plus"></i> Nuevo</a>`: yo``}
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
+    <div class="card">
+        <div class="card-head">
+            <header>Lista de Elementos Relacionados</header>
+            <div class="tools">
+                <div class="btn-group">
+                ${_escritura ? yo`
+                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${() => AgregarElementosRelacionados(variables, _escritura, producto)}">
+                    <i class="fa fa-plus"></i> Nuevo</a>`: yo``}
+                </div>
+            </div>
+        </div> 
+        <div class="card-body">
             <div class="table-responsive">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -33,7 +36,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
 
                 </table>
             </div>
-            <div class="box-footer clearfix">
+            <div class="card-actionbar">
                 <ul class="pagination pagination-sm no-margin pull-right">
                     <li>
                         <a href="#" onclick=${()=>(pagina_actual>0)?tabRelacionadas(variables, _escritura,pagina_actual-1):null}>«</a>

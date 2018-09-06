@@ -87,14 +87,24 @@ function Ver(Flag_Cerrado) {
                     <li>
                         <a href="javascript:void(0)" onclick=${() => ListarEmpresa(true)}><span class="title"> Empresa</span></a>
                     </li>
+                    
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => ListarSucursales(true)}><span class="title"> Sucursales</span></a>
+                    </li>
                     <li>
                         <a href="javascript:void(0)" onclick=${() => ListarUsuarios(true)}><span class="title"> Usuarios</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => ListarPerfiles(true)}><span class="title"> Perfiles</span></a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" onclick=${() => ListarCajas(true)}><span class="title"> Cajas</span></a>
                     </li>
                     <li>
                         <a href="javascript:void(0)" onclick=${() => ListarParametros(true)}><span class="title"> Parametros</span></a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)" onclick=${() => ListarModulos(true)}><span class="title"> Modulos</span></a>
                     </li>
                     
                 </ul>

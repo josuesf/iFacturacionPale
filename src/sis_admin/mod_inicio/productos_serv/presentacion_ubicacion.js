@@ -6,15 +6,19 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 function Ver(variables, _escritura, producto) {
     var el = yo`
-    <div>
-        <div class="box-header">
-            <h3 class="box-title">Lista de Stock por Almacen</h3>
-            ${_escritura ? yo`
-            <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${() => AgregarPresentacion(variables, _escritura, producto)}">
-                <i class="fa fa-plus"></i> Nuevo</a>`: yo``}
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
+    <div class="card">
+        <div class="card-head">
+            <header> Lista de Stock por Almacen
+            <header>
+            <div class="tools">
+                <div class="btn-group">
+                ${_escritura ? yo`
+                <a class="btn btn-info pull-right" data-toggle="modal" data-target="#modal-nuevo-general" onclick="${() => AgregarPresentacion(variables, _escritura, producto)}">
+                    <i class="fa fa-plus"></i> Nuevo</a>`: yo``}
+                </div>
+            </div>
+        </div> 
+        <div class="card-body">
             <div class="table-responsive">
                 <table id="example1" class="table table-bordered table-striped">
                     <thead>
@@ -80,10 +84,10 @@ function VerAgregarPresentacionUbicacion(variables, _escritura, producto,present
                         <h4 class="modal-title">Producto Stock</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
+                        <div class="panel">
                             <!-- form start -->
                             <div role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                     <div class="row">
                                         <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                             <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -157,9 +161,9 @@ function VerAgregarPresentacionUbicacion(variables, _escritura, producto,present
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <label for="Flag_Convertir"></label>
-                                                <div class="checkbox form-group">
+                                                <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                     <label>
-                                                    <input type="checkbox" id="Flag_Convertir" ><b> Es posible convertir?</b>
+                                                    <input type="checkbox" id="Flag_Convertir" ><span> Es posible convertir?</span>
                                                     </label>
                                                 </div>       
                                             </div> 
@@ -184,7 +188,7 @@ function VerAgregarPresentacionUbicacion(variables, _escritura, producto,present
                                 </div>
                             </div>
                         </div>
-                        <div class="box-footer">
+                        <div class="panel-footer">
                             <button onclick="${() => GuardarPresentacionUbicacion(variables,_escritura, producto)}"  class="btn btn-primary">Guardar</button>
                         </div>
                     </div>

@@ -6,7 +6,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 function Ver(_escritura, variables, producto){
     var el = yo`
-    <div>
+    <div class="card">
         <div class="modal fade" id="modal-buscar-responsable" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -18,14 +18,13 @@ function Ver(_escritura, variables, producto){
                         <h4 class="modal-title">Buscar cuenta contable</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
+                        <div class="panel">
+                            <div class="panel-heading">
                                 <h3 class="box-title">Buscar cuenta contable</h3>
-                            </div>
-                            <!-- /.box-header -->
+                            </div> 
                             <!-- form start -->
                             <form role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
     
                                     <label for="Cod_UsuarioCajero">Ingrese una cuenta o descripcion</label>
                                     <div class="input-group">
@@ -50,11 +49,11 @@ function Ver(_escritura, variables, producto){
                 </div>
             </div>
         </div>
-        <div class="box-body">
+        <div class="card-body">
             <!-- /.box-header -->
             <!-- form start -->
             <div role="form">
-                <div class="box-body">
+                <div class="panel-body">
                     <div class="row">
                         <div class="alert alert-callout alert-danger hidden" id="divErrors">
                             <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -70,17 +69,17 @@ function Ver(_escritura, variables, producto){
                         </div>`}
                         <div class="col-sm-${producto?'6':'3'}">
                             <label></label>
-                            <div class="checkbox">
+                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                 <label>
-                                    <input type="checkbox" id="Flag_Activo" ${producto ? producto.Flag_Activo ? 'checked':'':''}> Activo?
+                                    <input type="checkbox" id="Flag_Activo" ${producto ? producto.Flag_Activo ? 'checked':'':''}><span> Activo?</span>
                                 </label>
                             </div>
                         </div>
                         <div class="col-sm-${producto?'6':'3'}">
                             <label></label>
-                            <div class="checkbox">
+                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                 <label>
-                                    <input type="checkbox" id="Flag_Stock" ${producto ? producto.Flag_Stock ? 'checked':'':''}> Control Stock?
+                                    <input type="checkbox" id="Flag_Stock" ${producto ? producto.Flag_Stock ? 'checked':'':''}><span> Control Stock?</span>
                                 </label>
                             </div>
                         </div>
@@ -174,11 +173,10 @@ function Ver(_escritura, variables, producto){
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_Contabilidad">
-                        <div class="box-body">
-                            <!-- /.box-header -->
+                        <div class="panel-body"> 
                             <!-- form start -->
                             <div role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <label for="">Cuenta ventas</label>
@@ -254,8 +252,7 @@ function Ver(_escritura, variables, producto){
                                         </div>
                                     </div>
     
-                                </div>
-                                <!-- /.box-body -->
+                                </div> 
     
     
                             </div>
@@ -263,9 +260,9 @@ function Ver(_escritura, variables, producto){
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="tab_Datos_Adicionales">
-                        <div class="box-body">
+                        <div class="panel-body">
                             <div role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <div class="form-group">

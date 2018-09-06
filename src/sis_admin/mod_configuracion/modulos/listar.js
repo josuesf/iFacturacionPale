@@ -21,8 +21,8 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
               <p>Al eliminar el modulo no podra recuperarlo. Desea continuar de todas maneras?</p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-outline" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
+              <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Si,Eliminar</button>
             </div>
           </div>
           <!-- /.modal-content -->
@@ -42,14 +42,17 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <h3 class="box-title">Lista de Modulos</h3>
-                    ${_escritura ? yo`<a onclick=${()=>NuevoModulo(_escritura, raices)} class="btn btn-info pull-right">
-                        <i class="fa fa-plus"></i> Nuevo Modulo</a>`: yo``}
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+            <div class="card">
+                <div class="card-head">
+                <header>Lista de Modulos</header>
+                    <div class="tools">
+                        <div class="btn-group">
+                        ${_escritura ? yo`<a onclick=${()=>NuevoModulo(_escritura, raices)} class="btn btn-info pull-right">
+                            <i class="fa fa-plus"></i> Nuevo Modulo</a>`: yo``}
+                        </div>
+                    </div>
+                </div> 
+                <div class="card-body">
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -76,7 +79,7 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
     
                     </table>
                     </div>
-                    <div class="box-footer clearfix">
+                    <div class="card-actionbar">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
                                 <a href="#" onclick=${()=>(pagina_actual>0)?ListarModulos(_escritura,pagina_actual-1):null}>«</a>

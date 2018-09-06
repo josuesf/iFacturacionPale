@@ -24,32 +24,31 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${()=>ListarPerfiles(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${()=>ListarPerfiles(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                        ${perfil?'Editar':'Nuevo'} Perfil
+                    </header>
                     
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${perfil?'Editar':'Nuevo'} Perfil</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <!-- form start -->
+                <div class="card-body">
+                    <div class="panel">
+                         
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                             
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             ${modulos.map(e=>yo`
-                                            <div class="checkbox">
+                                            <div class="row">
+                                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                 <label>
-                                                    <input type="checkbox" id="${e.Cod_Modulo}" checked="1">${e.Cod_Modulo+' '+e.Des_Modulo} </label>
+                                                    <input type="checkbox" id="${e.Cod_Modulo}" checked="1"><span> ${e.Cod_Modulo+' '+e.Des_Modulo}</span> </label>
+                                            </div>
                                             </div>
                                             `)}
                                         </div>
@@ -61,7 +60,7 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, sucursal)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>

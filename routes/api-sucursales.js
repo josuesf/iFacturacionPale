@@ -31,7 +31,7 @@ router.post('/guardar_sucursal', function (req, res) {
         {nom_parametro:'Pie_Pagina',valor_parametro:input.Pie_Pagina},
         {nom_parametro:'Flag_Activo',valor_parametro:input.Flag_Activo},
         {nom_parametro:'Cod_Ubigeo',valor_parametro:input.Cod_Ubigeo},
-        {nom_parametro:'Cod_Usuario',valor_parametro:input.Cod_Usuario},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
     ]
     procedimientos =[
         {nom_respuesta:'sucursal',sp_name:'USP_PRI_SUCURSAL_G',parametros},

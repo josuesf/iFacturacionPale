@@ -16,16 +16,13 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
+                        <h4 class="modal-title"> Búsqueda de usuario</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Busqueda de usuario</h3>
-                            </div>
-                            <!-- /.box-header -->
-                            <!-- form start -->
+                        <div class="panel">
+                            
                             <form role="form">
-                                <div class="box-body">
+                                <div class="panel-body">
         
                                     <label for="Cod_UsuarioCajero">Ingrese codigo o nombre de usuario</label>
                                     <div class="input-group">
@@ -66,24 +63,22 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
             </ol>
         </section>
         <section class="content">
-            <div class="box">
-                <div class="box-header">
-                    <a onclick=${() => ListarSucursales(_escritura)}
-                    class="btn btn-xs btn-warning">
-                        <i class="fa fa-arrow-left"></i> Atras</a>
-                    
-                    
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">${sucursal ? 'Editar' : 'Nueva'} Sucursal</h3>
-                        </div>
-                        <!-- /.box-header -->
+            <div class="card">
+                <div class="card-head">
+                    <header>
+                        <a onclick=${() => ListarSucursales(_escritura)}
+                        class="btn btn-xs btn-icon-toggle">
+                            <i class="fa fa-arrow-left"></i></a>
+                             ${sucursal ? 'Editar' : 'Nueva'} Sucursal
+                    </header>
+                   
+                </div> 
+                <div class="card-body">
+                    <div class="panel">
+                        
                         <!-- form start -->
                         <form role="form">
-                            <div class="box-body">
+                            <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
                                         <p>Es necesario llenar todos los campos requeridos marcados con rojo</p>
@@ -99,9 +94,9 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="Flag_Activo"></label>
-                                            <div class="checkbox">
+                                            <div class="checkbox-inline checkbox-styled checkbox-primary">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Activo" class="required" checked="${sucursal ? sucursal.Flag_Activo : 0}"> Es Activo?
+                                                    <input type="checkbox" id="Flag_Activo" class="required" checked="${sucursal ? sucursal.Flag_Activo : 0}"><span> Es Activo?</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -165,7 +160,7 @@ module.exports = function NuevaSucursal(_escritura, sucursal) {
                 
                             
                         </form>
-                        <div class="box-footer">
+                        <div class="card-actionbar">
                                 <button onclick="${() => Guardar(_escritura, sucursal)}" class="btn btn-primary">Guardar</button>
                             </div>
                     </div>
