@@ -5,9 +5,12 @@ import {URL} from '../../../constantes_entorno/constantes'
 
 function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, documentos, productos) {
     
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Nueva Caja<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
 
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <div class="modal modal-danger fade" id="modal-danger-documento" style="display: none;">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -93,21 +96,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
         <div class="modal fade" id="modal-nuevo-favorito" style="display: none;">
             
         </div>
-        <section class="content-header">
-            <h1>
-                Cajas
-                <small>Control cajas</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li><a  onclick=${() => ListarCajas(_escritura)} href="#">
-                Cajas</a></li>
-                <li class="active">${caja ? 'Editar' : 'Nuevo'}</li>
-            </ol>
-        </section>
+       
         <section class="content">
             <div class="card">
                 <div class="card-head">
@@ -302,9 +291,22 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
     // $('.select2').select2();
+
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
 }
 
 var impresoras = [
@@ -315,7 +317,13 @@ var impresoras = [
     'BIXOLON SPP R310',
     'EPSON TM-T20II'
 ]
- 
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
+}
 
 function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables, caja, comprobantes, documento){
 

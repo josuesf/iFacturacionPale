@@ -9,7 +9,7 @@ function Ver(variables, _escritura, producto) {
     <div class="card">
         <div class="card-head">
             <header> Lista de Stock por Almacen
-            <header>
+            </header>
             <div class="tools">
                 <div class="btn-group">
                 ${_escritura ? yo`

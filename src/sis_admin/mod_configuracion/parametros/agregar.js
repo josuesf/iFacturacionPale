@@ -7,23 +7,13 @@ import {URL} from '../../../constantes_entorno/constantes'
 
 module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
 
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Nuevo Parametro<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
+
     var el = yo`
-    <div>
-        <section class="content-header">
-            <h1>
-                Perfiles
-                <small>Control perfiles</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li><a  onclick=${()=>ListarParametros(_escritura)} href="#">
-                Perfiles</a></li>
-                <li class="active">${perfil?'Editar':'Nuevo'}</li>
-            </ol>
-        </section>
+    <div class="tab-pane" id="tab_2">
+        
         <section class="content">
             <div class="card">
                 <div class="card-head">
@@ -54,9 +44,30 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
 }
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
+}
+
+
 function BusquedaDeUsuario(){
     var txtBuscarUsuario = document.getElementById("txtBuscarUsuario").value
     if(txtBuscarUsuario.length >= 4){

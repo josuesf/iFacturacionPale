@@ -1241,7 +1241,7 @@ function PrepararImpresionAlmacen(id_Movimiento,callback){
                                                     DETALLES: arrayJson
                                                 }
                                             }
-                                            GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
+                                            GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.COD_TIPO_DOCUMENTO!=undefined?arrayData.COD_TIPO_DOCUMENTO:""+""+arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
 
                                         })
 
@@ -1343,7 +1343,7 @@ function PrepararImpresionMovimientos(id_Movimiento,callback){
 
                             }
                         }
-                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
+                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.COD_TIPO_DOCUMENTO!=undefined?arrayData.COD_TIPO_DOCUMENTO:""+""+arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"",arrayData)
                     }else{
                         callback(false)
                         toastr.error('No tiene autorizada la serie del documento','Error',{timeOut: 5000})
@@ -1439,7 +1439,7 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                                             }
                                         }
                                         
-                                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,arrayData)
+                                        GenerarPDF(arrayData.cuerpo.DOCUMENTO.toString().toUpperCase(),arrayData.COD_TIPO_DOCUMENTO!=undefined?arrayData.COD_TIPO_DOCUMENTO:""+""+arrayData.cuerpo.SERIE+"-"+arrayData.cuerpo.NUMERO,"TOTAL: "+arrayData.cuerpo.MONEDA_ABREV+" "+arrayData.cuerpo.TOTAL,arrayData)
                                     }
 
                                 })

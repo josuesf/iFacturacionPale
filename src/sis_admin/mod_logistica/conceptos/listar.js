@@ -6,10 +6,14 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 
 function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
+
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Conceptos<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <section class="content-header">
-        <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+        <div class="modal modal-danger fade" id="modal-danger-conceptos" style="display: none;">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -29,17 +33,7 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
         </div>
         <!-- /.modal-dialog -->
       </div>
-            <h1>
-                Conceptos
-                <small>Control conceptos</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li class="active">Conceptos</li>
-            </ol>
+         
         </section>
         <section class="content">
             <div class="card">
@@ -76,7 +70,7 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
                                 <td>${getFechaHora(u.Fecha_Reg, true, false)}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => NuevoConcepto(_escritura, tipos_conceptos, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-conceptos" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -102,9 +96,29 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
 }
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
+}
+
 function getFechaHora(str, flagfecha, flaghora){
     var spl = str.split('T')
     var fecha = spl[0].split('-')

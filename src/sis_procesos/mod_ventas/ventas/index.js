@@ -7,7 +7,7 @@ import { ComprobantePago } from '../../mod_compras/comprobante_pago'
 import { preparar_impresion_comprobante } from '../../movimientos_caja'
 
 
-var cantidad_tabs = 1
+var cantidad_tabs = 2
 var IdTabSeleccionado = null
 var arrayValidacion = [null,'null','',undefined]
 var flag_cliente = false 

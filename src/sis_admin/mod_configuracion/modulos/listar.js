@@ -6,10 +6,14 @@ import {URL} from '../../../constantes_entorno/constantes'
 
 
 function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
+
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Modulos<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <section class="content-header">
-        <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+        <div class="modal modal-danger fade" id="modal-danger-modulos" style="display: none;">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -29,17 +33,7 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
         </div>
         <!-- /.modal-dialog -->
       </div>
-            <h1>
-                Modulos
-                <small>Control modulos</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li class="active">Modulos</li>
-            </ol>
+          
         </section>
         <section class="content">
             <div class="card">
@@ -71,7 +65,7 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
                                 <td>${u.Padre_Modulo}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoModulo(_escritura,raices, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-modulos" onclick="${()=>Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -97,8 +91,27 @@ function Ver(modulos, paginas,pagina_actual, _escritura,raices) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
+}
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
 }
 
 function Eliminar(_escritura, modulo){

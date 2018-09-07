@@ -15,27 +15,17 @@ var preguntas_seguridad = [
 
 function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
 
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Nuevo Usuario<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
+
     var el = yo`
-    <div>
-        <section class="content-header">
-            <h1>
-                Usuarios
-                <small>Control usuarios</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li><a  onclick=${() => ListarUsuarios(_escritura)} href="#">
-                Usuarios</a></li>
-                <li class="active">${usuario ? 'Editar' : 'Nuevo'}</li>
-            </ol>
-        </section>
+    <div class="tab-pane" id="tab_2">
+        
         <section class="content">
             <div class="card">
                 <div class="card-head">
-                    <header><a onclick=${() => ListarUsuarios(_escritura)} class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i></a> Nuevo Usuario
+                    <header><a onclick=${() => ListarUsuarios(_escritura)} class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i></a> ${usuario ? 'Editar' : 'Nuevo'} Usuario
                    </header> 
                     
                 </div>
@@ -160,9 +150,29 @@ function Ver(_escritura, _estados, _perfiles, cajas, usuario) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
 }
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
+}
+
 function ValidacionesExtras(usuario){
     if(!usuario){
         if(document.getElementById('Contrasena').value!=document.getElementById('Contrasena2').value){

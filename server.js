@@ -52,6 +52,7 @@ app.use('/reporting', reportingApp);
 
 jsreport = require('jsreport-core')(
   {
+    tempDirectory: require('path').join(__dirname, 'formatos/temp'),
     store: {
       provider: 'fs'
     },
@@ -254,7 +255,8 @@ function CargarVariables(req,res){
                   app.locals.arqueo = dataArqueo.result
                   res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                               Cod_Usuarios:req.session.username,
-                                              Nick:req.session.nick });
+                                              Nick:req.session.nick,
+                                              Turno:app.locals.turno[0].Des_Turno });
               })
             }
             
@@ -283,7 +285,8 @@ app.get('/', function (req, res) {
     }else{
       res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                                 Cod_Usuarios:req.session.username,
-                                                Nick:req.session.nick });
+                                                Nick:req.session.nick,
+                                                Turno:app.locals.turno[0].Des_Turno });
     }
   }
 })
@@ -672,12 +675,12 @@ app.post('/api/report', function(req, res) {
     }).catch(function (e) { 
       console.error(e)
       res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-      '  <i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>Ocurrio un error. Parece que no tienes configurado el formato para este tipo de documento</span></h3></div>')
+      '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>Ocurrio un error. Parece que no tienes configurado el formato para este tipo de documento</span></h3></div>')
       //return res.json({respuesta:'error'})
     })
   }else{
     res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-      '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado. Se registro correctamente la operacion pero no se genero el documento digital correspondiente por falta de configuraciones</span></h3></div>')
+      '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
   }
     
 });
@@ -762,7 +765,7 @@ app.get('/report', function(req, res) {
     })
   }else{
     res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-    '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
+    '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
 
   }
 

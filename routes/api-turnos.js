@@ -150,7 +150,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                         })
                       }
                     });
-
+                    console.log("monedas total")
 
                     ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
                                   "Arqueo de "+desc_caja+" para el Turno "+turno,
@@ -168,7 +168,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                   })
                   
                 }else{
- 
+                  req.app.locals.CierreCompleto = req.app.locals.isla 
                   if(req.app.locals.CierreCompleto){
 
                     var arregloMon=[]
@@ -180,7 +180,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                         })
                       }
                     });
-
+                    console.log("cierre completo 1")
                     ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
                                   "Arqueo de "+desc_caja+" para el Turno "+turno,
                                   turno,
@@ -196,7 +196,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                                   }) 
                   }else{
                     if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-
+                      console.log("cierre completo 2")
                       var arregloMon=[]
                       dataSaldoAnterior.result.forEach(element => {
                         if(element.Nom_Moneda!='OTROS'){
@@ -222,7 +222,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                                     }) 
 
                     }else{ 
-                      res.json({respuesta:"error",data:"No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"})
+                      res.json({respuesta:"error",data:"No se Puede Aperturar el Turno "+ turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"})
                     }
                   }
                 }

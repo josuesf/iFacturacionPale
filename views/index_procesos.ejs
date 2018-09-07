@@ -18,8 +18,11 @@
       <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/material-design-iconic-font.min5730.css" />
       <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/DataTables/jquery.dataTables.css" />
       <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/toastr/toastr.css" />
+      <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/bootstrap-datepicker/datepicker3ddea.css" />
+      <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/timepicker/bootstrap-timepicker.min.css" />
       <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/waitMe/waitMe.min.css" />
       <link type="text/css" rel="stylesheet" href="/assets/css/custom.css" />
+      <link type="text/css" rel="stylesheet" href="/assets/css/theme-default/libs/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" />
        
 	</head>
  
@@ -49,6 +52,17 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="headerbar-right"> 
+
+        <ul class="header-nav header-nav-options">
+              
+          <li class="dropdown hidden-xs">
+            <a href="javascript:void(0);">
+              <span class="badge style-primary" style="font-size: 15px;">TURNO : <%=Turno%></span> 
+            </a>
+          </li>
+        
+        </ul>
+
         <ul class="header-nav header-nav-profile">
           <li class="dropdown">
             <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
@@ -138,6 +152,10 @@
   <script src="/assets/js/libs/toastr/toastr.js"></script> 
   <script src="/assets/js/libs/jsreport/jsreport.js"></script> 
   <script src="/assets/js/custom.js"></script>
+  <script src="/assets/js/libs/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+  <script src="/assets/js/libs/ckeditor/ckeditor.js"></script>
+  <script src="/assets/js/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+  <script src="/assets/js/libs/timepicker/bootstrap-timepicker.min.js"></script>
   <script src="/assets/js/libs/waitMe/waitMe.min.js"></script>
   <script src="/assets/js/libs/jquery-ui/jquery.ui.combobox.js"></script>  
   <script src="/app_proc.js"></script>

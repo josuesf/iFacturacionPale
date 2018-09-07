@@ -5,7 +5,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 function Ver(_escritura, contactos, Id_ClienteProveedor, documentos) {
     var el = yo`
         <div class="table-responsive">
-            <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+            <div class="modal modal-danger fade" id="modal-danger-contactos" style="display: none;">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -79,7 +79,7 @@ function Ver(_escritura, contactos, Id_ClienteProveedor, documentos) {
                             <td>${u.Celular}</td>
                             <td>
                                 ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => AbrirContacto(_escritura, Id_ClienteProveedor, documentos, u.Id_ClienteContacto)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u, documentos)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-contactos" onclick="${() => Eliminar(_escritura, u, documentos)}"><i class="fa fa-trash"></i></button>` : yo``}
                             </td>
                         </tr>`)}
                     </tbody>

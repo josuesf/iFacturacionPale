@@ -5,40 +5,31 @@ import { NuevoProductoServ } from './agregar'
 import {URL} from '../../../constantes_entorno/constantes'
 
 function Ver(variables, paginas, pagina_actual, _escritura){
+
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Productos y Servicios <a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <section class="content-header">
-        <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span></button>
-              <h4 class="modal-title">¿Esta seguro que desea eliminar este elemento?</h4>
+            <div class="modal modal-danger fade" id="modal-danger-conf" style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title">¿Esta seguro que desea eliminar este elemento?</h4>
+                        </div>
+                        <div class="modal-body">
+                        <p>Al eliminar este elemento no podra recuperarlo. Desea continuar de todas maneras?</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" id="btnEliminarProducto" data-dismiss="modal">Si, Eliminar</button>
+                        </div>
+                    </div> 
+                </div> 
             </div>
-            <div class="modal-body">
-              <p>Al eliminar este elemento no podra recuperarlo. Desea continuar de todas maneras?</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-              <button type="button" class="btn btn-success" id="btnEliminar" data-dismiss="modal">Si, Eliminar</button>
-            </div>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-            <h1>
-                Productos y Servicios
-                <small>Control productos y servicios</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Inicio</a>
-                </li>
-                <li class="active">Productos y servicios</li>
-            </ol>
         </section>
         <section class="content">
             <div class="card">
@@ -78,7 +69,7 @@ function Ver(variables, paginas, pagina_actual, _escritura){
                                 <td>${u.Flag_Activo?"Si":"No"}</td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoProductoServ(_escritura, variables, u.Id_Producto)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${()=>EliminarProductoServ(_escritura, u.Id_Producto)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-conf" onclick="${()=>EliminarProductoServ(_escritura, u.Id_Producto)}"><i class="fa fa-trash"></i></button>` : yo``}
                                     
                                 </td>
                             </tr>`)}
@@ -104,8 +95,27 @@ function Ver(variables, paginas, pagina_actual, _escritura){
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
+}
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
 }
 
 // function getFechaHora(str, flagfecha, flaghora){
@@ -118,8 +128,10 @@ function Ver(variables, paginas, pagina_actual, _escritura){
 // }
 
  function EliminarProductoServ(_escritura, Id_Producto){
-     var btnEliminar = document.getElementById('btnEliminar')
+     console.log("id producto",Id_Producto)
+     var btnEliminar = document.getElementById('btnEliminarProducto')
      btnEliminar.addEventListener('click', function del(ev){ 
+        console.log("click eliminar")
         run_waitMe($('#main-contenido'), 3, "ios");
          const parametros = {
              method: 'POST',
@@ -134,8 +146,9 @@ function Ver(variables, paginas, pagina_actual, _escritura){
          fetch(URL+'/productos_serv_api/eliminar_producto', parametros)
              .then(req => req.json())
              .then(res => {
-                ListarProductosServ(_escritura,0)
-                this.removeEventListener('click', del)
+                console.log("respuesta de eliminacion",res)
+                //ListarProductosServ(_escritura,0)
+                //this.removeEventListener('click', del)
                 $('#main-contenido').waitMe('hide');
              }).catch(function (e) {
                 console.log(e);
@@ -170,8 +183,9 @@ function ListarProductosServ(escritura,NumeroPagina) {
                 paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
                 Ver(res.data, paginas,NumeroPagina||0, _escritura)
             }
-            else
+            else{
                 Ver([])
+            }
             
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {

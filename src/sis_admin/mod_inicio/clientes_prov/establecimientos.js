@@ -5,7 +5,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 function Ver(_escritura, establecimientos, Id_ClienteProveedor) {
     var el = yo`
         <div class="table-responsive">
-            <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+            <div class="modal modal-danger fade" id="modal-danger-establecimientos" style="display: none;">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -74,7 +74,7 @@ function Ver(_escritura, establecimientos, Id_ClienteProveedor) {
                             <td>${u.Obs_Establecimiento}</td>
                             <td>
                                 ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${() => AbrirEstablecimiento(_escritura, Id_ClienteProveedor, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
+                                ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-establecimientos" onclick="${() => Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
                             </td>
                         </tr>`)}
                     </tbody>

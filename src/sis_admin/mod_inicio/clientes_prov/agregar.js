@@ -13,24 +13,13 @@ import { ActividadEconomica } from './actividad_eco'
 import { Padrones } from './padrones'
 
 function NuevoCliente(_escritura, mas_variables, cliente) {
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Nuevo Cliente <a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
 
     var el = yo`
-    <div>
-        <section class="content-header">
-            <h1>
-                Clientes/Proveedores
-                <small>Control clientes</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Inicio</a>
-                </li>
-                <li><a  onclick=${() => ListarClientes(_escritura)} href="#">
-                Clientes</a></li>
-                <li class="active">${cliente ? 'Editar' : 'Nuevo'}</li>
-            </ol>
-        </section>
+    <div class="tab-pane" id="tab_2">
+       
         <section class="content">
             <div class="card">
                 <div class="card-head">
@@ -57,59 +46,57 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                             ${cliente ? yo`
                                             <ul class="nav nav-tabs">
                                                 <li class="active">
-                                                    <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                                    <a href="#tab_1_config" data-toggle="tab" aria-expanded="true">
                                                         <i class="fa fa-file"></i> Datos Generales</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => CuentasBancarias(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => CuentasBancarias(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Cuentas Bancarias</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Contactos(_escritura, cliente.Id_ClienteProveedor, mas_variables.documentos)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => Contactos(_escritura, cliente.Id_ClienteProveedor, mas_variables.documentos)}" aria-expanded="true">
                                                         Contactos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Establecimientos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => Establecimientos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Establecimientos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => PrecioProducto(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => PrecioProducto(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Precio de Productos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Vehiculos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => Vehiculos(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Vehiculos</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Licitaciones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => Licitaciones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Licitaciones</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => ActividadEconomica(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => ActividadEconomica(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Actividad Economica</a>
                                                 </li>
                                                 <li class="">
-                                                    <a href="#tab_2" data-toggle="tab" onclick="${() => Padrones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
+                                                    <a href="#tab_2_config" data-toggle="tab" onclick="${() => Padrones(_escritura, cliente.Id_ClienteProveedor)}" aria-expanded="true">
                                                         Padrones</a>
                                                 </li>
                                             </ul>`
             : yo`
                                             <ul class="nav nav-tabs">
                                                 <li class="active">
-                                                    <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                                    <a href="#tab_1_config" data-toggle="tab" aria-expanded="true">
                                                         <i class="fa fa-file"></i> Datos Generales</a>
                                                 </li>
                                             </ul>`}
                                         <div class="tab-content">
-                                            <div class="tab-pane" id="tab_2">
+                                            <div class="tab-pane" id="tab_2_config">
                                                 <div class="row" id="tab_current">
 
                                                 </div>
                                             </div>
-                                            <div class="tab-pane active" id="tab_1">
-                                                <div id="form_error" style="display: none;" class="alert alert-callout alert-danger">
-                                                    <p id="error_text"></p>
-                                                </div>
+                                            <div class="tab-pane active" id="tab_1_config">
+                                               
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
@@ -151,7 +138,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
                                                             <label for="Cliente">Razon Social *</label>
-                                                            <input type="text" style="text-transform:uppercase" class="form-control required" id="Cliente" value="${cliente ? cliente.Cliente : ''}">
+                                                            <input type="text" style="text-transform:uppercase" class="form-control" id="Cliente" value="${cliente ? cliente.Cliente : ''}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -383,11 +370,31 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
+
     if (cliente) {
         CambioDepartamento(cliente.Cod_Ubigeo)
     }
+}
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
 }
 function getValueXML(xmlDoc, TAG) {
     if (xmlDoc.getElementsByTagName(TAG).length > 0 && xmlDoc.getElementsByTagName(TAG)[0].childNodes.length > 0) {
@@ -421,20 +428,28 @@ function VerificarDoc() {
     var Max_Caracteres = $('#Cod_TipoDocumento').val() == '6' ? 11 : 8
     if (Nro_Documento.length != Max_Caracteres || isNaN(parseInt(Nro_Documento))) {
         $('#error_text').text('Ingrese un numero correcto de documento')
-        $('#form_error').show()
+        $('#tab_2#divErrors').show()
         $('#Nro_Documento').select()
     } else {
-        $('#form_error').hide()
+        $('#tab_2#divErrors').hide()
     }
 }
 function CambioTipoDoc() {
     if ($('#Cod_TipoDocumento').val() == '6') {
         $('#formRUC').show()
         $('#formDNI').hide()
+        $("#Ap_Paterno").removeClass("required")
+        $("#Ap_Materno").removeClass("required")
+        $("#Nombres").removeClass("required")
+        $("#Cliente").addClass("required")
 
     } else {
         $('#formRUC').hide()
         $('#formDNI').show()
+        $("#Ap_Paterno").addClass("required")
+        $("#Ap_Materno").addClass("required")
+        $("#Nombres").addClass("required")
+        $("#Cliente").removeClass("required")
     }
     $('#Nro_Documento').select()
 }
@@ -503,7 +518,7 @@ function CambioProvincia(Cod_Ubigeo) {
 }
 
 function Guardar(_escritura, diagramas, cliente) {
-    if (ValidacionCampos()) {
+    if (ValidacionCampos('divErrors','tab_2')) {
         run_waitMe($('#main-contenido'), 1, "ios","Guardando cliente proveedor...");
         var Id_ClienteProveedor = cliente ? cliente.Id_ClienteProveedor : '-1'
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDocumento').value

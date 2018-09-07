@@ -4,10 +4,14 @@ import { URL } from '../../../constantes_entorno/constantes'
 
 
 function Ver(empresa, _escritura) {
+
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Empresas<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <section class="content-header">
-        <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
+        <div class="modal modal-danger fade" id="modal-danger-empresa" style="display: none;">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -27,17 +31,7 @@ function Ver(empresa, _escritura) {
         </div>
         <!-- /.modal-dialog -->
       </div>
-            <h1>
-                Empresa
-                <small>Control de empresa</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Configuracion</a>
-                </li>
-                <li class="active">Empresa</li>
-            </ol>
+           
         </section>
         <section class="content">
             <div class="card">
@@ -140,9 +134,29 @@ function Ver(empresa, _escritura) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
 }
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
+}
+
 
 function GuardarEmpresa(_escritura, usuario) {
 

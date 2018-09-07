@@ -6,8 +6,12 @@ import {URL} from '../../../constantes_entorno/constantes'
 
 
 function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
+
+    var tab = yo`
+    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Almacenes<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-    <div>
+    <div class="tab-pane" id="tab_2">
         <section class="content-header">
         <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
             <div class="modal-dialog">
@@ -30,17 +34,7 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
             </div>
             <!-- /.modal-dialog -->
         </div>
-            <h1>
-                Almacenes
-                <small>Control almacenes</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="#">
-                        <i class="fa fa-cog"></i> Logistica</a>
-                </li>
-                <li class="active">Almacenes</li>
-            </ol>
+          
         </section>
         <section class="content">
             <div class="card">
@@ -101,8 +95,28 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
             </div>
         </section>
     </div>`
-    var main = document.getElementById('main-contenido');
-    empty(main).appendChild(el);
+    //var main = document.getElementById('main-contenido');
+    //empty(main).appendChild(el);
+    if($("#tab_2").length){  
+
+        $('#tab_2').remove()
+        $('#id_2').parents('li').remove()
+
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    }else{
+        $("#tabs").append(tab) 
+        $("#tabs_contents").append(el)
+    } 
+    $("#id_2").click()
+}
+
+
+function CerrarTab(){
+    $('#tab_2').remove()
+    $('#id_2').parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show'); 
 }
 
 function Eliminar(_escritura, almacen){

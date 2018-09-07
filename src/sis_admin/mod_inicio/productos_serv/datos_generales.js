@@ -29,9 +29,9 @@ function Ver(_escritura, variables, producto){
                                     <label for="Cod_UsuarioCajero">Ingrese una cuenta o descripcion</label>
                                     <div class="input-group">
                                         <div class="input-group-btn">
-                                            <button type="button" class="btn btn-primary" id="btnBuscar">Buscar</button>
+                                            <button type="button" class="btn btn-primary" id="btnBuscarConf">Buscar</button>
                                         </div>
-                                        <input type="text" class="form-control" id="txtBuscarCuenta" onkeypress="${()=> BusquedaCuenta()}">
+                                        <input type="text" class="form-control" id="txtBuscarCuentaConf" onkeypress="${()=> BusquedaCuenta()}">
                                     </div>
                                     <br>
                                     <div class="table-responsive" id="contenedorTablaCuentas">
@@ -49,7 +49,7 @@ function Ver(_escritura, variables, producto){
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="divDatosGenerales">
             <!-- /.box-header -->
             <!-- form start -->
             <div role="form">
@@ -289,17 +289,17 @@ function Ver(_escritura, variables, producto){
     var main = document.getElementById('tab_general');
     empty(main).appendChild(el);
     $('#modal-buscar-responsable').on('hidden.bs.modal', function () {
-        var old_element = document.getElementById("btnBuscar");
+        var old_element = document.getElementById("btnBuscarConf");
         var new_element = old_element.cloneNode(true);
         old_element.parentNode.replaceChild(new_element, old_element);
-        var old_element1 = document.getElementById("txtBuscarCuenta");
+        var old_element1 = document.getElementById("txtBuscarCuentaConf");
         var new_element1 = old_element1.cloneNode(true);    
         old_element1.parentNode.replaceChild(new_element1, old_element1);
     });
 }
 
 function GuardarProducto(_escritura, producto){
-    if(ValidacionCampos()){
+    if(ValidacionCampos('divErrors','divDatosGenerales')){
         var Id_Producto='-1'
         if(producto != undefined)
             Id_Producto = producto.Id_Producto
@@ -368,15 +368,15 @@ function GuardarProducto(_escritura, producto){
 
 function ClickBuscar(ev){
     var id = ev.toElement.id
-    var btnBuscar = document.getElementById('btnBuscar')
+    var btnBuscar = document.getElementById('btnBuscarConf')
     btnBuscar.addEventListener('click', () => BusquedaCuenta(id))
-    var txtBuscarCuenta = document.getElementById("txtBuscarCuenta")
+    var txtBuscarCuenta = document.getElementById("txtBuscarCuentaConf")
     txtBuscarCuenta.addEventListener('keydown', () => BusquedaCuenta(id))
 }
     
 
 function BusquedaCuenta (id){
-    var txtBuscarCuenta = document.getElementById("txtBuscarCuenta").value
+    var txtBuscarCuenta = document.getElementById("txtBuscarCuentaConf").value
     if(txtBuscarCuenta.length >= 0){
         const parametros = {
             method: 'POST',
