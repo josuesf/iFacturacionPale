@@ -202,6 +202,11 @@ function AbrirModalCambiarTurno(){
             </div>
             <div class="modal-body">
                 <div class="row">
+                    <div class="alert alert-callout alert-danger" id="divErrorCambioTurno" style="display: none;">
+                        <p id="textErrorCambioTurno" class="text-danger"></p>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
                         <label for="Gestion">Gestion</label>
@@ -286,8 +291,10 @@ function TraerPeriodos(){
             $('#divPeriodos').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
+            $("#divErrorCambioTurno").css("display","block")
+            $("#textErrorCambioTurno").text('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla') 
             $('#divPeriodos').waitMe('hide');
-            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+          //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }
 
@@ -313,12 +320,46 @@ function TraerTurnos(){
         }).catch(function (e) {
             console.log(e);
             $('#divTurnos').waitMe('hide');
-            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+            $("#divErrorCambioTurno").css("display","block")
+            $("#textErrorCambioTurno").text('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla') 
+            
+            //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
         });
 }
 
 function CambiarTurnoSistema(){
-    
+    run_waitMe($('#modal-alerta'), 1, "ios","Cambiando turno...");
+    var Turno = $("#Turno").val()
+    var Gestion = $("#Gestion").val()
+    var Periodo = $("#Periodo").val()
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+            Gestion,
+            Periodo,
+            Turno
+        })
+    }
+    fetch(URL+'/turnos_api/cambiar_turno_sistema', parametros)
+    .then(req => req.json())
+    .then(res => { 
+       if(res.respuesta=='ok'){
+        location.reload();
+       }else{
+           $("#divErrorCambioTurno").css("display","block")
+           $("#textErrorCambioTurno").text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.data) 
+       }
+       $('#modal-alerta').waitMe('hide');
+    }).catch(function (e) {
+        console.log(e);
+        $("#divErrorCambioTurno").css("display","block")
+        $("#textErrorCambioTurno").text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e)
+        $('#modal-alerta').waitMe('hide');
+    });
 }
 
 module.exports = function navegador(ctx, next) {

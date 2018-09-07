@@ -45,15 +45,15 @@ function CrearTurnoSiguiente(){
     fetch(URL +'/empresa_api/crear_siguiente_turno', parametros)
         .then(req => req.json())
         .then(res => { 
-            $('#divError').css("display","none")
-            $('#textError').text(''); 
+            //$('#divError').css("display","none")
+            //$('#textError').text(''); 
             TraerTurnos()
             $('#select-turno').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
             $('#select-turno').waitMe('hide');
-            $('#divError').css("display","block")
-            $('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
+            //$('#divError').css("display","block")
+            //$('#textError').text('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e); 
         });
 }
 

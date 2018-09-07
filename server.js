@@ -463,7 +463,7 @@ app.post('/login', function (req, res) {
  
 
 app.post('/logincajas', function (req, res) {
-  if(req.body.Turno!=undefined){ 
+  if(req.body.Turno!=undefined && req.body.Caja!=undefined){ 
     if (!req.session || !req.session.authenticated) {
       return res.redirect('/');
     }else{

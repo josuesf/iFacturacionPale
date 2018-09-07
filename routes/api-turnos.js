@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var {Ejecutar_Procedimientos, EXEC_QUERY} = require('../utility/exec_sp_sql')
+var {Ejecutar_Procedimientos, EXEC_SQL, EXEC_SQL_OUTPUT} = require('../utility/exec_sp_sql')
 // define the home page route
 
 router.post('/get_turnos', function (req, res) {
@@ -91,159 +91,239 @@ router.post('/eliminar_turno', function (req, res){
 
 router.post('/cambiar_turno_sistema', function (req, res){
     input = req.body
-    //var turno = req.body.Turno 
-    CargarVariables(req,res)
+    var gestion = req.body.Gestion
+    var periodo = req.body.Periodo
+    var turno = req.body.Turno 
+    var caja = req.app.locals.caja[0].Cod_Caja
+    var desc_caja = req.app.locals.caja[0].Des_Caja
+    var usuario = req.session.username
+    CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res)
 })
 
 
-function CargarVariables(req,res){
-    p = [
-      { nom_parametro: 'Cod_Turno', valor_parametro: req.session.turno }
+function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
+    var p = [
+      { nom_parametro: 'Cod_Turno', valor_parametro: turno }
     ]
     EXEC_SQL('usp_CAJ_TURNO_ATENCION_TXPK', p , function (dataTurno) {
+      if(dataTurno.err){
+        res.json({respuesta:"error",data:dataTurno.err}) 
+      }
+
       if(dataTurno.result.length>0){
-        app.locals.turno = dataTurno.result
         p = [
-          { nom_parametro: 'Cod_Caja', valor_parametro: req.session.caja }
-        ]
-  
-        EXEC_SQL('usp_CAJ_CAJAS_TXPK', p, function (dataCaja) {
-          app.locals.caja = dataCaja.result
-          p = [
-            { nom_parametro: 'Cod_Sucursal', valor_parametro: dataCaja.result[0].Cod_Sucursal }
-          ] 
-          EXEC_SQL('usp_PRI_SUCURSAL_TXPK', p , function (dataSucursal) {
-            app.locals.sucursal = dataSucursal.result
+          { nom_parametro: 'CodCaja', valor_parametro: caja },
+          { nom_parametro: 'CodTurno', valor_parametro: turno }
+        ] 
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
+          if(dataArqueoFisico.err){
+            res.json({respuesta:"error",data:dataArqueoFisico.err}) 
+          }
+          if(dataArqueoFisico.result.length<=0){
             p = [
-              { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja },
-              { nom_parametro: 'CodTurno', valor_parametro:  req.session.turno }
+              { nom_parametro: 'CodCaja', valor_parametro: caja }
             ] 
-            EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisico) {
-              if(dataArqueoFisico.result.length<=0){
-                app.locals.arqueo = dataArqueoFisico.result
-                p = [
-                  { nom_parametro: 'CodCaja', valor_parametro: dataCaja.result[0].Cod_Caja }
-                ] 
-  
-                EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
-                  p = [
-                    { nom_parametro: 'Cod_Caja', valor_parametro: dataCaja.result[0].Cod_Caja },
-                    { nom_parametro: 'Cod_Turno', valor_parametro:  req.session.turno }
-                  ]
-                  EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
-                    
-                    if(dataSaldoAnterior.result.length==0){
-  
-                      EXEC_SQL('USP_VIS_MONEDAS_TT', [] , function (dataMonedas) {
-                        res.render('loginarqueo.ejs', {  title: 'iFacturacion - Procesos', 
-                                                        caja: app.locals.caja, 
-                                                        turno:req.session.turno,
-                                                        numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                        apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
-                                                        monedas: dataMonedas.result});                      
-                      }) 
-                    }else{
-  
-                      app.locals.CierreCompleto = app.locals.isla 
-                      if(app.locals.CierreCompleto){
-  
-                        res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
-                                                        caja: app.locals.caja, 
-                                                        turno:req.session.turno,
-                                                        numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                        apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
-                                                        dataCierre: dataSaldoAnterior.result})
-                      }else{
-                        if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-                          
-                        res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', 
-                                                        caja: app.locals.caja, 
-                                                        turno:req.session.turno,
-                                                        numero:dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
-                                                        apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno,
-                                                        dataCierre: dataSaldoAnterior.result})
-  
-                        }else{
-                          errores = "No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"
-                          const fecha = new Date()
-                          var anio = fecha.getFullYear() 
-  
-                          var pcajas= [
-                            { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
-                          ]  
-                  
-                          EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', pcajas , function (e) {
-                            if (e.err) {
-                              errores = "Ocurrio un error. "+e.err
-                              return res.redirect('/login');
-                            }else{
-                              if(e.result.length>0){
-                                app.locals.cajasUsuarios = e.result 
-                                res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:e.result,err:errores});
-                              }else{
-                    
-                                EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
-                                  if(m.result.length>0){
-                                    app.locals.cajasUsuarios = m.result 
-                                    res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',gestion: anio,cajas:m.result,err:errores});
-                                  }else{
-                                    errores = 'No existen cajas activas'
-                                    app.locals.isla = false
-                                    app.locals.apertura = false
-                                    app.locals.CierreCompleto = true
-                                    app.locals.caja = { Cod_Caja : null }
-                                    app.locals.turno = null
-                                    app.locals.sucursal = null
-                                    app.locals.arqueo = null
-                                    app.locals.cajasUsuarios=[]
-                                    delete req.session.authenticated;
-                                    return res.redirect('/login');
-                                  }                     
-                                })
-                    
-                              }  
-                            }              
-                          })
-  
-                          /*app.locals.isla = false
-                          app.locals.apertura = false
-                          app.locals.CierreCompleto = true
-                          app.locals.caja = { Cod_Caja : null }
-                          app.locals.turno = null
-                          app.locals.sucursal = null
-                          app.locals.arqueo = null
-                          delete req.session.authenticated;
-                          res.redirect('/login');*/
-                        }
-                      }
-                    }
-                  })
-                })
-  
-              // res.render('loginarqueo.ejs', { title: 'iFacturacion - Procesos', caja: app.locals.caja, turno:req.session.turno,apertura:"Arqueo de "+app.locals.caja[0].Des_Caja+" para el Turno "+req.session.turno});
-              }else{
-                
-                p = [
-                  { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].id_ArqueoFisico }
-                ] 
-                
-                EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
-                    app.locals.arqueo = dataArqueo.result
-                    res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
-                                                Cod_Usuarios:req.session.username,
-                                                Nick:req.session.nick });
-                })
+
+            EXEC_SQL('USP_CAJ_ARQUEOFISICO_TNumeroSiguiente', p , function (dataNumero) {
+              if(dataArqueoFisico.err){
+                res.json({respuesta:"error",data:dataNumero.err}) 
               }
-              
+              p = [
+                { nom_parametro: 'Cod_Caja', valor_parametro: caja },
+                { nom_parametro: 'Cod_Turno', valor_parametro:  turno }
+              ]
+              EXEC_SQL('USP_CAJ_ARQUEOFISICO_TSaldoAnteriorXCajaTurno', p , function (dataSaldoAnterior) {
+
+                if(dataSaldoAnterior.err){
+                  res.json({respuesta:"error",data:dataNumero.err}) 
+                }
+                
+                if(dataSaldoAnterior.result.length==0){
+
+                  EXEC_SQL('USP_VIS_MONEDAS_TT', [] , function (dataMonedas) {
+                    var arregloMon=[]
+                    dataMonedas.result.forEach(element => {
+                      if(element.Nom_Moneda!='OTROS'){
+                        arregloMon.push({
+                          Cod_Moneda:element.Cod_Moneda,
+                          Monto_Moneda:0
+                        })
+                      }
+                    });
+
+
+                    ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                  "Arqueo de "+desc_caja+" para el Turno "+turno,
+                                  turno,
+                                  usuario,
+                                  caja,
+                                  arregloMon,req,function(flag){
+                                    if(flag){ 
+                                      req.session.periodo = periodo
+                                      req.session.gestion = gestion
+                                      req.app.locals.turno = dataTurno.result
+                                      res.json({respuesta:"ok"}) 
+                                    }
+                                  })                    
+                  })
+                  
+                }else{
+ 
+                  if(req.app.locals.CierreCompleto){
+
+                    var arregloMon=[]
+                    dataSaldoAnterior.result.forEach(element => {
+                      if(element.Nom_Moneda!='OTROS'){
+                        arregloMon.push({
+                          Cod_Moneda:element.Cod_Moneda,
+                          Monto_Moneda:element.Monto
+                        })
+                      }
+                    });
+
+                    ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                  "Arqueo de "+desc_caja+" para el Turno "+turno,
+                                  turno,
+                                  usuario,
+                                  caja,
+                                  arregloMon,req,function(flag){
+                                    if(flag){
+                                      req.session.periodo = periodo
+                                      req.session.gestion = gestion
+                                      req.app.locals.turno = dataTurno.result
+                                      res.json({respuesta:"ok"}) 
+                                    }
+                                  }) 
+                  }else{
+                    if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
+
+                      var arregloMon=[]
+                      dataSaldoAnterior.result.forEach(element => {
+                        if(element.Nom_Moneda!='OTROS'){
+                          arregloMon.push({
+                            Cod_Moneda:element.Cod_Moneda,
+                            Monto_Moneda:element.Monto
+                          })
+                        }
+                      });
+
+                      ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
+                                    "Arqueo de "+desc_caja+" para el Turno "+turno,
+                                    turno,
+                                    usuario,
+                                    caja,
+                                    dataSaldoAnterior.result,req,function(flag){
+                                      if(flag){
+                                        req.session.periodo = periodo
+                                        req.session.gestion = gestion
+                                        req.app.locals.turno = dataTurno.result
+                                        res.json({respuesta:"ok"}) 
+                                      }
+                                    }) 
+
+                    }else{ 
+                      res.json({respuesta:"error",data:"No se Puede Aperturar el Turno "+ req.session.turno+ " sin antes Cerrar el Turno "+dataSaldoAnterior.result[0].Cod_Turno+".\n\nVuelva a intentarlo otra vez"})
+                    }
+                  }
+                }
+              })
             })
-          })
-        })
+          }else{
+            
+            p = [
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].id_ArqueoFisico }
+            ] 
+            
+            EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
+              if(dataArqueo.err){
+                res.json({respuesta:"error",data:dataArqueo.err})
+              }
+              req.app.locals.arqueo = dataArqueo.result
+              req.session.periodo = periodo
+              req.session.gestion = gestion
+              req.app.locals.turno = dataTurno.result
+              res.json({respuesta:"ok"}) 
+            })
+          }
+          
+        }) 
       }else{
         res.json({respuesta:"error",data:"No existe el turno seleccionado"}) 
       }                  
     })
-  
-  }
+}
+
+function ArquearCaja(Numero,Des_ArqueoFisico,Cod_Turno,Cod_Usuario,Cod_Caja,ArrayMonedas,req,callback){
+  console.log(ArrayMonedas)
+  const fecha = new Date()
+  const mes = fecha.getMonth() + 1
+  const dia = fecha.getDate()
+  var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+ 
+  var Obs_ArqueoFisico = ''
+  var Fecha = fecha_format
+  var Flag_Cerrado = 0 
+
+  var p = [
+    { nom_parametro: 'id_ArqueoFisico', valor_parametro: -1, tipo:"output"},
+    { nom_parametro: 'Cod_Caja', valor_parametro: Cod_Caja},
+    { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
+    { nom_parametro: 'Numero', valor_parametro: Numero},
+    { nom_parametro: 'Des_ArqueoFisico', valor_parametro: Des_ArqueoFisico},
+    { nom_parametro: 'Obs_ArqueoFisico', valor_parametro: Obs_ArqueoFisico},
+    { nom_parametro: 'Fecha', valor_parametro: Fecha},
+    { nom_parametro: 'Flag_Cerrado', valor_parametro: Flag_Cerrado},
+    { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
+  ]
+
+  EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
+    if(dataArqueoFisico.err){
+      callback(false)
+    }
+    for(var i=0;i<ArrayMonedas.length;i++){
+      var parametros = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+            { nom_parametro: 'Cod_Moneda', valor_parametro: ArrayMonedas[i].Cod_Moneda},
+            { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
+            { nom_parametro: 'Monto', valor_parametro: ArrayMonedas[i].Monto_Moneda},
+            { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario}
+          ]
+
+      EXEC_SQL('USP_CAJ_ARQUEOFISICO_SALDO_G', parametros, function (dataSaldoArqueo) {
+
+        if(dataSaldoArqueo.err){
+          callback(false)
+        }
+         
+        p = [
+          { nom_parametro: 'CodCaja', valor_parametro: Cod_Caja },
+          { nom_parametro: 'CodTurno', valor_parametro:  Cod_Turno}
+        ] 
+        EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisicoCajaTurno) {
+
+          if(dataArqueoFisicoCajaTurno.err){
+            callback(false)
+          }
+
+          p_ = [
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor }
+          ] 
+
+          EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p_ , function (dataArqueo) {
+            if(dataArqueo.err){
+              callback(false)
+            }
+            req.app.locals.arqueo = dataArqueo.result
+            
+          }) 
+        })
+
+      })
+    }
+    req.app.locals.apertura = true
+    callback(true)
+  })
+}
    
 
 
