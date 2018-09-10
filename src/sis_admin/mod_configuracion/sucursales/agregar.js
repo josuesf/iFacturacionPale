@@ -243,7 +243,7 @@ function SeleccionarUsuario(usuario) {
 
 function Guardar(_escritura, sucursal) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    if(ValidacionCampos()){
+    if(ValidacionCampos('divError','tab_2')){
         run_waitMe($('#main-contenido'), 1, "ios","Guardando sucursal...");
         var Cod_Sucursal = sucursal ? sucursal.Cod_Sucursal : document.getElementById('Cod_Sucursal').value.toUpperCase()
         var Nom_Sucursal = document.getElementById('Nom_Sucursal').value.toUpperCase()

@@ -291,7 +291,7 @@ app.get('/', function (req, res) {
   }
 })
 
-app.get('/administracion', function (req, res) {
+/*app.get('/administracion', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
   } else{
@@ -303,7 +303,7 @@ app.get('/administracion', function (req, res) {
       res.redirect('/logout');
     }
   }
-}) 
+}) */
 
 
 app.get('/login', function (req, res) {

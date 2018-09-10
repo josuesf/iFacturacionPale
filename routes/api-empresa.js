@@ -203,7 +203,7 @@ router.post('/register',function(req,res){
         res.render('register.ejs', {err:'El email es inválido'});
       }else{
          
-        if(input.razon!='' && input.ruc!='' && input.celular!='' && input.direccion!='' && input.email!=''){
+        if(input.razon!='' && input.ruc!='' && input.celular.trim()!='' && input.direccion.trim()!='' && input.email!=''){
             const fecha = new Date()
             const mes = fecha.getMonth() + 1
             const dia = fecha.getDate()

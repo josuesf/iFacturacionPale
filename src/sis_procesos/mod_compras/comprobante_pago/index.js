@@ -6,7 +6,7 @@ import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
 import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
-import { refrescar_movimientos } from '../../movimientos_caja'
+import { refrescar_movimientos,preparar_impresion_comprobante } from '../../movimientos_caja'
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','',undefined]
@@ -1237,7 +1237,7 @@ function AgregarFilaTabla(CodLibro,variables){
 function AplicarPercepcion(CodLibro,variables){
     if($("#PorcentajePercepcion").val().trim()!=""){
         var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
-        var Serie = $("#Serie").val()
+        var Serie = arrayValidacion.includes($("#Serie").val())?'':$("#Serie").val()
         var Numero = $("#Numero").val()
         var Calculo = ((parseFloat($("#Gran_Total").val())*parseFloat($("#PorcentajePercepcion").val()))/100).toFixed(2)
         var idFila = "P"+contadorPercepcion
@@ -1260,10 +1260,13 @@ function AplicarPercepcion(CodLibro,variables){
                     <td class="Tipo hidden">PER</td> 
                     <td class="Obs_ComprobanteD hidden"></td> 
                     <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
-                    <ul class="dropdown-menu"> 
-                        <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(idFila,CodLibro)}">Asignar Serie</a></li>
-                        <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                    </ul>
+                    <td>
+                        <div style="display:flex;">
+                            <button type="button" class="btn btn-raised btn-primary btn-sm"  onclick="${()=>AsignarSeries(idFila,CodLibro)}"><i class="fa fa-tasks"></i></button>  
+                            <button type="button" class="btn btn-raised btn-danger btn-sm" onclick="${()=>EliminarFila(idFila,CodLibro,variables)}"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </td>
+                   
                 </tr>`
         $("#tablaBody").append(fila)
         contadorPercepcion++
@@ -2950,7 +2953,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
                                                 $('#modal-alerta').waitMe('hide');
-                                                LimpiarVenta()
+                                                LimpiarVenta() 
     
                                                 if(CodLibro=='14'){
                                                     dataArray.cuerpo.FORMA_PAGO=Des_FormaPago

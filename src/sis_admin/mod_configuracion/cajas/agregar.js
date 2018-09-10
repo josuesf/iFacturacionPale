@@ -106,7 +106,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                     <div class="panel">
                         
                         <!-- form start -->
-                        <div role="form">
+                        <div role="form" id="divAgregarCaja">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="alert alert-callout alert-danger hidden" id="divErrors">
@@ -428,7 +428,7 @@ function VerAgregarDocumento(_escritura, sucursales, usuarios, cuentas_contables
 
 function GuardarCaja(_escritura,caja) {
     //console.log(document.getElementById('Cod_Usuarios').value.toUpperCase())
-    if(ValidacionCampos()){
+    if(ValidacionCampos('divErrors','divAgregarCaja')){
         run_waitMe($('#main-contenido'), 1, "ios","Guardando caja...");
         var Cod_Caja = null
         if (caja != undefined)
