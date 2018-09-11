@@ -87,14 +87,14 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
                     <div class="card-actionbar">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual>0)?ListarSucursales(_escritura,pagina_actual-1):null}>«</a>
+                                <a href="javascript:void(0);" onclick=${()=>(pagina_actual>0)?ListarSucursales(_escritura,pagina_actual-1):null}>«</a>
                             </li>
                             ${((new Array(paginas)).fill(0)).map((p, i) => yo`<li class=${pagina_actual==i?'active':''}>
-                            <a href="#" onclick=${()=>ListarSucursales(_escritura,i)} >${i + 1}</a>
+                            <a href="javascript:void(0);" onclick=${()=>ListarSucursales(_escritura,i)} >${i + 1}</a>
                             </li>`)}
                         
                             <li>
-                                <a href="#" onclick=${()=>(pagina_actual+1<paginas)?ListarSucursales(_escritura,pagina_actual+1):null}>»</a>
+                                <a href="javascript:void(0);" onclick=${()=>(pagina_actual+1<paginas)?ListarSucursales(_escritura,pagina_actual+1):null}>»</a>
                             </li>
                         </ul>
                     </div>

@@ -5,8 +5,8 @@ var nodemailer = require('nodemailer')
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-          user: 'omar.muniz48@gmail.com',
-          pass: 'sas3tigres'
+          user: 'xxxxx483333@gmail.com',
+          pass: 'priena1'
       }
 });
 
@@ -288,6 +288,14 @@ function LimpiarVariablesGlobales() {
     global.objCliente = ''
 }
 
+function LimpiarEventoModales() {
+    $("#modal-proceso").off('shown.bs.modal')
+    $("#modal-proceso").off('hidden.bs.modal')
+
+    $("#modal-superior").off('shown.bs.modal')
+    $("#modal-superior").off('hidden.bs.modal')
+}
+
 function CambiarCadenaConexion(cadena) {
     console.log(cadena)
     var posicionDataSource = cadena.search("Data Source=")
@@ -407,4 +415,4 @@ function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
 }
  
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, LimpiarEventoModales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}

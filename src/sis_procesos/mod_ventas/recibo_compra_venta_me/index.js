@@ -4,6 +4,7 @@ var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { NuevoCliente,BuscarCliente } from '../../modales'
+import { LimpiarEventoModales } from '../../../../utility/tools'
 
 
 var arrayValidacion = [null,'null','',undefined]
@@ -643,7 +644,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
 }
  
 function NuevoCompraVentaME(_escritura, caja) { 
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {

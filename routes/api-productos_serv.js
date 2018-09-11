@@ -317,4 +317,16 @@ router.post('/get_codigo_unidad_by_codP_codA_codTP', function (req, res){
 })
 
 
+router.post('/buscar_cuenta_contable', function (req, res){
+    input = req.body 
+    parametros = [
+        {nom_parametro: 'TextoBuscar', valor_parametro: input.TextoBuscar}
+    ]
+    procedimientos = [
+        {nom_respuesta: 'cuentas', sp_name: 'USP_PRI_CUENTA_CONTABLE_Buscar', parametros}
+    ]
+    Ejecutar_Procedimientos(req,res, procedimientos)
+})
+
+
 module.exports = router;

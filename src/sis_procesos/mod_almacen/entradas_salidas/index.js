@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles} from '../../../../utility/tools'
+import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools'
 import { BuscarProducto } from '../../modales'
 import { BuscarComprobantePago } from '../../modales/comprobante_pago'
 import { AsignarSeriesModal } from '../../modales/series'
@@ -409,7 +409,7 @@ function CambioDestino(CodTipoComprobante,fecha_actual){
 
 function CambioOperacion(CodTipoComprobante){
     $("#divDestino").hide()
-    $("#divRechazar").hide()
+    $("#divRechazar").show()
     $("#divDocRef").show()
     var Cod_Almacen = $("#Cod_Almacen").val()
     if($("#Cod_Operacion").val()=="11"){
@@ -617,9 +617,32 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual){
 }
 
 function RechazarEnvio(){ 
-    
+    var el = yo`<div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title"><strong>Confirmacion</strong></h4>
+                </div>
+                <div class="modal-body">
+                    <p>Esta Seguro que desea RECHAZAR este Envio?</p>
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="${()=>ConfirmarRechazoEnvio()}">Aceptar</button>
+                </div>
+            </div>
+        </div>`
+    var modal_alerta = document.getElementById('modal-superior');
+    empty(modal_alerta).appendChild(el);
+    $('#modal-superior').modal()   
 } 
 
+
+function ConfirmarRechazoEnvio(){
+
+}
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual){
     if($("#divDestino").css("display")=="block" && $("#Cod_Destino").val()!=null && $("#Cod_Destino").val().trim()=="21"){
@@ -759,7 +782,7 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante){
 }
 
 function EntradasSalidas(Cod_TipoComprobante) {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { BloquearControles } from '../../../../utility/tools'
+import { BloquearControles,LimpiarEventoModales } from '../../../../utility/tools'
 
 var aCargarEfectivo = null 
 
@@ -599,7 +599,7 @@ function AceptarConfirmacion(){
 }
 
 function NuevoArqueoCaja(pCargarEfectivo) {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     run_waitMe($('#main-contenido'), 1, "ios");
     aCargarEfectivo = true
     const fecha = new Date()

@@ -3,6 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
+import { LimpiarEventoModales } from '../../../../utility/tools' 
 
 
 function Ver(_escritura, variables,fecha_actual,caja_actual) {
@@ -504,7 +505,7 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
 
 
 function NuevoEnvioEfectivo(_escritura, caja) {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     var Cod_Sucursal = '0001'

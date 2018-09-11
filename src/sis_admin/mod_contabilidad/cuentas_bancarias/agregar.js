@@ -107,9 +107,9 @@ function Ver(_escritura, variables, cuenta) {
                                         <div class="form-group">
                                             <label for=""></label>
                                             
-                                            <div class="checkbox">
+                                            <div class="checkbox checkbox-inline checkbox-styled">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Activo" checked="${cuenta ? cuenta.Flag_Activo : 0}"> Es Activo?
+                                                    <input type="checkbox" id="Flag_Activo" checked="${cuenta ? cuenta.Flag_Activo : 0}"><span> Es Activo? </span>
                                                 </label>
                                             </div>
                                         </div>

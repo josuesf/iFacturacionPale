@@ -568,6 +568,7 @@ function Guardar(_escritura, diagramas, cliente) {
                 Limite_Credito, Obs_Cliente, Num_DiaCredito
             })
         }
+        console.log("parametros de guardado",parametros)
         fetch(URL + '/clientes_api/guardar_cliente', parametros)
             .then(req => req.json())
             .then(res => {

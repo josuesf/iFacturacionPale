@@ -5,7 +5,7 @@ import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '..
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
-import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
+import { ConvertirCadena,BloquearControles, LimpiarEventoModales } from '../../../../utility/tools' 
 import { refrescar_movimientos,preparar_impresion_comprobante } from '../../movimientos_caja'
 
 var listaFormaPago = []
@@ -1055,6 +1055,15 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
     empty(document.getElementById('tablaDetallesComprobante')).appendChild(tabla);
     contador = Detalles.length
     CalcularTotal(CodLibro,variables)
+    $("#tablaDetallesComprobante").find('input[type="number"]').blur(function(){
+        $(this).val(parseFloat($(this).val()).toFixed(2))
+    })
+
+    $("#tablaDetallesComprobante").find('input[type="number"]').keypress(function(e){
+        if(e.which == 13) {
+            $(this).val(parseFloat($(this).val()).toFixed(2))
+        }
+    })
     /*var fila = yo``
     for (var i in Detalles) { 
         var idFila = contador+ Detalles[i].Id_Producto
@@ -1231,6 +1240,16 @@ function AgregarFilaTabla(CodLibro,variables){
         }
     }
    
+    $("#tablaDetallesComprobante").find('input[type="number"]').blur(function(){
+        $(this).val(parseFloat($(this).val()).toFixed(2))
+    })
+
+    $("#tablaDetallesComprobante").find('input[type="number"]').keypress(function(e){
+        if(e.which == 13) {
+            $(this).val(parseFloat($(this).val()).toFixed(2))
+        }
+    })
+
 }
 
 
@@ -1573,14 +1592,14 @@ function EditarCliente(){
 
 function EditarCantidad(idFila,CodLibro,variables){
     $("#"+idFila).find("td.Despachado").text($("#"+idFila).find("td.Cantidad").find('input').val())
-    $("#"+idFila).find("td.Importe").find('input').val(parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))
+    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
 function EditarPrecioUnitario(idFila,CodLibro,variables){ 
     $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
     $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
-    $("#"+idFila).find("td.Importe").find('input').val(parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))
+    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
@@ -1588,7 +1607,7 @@ function EditarPrecioUnitario(idFila,CodLibro,variables){
 function EditarDescuento(idFila,CodLibro,variables){
     $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
     $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
-    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val()) - parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())))
+    $("#"+idFila).find("td.Importe").find('input').val(((parseFloat($("#"+idFila).find("td.PU").find('input').val()) - parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
@@ -1710,7 +1729,7 @@ function CalcularTotal(CodLibro,variables){
 
     if($("#ckbAplicaImpuesto").is(":checked")){
         if($("#ckbIncluyeIGV").is(":checked")){
-            $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
+            $("#Gran_Total").val(parseFloat(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales).toFixed(2))
             var porcDescuentoglobal = ((parseFloat($("#Descuento_Global").val())*100)/(parseFloat($("#Gran_Total").val())+parseFloat($("#Descuento_Global").val())))/100
             Suma = Suma - Suma * porcDescuentoglobal
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
@@ -1718,14 +1737,14 @@ function CalcularTotal(CodLibro,variables){
         }else{
             $("#subtotal").val(Suma)
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
-            $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion+parseFloat($("#Impuesto").val())-parseFloat(DescuentosGlobales))
+            $("#Gran_Total").val(parseFloat(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion+parseFloat($("#Impuesto").val())-parseFloat(DescuentosGlobales)).toFixed(2))
             if(parseFloat($("#Descuento_Global").val())>0){
                 $("#Impuesto").val((parseFloat($("#Gran_Total").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
                 $("#subtotal").val(parseFloat($("#Gran_Total").val())-parseFloat($("#Impuesto").val()))
             }
         }
     }else{
-        $("#Gran_Total").val(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales)
+        $("#Gran_Total").val(parseFloat(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales).toFixed(2))
         $("#subtotal").val(Suma)
         $("#Impuesto").val(0)
     }
@@ -4356,7 +4375,8 @@ async function AsyncCalcularTotal(CodLibro,variables) {
  
 
 function ComprobantePago(Cod_Libro,Cliente,Detalles) {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
+
     run_waitMe($('#main-contenido'), 1, "ios","Cargando ventana para el comprobante...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

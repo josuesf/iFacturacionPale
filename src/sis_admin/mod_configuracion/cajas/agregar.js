@@ -182,16 +182,16 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                 <div class="nav-tabs-custom">
                                                     <ul class="nav nav-tabs">
                                                         <li class="active">
-                                                            <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                                            <a href="#tab_1_caja" data-toggle="tab" aria-expanded="true">
                                                                 <i class="fa fa-file"></i> Documentos Relacionados</a>
                                                         </li>
                                                         <li class="">
-                                                            <a href="#tab_2" data-toggle="tab" aria-expanded="false">
+                                                            <a href="#tab_2_caja" data-toggle="tab" aria-expanded="false">
                                                                 <i class="fa fa-star"></i> Productos Favoritos</a>
                                                         </li>
                                                     </ul>
                                                     <div class="tab-content">
-                                                        <div class="tab-pane active" id="tab_1">
+                                                        <div class="tab-pane active" id="tab_1_caja">
                                                             <div class="card-head">
                                                                 <div class="tools">
                                                                     <div class="btn-group">
@@ -237,7 +237,7 @@ function Ver(_escritura, sucursales, usuarios, cuentas_contables, caja, document
                                                             </div>
                                                         </div>
                                                         <!-- /.tab-pane -->
-                                                        <div class="tab-pane" id="tab_2">
+                                                        <div class="tab-pane" id="tab_2_caja">
                                                             <div class="card-head">
                                                                 <div class="tools">
                                                                     <div class="btn-group">

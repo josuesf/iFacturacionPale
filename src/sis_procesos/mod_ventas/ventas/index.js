@@ -106,8 +106,7 @@ function VerNuevaVenta(variables,CodLibro) {
 
                             <div class="row" style="text-align: left;">
                                 <div class="col-sm-6">
-                                    
-                                    <div class="row">
+                                     
                                         <div class="col-md-12"> 
                                                 ${variables.formaspago.map(e=>yo`
                                                     ${e.Cod_FormaPago=="008"? 
@@ -123,15 +122,13 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     }
                                                 `)}
                                              
-                                        </div>
-                                    </div>
+                                        </div> 
 
                                     ${MostrarCampos(0,variables.formaspago,1,idTabVenta)}
                                                 
                                 </div>
                                 <div class="col-sm-6">
-                                   
-                                    <div class="row">
+                                    
                                          
                                         <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
                                             <label> Tarjetas </label>
@@ -161,9 +158,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                         </div>
 
                                         ${MostrarCampos(0,variables.formaspago,2,idTabVenta)}
-                                            
-
-                                    </div>
+                                             
                                 </div>
                             </div>
                         </div>
@@ -597,15 +592,13 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
     if(opcion==1){
         if(indice<arreglo.length){
             if(arreglo[indice].Cod_FormaPago=='008'){
-                return yo`
-                    <div class="row">
+                return yo` 
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Tipo Cambio</label>
                                 <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
                             </div> 
-                        </div>
-                    </div>`
+                        </div> `
             }else{
                 MostrarCampos(indice+1,arreglo,opcion,idTab)
             }
@@ -617,15 +610,13 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
 
         if(indice<arreglo.length){
             if(arreglo[indice].Cod_FormaPago=='005' || arreglo[indice].Cod_FormaPago=='006'){
-                return  yo`
-                    <div class="row">
+                return  yo` 
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nro Ref.</label>
                                 <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTab}" name="Nro_Tarjeta_${idTab}" >
                             </div> 
-                        </div>
-                    </div>`
+                        </div> `
             }else{
                 MostrarCampos(indice+1,arreglo,opcion,idTab)
             }
@@ -975,7 +966,7 @@ function TabVentaSeleccionado(idTab){
     global.objProductoVentas = ''
 }
 
-function CerrarTabVenta(idTab){
+function CerrarTabVenta(idTab){ 
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 

@@ -3,6 +3,7 @@ var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { BuscarCliente } from '../../modales'
+import { LimpiarEventoModales } from '../../../../utility/tools'
 
 var flag_button = false
 var total = 0 
@@ -291,7 +292,7 @@ function Recepcionados(){
 }
 
 function NuevaRecepcion() {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     totalMonto = 0
     totalRecibido = 0
     total = 0

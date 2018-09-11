@@ -66,9 +66,9 @@ function Ver(_escritura, tipo_almacenes, almacen, cajas_almacen) {
                                         <div class="form-group">
                                             <label for="Flag_Principal"></label>
                                             
-                                            <div class="checkbox">
+                                            <div class="checkbox checkbox-inline checkbox-styled">
                                                 <label>
-                                                    <input type="checkbox" id="Flag_Principal" checked="${almacen ? almacen.Flag_Principal : 0}"> Es Principal?
+                                                    <input type="checkbox" id="Flag_Principal" checked="${almacen ? almacen.Flag_Principal : 0}"><span> Es Principal?</span>
                                                 </label>
                                             </div>
                                         </div>

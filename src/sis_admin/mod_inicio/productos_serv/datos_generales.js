@@ -370,13 +370,13 @@ function ClickBuscar(ev){
     var id = ev.toElement.id
     var btnBuscar = document.getElementById('btnBuscarConf')
     btnBuscar.addEventListener('click', () => BusquedaCuenta(id))
-    var txtBuscarCuenta = document.getElementById("txtBuscarCuentaConf")
+    var txtBuscarCuenta = $("#txtBuscarCuentaConf").get(0)  
     txtBuscarCuenta.addEventListener('keydown', () => BusquedaCuenta(id))
 }
     
 
 function BusquedaCuenta (id){
-    var txtBuscarCuenta = document.getElementById("txtBuscarCuentaConf").value
+    var txtBuscarCuenta = $("#txtBuscarCuentaConf").val()
     if(txtBuscarCuenta.length >= 0){
         const parametros = {
             method: 'POST',
@@ -387,7 +387,7 @@ function BusquedaCuenta (id){
             body: JSON.stringify({
                 TextoBuscar: txtBuscarCuenta
             })
-        }
+        }  
         fetch(URL+'/productos_serv_api/buscar_cuenta_contable', parametros)
         .then(req => req.json())
         .then(res => {

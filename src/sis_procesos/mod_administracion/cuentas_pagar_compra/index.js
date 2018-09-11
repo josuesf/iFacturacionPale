@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles} from '../../../../utility/tools' 
+import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools' 
 import { BuscarCuentasPendientes } from '../../modales/cuentas'
 import { NuevoCliente, BuscarCliente } from '../../modales' 
 
@@ -1511,7 +1511,7 @@ function AceptarConfirmacionCuenta(CodLibro){
 }
  
 function Cuentas(Cod_Libro) {
-    $("#modal-proceso").off('shown.bs.modal')
+    LimpiarEventoModales()
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

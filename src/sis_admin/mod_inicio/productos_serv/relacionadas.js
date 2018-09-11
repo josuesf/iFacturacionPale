@@ -39,15 +39,15 @@ function Ver(variables, paginas, pagina_actual, _escritura){
             <div class="card-actionbar">
                 <ul class="pagination pagination-sm no-margin pull-right">
                     <li>
-                        <a href="#" onclick=${()=>(pagina_actual>0)?tabRelacionadas(variables, _escritura,pagina_actual-1):null}>«</a>
+                        <a href="javascript:void(0);" onclick=${()=>(pagina_actual>0)?tabRelacionadas(variables, _escritura,pagina_actual-1):null}>«</a>
                     </li>
                     ${((new Array(paginas)).fill(0)).map((p, i) => yo`
                     <li class=${pagina_actual==i? 'active': ''}>
-                        <a href="#" onclick=${()=>tabRelacionadas(variables, _escritura,i)} >${i + 1}</a>
+                        <a href="javascript:void(0);" onclick=${()=>tabRelacionadas(variables, _escritura,i)} >${i + 1}</a>
                     </li>`)}
 
                     <li>
-                        <a href="#" onclick=${()=>(pagina_actual+1
+                        <a href="javascript:void(0);" onclick=${()=>(pagina_actual+1
                             <paginas)?tabRelacionadas(variables, _escritura,pagina_actual+1):null}>»</a>
                     </li>
                 </ul>
