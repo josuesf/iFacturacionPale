@@ -75,9 +75,9 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="input-group">
-                                            <input type="text" id="Nro_Documento_${idTabVenta}" placeholder="Nro Documento" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" onkeypress=${()=>KeyPressClienteDoc(idTabVenta)} onkeydown=${()=>CambioNroDocumento(event,idTabVenta)} class="form-control dirty">
+                                            <input type="text" id="Nro_Documento_${idTabVenta}" placeholder="Nro Documento" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" onkeypress=${()=>KeyPressClienteDoc(idTabVenta)} onkeydown=${()=>CambioNroDocumento(event,idTabVenta)} class="form-control input-sm dirty">
                                             <div class="input-group-btn">
-                                                <button type="button" class="btn btn-warning" onclick=${()=>EditarCliente(idTabVenta)} id="btnEditarCliente">
+                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente(idTabVenta)} id="btnEditarCliente">
                                                     <i class="fa fa-pencil"></i>
                                                 </button> 
                                             </div>
@@ -87,7 +87,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control" placeholder="Nombres completos" data-id=null>
+                                            <input type="text" id="Cliente_${idTabVenta}" class="form-control input-sm" placeholder="Nombres completos" data-id=null>
                                             <div class="form-control-line"></div>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="row">
                                     <div class="col-md-12"> 
                                         <div class="form-group">
-                                            <input type="text" class="form-control" placeholder="Direccion" id="Direccion_${idTabVenta}"> 
+                                            <input type="text" class="form-control input-sm" placeholder="Direccion" id="Direccion_${idTabVenta}"> 
                                             <div class="form-control-line"></div>
                                         </div>
                                     </div>
@@ -112,7 +112,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     ${e.Cod_FormaPago=="008"? 
                                                         yo`<div class="form-group">
                                                                 <label>Moneda</label> 
-                                                                <select id='Cod_Moneda_Forma_Pago_${idTabVenta}' class="form-control" onchange=${()=>CambioMonedaVentas(idTabVenta)}>
+                                                                <select id='Cod_Moneda_Forma_Pago_${idTabVenta}' class="form-control input-sm" onchange=${()=>CambioMonedaVentas(idTabVenta)}>
                                                                     ${variables.monedas.map(m=>
                                                                         yo`<option value=${m.Cod_Moneda}>${m.Nom_Moneda}</option>`
                                                                     )}
@@ -215,25 +215,22 @@ function VerNuevaVenta(variables,CodLibro) {
                                                     <th>Acciones</th>
                                                 </tr>
                                             </thead>
-                                            
-                                            <tfoot>
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down text-red"></i>TOTAL DESCUENTOS: 0.00</button></td>
-                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button></td>
-                                                    <td><button class="btn btn-default btn-lg btn-raised" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button></td>
-                                                </tr>
-                                            </tfoot>
-
                                             <tbody id="tablaBodyProductosVentas_${idTabVenta}">
                                             </tbody> 
                                         </table>
                                     </div>
                                 </div>
                                                         
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12 text-right">
+                                    <div class="btn-group">
+                                        <button class="btn btn-default btn-lg btn-raised btn-danger" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down"></i>TOTAL DESCUENTOS: 0.00</button>
+                                        <button class="btn btn-default btn-lg btn-raised btn-primary" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button>
+                                        <button class="btn btn-default btn-lg btn-raised btn-success" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button> 
+                                    </div>
+                                </div>
                             </div>
                             
 
@@ -596,7 +593,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Tipo Cambio</label>
-                                <input type="number" class="form-control" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
+                                <input type="number" class="form-control input-sm" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
                             </div> 
                         </div> `
             }else{
@@ -614,7 +611,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nro Ref.</label>
-                                <input type="number" class="form-control" value="" id="Nro_Tarjeta_${idTab}" name="Nro_Tarjeta_${idTab}" >
+                                <input type="number" class="form-control input-sm" value="" id="Nro_Tarjeta_${idTab}" name="Nro_Tarjeta_${idTab}" >
                             </div> 
                         </div> `
             }else{
@@ -1303,9 +1300,9 @@ function CambioPrecioDescuentos(idFila,idTab){
         _Descuento = 0
     }
     if(_Descuento !=0){
-        $('#'+idFila).find('td.Descuentos').find('input').css("background","#dd4b39")
+        $('#'+idFila).find('td.Descuentos').find('input').css("background","#ea1c0d")
         $('#'+idFila).find('td.Descuentos').find('input').css("color","white")
-        $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#dd4b39")
+        $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#ea1c0d")
     }else{
         
         $('#'+idFila).find('td.Descuentos').find('input').css("background","white")

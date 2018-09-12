@@ -421,7 +421,7 @@ function GuardarNuevoCliente(){
 
 
 function CargarCategoria(){ 
-    run_waitMe($('#divCodCategoriaProducto'), 1, "ios",""); 
+    run_waitMe($('#divCodCategoriaProducto'), 2, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {
@@ -448,7 +448,7 @@ function CargarCategoria(){
 }
 
 function CargarTipoPrecio(){
-    run_waitMe($('#divCodPrecioProducto'), 1, "ios",""); 
+    run_waitMe($('#divCodPrecioProducto'), 2, "ios",""); 
     const parametros = {
         method: 'POST',
         headers: {

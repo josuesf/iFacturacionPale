@@ -463,7 +463,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         <div class="form-group" id="divAplicaImpuesto">
                                             <div class="checkbox checkbox-inline checkbox-styled">
                                                 <label>
-                                                    <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'}><span>I.G.V 18% </span>
+                                                    <input type="checkbox" id="ckbAplicaImpuesto" ${variables.empresa.Flag_ExoneradoImpuesto?'checked':'checked'} onchange=${()=>CambioAplicaImpuesto(variables)}><span>I.G.V 18% </span>
                                                 </label>
                                             </div>
                                             <input type="text" class="form-control input-sm" value="0.00" id="Impuesto" onkeypress=${()=>BloquearControles(event)}>
@@ -1592,22 +1592,22 @@ function EditarCliente(){
 
 function EditarCantidad(idFila,CodLibro,variables){
     $("#"+idFila).find("td.Despachado").text($("#"+idFila).find("td.Cantidad").find('input').val())
-    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
+    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').attr("data-value"))*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
 function EditarPrecioUnitario(idFila,CodLibro,variables){ 
     $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
-    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
-    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
+    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())-parseFloat($("#"+idFila).find("td.Descuento").find('input').attr("data-value")))
+    $("#"+idFila).find("td.Importe").find('input').val((parseFloat($("#"+idFila).find("td.PU").find('input').attr("data-value"))*parseFloat($("#"+idFila).find("td.Cantidad").find('input').val())).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
 
 function EditarDescuento(idFila,CodLibro,variables){
     $("#"+idFila).find("td.Descuento").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val())/100)
-    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())*parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))
-    $("#"+idFila).find("td.Importe").find('input').val(((parseFloat($("#"+idFila).find("td.PU").find('input').val()) - parseFloat($("#"+idFila).find("td.Descuento").find('input').val()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
+    $("#"+idFila).find("td.PU").find('input').attr("data-value",parseFloat($("#"+idFila).find("td.PU").find('input').val())-parseFloat($("#"+idFila).find("td.Descuento").find('input').attr("data-value")))
+    $("#"+idFila).find("td.Importe").find('input').val(((parseFloat($("#"+idFila).find("td.PU").find('input').val()) - parseFloat($("#"+idFila).find("td.Descuento").find('input').attr("data-value")))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
     CalcularTotal(CodLibro,variables)
 }
 
@@ -1735,18 +1735,18 @@ function CalcularTotal(CodLibro,variables){
             $("#subtotal").val((Suma/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
         }else{
-            $("#subtotal").val(Suma)
+            $("#subtotal").val(parseFloat(Suma).toFixed(2))
             $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
             $("#Gran_Total").val(parseFloat(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion+parseFloat($("#Impuesto").val())-parseFloat(DescuentosGlobales)).toFixed(2))
             if(parseFloat($("#Descuento_Global").val())>0){
                 $("#Impuesto").val((parseFloat($("#Gran_Total").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
-                $("#subtotal").val(parseFloat($("#Gran_Total").val())-parseFloat($("#Impuesto").val()))
+                $("#subtotal").val((parseFloat($("#Gran_Total").val())-parseFloat($("#Impuesto").val())).toFixed(2))
             }
         }
     }else{
         $("#Gran_Total").val(parseFloat(Suma+SumaExoneracion+SumaGratuitas+SumaPercepcion-DescuentosGlobales).toFixed(2))
-        $("#subtotal").val(Suma)
-        $("#Impuesto").val(0)
+        $("#subtotal").val(parseFloat(Suma).toFixed(2))
+        $("#Impuesto").val(parseFloat(0).toFixed(2))
     }
  
 
@@ -3505,6 +3505,19 @@ function CambioMonedaFormaPagoEuros(Cod_Moneda,variables,Tipo_Cambio){
     }
     RecuperarTipoCambio(_CodMoneda,variables,Tipo_Cambio)
     OcultarCompletarSaldo(Cod_Moneda)
+}
+
+function CambioAplicaImpuesto(variables){
+    var Suma = $("#Gran_Total").val()
+    if($("#ckbAplicaImpuesto").is(":checked")){
+        $("#Gran_Total").val(Suma)
+        $("#subtotal").val((parseFloat(Suma)/(1+parseFloat(variables.empresa.Por_Impuesto)/100)).toFixed(2))
+        $("#Impuesto").val((parseFloat($("#subtotal").val())*parseFloat(variables.empresa.Por_Impuesto)/100).toFixed(2))
+    }else{
+        $("#Gran_Total").val(Suma)
+        $("#subtotal").val(Suma)
+        $("#Impuesto").val(0)
+    }
 }
 
 function CambioCodCuentaBancaria(CodLibro){
