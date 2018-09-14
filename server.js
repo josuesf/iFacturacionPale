@@ -27,7 +27,8 @@ var upload = multer({ storage: storage }).single('picture');
 var app = express();
 var errores = '';
 //app.set('view engine', 'ejs'); 
-app.use(express.static('public')); 
+app.use(express.static('public'));
+app.use('/static', express.static('formatos'));  
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
@@ -307,6 +308,7 @@ app.get('/', function (req, res) {
 
 
 app.get('/login', function (req, res) {
+  console.log("url del server",req.protocol + '://' + req.get('host') +'/static/11111111/images/111.jpg')
   if (req.session && req.session.authenticated) {
     return res.redirect('/');
   }else{
@@ -656,9 +658,15 @@ app.post('/api/report', function(req, res) {
   //console.log("request")
   //console.log(req.body) 
   if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){
-     
-    req.body.template.data['URL_LOGO'] = ''
-    req.body.template.data['FLAG'] = false
+      
+    if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/images/'+app.locals.empresa[0].RUC+'.jpg'))) { 
+      req.body.template.data['URL_LOGO'] = req.protocol + '://' + req.get('host') +'/static/'+app.locals.empresa[0].RUC+'/images/'+app.locals.empresa[0].RUC+".jpg"
+      req.body.template.data['FLAG'] = true
+    }else{
+      req.body.template.data['URL_LOGO'] = ''
+      req.body.template.data['FLAG'] = false
+    }
+  
     req.body.template.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
     req.body.template.data['DIRECCION'] = app.locals.empresa[0].Direccion
     req.body.template.data['RUC'] = app.locals.empresa[0].RUC
