@@ -47,6 +47,7 @@ function VerNuevaVenta(variables,CodLibro) {
                     </div>
                 </div>
             </div>
+            <p></p>
             <div class="row">
                 <div class="col-md-3">
                     <div class="card" id="div-cliente">
