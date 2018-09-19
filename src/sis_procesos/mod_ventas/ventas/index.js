@@ -56,8 +56,10 @@ function VerNuevaVenta(variables,CodLibro) {
 
                             <div class="tools">
                                 <div class="btn-group">
-                                    <a class="btn btn-icon-toggle text-white btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
-                                    <a class="btn btn-icon-toggle text-white btn-refresh" onclick=${()=>BuscarCliente("Cliente_"+idTabVenta,"Nro_Documento_"+idTabVenta,null)}><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-icon-toggle text-white" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                    <a class="btn btn-icon-toggle text-white" onclick=${()=>EditarCliente(idTabVenta)}><i class="fa fa-pencil"></i></a>
+                                    <a class="btn btn-icon-toggle text-white" onclick=${()=>BuscarCliente("Cliente_"+idTabVenta,"Nro_Documento_"+idTabVenta,null)}><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-icon-toggle text-white"><i class="fa fa-globe"></i></a>
                                 </div>
                             </div>
 
@@ -75,13 +77,8 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="input-group">
+                                        <div class="form-group">
                                             <input type="text" id="Nro_Documento_${idTabVenta}" placeholder="Nro Documento" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" onkeypress=${()=>KeyPressClienteDoc(idTabVenta)} onkeydown=${()=>CambioNroDocumento(event,idTabVenta)} class="form-control input-sm dirty">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente(idTabVenta)} id="btnEditarCliente">
-                                                    <i class="fa fa-pencil"></i>
-                                                </button> 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -234,20 +231,11 @@ function VerNuevaVenta(variables,CodLibro) {
                                 </div>
                             </div>
                             
+                            <div class="card-actionbar" id="divFooter_${idTabVenta}">
+                            </div>
 
                         </div>
-                        <div class="card-actionbar" id="divFooter_${idTabVenta}">
-                            <div class="col-md-12">
-                                <div class="box box-warning">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title"><button id="divTools_${idTabVenta}" style="display:none"  type="button" class="btn btn-icon-toggle" onclick=${()=>CrearBotonesCategoriasXSeleccion(variables.categorias,'',idTabVenta)}><i class="fa fa-arrow-left"></i></button> Productos</h3>
-                                    </div>
-                                    <div class="box-body" id="divProductos_${idTabVenta}">
-                                        ${CrearBotonesCategorias(variables.categorias,idTabVenta)}
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -306,7 +294,7 @@ function VerNuevaVenta(variables,CodLibro) {
     
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
-        console.log("producto seleccionado", global.objProductoVentas)
+        //console.log("producto seleccionado", global.objProductoVentas)
         if(global.objProductoVentas!=''){ 
             $("#txtBusqueda_"+IdTabSeleccionado).val("")
 
@@ -330,10 +318,10 @@ function VerNuevaVenta(variables,CodLibro) {
                             <tr id="${idFila+''+IdTabSeleccionado}">
                                 <td class="Cod_Producto">${global.objProductoVentas.Cod_Producto}</td> 
                                 <td class="Flag_Stock hidden">${global.objProductoVentas.Flag_Stock}</td> 
-                                <td class="Nom_Producto" style="width: 30%;">${global.objProductoVentas.Nom_Producto}</td> 
-                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
+                                <td class="Nom_Producto" style="width: 30%;"><input type="text" class="form-control input-sm" value=${global.objProductoVentas.Nom_Producto}  onchange=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeypress=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
+                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeyup=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
                                 <td class="Unitario hidden">${global.objProductoVentas.Precio_Venta}</td>
-                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
+                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
                                 <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
                                 <td class="DescuentoUnitario hidden">0</td> 
                                 <td class="DescuentoTotal hidden">0</td> 
@@ -444,6 +432,7 @@ function VerNuevaVenta(variables,CodLibro) {
     });
 
     IdTabSeleccionado = idTabVenta
+    VerVuelto(variables,idTabVenta)
 
 }
 
@@ -579,11 +568,11 @@ function AceptarConfirmacion(idTab,_CodTipoComprobante){
 
 
 function VerVuelto(variables,idTab){
-    if($("#btnTotal_"+idTab).hasClass('active')){
-        CrearDivFavoritos(variables,idTab)
-    }else{
+    //if($("#btnTotal_"+idTab).hasClass('active')){
+    //    CrearDivFavoritos(variables,idTab)
+    //}else{
         CrearDivVuelto(idTab)
-    }
+    //}
 }
 
 function MostrarCampos(indice,arreglo,opcion,idTab){
@@ -791,10 +780,10 @@ function RecuperarPrecio(favoritos,producto){
 
 
 
-function RecalcularSubtotales(idTab){
+function RecalcularSubtotales(idTab){ 
     $('#tablaBodyProductosVentas_'+idTab+' tr').each(function (index) { 
         var _Cantidad = parseFloat($(this).find("td").eq(3).find('input').val())
-        var _PrecioUnitario = parseFloat($(this).find("td").eq(4).text())
+        var _PrecioUnitario = parseFloat($(this).find("td").eq(5).find('input').val()) 
         $(this).find("td").eq(9).text((parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2))
         changeDetallesArrayJsonVentas(idTab,$(this).find("td").eq(0).text(),[null,null,null,null,null,null,null,null,null,null,null,null,(parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2),null,null,null,null])
     });
@@ -933,6 +922,7 @@ function CalcularTotal(idTab){
     }else{
         $("#btnConversion_"+idTab).css("display","none")
     }
+    $("#btnTotal_"+idTab).click()
 }
 
 function LimpiarVenta(idTab){
@@ -1244,75 +1234,88 @@ function CambioMonedaFormaPagoSoles(idTab){
 }
 
 
-function CambioCantidadVenta(idFila,idTab){
-    
-    changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Cantidad').find('input').val()).toFixed(2),null,null,null,null,null,null,null,null])
-                                    
+function CambioCantidadVenta(idFila,idTab){ 
+    if($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Cantidad').find('input').val().trim()!=""){
+        changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Cantidad').find('input').val()).toFixed(2),null,null,null,null,null,null,null,null])
+                                        
 
-    if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
-        
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Cod_Producto: $('#'+idFila).find('td.Cod_Producto').text().toString(),
-                Cod_Almacen: $("#Cod_Almacen_"+idTab).val(),
-                Cod_TipoPrecio: $("#Cod_Precio_"+idTab).val()
-            })
-        }
-        fetch(URL + '/productos_serv_api/get_codigo_unidad_by_codP_codA_codTP', parametros)
-            .then(req => req.json())
-            .then(res => {
-                if(res.respuesta=="ok"){
-                    if(res.data.producto.length>0){
-                        var producto = res.data.producto[0]
-                        if(parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()) > parseFloat(producto.Stock_Act)){
-                            toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
+        if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
+            
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Cod_Producto: $('#'+idFila).find('td.Cod_Producto').text().toString(),
+                    Cod_Almacen: $("#Cod_Almacen_"+idTab).val(),
+                    Cod_TipoPrecio: $("#Cod_Precio_"+idTab).val()
+                })
+            }
+            fetch(URL + '/productos_serv_api/get_codigo_unidad_by_codP_codA_codTP', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if(res.respuesta=="ok"){
+                        if(res.data.producto.length>0){
+                            var producto = res.data.producto[0]
+                            if(parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()) > parseFloat(producto.Stock_Act)){
+                                toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
+                                $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
+                            }
+                        }else{
                             $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                         }
                     }else{
                         $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                     }
-                }else{
-                    $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
-                }
 
-            }).catch(function (e) {
-                console.log(e);
-                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            }); 
-    } 
-    RecalcularSubtotales(idTab)
-    RecalcularDescuentosTotales(idTab)
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                }); 
+        } 
+        RecalcularSubtotales(idTab)
+        RecalcularDescuentosTotales(idTab)
+    }
+}
+
+function CambioNombreProducto(idFila,idTab){
+    changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,$('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Nom_Producto').find('input').val(),null,null,null,null,null,null,null,null,null,null,null])
 }
 
 
 function CambioPrecioDescuentos(idFila,idTab){
-
-    changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.UnitarioBase').find('input').val()).toFixed(2),parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Descuentos').find('input').val()).toFixed(2),null,null,null,null,null])
-
-    var _Unitario = parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())
-    var _Descuento = parseFloat($('#'+idFila).find('td.Descuentos').find('input').val()) / 100
-    if(_Descuento.toString()==''){
-        $('#'+idFila).find('td.Descuentos').find('input').val('0.00')
-        _Descuento = 0
-    }
-    if(_Descuento !=0){
-        $('#'+idFila).find('td.Descuentos').find('input').css("background","#ea1c0d")
-        $('#'+idFila).find('td.Descuentos').find('input').css("color","white")
-        $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#ea1c0d")
-    }else{
+    console.log("onkeyup descuenasd [reocp",$('#'+idFila).find('td.UnitarioBase').find('input').val())
+    if($('#'+idFila).find('td.UnitarioBase').find('input').val().trim()!="" && $('#'+idFila).find('td.Descuentos').find('input').val().trim()!=""){
         
-        $('#'+idFila).find('td.Descuentos').find('input').css("background","white")
-        $('#'+idFila).find('td.Descuentos').find('input').css("color","#555")
-        $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#98999c")
+        changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.UnitarioBase').find('input').val()).toFixed(2),parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Descuentos').find('input').val()).toFixed(2),null,null,null,null,null])
+
+        var _Unitario = parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())
+        var _Descuento = parseFloat($('#'+idFila).find('td.Descuentos').find('input').val()) / 100
+        if(_Descuento.toString()==''){
+            $('#'+idFila).find('td.Descuentos').find('input').val('0.00')
+            _Descuento = 0
+        }
+        if(_Descuento !=0){
+            $('#'+idFila).find('td.Descuentos').find('input').css("background","#ea1c0d")
+            $('#'+idFila).find('td.Descuentos').find('input').css("color","white")
+            $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#ea1c0d")
+        }else{
+            
+            $('#'+idFila).find('td.Descuentos').find('input').css("background","white")
+            $('#'+idFila).find('td.Descuentos').find('input').css("color","#555")
+            $('#'+idFila).find('td.Descuentos').find('input').css("border-color","#98999c")
+        }
+        $('#'+idFila).find('td.DescuentoUnitario').text(_Unitario * _Descuento)
+
+        $("#"+idFila).find("td.Unitario").text(parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())-parseFloat($('#'+idFila).find('td.DescuentoUnitario').text()))
+        $("#"+idFila).find("td.Precio").text(((parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())-parseFloat($('#'+idFila).find('td.DescuentoUnitario').text()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
+        
+
+        RecalcularSubtotales(idTab)
+        RecalcularDescuentosTotales(idTab)
     }
-    $('#'+idFila).find('td.DescuentoUnitario').text(_Unitario * _Descuento)
-    RecalcularSubtotales(idTab)
-    RecalcularDescuentosTotales(idTab)
  
 }
  
@@ -1368,10 +1371,10 @@ function AgregarProducto(producto,favoritos,idTab){
                                         <tr id="${idFila+''+idTab}">
                                             <td class="Cod_Producto">${dataProducto.Cod_Producto}</td> 
                                             <td class="Flag_Stock hidden">${dataProducto.Flag_Stock}</td> 
-                                            <td class="Nom_Producto" style="width: 30%;">${dataProducto.Nom_Producto}</td> 
-                                            <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
+                                            <td class="Nom_Producto" style="width: 30%;"><input type="text" class="form-control input-sm" value=${dataProducto.Nom_Producto} onchange=${()=>CambioNombreProducto(idFila+''+idTab,idTab)} onkeyup=${()=>CambioNombreProducto(idFila+''+idTab,idTab)}></td> 
+                                            <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)} onkeyup=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
                                             <td class="Unitario hidden">${RecuperarPrecio(favoritos,dataProducto)}</td>
-                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeypress=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
+                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
                                             <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td>
                                             <td class="DescuentoUnitario hidden">0</td> 
                                             <td class="DescuentoTotal hidden">0</td> 

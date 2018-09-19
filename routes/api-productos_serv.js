@@ -147,7 +147,8 @@ router.post('/guardar_producto', function (req, res){
         {nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username},
     ]
     procedimientos = [
-        {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTOS_G_2', parametros}
+        //{nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTOS_G_2', parametros}
+        {nom_respuesta: 'producto', sp_name: 'USP_PRI_PRODUCTOS_G', parametros}
     ]
     Ejecutar_Procedimientos(req,res, procedimientos)
 })

@@ -15,12 +15,12 @@ function Controles(escritura) {
 function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) {
 
     var tab = yo`
-    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Usuarios<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class=""><a href="#tab_listar_usuarios_2" data-toggle="tab" aria-expanded="false" id="id_tab_listar_usuarios_2">Usuarios<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
 
     var el = yo`
-    <div  class="tab-pane" id="tab_2">
+    <div  class="tab-pane" id="tab_listar_usuarios_2">
         <section class="content-header">
         <div class="modal modal-danger fade" id="modal-danger" style="display: none;">
         <div class="modal-dialog">
@@ -104,10 +104,10 @@ function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) 
     </div>`
     //var main = document.getElementById('main-contenido');
     //empty(main).appendChild(el);
-    if($("#tab_2").length){  
+    if($("#tab_listar_usuarios_2").length){  
 
-        $('#tab_2').remove()
-        $('#id_2').parents('li').remove()
+        $('#tab_listar_usuarios_2').remove()
+        $('#id_tab_listar_usuarios_2').parents('li').remove()
 
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
@@ -115,13 +115,13 @@ function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) 
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
     } 
-    $("#id_2").click()
+    $("#id_tab_listar_usuarios_2").click()
 }
 
 
 function CerrarTab(){
-    $('#tab_2').remove()
-    $('#id_2').parents('li').remove()
+    $('#tab_listar_usuarios_2').remove()
+    $('#id_tab_listar_usuarios_2').parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show'); 
 }

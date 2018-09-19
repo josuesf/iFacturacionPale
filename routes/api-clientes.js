@@ -58,11 +58,14 @@ router.post('/guardar_cliente', function (req, res) {
         { nom_parametro: 'Limite_Credito', valor_parametro: input.Limite_Credito },
         { nom_parametro: 'Obs_Cliente', valor_parametro: input.Obs_Cliente },
         { nom_parametro: 'Num_DiaCredito', valor_parametro: input.Num_DiaCredito },
+        { nom_parametro: 'Foto', valor_parametro: null },
+        { nom_parametro: 'Firma', valor_parametro: null },
         { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username }
 
     ]
     procedimientos = [
-        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G_2', parametros },
+        //{ nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G_2', parametros },
+        { nom_respuesta: 'cliente', sp_name: 'USP_PRI_CLIENTE_PROVEEDOR_G', parametros },
     ]
     Ejecutar_Procedimientos(req,res, procedimientos)
 });

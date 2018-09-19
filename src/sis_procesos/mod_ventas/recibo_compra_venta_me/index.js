@@ -34,7 +34,9 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="tools">
                                         <div class="btn-group">
                                             <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></a>
+                                            <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
                                             <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")}><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                         </div>
                                     </div>
                                 </div> 
@@ -48,15 +50,8 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="input-group">
+                                            <div class="form-group">
                                                 <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar" onblur=${()=>RecuperarDatosClientePorNroDoc()} onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)}>
-                                                <div class="input-group-btn">
-                                                    <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
-                                                        <i class="fa fa-pencil"></i>
-                                                    </button> 
-                                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc"
-                                                    ><i class="fa fa-globe"></i></button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

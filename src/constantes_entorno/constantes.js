@@ -46,6 +46,26 @@ var GETCONFIG = function GET(ruc){
                                 height: "11.7in"
                             }
                         },
+                        'FA':
+                        {
+                            content: fs.readFileSync(require('path').join('formatos/'+ruc+'/templates/FacturaComprobante', 'content.handlebars'), 'utf8'),
+                            recipe: "chrome-pdf",
+                            engine: 'handlebars',
+                            chrome: { 
+                                width: "8.27in",
+                                height: "11.7in"
+                            }
+                        },
+                        'BO':
+                        {
+                            content: fs.readFileSync(require('path').join('formatos/'+ruc+'/templates/FacturaComprobante', 'content.handlebars'), 'utf8'),
+                            recipe: "chrome-pdf",
+                            engine: 'handlebars',
+                            chrome: { 
+                                width: "8.27in",
+                                height: "11.7in"
+                            }
+                        },
                         'NE':
                         {
                             content: fs.readFileSync(require('path').join('formatos/'+ruc+'/templates/TicketNES', 'content.handlebars'), 'utf8'),

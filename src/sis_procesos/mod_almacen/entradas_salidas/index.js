@@ -10,6 +10,7 @@ import { refrescar_movimientos } from '../../movimientos_caja'
 var contador = 0
 var idFilaSeleccionada = 0
 var idFilaSeleccionadaSerie = 0
+var arrayValidacion = [null,'null','',undefined]
 
 function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     global.arraySeries = ''
@@ -143,9 +144,6 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                             <div class="panel-footer">
                                 <div class="row">
                                     <div class="col-md-12">  
-                                        <div class="col-md-6" id="divRechazar">  
-                                            <button class="btn btn-danger btn-sm" onclick=${()=>RechazarEnvio()}>Rechazar Envio</button>
-                                        </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <b>Fecha: </b>
@@ -209,9 +207,12 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                 </div>
             </div>
     
-            <div class="modal-footer">
-                <button class="btn btn-primary" id="btnAceptar" onclick="${()=>AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual)}">Aceptar</button>
+            <div class="modal-footer"> 
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <div class="input-group" style="float:right">
+                    <button class="btn btn-danger" style="display:none" id="divRechazar" onclick=${()=>RechazarEnvio()}>Rechazar Envio</button>
+                    <button class="btn btn-primary" id="btnAceptar" onclick="${()=>AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual)}">Aceptar</button> 
+                </div> 
             </div>
         </div>
     </div>`
@@ -396,48 +397,28 @@ function CambioDestino(CodTipoComprobante,fecha_actual){
         if($("#Cod_Destino").val()!=null){
             CargarDatosAControles(CodTipoComprobante,fecha_actual)
             $("#btnAceptar").text("Recepcionar")
-            $("#divRechazar").show()
+            $("#divRechazar").css("display","inline-block")
             // falta  buConsultarSeries.Visible = true;
         }else{
             $("#btnAceptar").text("Aceptar")
-            $("#divRechazar").hide()
+            $("#divRechazar").css("display","none")
             // falta buConsultarSeries.Visible = true;
 
         }
+    }else{
+        $("#btnAceptar").text("Aceptar")
+        $("#divRechazar").css("display","inline-block")
     }
 }
 
 function CambioOperacion(CodTipoComprobante){
-    $("#divDestino").hide()
-    $("#divRechazar").show()
-    $("#divDocRef").show()
-    var Cod_Almacen = $("#Cod_Almacen").val()
-    if($("#Cod_Operacion").val()=="11"){
-        $("#laCod_Destino").text("Destino:")
-        $("#divDestino").show()
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Cod_Almacen
-            })
-        }
-        fetch(URL + '/almacenes_api/get_almacenes_distinto', parametros)
-            .then(req => req.json())
-            .then(res => {               
-                LlenarAlmacenesDestinos(res.data.almacenes)
-    
-            }).catch(function (e) {
-                console.log(e);
-                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            });
-             
-    }else{
-        if($("#Cod_Operacion").val()=="21"){
-            $("#laCod_Destino").text("Pendientes:")
+    if(!arrayValidacion.includes($("#Cod_Almacen").val())){
+        $("#divDestino").hide()
+        $("#divRechazar").css("display","inline-block")
+        $("#divDocRef").show()
+        var Cod_Almacen = $("#Cod_Almacen").val()
+        if($("#Cod_Operacion").val()=="11"){
+            $("#laCod_Destino").text("Destino:")
             $("#divDestino").show()
             const parametros = {
                 method: 'POST',
@@ -449,16 +430,41 @@ function CambioOperacion(CodTipoComprobante){
                     Cod_Almacen
                 })
             }
-            fetch(URL + '/almacenes_api/get_mov_pendiente_almacenes', parametros)
+            fetch(URL + '/almacenes_api/get_almacenes_distinto', parametros)
                 .then(req => req.json())
-                .then(res => { 
-                    LlenarPendientesRecepcionar(res.data.pendientes)
+                .then(res => {               
+                    LlenarAlmacenesDestinos(res.data.almacenes)
         
                 }).catch(function (e) {
                     console.log(e);
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 });
+                
+        }else{
+            if($("#Cod_Operacion").val()=="21"){
+                $("#laCod_Destino").text("Pendientes:")
+                $("#divDestino").show()
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Cod_Almacen
+                    })
+                }
+                fetch(URL + '/almacenes_api/get_mov_pendiente_almacenes', parametros)
+                    .then(req => req.json())
+                    .then(res => { 
+                        LlenarPendientesRecepcionar(res.data.pendientes)
             
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                    });
+                
+            }
         }
     }
 }

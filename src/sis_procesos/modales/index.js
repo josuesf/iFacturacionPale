@@ -244,12 +244,11 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc){
     empty(document.getElementById('contenedorTablaClientes')).appendChild(el);
 }
 
-function AgregarTablaProductos(productos){
+function AgregarTablaProductos(productos){ 
     var el = yo`<tabla class="table table-hover">
     <thead>
         <tr>
-            <th>Codigo</th>
-            <th>Almacen</th> 
+            <th>Codigo</th> 
             <th>Producto</th>
             <th>Stock</th>
             <th>Moneda</th>
@@ -261,10 +260,10 @@ function AgregarTablaProductos(productos){
     <tbody>
         ${productos.map(u => yo`
         <tr>
-            <td>${u.Cod_Producto}</td>
-            <td>${u.Des_Almacen}</td>
+            <td>${u.Cod_Producto}</td> 
             <td>${u.Nom_Producto}</td>  
-            <td>${u.Stock_Act}</td>  
+            <td>${u.Stock_Act}</td> 
+            <td>${u.Nom_Moneda}</td>  
             <td>${u.Nom_UnidadMoneda}</td>  
             <td>${u.Precio_Compra}</td>  
             <td>${u.Nom_UnidadMedida}</td>

@@ -8,11 +8,11 @@ import {URL} from '../../../constantes_entorno/constantes'
 module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
 
     var tab = yo`
-    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Nuevo Parametro<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class=""><a href="#tab_crear_parametros_2" data-toggle="tab" aria-expanded="false" id="id_tab_crear_paramtros_2">Nuevo Parametro<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
-    <div class="tab-pane" id="tab_2">
+    <div class="tab-pane" id="tab_crear_parametros_2">
         
         <section class="content">
             <div class="card">
@@ -46,10 +46,10 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
     </div>`
     //var main = document.getElementById('main-contenido');
     //empty(main).appendChild(el);
-    if($("#tab_2").length){  
+    if($("#tab_crear_parametros_2").length){  
 
-        $('#tab_2').remove()
-        $('#id_2').parents('li').remove()
+        $('#tab_crear_parametros_2').remove()
+        $('#id_tab_crear_paramtros_2').parents('li').remove()
 
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
@@ -57,12 +57,12 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
     } 
-    $("#id_2").click()
+    $("#id_tab_crear_paramtros_2").click()
 }
 
 function CerrarTab(){
-    $('#tab_2').remove()
-    $('#id_2').parents('li').remove()
+    $('#tab_crear_parametros_2').remove()
+    $('#id_tab_crear_paramtros_2').parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show'); 
 }

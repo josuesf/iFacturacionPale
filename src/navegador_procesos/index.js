@@ -100,7 +100,7 @@ function Ver(Flag_Cerrado) {
                     </a> 
                     <ul>
                         <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NE')}><span class="title"> Registro de Entradas</span></a></li>
-                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NS')}><span class="title"> Registro de Entradas</span></a></li>
+                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NS')}><span class="title"> Registro de Salidas</span></a></li>
                     </ul> 
                 </li>
 

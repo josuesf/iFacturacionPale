@@ -2201,7 +2201,7 @@ body:not(.menubar-first) .menubar-fixed-panel {
 }
 section {
   position: relative;
-  padding: 24px;
+  padding: 10px;
 }
 section:first-child {
   padding-top: 0;
@@ -2211,10 +2211,7 @@ section:first-child {
 }
 section.full-bleed {
   padding: 0 !important;
-}
-.section-body:first-child {
-  margin-top: 24px;
-}
+} 
 .full-bleed .section-body:first-child {
   margin-top: 0;
 }

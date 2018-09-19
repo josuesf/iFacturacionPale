@@ -91,20 +91,7 @@ function Ver(_escritura, variables, producto){
                                 <input type="text" style="text-transform:uppercase" class="form-control required" id="Nom_Producto" placeholder="Nombre producto" value="${producto? producto.Nom_Producto:''}">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Des_LargaProducto">SUNAT *</label>
-                                <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_LargaProducto" placeholder="Codigo producto" value="${producto? producto.Des_LargaProducto:''}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="Des_CortaProducto">Interno *</label>
-                                <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_CortaProducto" placeholder="Codigo producto" value="${producto? producto.Des_CortaProducto:''}">
-                            </div>
-                        </div>
+                     
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Cod_TipoOperatividad">Operatividad</label>
@@ -185,7 +172,7 @@ function Ver(_escritura, variables, producto){
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable" id="BuscarCuenta1"
                                                         onclick="${(ev) => ClickBuscar(ev)}">Buscar cuenta</button>
                                                 </div>
-                                                <input type="text" class="form-control" id="Cuenta_Contable" value="${producto? producto.Cuenta_Contable:''}" disabled>
+                                                <input type="text" class="form-control" id="Cuenta_Contable" value="${producto? producto.Cuenta_Contable:''}">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -195,7 +182,7 @@ function Ver(_escritura, variables, producto){
                                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-buscar-responsable" id="BuscarCuenta2"
                                                         onclick="${(ev) => ClickBuscar(ev)}">Buscar cuenta</button>
                                                 </div>
-                                                <input type="text" class="form-control" id="Contra_Cuenta" value="${producto? producto.Contra_Cuenta:''}" disabled>
+                                                <input type="text" class="form-control" id="Contra_Cuenta" value="${producto? producto.Contra_Cuenta:''}">
                                             </div>
                                         </div>
                                     </div>
@@ -268,6 +255,20 @@ function Ver(_escritura, variables, producto){
                                             <div class="form-group">
                                                 <label>Observaciones</label>
                                                 <textarea class="form-control" id="Obs_Producto" rows=10 placeholder="Observacione..." value="${producto? producto.Obs_Producto:''}"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Des_LargaProducto">Descripcion Larga *</label>
+                                                <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_LargaProducto" placeholder="Descripcion Larga" value="${producto? producto.Des_LargaProducto:''}">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label for="Des_CortaProducto">Descripcion Corta *</label>
+                                                <input type="text" style="text-transform:uppercase" class="form-control required" id="Des_CortaProducto" placeholder="Descripcion Corta" value="${producto? producto.Des_CortaProducto:''}">
                                             </div>
                                         </div>
                                     </div>

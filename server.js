@@ -307,8 +307,7 @@ app.get('/', function (req, res) {
 }) */
 
 
-app.get('/login', function (req, res) {
-  console.log("url del server",req.protocol + '://' + req.get('host') +'/static/11111111/images/111.jpg')
+app.get('/login', function (req, res) { 
   if (req.session && req.session.authenticated) {
     return res.redirect('/');
   }else{
@@ -338,7 +337,7 @@ app.post('/login', function (req, res) {
 
   EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {   
     if (m.err) {
-      errores = "Ocurrio un error. "+m.err
+      errores = "Ocurrio un error con el servidor comuniquese con el administrador. "//+m.err
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
@@ -347,7 +346,7 @@ app.post('/login', function (req, res) {
         
         EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
           if (e.err){
-            errores = "Ocurrio un error. "+e.err
+            errores = "Ocurrio un error con el servidor comuniquese con el administrador. "//+e.err
             return res.redirect('/login');
           } 
           var Cod_Empresa=e.result[0].Cod_Empresa
@@ -363,7 +362,7 @@ app.post('/login', function (req, res) {
             //if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
               LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
                 if (e.err) {
-                  errores = e.err
+                  errores = "Ocurrio un error con el servidor comuniquese con el administrador. "//e.err
                   return res.redirect('/login');
                 }
           
@@ -657,6 +656,7 @@ app.get('/prueba',function(req,res){
 app.post('/api/report', function(req, res) { 
   //console.log("request")
   //console.log(req.body) 
+  console.log("configuracionb de "+GETCONFIG(app.locals.empresa[0].RUC))
   if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){
       
     if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/images/'+app.locals.empresa[0].RUC+'.jpg'))) { 

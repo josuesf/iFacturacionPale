@@ -8,7 +8,7 @@ import { ConvertirCadena } from '../../../utility/tools'
 function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var el = yo`
         <div>
-            <section class="content-header" id="sectionModals">
+            <div class="content-header" id="sectionModals">
  
                 <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
@@ -29,7 +29,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                 <div class="modal fade" id="modal-proceso" >
                     
                 </div>
-            </section>
+            </div>
             <section class="content">
                 <div class="row">
                     <div class="col-md-12"> 
@@ -39,7 +39,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                     <li class="active"><a href="#tab_1" id="id_1" data-toggle="tab" aria-expanded="true" onclick=${()=>refrescar_movimientos_caja()}>Movimientos caja</a></li>
                                 </ul>
                             </div>
-                            <div class="card-body tab-content" id="tabs_contents">
+                            <div class="tab-content" id="tabs_contents" style="padding: 10px;">
                                 <div class="tab-pane active" id="tab_1">
                                     
                                     <div class="box box-primary">
@@ -712,7 +712,7 @@ function AceptarConfirmacion(flag,movimiento){
 
 function VerFormatoDocumento(movimiento){
     var entidad = movimiento.Entidad
-    console.log(movimiento)
+    //console.log(movimiento)
     var id_Movimiento = movimiento.ID
     
     switch (entidad){
@@ -1404,7 +1404,7 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                             var obs_string = ''
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){  
                                 FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
-                                    console.log("despues de data observaciones",data_string)
+                                    console.log("despues de data observaciones",dataComprobante)
                                     if(dataComprobante.Cod_Libro=='14'){
                                         var arrayData = {
                                             cuerpo:{

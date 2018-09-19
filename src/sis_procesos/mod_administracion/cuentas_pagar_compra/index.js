@@ -39,7 +39,9 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <div class="tools">
                                     <div class="btn-group">
                                         <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.dataDocumentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
                                         <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -53,13 +55,8 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                         </div>
                                     </div>
                                     <div class="col-md-8" id="divNroDocumento">
-                                        <div class="input-group">
+                                        <div class="form-group">
                                             <input type="text" id="Nro_Documento"  onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" placeholder="Nro Documento">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
-                                                    <i class="fa fa-pencil"></i>
-                                                </button>
-                                            </div>
                                         </div>
                                     </div>
                                

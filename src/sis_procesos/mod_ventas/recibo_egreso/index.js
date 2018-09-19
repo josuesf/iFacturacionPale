@@ -38,8 +38,10 @@ function CargarFormulario(variables, fecha_actual) {
                                 <header> A favor de </header>
                                 <div class="tools">
                                     <div class="btn-group">
-                                        <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
-                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-icon-toggle btn-info" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-icon-toggle btn-success" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -55,16 +57,8 @@ function CargarFormulario(variables, fecha_actual) {
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="input-group">
+                                        <div class="form-group">
                                             <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc()}"  onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} class="form-control required input-sm" placeholder="Nro Documento">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
-                                                    <i class="fa fa-pencil"></i>
-                                                </button> 
-                                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-buscar-doc-proveedor" id="BuscarDoc">
-                                                    <i class="fa fa-globe"></i>
-                                                </button>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -272,9 +266,10 @@ function BuscarClienteDoc() {
         fetch(URL + '/recibo_iegreso_api/get_cliente_by_nro_documento', parametros)
             .then(req => req.json())
             .then(res => {
+                 
                 if (res.respuesta == 'ok' && res.data.cliente.length > 0) {
                     $("#Cliente").val(res.data.cliente[0].Cliente)
-                    $("#Cod_TipoDoc").val(res.data.cliente[0].Cod_TipoDoc)
+                    $("#Cod_TipoDoc").val(res.data.cliente[0].Cod_TipoDocumento)
                     $("#Nro_Documento").val(res.data.cliente[0].Nro_Documento)
                     Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
 

@@ -61,7 +61,9 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                 <div class="tools">
                                     <div class="btn-group">
                                         <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.documentos)}><i class="fa fa-plus"></i></a>
+                                        <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
                                         <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",CodLibro == "08" ? "001" : "002")}><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -75,16 +77,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                     </div>
                                     <div class="col-md-6" id="divNroDocumento">
-                                        <div class="input-group">
+                                        <div class="form-group">
                                             <input type="text" id="Nro_Documento" onblur="${() => BuscarClienteDoc(CodLibro)}" placeholder="Nro Documento" onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} class="form-control input-sm required" value=${Cliente?Cliente.Nro_Documento:''}>
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-warning btn-sm" onclick=${()=>EditarCliente()} id="btnEditarCliente">
-                                                    <i class="fa fa-pencil"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-success btn-sm" id="BuscarRENIEC">
-                                                    <i class="fa fa-globe"></i>
-                                                </button>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3" id="divDetalles">
@@ -211,23 +205,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4" id="divLicitacion" style="display:block">
- 
-                                                <div class="checkbox checkbox-inline checkbox-styled">
-                                                    <label>
-                                                        <input type="checkbox" id="optLicitacion" name="optLicitacion" onchange=${()=>CambioLicitacion()}><span> Licitacion</span> 
-                                                    </label>
-                                                </div> 
- 
-                                            </div>
-                                            <div class="col-md-8" id="divCodigoLicitacion" style="display:none">
-                                                <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cod_Licitacion" onchange=${()=>CambioSelectLicitacion(CodLibro,variables)}> 
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="row">
@@ -484,7 +462,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             </div>
                                             <input type="number" class="form-control input-sm" value="0.00" id="Servicios">
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group hidden">
                                             <strong>DESCUENTO GLOBAL</strong>
                                             <input type="number" class="form-control input-sm" value="0.00" id="Descuento_Global" onkeypress=${()=>CalcularTotal(CodLibro,variables)} onchange=${()=>CalcularTotal(CodLibro,variables)}>
                                         </div>
@@ -691,8 +669,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             if(CodLibro=="14"){
                 $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
                 CargarSeries(CodLibro)
-                CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
-                CambioLicitacion()
+                //CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                //CambioLicitacion()
             }
         }
         //CambioLicitacion()
@@ -1458,7 +1436,7 @@ function LlenarCheques(cheques){
 }
 
 
-function LlenarLicitaciones(licitaciones){
+/*function LlenarLicitaciones(licitaciones){
     var html = ''
     for(var i=0; i<licitaciones.length; i++){
         html = html+'<option value="'+licitaciones[i].Cod_Licitacion+'">'+licitaciones[i].Des_Licitacion+'</option>'
@@ -1466,7 +1444,7 @@ function LlenarLicitaciones(licitaciones){
      
     $("#Cod_Licitacion").html('')
     $("#Cod_Licitacion").html(html) 
-}
+}*/
 
 function LlenarUnidadMedida(unidades_medidas){
     var html = ''
@@ -1982,7 +1960,7 @@ function AceptarFormaPago(amodo){
             $("#divCredito").css("display","none")
             $("#divNroDias").css("display","none")
             $("#divMoneda").css("display","none")
-            $("#divLicitacion").css("display","none")
+            //$("#divLicitacion").css("display","none")
             $("#divFormasPago").css("display","none")
             $("#divTC").css("display","none")
             $("#divMultiplesPagos").removeClass()
@@ -2084,10 +2062,10 @@ function CargarConfiguracionDefault(CodLibro,variables){
     $("#divExportacion").css("display","none")
     CalcularTotal(CodLibro,variables)
     $("input[name=optCredito][value='contado']").prop("checked",true)
-    CambioLicitacion()
+    //CambioLicitacion()
 }
 
-function EsValidaLicitacion(){ 
+/*function EsValidaLicitacion(){ 
     if($("#divLicitacion").css("display")=='block'){
         if($("#optLicitacion").is(":checked")){
             if($("#Cod_Licitacion").val()!=''){
@@ -2101,7 +2079,7 @@ function EsValidaLicitacion(){
     }else{
         return true
     }
-}
+}*/
 
 function EsValidoCredito(CodLibro,callback){
     if($('input[name=optCredito]:checked').val()=="credito" && $("#divCredito").css("display")=='block'){
@@ -2135,9 +2113,9 @@ function EsValido(CodLibro,callback){
         }
     }
 
-    if($("#divLicitacion").css("display")=='block' && $("#optLicitacion").is(":checked")){
+    /*if($("#divLicitacion").css("display")=='block' && $("#optLicitacion").is(":checked")){
         callback(EsValidaLicitacion())
-    }
+    }*/
 
     if(!arrayValidacion.includes($("#Cliente").attr("data-id"))){
         if($("#Serie option:selected").text()!=''){
@@ -2145,7 +2123,7 @@ function EsValido(CodLibro,callback){
                 if($("#Cod_TipoComprobante").val()!=''){
                     if($("#tablaBody > tr").length > 0){
                         if(MontoMaximo==0 || parseFloat($("#Gran_Total").val()) <= MontoMaximo){
-                            if(EsValidaLicitacion()){
+                            //if(EsValidaLicitacion()){
                                 EsValidoCredito(CodLibro,function(flag){
                                     if(flag){
                                         EsValidoSeries(CodLibro,function(flag){
@@ -2162,10 +2140,10 @@ function EsValido(CodLibro,callback){
                                     }
                                 })
  
-                            }else{
-                                $("#Cod_Licitacion").focus()
-                                callback(false)
-                            }
+                            //}else{
+                            //    $("#Cod_Licitacion").focus()
+                            //    callback(false)
+                            //}
                         }else{
                             toastr.error('Debe de seleccionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante','Error',{timeOut: 5000}) 
                             callback(false)
@@ -2265,7 +2243,7 @@ function DeterminarTipoIGV(flagImpuesto,flagExportacion,Por_Impuesto,Tipo,SubTot
     callback(IGV,Cod_TipoIGV)
 }
 
-function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_ComprobantePago,Flag_Cancelado,Obs_LicitacionesM,callback){
+/*function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_ComprobantePago,Flag_Cancelado,Obs_LicitacionesM,callback){
     const parametros = {
         method: 'POST',
         headers: {
@@ -2295,7 +2273,7 @@ function GuardarLicitacion(Id_ClienteProveedor,Cod_Licitacion,Nro_Detalle,id_Com
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
-}
+}*/
 
 function GuardarFormaPago(id_ComprobantePago,Item,Des_FormaPago,Cod_TipoFormaPago,Cuenta_CajaBanco,Id_Movimiento,TipoCambio,Cod_Moneda,Monto,Cod_Plantilla,Obs_FormaPago,Fecha,callback){
      
@@ -2483,7 +2461,7 @@ function GuardarSeries(indiceSerie,idComprobante,idDetalle,arraySeries,callback)
     }
 }
 
-function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,callback){
+/*function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,callback){
     const parametros = {
         method: 'POST',
         headers: {
@@ -2515,7 +2493,7 @@ function RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitaci
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
-}
+}*/
 
 function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,callback){
    
@@ -2595,7 +2573,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                         console.log(res)
                         //callback(false)
                         if (res.respuesta == 'ok') {
-                           if($("#divLicitacion").css("display")=="block" && $("#optLicitacion").is(":checked")){
+                           /*if($("#divLicitacion").css("display")=="block" && $("#optLicitacion").is(":checked")){
                                 var Id_ClienteProveedor = $("#Cliente").attr("data-id")
                                 var Cod_Licitacion = $("#Cod_Licitacion").val()
                                 RecuperarNroDetalleXLicitacionProducto(Id_ClienteProveedor,Cod_Licitacion,Id_Producto,function(result){
@@ -2624,7 +2602,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                                         callback(false)
                                     }
                                 })
-                           }else{
+                           }else{*/
                                 let Series = JSON.parse($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(16).find("input").val())
                                 GuardarSeries(0,idComprobante,id_Detalle,Series,function(flag){
                                     if(flag){
@@ -2633,7 +2611,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
                                         callback(false)
                                     }
                                 })
-                           }
+                           //}
                         }else{
                             callback(false)
                         }
@@ -2979,6 +2957,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                     PrepararImpresion(dataArray)
                                                 }else{
                                                     $("#modal-alerta").modal("hide")
+                                                    refrescar_movimientos()
                                                 }
 
                                                 
@@ -3008,6 +2987,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                                 PrepararImpresion(dataArray)
                                                             }else{
                                                                 $("#modal-alerta").modal("hide")
+                                                                refrescar_movimientos()
                                                             }
                                                                 
                                                         }else{
@@ -3039,6 +3019,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         PrepararImpresion(dataArray)
                                                     }else{
                                                         $("#modal-alerta").modal("hide")
+                                                        refrescar_movimientos()
                                                     } 
                                                         
                                                 }else{
@@ -3120,6 +3101,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         PrepararImpresion(dataArray)
                                                     }else{
                                                         $("#modal-alerta").modal("hide")
+                                                        refrescar_movimientos()
                                                     } 
                                                     
                                                 }else{
@@ -3212,6 +3194,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         PrepararImpresion(dataArray)
                                                     }else{
                                                         $("#modal-alerta").modal("hide")
+                                                        refrescar_movimientos()
                                                     }
                                                     
                                                 }else{
@@ -3345,7 +3328,7 @@ function CargarUnidadMedida(Id_Producto,Cod_Almacen){
     }
 }
 
-function CargarLicitacionesCliente(Id_ClienteProveedor){
+/*function CargarLicitacionesCliente(Id_ClienteProveedor){
     const parametros = {
         method: 'POST',
         headers: {
@@ -3378,7 +3361,7 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
-}
+}*/
 
 function CargarSeries(CodLibro){
     if(CodLibro=="14"){
@@ -3727,7 +3710,7 @@ function RecorrerTablaDetalles_Series(indiceDetalle,callback){
     }
 }
 
-function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,indiceLicitacion,arregloLicitacion,_ExisteAtencion){
+/*function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,indiceLicitacion,arregloLicitacion,_ExisteAtencion){
     if(indiceDetalle < $("#tablaBody > tr").length){
         _ExisteAtencion = false
         if(indiceLicitacion<arregloLicitacion.length){
@@ -3761,12 +3744,9 @@ function RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle,ind
         }else{
             RecorrerTablaDetalles_Licitaciones(CodLibro,variables,indiceDetalle+1,0,arregloLicitacion,_ExisteAtencion)
         }
-        //console.log($('#tablaBody > tr:eq('+indiceDetalle+')').find('td').eq(2).find('input').val())
-    } 
-    /*$('#tablaBody tr').each(function () {
-        var Id_Producto = $(this).find("td").eq(2).find("input").val()
-    })*/
-}
+         
+    }  
+}*/
 
 
 function CambioNroDocumento(e){ 
@@ -3807,7 +3787,7 @@ function CambioCreditoContado(){
     }
 }
 
-function CambioSelectLicitacion(CodLibro,variables){
+/*function CambioSelectLicitacion(CodLibro,variables){
     if($("#divCodigoLicitacion").css("display")=="block"){
         if($("#optLicitacion").is(":checked")){
             if($("#Cod_Licitacion").val()!=""){
@@ -3841,15 +3821,15 @@ function CambioSelectLicitacion(CodLibro,variables){
             }
         }
     }
-}
+}*/
 
-function CambioLicitacion(){
+/*function CambioLicitacion(){
     var visible = "none"
     if($("#optLicitacion").is(":checked")){
         visible = "block"
     }
     $("#divCodigoLicitacion").css("display",visible)
-}
+}*/
 
  
 function CambioUnidadMedida() {
@@ -4290,8 +4270,8 @@ function BuscarClienteDoc(CodLibro) {
                     if(CodLibro=="14"){
                         $("#Cod_TipoComprobante").val(global.objCliente.Cod_TipoComprobante)
                         CargarSeries(CodLibro)
-                        CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
-                        CambioLicitacion()
+                        //CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
+                        //CambioLicitacion()
                     }
                 }
                 //CambioCreditoContado()

@@ -7,11 +7,11 @@ import {URL} from '../../../constantes_entorno/constantes'
 function Ver(parametros, paginas,pagina_actual, _escritura) {
 
     var tab = yo`
-    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false" id="id_2">Parametros<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class=""><a href="#tab_listar_parametros_2" data-toggle="tab" aria-expanded="false" id="id_tab_listar_parametros_2">Parametros<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
-    <div class="tab-pane" id="tab_2">
+    <div class="tab-pane" id="tab_listar_parametros_2">
         <section class="content-header">
         <div class="modal modal-danger fade" id="modal-danger-parametros" style="display: none;">
         <div class="modal-dialog">
@@ -49,8 +49,7 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
                             <tr>
                                 <th>Codigo</th>
                                 <th>Tabla</th>
-                                <th>Descripcion</th>
-                                <th>Sistema</th>
+                                <th>Descripcion</th> 
                                 <th>Acceso</th>
                                 <th>Acciones</th>
                             </tr>
@@ -60,13 +59,12 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
                             <tr>
                                 <td>${u.Cod_Tabla}</td>
                                 <td>${u.Tabla}</td>
-                                <td>${u.Des_Tabla}</td>
-                                <td>${u.Cod_Sistema}</td>
-                                <td>${u.Flag_Acceso}</td>
+                                <td>${u.Des_Tabla}</td> 
+                                <td>  
+                                    <i class=${u.Flag_Acceso?"fa fa-check text-success":"md md-block text-danger"}></i>
+                                 </td>
                                 <td>
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoParametro(_escritura, u)}"><i class="fa fa-edit"></i></button>` : yo``}
-                                    ${_escritura ? yo`<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#modal-danger-parametros" onclick="${()=>Eliminar(_escritura, u)}"><i class="fa fa-trash"></i></button>` : yo``}
-                                    
+                                    ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoParametro(_escritura, u)}"><i class="fa fa-edit"></i></button>` : yo``} 
                                 </td>
                             </tr>`)}
                         </tbody>
@@ -93,10 +91,10 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
     </div>`
     //var main = document.getElementById('main-contenido');
     //empty(main).appendChild(el);
-    if($("#tab_2").length){  
+    if($("#tab_listar_parametros_2").length){  
 
-        $('#tab_2').remove()
-        $('#id_2').parents('li').remove()
+        $('#tab_listar_parametros_2').remove()
+        $('#id_tab_listar_parametros_2').parents('li').remove()
 
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
@@ -104,12 +102,12 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
     } 
-    $("#id_2").click()
+    $("#id_tab_listar_parametros_2").click()
 }
 
 function CerrarTab(){
-    $('#tab_2').remove()
-    $('#id_2').parents('li').remove()
+    $('#tab_listar_parametros_2').remove()
+    $('#id_tab_listar_parametros_2').parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show'); 
 }
