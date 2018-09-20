@@ -255,9 +255,10 @@ function CargarVariables(req,res){
               EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
                   app.locals.arqueo = dataArqueo.result
                   res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
-                                              Cod_Usuarios:req.session.username,
-                                              Nick:req.session.nick,
-                                              Turno:app.locals.turno[0].Des_Turno });
+                                                      Nom_Empresa: app.locals.empresa[0].Nom_Comercial,
+                                                      Cod_Usuarios:req.session.username,
+                                                      Nick:req.session.nick,
+                                                      Turno:app.locals.turno[0].Des_Turno });
               })
             }
             
@@ -285,9 +286,10 @@ app.get('/', function (req, res) {
       }
     }else{
       res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
-                                                Cod_Usuarios:req.session.username,
-                                                Nick:req.session.nick,
-                                                Turno:app.locals.turno[0].Des_Turno });
+                                          Nom_Empresa: app.locals.empresa[0].Nom_Comercial,
+                                          Cod_Usuarios:req.session.username,
+                                          Nick:req.session.nick,
+                                          Turno:app.locals.turno[0].Des_Turno });
     }
   }
 })
@@ -362,7 +364,7 @@ app.post('/login', function (req, res) {
             //if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
               LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
                 if (e.err) {
-                  errores = "Ocurrio un error con el servidor comuniquese con el administrador. "//e.err
+                  errores = e.err
                   return res.redirect('/login');
                 }
           

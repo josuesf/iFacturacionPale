@@ -79,6 +79,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <input type="text" id="Nro_Documento_${idTabVenta}" placeholder="Nro Documento" onblur="${() => BuscarClienteDoc(CodLibro,idTabVenta)}" onkeypress=${()=>KeyPressClienteDoc(idTabVenta)} onkeydown=${()=>CambioNroDocumento(event,idTabVenta)} class="form-control input-sm dirty">
+                                            <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -318,11 +319,11 @@ function VerNuevaVenta(variables,CodLibro) {
                             <tr id="${idFila+''+IdTabSeleccionado}">
                                 <td class="Cod_Producto">${global.objProductoVentas.Cod_Producto}</td> 
                                 <td class="Flag_Stock hidden">${global.objProductoVentas.Flag_Stock}</td> 
-                                <td class="Nom_Producto" style="width: 30%;"><input type="text" class="form-control input-sm" value=${global.objProductoVentas.Nom_Producto}  onchange=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeypress=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
-                                <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeyup=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
+                                <td class="Nom_Producto" style="width: 30%;"><div class="form-group"><input type="text" class="form-control input-sm" value=${global.objProductoVentas.Nom_Producto}  onchange=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeypress=${()=>CambioNombreProducto(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}><div class="form-control-line"></div></div></td> 
+                                <td class="Cantidad"><div class="form-group"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeyup=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioCantidadVenta(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}><div class="form-control-line"></div></div></td>
                                 <td class="Unitario hidden">${global.objProductoVentas.Precio_Venta}</td>
-                                <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td> 
-                                <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}></td>
+                                <td class="UnitarioBase"><div class="form-group"><input type="number" class="form-control input-sm" value=${global.objProductoVentas.Precio_Venta} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}><div class="form-control-line"></div></div></td> 
+                                <td class="Descuentos"><div class="form-group"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+IdTabSeleccionado,IdTabSeleccionado)}><div class="form-control-line"></div></div></td>
                                 <td class="DescuentoUnitario hidden">0</td> 
                                 <td class="DescuentoTotal hidden">0</td> 
                                 <td class="Precio">${global.objProductoVentas.Precio_Venta}</td>
@@ -784,8 +785,10 @@ function RecalcularSubtotales(idTab){
     $('#tablaBodyProductosVentas_'+idTab+' tr').each(function (index) { 
         var _Cantidad = parseFloat($(this).find("td").eq(3).find('input').val())
         var _PrecioUnitario = parseFloat($(this).find("td").eq(5).find('input').val()) 
-        $(this).find("td").eq(9).text((parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2))
-        changeDetallesArrayJsonVentas(idTab,$(this).find("td").eq(0).text(),[null,null,null,null,null,null,null,null,null,null,null,null,(parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2),null,null,null,null])
+        var _DescuentoUnitario = parseFloat($(this).find("td").eq(7).text()) 
+        $(this).find("td").eq(9).text(((_PrecioUnitario-_DescuentoUnitario)*(_Cantidad)).toFixed(2))
+        //$(this).find("td").eq(9).text((parseFloat(_Cantidad)*parseFloat(_PrecioUnitario)).toFixed(2))
+        changeDetallesArrayJsonVentas(idTab,$(this).find("td").eq(0).text(),[null,null,null,null,null,null,null,null,null,null,null,null,((_PrecioUnitario-_DescuentoUnitario)*(_Cantidad)).toFixed(2),null,null,null,null])
     });
     CalcularTotal(idTab)
 }
@@ -1286,7 +1289,9 @@ function CambioNombreProducto(idFila,idTab){
 
 
 function CambioPrecioDescuentos(idFila,idTab){
-    console.log("onkeyup descuenasd [reocp",$('#'+idFila).find('td.UnitarioBase').find('input').val())
+    $("#"+idFila).find("td.Precio").text("0.00")
+    //console.log($("#"+idFila).find("td.Precio").text())
+    //console.log("onkeyup descuenasd [reocp",$('#'+idFila).find('td.UnitarioBase').find('input').val())
     if($('#'+idFila).find('td.UnitarioBase').find('input').val().trim()!="" && $('#'+idFila).find('td.Descuentos').find('input').val().trim()!=""){
         
         changeDetallesArrayJsonVentas(idTab,$('#'+idFila).find('td.Cod_Producto').text(),[null,null,null,null,null,null,null,null,null,null,parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.UnitarioBase').find('input').val()).toFixed(2),parseFloat($('#tablaBodyProductosVentas_'+idTab+' tr#'+idFila).find('td.Descuentos').find('input').val()).toFixed(2),null,null,null,null,null])
@@ -1310,9 +1315,8 @@ function CambioPrecioDescuentos(idFila,idTab){
         $('#'+idFila).find('td.DescuentoUnitario').text(_Unitario * _Descuento)
 
         $("#"+idFila).find("td.Unitario").text(parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())-parseFloat($('#'+idFila).find('td.DescuentoUnitario').text()))
-        $("#"+idFila).find("td.Precio").text(((parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())-parseFloat($('#'+idFila).find('td.DescuentoUnitario').text()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
-        
-
+        //$("#"+idFila).find("td.Precio").text(((parseFloat($('#'+idFila).find('td.UnitarioBase').find('input').val())-parseFloat($('#'+idFila).find('td.DescuentoUnitario').text()))*(parseFloat($("#"+idFila).find("td.Cantidad").find('input').val()))).toFixed(2))
+       
         RecalcularSubtotales(idTab)
         RecalcularDescuentosTotales(idTab)
     }
@@ -1371,11 +1375,11 @@ function AgregarProducto(producto,favoritos,idTab){
                                         <tr id="${idFila+''+idTab}">
                                             <td class="Cod_Producto">${dataProducto.Cod_Producto}</td> 
                                             <td class="Flag_Stock hidden">${dataProducto.Flag_Stock}</td> 
-                                            <td class="Nom_Producto" style="width: 30%;"><input type="text" class="form-control input-sm" value=${dataProducto.Nom_Producto} onchange=${()=>CambioNombreProducto(idFila+''+idTab,idTab)} onkeyup=${()=>CambioNombreProducto(idFila+''+idTab,idTab)}></td> 
-                                            <td class="Cantidad"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)} onkeyup=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}></td>
+                                            <td class="Nom_Producto" style="width: 30%;"><div class="form-group"><input type="text" class="form-control input-sm" value=${dataProducto.Nom_Producto} onchange=${()=>CambioNombreProducto(idFila+''+idTab,idTab)} onkeyup=${()=>CambioNombreProducto(idFila+''+idTab,idTab)}><div class="form-control-line"></div></div></td> 
+                                            <td class="Cantidad"><div class="form-group"><input type="number" class="form-control input-sm" value="1.0000" onblur=${()=>FocusInOutCantidadVenta(idFila+''+idTab,idTab)} onchange=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)} onkeyup=${()=>CambioCantidadVenta(idFila+''+idTab,idTab)}><div class="form-control-line"></div></div></td>
                                             <td class="Unitario hidden">${RecuperarPrecio(favoritos,dataProducto)}</td>
-                                            <td class="UnitarioBase"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td> 
-                                            <td class="Descuentos"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}></td>
+                                            <td class="UnitarioBase"><div class="form-group"><input type="number" class="form-control input-sm" value=${RecuperarPrecio(favoritos,dataProducto)} onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}><div class="form-control-line"></div></div></td> 
+                                            <td class="Descuentos"><div class="form-group"><input type="number" class="form-control input-sm" value="0.00" onchange=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)} onkeyup=${()=>CambioPrecioDescuentos(idFila+''+idTab,idTab)}><div class="form-control-line"></div></div></td>
                                             <td class="DescuentoUnitario hidden">0</td> 
                                             <td class="DescuentoTotal hidden">0</td> 
                                             <td class="Precio">${RecuperarPrecio(favoritos,dataProducto)}</td>

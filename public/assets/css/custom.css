@@ -235,3 +235,17 @@ table.dataTable.no-footer {
     padding: 14px 0 14px 0px;
     float: left;
 }
+
+.name-bussiness{
+    width: 200px;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+}
+
+.name-bussiness:hover{
+    width: auto;
+    white-space: initial;
+    overflow:visible;
+    cursor: pointer;
+}

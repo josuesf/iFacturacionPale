@@ -153,7 +153,7 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
         request.execute('usp_PRI_USUARIO_TXPK', function (err, result) {
             dbConn.close()
             if (err) {
-                return next({err})
+                return next({err:"Ocurrio un error en el servidor comuniquese con el administrador."})
             }
             Contrasena = md5(Contrasena)
             usuario =  result[0]

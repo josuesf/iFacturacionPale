@@ -90,26 +90,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4" id="divDocRef">
-                                        <div class="checkbox checkbox-inline checkbox-styled">
-                                            <label> 
-                                                <input type="checkbox" id="optDocRef" onchange=${()=>CambioDocRef()}><span> Con Doc Ref?</span> 
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8" style="display:none" id="divId_ComprobantePago">
-                                        <div class="input-group">
-                                            <input type="text" id="Id_ComprobantePago" data-id=0 class="form-control required" disabled>
-                                            <div class="input-group-btn">
-                                                <button type="button" data-toggle="modal" id="BuscarId_ComprobantePago" class="btn btn-success" onclick=${()=>BuscarComprobantePago(CodTipoComprobante)}>
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                
 
                             </div>
                             
@@ -152,6 +133,27 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row">
+                                    <div class="col-md-4" id="divDocRef">
+                                        <div class="checkbox checkbox-inline checkbox-styled">
+                                            <label> 
+                                                <input type="checkbox" id="optDocRef" onchange=${()=>CambioDocRef()}><span> Doc Ref?</span> 
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8" style="display:none" id="divId_ComprobantePago">
+                                        <div class="input-group">
+                                            <input type="text" id="Id_ComprobantePago" data-id=0 class="form-control required" disabled>
+                                            <div class="input-group-btn">
+                                                <button type="button" data-toggle="modal" id="BuscarId_ComprobantePago" class="btn btn-success" onclick=${()=>BuscarComprobantePago(CodTipoComprobante)}>
+                                                    <i class="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+
                             </div>
                         </div>
                     </div>
