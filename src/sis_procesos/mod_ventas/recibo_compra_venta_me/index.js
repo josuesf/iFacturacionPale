@@ -494,7 +494,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     Id_MovimientoRef
                 })
             }
-            console.log(parametros)
+            //console.log(parametros)
             fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
             .then(req => req.json())
             .then(res => {

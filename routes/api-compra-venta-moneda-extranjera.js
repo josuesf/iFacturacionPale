@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var {Ejecutar_Procedimientos} = require('../utility/exec_sp_sql')
+var {Ejecutar_Procedimientos, EXEC_SQL_OUTPUT} = require('../utility/exec_sp_sql')
 
 router.post('/guardar_compra_venta_me', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'id_Movimiento',valor_parametro:input.id_Movimiento},
+        {nom_parametro:'id_Movimiento',valor_parametro:input.id_Movimiento,tipo:"output"},
         {nom_parametro:'Cod_Caja',valor_parametro:req.app.locals.caja[0].Cod_Caja},
         {nom_parametro:'Cod_Turno',valor_parametro:req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Id_Concepto',valor_parametro:input.Id_Concepto},
@@ -30,10 +30,15 @@ router.post('/guardar_compra_venta_me', function (req, res) {
         {nom_parametro:'Id_MovimientoRef',valor_parametro:input.Id_MovimientoRef},
         {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username},
     ]
-    procedimientos =[
+    /*procedimientos =[
         {nom_respuesta:'compra_venta_me',sp_name:'USP_CAJ_CAJA_MOVIMIENTOS_G',parametros}
     ]
-    Ejecutar_Procedimientos(req,res,procedimientos)
+    Ejecutar_Procedimientos(req,res,procedimientos)*/
+    
+    EXEC_SQL_OUTPUT('USP_CAJ_CAJA_MOVIMIENTOS_G', parametros , function (dataMov) {
+        if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
+        return res.json({respuesta:"ok",data:{movimiento:{ id_Movimiento:dataMov.result[0].valor }}}) 
+    })
 });
 
 

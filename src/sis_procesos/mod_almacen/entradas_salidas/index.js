@@ -416,7 +416,7 @@ function CambioDestino(CodTipoComprobante,fecha_actual){
 function CambioOperacion(CodTipoComprobante){
     if(!arrayValidacion.includes($("#Cod_Almacen").val())){
         $("#divDestino").hide()
-        $("#divRechazar").css("display","inline-block")
+        //$("#divRechazar").css("display","inline-block")
         $("#divDocRef").show()
         var Cod_Almacen = $("#Cod_Almacen").val()
         if($("#Cod_Operacion").val()=="11"){

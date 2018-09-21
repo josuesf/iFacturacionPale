@@ -4,7 +4,7 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { NuevoCliente, BuscarCliente, BuscarProducto,Buscar } from '../../modales'
 import { BloquearControles,getObjectArrayJsonVentas, changeArrayJsonVentas,changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas,LimpiarVariablesGlobales } from '../../../../utility/tools'
 import { ComprobantePago } from '../../mod_compras/comprobante_pago'
-import { preparar_impresion_comprobante } from '../../movimientos_caja'
+import { preparar_impresion_comprobante,preparar_impresion_movimientos } from '../../movimientos_caja'
 
 
 var cantidad_tabs = 2
@@ -561,9 +561,39 @@ function CargarModalConfirmacion(idTab,_CodTipoComprobante){
     $('#modal-alerta').modal()
 }
 
+function CargarModalConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda){
+    var el = yo`
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title"> Confirmacion </h4>
+            </div>
+            <div class="modal-body">
+                <p>Desea comprar ${parseFloat(_MontoComprar).toFixed(2)} ${_NombreMoneda} ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick=${()=>LimpiarVenta(idTab)}>Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda)}>Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>`
+
+
+    var modal_proceso = document.getElementById('modal-alerta');
+    empty(modal_proceso).appendChild(el);
+    $('#modal-alerta').modal()
+}
 
 function AceptarConfirmacion(idTab,_CodTipoComprobante){
     VentaSimpleSinME(idTab,_CodTipoComprobante)
+}
+
+function AceptarConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda){
+    CompraSimple(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda)
 }
 
 
@@ -1324,17 +1354,19 @@ function CambioPrecioDescuentos(idFila,idTab){
 }
  
 function CambioTipoCambioVenta(idTab){
-    //TipodeCambio = parseFloat($("#Tipo_Cambio_Venta_"+idTab).val())
-    changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()),null,null,null,null,null])
-    CalcularTotal(idTab)
-    CalcularTotalDescuentos(idTab)
-    if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
-    //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
-        $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
-    }else{
-        $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
+    if($("#Tipo_Cambio_Venta_"+idTab).val().trim()!=''){
+        //TipodeCambio = parseFloat($("#Tipo_Cambio_Venta_"+idTab).val())
+        changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()),null,null,null,null,null])
+        CalcularTotal(idTab)
+        CalcularTotalDescuentos(idTab)
+        if($('#Cod_Moneda_Forma_Pago_'+idTab).val() == 'PEN'){
+        //if ($('input[name=Cod_Moneda_Forma_Pago_'+idTab+']:checked').val() == 'soles'){
+            $("#TotalCobrar_"+idTab).val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)
+        }else{
+            $("#TotalCobrar_"+idTab).val(parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].TipodeCambio))
+        }
+        CalcularVuelto(idTab)
     }
-    CalcularVuelto(idTab)
 }
 
 
@@ -1617,7 +1649,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
     }
 }
 
-function EmisionRapida(idTab,pCod_Moneda){ 
+function EmisionRapida(idTab,pCod_Moneda,callback){ 
     run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1648,20 +1680,23 @@ function EmisionRapida(idTab,pCod_Moneda){
             console.log(res)
             if(res.respuesta == 'ok'){
                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                LimpiarVenta(idTab)
+                 
                 preparar_impresion_comprobante(res.data,function(flag){
                     if(!flag){
                         toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})
                     }
                 })
+                callback(true)
             }else{
                 toastr.error(res.detalle_error,'Error',{timeOut: 5000}) 
+                callback(false)
             }
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
+            callback(false)
         });
 
 
@@ -1676,7 +1711,7 @@ function ObtenerFormaPago(idTab){
                 Item : 1,
                 Des_FormaPago : 'VISA NET',
                 Cod_FormaPago : '005',
-                Cod_Moneda : 'PEN',
+                Cod_Moneda : $("#Cod_Moneda_Forma_Pago_"+idTab).val(),
                 TipoCambio : 1,
                 Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
@@ -1689,7 +1724,7 @@ function ObtenerFormaPago(idTab){
                 Item : 1,
                 Des_FormaPago : 'MASTERCARD',
                 Cod_FormaPago : '006',
-                Cod_Moneda : 'PEN',
+                Cod_Moneda : $("#Cod_Moneda_Forma_Pago_"+idTab).val(),
                 TipoCambio : 1,
                 Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
                 CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
@@ -1704,7 +1739,7 @@ function ObtenerFormaPago(idTab){
             Item : 1,
             Des_FormaPago : 'EFECTIVO',
             Cod_FormaPago : '008',
-            Cod_Moneda : 'PEN',
+            Cod_Moneda : $("#Cod_Moneda_Forma_Pago_"+idTab).val(),
             TipoCambio : 1,
             Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
             CuentaCajaBanco :$("#Nro_Tarjeta_"+idTab).val()==undefined?'':$("#Nro_Tarjeta_"+idTab).val()
@@ -1713,12 +1748,191 @@ function ObtenerFormaPago(idTab){
     }
 }
 
+function ComprarMonedaExtranjera(idTab,_MontoComprar, _TipoCambio, _CodMoneda){
+    var _NombreMoneda = ''
+    if (_CodMoneda=='USD'){
+        _NombreMoneda = 'DOLARES'
+    }else{
+        _NombreMoneda = 'EUROS'
+    }
+    if(_NombreMoneda!=''){
+        CargarModalConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda)
+    }
+}
+
+function CrearClientesVarios(idTab,callback){
+    if(arrayValidacion.includes($("#Cliente_"+idTab).attr("data-id"))){
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+
+            })
+        } 
+        fetch(URL+'/clientes_api/get_clientes_varios', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                if(res.data.cliente.length>0)
+                    callback(true,{
+                        Id:res.data.cliente[0].Id_ClienteProveedor,
+                        Cliente:res.data.cliente[0].Cliente
+                    })
+                else
+                    callback(false,{})
+            }else{
+                callback(false,{})
+            }
+        }).catch(function (e) {
+            callback(false,{})
+            //console.log(e);
+            toastr.error('Ocurrio un error en la conexion.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
+    }else{
+        callback(true,{
+            Id:parseInt($("#Cliente_"+idTab).attr("data-id")),
+            Cliente:$("#Cliente_"+idTab).val()
+        })
+    }
+}
+
+function CompraSimple(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda){
+    if(parseFloat(_MontoComprar)>0){
+        CrearClientesVarios(idTab,function(flag,jsonCliente){
+            if(flag){
+                var _nom_moneda = _Cod_Moneda == "USD" ? "DOLARES" : "EUROS";
+
+                var id_Movimiento = -1
+                var IdConcepto = 3000
+                var Id_ClienteProveedor = jsonCliente.Id
+                var Cliente = jsonCliente.Cliente
+                var Des_Movimiento = "Compra ME "+_NombreMoneda+" : "+_MontoComprar+" T/C: "+parseFloat(_TipoCambio).toFixed(3)+" SOLES: "+(parseFloat(_MontoComprar)*parseFloat(parseFloat(_TipoCambio).toFixed(3))).toFixed(3)
+                var Cod_TipoComprobante = "CV"
+                const fecha = new Date()
+                const mes = fecha.getMonth() + 1
+                const dia = fecha.getDate()
+                var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+                var Fecha = fecha_format
+                var Tipo_Cambio = _TipoCambio
+                var Ingreso = _MontoComprar
+                var Cod_MonedaIng = _CodMoneda
+                var Egreso = (parseFloat(_MontoComprar)*parseFloat(parseFloat(_TipoCambio).toFixed(3))).toFixed(3)
+                var Cod_MonedaEgr = 'PEN'
+                var Flag_Extornado = 0
+                var Fecha_Aut = fecha_format
+                var Obs_Movimiento = ''
+                var Id_MovimientoRef=null
+
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        id_Movimiento,
+                        Id_Concepto,
+                        Id_ClienteProveedor,
+                        Cliente,
+                        Des_Movimiento,
+                        Cod_TipoComprobante,
+                        Serie,
+                        Numero,
+                        Fecha,
+                        Tipo_Cambio,
+                        Ingreso,
+                        Cod_MonedaIng,
+                        Egreso,
+                        Cod_MonedaEgr,
+                        Flag_Extornado,
+                        Fecha_Aut,
+                        Obs_Movimiento,
+                        Id_MovimientoRef
+                    })
+                } 
+                fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
+                .then(req => req.json())
+                .then(res => {
+                    if (res.respuesta == 'ok') {     
+                        LimpiarVenta(idTab)          
+                        toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000})
+                        preparar_impresion_movimientos(res.data.movimiento.id_Movimiento,function(flag){
+                            if(!flag){
+                                toastr.error('No Puede imprimir el documento. Comuniquese con su Administrador.','Error',{timeOut: 5000})
+                            }
+                        })
+                    }
+                    else{
+                        toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
+                    }
+                }).catch(function (e) {
+                    console.log(e);
+                    toastr.error('Ocurrio un error en la conexion.  Tipo error : '+e,'Error',{timeOut: 5000})
+                });
+
+
+            }else{
+                toastr.error('Ocurrio un error en la conexion.  Tipo error : '+e,'Error',{timeOut: 5000}) 
+            }
+        })
+    }else{
+        LimpiarVenta(idTab)
+    }
+
+    /*const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            id_Movimiento,
+            Id_Concepto,
+            Id_ClienteProveedor,
+            Cliente,
+            Des_Movimiento,
+            Cod_TipoComprobante,
+            Serie,
+            Numero,
+            Fecha,
+            Tipo_Cambio,
+            Ingreso,
+            Cod_MonedaIng,
+            Egreso,
+            Cod_MonedaEgr,
+            Flag_Extornado,
+            Fecha_Aut,
+            Obs_Movimiento,
+            Id_MovimientoRef
+        })
+    } 
+    fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
+    .then(req => req.json())
+    .then(res => {
+        console.log("respuesta de compra simple moneda",res)
+    }).catch(function (e) {
+        console.log(e);
+        toastr.error('Ocurrio un error en la conexion.  Tipo error : '+e,'Error',{timeOut: 5000})
+    });*/
+
+}
+
 function VentaSimpleSinME(idTab,_CodTipoComprobante){
      
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,'PEN',_CodTipoComprobante)
+    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),_CodTipoComprobante,function(flag){
+        if(flag){
+            LimpiarVenta(idTab)
+        }
+    })
 }
 
 function VentaSimpleConME(idTab,_CodTipoComprobante){
@@ -1726,7 +1940,13 @@ function VentaSimpleConME(idTab,_CodTipoComprobante){
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,'PEN',_CodTipoComprobante)
+    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),_CodTipoComprobante,function(flag){
+        if(flag){
+             
+            ComprarMonedaExtranjera(idTab,parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#Vuelto_"+idTab).val()), parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()), $("#Cod_Moneda_Forma_Pago_"+idTab).val()=='USD'?'USD':'EUR')
+           
+        } 
+    })
 }
 
 

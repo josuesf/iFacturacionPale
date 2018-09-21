@@ -1540,3 +1540,7 @@ module.exports.refrescar_movimientos = function refrescar_movimientos(){
 module.exports.preparar_impresion_comprobante = function preparar_impresion_comprobante(id_ComprobantePago,callback){
     PrepararImpresionComprobante(id_ComprobantePago,callback)
 } 
+
+module.exports.preparar_impresion_movimientos = function preparar_impresion_movimientos(id_Movimiento,callback){
+    PrepararImpresionMovimientos(id_Movimiento,callback)
+} 
