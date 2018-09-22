@@ -523,10 +523,10 @@ function Guardar(_escritura, diagramas, cliente) {
         var Id_ClienteProveedor = cliente ? cliente.Id_ClienteProveedor : '-1'
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDocumento').value
         var Nro_Documento = document.getElementById('Nro_Documento').value
-        var Cliente = document.getElementById('Cliente').value.toUpperCase()
         var Ap_Paterno = document.getElementById('Ap_Paterno').value.toUpperCase()
         var Ap_Materno = document.getElementById('Ap_Materno').value.toUpperCase()
         var Nombres = document.getElementById('Nombres').value.toUpperCase()
+        var Cliente = (document.getElementById('Cliente').value.toUpperCase() + Ap_Paterno +" " + Ap_Materno+" " + Nombres).trim()
         var Direccion = document.getElementById('Direccion').value.toUpperCase()
         var Cod_EstadoCliente = document.getElementById('Cod_EstadoCliente').value
         var Cod_CondicionCliente = document.getElementById('Cod_CondicionCliente').value
@@ -572,11 +572,12 @@ function Guardar(_escritura, diagramas, cliente) {
         fetch(URL + '/clientes_api/guardar_cliente', parametros)
             .then(req => req.json())
             .then(res => {
+                console.log("respuesta de save",res)
                 if (res.respuesta == 'ok') {
                     ListarClientes(_escritura)
                 }
                 else {
-                    alert('Ocurrio un error')
+                    toastr.error('Ocurrio un error.  Tipo error : '+e,'Error',{timeOut: 5000})
                 }
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
