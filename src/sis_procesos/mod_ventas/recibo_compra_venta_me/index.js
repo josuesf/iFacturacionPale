@@ -12,7 +12,8 @@ var arrayValidacion = [null,'null','',undefined]
 var cantidad_tabs = 0
 global.variablesCVME = {}
 
-function Ver(_escritura, Serie, variables,fecha_actual) {
+function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
+    global.objCliente = ''
     cantidad_tabs++
     const idTabCVME = "CVME_"+cantidad_tabs
     global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
@@ -72,7 +73,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                             <div class="panel panel-default">
                                 <div class="panel-heading text-center">
                                     <div class="row">
-                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC} </strong></h4>
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${empresa.RUC} </strong></h4>
                                     </div>
                                     <div class="row">
                                         <h4><strong>COMPRA/VENTA ME</strong></h4>
@@ -207,11 +208,12 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                             </div> 
                         </div>
                     </div>
+                    <div class="row pull-right"> 
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
+                    </div>
                 </div>
-                <div class="row pull-right"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
-                </div>
+               
             </div>
         </div>`
 
@@ -221,11 +223,40 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
     $("#tabs").append(tab)
     $("#tabs_contents").append(el)
     $("#id_"+idTabCVME).click()
+
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente) 
+            global.variablesCVME[idTabCVME].Id_ClienteProveedor = global.objCliente.Id_ClienteProveedor
+            $("#Cod_TipoDocumentoBuscar_"+idTabCVME).val(global.objCliente.Cod_TipoDocumento)
+            $("#txtNombreCliente_"+idTabCVME).val(global.objCliente.Cliente)
+            $("#Nro_DocumentoBuscar_"+idTabCVME).val(global.objCliente.Nro_Documento)
+            $("#txtNombreCliente_"+idTabCVME).attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+
+            $("#Nro_DocumentoBuscar_"+idTabCVME).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#txtNombreCliente_"+idTabCVME).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+           
+            $("#Nro_DocumentoBuscar_"+idTabCVME).attr("disabled",true);
+            $("#txtNombreCliente_"+idTabCVME).attr("disabled",true); 
+            $("#Cod_TipoDocumentoBuscar_"+idTabCVME).attr("disabled",true);
+        }
+    })
+
     TraerCuentaBancariaEntidadFinanciera(idTabCVME)
     ObservacionesXML(variables.diagramas,idTabCVME)
 }
 
-function RefrescarVer(_escritura, Serie, variables,fecha_actual,idTabCVME) { 
+function RefrescarVer(_escritura, Serie, variables,fecha_actual,empresa,idTabCVME) { 
+    global.objCliente = ''
     global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
     
     var el = yo` 
@@ -280,7 +311,7 @@ function RefrescarVer(_escritura, Serie, variables,fecha_actual,idTabCVME) {
                             <div class="panel panel-default">
                                 <div class="panel-heading text-center">
                                     <div class="row">
-                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC} </strong></h4>
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${empresa.RUC} </strong></h4>
                                     </div>
                                     <div class="row">
                                         <h4><strong>COMPRA/VENTA ME</strong></h4>
@@ -415,17 +446,48 @@ function RefrescarVer(_escritura, Serie, variables,fecha_actual,idTabCVME) {
                             </div> 
                         </div>
                     </div>
+                    <div class="row pull-right"> 
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
+                    </div>
                 </div>
-                <div class="row pull-right"> 
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
-                </div>
+                
             </div>`
 
     //var modal_proceso = document.getElementById('modal-proceso')
     //empty(modal_proceso).appendChild(el)
     //$('#modal-proceso').modal()
     $('#tab_'+idTabCVME).html(el)
+
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente) 
+            global.variablesCVME[idTabCVME].Id_ClienteProveedor = global.objCliente.Id_ClienteProveedor
+            $("#Cod_TipoDocumentoBuscar_"+idTabCVME).val(global.objCliente.Cod_TipoDocumento)
+            $("#txtNombreCliente_"+idTabCVME).val(global.objCliente.Cliente)
+            $("#Nro_DocumentoBuscar_"+idTabCVME).val(global.objCliente.Nro_Documento)
+            $("#txtNombreCliente_"+idTabCVME).attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+
+            $("#Nro_DocumentoBuscar_"+idTabCVME).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#txtNombreCliente_"+idTabCVME).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+           
+            $("#Nro_DocumentoBuscar_"+idTabCVME).attr("disabled",true);
+            $("#txtNombreCliente_"+idTabCVME).attr("disabled",true); 
+            $("#Cod_TipoDocumentoBuscar_"+idTabCVME).attr("disabled",true);
+        }
+    })
+
+    
+
     TraerCuentaBancariaEntidadFinanciera(idTabCVME)
     ObservacionesXML(variables.diagramas,idTabCVME)
 }
@@ -436,7 +498,7 @@ function CerrarTabCVME(idTab){
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
-    global.variablesCVME.splice(idTab,1)
+    delete global.variablesCVME[idTab]
 }
 
 function LlenarCuenta(cuenta,idSelect){
@@ -940,7 +1002,7 @@ function RefrescarTraerSiguienteNumeroComprobante(_escritura, Serie, idTab) {
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
-                RefrescarVer(_escritura, Serie,variables,fecha_format,idTab)  
+                RefrescarVer(_escritura, Serie,variables,fecha_format,res.empresa,idTab)  
             }
             else { 
             }
@@ -974,7 +1036,7 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
 
-                Ver(_escritura, Serie,variables,fecha_format)  
+                Ver(_escritura, Serie,variables,fecha_format,res.empresa)  
             }
             else { 
             }

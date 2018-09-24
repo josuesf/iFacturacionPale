@@ -135,8 +135,7 @@ function VerAsignarSeries(_Series, fecha, Stock, Cantidad) {
     $('#modal-otros-procesos').modal()
 }
 
-function VerGenerarSeries(_Series, fecha, Stock, Cantidad) {
-    LimpiarVariablesGlobales()
+function VerGenerarSeries(_Series, fecha, Stock, Cantidad) { 
     var el = yo`
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
@@ -435,7 +434,8 @@ function AceptarAsignarSerie() {
             data['Observacion'] = $(this).find("td.Observacion").find('input').val()
             arraySeries.push(data)
             $('#modal-otros-procesos').modal('hide')
-            global.arraySeries = arraySeries
+            
+            global.arraySeries =arraySeries
         })
     } else {
         toastr.error('Debe de ingresar todas las series antes de salir de esta ventana', 'Error', { timeOut: 5000 })
@@ -473,6 +473,7 @@ function EsValido() {
 }
 
 function AsignarSeriesModal(Cod_Almacen, Id_Producto, Cantidad, NroDias, _Series, fecha, Stock) {
+    LimpiarVariablesGlobales()
     $('#modal-otros-procesos').waitMe('hide');
     const parametros = {
         method: 'POST',

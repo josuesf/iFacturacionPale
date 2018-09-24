@@ -370,52 +370,60 @@ router.post('/guardar_mov_almacen', function (req, res){
 
  
 router.post('/get_variables_entradas_salidas', function (req, res){
-    var data = {}
-    input = req.body
-    parametros = [
-        {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja}
-    ]
-
-    EXEC_SQL('USP_CAJ_CAJA_ALMACEN_TXCaja', parametros, function (dataAlmacen) {
-        if (dataAlmacen.error) return res.json({ respuesta: 'error', detalle_error: dataAlmacen.error })
-        data['dataAlmacen'] = dataAlmacen.result
+    try{
+        var data = {}
+        input = req.body
         parametros = [
-            {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante} 
+            {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja}
         ]
 
-        EXEC_SQL('USP_VIS_TIPO_OPERACIONES_TXComprobante', parametros, function (dataTiposOperaciones) {
-            if (dataTiposOperaciones.error) return res.json({ respuesta: 'error', detalle_error: dataTiposOperaciones.error })
-            data['dataTiposOperaciones'] = dataTiposOperaciones.result
+        EXEC_SQL('USP_CAJ_CAJA_ALMACEN_TXCaja', parametros, function (dataAlmacen) {
+            if (dataAlmacen.error) return res.json({ respuesta: 'error', detalle_error: dataAlmacen.error })
+            data['dataAlmacen'] = dataAlmacen.result
             parametros = [
-                {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja}
+                {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante} 
             ]
 
-            EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCaja', parametros, function (dataDocumentos) {
-                if (dataDocumentos.error) return res.json({ respuesta: 'error', detalle_error: dataDocumentos.error })
-                data['dataDocumentos'] = dataDocumentos.result
+            EXEC_SQL('USP_VIS_TIPO_OPERACIONES_TXComprobante', parametros, function (dataTiposOperaciones) {
+                if (dataTiposOperaciones.error) return res.json({ respuesta: 'error', detalle_error: dataTiposOperaciones.error })
+                data['dataTiposOperaciones'] = dataTiposOperaciones.result
                 parametros = [
-                    {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
-                    {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante} 
+                    {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja}
                 ]
-                
-                EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCajaComprobante', parametros, function (dataComprobante) {
-                    if (dataComprobante.error) return res.json({ respuesta: 'error', detalle_error: dataComprobante.error })
-                    data['dataComprobante'] = dataComprobante.result
+
+                EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCaja', parametros, function (dataDocumentos) {
+                    if (dataDocumentos.error) return res.json({ respuesta: 'error', detalle_error: dataDocumentos.error })
+                    data['dataDocumentos'] = dataDocumentos.result
                     parametros = [
-                        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
-                        {nom_parametro:'Serie', valor_parametro: dataComprobante.result[0].Serie} 
+                        {nom_parametro:'Cod_Caja', valor_parametro: req.app.locals.caja[0].Cod_Caja},
+                        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante} 
                     ]
-                    EXEC_SQL('USP_ALM_ALMACEN_MOV_TSiguienteNumero', parametros, function (dataMov) {
-                        if (dataMov.error) return res.json({ respuesta: 'error', detalle_error: dataMov.error })
-                        data['dataMov'] = dataMov.result
-                        return res.json({ respuesta: 'ok', data })
-                        
+                    
+                    EXEC_SQL('USP_CAJ_CAJAS_DOC_TXCodCajaComprobante', parametros, function (dataComprobante) {
+                        if (dataComprobante.error) return res.json({ respuesta: 'error', detalle_error: dataComprobante.error })
+                        if(dataComprobante.result.length>0){
+                            data['dataComprobante'] = dataComprobante.result
+                            parametros = [
+                                {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+                                {nom_parametro:'Serie', valor_parametro: dataComprobante.result[0].Serie} 
+                            ]
+                            EXEC_SQL('USP_ALM_ALMACEN_MOV_TSiguienteNumero', parametros, function (dataMov) {
+                                if (dataMov.error) return res.json({ respuesta: 'error', detalle_error: dataMov.error })
+                                data['dataMov'] = dataMov.result
+                                return res.json({ respuesta: 'ok', data })
+                                
+                            })
+                        }else{
+                            return res.json({ respuesta: 'error', detalle_error: 'no existen comprobantes configurados' })
+                        }
                     })
                 })
             })
+        
         })
-    
-    })
+    }catch(e){
+        res.json({ respuesta: 'error', detalle_error: e })
+    }
 })
 
 

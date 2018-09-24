@@ -102,7 +102,7 @@ var EXEC_QUERY_DBMaster = function (query, parametros, next) {
 var Ejecutar_Procedimientos = function (req,res, procedimientos,respuesta_previa) {
     Ejecutar_SP_SQL(req,res,procedimientos,0,respuesta_previa)
 }
-var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previa) {
+var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previa) { 
     var dbConn = new sql.Connection(dbConfig());
     dbConn.connect(function (err) {
         if (err) {

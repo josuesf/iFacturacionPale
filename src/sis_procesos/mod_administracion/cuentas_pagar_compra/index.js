@@ -6,73 +6,78 @@ import { BuscarCuentasPendientes } from '../../modales/cuentas'
 import { NuevoCliente, BuscarCliente } from '../../modales' 
 
 var arrayValidacion = [null,'null','',undefined]
-var flag_cliente = false 
+var cantidad_tabs = 0
+global.variablesPC = {}
+//var flag_cliente = false 
 
 function VerCuentas(variables,fecha_actual,CodLibro) {
     global.objCliente = ''
-    flag_cliente = false 
+
+    cantidad_tabs++
+    const idTabPC = "PC_"+cantidad_tabs
+    global.variablesPC[idTabPC]={idTab:idTabPC,flag_cliente:false}
+
+    var tab = yo`
+    <li class="" ><a href="#tab_${idTabPC}" data-toggle="tab" aria-expanded="false" id="id_${idTabPC}">${CodLibro=='08'?'CUENTAS POR PAGAR':'CUENTAS POR COBRAR'} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabPC(idTabPC)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+
+
+    //flag_cliente = false 
     var el = yo`
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title"><b>${CodLibro=='08'?'CUENTAS POR PAGAR':'CUENTAS POR COBRAR'}</b></h4>
-            </div>
-            <div class="modal-body" id="modal_form_ingreso">
-                <div class="modal fade" id="modal_observaciones">
+    <div class="tab-pane" id="tab_${idTabPC}">
+        <div class="panel">
+            <div class="panel-body" id="modal_form_ingreso_${idTabPC}">
+                <div class="modal fade" id="modal_observaciones_${idTabPC}">
                     <div class="modal-dialog modal-sm" > 
-                        <div class="modal-content" id="modal_obs_body"></div>
+                        <div class="modal-content" id="modal_obs_body_${idTabPC}"></div>
                     </div> 
                 </div>
                 <div class="row">
-                    <div class="alert alert-callout alert-danger hidden" id="modal_error_ingreso">
+                    <div class="alert alert-callout alert-danger hidden" id="modal_error_ingreso_${idTabPC}">
                         <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-8" id="div-cliente-cuentas">
+                    <div class="col-md-8" id="div-cliente-cuentas_${idTabPC}">
                         <div class="card">
                             <div class="card-head">
                                 <header> Cliente/Proveedor </header>
                                 <div class="tools">
                                     <div class="btn-group">
                                         <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.dataDocumentos)}><i class="fa fa-plus"></i></a>
-                                        <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente","Nro_Documento",null)}><i class="fa fa-search"></i></a>
+                                        <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente(idTabPC)}><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente_"+idTabPC,"Nro_Documento_"+idTabPC,null)}><i class="fa fa-search"></i></a>
                                         <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-md-4" id="divCodTipoDoc">
+                                    <div class="col-md-4" id="divCodTipoDoc_${idTabPC}">
                                         <div class="form-group">
-                                            <select id="Cod_TipoDoc" class="form-control input-sm">
+                                            <select id="Cod_TipoDoc_${idTabPC}" class="form-control input-sm">
                                                 ${variables.dataDocumentos.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-8" id="divNroDocumento">
+                                    <div class="col-md-8" id="divNroDocumento_${idTabPC}">
                                         <div class="form-group">
-                                            <input type="text" id="Nro_Documento"  onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)} onblur="${() => BuscarClienteDoc(CodLibro)}" class="form-control input-sm required" placeholder="Nro Documento">
+                                            <input type="text" id="Nro_Documento_${idTabPC}"  onkeypress=${()=>KeyPressClienteDoc(idTabPC)} onkeydown=${()=>CambioNroDocumento(event,idTabPC)} onblur="${() => BuscarClienteDoc(CodLibro,idTabPC)}" class="form-control input-sm required" placeholder="Nro Documento">
                                         </div>
                                     </div>
                                
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12" id="divCliente">
+                                    <div class="col-md-12" id="divCliente_${idTabPC}">
                                         <div class="form-group">
-                                            <input type="text" id="Cliente" class="form-control input-sm required" data-id=null placeholder="Nombre cliente">
+                                            <input type="text" id="Cliente_${idTabPC}" class="form-control input-sm required" data-id=null placeholder="Nombre cliente">
                                             <div class="form-control-line"></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12" id="divDireccion">
+                                    <div class="col-md-12" id="divDireccion_${idTabPC}">
                                         <div class="form-group"> 
-                                            <input type="text" id="Direccion" class="form-control input-sm required" placeholder="Direccion">
+                                            <input type="text" id="Direccion_${idTabPC}" class="form-control input-sm required" placeholder="Direccion">
                                             <div class="form-control-line"></div>
                                         </div>
                                     </div>
@@ -83,7 +88,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="panel panel-default" id="divCabecera">
+                        <div class="panel panel-default" id="divCabecera_${idTabPC}">
                             <div class="panel-heading text-center">
                                 <div class="row">
                                     <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC}</strong></h4>
@@ -91,7 +96,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <select id="Cod_TipoComprobante" class="form-control selectPalerp" onchange=${()=>BloquearControles(event)}>
+                                            <select id="Cod_TipoComprobante_${idTabPC}" class="form-control selectPalerp" onchange=${()=>BloquearControles(event)}>
                                                  <option style="text-transform:uppercase" value=${CodLibro=='08'?'RI':'RE'}>${CodLibro=='08'?'RECIBO DE EGRESO':'RECIBO DE INGRESO'}</option>
                                             </select>
                                         </div>
@@ -99,17 +104,17 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 </div> 
                                 
                                 <div class="row">
-                                    <div class="col-md-5" id="divSerie">
+                                    <div class="col-md-5" id="divSerie_${idTabPC}">
                                         <div class="form-group">
  
-                                            <select class="form-control input-sm" id="Serie" onchange=${()=>BloquearControles(event)}>
+                                            <select class="form-control input-sm" id="Serie_${idTabPC}" onchange=${()=>BloquearControles(event)}>
                                                 ${variables.dataComprobante.map(e=>yo`<option style="text-transform:uppercase" value="${e.Serie}">${e.Serie}</option>`)}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-7" id="divNumero">
+                                    <div class="col-md-7" id="divNumero_${idTabPC}">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-sm required" id="Numero" value="00000000${variables.dataMov[0].Numero}" onkeypress=${()=>BloquearControles(event)}>
+                                            <input type="text" class="form-control input-sm required" id="Numero_${idTabPC}" value="00000000${variables.dataMov[0].Numero}" onkeypress=${()=>BloquearControles(event)}>
                                         </div>
                                     </div>
                                 </div> 
@@ -125,34 +130,34 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                     <div class="col-sm-6">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="col-sm-4" id="divContado">
+                                                <div class="col-sm-4" id="divContado_${idTabPC}">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" value="contado" id="optCredito" name="optCredito"  checked> <span> Contado</span>
+                                                            <input type="radio" value="contado" id="optCredito_${idTabPC}" name="optCredito_${idTabPC}"  checked> <span> Contado</span>
                                                         </label>
                                                     </div>
                                                 </div>
                                                  
-                                                <div class="col-sm-8" id="divOperacion">
-                                                    <label id="lbCuentaCajaBanco">#Operacion</label>
+                                                <div class="col-sm-8" id="divOperacion_${idTabPC}">
+                                                    <label id="lbCuentaCajaBanco_${idTabPC}">#Operacion</label>
                                                     <div class="form-group">
-                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria" onchange=${()=>CambioCodCuentaBancaria(CodLibro)}> 
+                                                        <select class="form-control input-sm" id="Cod_CuentaBancaria_${idTabPC}" onchange=${()=>CambioCodCuentaBancaria(CodLibro,idTabPC)}> 
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-4" id="divFormasPago">
+                                            <div class="col-md-4" id="divFormasPago_${idTabPC}">
                                                 <div class="form-group">
-                                                    <select class="form-control input-sm" id="Cod_FormaPago" onchange="${()=>CambioFormasPago(CodLibro)}"> 
+                                                    <select class="form-control input-sm" id="Cod_FormaPago_${idTabPC}" onchange="${()=>CambioFormasPago(CodLibro,idTabPC)}"> 
                                                         ${variables.dataFormasPago.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_FormaPago}">${e.Nom_FormaPago}</option>`)}
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8" id="divCuentaCajaBancos">
+                                            <div class="col-md-8" id="divCuentaCajaBancos_${idTabPC}">
                                                 <div class="form-group" style="display: flex;">
-                                                    <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos"> 
+                                                    <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos_${idTabPC}"> 
                                                     </select>
                                                 </div>
                                             </div>
@@ -160,10 +165,10 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="row">
-                                            <div class="col-sm-4" id="divMoneda">
+                                            <div class="col-sm-4" id="divMoneda_${idTabPC}">
                                                 <div class="form-group">
                                                     <b>Moneda: </b>
-                                                    <select id="Cod_Moneda" class="form-control input-sm" onchange=${()=>CambioMoneda(CodLibro)}>
+                                                    <select id="Cod_Moneda_${idTabPC}" class="form-control input-sm" onchange=${()=>CambioMoneda(CodLibro,idTabPC)}>
                                                         ${variables.dataMonedas.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                     </select>
                                                 </div>
@@ -177,7 +182,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-5" id="divFecha">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onkeypress=${()=>TraerTipoCambio(CodLibro)}>
+                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onkeypress=${()=>TraerTipoCambio(CodLibro,idTabPC)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -206,7 +211,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4">          
-                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro,idTabPC)}>Ver</button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -238,7 +243,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4 col-sm-4">
-                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro,idTabPC)}>Ver</button>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -286,7 +291,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-4 col-md-4">
-                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro)}>Ver</button>
+                                                        <button class="btn btn-info" type="button" onclick=${()=>BuscarPorFecha(CodLibro,idTabPC)}>Ver</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -367,7 +372,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick=${()=>VerGuardar(CodLibro)}>${CodLibro=='08'?'Pagar':'Cobrar'}</button>
+                <button class="btn btn-primary" onclick=${()=>VerGuardar(CodLibro,idTabPC)}>${CodLibro=='08'?'Pagar':'Cobrar'}</button>
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -411,11 +416,11 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
         KeyPressClienteDoc()
      });*/
 
-    CambioFormasPago(CodLibro)
+    CambioFormasPago(CodLibro,idTabPC)
     if(global.objCliente =='')
         BuscarCuentasPendientes(CodLibro,0,'1753-01-01 00:00:00','9999-12-31 23:59:59.997')
     else{
-        $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+        $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
         
         /*$("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
         $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
@@ -423,63 +428,63 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
 
 
 
-        $("#Cliente").val(global.objCliente.Nom_Cliente)
-        $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-        $("#Direccion").val(global.objCliente.Direccion_Cliente)
-        $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
-        $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
+        $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
+        $("#Nro_Documento_"+idTabPC).val(global.objCliente.Doc_Cliente)
+        $("#Direccion_"+idTabPC).val(global.objCliente.Direccion_Cliente)
+        $("#Cliente_"+idTabPC).attr("data-id",global.objCliente.Id_Cliente)
+        $("#Cod_Moneda_"+idTabPC).val(global.objCliente.Cod_Moneda)
 
-        $("#Nro_Documento").bind("keypress", function(event){
+        $("#Nro_Documento_"+idTabPC).bind("keypress", function(event){
             event.preventDefault();
             event.stopPropagation();
         });
         
-        $("#Cliente").bind("keypress", function(event){
+        $("#Cliente_"+idTabPC).bind("keypress", function(event){
             event.preventDefault();
             event.stopPropagation();
         });
         
-        $("#Direccion").bind("keypress", function(event){
+        $("#Direccion_"+idTabPC).bind("keypress", function(event){
             event.preventDefault();
             event.stopPropagation();
         });
         
-        $("#Nro_Documento").attr("disabled",true);
-        $("#Cliente").attr("disabled",true);
-        $("#Direccion").attr("disabled",true);
-        $("#Cod_TipoDoc").attr("disabled",true);
+        $("#Nro_Documento_"+idTabPC).attr("disabled",true);
+        $("#Cliente_"+idTabPC).attr("disabled",true);
+        $("#Direccion_"+idTabPC).attr("disabled",true);
+        $("#Cod_TipoDoc_"+idTabPC).attr("disabled",true);
 
         CargarLicitacionesCliente(global.objCliente.Id_Cliente)
-        BuscarPorFecha(CodLibro)
+        BuscarPorFecha(CodLibro,idTabPC)
     }
 
     
     $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
         if(global.objCliente!=''){ 
-            $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-            $("#Cliente").val(global.objCliente.Nom_Cliente)
-            $("#Nro_Documento").val(global.objCliente.Doc_Cliente)
-            $("#Direccion").val(global.objCliente.Direccion_Cliente)
+            $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
+            $("#Nro_Documento_"+idTabPC).val(global.objCliente.Doc_Cliente)
+            $("#Direccion_"+idTabPC).val(global.objCliente.Direccion_Cliente)
 
-            $("#Nro_Documento").bind("keypress", function(event){
+            $("#Nro_Documento_"+idTabPC).bind("keypress", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
             
-            $("#Cliente").bind("keypress", function(event){
+            $("#Cliente_"+idTabPC).bind("keypress", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
             
-            $("#Direccion").bind("keypress", function(event){
+            $("#Direccion_"+idTabPC).bind("keypress", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
             
-            $("#Nro_Documento").attr("disabled",true);
-            $("#Cliente").attr("disabled",true);
-            $("#Direccion").attr("disabled",true);
-            $("#Cod_TipoDoc").attr("disabled",true);
+            $("#Nro_Documento_"+idTabPC).attr("disabled",true);
+            $("#Cliente_"+idTabPC).attr("disabled",true);
+            $("#Direccion_"+idTabPC).attr("disabled",true);
+            $("#Cod_TipoDoc_"+idTabPC).attr("disabled",true);
 
             /*$("#Cliente").tagsinput('removeAll')
             $("#Nro_Documento").tagsinput('removeAll')
@@ -489,10 +494,10 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
             $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)*/
 
-            $("#Cliente").attr("data-id",global.objCliente.Id_Cliente)
-            $("#Cod_Moneda").val(global.objCliente.Cod_Moneda)
+            $("#Cliente_"+idTabPC).attr("data-id",global.objCliente.Id_Cliente)
+            $("#Cod_Moneda_"+idTabPC).val(global.objCliente.Cod_Moneda)
             CargarLicitacionesCliente(global.objCliente.Id_Cliente)
-            BuscarPorFecha(CodLibro)
+            BuscarPorFecha(CodLibro,idTabPC)
         }
     }) 
 
@@ -500,9 +505,9 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     CambioTodoVencimiento()
     CambioTodoLicitacion()
 
-    $("#Cuenta_CajaBancos").combobox()
-    $("#Cuenta_CajaBancos").parent().find('input.ui-widget').blur(function(){ 
-        TraerPorCuentaOperacion()
+    $("#Cuenta_CajaBancos_"+idTabPC).combobox()
+    $("#Cuenta_CajaBancos_"+idTabPC).parent().find('input.ui-widget').blur(function(){ 
+        TraerPorCuentaOperacion(idTabPC)
     })
  
 }
@@ -537,7 +542,7 @@ function AgregarTabla(comprobantes){
     empty(document.getElementById('divTablaComprobantes')).appendChild(el);
 }
 
-function CargarModalConfirmacionCuentas(CodLibro){
+function CargarModalConfirmacionCuentas(CodLibro,idTab){
     var el = yo`
     <div class="modal-dialog">
         <div class="modal-content">
@@ -552,7 +557,7 @@ function CargarModalConfirmacionCuentas(CodLibro){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick=${()=>AceptarConfirmacionCuenta(CodLibro)}>Aceptar</button>
+                <button type="button" class="btn btn-primary" onclick=${()=>AceptarConfirmacionCuenta(CodLibro,idTab)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -564,63 +569,63 @@ function CargarModalConfirmacionCuentas(CodLibro){
     $('#modal-alerta').modal()
 }
 
-function LlenarCuentaBancaria(cuentas,CodLibro){
+function LlenarCuentaBancaria(cuentas,CodLibro,idTab){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].Cod_CuentaBancaria+'">'+cuentas[i].Des_CuentaBancaria+'</option>'
     }
      
-    $("#Cod_CuentaBancaria").html('')
-    $("#Cod_CuentaBancaria").html(html)
-    CambioCodCuentaBancaria(CodLibro)
+    $("#Cod_CuentaBancaria_"+idTab).html('')
+    $("#Cod_CuentaBancaria_"+idTab).html(html)
+    CambioCodCuentaBancaria(CodLibro,idTab)
 }
 
-function LlenarCuentaBancaria_(cuentas,CodLibro){
+function LlenarCuentaBancaria_(cuentas,CodLibro,idTab){
     var html = ''
     for(var i=0; i<cuentas.length; i++){
         html = html+'<option value="'+cuentas[i].NroCuenta_Bancaria+'">'+cuentas[i].CuentaBancaria+'</option>'
     }
      
-    $("#Cod_CuentaBancaria").html('')
-    $("#Cod_CuentaBancaria").html(html)
-    CambioCodCuentaBancaria(CodLibro) 
+    $("#Cod_CuentaBancaria_"+idTab).html('')
+    $("#Cod_CuentaBancaria_"+idTab).html(html)
+    CambioCodCuentaBancaria(CodLibro,idTab) 
 }
 
-function LlenarCheques(cheques){
+function LlenarCheques(cheques,idTab){
     var html = '<option value="">Seleccione una opcion</option>'
     for(var i=0; i<cheques.length; i++){
         html = html+'<option value="'+cheques[i].Id_MovimientoCuenta+'">'+cheques[i].Des_Movimiento+'</option>'
     }
      
-    $("#Cuenta_CajaBancos").html('')
-    $("#Cuenta_CajaBancos").html(html) 
+    $("#Cuenta_CajaBancos_"+idTab).html('')
+    $("#Cuenta_CajaBancos_"+idTab).html(html) 
 }
 
-function KeyPressClienteDoc(){ 
-    console.log("keypress",$('#Nro_Documento').val().trim().length)
-    switch(($('#Nro_Documento').val().trim().length)+1){
+function KeyPressClienteDoc(idTab){ 
+    //console.log("keypress",$('#Nro_Documento').val().trim().length)
+    switch(($('#Nro_Documento_'+idTab).val().trim().length)+1){
         case 8:
-            $("#Cod_TipoDoc").val("1")
+            $("#Cod_TipoDoc_"+idTab).val("1")
             break;
         case 11:
-            $("#Cod_TipoDoc").val("6")
+            $("#Cod_TipoDoc_"+idTab).val("6")
             break;
     }
    
 }
 
-function EsValido(){
+function EsValido(idTab){
     var MontoMaximo = 0
      
-   if($("#divCuentaCajaBancos").css("display")=="block" && $("#Cuenta_CajaBancos").val()!='' && $("#Cuenta_CajaBancos").val()!=null){
+   if($("#divCuentaCajaBancos_"+idTab).css("display")=="block" && $("#Cuenta_CajaBancos_"+idTab).val()!='' && $("#Cuenta_CajaBancos_"+idTab).val()!=null){
        try{
-            MontoMaximo = parseFloat($("#Cuenta_CajaBancos option:selected").text().split('[').join('').split(']')[0])//split('[', ']')[1])
+            MontoMaximo = parseFloat($("#Cuenta_CajaBancos_"+idTab+" option:selected").text().split('[').join('').split(']')[0])//split('[', ']')[1])
        }catch(e){
             MontoMaximo = 0
        }
    }
 
-   if( $("#Cliente").attr("data-id")!=null &&  $("#Cliente").attr("data-id")!=''){
+   if( $("#Cliente_"+idTab).attr("data-id")!=null &&  $("#Cliente_"+idTab).attr("data-id")!=''){
        if($("#tablaComprobantes > tbody tr").length > 0){
            if(MontoMaximo==0 || parseFloat($("#TotalAmortizar").val())<= MontoMaximo){
                if(parseFloat($("#TotalAmortizar").val())!=0){
@@ -630,21 +635,21 @@ function EsValido(){
                     $("#TotalAmortizar").focus()
                }    
            }else{
-               if($("#Cod_FormaPago").val().toString()=="998"){
+               if($("#Cod_FormaPago_"+idTab).val().toString()=="998"){
                     toastr.error('Debe de selecionar un Pago Adelantado que sea superior o igual al Monto Total de Comprobante.','Error',{timeOut: 5000})
                }else{
-                   if($("#Cod_FormaPago").val().toString()=="007"){
+                   if($("#Cod_FormaPago_"+idTab).val().toString()=="007"){
                         toastr.error('Debe de selecionar un Cheque que sea superior o igual al Monto Total de Comprobante.','Error',{timeOut: 5000})
                    }
                }
-               $("#Cuenta_CajaBancos").focus()
+               $("#Cuenta_CajaBancos_"+idTab).focus()
            }
        }else{
             toastr.error('Debe ingresar como minimo un Detalle en el Comprobante.','Error',{timeOut: 5000})
        }
    }else{
         toastr.error('Debe selecionar un cliente si por defecto dejarlo en CLIENTES VARIOS.','Error',{timeOut: 5000})
-        $("#Cliente").focus()
+        $("#Cliente_"+idTab).focus()
    }
 
    return false
@@ -675,42 +680,42 @@ function CalcularTotal(){
     }
 }
 
-function CambioNroDocumento(e){ 
+function CambioNroDocumento(e,idTab){ 
     if(e.which == 46 || e.which == 8){ 
         if(flag_cliente){
-            $("#Nro_Documento").val("");
-            $("#Cliente").val("");
-            $("#Cliente").attr("data-id",null);
-            $("#Direccion").val("");
+            $("#Nro_Documento_"+idTab).val("");
+            $("#Cliente_"+idTab).val("");
+            $("#Cliente_"+idTab).attr("data-id",null);
+            $("#Direccion_"+idTab).val("");
             flag_cliente=false
         }
     }   
 }
 
 
-function EditarCliente(){ 
-    if(!arrayValidacion.includes($("#Cliente").attr("data-id")))
-        flag_cliente = true
+function EditarCliente(idTab){ 
+    if(!arrayValidacion.includes($("#Cliente_"+idTab).attr("data-id")))
+        global.variablesPC[idTab].flag_cliente = true
     else
-        flag_cliente=false
+        global.variablesPC[idTab].flag_cliente= false
     
 
-    $("#Nro_Documento").unbind("keypress");
-    $("#Cliente").unbind("keypress");
-    $("#Direccion").unbind("keypress");
+    $("#Nro_Documento_"+idTab).unbind("keypress");
+    $("#Cliente_"+idTab).unbind("keypress");
+    $("#Direccion_"+idTab).unbind("keypress");
 
-    $("#Nro_Documento").attr("disabled",false);
-    $("#Cliente").attr("disabled",false);
-    $("#Direccion").attr("disabled",false);
-    $("#Cod_TipoDoc").attr("disabled",false);
+    $("#Nro_Documento_"+idTab).attr("disabled",false);
+    $("#Cliente_"+idTab).attr("disabled",false);
+    $("#Direccion_"+idTab).attr("disabled",false);
+    $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
 }
 
-function BuscarPorFecha(CodLibro){
-    var Id_Cliente = $("#Cliente").attr("data-id")
+function BuscarPorFecha(CodLibro,idTab){
+    var Id_Cliente = $("#Cliente_"+idTab).attr("data-id")
     var Cod_Libro = CodLibro
     var FechaInicio = $("#optTodoFechas").is(":checked")?'1753-01-01 00:00:00':$("#FechaInicio").val()
     var FechaFin = $("#optTodoFechas").is(":checked")?'9999-12-31 23:59:59.997':$("#FechaFin").val()
-    var Cod_Moneda = $("#Cod_Moneda").val()
+    var Cod_Moneda = $("#Cod_Moneda_"+idTab).val()
     var Vencimiento = $("#optTodoVencimiento").is(":checked")?null:(($('input[name=optRadios]:checked').val()=="PorVencer")?true:false)
     var Cod_Licitacion = $("#optTodoLicitacion").is(":checked")?null:$("#Cod_Licitacion").val()
 
@@ -743,11 +748,11 @@ function BuscarPorFecha(CodLibro){
     
 }
 
-function CambioMoneda(CodLibro){
-    if($("#Cod_Moneda").val()!=null && $("#Cod_Moneda").val()!=""){
-        if($("#Cod_Moneda").val()=="USD"){
+function CambioMoneda(CodLibro,idTab){
+    if($("#Cod_Moneda_"+idTab).val()!=null && $("#Cod_Moneda_"+idTab).val()!=""){
+        if($("#Cod_Moneda_"+idTab).val()=="USD"){
             $("#divTC").css("display","block")
-            TraerTipoCambio(CodLibro)
+            TraerTipoCambio(CodLibro,idTab)
         }else{
             $("#divTC").css("display","none")
             $("#Tipo_Cambio").val("1")
@@ -775,9 +780,9 @@ function CambioTodoVencimiento(){
     }
 }
 
-function CambioCodCuentaBancaria(CodLibro){
-    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria").val()
-    var Beneficiario = $("#Cliente").val()
+function CambioCodCuentaBancaria(CodLibro,idTab){
+    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria_"+idTab).val()
+    var Beneficiario = $("#Cliente_"+idTab).val()
     var Cod_Libro = CodLibro
 
     const parametros = {
@@ -797,7 +802,7 @@ function CambioCodCuentaBancaria(CodLibro){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cheques = res.data.cheques 
-                LlenarCheques(cheques)
+                LlenarCheques(cheques,idTab)
             } 
         }).catch(function (e) {
             console.log(e);
@@ -809,72 +814,72 @@ function CambioAmortizar(){
     CalcularTotal()
 }
 
-function CambioFormasPago(CodLibro){
-    if($("#Cod_FormaPago").val()!=null && $("#Cod_FormaPago").val()!=""){
+function CambioFormasPago(CodLibro,idTab){
+    if($("#Cod_FormaPago_"+idTab).val()!=null && $("#Cod_FormaPago_"+idTab).val()!=""){
         var flagDisplay="none"
-        if($("#Cod_FormaPago").val()!="008")
+        if($("#Cod_FormaPago_"+idTab).val()!="008")
             flagDisplay = "block"
         
-        $("#divOperacion").css("display",flagDisplay)
-        $("#Cod_CuentaBancaria").css("display",flagDisplay)
-        $("#divCuentaCajaBancos").css("display",flagDisplay)
+        $("#divOperacion_"+idTab).css("display",flagDisplay)
+        $("#Cod_CuentaBancaria_"+idTab).css("display",flagDisplay)
+        $("#divCuentaCajaBancos_"+idTab).css("display",flagDisplay)
 
-        if($("#divOperacion").css("display")=="block"){
-            switch ($("#Cod_FormaPago").val()) {
+        if($("#divOperacion_"+idTab).css("display")=="block"){
+            switch ($("#Cod_FormaPago_"+idTab).val()) {
                 case "007":
                     if(CodLibro=="08"){
-                        $("#lbCuentaCajaBanco").text("# de Cheque: ")
-                        TraerCuentaBancariaPorSucursal(CodLibro)
+                        $("#lbCuentaCajaBanco_"+idTab).text("# de Cheque: ")
+                        TraerCuentaBancariaPorSucursal(CodLibro,idTab)
                     }else{
                         toastr.error('No Existe la Operacion de CHEQUE para ventas.\nSe debe de Depositar el Cheque eh ingresarlo como Deposito en Cuenta.','Error',{timeOut: 5000})
-                        $("#Cod_FormaPago").val(null)
+                        $("#Cod_FormaPago_"+idTab).val(null)
                     }
                     break 
                 case "011":
-                    $("#Cod_CuentaBancaria").css("display","block")
-                    $("#lbCuentaCajaBanco").text("# de Operacion")
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","block")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Operacion")
                     if(CodLibro=="08"){
-                        TraerCuentasBancariasXIdClienteProveedor(CodLibro)
+                        TraerCuentasBancariasXIdClienteProveedor(CodLibro,idTab)
                     }else{
-                        TraerCuentaBancariaPorSucursal(CodLibro)
+                        TraerCuentaBancariaPorSucursal(CodLibro,idTab)
                     }
                     break
                 case "001":
-                    $("#lbCuentaCajaBanco").text("# de Letra: ")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Letra: ")
                     break
                 case "005":
-                    $("#lbCuentaCajaBanco").text("# de Tarjeta VISA: ")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Tarjeta VISA: ")
                     break
                 case "006":
-                    $("#lbCuentaCajaBanco").text("# de Tarjeta MASTER CARD: ")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Tarjeta MASTER CARD: ")
                     break
                 case "004":
-                    $("#lbCuentaCajaBanco").text("# de Orden de Pago: ")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Orden de Pago: ")
                     break
                 case "003":
-                    $("#Cod_CuentaBancaria").css("display","block")
-                    $("#lbCuentaCajaBanco").text("Seleccione Transferencia: ")
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","block")
+                    $("#lbCuentaCajaBanco_"+idTab).text("Seleccione Transferencia: ")
                     TraerCuentaBancariaPorSucursal()
                     break
                 case "008":
-                    $("#divOperacion").css("display","none")
-                    $("#Cod_CuentaBancaria").css("display","none")
-                    $("#divCuentaCajaBancos").css("display","none")
-                    $("#divCabecera").css("pointer-events","auto")
+                    $("#divOperacion_"+idTab).css("display","none")
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","none")
+                    $("#divCuentaCajaBancos_"+idTab).css("display","none")
+                    $("#divCabecera_"+idTab).css("pointer-events","auto")
                     break
                 case "998":
-                    $("#lbCuentaCajaBanco").text("Selecione Pago Adelantado: ")
-                    TraerSaldoPagoAdelantado()
+                    $("#lbCuentaCajaBanco_"+idTab).text("Selecione Pago Adelantado: ")
+                    TraerSaldoPagoAdelantado(idTab)
                     break
                 default:
-                    $("#lbCuentaCajaBanco").text("# de Operación: ")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Operación: ")
                     break
             }
         }
     }
 }
 
-function TraerPorCuentaOperacion(){ 
+function TraerPorCuentaOperacion(idTab){ 
     const parametros = {
         method: 'POST',
         headers: {
@@ -882,8 +887,8 @@ function TraerPorCuentaOperacion(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            Cod_CuentaBancaria:$("#Cod_CuentaBancaria").val(),
-            Nro_Operacion:$("#Cuenta_CajaBancos option:selected").text()
+            Cod_CuentaBancaria:$("#Cod_CuentaBancaria_"+idTab).val(),
+            Nro_Operacion:$("#Cuenta_CajaBancos_"+idTab+" option:selected").text()
         })
     }
     fetch(URL + '/cuentas_bancarias_api/get_by_cuenta_operacion', parametros)
@@ -892,9 +897,9 @@ function TraerPorCuentaOperacion(){
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
                 if(cuentas.length > 0){
-                    toastr.error('En la Cuenta: '+$("#Cod_CuentaBancaria option:selected").text()+' la Operacion N°: '+$("#Cuenta_CajaBancos option:selected").text()+', ya Existe. Verifique y Vuelva a Intentarlo','Error',{timeOut: 5000})
-                    $("#Cuenta_CajaBancos").val("")
-                    $("#Cuenta_CajaBancos").focus()
+                    toastr.error('En la Cuenta: '+$("#Cod_CuentaBancaria_"+idTab+" option:selected").text()+' la Operacion N°: '+$("#Cuenta_CajaBancos_"+idTab+" option:selected").text()+', ya Existe. Verifique y Vuelva a Intentarlo','Error',{timeOut: 5000})
+                    $("#Cuenta_CajaBancos_"+idTab).val("")
+                    $("#Cuenta_CajaBancos_"+idTab).focus()
                 }
             } 
         }).catch(function (e) {
@@ -903,10 +908,10 @@ function TraerPorCuentaOperacion(){
         });
 }
 
-function TraerTipoCambio(CodLibro){
+function TraerTipoCambio(CodLibro,idTab){
     if($("#Cod_Moneda").val()!="PEN"){
         try{
-            var Cod_Moneda = $("#Cod_Moneda").val()
+            var Cod_Moneda = $("#Cod_Moneda_"+idTab).val()
             var FechaHora = $("#Fecha").val()
             const parametros = {
                 method: 'POST',
@@ -944,7 +949,7 @@ function TraerTipoCambio(CodLibro){
     }
 }
 
-function TraerSaldoPagoAdelantado(){
+function TraerSaldoPagoAdelantado(idTab){
     const parametros = {
         method: 'POST',
         headers: {
@@ -963,9 +968,9 @@ function TraerSaldoPagoAdelantado(){
                 if (pagos_adelantados.length>0){
                     LlenarPagosAdelantados(pagos_adelantados)
                 }else{
-                    $("#lbCuentaCajaBanco").text("No tienen Ningun Adelanto para Selecionar.")
-                    $("#Cuenta_CajaBancos").html('')
-                    $("#divCuentaCajaBancos").css("display","none")
+                    $("#lbCuentaCajaBanco_"+idTab).text("No tienen Ningun Adelanto para Selecionar.")
+                    $("#Cuenta_CajaBancos_"+idTab).html('')
+                    $("#divCuentaCajaBancos_"+idTab).css("display","none")
                 } 
             } 
         }).catch(function (e) {
@@ -974,7 +979,7 @@ function TraerSaldoPagoAdelantado(){
         });
 }
 
-function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
+function TraerCuentasBancariasXIdClienteProveedor(CodLibro,idTab){
     const parametros = {
         method: 'POST',
         headers: {
@@ -990,7 +995,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria_(cuentas,CodLibro)
+                LlenarCuentaBancaria_(cuentas,CodLibro,idTab)
             } 
         }).catch(function (e) {
             console.log(e);
@@ -999,7 +1004,7 @@ function TraerCuentasBancariasXIdClienteProveedor(CodLibro){
 }
 
 
-function TraerCuentaBancariaPorSucursal(CodLibro){
+function TraerCuentaBancariaPorSucursal(CodLibro,idTab){
     const parametros = {
         method: 'POST',
         headers: {
@@ -1014,7 +1019,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
-                LlenarCuentaBancaria(cuentas,CodLibro)
+                LlenarCuentaBancaria(cuentas,CodLibro,idTab)
             } 
         }).catch(function (e) {
             console.log(e);
@@ -1022,10 +1027,10 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
         });
 }
 
-function BuscarClienteDoc(CodLibro) {
-    if($("#Nro_Documento").val().trim().length>0){
-        run_waitMe($('#div-cliente-cuentas'), 1, "ios","Buscando cliente...");
-        var Nro_Documento = $("#Nro_Documento").val()
+function BuscarClienteDoc(CodLibro,idTab) {
+    if($("#Nro_Documento_"+idTab).val().trim().length>0){
+        run_waitMe($('#div-cliente-cuentas_'+idTab), 1, "ios","Buscando cliente...");
+        var Nro_Documento = $("#Nro_Documento_"+idTab).val()
         var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
         var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
         const parametros = {
@@ -1046,72 +1051,72 @@ function BuscarClienteDoc(CodLibro) {
                     
                     if(global.objCliente !='' && global.objCliente){
                         $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
-                        $("#Cliente").val(global.objCliente.Cliente)
-                        $("#Direccion").val(global.objCliente.Direccion)
-                        $("#Nro_Documento").val(global.objCliente.Nro_Documento)
+                        $("#Cliente_"+idTab).val(global.objCliente.Cliente)
+                        $("#Direccion_"+idTab).val(global.objCliente.Direccion)
+                        $("#Nro_Documento_"+idTab).val(global.objCliente.Nro_Documento)
 
-                        $("#Nro_Documento").bind("keypress", function(event){
+                        $("#Nro_Documento_"+idTab).bind("keypress", function(event){
                             event.preventDefault();
                             event.stopPropagation();
                         });
                         
-                        $("#Cliente").bind("keypress", function(event){
+                        $("#Cliente_"+idTab).bind("keypress", function(event){
                             event.preventDefault();
                             event.stopPropagation();
                         });
                         
-                        $("#Direccion").bind("keypress", function(event){
+                        $("#Direccion_"+idTab).bind("keypress", function(event){
                             event.preventDefault();
                             event.stopPropagation();
                         });
                         
-                        $("#Nro_Documento").attr("disabled",true);
-                        $("#Cliente").attr("disabled",true);
-                        $("#Direccion").attr("disabled",true);
+                        $("#Nro_Documento_"+idTab).attr("disabled",true);
+                        $("#Cliente_"+idTab).attr("disabled",true);
+                        $("#Direccion_"+idTab).attr("disabled",true);
                         $("#Cod_TipoDoc").attr("disabled",true);
 
                         /*$("#Cliente").tagsinput('add',global.objCliente.Cliente)
                         $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
                         $("#Direccion").tagsinput('add',global.objCliente.Direccion)*/
 
-                        $("#Cliente").attr("data-id",global.objCliente.Id_ClienteProveedor) 
+                        $("#Cliente_"+idTab).attr("data-id",global.objCliente.Id_ClienteProveedor) 
                         CargarLicitacionesCliente(global.objCliente.Id_ClienteProveedor)
                     }
                 }else{
 
-                    $("#Cliente").val("") 
-                    $("#Direccion").val("") 
-                    $("#Cliente").attr("data-id",null)
+                    $("#Cliente_"+idTab).val("") 
+                    $("#Direccion_"+idTab).val("") 
+                    $("#Cliente_"+idTab).attr("data-id",null)
         
-                    $("#Nro_Documento").unbind("keypress");
-                    $("#Cliente").unbind("keypress");
-                    $("#Direccion").unbind("keypress");
+                    $("#Nro_Documento_"+idTab).unbind("keypress");
+                    $("#Cliente_"+idTab).unbind("keypress");
+                    $("#Direccion_"+idTab).unbind("keypress");
         
-                    $("#Nro_Documento").attr("disabled",false);
-                    $("#Cliente").attr("disabled",false);
-                    $("#Direccion").attr("disabled",false);
+                    $("#Nro_Documento_"+idTab).attr("disabled",false);
+                    $("#Cliente_"+idTab).attr("disabled",false);
+                    $("#Direccion_"+idTab).attr("disabled",false);
                     $("#Cod_TipoDoc").attr("disabled",false);
 
                 }
-                $('#div-cliente-cuentas').waitMe('hide');
+                $('#div-cliente-cuentas_'+idTab).waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
 
-                $("#Cliente").val("") 
-                $("#Direccion").val("") 
-                $("#Cliente").attr("data-id",null)
+                $("#Cliente_"+idTab).val("") 
+                $("#Direccion_"+idTab).val("") 
+                $("#Cliente_"+idTab).attr("data-id",null)
     
-                $("#Nro_Documento").unbind("keypress");
-                $("#Cliente").unbind("keypress");
-                $("#Direccion").unbind("keypress");
+                $("#Nro_Documento_"+idTab).unbind("keypress");
+                $("#Cliente_"+idTab).unbind("keypress");
+                $("#Direccion_"+idTab).unbind("keypress");
     
-                $("#Nro_Documento").attr("disabled",false);
-                $("#Cliente").attr("disabled",false);
-                $("#Direccion").attr("disabled",false);
+                $("#Nro_Documento_"+idTab).attr("disabled",false);
+                $("#Cliente_"+idTab).attr("disabled",false);
+                $("#Direccion_"+idTab).attr("disabled",false);
                 $("#Cod_TipoDoc").attr("disabled",false);
 
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                $('#div-cliente-cuentas').waitMe('hide');
+                $('#div-cliente-cuentas_'+idTab).waitMe('hide');
             });
     }
 }
@@ -1150,10 +1155,10 @@ function CargarLicitacionesCliente(Id_ClienteProveedor){
         });
 }
 
-function VerGuardar(CodLibro){
+function VerGuardar(CodLibro,idTab){
     try{
-        if(EsValido()){
-            CargarModalConfirmacionCuentas(CodLibro)
+        if(EsValido(idTab)){
+            CargarModalConfirmacionCuentas(CodLibro,idTab)
         }
     }catch(e){
         toastr.error('Error al agregar nuevo elemento, intentelo mas luego.\n\n','Error',{timeOut: 5000})
@@ -1161,13 +1166,13 @@ function VerGuardar(CodLibro){
 }
  
 
-function GuardarMovimientoBancario(Facturas,CodLibro){
+function GuardarMovimientoBancario(Facturas,CodLibro,idTab){
 
-    var Cod_CuentaBancaria =$("#Cod_CuentaBancaria").val()
-    var Nro_Operacion = $("#Cuenta_CajaBancos option:selected").text()
+    var Cod_CuentaBancaria =$("#Cod_CuentaBancaria_"+idTab).val()
+    var Nro_Operacion = $("#Cuenta_CajaBancos_"+idTab+" option:selected").text()
     var Des_Movimiento = (CodLibro == "08"?"POR PAGO DEL(DE LOS) COMPROBANTE(S): " + Facturas: "POR COBRO DE LO(S) COMPROBANTE(S): " + Facturas)
     var Cod_TipoOperacionBancaria = ''
-    if($("#Cod_FormaPago").val()=="007"){
+    if($("#Cod_FormaPago_"+idTab).val()=="007"){
         Cod_TipoOperacionBancaria = "006"
     }else{
         Cod_TipoOperacionBancaria = "001"
@@ -1178,10 +1183,10 @@ function GuardarMovimientoBancario(Facturas,CodLibro){
     var TipoCambio = $("#Tipo_Cambio").val()
     var Cod_Plantilla = $("#Tipo_Cambio").val()
     var Nro_Cheque = 0 
-    if($("#Cod_FormaPago").val()=="007"){
-        Nro_Cheque = "00000000"+ $("#Cuenta_CajaBancos option:selected").text()
+    if($("#Cod_FormaPago_"+idTab).val()=="007"){
+        Nro_Cheque = "00000000"+ $("#Cuenta_CajaBancos_"+idTab+" option:selected").text()
     }
-    var Beneficiario = $("#Cliente").val()
+    var Beneficiario = $("#Cliente_"+idTab).val()
     var Id_ComprobantePago=-1
     var Obs_Movimiento = $("#Comentarios").val()
      
@@ -1217,13 +1222,13 @@ function GuardarMovimientoBancario(Facturas,CodLibro){
 
 }
 
-function GuardarMovimientoCaja(Facturas,CodLibro){
+function GuardarMovimientoCaja(Facturas,CodLibro,idTab){
     var Id_Concepto = (CodLibro == "08"?6000:7000)
-    var Id_ClienteProveedor = $("#Cliente").attr("data-id")
-    var Cliente = $("#Cliente").val()
+    var Id_ClienteProveedor = $("#Cliente_"+idTab).attr("data-id")
+    var Cliente = $("#Cliente_"+idTab).val()
     var Des_Movimiento = (CodLibro == "08"?"POR PAGO DEL(DE LOS) COMPROBANTE(S): " + Facturas: "POR COBRO DE LO(S) COMPROBANTE(S): " + Facturas)
     var Cod_TipoComprobante = (CodLibro == "08"?"RE":"RI")
-    var Serie = $("#Serie").val()
+    var Serie = $("#Serie_"+idTab).val()
     var Fecha = $("#Fecha").val()
     var Tipo_Cambio = $("#Tipo_Cambio").val()
     var Ingreso = 0
@@ -1232,14 +1237,14 @@ function GuardarMovimientoCaja(Facturas,CodLibro){
     var Cod_MonedaEgr=""
     if(CodLibro!="08"){
         Ingreso = $("#TotalAmortizar").val()
-        Cod_MonedaIng = $("#Cod_Moneda").val()
+        Cod_MonedaIng = $("#Cod_Moneda_"+idTab).val()
         Egreso = 0
-        Cod_MonedaEgr = $("#Cod_Moneda").val()
+        Cod_MonedaEgr = $("#Cod_Moneda_"+idTab).val()
     }else{
         Ingreso = 0
-        Cod_MonedaIng = $("#Cod_Moneda").val()
+        Cod_MonedaIng = $("#Cod_Moneda_"+idTab).val()
         Egreso = $("#TotalAmortizar").val()
-        Cod_MonedaEgr = $("#Cod_Moneda").val()
+        Cod_MonedaEgr = $("#Cod_Moneda_"+idTab).val()
     }
     var Flag_Extornado = '0'
     const fecha = new Date()
@@ -1282,28 +1287,28 @@ function GuardarMovimientoCaja(Facturas,CodLibro){
  
 }
 
-function AceptarConfirmacionCuenta(CodLibro){
+function AceptarConfirmacionCuenta(CodLibro,idTab){
     
     var Facturas = ""
     // ------- Inicio EstablecerCamposEntidad
 
     var Fecha_FormaPago = $("#Fecha").val()
-    var Cod_TipoFormaPago_FormaPago = $("#Cod_FormaPago").val()
+    var Cod_TipoFormaPago_FormaPago = $("#Cod_FormaPago_"+idTab).val()
     var Id_Movimiento_FormaPago = 0
     var Cuenta_CajaBancos_FormaPago = ''
-    if ($("#Cuenta_CajaBancos").val() != null && $("#Cuenta_CajaBancos").val()!=''){
-        Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos").val());
-        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos option:selected").text().split('(', ')')[1];
+    if ($("#Cuenta_CajaBancos_"+idTab).val() != null && $("#Cuenta_CajaBancos_"+idTab).val()!=''){
+        Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos_"+idTab).val());
+        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos_"+idTab+" option:selected").text().split('(', ')')[1];
     }
-    else if ($("#divCuentaCajaBancos").css("display")=="display")
-        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos option:selected").text().trim();
+    else if ($("#divCuentaCajaBancos_"+idTab).css("display")=="display")
+        Cuenta_CajaBancos_FormaPago = $("#Cuenta_CajaBancos_"+idTab+" option:selected").text().trim();
     
-    if ($("#Cod_CuentaBancaria").val() == "003"){
-        Cuenta_CajaBancos_FormaPago =  $("#Cuenta_CajaBancos option:selected").text()
+    if ($("#Cod_CuentaBancaria_"+idTab).val() == "003"){
+        Cuenta_CajaBancos_FormaPago =  $("#Cuenta_CajaBancos_"+idTab+" option:selected").text()
     }
     var Des_FormaPago_FormaPago = $("#Comentarios").val().trim(); 
     var TipoCambio_FormaPago = $("#Tipo_Cambio").val()
-    var Cod_Moneda_FormaPago = $("#Cod_Moneda").val()             
+    var Cod_Moneda_FormaPago = $("#Cod_Moneda_"+idTab).val()             
     
     // ------- Fin EstablecerCamposEntidad
 
@@ -1402,34 +1407,34 @@ function AceptarConfirmacionCuenta(CodLibro){
         Facturas = Facturas.substring(0,Facturas.length-2)
     }
 
-    switch($("#Cod_FormaPago").val()){
+    switch($("#Cod_FormaPago_"+idTab).val()){
         case "008":
-            GuardarMovimientoCaja(Facturas,CodLibro)
+            GuardarMovimientoCaja(Facturas,CodLibro,idTab)
             break
         case "007":
             if(CodLibro=="08"){
-                if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
-                    GuardarMovimientoBancario(Facturas,CodLibro)
+                if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
+                    GuardarMovimientoBancario(Facturas,CodLibro,idTab)
                 }
             }
             break
         case "011":
-            if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
+            if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
                 if(CodLibro=="08"){
                     GuardarMovimientoCaja(Facturas,CodLibro)
                 }else{
                     if(CodLibro=="14"){
-                        GuardarMovimientoBancario(Facturas,CodLibro)
+                        GuardarMovimientoBancario(Facturas,CodLibro,idTab)
                     }
                 }
             }
             break
         case "003":
-            if($("#Cuenta_CajaBancos").val()==null || $("#Cuenta_CajaBancos").val()==""){
+            if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
                 if(CodLibro=="08"){
                     GuardarMovimientoCaja(Facturas,CodLibro)
                 }else{
-                    GuardarMovimientoBancario(Facturas,CodLibro)
+                    GuardarMovimientoBancario(Facturas,CodLibro,idTab)
                 }
             }
             break
@@ -1440,8 +1445,8 @@ function AceptarConfirmacionCuenta(CodLibro){
             var id_ComprobantePago = parseInt($(this).find("td").eq(0).text());//parseInt()
             var Monto = parseFloat($(this).find("td").eq(6).find("input").val())
             Id_Movimiento_FormaPago = 0
-            if($("#Cuenta_CajaBancos").val()!=null || $("#Cuenta_CajaBancos").val()!=""){
-                Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos").val())
+            if($("#Cuenta_CajaBancos_"+idTab).val()!=null || $("#Cuenta_CajaBancos_"+idTab).val()!=""){
+                Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos_"+idTab).val())
             }
  
             const parametros = {

@@ -64,9 +64,9 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <div class="radio">
+                                                <div class="radio-inline radio-styled radio-primary">
                                                     <label>
-                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}> Banco
+                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}><span> Banco</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -91,9 +91,9 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
 
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <div class="radio">
+                                                <div class="radio-inline radio-styled radio-primary">
                                                     <label>
-                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}> Caja
+                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}><span> Caja</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -123,9 +123,9 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                                 </div>
                                             </div>
                                             <div class="col-md-3 text-center" id="formBancoITF_${idTabT}" style="display:none">
-                                                <div class="checkbox">
+                                                <div class="checkbox checkbox-inline checkbox-styled">
                                                     <label>
-                                                        <input type="checkbox" id="optITF_${idTabT}" name="optITF_${idTabT}" onclick=${()=>CalcularITF(idTabT)}> Con ITF? 0.005%
+                                                        <input type="checkbox" id="optITF_${idTabT}" name="optITF_${idTabT}" onclick=${()=>CalcularITF(idTabT)}><span> Con ITF? 0.005%</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -214,9 +214,9 @@ function RefrescarVer(_escritura, variables,fecha_actual,caja_actual,idTabT) {
                                     <div class="panel-body">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <div class="radio">
+                                                <div class="radio-inline radio-styled radio-primary">
                                                     <label>
-                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}> Banco
+                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}><span> Banco</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -241,9 +241,9 @@ function RefrescarVer(_escritura, variables,fecha_actual,caja_actual,idTabT) {
 
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <div class="radio">
+                                                <div class="radio-inline radio-styled radio-primary">
                                                     <label>
-                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}> Caja
+                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}><span> Caja</span>
                                                     </label>
                                                 </div>
                                             </div>
@@ -601,7 +601,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                     Egreso = 0
                     Flag_Extornado = 0
                     Id_MovimientoRef = res.data
-                    GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables)
+                    GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab)
                 }
                 else {
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
@@ -614,7 +614,7 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
             });
 }
 
-function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
+function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab){
        
     const parametros = {
         method: 'POST',

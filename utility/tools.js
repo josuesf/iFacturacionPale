@@ -286,6 +286,9 @@ function LimpiarVariablesGlobales() {
     global.objProductoVentas = ''
     global.objProducto = ''
     global.objCliente = ''
+    global.arraySeries = ''
+    global.objComprobantePagoDetalle = ''
+    global.objComprobantePago = ''
 }
 
 function LimpiarEventoModales() {

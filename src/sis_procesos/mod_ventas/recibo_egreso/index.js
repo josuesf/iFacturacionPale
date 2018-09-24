@@ -11,8 +11,9 @@ var arrayValidacion = [null,'null','',undefined]
 var cantidad_tabs = 0
 global.variablesRE = {}
 
-function CargarFormulario(variables, fecha_actual) {
+function CargarFormulario(variables, fecha_actual,empresa) {
     //flag_cliente=false
+    global.objCliente = ''
     cantidad_tabs++
     const idTabRE = "RE_"+cantidad_tabs
     global.variablesRE[idTabRE]={idTab:idTabRE,flag_cliente:false,Id_ClienteProveedor:null,Obs_Recibo:null}//push({idTab:idTabRI,flag_cliente:false,Id_ClienteProveedor:null,Obs_Recibo})
@@ -91,7 +92,7 @@ function CargarFormulario(variables, fecha_actual) {
 
                                 <div class="panel-heading text-center">
                                     <div class="row">
-                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC} </strong></h4>
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${empresa.RUC} </strong></h4>
                                     </div>
                                     <div class="row">
                                         <h4><strong>RECIBO DE EGRESO</strong></h4>
@@ -179,10 +180,10 @@ function CargarFormulario(variables, fecha_actual) {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row pull-right">
-                <button onclick="${() => Guardar(idTabRE)}" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                <div class="row pull-right">
+                    <button onclick="${() => Guardar(idTabRE)}" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
         </div>
     </div>`
@@ -193,10 +194,41 @@ function CargarFormulario(variables, fecha_actual) {
     $("#tabs").append(tab)
     $("#tabs_contents").append(el)
     $("#id_"+idTabRE).click()
+
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente) 
+            global.variablesRE[idTabRE].Id_ClienteProveedor = global.objCliente.Id_ClienteProveedor
+            $("#Cod_TipoDoc_"+idTabRE).val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente_"+idTabRE).val(global.objCliente.Cliente)
+            $("#Nro_Documento_"+idTabRE).val(global.objCliente.Nro_Documento)
+            $("#Cliente_"+idTabRE).attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+
+            $("#Nro_Documento_"+idTabRE).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente_"+idTabRE).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+           
+            $("#Nro_Documento_"+idTabRE).attr("disabled",true);
+            $("#Cliente_"+idTabRE).attr("disabled",true); 
+            $("#Cod_TipoDoc_"+idTabRE).attr("disabled",true);
+        }
+    })
+    
+
+
     console.log(global.variablesRE)
 }
 
-function RefrescarFormulario(variables, fecha_actual,idTabRE) {
+function RefrescarFormulario(variables, fecha_actual,empresa,idTabRE) {
+    global.objCliente = ''
     global.variablesRE[idTabRE]={idTab:idTabRE,flag_cliente:false,Id_ClienteProveedor:null,Obs_Recibo:null}
      
     var el = yo`
@@ -269,7 +301,7 @@ function RefrescarFormulario(variables, fecha_actual,idTabRE) {
 
                                 <div class="panel-heading text-center">
                                     <div class="row">
-                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. 20442625256 </strong></h4>
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${empresa.RUC} </strong></h4>
                                     </div>
                                     <div class="row">
                                         <h4><strong>RECIBO DE EGRESO</strong></h4>
@@ -357,15 +389,44 @@ function RefrescarFormulario(variables, fecha_actual,idTabRE) {
                         </div>
                     </div>
                 </div>
+                <div class="row pull-right">
+                    <button onclick="${() => Guardar(idTabRE)}" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                </div>
             </div>
-            <div class="row pull-right">
-                <button onclick="${() => Guardar(idTabRE)}" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
-            </div>
+            
         </div>`
     $('#tab_'+idTabRE).html(el)
     //empty(ingreso).appendChild(el) 
     console.log(global.variablesRE)
+
+    $('#modal-superior').on('hidden.bs.modal', function () {
+
+        if(global.objCliente !='' && global.objCliente){
+            //console.log(global.objCliente) 
+            global.variablesRE[idTabRE].Id_ClienteProveedor = global.objCliente.Id_ClienteProveedor
+            $("#Cod_TipoDoc_"+idTabRE).val(global.objCliente.Cod_TipoDocumento)
+            $("#Cliente_"+idTabRE).val(global.objCliente.Cliente)
+            $("#Nro_Documento_"+idTabRE).val(global.objCliente.Nro_Documento)
+            $("#Cliente_"+idTabRE).attr("data-id",global.objCliente.Id_ClienteProveedor)
+
+
+            $("#Nro_Documento_"+idTabRE).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+            
+            $("#Cliente_"+idTabRE).bind("keypress", function(event){
+                event.preventDefault();
+                event.stopPropagation();
+            });
+           
+            $("#Nro_Documento_"+idTabRE).attr("disabled",true);
+            $("#Cliente_"+idTabRE).attr("disabled",true); 
+            $("#Cod_TipoDoc_"+idTabRE).attr("disabled",true);
+        }
+    })
+
 }
 
 //var Id_ClienteProveedor = null
@@ -376,7 +437,7 @@ function CerrarTabRE(idTab){
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
-    global.variablesRE.splice(idTab,1)
+    delete global.variablesRE[idTab]
     //arrayJson[i].Detalles.splice(j, 1)
     //delete global.variablesRI[idTab]
 }
@@ -484,7 +545,7 @@ function BuscarClienteDoc(idTab) {
                     $("#Cliente_"+idTab).attr("disabled",false); 
                     $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
                 }
-                $('#div-cliente-recibo-egreso').waitMe('hide');
+                $('#div-cliente-recibo-egreso_'+idTab).waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
 
@@ -556,7 +617,7 @@ function Guardar(idTab) {
     const MontoEgreso = document.getElementById('Monto_'+idTab).value
     const MontoIngreso = 0
     const Cod_Moneda = document.getElementById('Cod_Moneda_'+idTab).value
-    const Obs_Movimiento = Obs_Recibo
+    const Obs_Movimiento = global.variablesRE[idTab].Obs_Recibo
     run_waitMe($('#main-contenido'), 1, "ios","");
     const parametros = {
         method: 'POST',
@@ -566,7 +627,7 @@ function Guardar(idTab) {
         },
         credentials: 'same-origin',
         body: JSON.stringify({
-            Id_Concepto, Id_ClienteProveedor, Cliente,
+            Id_Concepto, Id_ClienteProveedor:global.variablesRE[idTab].Id_ClienteProveedor, Cliente,
             Des_Movimiento, Cod_TipoComprobante, Serie,
             Numero, Fecha, MontoEgreso,MontoIngreso, Cod_Moneda, Obs_Movimiento
         })
@@ -616,7 +677,7 @@ function RefrescarEgreso(idTab) {
                 const mes = fecha.getMonth() + 1
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-                RefrescarFormulario(res.data, fecha_format,idTab)
+                RefrescarFormulario(res.data, fecha_format,res.empresa,idTab)
             }
             else
                 toastr.error('Ocurrio un error al momento de cargar los datos.','Error',{timeOut: 5000})
@@ -654,7 +715,7 @@ function NuevoEgreso() {
                 const mes = fecha.getMonth() + 1
                 const dia = fecha.getDate()
                 var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
-                CargarFormulario(res.data, fecha_format)
+                CargarFormulario(res.data, fecha_format,res.empresa)
             }
             else
                 toastr.error('Ocurrio un error al momento de cargar los datos.','Error',{timeOut: 5000})

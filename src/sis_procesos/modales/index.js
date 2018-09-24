@@ -347,11 +347,13 @@ function SeleccionarProducto(producto){
 }
 
 function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
-    if (idInputCliente!=null)
+    if (idInputCliente!=null){
         $("#"+idInputCliente).val(cliente.Cliente)
+    }
     
-    if (idInputDoc!=null)
+    if (idInputDoc!=null){
         $("#"+idInputDoc).val(cliente.Nro_Documento)
+    }
 
     
     global.objCliente = cliente
@@ -359,7 +361,7 @@ function SeleccionarCliente(cliente,idInputCliente,idInputDoc){
     
     if (idInputCliente!=null)
         $("#"+idInputCliente).attr("data-id",cliente.Id_ClienteProveedor)
-    $("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
+    //$("#Cod_TipoDoc").val(cliente.Cod_TipoDocumento)
 }
 
 function CambioClienteDoc(){
