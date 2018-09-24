@@ -8,21 +8,23 @@ import { LimpiarEventoModales } from '../../../../utility/tools'
 
 
 var arrayValidacion = [null,'null','',undefined]
-var flag_cliente = false 
+//var flag_cliente = false 
+var cantidad_tabs = 0
+global.variablesCVME = {}
 
 function Ver(_escritura, Serie, variables,fecha_actual) {
+    cantidad_tabs++
+    const idTabCVME = "CVME_"+cantidad_tabs
+    global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
+    var tab = yo`
+    <li class="" ><a href="#tab_${idTabCVME}" data-toggle="tab" aria-expanded="false" id="id_${idTabCVME}">Compra ME <a style="padding-left: 10px;"  onclick=${()=>CerrarTabCVME(idTabCVME)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong id="tituloModal">Compra ME</strong></h4>
-                </div>
-                <div class="modal-body" id="modal_form">
+        <div class="tab-pane" id="tab_${idTabCVME}">
+            <div class="panel">
+                <div class="panel-body" id="modal_form_${idTabCVME}">
                     <div class="row">
-                        <div id="modal_error" class="alert alert-callout alert-danger hidden">
+                        <div id="modal_error_${idTabCVME}" class="alert alert-callout alert-danger hidden">
                             <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
                         </div>
                     </div>
@@ -34,8 +36,8 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="tools">
                                         <div class="btn-group">
                                             <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></a>
-                                            <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente()}><i class="fa fa-pencil"></i></a>
-                                            <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")}><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente(idTabCVME)}><i class="fa fa-pencil"></i></a>
+                                            <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("txtNombreCliente_"+idTabCVME,"Nro_DocumentoBuscar_"+idTabCVME,"002")}><i class="fa fa-search"></i></a>
                                             <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                         </div>
                                     </div>
@@ -44,21 +46,21 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <select class="form-control input-sm" id="Cod_TipoDocumentoBuscar" onchange=${()=>CambioClienteDoc()}>
+                                                <select class="form-control input-sm" id="Cod_TipoDocumentoBuscar_${idTabCVME}" onchange=${()=>CambioClienteDoc(idTabCVME)}>
                                                     ${variables.tipos_documento.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar" onblur=${()=>RecuperarDatosClientePorNroDoc()} onkeypress=${()=>KeyPressClienteDoc()} onkeydown=${()=>CambioNroDocumento(event)}>
+                                                <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar_${idTabCVME}" onblur=${()=>RecuperarDatosClientePorNroDoc(idTabCVME)} onkeypress=${()=>KeyPressClienteDoc(idTabCVME)} onkeydown=${()=>CambioNroDocumento(event,idTabCVME)}>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <input type="text" class="form-control input-sm" id="txtNombreCliente" placeholder="Nombre del cliente"> 
+                                                <input type="text" class="form-control input-sm" id="txtNombreCliente_${idTabCVME}" placeholder="Nombre del cliente"> 
                                               
                                             </div>
                                         </div>
@@ -70,7 +72,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                             <div class="panel panel-default">
                                 <div class="panel-heading text-center">
                                     <div class="row">
-                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. 20442625256 </strong></h4>
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC} </strong></h4>
                                     </div>
                                     <div class="row">
                                         <h4><strong>COMPRA/VENTA ME</strong></h4>
@@ -79,14 +81,14 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="row">
                                         <div class="col-md-5">
                                             <div class="form-group">
-                                                <select class="form-control" id="Serie">
+                                                <select class="form-control" id="Serie_${idTabCVME}">
                                                     <option style="text-transform:uppercase" value="${Serie}">${Serie}</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-md-7">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="Numero" value="00000000${variables.siguiente_numero_comprobante[0].Numero}">
+                                                <input type="text" class="form-control" id="Numero_${idTabCVME}" value="00000000${variables.siguiente_numero_comprobante[0].Numero}">
                                             </div>
                                         </div>
                                     </div> 
@@ -101,14 +103,14 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                             <div class="col-sm-6"> 
                                 <div class="radio-inline radio-styled radio-primary">
                                     <label>
-                                        <input type="radio" value="c" id="TipoDestino" name="TipoDestino" checked onclick="${() => CambioTipoDestino()}" ><span> En Caja</span>
+                                        <input type="radio" value="c" id="TipoDestino_${idTabCVME}" name="TipoDestino_${idTabCVME}" checked onclick="${() => CambioTipoDestino(idTabCVME)}" ><span> En Caja</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="col-sm-6"> 
                                 <div class="radio-inline radio-styled radio-primary">
                                     <label>
-                                        <input type="radio" value="b" id="TipoDestino" name="TipoDestino" onclick="${() => CambioTipoDestino()}"><span> En Banco</span>
+                                        <input type="radio" value="b" id="TipoDestino_${idTabCVME}" name="TipoDestino_${idTabCVME}" onclick="${() => CambioTipoDestino(idTabCVME)}"><span> En Banco</span>
                                     </label>
                                 </div>
                             </div>
@@ -116,7 +118,7 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Fecha">Fecha</label>
-                                <input type="date" class="form-control" id="Fecha" placeholder='dd/mm/aaaa' value="${fecha_actual}">
+                                <input type="date" class="form-control" id="Fecha_${idTabCVME}" placeholder='dd/mm/aaaa' value="${fecha_actual}">
                             </div>
                         </div>
                     </div>
@@ -132,50 +134,50 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                     <div class="col-md-12"> 
                                         <div class="col-md-6"> 
                                              
-                                            <div class="col-md-12" id="formBanco" style="display:none">
+                                            <div class="col-md-12" id="formBanco_${idTabCVME}" style="display:none">
                                                 <div class="form-group">
                                                     <label for="Cod_Producto">Banco</label>
-                                                    <select class="form-control" id="SelectEntidadFinanciera" onchange=${()=>TraerCuentaBancariaEntidadFinanciera()}>
+                                                    <select class="form-control" id="SelectEntidadFinanciera_${idTabCVME}" onchange=${()=>TraerCuentaBancariaEntidadFinanciera(idTabCVME)}>
                                                         ${variables.entidades_financieras.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_EntidadFinanciera}">${e.Nom_EntidadFinanciera}</option>`)}
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="Cod_CuentaSoles">Cuenta Soles</label>
-                                                    <select class="form-control" id="Cod_CuentaSoles">
+                                                    <select class="form-control" id="Cod_CuentaSoles_${idTabCVME}">
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="Cod_CuentaME">Cuenta ME</label>
-                                                    <select class="form-control" id="Cod_CuentaME">
+                                                    <select class="form-control" id="Cod_CuentaME_${idTabCVME}">
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="Operacion">Operacion</label>
-                                                    <input type="text" class="form-control" id="Operacion">
+                                                    <input type="text" class="form-control" id="Operacion_${idTabCVME}">
                                                 </div>
                                             </div>
                                             
                                             <div class="col-md-12"> 
-                                                <div class="form-group" id="obs_body_xml">
+                                                <div class="form-group" id="obs_body_xml_${idTabCVME}">
                                                   
                                                 </div>
                                             </div>
 
                                         </div>
-                                        <div class="col-md-6" id="formVentaCompraME">
+                                        <div class="col-md-6" id="formVentaCompraME_${idTabCVME}">
                                             <label>Tipo de Operacion</label>
                                             <div class="col-sm-12">
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV" name="optionCV" value="c"  onclick="${() => CambioCompraVentaME()}" checked><span> Compra ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c"  onclick="${() => CambioCompraVentaME(idTabCVME)}" checked><span> Compra ME</span>
                                                         </label>
                                                     </div> 
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV" name="optionCV" value="v" onclick="${() => CambioCompraVentaME()}"><span> Venta ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v" onclick="${() => CambioCompraVentaME(idTabCVME)}"><span> Venta ME</span>
                                                         </label>
                                                     </div>
                                                 </div> 
@@ -183,21 +185,21 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                                             <br><br><br>
                                             <div class="form-group">
                                                 <label for="Cod_Moneda">Moneda</label>
-                                                <select class="form-control required" id="Cod_Moneda">
+                                                <select class="form-control required" id="Cod_Moneda_${idTabCVME}">
                                                     ${variables.monedas_sinsoles.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="Monto">Monto</label>
-                                                <input type="number" class="form-control required" id="Monto" onkeypress=${()=>CambioSoles()}>
+                                                <input type="number" class="form-control required" id="Monto_${idTabCVME}" onkeypress=${()=>CambioSoles(idTabCVME)}>
                                             </div>
                                             <div class="form-group">
                                                 <label for="TipoCambio">Tipo de Cambio</label>
-                                                <input type="number" class="form-control required" id="TipoCambio" onkeypress=${()=>CambioSoles()}>
+                                                <input type="number" class="form-control required" id="TipoCambio_${idTabCVME}" onkeypress=${()=>CambioSoles(idTabCVME)}>
                                             </div>
                                             <div class="form-group">
                                                 <label for="Soles">Soles</label>
-                                                <input type="number" class="form-control required" id="Soles" onkeypress=${()=>CambioMonto()}>
+                                                <input type="number" class="form-control required" id="Soles_${idTabCVME}" onkeypress=${()=>CambioMonto(idTabCVME)}>
                                             </div>
                                         </div>
                                     </div>
@@ -206,22 +208,236 @@ function Ver(_escritura, Serie, variables,fecha_actual) {
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer text-center"> 
+                <div class="row pull-right"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual)}>Guardar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
                 </div>
             </div>
         </div>`
 
-    var modal_proceso = document.getElementById('modal-proceso')
-    empty(modal_proceso).appendChild(el)
-    $('#modal-proceso').modal()
-    TraerCuentaBancariaEntidadFinanciera()
-    ObservacionesXML(variables.diagramas)
+    //var modal_proceso = document.getElementById('modal-proceso')
+    //empty(modal_proceso).appendChild(el)
+    //$('#modal-proceso').modal()
+    $("#tabs").append(tab)
+    $("#tabs_contents").append(el)
+    $("#id_"+idTabCVME).click()
+    TraerCuentaBancariaEntidadFinanciera(idTabCVME)
+    ObservacionesXML(variables.diagramas,idTabCVME)
+}
+
+function RefrescarVer(_escritura, Serie, variables,fecha_actual,idTabCVME) { 
+    global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
+    
+    var el = yo` 
+            <div class="panel">
+                <div class="panel-body" id="modal_form_${idTabCVME}">
+                    <div class="row">
+                        <div id="modal_error_${idTabCVME}" class="alert alert-callout alert-danger hidden">
+                            <p>Es necesario llenar todos los campos requeridos y el Importe mayor a cero</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-head">
+                                    <header>A favor de : </header>
+                                    <div class="tools">
+                                        <div class="btn-group">
+                                            <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.tipos_documento)}><i class="fa fa-plus"></i></a>
+                                            <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente(idTabCVME)}><i class="fa fa-pencil"></i></a>
+                                            <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("txtNombreCliente_"+idTabCVME,"Nro_DocumentoBuscar_"+idTabCVME,"002")}><i class="fa fa-search"></i></a>
+                                            <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <select class="form-control input-sm" id="Cod_TipoDocumentoBuscar_${idTabCVME}" onchange=${()=>CambioClienteDoc(idTabCVME)}>
+                                                    ${variables.tipos_documento.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_TipoDoc}">${e.Nom_TipoDoc}</option>`)}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar_${idTabCVME}" onblur=${()=>RecuperarDatosClientePorNroDoc(idTabCVME)} onkeypress=${()=>KeyPressClienteDoc(idTabCVME)} onkeydown=${()=>CambioNroDocumento(event,idTabCVME)}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control input-sm" id="txtNombreCliente_${idTabCVME}" placeholder="Nombre del cliente"> 
+                                              
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading text-center">
+                                    <div class="row">
+                                        <h4 class="box-title" id="Ruc_Empresa"><strong> R.U.C. ${variables.empresa.RUC} </strong></h4>
+                                    </div>
+                                    <div class="row">
+                                        <h4><strong>COMPRA/VENTA ME</strong></h4>
+                                    </div> 
+                                    
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <select class="form-control" id="Serie_${idTabCVME}">
+                                                    <option style="text-transform:uppercase" value="${Serie}">${Serie}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="Numero_${idTabCVME}" value="00000000${variables.siguiente_numero_comprobante[0].Numero}">
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-sm-6"> 
+                                <div class="radio-inline radio-styled radio-primary">
+                                    <label>
+                                        <input type="radio" value="c" id="TipoDestino_${idTabCVME}" name="TipoDestino_${idTabCVME}" checked onclick="${() => CambioTipoDestino(idTabCVME)}" ><span> En Caja</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm-6"> 
+                                <div class="radio-inline radio-styled radio-primary">
+                                    <label>
+                                        <input type="radio" value="b" id="TipoDestino_${idTabCVME}" name="TipoDestino_${idTabCVME}" onclick="${() => CambioTipoDestino(idTabCVME)}"><span> En Banco</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="Fecha">Fecha</label>
+                                <input type="date" class="form-control" id="Fecha_${idTabCVME}" placeholder='dd/mm/aaaa' value="${fecha_actual}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading text-center">
+                                <p> Detalles</p>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="row"> 
+                                    <div class="col-md-12"> 
+                                        <div class="col-md-6"> 
+                                             
+                                            <div class="col-md-12" id="formBanco_${idTabCVME}" style="display:none">
+                                                <div class="form-group">
+                                                    <label for="Cod_Producto">Banco</label>
+                                                    <select class="form-control" id="SelectEntidadFinanciera_${idTabCVME}" onchange=${()=>TraerCuentaBancariaEntidadFinanciera(idTabCVME)}>
+                                                        ${variables.entidades_financieras.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_EntidadFinanciera}">${e.Nom_EntidadFinanciera}</option>`)}
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Cod_CuentaSoles">Cuenta Soles</label>
+                                                    <select class="form-control" id="Cod_CuentaSoles_${idTabCVME}">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Cod_CuentaME">Cuenta ME</label>
+                                                    <select class="form-control" id="Cod_CuentaME_${idTabCVME}">
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="Operacion">Operacion</label>
+                                                    <input type="text" class="form-control" id="Operacion_${idTabCVME}">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-12"> 
+                                                <div class="form-group" id="obs_body_xml_${idTabCVME}">
+                                                  
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-6" id="formVentaCompraME_${idTabCVME}">
+                                            <label>Tipo de Operacion</label>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                    <div class="radio-inline radio-styled radio-primary">
+                                                        <label>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c"  onclick="${() => CambioCompraVentaME(idTabCVME)}" checked><span> Compra ME</span>
+                                                        </label>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="radio-inline radio-styled radio-primary">
+                                                        <label>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v" onclick="${() => CambioCompraVentaME(idTabCVME)}"><span> Venta ME</span>
+                                                        </label>
+                                                    </div>
+                                                </div> 
+                                            </div> 
+                                            <br><br><br>
+                                            <div class="form-group">
+                                                <label for="Cod_Moneda">Moneda</label>
+                                                <select class="form-control required" id="Cod_Moneda_${idTabCVME}">
+                                                    ${variables.monedas_sinsoles.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Monto">Monto</label>
+                                                <input type="number" class="form-control required" id="Monto_${idTabCVME}" onkeypress=${()=>CambioSoles(idTabCVME)}>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="TipoCambio">Tipo de Cambio</label>
+                                                <input type="number" class="form-control required" id="TipoCambio_${idTabCVME}" onkeypress=${()=>CambioSoles(idTabCVME)}>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Soles">Soles</label>
+                                                <input type="number" class="form-control required" id="Soles_${idTabCVME}" onkeypress=${()=>CambioMonto(idTabCVME)}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row pull-right"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarCompraVentaME(variables,fecha_actual,idTabCVME)}>Guardar</button>
+                </div>
+            </div>`
+
+    //var modal_proceso = document.getElementById('modal-proceso')
+    //empty(modal_proceso).appendChild(el)
+    //$('#modal-proceso').modal()
+    $('#tab_'+idTabCVME).html(el)
+    TraerCuentaBancariaEntidadFinanciera(idTabCVME)
+    ObservacionesXML(variables.diagramas,idTabCVME)
 }
 
 
-
+function CerrarTabCVME(idTab){ 
+    $('#tab_'+idTab).remove()
+    $('#id_'+idTab).parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show');
+    global.variablesCVME.splice(idTab,1)
+}
 
 function LlenarCuenta(cuenta,idSelect){
     var el = yo`
@@ -233,63 +449,63 @@ function LlenarCuenta(cuenta,idSelect){
 }
 
 
-var Id_ClienteProveedor = null
+//var Id_ClienteProveedor = null
 
-function CambioNroDocumento(e){  
+function CambioNroDocumento(e,idTab){  
     if(e.which == 46 || e.which == 8){ 
-        if(flag_cliente){
-            $("#Nro_DocumentoBuscar").val("");
-            $("#txtNombreCliente").val(""); 
-            Id_ClienteProveedor=null
-            flag_cliente=false
+        if(global.variablesCVME[idTab].flag_cliente){
+            $("#Nro_DocumentoBuscar_"+idTab).val("");
+            $("#txtNombreCliente_"+idTab).val(""); 
+            global.variablesCVME[idTab].Id_ClienteProveedor=null
+            global.variablesCVME[idTab].flag_cliente=false
         }
     }   
 }
 
-function KeyPressClienteDoc(){  
-    switch(($('#Nro_DocumentoBuscar').val().trim().length)+1){
+function KeyPressClienteDoc(idTab){  
+    switch(($('#Nro_DocumentoBuscar_'+idTab).val().trim().length)+1){
         case 8:
-            $("#Cod_TipoDocumentoBuscar").val("1")
+            $("#Cod_TipoDocumentoBuscar_"+idTab).val("1")
             break;
         case 11:
-            $("#Cod_TipoDocumentoBuscar").val("6")
+            $("#Cod_TipoDocumentoBuscar_"+idTab).val("6")
             break;
     }
    
 }
 
-function EditarCliente(){ 
-    if(!arrayValidacion.includes(Id_ClienteProveedor))
-        flag_cliente = true
+function EditarCliente(idTab){ 
+    if(!arrayValidacion.includes(global.variablesCVME[idTab].Id_ClienteProveedor))
+        global.variablesCVME[idTab].flag_cliente = true
     else
-        flag_cliente=false
+        global.variablesCVME[idTab].flag_cliente=false
     
 
-    $("#Nro_DocumentoBuscar").unbind("keypress");
-    $("#txtNombreCliente").unbind("keypress");
+    $("#Nro_DocumentoBuscar_"+idTab).unbind("keypress");
+    $("#txtNombreCliente_"+idTab).unbind("keypress");
 
-    $("#Nro_DocumentoBuscar").attr("disabled",false);
-    $("#txtNombreCliente").attr("disabled",false);
-    $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
+    $("#Nro_DocumentoBuscar_"+idTab).attr("disabled",false);
+    $("#txtNombreCliente_"+idTab).attr("disabled",false);
+    $("#Cod_TipoDocumentoBuscar_"+idTab).attr("disabled",false);
 }
 
-function CambioClienteDoc(){
-    if($("#Cod_TipoDocumentoBuscar").val()=="1" || $("#Cod_TipoDocumentoBuscar").val()=="6"){
-        $("#Nro_DocumentoBuscar").addClass("required")
-        $("#Nro_DocumentoBuscar").css("border-color","red");
+function CambioClienteDoc(idTab){
+    if($("#Cod_TipoDocumentoBuscar_"+idTab).val()=="1" || $("#Cod_TipoDocumentoBuscar_"+idTab).val()=="6"){
+        $("#Nro_DocumentoBuscar_"+idTab).addClass("required")
+        $("#Nro_DocumentoBuscar_"+idTab).css("border-color","red");
     }else{
-        $("#Nro_DocumentoBuscar").css("border-color","");
-        $("#Nro_DocumentoBuscar").removeClass("required",false)
+        $("#Nro_DocumentoBuscar_"+idTab).css("border-color","");
+        $("#Nro_DocumentoBuscar_"+idTab).removeClass("required",false)
     }
 }
 
 
-function CambioSoles(){ 
-    $("#Soles").val(parseFloat($("#Monto").val())*parseFloat($("#TipoCambio").val()))
+function CambioSoles(idTab){ 
+    $("#Soles_"+idTab).val(parseFloat($("#Monto_"+idTab).val())*parseFloat($("#TipoCambio_"+idTab).val()))
 }
 
-function CambioMonto(){
-    $("#Monto").val(parseFloat($("#Soles").val())/parseFloat($("#TipoCambio").val()))
+function CambioMonto(idTab){
+    $("#Monto_"+idTab).val(parseFloat($("#Soles_"+idTab).val())/parseFloat($("#TipoCambio_"+idTab).val()))
 }
  
 
@@ -301,7 +517,7 @@ function getValueXML(xmlDoc, TAG) {
     }
 }
 
-function ObservacionesXML(diagrama) {
+function ObservacionesXML(diagrama,idTab) {
     var xml = ''
     var parser = new DOMParser();
     var xmlDoc = parser.parseFromString(xml, "text/xml");
@@ -318,15 +534,15 @@ function ObservacionesXML(diagrama) {
             </div>
         </div>`)}
     </div>`;
-    var obs_xml = document.getElementById('obs_body_xml')
+    var obs_xml = document.getElementById('obs_body_xml_'+idTab)
     empty(obs_xml).appendChild(el) 
 }
 
 
-function RecuperarDatosClientePorNroDoc(){
-    if($("#Nro_DocumentoBuscar").val().trim().length>0){
-        var Nro_Documento = $("#Nro_DocumentoBuscar").val()
-        var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar").val()
+function RecuperarDatosClientePorNroDoc(idTab){
+    if($("#Nro_DocumentoBuscar_"+idTab).val().trim().length>0){
+        var Nro_Documento = $("#Nro_DocumentoBuscar_"+idTab).val()
+        var Cod_TipoDocumento = $("#Cod_TipoDocumentoBuscar_"+idTab).val()
         const parametros = {
             method: 'POST',
             headers: {
@@ -343,50 +559,50 @@ function RecuperarDatosClientePorNroDoc(){
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok' && res.data.cliente.length>0) {
-                $("#txtNombreCliente").val(res.data.cliente[0].Cliente)
-                $("#txtNombreCliente").focus()
-                Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
-                $("#Nro_DocumentoBuscar").bind("keypress", function(event){
+                $("#txtNombreCliente_"+idTab).val(res.data.cliente[0].Cliente)
+                $("#txtNombreCliente_"+idTab).focus()
+                global.variablesCVME[idTab].Id_ClienteProveedor = res.data.cliente[0].Id_ClienteProveedor
+                $("#Nro_DocumentoBuscar_"+idTab).bind("keypress", function(event){
                     event.preventDefault();
                     event.stopPropagation();
                 });
 
-                $("#txtNombreCliente").bind("keypress", function(event){
+                $("#txtNombreCliente_"+idTab).bind("keypress", function(event){
                     event.preventDefault();
                     event.stopPropagation();
                 });
 
               
-                $("#Nro_DocumentoBuscar").attr("disabled",true);
-                $("#txtNombreCliente").attr("disabled",true); 
-                $("#Cod_TipoDocumentoBuscar").attr("disabled",true);
+                $("#Nro_DocumentoBuscar_"+idTab).attr("disabled",true);
+                $("#txtNombreCliente_"+idTab).attr("disabled",true); 
+                $("#Cod_TipoDocumentoBuscar_"+idTab).attr("disabled",true);
             }
             else{
 
-                Id_ClienteProveedor = null
-                $("#txtNombreCliente").val("")  
-                $("#txtNombreCliente").attr("data-id",null)
+                global.variablesCVME[idTab].Id_ClienteProveedor = null
+                $("#txtNombreCliente_"+idTab).val("")  
+                $("#txtNombreCliente_"+idTab).attr("data-id",null)
 
-                $("#Nro_DocumentoBuscar").unbind("keypress");
-                $("#txtNombreCliente").unbind("keypress"); 
+                $("#Nro_DocumentoBuscar_"+idTab).unbind("keypress");
+                $("#txtNombreCliente_"+idTab).unbind("keypress"); 
 
-                $("#Nro_DocumentoBuscar").attr("disabled",false);
-                $("#txtNombreCliente").attr("disabled",false); 
-                $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
+                $("#Nro_DocumentoBuscar_"+idTab).attr("disabled",false);
+                $("#txtNombreCliente_"+idTab).attr("disabled",false); 
+                $("#Cod_TipoDocumentoBuscar_"+idTab).attr("disabled",false);
 
                 //BuscarCliente("txtNombreCliente","Nro_DocumentoBuscar","002")
             }
         }).catch(function (e) {
-            Id_ClienteProveedor = null
-            $("#txtNombreCliente").val("")  
-            $("#txtNombreCliente").attr("data-id",null)
+            global.variablesCVME[idTab].Id_ClienteProveedor = null
+            $("#txtNombreCliente_"+idTab).val("")  
+            $("#txtNombreCliente_"+idTab).attr("data-id",null)
 
-            $("#Nro_DocumentoBuscar").unbind("keypress");
-            $("#txtNombreCliente").unbind("keypress"); 
+            $("#Nro_DocumentoBuscar_"+idTab).unbind("keypress");
+            $("#txtNombreCliente_"+idTab).unbind("keypress"); 
 
-            $("#Nro_DocumentoBuscar").attr("disabled",false);
-            $("#txtNombreCliente").attr("disabled",false); 
-            $("#Cod_TipoDocumentoBuscar").attr("disabled",false);
+            $("#Nro_DocumentoBuscar_"+idTab).attr("disabled",false);
+            $("#txtNombreCliente_"+idTab).attr("disabled",false); 
+            $("#Cod_TipoDocumentoBuscar_"+idTab).attr("disabled",false);
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
@@ -395,33 +611,27 @@ function RecuperarDatosClientePorNroDoc(){
  
 
 
-function CambioTipoDestino() {
-    if ($('input[name=TipoDestino]:checked').val() == 'c') {
-        $('#formBanco').hide() 
+function CambioTipoDestino(idTab) {
+    if ($('input[name=TipoDestino_'+idTab+']:checked').val() == 'c') {
+        $('#formBanco_'+idTab).hide() 
     } else {
-        $('#formBanco').show()
+        $('#formBanco_'+idTab).show()
     }
 }
 
-function CambioCompraVentaME() {
-    if ($('input[name=optionCV]:checked').val() == 'c') {
-        $('#tituloModal').text("Compra ME") 
+function CambioCompraVentaME(idTab) {
+    if ($('input[name=optionCV_'+idTab+']:checked').val() == 'c') {
+        $('#id_'+idTab).text("Compra ME") 
     } else {
-        $('#tituloModal').text("Venta ME")
+        $('#id_'+idTab).text("Venta ME")
     }
 }
+ 
 
-
-function SeleccionarCliente(cliente){
-    $("#Nro_DocumentoBuscar").val(cliente.Nro_Documento)
-    $("#txtNombreCliente").val(cliente.Cliente)
-    Id_ClienteProveedor =  cliente.Id_ClienteProveedor
-}
-
-function GuardarCompraVentaME(variables,fecha_actual){
-    if(ValidacionCampos("modal_error","modal_form")){
-        run_waitMe($('#modal-proceso'), 1, "ios","Registrando operación...");
-        if ($('input[name=TipoDestino]:checked').val() == 'c') {
+function GuardarCompraVentaME(variables,fecha_actual,idTab){
+    if(ValidacionCampos("modal_error_"+idTab,"modal_form_"+idTab)){
+        run_waitMe($('#main-contenido'), 1, "ios","Registrando operación...");
+        if ($('input[name=TipoDestino_'+idTab+']:checked').val() == 'c') {
             var OBS = '<Registro>'
             for (var i = 0; i < variables.diagramas.length; i++) {
                 OBS += '<' + variables.diagramas[i].Cod_Elemento + '>' + document.getElementById(variables.diagramas[i].Cod_Elemento).value + '</' + variables.diagramas[i].Cod_Elemento + '>'
@@ -432,14 +642,14 @@ function GuardarCompraVentaME(variables,fecha_actual){
             var Cod_Caja = '100'
             var Cod_Turno = 'T0002'
             var Id_Concepto = 3000 
-            var Cliente = $("#txtNombreCliente").val()
-            var _nom_moneda = $("#Cod_Moneda").val() == "USD" ? "DOLARES" : "EUROS";
+            var Cliente = $("#txtNombreCliente_"+idTab).val()
+            var _nom_moneda = $("#Cod_Moneda_"+idTab).val() == "USD" ? "DOLARES" : "EUROS";
             
             var Cod_TipoComprobante = 'CV'
-            var Serie = $("#Serie").val()
-            var Numero = $("#Numero").val()
+            var Serie = $("#Serie_"+idTab).val()
+            var Numero = $("#Numero_"+idTab).val()
             var Fecha = fecha_actual
-            var Tipo_Cambio = $("#TipoCambio").val()
+            var Tipo_Cambio = $("#TipoCambio_"+idTab).val()
             var Ingreso = null
             var Cod_MonedaIng = null
             var Egreso = null
@@ -448,20 +658,20 @@ function GuardarCompraVentaME(variables,fecha_actual){
             var Fecha_Aut = fecha_actual
             var Id_MovimientoRef=0
 
-            if ($('input[name=optionCV]:checked').val() == 'c') {
+            if ($('input[name=optionCV_'+idTab+']:checked').val() == 'c') {
                 Des_Movimiento = "Compra ME " +_nom_moneda + " : " +
-                parseFloat($("#Monto").val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio").val()).toFixed(3) + " SOLES: " + parseFloat($("#Soles").val()).toFixed(3);
-                Ingreso = parseFloat($("#Monto").val()).toFixed(3)
-                Cod_MonedaIng = $("#Cod_Moneda").val()
-                Egreso = $("#Soles").val()
+                parseFloat($("#Monto_"+idTab).val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio_"+idTab).val()).toFixed(3) + " SOLES: " + parseFloat($("#Soles_"+idTab).val()).toFixed(3);
+                Ingreso = parseFloat($("#Monto_"+idTab).val()).toFixed(3)
+                Cod_MonedaIng = $("#Cod_Moneda_"+idTab).val()
+                Egreso = $("#Soles_"+idTab).val()
                 Cod_MonedaEgr = 'PEN'
             }else{
                 Des_Movimiento = "Venta ME " +_nom_moneda + " : " +
-                parseFloat($("#Monto").val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio").val()).toFixed(2) + " SOLES: " + parseFloat($("#Soles").val()).toFixed(2);
-                Ingreso = parseFloat($("#Soles").val()).toFixed(3)
+                parseFloat($("#Monto_"+idTab).val()).toFixed(2) + " T/C: " + parseFloat($("#TipoCambio_"+idTab).val()).toFixed(2) + " SOLES: " + parseFloat($("#Soles_"+idTab).val()).toFixed(2);
+                Ingreso = parseFloat($("#Soles_"+idTab).val()).toFixed(3)
                 Cod_MonedaIng = 'PEN'
-                Egreso = $("#Monto").val()
-                Cod_MonedaEgr = $("#Cod_Moneda").val()
+                Egreso = $("#Monto_"+idTab).val()
+                Cod_MonedaEgr = $("#Cod_Moneda_"+idTab).val()
             }
 
             const parametros = {
@@ -476,7 +686,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     Cod_Caja,
                     Cod_Turno,
                     Id_Concepto,
-                    Id_ClienteProveedor,
+                    Id_ClienteProveedor: global.variablesCVME[idTab].Id_ClienteProveedor,
                     Cliente,
                     Des_Movimiento,
                     Cod_TipoComprobante,
@@ -498,11 +708,11 @@ function GuardarCompraVentaME(variables,fecha_actual){
             fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_compra_venta_me', parametros)
             .then(req => req.json())
             .then(res => {
-                $('#modal-proceso').modal('hide')
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide')
                 if (res.respuesta == 'ok') {               
                     toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
-                    refrescar_movimientos()
+                    RefrescarCompraVentaME(true,idTab)
+                    //refrescar_movimientos()
                 }
                 else{
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
@@ -510,7 +720,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
             }).catch(function (e) {
                 console.log(e);
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             });
         }else{
             var OBS = '<Registro>'
@@ -520,24 +730,24 @@ function GuardarCompraVentaME(variables,fecha_actual){
             var Obs_Movimiento = OBS+'</Registro>'
             var Id_MovimientoCuenta = -1
             var Cod_CuentaBancaria = null
-            var Nro_Operacion = $("#Operacion").val()
+            var Nro_Operacion = $("#Operacion_"+idTab).val()
             var Des_Movimiento='SALIDA: COMPRA/VENTA DE MONEDA EXTRANJERA BANCOS'
             var Cod_TipoOperacionBancaria='010'
-            var Fecha = $("#Fecha").val()
+            var Fecha = $("#Fecha_"+idTab).val()
             var Monto = null
-            var TipoCambio = $("#TipoCambio").val()
+            var TipoCambio = $("#TipoCambio_"+idTab).val()
             var Cod_Caja = '100'
             var Cod_Turno = 'T0002'
             var Cod_Plantilla=''
             var Nro_Cheque=''
             var Beneficiario=''
             var Id_ComprobantePago=0
-            if ($('input[name=optionCV]:checked').val() == 'c') {
-                Cod_CuentaBancaria = $("#Cod_CuentaSoles").val()
-                Monto = -1 * parseFloat($("#Soles").val())
+            if ($('input[name=optionCV_'+idTab+']:checked').val() == 'c') {
+                Cod_CuentaBancaria = $("#Cod_CuentaSoles_"+idTab).val()
+                Monto = -1 * parseFloat($("#Soles_"+idTab).val())
             }else{
-                Cod_CuentaBancaria = $("#Cod_CuentaME").val()
-                Monto = -1 * parseFloat($("#Monto").val())
+                Cod_CuentaBancaria = $("#Cod_CuentaME_"+idTab).val()
+                Monto = -1 * parseFloat($("#Monto_"+idTab).val())
             }
 
             const parametros = {
@@ -570,12 +780,12 @@ function GuardarCompraVentaME(variables,fecha_actual){
             .then(res => {
                 if (res.respuesta == 'ok') {               
                     //$('#modal-superior').modal('hide')
-                    if ($('input[name=optionCV]:checked').val() == 'c') {
-                        Cod_CuentaBancaria = $("#Cod_CuentaME").val()
-                        Monto = -1 * parseFloat($("#Monto").val())
+                    if ($('input[name=optionCV_'+idTab+']:checked').val() == 'c') {
+                        Cod_CuentaBancaria = $("#Cod_CuentaME_"+idTab).val()
+                        Monto = -1 * parseFloat($("#Monto_"+idTab).val())
                     }else{
-                        Cod_CuentaBancaria = $("#Cod_CuentaSoles").val()
-                        Monto = -1 * parseFloat($("#Soles").val())
+                        Cod_CuentaBancaria = $("#Cod_CuentaSoles_"+idTab).val()
+                        Monto = -1 * parseFloat($("#Soles_"+idTab).val())
                     }
 
 
@@ -606,12 +816,12 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     }
                     fetch(URL+'/compra_venta_moneda_extranjera_api/guardar_cuenta_bancaria_compra_venta_me', parametros)
                     .then(req => req.json())
-                    .then(res => {
-                        $('#modal-proceso').modal('hide')
-                        $('#modal-proceso').waitMe('hide');
+                    .then(res => { 
+                        $('#main-contenido').waitMe('hide');
                         if (res.respuesta == 'ok') {             
                             toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
-                            refrescar_movimientos()
+                            RefrescarCompraVentaME(true,idTab)
+                            //refrescar_movimientos()
                         }
                         else{
                             toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000}) 
@@ -619,7 +829,7 @@ function GuardarCompraVentaME(variables,fecha_actual){
                     }).catch(function (e) {
                         console.log(e);
                         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                        $('#modal-proceso').waitMe('hide');
+                        $('#main-contenido').waitMe('hide');
                     });
         
 
@@ -627,15 +837,50 @@ function GuardarCompraVentaME(variables,fecha_actual){
                 else{
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
                 }
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             });
 
         }
     }
+}
+
+function RefrescarCompraVentaME(_escritura,idTab) { 
+    LimpiarEventoModales()
+    run_waitMe($('#main-contenido'), 1, "ios");
+    var Cod_Caja = '100'//caja.Cod_Caja
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Caja
+        })
+    }
+    fetch(URL + '/compra_venta_moneda_extranjera_api/get_comprobante_by_caja', parametros)
+        .then(req => req.json())
+        .then(res => {
+            console.log(res)
+            if (res.respuesta == 'ok') {
+                if(res.data.comprobante_caja.length>0)
+                    RefrescarTraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie,idTab)
+                else  
+                    RefrescarTraerSiguienteNumeroComprobante(_escritura,'',idTab) 
+
+            }
+            else {
+                $('#main-contenido').waitMe('hide');
+            }
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
  
 function NuevoCompraVentaME(_escritura, caja) { 
@@ -666,6 +911,40 @@ function NuevoCompraVentaME(_escritura, caja) {
             else {
                 $('#main-contenido').waitMe('hide');
             }
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
+}
+
+function RefrescarTraerSiguienteNumeroComprobante(_escritura, Serie, idTab) {
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Serie
+        })
+    }
+    fetch(URL + '/compra_venta_moneda_extranjera_api/get_next_number_comprobante', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var variables = res.data
+
+                const fecha = new Date()
+                const mes = fecha.getMonth() + 1
+                const dia = fecha.getDate()
+                var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+
+                RefrescarVer(_escritura, Serie,variables,fecha_format,idTab)  
+            }
+            else { 
+            }
+            $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
@@ -709,8 +988,8 @@ function TraerSiguienteNumeroComprobante(_escritura, Serie) {
 
 
 
-function TraerCuentaBancariaEntidadFinanciera() {
-    var Cod_EntidadFinanciera = $("#SelectEntidadFinanciera").val() 
+function TraerCuentaBancariaEntidadFinanciera(idTab) {
+    var Cod_EntidadFinanciera = $("#SelectEntidadFinanciera_"+idTab).val() 
     const parametros = {
         method: 'POST',
         headers: {
@@ -725,8 +1004,8 @@ function TraerCuentaBancariaEntidadFinanciera() {
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                LlenarCuenta(res.data.cuenta_bancaria_pen,"Cod_CuentaSoles")
-                LlenarCuenta(res.data.cuenta_bancaria_usd,"Cod_CuentaME")
+                LlenarCuenta(res.data.cuenta_bancaria_pen,"Cod_CuentaSoles_"+idTab)
+                LlenarCuenta(res.data.cuenta_bancaria_usd,"Cod_CuentaME_"+idTab)
             }
             else {
             }

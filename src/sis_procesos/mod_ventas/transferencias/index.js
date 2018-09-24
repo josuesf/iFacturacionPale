@@ -5,22 +5,24 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { LimpiarEventoModales } from '../../../../utility/tools' 
 
+var cantidad_tabs = 0
 
 function Ver(_escritura, variables,fecha_actual,caja_actual) {
+    cantidad_tabs++
+    const idTabT = "T_"+cantidad_tabs
+
+    var tab = yo`
+    <li class="" ><a href="#tab_${idTabT}" data-toggle="tab" aria-expanded="false" id="id_${idTabT}">Transferencias entre cajas <a style="padding-left: 10px;"  onclick=${()=>CerrarTabT(idTabT)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+
+
     var el = yo`
-        <div class="modal-dialog ">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                    <h4 class="modal-title"><strong>Transferencias entre cajas</strong></h4>
-                </div>
-                <div class="modal-body"  id="modal_form">
+        <div class="tab-pane" id="tab_${idTabT}">
+            <div class="panel">
+                <div class="panel-body"  id="modal_form_${idTabT}">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div id="modal_error" class="alert alert-callout alert-danger hidden">
+                                <div id="modal_error_${idTabT}" class="alert alert-callout alert-danger hidden">
                                     <p> Es necesario llenar los campos marcados con rojo</p>
                                 </div>
                             </div>
@@ -29,7 +31,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="Cajero">Cajero</label>
-                                        <h4 type="text" class="form-control" id="Cajero"></h4>
+                                        <h4 type="text" class="form-control" id="Cajero_${idTabT}"></h4>
                                     </div>
                                 </div>
                             </div>
@@ -38,7 +40,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="Cod_CajaOrigen">Caja</label>
-                                        <select class="form-control" id="Cod_CajaOrigen" disabled>
+                                        <select class="form-control" id="Cod_CajaOrigen_${idTabT}" disabled>
                                             ${variables.cajas.map(e => yo`
                                                 <option value="${e.Cod_Caja}" ${e.Cod_Caja == caja_actual.Cod_Caja ? 'selected' : ''}>${e.Des_Caja}</option>
                                             `)}
@@ -51,7 +53,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="Fecha">Fecha</label>
-                                        <input type="date" class="form-control required" id="Fecha" placeholder='dd/mm/aaaa' value=${fecha_actual}>
+                                        <input type="date" class="form-control required" id="Fecha_${idTabT}" placeholder='dd/mm/aaaa' value=${fecha_actual}>
                                     </div>
                                 </div>
                             </div>
@@ -64,15 +66,15 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                             <div class="col-md-3">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" value="b" id="optEnvios" name="optEnvios" onclick=${()=>CambioRadios()}> Banco
+                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}> Banco
                                                     </label>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-9" id="formBanco" style="display:none"> 
+                                            <div class="col-md-9" id="formBanco_${idTabT}" style="display:none"> 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <select class="form-control" id="Cod_Cuenta_Bancaria">
+                                                        <select class="form-control" id="Cod_Cuenta_Bancaria_${idTabT}">
                                                             ${variables.cuentas_bancarias.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaBancaria}">${e.Des_CuentaBancaria}</option>`)}
                                                         </select>
                                                     </div>
@@ -81,7 +83,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="sr-only" for="NroOperacion">Nro Op.</label>
-                                                        <input type="text" class="form-control" id="NroOperacion">
+                                                        <input type="text" class="form-control" id="NroOperacion_${idTabT}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,13 +93,13 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                             <div class="col-md-3">
                                                 <div class="radio">
                                                     <label>
-                                                        <input type="radio" value="c" id="optEnvios" name="optEnvios" checked onclick=${()=>CambioRadios()}> Caja
+                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}> Caja
                                                     </label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-9" id="formCaja">
+                                            <div class="col-md-9" id="formCaja_${idTabT}">
                                                 <div class="form-group">
-                                                    <select class="form-control required" id="Cod_CajaDestino">
+                                                    <select class="form-control required" id="Cod_CajaDestino_${idTabT}">
                                                         ${variables.cajas_diferentes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Caja}">${e.Des_Caja}</option>`)}
                                                     </select>
                                                 </div>
@@ -108,22 +110,22 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label for="Cod_Producto">Moneda</label>
-                                                    <select class="form-control" id="Cod_Moneda">\
+                                                    <label for="Cod_Moneda">Moneda</label>
+                                                    <select class="form-control" id="Cod_Moneda_${idTabT}">\
                                                         ${variables.monedas.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="Cod_Producto">Monto</label>
-                                                    <input type="number" class="form-control required" id="Monto" onkeypress=${()=>CalcularITF()}>
+                                                    <label for="Monto">Monto</label>
+                                                    <input type="number" class="form-control required" id="Monto_${idTabT}" onkeypress=${()=>CalcularITF(idTabT)}>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3 text-center" id="formBancoITF" style="display:none">
+                                            <div class="col-md-3 text-center" id="formBancoITF_${idTabT}" style="display:none">
                                                 <div class="checkbox">
                                                     <label>
-                                                        <input type="checkbox" id="optITF" name="optITF" onclick=${()=>CalcularITF()}> Con ITF? 0.005%
+                                                        <input type="checkbox" id="optITF_${idTabT}" name="optITF_${idTabT}" onclick=${()=>CalcularITF(idTabT)}> Con ITF? 0.005%
                                                     </label>
                                                 </div>
                                             </div>
@@ -134,7 +136,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label for="Comentario">Comentario</label>
-                                                    <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario" placeholder="Ingrese un comentario"></textarea>
+                                                    <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario_${idTabT}" placeholder="Ingrese un comentario"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -148,88 +150,246 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarEnvio(variables)}>Guardar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarEnvio(variables,idTabT)}>Guardar</button>
                 </div>
             </div>
         </div>`
 
-    var modal_proceso = document.getElementById('modal-proceso');
-    empty(modal_proceso).appendChild(el);
-    $('#modal-proceso').modal()
-    $('#Cajero').text($('p#nick').text())
+    //var modal_proceso = document.getElementById('modal-proceso');
+    //empty(modal_proceso).appendChild(el);
+    //$('#modal-proceso').modal()
+    $("#tabs").append(tab)
+    $("#tabs_contents").append(el)
+    $("#id_"+idTabT).click()
+    $('#Cajero_'+idTabT).text($('p#nick').text())
 }
 
-function CalcularITF(){
-    $("#optITF").attr("data-value","")
-    if($("#optITF").is(":checked")){
-        if($.trim($("#Monto").val()).length>0){
-            var ITF = parseFloat($("#Monto").val()) * 0.00005
-            $("#optITF").attr("data-value",ITF.toString()+".000")
-            if(parseInt($("#optITF").attr("data-value").substring($("#optITF").attr("data-value").length - 2, 1)) >= 5){
-                $("#optITF").attr("data-value",$("#optITF").attr("data-value").substring(0,$("#optITF").attr("data-value").length - 2)+"5")
+function RefrescarVer(_escritura, variables,fecha_actual,caja_actual,idTabT) {
+    
+    var el = yo` 
+            <div class="panel">
+                <div class="panel-body"  id="modal_form_${idTabT}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div id="modal_error_${idTabT}" class="alert alert-callout alert-danger hidden">
+                                    <p> Es necesario llenar los campos marcados con rojo</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Cajero">Cajero</label>
+                                        <h4 type="text" class="form-control" id="Cajero_${idTabT}"></h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Cod_CajaOrigen">Caja</label>
+                                        <select class="form-control" id="Cod_CajaOrigen_${idTabT}" disabled>
+                                            ${variables.cajas.map(e => yo`
+                                                <option value="${e.Cod_Caja}" ${e.Cod_Caja == caja_actual.Cod_Caja ? 'selected' : ''}>${e.Des_Caja}</option>
+                                            `)}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="Fecha">Fecha</label>
+                                        <input type="date" class="form-control required" id="Fecha_${idTabT}" placeholder='dd/mm/aaaa' value=${fecha_actual}>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Destino y Monto</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" value="b" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" onclick=${()=>CambioRadios(idTabT)}> Banco
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-9" id="formBanco_${idTabT}" style="display:none"> 
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <select class="form-control" id="Cod_Cuenta_Bancaria_${idTabT}">
+                                                            ${variables.cuentas_bancarias.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_CuentaBancaria}">${e.Des_CuentaBancaria}</option>`)}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="NroOperacion">Nro Op.</label>
+                                                        <input type="text" class="form-control" id="NroOperacion_${idTabT}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" value="c" id="optEnvios_${idTabT}" name="optEnvios_${idTabT}" checked onclick=${()=>CambioRadios(idTabT)}> Caja
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-9" id="formCaja_${idTabT}">
+                                                <div class="form-group">
+                                                    <select class="form-control required" id="Cod_CajaDestino_${idTabT}">
+                                                        ${variables.cajas_diferentes.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Caja}">${e.Des_Caja}</option>`)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                            
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label for="Cod_Moneda">Moneda</label>
+                                                    <select class="form-control" id="Cod_Moneda_${idTabT}">\
+                                                        ${variables.monedas.map(e => yo`<option style="text-transform:uppercase" value="${e.Cod_Moneda}">${e.Nom_Moneda}</option>`)}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="Monto">Monto</label>
+                                                    <input type="number" class="form-control required" id="Monto_${idTabT}" onkeypress=${()=>CalcularITF(idTabT)}>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 text-center" id="formBancoITF_${idTabT}" style="display:none">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="optITF_${idTabT}" name="optITF_${idTabT}" onclick=${()=>CalcularITF(idTabT)}> Con ITF? 0.005%
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="Comentario">Comentario</label>
+                                                    <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario_${idTabT}" placeholder="Ingrese un comentario"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-center"> 
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-info" id="btnGuardar" onclick=${()=>GuardarEnvio(variables,idTabT)}>Guardar</button>
+                </div>
+            </div>`
+
+    //var modal_proceso = document.getElementById('modal-proceso');
+    //empty(modal_proceso).appendChild(el);
+    //$('#modal-proceso').modal()
+    $('#tab_'+idTabT).html(el)
+    $('#Cajero_'+idTabT).text($('p#nick').text())
+}
+
+function CerrarTabT(idTab){ 
+    $('#tab_'+idTab).remove()
+    $('#id_'+idTab).parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show');
+}
+
+
+function CalcularITF(idTab){
+    $("#optITF_"+idTab).attr("data-value","")
+    if($("#optITF_"+idTab).is(":checked")){
+        if($.trim($("#Monto_"+idTab).val()).length>0){
+            var ITF = parseFloat($("#Monto_"+idTab).val()) * 0.00005
+            $("#optITF_"+idTab).attr("data-value",ITF.toString()+".000")
+            if(parseInt($("#optITF_"+idTab).attr("data-value").substring($("#optITF_"+idTab).attr("data-value").length - 2, 1)) >= 5){
+                $("#optITF_"+idTab).attr("data-value",$("#optITF_"+idTab).attr("data-value").substring(0,$("#optITF_"+idTab).attr("data-value").length - 2)+"5")
             }else{
-                $("#optITF").attr("data-value",$("#optITF").attr("data-value").substring(0,$("#optITF").attr("data-value").length - 2)+"0")
+                $("#optITF_"+idTab).attr("data-value",$("#optITF_"+idTab).attr("data-value").substring(0,$("#optITF_"+idTab).attr("data-value").length - 2)+"0")
             }
         }
     }
 }
  
 
-function CambioRadios(){
-    if ($('input[name=optEnvios]:checked').val() == 'b') {
-        $("#formBanco").show()
-        $("#formBancoITF").show()
-        $("#formCaja").hide()
-        $("#Cod_CajaDestino").removeClass("required")
-        $("#Cod_Cuenta_Bancaria").addClass("required")
-        $("#NroOperacion").addClass("required")
+function CambioRadios(idTab){
+    if ($('input[name=optEnvios_'+idTab+']:checked').val() == 'b') {
+        $("#formBanco_"+idTab).show()
+        $("#formBancoITF_"+idTab).show()
+        $("#formCaja_"+idTab).hide()
+        $("#Cod_CajaDestino_"+idTab).removeClass("required")
+        $("#Cod_Cuenta_Bancaria_"+idTab).addClass("required")
+        $("#NroOperacion_"+idTab).addClass("required")
     }else{
-        $("#formBanco").hide()
-        $("#formBancoITF").hide()
-        $("#formCaja").show()
-        $("#Cod_CajaDestino").addClass("required")
-        $("#Cod_Cuenta_Bancaria").removeClass("required")
-        $("#NroOperacion").removeClass("required")
+        $("#formBanco_"+idTab).hide()
+        $("#formBancoITF_"+idTab).hide()
+        $("#formCaja_"+idTab).show()
+        $("#Cod_CajaDestino_"+idTab).addClass("required")
+        $("#Cod_Cuenta_Bancaria_"+idTab).removeClass("required")
+        $("#NroOperacion_"+idTab).removeClass("required")
     }
 }
 
 
-function GuardarEnvio(variables){
-    if(ValidacionCampos("modal_error","modal_form")){
+function GuardarEnvio(variables,idTab){
+    if(ValidacionCampos("modal_error_"+idTab,"modal_form_"+idTab)){
 
-        run_waitMe($('#modal-proceso'), 1, "ios","Registrando operación...");
+        run_waitMe($('#main-contenido'), 1, "ios","Registrando operación...");
         var Cod_Caja = '100'//caja.Cod_Caja
         var Cod_Turno = 'T0002'
         var Id_Concepto = 11000
         var Id_ClienteProveedor = 0
         var Cliente = null
         var ClienteMov = null
-        if($('input[name=optEnvios]:checked').val()=="b"){
-            Cliente = $("#Cod_Cuenta_Bancaria option:selected").text()
-            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria option:selected").val() + " : " + $("#NroOperacion").val() + " , " + $("#Comentario").val()
+        if($('input[name=optEnvios_'+idTab+']:checked').val()=="b"){
+            Cliente = $("#Cod_Cuenta_Bancaria_"+idTab+" option:selected").text()
+            ClienteMov = "PARA : " + $("#Cod_Cuenta_Bancaria_"+idTab+" option:selected").val() + " : " + $("#NroOperacion_"+idTab).val() + " , " + $("#Comentario_"+idTab).val()
         }else{
-            Cliente = $("#Cod_CajaDestino option:selected").text()
-            ClienteMov = "PARA : " + $("#Cod_CajaDestino option:selected").text() + " , " + $("#Comentario").val()
+            Cliente = $("#Cod_CajaDestino_"+idTab+" option:selected").text()
+            ClienteMov = "PARA : " + $("#Cod_CajaDestino_"+idTab+" option:selected").text() + " , " + $("#Comentario_"+idTab).val()
         }
         var Des_Movimiento = ClienteMov
-        var Fecha = $("#Fecha").val()
-        var Cod_MonedaEgr = $("#Cod_Moneda").val()
-        var Cod_MonedaIng = $("#Cod_Moneda").val()
-        var Fecha_Aut = $("#Fecha").val()
+        var Fecha = $("#Fecha_"+idTab).val()
+        var Cod_MonedaEgr = $("#Cod_Moneda_"+idTab).val()
+        var Cod_MonedaIng = $("#Cod_Moneda_"+idTab).val()
+        var Fecha_Aut = $("#Fecha_"+idTab).val()
         var Serie = variables.serie[0].Serie
         var Tipo_Cambio = 1
         var Ingreso = 0
-        var Egreso = $("#Monto").val()
+        var Egreso = $("#Monto_"+idTab).val()
         var Flag_Extornado = 0
         var Id_MovimientoRef = 0
 
-        if ($('input[name=optEnvios]:checked').val() == 'c') {
+        if ($('input[name=optEnvios_'+idTab+']:checked').val() == 'c') {
             
-            GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables)
+            GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab)
              
         }else{
             
-            GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables)
+            GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab)
              
         }
                     
@@ -237,7 +397,7 @@ function GuardarEnvio(variables){
 }
 
 
-function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
+function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab){
        
     const parametros = {
         method: 'POST',
@@ -268,34 +428,34 @@ function GuardarMovEgresoBanco(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedo
         .then(req => req.json())
         .then(res => { 
             if (res.respuesta == 'ok') {
-                GuardarMovCuentaBancaria(variables)
+                GuardarMovCuentaBancaria(variables,idTab)
             }
             else {  
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             }
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            $('#modal-proceso').waitMe('hide');
+            $('#main-contenido').waitMe('hide');
         });
 }
 
 
-function GuardarMovCuentaBancaria(variables){
+function GuardarMovCuentaBancaria(variables,idTab){
     var Id_MovimientoCuenta = -1
-    var Cod_CuentaBancaria=$("#Cod_Cuenta_Bancaria").val()
-    var Nro_Operacion = $("#NroOperacion").val()
+    var Cod_CuentaBancaria=$("#Cod_Cuenta_Bancaria_"+idTab).val()
+    var Nro_Operacion = $("#NroOperacion_"+idTab).val()
     var Des_Movimiento='DEPOSITO EN EFECTIVO'
     var Cod_TipoOperacionBancaria='001'
-    var Fecha = $("#Fecha").val()
-    var Monto = $("#Monto").val()
+    var Fecha = $("#Fecha_"+idTab).val()
+    var Monto = $("#Monto_"+idTab).val()
     var TipoCambio = 1
     var Cod_Caja = '100'
     var Cod_Turno = 'T0002'
     var Nro_Cheque = ''
     var Beneficiario = ''
     var Id_ComprobantePago = 0
-    var Obs_Movimiento = $("#Comentario").val()
+    var Obs_Movimiento = $("#Comentario_"+idTab).val()
     var Cod_Plantilla=null
     const parametros = {
         method: 'POST',
@@ -326,12 +486,12 @@ function GuardarMovCuentaBancaria(variables){
         .then(req => req.json())
         .then(res => {
             if (res.respuesta == 'ok') {
-                if($("#optITF").is(":checked")){
+                if($("#optITF_"+idTab).is(":checked")){
                     Id_MovimientoCuenta = 0
                     Des_Movimiento='IMPUESTO ITF'
-                    Monto = -1 * parseFloat($("#optITF").attr("data-value"))
+                    Monto = -1 * parseFloat($("#optITF_"+idTab).attr("data-value"))
                     Cod_TipoOperacionBancaria = '004'
-                    Nro_Operacion = parseInt($("#NroOperacion").val())+1
+                    Nro_Operacion = parseInt($("#NroOperacion_"+idTab).val())+1
 
                     const parametros = {
                         method: 'POST',
@@ -361,12 +521,12 @@ function GuardarMovCuentaBancaria(variables){
 
                     fetch(URL + '/envios_api/guardar_movimientos_cuenta_bancaria', parametros)
                     .then(req => req.json())
-                    .then(res => { 
-                        $('#modal-proceso').modal('hide')
-                        $('#modal-proceso').waitMe('hide');
+                    .then(res => {  
+                        $('#main-contenido').waitMe('hide');
                         if (res.respuesta == 'ok') {
                             toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000})
-                            refrescar_movimientos()
+                            RefrescarEnvioEfectivo(true,idTab)
+                            //refrescar_movimientos()
                         }
                         else {
                             toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
@@ -374,27 +534,26 @@ function GuardarMovCuentaBancaria(variables){
                     }).catch(function (e) {
                         console.log(e);
                         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                        $('#modal-proceso').waitMe('hide');
+                        $('#main-contenido').waitMe('hide');
                     });
 
-                }else{
-                    $('#modal-proceso').modal('hide')
-                    $('#modal-proceso').waitMe('hide');
+                }else{ 
+                    $('#main-contenido').waitMe('hide');
                 } 
             }
             else {
                 toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             }
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            $('#modal-proceso').waitMe('hide');
+            $('#main-contenido').waitMe('hide');
         });
 }
 
 
-function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables){
+function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor,Cliente,Des_Movimiento,Fecha,Cod_MonedaEgr,Cod_MonedaIng,Fecha_Aut,Serie,Tipo_Cambio,Ingreso,Egreso,Flag_Extornado,Id_MovimientoRef, variables,idTab){
        
         const parametros = {
             method: 'POST',
@@ -426,19 +585,19 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
             .then(req => req.json())
             .then(res => { 
                 if (res.respuesta == 'ok') {
-                    Cod_Caja = $("#Cod_CajaDestino").val()
+                    Cod_Caja = $("#Cod_CajaDestino_"+idTab).val()
                     Cod_Turno = null
                     Id_Concepto = 11000
                     Id_ClienteProveedor = 0
-                    Cliente =  $("#Cod_CajaOrigen option:selected").text() 
-                    Des_Movimiento = "DE : "+$("#Cod_CajaOrigen option:selected").text()+","+$("#Comentario").val()
-                    Fecha = $("#Fecha").val()
-                    Cod_MonedaEgr = $("#Cod_Moneda").val()
-                    Cod_MonedaIng = $("#Cod_Moneda").val()
-                    Fecha_Aut = $("#Fecha").val()
+                    Cliente =  $("#Cod_CajaOrigen_"+idTab+" option:selected").text() 
+                    Des_Movimiento = "DE : "+$("#Cod_CajaOrigen_"+idTab+" option:selected").text()+","+$("#Comentario_"+idTab).val()
+                    Fecha = $("#Fecha_"+idTab).val()
+                    Cod_MonedaEgr = $("#Cod_Moneda_"+idTab).val()
+                    Cod_MonedaIng = $("#Cod_Moneda_"+idTab).val()
+                    Fecha_Aut = $("#Fecha_"+idTab).val()
                     Serie = variables.serie[0].Serie
                     Tipo_Cambio = 1
-                    Ingreso = $("#Monto").val()
+                    Ingreso = $("#Monto_"+idTab).val()
                     Egreso = 0
                     Flag_Extornado = 0
                     Id_MovimientoRef = res.data
@@ -446,12 +605,12 @@ function GuardarMovEgresoCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProveedor
                 }
                 else {
                     toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})    
-                    $('#modal-proceso').waitMe('hide');
+                    $('#main-contenido').waitMe('hide');
                 }
             }).catch(function (e) {
                 console.log(e);
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                $('#modal-proceso').waitMe('hide');
+                $('#main-contenido').waitMe('hide');
             });
 }
 
@@ -485,12 +644,12 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
     } 
     fetch(URL + '/envios_api/guardar_movimientos_ingreso_otra_caja', parametros)
         .then(req => req.json())
-        .then(res => {
-            $('#modal-proceso').modal('hide')
-            $('#modal-proceso').waitMe('hide');
+        .then(res => { 
+            $('#main-contenido').waitMe('hide');
             if (res.respuesta == 'ok') {
                 toastr.success('Se registro correctamente el movimiento','Confirmacion',{timeOut: 5000}) 
-                refrescar_movimientos()
+                RefrescarEnvioEfectivo(true,idTab)
+                //refrescar_movimientos()
             }
             else {
                 toastr.error('No se pudo registrar correctamente el movimiento','Error',{timeOut: 5000})  
@@ -498,10 +657,50 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            $('#modal-proceso').waitMe('hide');
+            $('#main-contenido').waitMe('hide');
         });
 }
 
+
+
+function RefrescarEnvioEfectivo(_escritura,idTab) {
+    LimpiarEventoModales()
+    run_waitMe($('#main-contenido'), 1, "ios");
+    var Cod_Caja = '100'//caja.Cod_Caja
+    var Cod_Sucursal = '0001'
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Caja,
+            Cod_Sucursal
+        })
+    }
+    fetch(URL + '/envios_api/get_cajas_envios', parametros)
+        .then(req => req.json())
+        .then(res => {
+            var variables = res.data
+            if (res.respuesta == 'ok') {
+                const fecha = new Date()
+                const mes = fecha.getMonth() + 1
+                const dia = fecha.getDate()
+                var fecha_format = fecha.getFullYear() + '-' + (mes > 9 ? mes : '0' + mes) + '-' + (dia > 9 ? dia : '0' + dia)
+                RefrescarVer(_escritura, variables,fecha_format,res.caja,idTab)
+              
+            }
+            else { 
+                
+            }
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
+}
 
 
 function NuevoEnvioEfectivo(_escritura, caja) {
