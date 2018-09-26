@@ -45,7 +45,7 @@ router.post('/arquear_caja', function (req, res) {
 }); 
 
 router.post('/venta_simple', function (req, res) { 
-   
+   console.log("v",req.body)
     TraerConexion(req,res,function(flag){
         if(flag)
             VentaSimple(req,res)
@@ -62,6 +62,20 @@ router.post('/get_all_productos_serv', function (req, res) {
         if(flag){
             procedimientos =[
                 {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_TT1',parametros:[]} 
+            ]
+            Ejecutar_Procedimientos(req,res,procedimientos)
+        }else
+            return res.json({respuesta:"error"}) 
+    });
+
+}); 
+
+router.post('/get_all_precios_productos_serv', function (req, res) {
+    
+    TraerConexion(req,res,function(flag){
+        if(flag){
+            procedimientos =[
+                {nom_respuesta:'precios',sp_name:'USP_PRI_PRODUCTO_PRECIO_TT',parametros:[]} 
             ]
             Ejecutar_Procedimientos(req,res,procedimientos)
         }else
@@ -177,6 +191,7 @@ router.post('/guardar_detalle_producto',function(req,res){
 
 
 function VentaSimple(req,res){
+    console.log("ventaaa simple",req.body)
      
     var input = req.body 
     
@@ -305,6 +320,7 @@ function VentaSimple(req,res){
                     var Cod_TipoOperacion = '01'
 
                     if(dataFacRapida.result.length>0){
+                        console.log("doc cliente",dataFacRapida)
                         var Serie = dataFacRapida.result[0].Serie
                         var Cod_TipoComprobante = dataFacRapida.result[0].Cod_TipoComprobante
                         var Nro_Ticketera = ""
@@ -393,7 +409,7 @@ function VentaSimple(req,res){
                                 { nom_parametro: 'Otros_Tributos', valor_parametro: Otros_Tributos},
                                 { nom_parametro: 'Cod_Usuario', valor_parametro: Cod_Usuario},
                             ]
-                            console.log(parametrosComprobante)
+                            console.log("comprante",parametrosComprobante)
                             
                             EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
                                 console.log()

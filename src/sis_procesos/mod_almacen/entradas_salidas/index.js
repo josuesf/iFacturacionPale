@@ -1124,6 +1124,7 @@ function EntradasSalidas(Cod_TipoComprobante) {
     fetch(URL + '/almacenes_api/get_variables_entradas_salidas', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log("entradas y salidad",res)
             if(res.respuesta=='ok'){
                 var variables = res.data 
                 const parametros = {
@@ -1138,14 +1139,11 @@ function EntradasSalidas(Cod_TipoComprobante) {
                 fetch(URL + '/cajas_api/get_empresa', parametros)
                     .then(req => req.json())
                     .then(res => { 
-                        //console.log(variables)
-                        if(res.respuesta=='ok'){
-                            var data_empresa = res.empresa
-                            variables['empresa'] = data_empresa 
-                            VerEntradasSalidas(variables,Cod_TipoComprobante,fecha_format)
-                        }else{
-                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
-                        }
+                       
+                        var data_empresa = res.empresa
+                        variables['empresa'] = data_empresa 
+                        VerEntradasSalidas(variables,Cod_TipoComprobante,fecha_format)
+                       
                         $('#main-contenido').waitMe('hide');
             
                     }).catch(function (e) {

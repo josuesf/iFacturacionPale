@@ -52,6 +52,23 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
                 </div>
                 <!-- /.box-header -->
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control" id="parametro_busqueda_sucursal" onkeypress=${()=>BuscarParmatroSucursal(event)}>
+                                            <label for="parametro_busqueda_sucursal">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button" id="btnBuscarSucursal" onclick=${()=>BuscarParmatroSucursal()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -164,7 +181,23 @@ function Eliminar(_escritura, sucursal){
     })
 }
 
-function ListarSucursales(escritura,NumeroPagina) {
+function BuscarParmatroSucursal(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_sucursal").val()
+            var scriptOrden= " ORDER BY Cod_Sucursal desc"
+            var scripWhere = "WHERE Cod_Sucursal like '%"+parametro+"%' or Nom_Sucursal like '%"+parametro+"%' or Dir_Sucursal like '%"+parametro+"%' or Cod_UsuarioAdm like '%"+parametro+"%'"
+            ListarSucursales(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_sucursal").val()
+        var scriptOrden= " ORDER BY Cod_Sucursal desc"
+        var scripWhere = "WHERE Cod_Sucursal like '%"+parametro+"%' or Nom_Sucursal like '%"+parametro+"%' or Dir_Sucursal like '%"+parametro+"%' or Cod_UsuarioAdm like '%"+parametro+"%'"
+        ListarSucursales(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarSucursales(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -176,8 +209,8 @@ function ListarSucursales(escritura,NumeroPagina) {
         body: JSON.stringify({
             TamanoPagina: '20',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Sucursal desc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Sucursal desc',
+            ScripWhere: ScripWhere||''
         })
     }
     fetch(URL+'/sucursales_api/get_sucursales', parametros)

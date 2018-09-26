@@ -120,6 +120,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                                 <div class="form-group">
                                                     <label for="Monto">Monto</label>
                                                     <input type="number" class="form-control required" id="Monto_${idTabT}" onkeypress=${()=>CalcularITF(idTabT)}>
+                                                    <div class="form-control-line"></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3 text-center" id="formBancoITF_${idTabT}" style="display:none">
@@ -137,6 +138,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
                                                 <div class="form-group">
                                                     <label for="Comentario">Comentario</label>
                                                     <textarea type="text" style="text-transform:uppercase" class="form-control" id="Comentario_${idTabT}" placeholder="Ingrese un comentario"></textarea>
+                                                    <div class="form-control-line"></div>
                                                 </div>
                                             </div>
                                         </div>

@@ -34,11 +34,8 @@ function VerNuevaVenta(variables,CodLibro) {
     var tabContent = yo`
         <div class="tab-pane" id="tab_${idTabVenta}">
             <div class="row">
-                <div class="col-md-8">
-                    <span class="badge style-primary" style="margin-bottom:  4px;"> Favoritos</span>
-                    <div class="scroll-horizontal">
-                        ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)} 
-                    </div>
+                <div class="col-md-8"> 
+                    ${CrearBotonesFavoritos(variables.favoritos,idTabVenta)}  
                 </div>
                 <div class="col-md-4">
                     <div class="btn-group-horizontal pull-right" style="padding-top:  20px;">
@@ -130,7 +127,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                     
                                          
                                         <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
-                                            <label> Tarjetas </label>
+                                            <label> Formas de Pago </label>
                                             ${variables.formaspago.map(e=>yo`
                                                 ${  e.Cod_FormaPago!="005"?
                                                     e.Cod_FormaPago!="006"?
@@ -713,9 +710,15 @@ function CrearBotonesCategoriasXSeleccion(categorias,CodPadre,idTab){
 
 
 function CrearBotonesFavoritos(favoritos,idTab){
-    return yo`<ul> 
-                ${favoritos.map(e=>yo`<li><a class="btn btn-block btn-default btn-sm" onclick=${()=>AgregarProducto(e,favoritos,idTab)}><i class="fa fa-star text-orange"></i>  ${e.Nom_Producto}</a></li>`)}       
-            </ul>` 
+    return yo`
+            <div>
+                <span class="badge style-primary" style="margin-bottom:  4px;"> Favoritos</span>
+                <div class="scroll-horizontal">
+                    <ul> 
+                        ${favoritos.map(e=>yo`<li><a class="btn btn-block btn-default btn-sm" onclick=${()=>AgregarProducto(e,favoritos,idTab)}><i class="fa fa-star text-orange"></i>  ${e.Nom_Producto}</a></li>`)}       
+                    </ul>
+                </div>
+            </div>` 
     /*return  yo`<div> 
                 ${favoritos.map(e=>yo`<a class="btn btn-app" onclick=${()=>AgregarProducto(e,favoritos,idTab)} style="height:80px"><i class="fa fa-star text-orange"></i> ${e.Nom_Producto}<p></p> ${parseFloat(e.Valor).toFixed(4)}</a>`)}
             </div>`*/
@@ -1692,11 +1695,12 @@ function EmisionRapida(idTab,pCod_Moneda,callback){
                 callback(false)
             }
             $('#main-contenido').waitMe('hide');
-        }).catch(function (e) {
+        }).catch(function (e) { 
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
-            callback(false)
+            return callback(false)
+            
         });
 
 

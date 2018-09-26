@@ -18,7 +18,7 @@ function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
     const idTabCVME = "CVME_"+cantidad_tabs
     global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabCVME}" data-toggle="tab" aria-expanded="false" id="id_${idTabCVME}">Compra ME <a style="padding-left: 10px;"  onclick=${()=>CerrarTabCVME(idTabCVME)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class="" ><a href="#tab_${idTabCVME}" data-toggle="tab" aria-expanded="false" id="id_${idTabCVME}">Compra / Venta ME <a style="padding-left: 10px;"  onclick=${()=>CerrarTabCVME(idTabCVME)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
     var el = yo`
         <div class="tab-pane" id="tab_${idTabCVME}">
@@ -55,6 +55,7 @@ function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <input type="text" class="form-control input-sm" placeholder="Nro Documento" id="Nro_DocumentoBuscar_${idTabCVME}" onblur=${()=>RecuperarDatosClientePorNroDoc(idTabCVME)} onkeypress=${()=>KeyPressClienteDoc(idTabCVME)} onkeydown=${()=>CambioNroDocumento(event,idTabCVME)}>
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +63,7 @@ function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <input type="text" class="form-control input-sm" id="txtNombreCliente_${idTabCVME}" placeholder="Nombre del cliente"> 
-                                              
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -171,14 +172,14 @@ function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c"  onclick="${() => CambioCompraVentaME(idTabCVME)}" checked><span> Compra ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c" checked><span> Compra ME</span>
                                                         </label>
                                                     </div> 
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v" onclick="${() => CambioCompraVentaME(idTabCVME)}"><span> Venta ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v" ><span> Venta ME</span>
                                                         </label>
                                                     </div>
                                                 </div> 
@@ -409,14 +410,14 @@ function RefrescarVer(_escritura, Serie, variables,fecha_actual,empresa,idTabCVM
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c"  onclick="${() => CambioCompraVentaME(idTabCVME)}" checked><span> Compra ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="c" checked><span> Compra ME</span>
                                                         </label>
                                                     </div> 
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="radio-inline radio-styled radio-primary">
                                                         <label>
-                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v" onclick="${() => CambioCompraVentaME(idTabCVME)}"><span> Venta ME</span>
+                                                            <input type="radio" id="optionCV_${idTabCVME}" name="optionCV_${idTabCVME}" value="v"><span> Venta ME</span>
                                                         </label>
                                                     </div>
                                                 </div> 
@@ -680,14 +681,7 @@ function CambioTipoDestino(idTab) {
         $('#formBanco_'+idTab).show()
     }
 }
-
-function CambioCompraVentaME(idTab) {
-    if ($('input[name=optionCV_'+idTab+']:checked').val() == 'c') {
-        $('#id_'+idTab).text("Compra ME") 
-    } else {
-        $('#id_'+idTab).text("Venta ME")
-    }
-}
+ 
  
 
 function GuardarCompraVentaME(variables,fecha_actual,idTab){

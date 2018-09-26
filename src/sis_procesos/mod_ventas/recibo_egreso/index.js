@@ -64,6 +64,7 @@ function CargarFormulario(variables, fecha_actual,empresa) {
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <input type="text" id="Nro_Documento_${idTabRE}" onblur="${() => BuscarClienteDoc(idTabRE)}"  onkeypress=${()=>KeyPressClienteDoc(idTabRE)} onkeydown=${()=>CambioNroDocumento(event,idTabRE)} class="form-control required input-sm" placeholder="Nro Documento">
+                                                <div class="form-control-line"></div>
                                             </div>
                                         </div>
                                         <div class="col-md-3">

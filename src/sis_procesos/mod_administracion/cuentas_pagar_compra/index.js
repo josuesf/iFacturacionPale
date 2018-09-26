@@ -43,10 +43,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 <header> Cliente/Proveedor </header>
                                 <div class="tools">
                                     <div class="btn-group">
-                                        <a class="btn btn-icon-toggle btn-info btn-refresh" onclick=${()=>NuevoCliente(variables.dataDocumentos)}><i class="fa fa-plus"></i></a>
                                         <a class="btn btn-icon-toggle btn-warning" onclick=${()=>EditarCliente(idTabPC)}><i class="fa fa-pencil"></i></a>
-                                        <a class="btn btn-icon-toggle btn-success btn-refresh" onclick=${()=>BuscarCliente("Cliente_"+idTabPC,"Nro_Documento_"+idTabPC,null)}><i class="fa fa-search"></i></a>
-                                        <a class="btn btn-icon-toggle btn-primary"><i class="fa fa-globe"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -504,6 +501,8 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             BuscarPorFecha(CodLibro,idTabPC)
         }
     }) 
+    
+    
 
     CambioTodoFechas(idTabPC)
     CambioTodoVencimiento(idTabPC)
@@ -614,8 +613,16 @@ function KeyPressClienteDoc(idTab){
         case 11:
             $("#Cod_TipoDoc_"+idTab).val("6")
             break;
-    }
-   
+    }  
+}
+
+
+function CerrarTabPC(idTab){ 
+    $('#tab_'+idTab).remove()
+    $('#id_'+idTab).parents('li').remove()
+    var tabFirst = $('#tabs a:first'); 
+    tabFirst.tab('show');
+    delete global.variablesPC[idTab]
 }
 
 function EsValido(idTab){
@@ -686,12 +693,12 @@ function CalcularTotal(idTab){
 
 function CambioNroDocumento(e,idTab){ 
     if(e.which == 46 || e.which == 8){ 
-        if(flag_cliente){
+        if(global.variablesPC[idTab].flag_cliente){
             $("#Nro_Documento_"+idTab).val("");
             $("#Cliente_"+idTab).val("");
             $("#Cliente_"+idTab).attr("data-id",null);
             $("#Direccion_"+idTab).val("");
-            flag_cliente=false
+            global.variablesPC[idTab].flag_cliente=false
         }
     }   
 }
@@ -1035,7 +1042,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
     if($("#Nro_Documento_"+idTab).val().trim().length>0){
         run_waitMe($('#div-cliente-cuentas_'+idTab), 1, "ios","Buscando cliente...");
         var Nro_Documento = $("#Nro_Documento_"+idTab).val()
-        var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc').value
+        var Cod_TipoDocumento = document.getElementById('Cod_TipoDoc_'+idTab).value
         var Cod_TipoCliente = CodLibro == "08" ? "001" : "002"
         const parametros = {
             method: 'POST',
@@ -1054,7 +1061,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
                     global.objCliente = res.data.cliente[0]
                     
                     if(global.objCliente !='' && global.objCliente){
-                        $("#Cod_TipoDoc").val(global.objCliente.Cod_TipoDocumento)
+                        $("#Cod_TipoDoc_"+idTab).val(global.objCliente.Cod_TipoDocumento)
                         $("#Cliente_"+idTab).val(global.objCliente.Cliente)
                         $("#Direccion_"+idTab).val(global.objCliente.Direccion)
                         $("#Nro_Documento_"+idTab).val(global.objCliente.Nro_Documento)
@@ -1077,7 +1084,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
                         $("#Nro_Documento_"+idTab).attr("disabled",true);
                         $("#Cliente_"+idTab).attr("disabled",true);
                         $("#Direccion_"+idTab).attr("disabled",true);
-                        $("#Cod_TipoDoc").attr("disabled",true);
+                        $("#Cod_TipoDoc_"+idTab).attr("disabled",true);
 
                         /*$("#Cliente").tagsinput('add',global.objCliente.Cliente)
                         $("#Nro_Documento").tagsinput('add',global.objCliente.Nro_Documento)
@@ -1099,7 +1106,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
                     $("#Nro_Documento_"+idTab).attr("disabled",false);
                     $("#Cliente_"+idTab).attr("disabled",false);
                     $("#Direccion_"+idTab).attr("disabled",false);
-                    $("#Cod_TipoDoc").attr("disabled",false);
+                    $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
 
                 }
                 $('#div-cliente-cuentas_'+idTab).waitMe('hide');
@@ -1117,7 +1124,7 @@ function BuscarClienteDoc(CodLibro,idTab) {
                 $("#Nro_Documento_"+idTab).attr("disabled",false);
                 $("#Cliente_"+idTab).attr("disabled",false);
                 $("#Direccion_"+idTab).attr("disabled",false);
-                $("#Cod_TipoDoc").attr("disabled",false);
+                $("#Cod_TipoDoc_"+idTab).attr("disabled",false);
 
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 $('#div-cliente-cuentas_'+idTab).waitMe('hide');

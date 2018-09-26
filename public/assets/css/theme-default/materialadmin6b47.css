@@ -2201,7 +2201,7 @@ body:not(.menubar-first) .menubar-fixed-panel {
 }
 section {
   position: relative;
-  padding: 10px;
+  padding: 4px;
 }
 section:first-child {
   padding-top: 0;
@@ -2429,7 +2429,7 @@ section.section-account .img-circle {
 }
 @media (max-width: 768px) {
   section {
-    padding: 12px;
+    padding: 4px;
   }
   .full-content section.has-actions {
     padding-bottom: 64px;
@@ -4969,8 +4969,8 @@ li.dropdown-progress .progress {
   background-color: #ffffff;
   color: #313534;
   border-radius: 2px;
-  -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow:0 1px 3px 0 rgb(126, 128, 130);
+  box-shadow: 0 1px 3px 0 rgb(126, 128, 130);
 }
 .card:before,
 .card:after {
