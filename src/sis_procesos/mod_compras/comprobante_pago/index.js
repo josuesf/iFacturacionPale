@@ -3948,7 +3948,7 @@ function CambioFormasPago(CodLibro){
                     $("#divCuentaCajaBancos").css("display","none")
                     break
                 case "998":
-                    $("#lbCuentaCajaBanco").text("Selecione Pago Adelantado: ")
+                    $("#lbCuentaCajaBanco").text("Seleccione Pago Adelantado: ")
                     TraerSaldoPagoAdelantado()
                     break
                 default:

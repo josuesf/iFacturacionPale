@@ -124,8 +124,29 @@ function VerNuevaVenta(variables,CodLibro) {
                                                 
                                 </div>
                                 <div class="col-sm-6">
-                                    
-                                         
+                                     
+                                        <div class="col-md-12"> 
+                                            <select class="form-control input-sm" onchange="${()=>CambioFormasPago(CodLibro,idTabVenta)}" id="Cod_FormaPago_${idTabVenta}"> 
+                                                ${variables.formaspago.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_FormaPago}">${e.Nom_FormaPago}</option>`)} 
+                                            </select>
+                                        </div> 
+
+                                        <div class="col-md-12" id="divCuentaCajaBancos_${idTabVenta}">
+                                            <div class="form-group">
+                                                <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos_${idTabVenta}"> 
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12" id="divOperacion_${idTabVenta}">
+                                            <div class="form-group">
+                                                <label id="lbCuentaCajaBanco_${idTabVenta}">#Operacion</label>
+                                                <select class="form-control input-sm" id="Cod_CuentaBancaria_${idTabVenta}" onchange=${()=>CambioCodCuentaBancaria(CodLibro,idTabVenta)}> 
+                                                </select> 
+                                            </div> 
+                                        </div>
+ 
+                                     
                                         <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
                                             <label> Formas de Pago </label>
                                             ${variables.formaspago.map(e=>yo`
@@ -152,8 +173,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                             `)}
                                                 
                                         </div>
-
-                                        ${MostrarCampos(0,variables.formaspago,2,idTabVenta)}
+ 
                                              
                                 </div>
                             </div>
@@ -248,9 +268,9 @@ function VerNuevaVenta(variables,CodLibro) {
     //CambioMonedaFormaPagoDolares(idTabVenta)
     //CambioMonedaFormaPagoEuros(idTabVenta)
     CambioMonedaVentas(idTabVenta)
-    CambioMonedaFormaPagoMasterCard(idTabVenta)
-    CambioMonedaFormaPagoVisa(idTabVenta)
-    
+    //CambioMonedaFormaPagoMasterCard(idTabVenta)
+    //CambioMonedaFormaPagoVisa(idTabVenta)
+    CambioFormasPago(CodLibro,idTabVenta)
 
     /*$("#Nro_Documento_"+idTabVenta).tagsinput({
         maxTags: 1
@@ -640,6 +660,171 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
         }
  
     }
+}
+
+function CambioFormasPago(CodLibro,idTab){
+    if(!arrayValidacion.includes($("#Cod_FormaPago_"+idTab).val())){
+        var flagDisplay="none"
+        if($("#Cod_FormaPago_"+idTab).val()!="008" && $("#Cod_FormaPago_"+idTab).val()!="007")
+            flagDisplay = "block"
+        
+        $("#divOperacion_"+idTab).css("display",flagDisplay)
+        $("#Cod_CuentaBancaria_"+idTab).css("display",flagDisplay)
+        $("#divCuentaCajaBancos_"+idTab).css("display",flagDisplay)
+
+        if($("#divOperacion_"+idTab).css("display")=="block"){
+            switch ($("#Cod_FormaPago_"+idTab).val()) {
+                case "011":
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","block")
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Operacion")
+                    TraerCuentaBancariaPorSucursal(CodLibro,idTab) 
+                    break
+                case "001":
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Letra: ")
+                    break
+                case "005":
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Tarjeta VISA: ")
+                    break
+                case "006":
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Tarjeta MASTER CARD: ")
+                    break
+                case "004":
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Orden de Pago: ")
+                    break
+                case "003":
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","block")
+                    $("#lbCuentaCajaBanco_"+idTab).text("Seleccione Transferencia: ")
+                    TraerCuentaBancariaPorSucursal(CodLibro)
+                    break
+                case "008":
+                    $("#divOperacion_"+idTab).css("display","none")
+                    $("#Cod_CuentaBancaria_"+idTab).css("display","none")
+                    $("#divCuentaCajaBancos_"+idTab).css("display","none")
+                    break
+                case "998":
+                    $("#lbCuentaCajaBanco_"+idTab).text("Seleccione Pago Adelantado: ")
+                    TraerSaldoPagoAdelantado(idTab)
+                    break
+                default:
+                    $("#lbCuentaCajaBanco_"+idTab).text("# de Operación: ")
+                    break
+            }
+        }
+    }
+}
+
+function LlenarCuentaBancaria(cuentas,CodLibro,idTab){
+    var html = ''
+    for(var i=0; i<cuentas.length; i++){
+        html = html+'<option value="'+cuentas[i].Cod_CuentaBancaria+'">'+cuentas[i].Des_CuentaBancaria+'</option>'
+    }
+     
+    $("#Cod_CuentaBancaria_"+idTab).html('')
+    $("#Cod_CuentaBancaria_"+idTab).html(html) 
+    CambioCodCuentaBancaria(CodLibro,idTab)
+}
+
+function LlenarCheques(cheques,idTab){
+    var html = ''
+    for(var i=0; i<cheques.length; i++){
+        html = html+'<option value="'+cheques[i].Id_MovimientoCuenta+'">'+cheques[i].Des_Movimiento+'</option>'
+    }
+     
+    $("#Cuenta_CajaBancos_"+idTab).html('')
+    $("#Cuenta_CajaBancos_"+idTab).html(html) 
+}
+
+function LlenarPagosAdelantados(cuentas,idTab){
+    var html = ''
+    for(var i=0; i<cuentas.length; i++){
+        html = html+'<option value="'+cuentas[i].id_Movimiento+'">'+cuentas[i].Des_Movimiento+'</option>'
+    }
+     
+    $("#Cuenta_CajaBancos_"+idTab).html('')
+    $("#Cuenta_CajaBancos_"+idTab).html(html) 
+}
+
+function TraerSaldoPagoAdelantado(idTab){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Id_ClienteProveedor: parseInt($("#Cliente_"+idTab).attr("data-id"))//global.objCliente.Id_ClienteProveedor
+        })
+    }
+    fetch(URL + '/comprobantes_pago_api/get_pago_adelantado', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var pagos_adelantados = res.data.pagos_adelantados
+                if (pagos_adelantados.length>0){
+                    LlenarPagosAdelantados(pagos_adelantados,idTab)
+                }else{
+                    $("#lbCuentaCajaBanco_"+idTab).text("No tienen Ningun Adelanto para Selecionar.")
+                    $("#Cuenta_CajaBancos_"+idTab).html('')
+                    $("#divCuentaCajaBancos_"+idTab).css("display","none")
+                } 
+            } 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
+}
+
+function CambioCodCuentaBancaria(CodLibro,idTab){
+    var Cod_CuentaBancaria = $("#Cod_CuentaBancaria_"+idTab).val()
+    var Beneficiario = $("#Cliente_"+idTab).val()
+    var Cod_Libro = CodLibro
+
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_CuentaBancaria,
+            Beneficiario,
+            Cod_Libro
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/get_cheques_by_cuenta_cliente', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var cheques = res.data.cheques 
+                LlenarCheques(cheques,idTab)
+            } 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
+}
+
+function TraerCuentaBancariaPorSucursal(CodLibro,idTab){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        })
+    }
+    fetch(URL + '/cuentas_bancarias_api/get_cuenta_by_sucursal', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if (res.respuesta == 'ok') {
+                var cuentas = res.data.cuentas
+                LlenarCuentaBancaria(cuentas,CodLibro,idTab)
+            } 
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
 }
 
 function CrearBotonesProductos(c,idTab,callback){
