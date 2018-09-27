@@ -1652,8 +1652,10 @@ function BuscarClienteDoc(CodLibro,idTab) {
     }
 }
 
-function EmisionRapida(idTab,pCod_Moneda,callback){ 
+function EmisionRapida(idTab,pCod_Moneda,pCodTipoComprobante,callback){ 
     run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
+    $('#main-contenido').waitMe('hide');
+    //callback(false)
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate() 
@@ -1699,11 +1701,9 @@ function EmisionRapida(idTab,pCod_Moneda,callback){
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $('#main-contenido').waitMe('hide');
-            return callback(false)
+            callback(false)
             
         });
-
-
 }
 
 function ObtenerFormaPago(idTab){

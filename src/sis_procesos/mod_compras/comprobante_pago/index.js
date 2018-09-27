@@ -6,7 +6,7 @@ import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
 import { ConvertirCadena,BloquearControles, LimpiarEventoModales } from '../../../../utility/tools' 
-import { refrescar_movimientos,preparar_impresion_comprobante } from '../../movimientos_caja'
+import { refrescar_movimientos } from '../../movimientos_caja'
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','',undefined]
