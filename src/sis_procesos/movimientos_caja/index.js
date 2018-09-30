@@ -1,4 +1,4 @@
-var yo = require('yo-yo')
+﻿var yo = require('yo-yo')
 var empty = require('empty-element');
 import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
 import { CargarPDFModal } from '../modales/pdf'
@@ -54,32 +54,26 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                             <table id="tablaMovimientos" class="table table-hover">
                                                 <thead>
                                                     <tr> 
-                                                        <th>Fecha/Hora</th>
-                                                        <th>D</th>
+                                                        <th>Fecha Emision</th> 
                                                         <th>Documento</th>
                                                         <th>Cliente/Proveedor</th>
-                                                        <th>Descripcion</th>
-                                                        <th>Plan</th>
-                                                        <th>Cantidad</th>
-                                                        <th>PU</th>
                                                         <th>Ingreso</th>
                                                         <th>Egreso</th>
+                                                        <th>Usuario</th>
+                                                        <th>Estado</th>
                                                         <th>Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                 ${movimientos.map(u => yo`
                                                 <tr>
-                                                    <td>${(new Date(u.Fecha_Reg)).toLocaleDateString()+" "+(new Date(u.Fecha_Reg)).toLocaleTimeString()}</td>
-                                                    <td>${u.ID}</td>
+                                                    <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
                                                     <td>${u.Documento}</td>
                                                     <td>${u.Cliente}</td>
-                                                    <td>${u.Movimiento}</td>
-                                                    <td>${u.Cod_Manguera}</td>
-                                                    <td>${u.Cantidad}</td>
-                                                    <td>${u.PrecioUnitario}</td>
-                                                    <td>${u.Ingreso}</td>
-                                                    <td>${u.Egreso}</td>
+                                                    <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
+                                                    <td><span class="badge style-danger">${u.SimboloEgr} ${u.Egreso}</span></td>
+                                                    <td>${u.Cod_UsuarioReg}</td>
+                                                    <td><span class="badge style-primary">${u.Estado}</span></td>
                                                     <td>
                                                     ${!Flag_Cerrado?
                                                     yo`<div class="btn-group">
@@ -260,34 +254,27 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                         <table id="tablaMovimientos" class="table table-hover">
                             <thead>
                                 <tr> 
-                                    <th>Fecha/Hora</th>
-                                    <th>D</th>
+                                    <th>Fecha Emision</th> 
                                     <th>Documento</th>
                                     <th>Cliente/Proveedor</th>
-                                    <th>Descripcion</th>
-                                    <th>Plan</th>
-                                    <th>Cantidad</th>
-                                    <th>PU</th>
                                     <th>Ingreso</th>
                                     <th>Egreso</th>
+                                    <th>Usuario</th>
+                                    <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody class="context-menu-one">
+                            <tbody>
                             ${movimientos.map(u => yo`
-                            <tr> 
-                                <td>${(new Date(u.Fecha_Reg)).toLocaleDateString()+" "+(new Date(u.Fecha_Reg)).toLocaleTimeString()}</td>
-                                <td>${u.ID}</td>
+                            <tr>
+                                <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
                                 <td>${u.Documento}</td>
                                 <td>${u.Cliente}</td>
-                                <td>${u.Movimiento}</td>
-                                <td>${u.Cod_Manguera}</td>
-                                <td>${u.Cantidad}</td>
-                                <td>${u.PrecioUnitario}</td>
-                                <td>${u.Ingreso}</td>
-                                <td>${u.Egreso}</td>
+                                <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
+                                <td><span class="badge style-danger">${u.SimboloEgr} ${u.Egreso}</span></td>
+                                <td>${u.Cod_UsuarioReg}</td>
+                                <td><span class="badge style-primary">${u.Estado}</span></td>
                                 <td>
-
                                 ${!Flag_Cerrado?
                                 yo`<div class="btn-group">
                                         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -303,10 +290,12 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                                 :
                                 yo`
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Elegir una accion <span class="caret"></span>
-                                    <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li>
                                     </button>
+                                    <ul class="dropdown-menu"> 
+                                        <li><a href="javascript:void(0)" onclick=${()=>VerFormatoDocumento(u)} ><i class="fa fa-print"></i> Reimprimir</a></li>
+                                    </ul>
                                 </div>
                                 `}
                                 </td>

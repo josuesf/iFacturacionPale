@@ -124,10 +124,11 @@ function VerNuevaVenta(variables,CodLibro) {
                                                 
                                 </div>
                                 <div class="col-sm-6">
-                                     
+                                    <div class="form-group">
+                                        <label>Formas de pago</label>        
                                         <div class="col-md-12"> 
                                             <select class="form-control input-sm" onchange="${()=>CambioFormasPago(CodLibro,idTabVenta)}" id="Cod_FormaPago_${idTabVenta}"> 
-                                                ${variables.formaspago.map(e=>yo`<option style="text-transform:uppercase" value="${e.Cod_FormaPago}">${e.Nom_FormaPago}</option>`)} 
+                                                ${variables.formaspago.map(e=>e.Cod_FormaPago!='007'?yo`<option style="text-transform:uppercase" value="${e.Cod_FormaPago}">${e.Nom_FormaPago}</option>`:yo``)} 
                                             </select>
                                         </div> 
 
@@ -145,35 +146,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                                 </select> 
                                             </div> 
                                         </div>
- 
-                                     
-                                        <div class="cc-selector-2 text-center row" id="divTarjetas_${idTabVenta}"> 
-                                            <label> Formas de Pago </label>
-                                            ${variables.formaspago.map(e=>yo`
-                                                ${  e.Cod_FormaPago!="005"?
-                                                    e.Cod_FormaPago!="006"?
-                                                    yo``
-                                                    :
-                                                    yo`
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <input  checked="checked" id="Cod_FormaPago_MasterCard_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="mastercard"  onchange=${()=>CambioMonedaFormaPagoMasterCard(idTabVenta)}/>
-                                                            <label class="drinkcard-cc mastercard" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
-                                                        </div>
-                                                    </div>`
-                                                    :
-                                                    yo`
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <input  checked="checked" id="Cod_FormaPago_Visa_${idTabVenta}" type="radio" name="Cod_FormaPago_Modal_${idTabVenta}" value="visa" onchange=${()=>CambioMonedaFormaPagoVisa(idTabVenta)}/>
-                                                            <label class="drinkcard-cc visa" for="Cod_FormaPago_Modal_${idTabVenta}"></label>
-                                                        </div>
-                                                    </div>`
-                                                }
-                                            `)}
-                                                
-                                        </div>
- 
+                                    </div>
                                              
                                 </div>
                             </div>
@@ -243,7 +216,7 @@ function VerNuevaVenta(variables,CodLibro) {
                                 <div class="col-md-12 text-right">
                                     <div class="btn-group">
                                         <button class="btn btn-default btn-lg btn-raised btn-danger" id="btnDescuentos_${idTabVenta}" style="display:none"><i class="fa fa-arrow-circle-down"></i>TOTAL DESCUENTOS: 0.00</button>
-                                        <button class="btn btn-default btn-lg btn-raised btn-primary" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" onclick=${()=>VerVuelto(variables,idTabVenta)}><i class="fa fa-money text-green"></i></button>
+                                        <button class="btn btn-default btn-lg btn-raised btn-primary" id="btnTotal_${idTabVenta}" data-toggle="button" aria-pressed="false" autocomplete="off" ><i class="fa fa-money text-green"></i></button>
                                         <button class="btn btn-default btn-lg btn-raised btn-success" id="btnConversion_${idTabVenta}" style="display:none"><i class="fa fa-refresh text-green"></i></button> 
                                     </div>
                                 </div>
@@ -263,14 +236,17 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
 
+    $("#Cuenta_CajaBancos_"+idTabVenta).combobox()
+
     TraerSimboloSOLES(variables.monedas,'PEN',idTabVenta)
     //CambioMonedaFormaPagoSoles(idTabVenta)
     //CambioMonedaFormaPagoDolares(idTabVenta)
     //CambioMonedaFormaPagoEuros(idTabVenta)
     CambioMonedaVentas(idTabVenta)
+    CambioFormasPago(CodLibro,idTabVenta)
     //CambioMonedaFormaPagoMasterCard(idTabVenta)
     //CambioMonedaFormaPagoVisa(idTabVenta)
-    CambioFormasPago(CodLibro,idTabVenta)
+    
 
     /*$("#Nro_Documento_"+idTabVenta).tagsinput({
         maxTags: 1
@@ -662,6 +638,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
     }
 }
 
+
 function CambioFormasPago(CodLibro,idTab){
     if(!arrayValidacion.includes($("#Cod_FormaPago_"+idTab).val())){
         var flagDisplay="none"
@@ -712,6 +689,7 @@ function CambioFormasPago(CodLibro,idTab){
         }
     }
 }
+
 
 function LlenarCuentaBancaria(cuentas,CodLibro,idTab){
     var html = ''
@@ -1837,10 +1815,8 @@ function BuscarClienteDoc(CodLibro,idTab) {
     }
 }
 
-function EmisionRapida(idTab,pCod_Moneda,pCodTipoComprobante,callback){ 
+function EmisionRapida(idTab,pCod_Moneda,callback){ 
     run_waitMe($('#main-contenido'), 1, "ios","Realizando la venta...");
-    $('#main-contenido').waitMe('hide');
-    //callback(false)
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate() 
@@ -1889,10 +1865,26 @@ function EmisionRapida(idTab,pCod_Moneda,pCodTipoComprobante,callback){
             callback(false)
             
         });
+
+
 }
 
 function ObtenerFormaPago(idTab){
-    if($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard' || $('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'visa'){
+     
+    let listaFormaPago = []
+    listaFormaPago.push({
+        id_ComprobantePago :0,
+        Item : 1,
+        Des_FormaPago : $("#Cod_FormaPago_"+idTab+" option:selected").text(),
+        Cod_FormaPago : $("#Cod_FormaPago_"+idTab).val(),
+        Cod_Moneda : $("#Cod_Moneda_Forma_Pago_"+idTab).val(),
+        TipoCambio : $("#Tipo_Cambio_Venta_"+idTab).val(),
+        Monto:parseFloat(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0].Total)/1,
+        CuentaCajaBanco :$("#Cuenta_CajaBancos_"+idTab).val()
+    })
+    return listaFormaPago 
+}
+    /*if($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard' || $('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'visa'){
         if ($('input[name=Cod_FormaPago_Modal_'+idTab+']:checked').val() == 'mastercard'){
             let listaFormaPago = []
             listaFormaPago.push({
@@ -1935,7 +1927,7 @@ function ObtenerFormaPago(idTab){
         })
         return listaFormaPago
     }
-}
+}*/
 
 function ComprarMonedaExtranjera(idTab,_MontoComprar, _TipoCambio, _CodMoneda){
     var _NombreMoneda = ''
@@ -2117,7 +2109,7 @@ function VentaSimpleSinME(idTab,_CodTipoComprobante){
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),_CodTipoComprobante,function(flag){
+    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),function(flag){
         if(flag){
             LimpiarVenta(idTab)
         }
@@ -2129,7 +2121,7 @@ function VentaSimpleConME(idTab,_CodTipoComprobante){
     if (getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=null && getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente!=''){
         _CodTipoComprobante = getObjectArrayJsonVentas(global.variablesVentas,IdTabSeleccionado)[0].Cliente.Cod_TipoComprobante
     }
-    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),_CodTipoComprobante,function(flag){
+    EmisionRapida(idTab,$("#Cod_Moneda_Forma_Pago_"+idTab).val(),function(flag){
         if(flag){
              
             ComprarMonedaExtranjera(idTab,parseFloat($("#TotalRecibidos_"+idTab).val()) - parseFloat($("#Vuelto_"+idTab).val()), parseFloat($("#Tipo_Cambio_Venta_"+idTab).val()), $("#Cod_Moneda_Forma_Pago_"+idTab).val()=='USD'?'USD':'EUR')

@@ -1,7 +1,7 @@
 const fs = require('fs');  
 const ENV_WEB = true;
-var URL=ENV_WEB?'':'http://localhost:3000';
-var URL_REPORT = 'http://127.0.0.1:3000';
+var URL=ENV_WEB?'':'http://ifacturacion.hopto.org:3000'
+var URL_REPORT = 'http://ifacturacion.hopto.org:3000';
 
 var GETCONFIG = function GET(ruc){
     try{

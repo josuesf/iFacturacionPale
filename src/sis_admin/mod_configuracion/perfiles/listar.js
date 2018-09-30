@@ -48,6 +48,25 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
                     </div>
                 </div> 
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_perfil" onkeypress=${()=>BuscarParametroPerfil(event)}>
+                                            <label for="parametro_busqueda_perfil">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametroPerfil()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -154,7 +173,24 @@ function Eliminar(_escritura, sucursal){
     })
 }
 
-function ListarPerfiles(escritura,NumeroPagina) {
+
+function BuscarParametroPerfil(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_perfil").val()
+            var scriptOrden= " ORDER BY Cod_Perfil asc"
+            var scripWhere = "WHERE Cod_Perfil like '%"+parametro+"%' or Des_Perfil like '%"+parametro+"%'"
+            ListarPerfiles(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_perfil").val()
+        var scriptOrden= " ORDER BY Cod_Perfil asc"
+        var scripWhere = "WHERE Cod_Perfil like '%"+parametro+"%' or Des_Perfil like '%"+parametro+"%'"
+        ListarPerfiles(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarPerfiles(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -164,10 +200,10 @@ function ListarPerfiles(escritura,NumeroPagina) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Perfil desc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Perfil asc',
+            ScripWhere: ScripWhere||'' 
         })
     }
     fetch(URL+'/perfiles_api/get_perfiles', parametros)

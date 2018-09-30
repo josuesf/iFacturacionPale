@@ -63,7 +63,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Almacen</label>
-                                            <select id="Cod_Almacen_${idTabES}" class="form-control input-sm required">
+                                            <select id="Cod_Almacen_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)}>
                                                 ${variables.dataAlmacen.map(e => yo`<option value="${e.Cod_Almacen}">${e.Des_Almacen}</option>`)}
                                             </select>
                                         </div>
@@ -73,7 +73,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Operacion</label>
-                                            <select id="Cod_Operacion_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES)}>
+                                            <select id="Cod_Operacion_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)}>
                                                 ${variables.dataTiposOperaciones.map(e => yo`<option value="${e.Cod_TipoOperacion}">${e.Nom_TipoOperacion}</option>`)}
                                             </select>
                                         </div>
@@ -259,7 +259,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
         }
     })
 
-    CambioOperacion(CodTipoComprobante,idTabES)
+    CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)
     CambioDestino(CodTipoComprobante,fecha_actual,idTabES)
     console.log(global.variablesES)
 }
@@ -305,7 +305,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Almacen</label>
-                                            <select id="Cod_Almacen_${idTabES}" class="form-control input-sm required">
+                                            <select id="Cod_Almacen_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)}>
                                                 ${variables.dataAlmacen.map(e => yo`<option value="${e.Cod_Almacen}">${e.Des_Almacen}</option>`)}
                                             </select>
                                         </div>
@@ -315,7 +315,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Operacion</label>
-                                            <select id="Cod_Operacion_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES)}>
+                                            <select id="Cod_Operacion_${idTabES}" class="form-control input-sm required" onchange=${()=>CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)}>
                                                 ${variables.dataTiposOperaciones.map(e => yo`<option value="${e.Cod_TipoOperacion}">${e.Nom_TipoOperacion}</option>`)}
                                             </select>
                                         </div>
@@ -496,7 +496,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
         }
     })
 
-    CambioOperacion(CodTipoComprobante,idTabES)
+    CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)
     CambioDestino(CodTipoComprobante,fecha_actual,idTabES)
 }
 
@@ -590,7 +590,7 @@ function LlenarDetallesMovAlmacen(CodTipoComprobante,productos,fecha_actual,idTa
                         <td class="Id_Producto hidden"><input class="form-control" type="text" value="${u.Id_Producto}" name="Id_Producto"></td>
                         <td class="Item hidden"><input class="form-control" type="text" value="${u.Item}" name="Item"></td>
                         <td class="Cod_Producto"><input data-id="${u.Id_Producto}" class="form-control" type="text" value="${u.Cod_Producto}" name="Cod_Producto"></td>
-                        <td class="Nom_Producto"><input class="form-control" type="text" value="${u.Des_Producto}"  onblur=${()=>BuscarProductoES(CodTipoComprobante,u.Id_Producto,idTab)}></td>
+                        <td class="Nom_Producto"><input class="form-control" type="text" value="${u.Des_Producto}" name="Nom_Producto" onblur=${()=>BuscarProductoES(CodTipoComprobante,u.Id_Producto,idTab)}></td>
                         <td class="Cantidad"><input class="form-control" type="number" value="${u.Cantidad}" name="Cantidad"></td>
                         <td class="Cod_UnidadMedida hidden"><input class="form-control" value="${u.Cod_UnidadMedida}" name="Cod_UnidadMedida"></td>
                         <td class="Precio_Venta"><input class="form-control" type="number" value="${u.Precio_Unitario}" name="Precio_Venta"></td> 
@@ -641,7 +641,8 @@ function LlenarPendientesRecepcionar(pendientes,idTab){
 
 function CambioDestino(CodTipoComprobante,fecha_actual,idTab){
     if($("#Cod_Operacion_"+idTab).val()=="21"){
-        if($("#Cod_Destino_"+idTab).val()!=null){
+        if(!arrayValidacion.includes($("#Cod_Destino_"+idTab).val())){
+            console.log("cod_destino es diferente en validacion")
             CargarDatosAControles(CodTipoComprobante,fecha_actual,idTab)
             $("#btnAceptar_"+idTab).text("Recepcionar")
             $("#divRechazar_"+idTab).css("display","inline-block")
@@ -666,7 +667,7 @@ function CerrarTabES(idTab){
     delete global.variablesES[idTab]
 }
 
-function CambioOperacion(CodTipoComprobante,idTab){
+function CambioOperacion(CodTipoComprobante,idTab,fecha_actual){
     if(!arrayValidacion.includes($("#Cod_Almacen_"+idTab).val())){
         $("#divDestino_"+idTab).hide()
         //$("#divRechazar").css("display","inline-block")
@@ -689,7 +690,8 @@ function CambioOperacion(CodTipoComprobante,idTab){
                 .then(req => req.json())
                 .then(res => {               
                     LlenarAlmacenesDestinos(res.data.almacenes,idTab)
-        
+                    $("#divDocRef_"+idTab).hide()
+                    CambioDestino(CodTipoComprobante,fecha_actual,idTab)
                 }).catch(function (e) {
                     console.log(e);
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
@@ -713,7 +715,7 @@ function CambioOperacion(CodTipoComprobante,idTab){
                     .then(req => req.json())
                     .then(res => { 
                         LlenarPendientesRecepcionar(res.data.pendientes,idTab)
-            
+                        CambioDestino(CodTipoComprobante,fecha_actual,idTab)
                     }).catch(function (e) {
                         console.log(e);
                         toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
@@ -906,19 +908,27 @@ function ConfirmarRechazoEnvio(){
 }
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
-    if($("#divDestino_"+idTab).css("display")=="block" && $("#Cod_Destino_"+idTab).val()!=null && $("#Cod_Destino_"+idTab).val().trim()=="21"){
+    if($("#divDestino_"+idTab).css("display")=="block" && !arrayValidacion.includes($("#Cod_Destino_"+idTab).val()) && $("#Cod_Operacion_"+idTab).val().trim()=="21"){
+        console.log("pruebaaaa")
         run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
-
-        $("#Cod_Operacion_"+idTab).val(movimientos_almacen.Cod_TipoOperacion)
-        $("#Serie_"+idTab).val(movimientos_almacen.Serie)
-        $("#Numero_"+idTab).val(movimientos_almacen.Numero)
-        $("#Fecha_"+idTab).val(movimientos_almacen.Fecha)
-        $("#Motivo_"+idTab).val(movimientos_almacen.Motivo)
-        $("#Id_ComprobantePago_"+idTab).attr("data-id",movimientos_almacen.Id_ComprobantePago)
-
-
-        var Motivo = $("#Motivo_"+idTab).val()
+        
+        var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()
+        var Cod_TipoOperacion = $("#Cod_Operacion_"+idTab).val()
+        var Cod_TipoComprobante = CodTipoComprobante//$("#Id_ComprobantePago").attr("data-id")
         var Fecha = fecha_actual
+        var Serie = $("#Serie_"+idTab).val()
+        var Numero = $("#Numero_"+idTab).val()
+        var Motivo = $("#Motivo_"+idTab).val()
+        var Id_ComprobantePago = $("#Id_ComprobantePago_"+idTab).attr("data-id")
+        var Flag_Anulado = 0
+        if($("#divAnulado_"+idTab).css("display")=="display"){
+            Flag_Anulado = 1
+        }
+        var Obs_AlmacenMov = null
+        var dataForm = $("#formTablaMovAlmacen_"+idTab).serializeArray()
+
+        // destino
+        var Cod_Destino = $("#Cod_Destino_"+idTab).val()
 
 
     }else{
@@ -1078,13 +1088,11 @@ function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) {
                     .then(req => req.json())
                     .then(res => { 
                         //console.log(variables)
-                        if(res.respuesta=='ok'){
-                            var data_empresa = res.empresa
-                            variables['empresa'] = data_empresa 
-                            RefrescarVerEntradasSalidas(variables,Cod_TipoComprobante,fecha_format,idTab)
-                        }else{
-                            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
-                        }
+                       
+                        var data_empresa = res.empresa
+                        variables['empresa'] = data_empresa 
+                        RefrescarVerEntradasSalidas(variables,Cod_TipoComprobante,fecha_format,idTab)
+                       
                         $('#main-contenido').waitMe('hide');
             
                     }).catch(function (e) {

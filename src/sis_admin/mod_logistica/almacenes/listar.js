@@ -48,6 +48,25 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
                     </div>
                 </div> 
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_almacen" onkeypress=${()=>BuscarParametroAlmacen(event)}>
+                                            <label for="parametro_busqueda_almacen">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametroAlmacen()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -156,7 +175,23 @@ function Eliminar(_escritura, almacen){
     })
 }
 
-function ListarAlmacenes(escritura,NumeroPagina) {
+function BuscarParametroAlmacen(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_almacen").val()
+            var scriptOrden= " ORDER BY Cod_Almacen asc"
+            var scripWhere = "WHERE Cod_Almacen like '%"+parametro+"%' or Des_Almacen like '%"+parametro+"%' or Des_CortaAlmacen like '%"+parametro+"%'"
+            ListarAlmacenes(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_almacen").val()
+        var scriptOrden= " ORDER BY Cod_Almacen asc"
+        var scripWhere = "WHERE Cod_Almacen like '%"+parametro+"%' or Des_Almacen like '%"+parametro+"%' or Des_CortaAlmacen like '%"+parametro+"%'"
+        ListarAlmacenes(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -166,10 +201,10 @@ function ListarAlmacenes(escritura,NumeroPagina) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Almacen asc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Almacen asc',
+            ScripWhere: ScripWhere||'' 
         })
     }
     fetch(URL+'/almacenes_api/get_almacenes', parametros)

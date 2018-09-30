@@ -46,6 +46,25 @@ function Ver(variables, paginas, pagina_actual, _escritura){
                     </div>
                 </div>
                 <div class="card-body">
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_cuenta_bancaria" onkeypress=${()=>BuscarParametroCuentasBancarias(event)}>
+                                            <label for="parametro_busqueda_cuenta_bancaria">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametroCuentasBancarias()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -150,7 +169,23 @@ function Eliminar(_escritura, cuenta){
     })
 }
 
-function ListarCuentasBancarias(escritura,NumeroPagina) {
+function BuscarParametroCuentasBancarias(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_cuenta_bancaria").val()
+            var scriptOrden= " ORDER BY Cod_CuentaBancaria asc"
+            var scripWhere = "WHERE Cod_CuentaBancaria like '%"+parametro+"%' or Des_CuentaBancaria like '%"+parametro+"%' or Cod_CuentaContable like '%"+parametro+"%'"
+            ListarCuentasBancarias(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_cuenta_bancaria").val()
+        var scriptOrden= " ORDER BY Cod_CuentaBancaria asc"
+        var scripWhere = "WHERE Cod_CuentaBancaria like '%"+parametro+"%' or Des_CuentaBancaria like '%"+parametro+"%' or Cod_CuentaContable like '%"+parametro+"%'"
+        ListarCuentasBancarias(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarCuentasBancarias(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -160,10 +195,10 @@ function ListarCuentasBancarias(escritura,NumeroPagina) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_CuentaBancaria asc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_CuentaBancaria asc',
+            ScripWhere: ScripWhere||''  
         })
     }
     fetch(URL+'/cuentas_bancarias_api/get_cuentas', parametros)

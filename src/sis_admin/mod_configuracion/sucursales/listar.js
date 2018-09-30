@@ -58,7 +58,7 @@ function Ver(sucursales, paginas,pagina_actual, _escritura) {
                                 <div class="form-group floating-label">
                                     <div class="input-group">
                                         <div class="input-group-content">
-                                            <input type="text" class="form-control" id="parametro_busqueda_sucursal" onkeypress=${()=>BuscarParmatroSucursal(event)}>
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_sucursal" onkeypress=${()=>BuscarParmatroSucursal(event)}>
                                             <label for="parametro_busqueda_sucursal">Ingrese parametro de busqueda</label>
                                         </div>
                                         <div class="input-group-btn">
@@ -207,7 +207,7 @@ function ListarSucursales(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
             ScripOrden: ScripOrden||' ORDER BY Cod_Sucursal desc',
             ScripWhere: ScripWhere||''

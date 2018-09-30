@@ -188,6 +188,9 @@ router.post('/guardar_mov_almacen_', function (req, res){
 
 router.post('/guardar_mov_almacen', function (req, res){ 
     input = req.body
+    arreglo = input.dataForm
+    console.log(arreglo)
+    return res.json({ respuesta: 'ok', data:"sss" })
     parametros = [
         {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
@@ -210,17 +213,17 @@ router.post('/guardar_mov_almacen', function (req, res){
         else{
             var Id_AlmacenMov = dataMov.result[0].valor  
             var contador = 1 
-            //console.log(input.dataForm)
-            for(var i=0;i<input.dataForm.length;i += 9){
-                var Id_Producto = input.dataForm[i].value
+            //console.log(arreglo)
+            for(var i=0;i<arreglo.length;i += 9){
+                var Id_Producto = arreglo[i].value
                 var Item = contador
                 contador++
-                var Des_Producto = input.dataForm[i+3].value
-                var Precio_Unitario = input.dataForm[i+6].value
-                var Cantidad = input.dataForm[i+4].value
-                var Cod_UnidadMedida = input.dataForm[i+5].value
-                var Obs_AlmacenMovD = input.dataForm[i+7].value
-                var Series = JSON.parse(input.dataForm[i+8].value)
+                var Des_Producto = arreglo[i+3].value
+                var Precio_Unitario = arreglo[i+6].value
+                var Cantidad = arreglo[i+4].value
+                var Cod_UnidadMedida = arreglo[i+5].value
+                var Obs_AlmacenMovD = arreglo[i+7].value
+                var Series = JSON.parse(arreglo[i+8].value)
                 var Cod_Usuario = req.session.username
 
                 var parametros = [
@@ -234,11 +237,7 @@ router.post('/guardar_mov_almacen', function (req, res){
                     { nom_parametro: 'Obs_AlmacenMovD', valor_parametro:Obs_AlmacenMovD},
                     { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
                 ]
-                
-                /*var procedimientos = [
-                    {nom_respuesta: 'almacen_mov', sp_name: 'USP_ALM_ALMACEN_MOV_D_G', parametros}
-                ]*/
-
+           
                 EXEC_SQL('USP_ALM_ALMACEN_MOV_D_G', parametros, function (dataAlmacen) {
                     if (dataAlmacen.error) return res.json({ respuesta: 'error', detalle_error: dataAlmacen.error })
                     else{
@@ -286,17 +285,17 @@ router.post('/guardar_mov_almacen', function (req, res){
                     if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
                     var Id_AlmacenMov = dataMov.result[0].valor  
                     var contador = 1 
-                    for(var i=0;i<input.dataForm.length;i += 9){
+                    for(var i=0;i<arreglo.length;i += 9){
 
-                        var Id_Producto = input.dataForm[i].value
+                        var Id_Producto = arreglo[i].value
                         var Item = contador
                         contador++
-                        var Des_Producto = input.dataForm[i+3].value
-                        var Precio_Unitario = input.dataForm[i+6].value
-                        var Cantidad = input.dataForm[i+4].value
-                        var Cod_UnidadMedida = input.dataForm[i+5].value
-                        var Obs_AlmacenMovD = input.dataForm[i+7].value
-                        var Series = JSON.parse(input.dataForm[i+8].value)
+                        var Des_Producto = arreglo[i+3].value
+                        var Precio_Unitario = arreglo[i+6].value
+                        var Cantidad = arreglo[i+4].value
+                        var Cod_UnidadMedida = arreglo[i+5].value
+                        var Obs_AlmacenMovD = arreglo[i+7].value
+                        var Series = JSON.parse(arreglo[i+8].value)
                         var Cod_Usuario = req.session.username
 
                         var parametros = [
@@ -310,11 +309,7 @@ router.post('/guardar_mov_almacen', function (req, res){
                             { nom_parametro: 'Obs_AlmacenMovD', valor_parametro:Obs_AlmacenMovD},
                             { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
                         ]
-                        
-                        /*var procedimientos = [
-                            {nom_respuesta: 'almacen_mov', sp_name: 'USP_ALM_ALMACEN_MOV_D_G', parametros}
-                        ]*/
-
+                    
                         EXEC_SQL('USP_ALM_ALMACEN_MOV_D_G', parametros, function (dataAlmacen) {
                             if (dataAlmacen.error) return res.json({ respuesta: 'error', detalle_error: dataAlmacen.error })
                             else{
@@ -339,27 +334,7 @@ router.post('/guardar_mov_almacen', function (req, res){
                             }
                         })
 
-                        /*Ejecutar_Procedimientos(req,res, procedimientos) 
-
-                        if(Series.length>0){
-                            for(var j=0;j<Series.length;j ++){
-                                var p = [
-                                    {nom_parametro:'Cod_Tabla', valor_parametro: "ALM_ALMACEN_MOV"},
-                                    { nom_parametro: 'Id_Tabla', valor_parametro: Id_AlmacenMov},
-                                    { nom_parametro: 'Item', valor_parametro: Item},
-                                    { nom_parametro: 'Serie', valor_parametro: Series[j].Serie},
-                                    { nom_parametro: 'Fecha_Vencimiento', valor_parametro:Series[j].Fecha},
-                                    { nom_parametro: 'Obs_Serie', valor_parametro:Series[j].Observacion},
-                                    { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
-                                ]
-                                var procedimientos = [
-                                    {nom_respuesta: 'series', sp_name: 'USP_CAJ_SERIES_G', parametros:p}
-                                ]
-                                Ejecutar_Procedimientos(req,res, procedimientos)
-                                
-                            }
-                        }*/
-
+                     
                     }
                 })
             }

@@ -56,6 +56,26 @@ function Ver(cajas, paginas, pagina_actual, _escritura, _sucursales) {
                     </div>
                 </div>
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_caja" onkeypress=${()=>BuscarParametroCaja(event)}>
+                                            <label for="parametro_busqueda_caja">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametroCaja()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -165,7 +185,23 @@ function EliminarCaja(_escritura, caja){
     })
 }
 
-function ListarCajas(escritura, NumeroPagina){
+function BuscarParametroCaja(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_caja").val()
+            var scriptOrden= " ORDER BY Cod_Caja desc"
+            var scripWhere = "WHERE Cod_Caja like '%"+parametro+"%' or Des_Caja like '%"+parametro+"%' or Cod_CuentaContable like '%"+parametro+"%'"
+            ListarCajas(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_caja").val()
+        var scriptOrden= " ORDER BY Cod_Caja desc"
+        var scripWhere = "WHERE Cod_Caja like '%"+parametro+"%' or Des_Caja like '%"+parametro+"%' or Cod_CuentaContable like '%"+parametro+"%'"
+        ListarCajas(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarCajas(escritura, NumeroPagina,ScripOrden,ScripWhere){
     run_waitMe($('#main-contenido'), 3, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -175,10 +211,10 @@ function ListarCajas(escritura, NumeroPagina){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Caja desc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Caja desc',
+            ScripWhere: ScripWhere||''  
         })
     }
     fetch(URL+'/cajas_api/get_cajas', parametros)

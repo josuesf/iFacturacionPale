@@ -43,6 +43,25 @@ function Ver(parametros, paginas,pagina_actual, _escritura) {
                 </div>
                 
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda" onkeypress=${()=>BuscarParametro(event)}>
+                                            <label for="parametro_busqueda">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametro()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -150,7 +169,24 @@ function Eliminar(_escritura, sucursal){
     })
 }
 
-function ListarParametros(escritura,NumeroPagina) {
+function BuscarParametro(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda").val()
+            var scriptOrden= " ORDER BY Cod_Tabla asc"
+            var scripWhere = "WHERE Cod_Tabla like '%"+parametro+"%' or Tabla like '%"+parametro+"%' or Cod_Sistema like '%"+parametro+"%'"
+            ListarParametros(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda").val()
+        var scriptOrden= " ORDER BY Cod_Tabla asc"
+        var scripWhere = "WHERE Cod_Tabla like '%"+parametro+"%' or Tabla like '%"+parametro+"%' or Cod_Sistema like '%"+parametro+"%'"
+        ListarParametros(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+
+function ListarParametros(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -160,10 +196,10 @@ function ListarParametros(escritura,NumeroPagina) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Tabla desc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Tabla desc',
+            ScripWhere: ScripWhere||''   
         })
     }
     fetch(URL+'/parametros_api/get_parametros', parametros)

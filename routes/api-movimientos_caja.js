@@ -9,14 +9,15 @@ router.post('/get_movimientos', function (req, res) {
     parametros = [
         {nom_parametro:'Cod_Caja',valor_parametro: req.app.locals.caja[0].Cod_Caja },
         {nom_parametro:'Cod_Turno',valor_parametro: req.app.locals.turno[0].Cod_Turno },
-        {nom_parametro:'Flag_Resumen',valor_parametro:'0'},
+        //{nom_parametro:'Flag_Resumen',valor_parametro:'0'},
     ]
     parametros2 = [
         {nom_parametro:'Cod_Caja',valor_parametro: req.app.locals.caja[0].Cod_Caja},
         {nom_parametro:'Cod_Turno',valor_parametro: req.app.locals.turno[0].Cod_Turno},
     ]
     procedimientos =[
-        {nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},
+       // {nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},
+        {nom_respuesta:'movimientos',sp_name:'USP_MovimientosResumenCajaTurnoTotales',parametros},
         {nom_respuesta:'saldos',sp_name:'USP_SaldosXCajaTurno',parametros:parametros2},
     ]
     Ejecutar_Procedimientos(req,res,procedimientos)

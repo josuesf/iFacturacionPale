@@ -56,6 +56,23 @@ function Ver(usuarios, paginas, pagina_actual, _escritura, _estados, _perfiles) 
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_usuario" onkeypress=${()=>BuscarParametroUsuario(event)}>
+                                            <label for="parametro_busqueda_sucursal">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button" id="btnBuscarUsuario" onclick=${()=>BuscarParametroUsuario()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -164,7 +181,24 @@ function EliminarUsuario(_escritura, usuario){
     })
 }
 
-function ListarUsuarios(escritura, NumeroPagina) {
+function BuscarParametroUsuario(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_usuario").val()
+            var scriptOrden= " ORDER BY Nick asc"
+            var scripWhere = "WHERE Cod_Usuarios like '%"+parametro+"%' OR NICK LIKE '%"+parametro+"%'"
+            ListarUsuarios(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_usuario").val()
+        var scriptOrden= " ORDER BY Nick asc"
+        var scripWhere = "WHERE Cod_Usuarios like '%"+parametro+"%' OR NICK LIKE '%"+parametro+"%'"
+        ListarSucursales(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+
+function ListarUsuarios(escritura, NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -175,10 +209,10 @@ function ListarUsuarios(escritura, NumeroPagina) {
         },
         credentials: 'same-origin',
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Cod_Usuarios asc',
-            ScripWhere: ''
+            ScripOrden: ScripOrden||' ORDER BY Cod_Usuarios asc',
+            ScripWhere: ScripWhere||'' 
         })
     }
     fetch(URL+'/usuarios_api/get_usuarios', parametros)

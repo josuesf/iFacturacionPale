@@ -777,7 +777,7 @@ function CambioTodoFechas(idTab){
 }
 
 function CambioTodoLicitacion(idTab){
-    $("#Cod_Licitacion_"+idTab).attr("disabled",($("#optTodoFechas_"+idTab).is(":checked")))
+    $("#Cod_Licitacion_"+idTab).attr("disabled",($("#optTodoLicitacion_"+idTab).is(":checked")))
 }
 
 function CambioTodoVencimiento(idTab){

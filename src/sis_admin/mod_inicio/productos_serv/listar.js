@@ -43,6 +43,25 @@ function Ver(variables, paginas, pagina_actual, _escritura){
                     </div>
                 </div>
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-content">
+                                            <input type="text" class="form-control dirty" id="parametro_busqueda_producto" onkeypress=${()=>BuscarParametroProducto(event)}>
+                                            <label for="parametro_busqueda_producto">Ingrese parametro de busqueda</label>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <button class="btn ink-reaction btn-raised btn-primary" type="button"  onclick=${()=>BuscarParametroProducto()}><i class="fa fa-search"></i> Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="table-responsive">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -158,7 +177,23 @@ function CerrarTab(){
      })
 }
 
-function ListarProductosServ(escritura,NumeroPagina) {
+function BuscarParametroProducto(event){
+    if(event){
+        if(event.which == 13) { 
+            var parametro = $("#parametro_busqueda_producto").val()
+            var scriptOrden= " ORDER BY Nom_Producto asc"
+            var scripWhere = "WHERE (Cod_Producto like '%"+parametro+"%' or Nom_Producto like '%"+parametro+"%') AND Cod_TipoProducto like '%'"
+            ListarProductosServ(true,'0',scriptOrden,scripWhere)
+        }
+    }else{
+        var parametro = $("#parametro_busqueda_producto").val()
+        var scriptOrden= " ORDER BY Nom_Producto asc"
+        var scripWhere = "WHERE (Cod_Producto like '%"+parametro+"%' or Nom_Producto like '%"+parametro+"%') AND Cod_TipoProducto like '%'"
+        ListarProductosServ(true,'0',scriptOrden,scripWhere)
+    }
+}
+
+function ListarProductosServ(escritura,NumeroPagina,ScripOrden,ScripWhere) {
     run_waitMe($('#main-contenido'), 3, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -168,10 +203,10 @@ function ListarProductosServ(escritura,NumeroPagina) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '20',
+            TamanoPagina: '50',
             NumeroPagina: NumeroPagina||'0',
-            ScripOrden: ' ORDER BY Nom_Producto asc',
-            ScripWhere: '',
+            ScripOrden: ScripOrden||' ORDER BY Nom_Producto asc',
+            ScripWhere: ScripWhere||'',
             Cod_Tabla: 'PRI_PRODUCTOS'
         })
     }
