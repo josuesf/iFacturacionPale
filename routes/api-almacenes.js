@@ -190,7 +190,6 @@ router.post('/guardar_mov_almacen', function (req, res){
     input = req.body
     arreglo = input.dataForm
     console.log(arreglo)
-    return res.json({ respuesta: 'ok', data:"sss" })
     parametros = [
         {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},

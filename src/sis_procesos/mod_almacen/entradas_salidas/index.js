@@ -24,7 +24,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
 
     cantidad_tabs++
     const idTabES = "ES_"+cantidad_tabs
-    global.variablesES[idTabES]={idTab:idTabES,contador:0,idFilaSeleccionada:0,idFilaSeleccionadaSerie:0}
+    global.variablesES[idTabES]={idTab:idTabES,contador:0,idFilaSeleccionada:0,idFilaSeleccionadaSerie:0,almacen_mov:null}
 
     var tab = yo`
     <li class="" ><a href="#tab_${idTabES}" data-toggle="tab" aria-expanded="false" id="id_${idTabES}">${CodTipoComprobante=="NE"?"NOTA DE ENTRADA":"NOTA DE SALIDA - GUIA DE REMISION"} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabES(idTabES)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
@@ -270,7 +270,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
     global.objProducto = ''
     global.objComprobantePago = '' 
     global.objComprobantePagoDetalle = '' 
-    global.variablesES[idTabES]={idTab:idTabES,contador:0,idFilaSeleccionada:0,idFilaSeleccionadaSerie:0}
+    global.variablesES[idTabES]={idTab:idTabES,contador:0,idFilaSeleccionada:0,idFilaSeleccionadaSerie:0,almacen_mov:null}
  
     var el = yo` 
         <div class="panel">
@@ -640,22 +640,46 @@ function LlenarPendientesRecepcionar(pendientes,idTab){
 
 
 function CambioDestino(CodTipoComprobante,fecha_actual,idTab){
+    console.log("sjjsj")
     if($("#Cod_Operacion_"+idTab).val()=="21"){
         if(!arrayValidacion.includes($("#Cod_Destino_"+idTab).val())){
             console.log("cod_destino es diferente en validacion")
             CargarDatosAControles(CodTipoComprobante,fecha_actual,idTab)
             $("#btnAceptar_"+idTab).text("Recepcionar")
             $("#divRechazar_"+idTab).css("display","inline-block")
+            $('#tablaBody_'+idTab+' tr').each(function () {
+                $(this).find("td").eq(2).find("input").attr("disabled",true)
+                $(this).find("td").eq(3).find("input").attr("disabled",true)
+                $(this).find("td").eq(4).find("input").attr("disabled",true)
+                $(this).find("td").eq(6).find("input").attr("disabled",true)
+                $(this).find("td").eq(8).find("input").attr("disabled",true)
+            })
+            //event.preventDefault();
+    //event.stopPropagation();
             // falta  buConsultarSeries.Visible = true;
         }else{
             $("#btnAceptar_"+idTab).text("Aceptar")
             $("#divRechazar_"+idTab).css("display","none")
+            $('#tablaBody_'+idTab+' tr').each(function () {
+                $(this).find("td").eq(2).find("input").attr("disabled",false)
+                $(this).find("td").eq(3).find("input").attr("disabled",false)
+                $(this).find("td").eq(4).find("input").attr("disabled",false)
+                $(this).find("td").eq(6).find("input").attr("disabled",false)
+                $(this).find("td").eq(8).find("input").attr("disabled",false)
+            })
             // falta buConsultarSeries.Visible = true;
 
         }
     }else{
         $("#btnAceptar_"+idTab).text("Aceptar")
-        $("#divRechazar_"+idTab).css("display","inline-block")
+        $("#divRechazar_"+idTab).css("display","none")
+        $('#tablaBody_'+idTab+' tr').each(function () {
+            $(this).find("td").eq(2).find("input").attr("disabled",false)
+            $(this).find("td").eq(3).find("input").attr("disabled",false)
+            $(this).find("td").eq(4).find("input").attr("disabled",false)
+            $(this).find("td").eq(6).find("input").attr("disabled",false)
+            $(this).find("td").eq(8).find("input").attr("disabled",false)
+        })
     }
 }
 
@@ -670,8 +694,9 @@ function CerrarTabES(idTab){
 function CambioOperacion(CodTipoComprobante,idTab,fecha_actual){
     if(!arrayValidacion.includes($("#Cod_Almacen_"+idTab).val())){
         $("#divDestino_"+idTab).hide()
-        //$("#divRechazar").css("display","inline-block")
+        $("#divRechazar_"+idTab).css("display","none")
         $("#divDocRef_"+idTab).show()
+        $("#tablaBody_"+idTab).html('')
         var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()
         if($("#Cod_Operacion_"+idTab).val()=="11"){
             $("#laCod_Destino_"+idTab).text("Destino:")
@@ -762,21 +787,26 @@ function CargarDatosAControles(CodTipoComprobante,fecha_actual,idTab){
         .then(req => req.json())
         .then(res => { 
             if(res.data.movimientos_almacen.length>0){
+                global.variablesES[idTab].almacen_mov=res.data.movimientos_almacen[0]
                 CargarElementos(CodTipoComprobante,res.data.movimientos_almacen[0],fecha_actual,idTab)
             }else{
+                global.variablesES[idTab].almacen_mov=null
                 IniciarElementos(fecha_actual,idTab)
             }
         }).catch(function (e) {
+            global.variablesES[idTab].almacen_mov=null
+            IniciarElementos(fecha_actual,idTab)
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 }
 
 function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual,idTab){
+    //console.log(movimientos_almacen)
     $("#Cod_Operacion_"+idTab).val(movimientos_almacen.Cod_TipoOperacion)
     $("#Serie_"+idTab).val(movimientos_almacen.Serie)
     $("#Numero_"+idTab).val(movimientos_almacen.Numero)
-    $("#Fecha_"+idTab).val(movimientos_almacen.Fecha)
+    $("#Fecha_"+idTab).val(movimientos_almacen.Fecha.toString().split("T")[0])
     $("#Motivo_"+idTab).val(movimientos_almacen.Motivo)
     $("#Id_ComprobantePago_"+idTab).attr("data-id",movimientos_almacen.Id_ComprobantePago)
     if(movimientos_almacen.Id_ComprobantePago!=0 && movimientos_almacen.Cod_TipoOperacion!="21"){
@@ -909,7 +939,7 @@ function ConfirmarRechazoEnvio(){
 
 function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
     if($("#divDestino_"+idTab).css("display")=="block" && !arrayValidacion.includes($("#Cod_Destino_"+idTab).val()) && $("#Cod_Operacion_"+idTab).val().trim()=="21"){
-        console.log("pruebaaaa")
+         
         run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
         
         var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()

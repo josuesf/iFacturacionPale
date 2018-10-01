@@ -3564,13 +3564,7 @@ function FocusOutSerie() {
         $("#Serie option:last").attr("selected", "selected");
     }
 
-}
-
-function CambioNumero_(event,CodLibro){
-    if(CodLibro!='08'){
-        BloquearControles(event)
-    }
-}
+} 
 
 function CambioNumero(){
     if($("#Numero").val().trim()>0){
