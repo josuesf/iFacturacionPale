@@ -67,7 +67,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                 <tbody>
                                                 ${movimientos.map(u => yo`
                                                 <tr>
-                                                    <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
+                                                    <td>${u.FechaEmision.toString().split('T')[0]}</td> 
                                                     <td>${u.Documento}</td>
                                                     <td>${u.Cliente}</td>
                                                     <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
@@ -147,6 +147,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var footer = document.getElementById('content_footer')
     empty(footer).appendChild(footer_element);
     $('#tablaMovimientos').DataTable({
+        "responsive": true,
         "lengthChange": false,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
@@ -267,7 +268,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                             <tbody>
                             ${movimientos.map(u => yo`
                             <tr>
-                                <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
+                                <td>${u.FechaEmision.toString().split('T')[0]}</td> 
                                 <td>${u.Documento}</td>
                                 <td>${u.Cliente}</td>
                                 <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
@@ -345,6 +346,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     $('#content_footer').html(sectionFooter);
 
     $('#tablaMovimientos').DataTable({
+        "responsive": true,
         "lengthChange": false,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
@@ -1220,7 +1222,7 @@ function PrepararImpresionAlmacen(id_Movimiento,callback){
                                             var arrayData = {
                                                 cuerpo:{
                                                     COD_TIPO_DOCUMENTO: dataAlmacen.Cod_TipoComprobante,
-                                                    FECHA_EMISION: (new Date(dataAlmacen.Fecha)).toLocaleDateString(),
+                                                    FECHA_EMISION: dataAlmacen.Fecha.toString().split('T')[0],
                                                     DOCUMENTO: nombreDoc, 
                                                     SERIE: dataAlmacen.Serie,
                                                     NUMERO: dataAlmacen.Numero, 
@@ -1312,7 +1314,7 @@ function PrepararImpresionMovimientos(id_Movimiento,callback){
                         var arrayData = {
                             cuerpo:{
                                 COD_TIPO_DOCUMENTO: res.data.movimiento[0].Cod_TipoComprobante,
-                                FECHA_EMISION: (new Date(res.data.movimiento[0].Fecha)).toLocaleDateString(),
+                                FECHA_EMISION: res.data.movimiento[0].Fecha.toString().split('T')[0],
                                 DOCUMENTO: nombreDoc, 
                                 NOM_SOLICITANTE: res.data.movimiento[0].Cliente,
                                 NUM_CUENTA: res.data.movimiento[0].Id_Concepto, 
@@ -1407,8 +1409,8 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                                                 COD_DOCCLIENTE:dataComprobante.Cod_TipoDoc,
                                                 RUC_CLIENTE:dataComprobante.Doc_Cliente,
                                                 DIRECCION_CLIENTE:dataComprobante.Direccion_Cliente,
-                                                FECHA_EMISION: (new Date(dataComprobante.FechaEmision)).toLocaleDateString(),
-                                                FECHA_VENCIMIENTO:(new Date(dataComprobante.FechaVencimiento)).toLocaleDateString(),
+                                                FECHA_EMISION: dataComprobante.FechaEmision.toString().split('T')[0],
+                                                FECHA_VENCIMIENTO:dataComprobante.FechaVencimiento.toString().split('T')[0],
                                                 FORMA_PAGO:dataComprobante.Cod_FormaPago,
                                                 GLOSA:dataComprobante.Glosa,
                                                 OBSERVACIONES:data_string,
@@ -1502,6 +1504,7 @@ module.exports = function movimientos_caja(ctx, next) {
     fetch(URL+'/movimientos_caja_api/get_movimientos', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log(res)
             if (res.respuesta == 'ok') {
                 Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
                     $('#base').waitMe('hide');

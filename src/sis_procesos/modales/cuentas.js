@@ -6,7 +6,7 @@ import { LimpiarVariablesGlobales } from '../../../utility/tools'
 function VerBuscarCuentasPendientes(CodLibro,cuentas){ 
     LimpiarVariablesGlobales()
     var el = yo`
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -17,7 +17,7 @@ function VerBuscarCuentasPendientes(CodLibro,cuentas){
                 <div class="modal-body">
                     
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-md-12">
                             <div class="table-responsive" id="contenedorTablaClientesCuentas"> 
                             </div>
                         </div>
@@ -69,6 +69,7 @@ function AgregarTabla(cuentas,CodLibro){
     empty(document.getElementById('contenedorTablaClientesCuentas')).appendChild(el);
 
     $('#example').DataTable({
+        "responsive": true,
         "lengthChange": false,
         "oLanguage": {
             "sSearch": "Buscar:"

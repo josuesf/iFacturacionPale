@@ -31,7 +31,7 @@ function Numeros(dNumAux, dFactor) {
         sTexto += sCentenas[iNumero] + " "
     }
 
-    dCociente = dCociente % 100;
+    dCociente = dCociente % 100; 
     if (dCociente >= 30) {
         dNumero = dCociente / 10;
         sNumero = dNumero.toString()
@@ -48,14 +48,16 @@ function Numeros(dNumAux, dFactor) {
 
     else {
         dNumero = dCociente
-        sNumero = dNumero.toString()
-        if (sNumero.Length > 1)
-            if (sNumero[1] != '.')
+        sNumero = dNumero.toString()  
+        if (sNumero.length > 1){
+            if (sNumero[1] != '.'){ 
                 iNumero = parseInt(sNumero[0].toString() + sNumero[1].toString());
-            else
+            }else{ 
                 iNumero = parseInt(sNumero[0].toString());
-        else
+            }
+        }else{
             iNumero = parseInt(sNumero[0].toString());
+        }
         sTexto += sUnidades[iNumero] + " ";
     }
 
@@ -95,7 +97,6 @@ function ConvertirCadena(sNumero) {
     dNumAux = dNumero % 1000
     sResultado += Numeros(dNumAux, 1)
 
-
     sAux = dNumero.toString()
 
     if (sAux.indexOf(".") >= 0)
@@ -104,7 +105,7 @@ function ConvertirCadena(sNumero) {
     x = sResultado[1].toString()
     sResultado = x.toString()
 
-    for (var i = 2; i < sAux.Length; i++)
+    for (var i = 2; i < sAux.length; i++)
         sResultado += sAux[i].toString()
     return sResultado;
 }
@@ -133,7 +134,7 @@ function ConvertirCadena(dNumero, TipoMoneda) {
     }
 
     dNumAux = dNumero % 1000
-    sResultado += Numeros(dNumAux, 1)
+    sResultado += Numeros(dNumAux, 1) 
     sAux = dNumero.toString()
     var sNumPuntos = []
     var Numero = 0
@@ -142,7 +143,7 @@ function ConvertirCadena(dNumero, TipoMoneda) {
 
     try {
         Numero = parseInt(sNumPuntos[1]);
-        if (sNumPuntos[1].Length == 1) {
+        if (sNumPuntos[1].length == 1) {
             Numero *= 10;
         }
 
@@ -290,14 +291,7 @@ function LimpiarVariablesGlobales() {
     global.objComprobantePagoDetalle = ''
     global.objComprobantePago = ''
 }
-
-function LimpiarEventoModales() {
-    $("#modal-proceso").off('shown.bs.modal')
-    $("#modal-proceso").off('hidden.bs.modal')
-
-    $("#modal-superior").off('shown.bs.modal')
-    $("#modal-superior").off('hidden.bs.modal')
-}
+ 
 
 function CambiarCadenaConexion(cadena) {
     console.log(cadena)
@@ -418,4 +412,4 @@ function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
 }
  
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, LimpiarEventoModales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}

@@ -28,14 +28,12 @@ var app = express();
 var errores = '';
 //app.set('view engine', 'ejs'); 
 app.use(express.static('public'));
-app.use('/static', express.static('formatos'));  
-app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+//app.use('/static', express.static('formatos'));  
+app.use(bodyParser.json({limit:'50mb'})); // support json encoded bodies
+app.use(bodyParser.urlencoded({ limit:'50mb',extended: true, parameterLimit: 1000000 })); // support encoded bodies 
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
-// app.use(authChecker);
  
-
 // configuration default
 
 app.locals.isla = false
@@ -78,43 +76,8 @@ jsreport = require('jsreport-core')(
     },
     appPath: "/reporting"
   }
-);
-
-/*jsreport.use(require('jsreport-import-export')());
-jsreport.use(require('jsreport-tags')());
-jsreport.use(require('jsreport-templates')());
-jsreport.use(require('jsreport-jsrender')());
-jsreport.use(require('jsreport-authentication')());
-jsreport.use(require('jsreport-handlebars')());
-jsreport.use(require('jsreport-cli')());
-jsreport.use(require('jsreport-freeze')());
-jsreport.use(require('jsreport-debug')()); 
-jsreport.use(require('jsreport-express')()); 
-jsreport.use(require('jsreport-fop-pdf')());
-jsreport.use(require('jsreport-pdf-utils')());
-jsreport.use(require('jsreport-data')());
-jsreport.use(require('jsreport-chrome-pdf')());
-jsreport.use(require('jsreport-html-to-xlsx')());
-jsreport.use(require('jsreport-child-templates')());
-jsreport.use(require('jsreport-browser-client')());
-jsreport.use(require('jsreport-licensing')());
-jsreport.use(require('jsreport-authorization')());
-jsreport.use(require('jsreport-version-control')());
-jsreport.use(require('jsreport-assets')());
-jsreport.use(require('jsreport-reports')());
-jsreport.use(require('jsreport-text')());
-jsreport.use(require('jsreport-base')()); 
-jsreport.use(require('jsreport-studio')());
-jsreport.use(require('jsreport-fs-store')())
-jsreport.use(require('jsreport-scripts')());
-
-jsreport.use(require('jsreport-scheduling')());
-jsreport.use(require('jsreport-xlsx')());
-jsreport.use(require('jsreport-sample-template')());
-jsreport.use(require('jsreport-resources')());
-jsreport.use(require('jsreport-public-templates')()); */
-
-
+); 
+ 
 jsreport.init().then(() => { 
   console.log('jsreport server started')
 }).catch((e) => { 
@@ -252,7 +215,7 @@ function CargarVariables(req,res){
                 { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].id_ArqueoFisico }
               ] 
               
-              EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) {
+              EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p , function (dataArqueo) { 
                   app.locals.arqueo = dataArqueo.result
                   res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                                       Nom_Empresa: app.locals.empresa[0].Nom_Comercial,
@@ -273,18 +236,19 @@ function CargarVariables(req,res){
 
 }
  
-app.get('/', function (req, res) {
+app.get('/', function (req, res) { 
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
   } else{
     if(!app.locals.apertura){
       if (req.session.caja) {
+        console.log("turno cambiado",app.locals.turno)
         CargarVariables(req,res) 
       }else{
         errores = "No tiene asignada ninguna caja. No puede iniciar sesion en el sistema"
         res.redirect('/logout');
       }
-    }else{
+    }else{ 
       res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                           Nom_Empresa: app.locals.empresa[0].Nom_Comercial,
                                           Cod_Usuarios:req.session.username,
@@ -314,6 +278,7 @@ app.get('/login', function (req, res) {
     return res.redirect('/');
   }else{
     res.render('login.ejs', { title: 'iFacturacion - Usuarios ', err:errores});
+    errores=''
   }  
   /*const fecha = new Date()
   var anio = fecha.getFullYear() 
@@ -339,7 +304,7 @@ app.post('/login', function (req, res) {
 
   EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {   
     if (m.err) {
-      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +m.err
+      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+m.err
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
@@ -348,7 +313,7 @@ app.post('/login', function (req, res) {
         
         EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
           if (e.err){
-            errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +e.err
+            errores = "Ocurrio un error con el servidor comuniquese con el administrador. "// +e.err
             return res.redirect('/login');
           } 
           var Cod_Empresa=e.result[0].Cod_Empresa
@@ -496,7 +461,7 @@ app.post('/logincajas', function (req, res) {
       //var anio = fecha.getFullYear() 
       res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:app.locals.cajasUsuarios ,mensaje:'Seleccione una de las cajas asignadas a este usuario',err:'Es necesario ingresar todos los campos'});
     }else{ 
-      errores = ""
+      errores = ''
       return res.redirect('/login');
     }
   }
@@ -613,6 +578,9 @@ var services_api = require('./routes/api-services')
 var formas_pago_api = require('./routes/api-formas-pago')
 var comprobantes_pago_api = require('./routes/api-comprobantes-pago')
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
+var precios_api = require('./routes/api-precios')
+var reporte_api = require('./routes/api-reporte')
+var cambio_monetario_api = require('./routes/api-cambio-monetario')
  
 app.use('/usuarios_api',usuarios_api);
 app.use('/cajas_api', cajas_api);
@@ -639,6 +607,9 @@ app.use('/reservas_api', reservas_api)
 app.use('/ws', services_api)
 app.use('/formas_pago_api', formas_pago_api)
 app.use('/comprobantes_pago_api', comprobantes_pago_api)
+app.use('/precios_api', precios_api)
+app.use('/reporte_api', reporte_api)
+app.use('/cambio_monetario_api', cambio_monetario_api)
  
 
 //Listen Server
@@ -656,219 +627,50 @@ app.get('/prueba',function(req,res){
 
  
 app.post('/api/report', function(req, res) { 
-  //console.log("request")
-  //console.log(req.body) 
-  console.log("configuracionb de "+GETCONFIG(app.locals.empresa[0].RUC))
-  if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){
-      
-    if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/images/'+app.locals.empresa[0].RUC+'.jpg'))) { 
-      req.body.template.data['URL_LOGO'] = req.protocol + '://' + req.get('host') +'/static/'+app.locals.empresa[0].RUC+'/images/'+app.locals.empresa[0].RUC+".jpg"
+  //console.log("request") 
+  //console.log("configuracionb de ",GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO])
+  if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){  
+     
+    if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/recibos_tickets/assets/logo.jpg'))) { 
       req.body.template.data['FLAG'] = true
     }else{
-      req.body.template.data['URL_LOGO'] = ''
       req.body.template.data['FLAG'] = false
     }
   
     req.body.template.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
     req.body.template.data['DIRECCION'] = app.locals.empresa[0].Direccion
     req.body.template.data['RUC'] = app.locals.empresa[0].RUC
+    req.body.template.data['DES_IMPUESTO'] = app.locals.empresa[0].Des_Impuesto
+    req.body.template.data['IMPUESTO'] = app.locals.empresa[0].Por_Impuesto
     req.body.template.data['USUARIO'] = req.session.username
     req.body.template.data['FLAG_ANULADO'] = req.body.template.data['FLAG_ANULADO']=='true'?true:false
-    
+    //fecha y hora de la generacion del reporte
+    const fecha = new Date()
+    const mes = fecha.getMonth() + 1
+    const dia = fecha.getDate() 
+    var fecha_format = (dia > 9 ? dia : '0' + dia) + '/' + (mes > 9 ? mes : '0' + mes) + '/' + fecha.getFullYear() + ' '+ [(fecha.getHours()>9?fecha.getHours():'0'+fecha.getHours()), (fecha.getMinutes()>9?fecha.getMinutes():'0'+fecha.getMinutes())].join(':');
+    req.body.template.data['FECHA_SISTEMA'] = fecha_format
+ 
     var request = {
       template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],
-      data: req.body.template.data
+      data: req.body.template.data,
+      options: { preview: true }
     }; 
     
-    jsreport.render(request).then(function (o) {  
+    jsreport.render(request).then(function (o) {
+      //console.log(o.content.toString())
       o.result.pipe(res);
     }).catch(function (e) { 
       console.error(e)
       res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-      '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>Ocurrio un error. Parece que no tienes configurado el formato para este tipo de documento</span></h3></div>')
-      //return res.json({respuesta:'error'})
+      '<i class="fa fa-warning fa-5x"></i><br/><h3><span>Ocurrio un error.'+e+'</span></h3></div>')
     })
   }else{
     res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-      '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
+      '<i class="fa fa-warning fa-5x"></i><br/><h3><span>No existe una configuracion del formato para el documento.</span></h3></div>')
   }
     
 });
-
-app.get('/report', function(req, res) { 
-  //console.log(Object.keys(GETCONFIG('default')).length)
-  if(Object.keys(GETCONFIG('default')).length>0){
-    var request = {
-      template:  GETCONFIG('defauslt')['TKF'],
-      data:{
-        "URL_LOGO":"https://www.sparksuite.com/images/logo.png",
-        "FLAG":false,
-        "NOMBRE":"GRIFO MARCELO'S S.R.L.  ",
-        "DIRECCION":"AV. HUAYRUROPATA NRO. 1700 CUSCO-CUSCO-WANCHAQ ",
-        "RUC":"20357768269",
-        "COD_TIPOCOMPROBANTE": "01",
-        "DOCUMENTO": "FACTURA ELECTRONICA",
-        "SERIE": "F001",
-        "NUMERO": "00005591",
-        "FLAG_ANULADO":false,
-        "MOTIVO_ANULACION":"ERROR DE EMISION",
-        "COMP_AFECTADO":"F001-00000098",
-        "CLIENTE": "omar",
-        "COD_DOCCLIENTE":"6",
-        "RUC_CLIENTE": "20491228297",
-        "DIRECCION_CLIENTE": "MZA. U LOTE.20 ASC. TUPAC AMARU CUSCO - CUSCO - SAN SEBASTIAN  ",
-        "FECHA_EMISION": "24-06-2018",
-        "FECHA_VENCIMIENTO": "24-06-2018",
-        "FORMA_PAGO": "EFECTIVO",
-        "GLOSA": "POR LA VENTA DE MERCADERIA",
-        "OBSERVACIONES":"O/C RS-2165-2018",
-        "USUARIO": "CAJERO",
-        "MONEDA":"SOLES",
-        "ESCRITURA_MONTO":"SON: CIENTO VEINTE SIETE CON 52/100 SOLES ",
-        "GRAVADAS":"108.07",
-        "EXONERADAS":"0.00",
-        "GRATUITAS":"0.00",
-        "INAFECTAS":"0.00",
-        "DES_IMPUESTO":"IGV",
-        "IMPUESTO":"18",
-        "DESCUENTO":"0.00",
-        "IGV":"19.45",
-        "TOTAL":"127.52",
-        "PIE_DE_PAGINA":"Representación impresa del comprobante electrónico, consulte su documento en www.ifacturacion.pe",
-        "VERSION_SISTEMA":"F|9.1.4",
-        "DETALLES": [{
-            "DESCRIPCION": "GASEOSA COCACOLA 2.5L",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "5.00",
-            "PRECIO_UNITARIO":"7.90",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"39.50"
-        }, {
-            "DESCRIPCION": "SIXPACK CERVEZA CUSQUEÑA TRIGO 330ML",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "1.00",
-            "PRECIO_UNITARIO":"19.70",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"19.70"
-        },{
-            "DESCRIPCION": "ALTOMAYO CAFE GOURMET 180GR"    ,
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "3.00",
-            "PRECIO_UNITARIO":"24.99",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"74.97"
-        },{
-            "DESCRIPCION": "DONOFRIO CHOCOTON PANETON 500GR",
-            "UNIDAD": "UNIDADES",
-            "CANTIDAD": "1.00",
-            "PRECIO_UNITARIO":"13.70",
-            "DESCUENTO":"0.00",
-            "SUBTOTAL":"13.70"
-        }]
-    }
-    };  
-    jsreport.render(request).then(function (o) {  
-      o.result.pipe(res);
-    }).catch(function (e) { 
-      console.error(e)
-      return res.json({respuesta:'error'})
-    })
-  }else{
-    res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
-    '<i class="fa fa-file-pdf-o fa-5x"></i><br/><h3><span>No existe una configuracion del formato del pdf para el documento seleccionado.</span></h3></div>')
-
-  }
-
-  /*let jsreport = require('jsreport-core')(
-    {
-      store: {
-        provider: 'fs'
-      },
-      logger: {
-        'console': { 'transport': 'console', 'level': 'debug' }
-      },
-      extensions: {
-          express: { app: reportingApp, server: server },
-          'fs-store': {
-            dataDirectory: require('path').join(__dirname, 'formatos/default'),
-            syncModifications: true
-          }
-      },
-      appPath: "/reporting"
-    }
-  ); */
-
-  //jsreport.options.extensions['fs-store'].dataDirectory = require('path').join(__dirname, 'formatos/asdasds')
-
-  //jsreport._initOptions()
-
-  /*jsreport.close().then(() => { 
-    jsreport.init().then(() => { 
-      
-      jsreport.render(request).then(function (o) {  
-        o.result.pipe(res);
-      }).catch(function (e) { 
-        console.log(e)
-        return res.json({respuesta:'error'})
-      })
-
-    }).catch((e) => { 
-      console.log(e);
-    });
-  })*/
-
-  
-  //console.log(jsreport.options.extensions['fs-store'].dataDirectory)
-  //jsreport._initOptions()
- 
-  /*jsreport.render(request).then(function (o) {  
-    o.result.pipe(res);
-  }).catch(function (e) { 
-    console.log(e)
-    return res.json({respuesta:'error'})
-  })*/
- 
-    
-  //console.log(jsreport)  
-  /*jsreport = require('jsreport-core')(
-    {
-      store: {
-        provider: 'fs'
-      },
-      logger: {
-        'console': { 'transport': 'console', 'level': 'debug' }
-      },
-      extensions: {
-          express: { app: reportingApp, server: server },
-          'fs-store': {
-            dataDirectory: require('path').join(__dirname, 'formatos/default'),
-            syncModifications: true
-          }
-      },
-      appPath: "/reporting"
-    }
-  ); 
-  jsreport.init().then(() => { 
-     
-    jsreport.render(request).then(function (o) {  
-      o.result.pipe(res);
-    }).catch(function (e) { 
-      console.log(e)
-      return res.json({respuesta:'error'})
-    })
-
-  }).catch((e) => { 
-    console.log(e);
-  });*/
-
-  /*jsreport.render(request).then(function (o) {  
-    o.result.pipe(res);
-  }).catch(function (e) { 
-    console.error(e)
-    return res.json({respuesta:'error'})
-  })*/ 
-});
-
  
 /* FUNCTIONS PRIVATES */
 
@@ -876,12 +678,9 @@ function iniciarJsReport(ruc,callback){
   crearDirectorioEmpresa(ruc,function(flag){
     callback(flag)
   })
- 
 }
  
-
-function crearDirectorioEmpresa(ruc,callback){
-  console.log(ruc)
+function crearDirectorioEmpresa(ruc,callback){ 
   try{
     var dir = require('path').join(__dirname, 'formatos/'+ruc);
     if (!fs.existsSync(dir)){
@@ -890,8 +689,7 @@ function crearDirectorioEmpresa(ruc,callback){
         fse.copy(require('path').join(__dirname, 'formatos/default'), require('path').join(__dirname, 'formatos/'+ruc), err => {
           if (err)  callback(false)
           callback(true)
-        })
-        //callback(true)
+        }) 
     }else{
       callback(true)
     }

@@ -21,11 +21,11 @@ $(document).ready(function(){
     })
     $("#Periodo").change(function(){
         TraerTurnos()
-    })
+    })*/
 
     $("#btnTurnoSiguiente").click(function(){
         CrearTurnoSiguiente()
-    })*/
+    })
 })
 
 function CrearTurnoSiguiente(){ 

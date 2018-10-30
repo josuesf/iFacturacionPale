@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools'
+import {BloquearControles} from '../../../../utility/tools'
 import { BuscarProducto } from '../../modales'
 import { BuscarComprobantePago } from '../../modales/comprobante_pago'
 import { AsignarSeriesModal } from '../../modales/series'
@@ -218,7 +218,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
             <div class="modal-footer"> 
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                 <div class="input-group" style="float:right">
-                    <button class="btn btn-danger" style="display:none" id="divRechazar_${idTabES}" onclick=${()=>RechazarEnvio(idTabES)}>Rechazar Envio</button>
+                    <button class="btn btn-danger" style="display:none" id="divRechazar_${idTabES}" onclick=${()=>RechazarEnvio(CodTipoComprobante,idTabES)}>Rechazar Envio</button>
                     <button class="btn btn-primary" id="btnAceptar_${idTabES}" onclick="${()=>AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual,idTabES)}">Aceptar</button> 
                 </div> 
             </div>
@@ -231,7 +231,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     $("#tabs_contents").append(el)
     $("#id_"+idTabES).click()
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -253,15 +253,14 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
         }
     })
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
     })
 
     CambioOperacion(CodTipoComprobante,idTabES,fecha_actual)
-    CambioDestino(CodTipoComprobante,fecha_actual,idTabES)
-    console.log(global.variablesES)
+    CambioDestino(CodTipoComprobante,fecha_actual,idTabES) 
 }
 
 
@@ -460,7 +459,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
             <div class="modal-footer"> 
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
                 <div class="input-group" style="float:right">
-                    <button class="btn btn-danger" style="display:none" id="divRechazar_${idTabES}" onclick=${()=>RechazarEnvio(idTabES)}>Rechazar Envio</button>
+                    <button class="btn btn-danger" style="display:none" id="divRechazar_${idTabES}" onclick=${()=>RechazarEnvio(CodTipoComprobante, idTabES)}>Rechazar Envio</button>
                     <button class="btn btn-primary" id="btnAceptar_${idTabES}" onclick="${()=>AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual,idTabES)}">Aceptar</button> 
                 </div> 
             </div>
@@ -468,7 +467,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
   
     $('#tab_'+idTabES).html(el)
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -490,7 +489,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
         }
     })
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -599,15 +598,10 @@ function LlenarDetallesMovAlmacen(CodTipoComprobante,productos,fecha_actual,idTa
                         <td class="Series hidden"><input class="form-control" type="text" value=${JSON.stringify([])} name="Series"></td>
 
                         <td>
-                            <div class="btn-group">
-                                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-info dropdown-toggle">
-                                Elegir una accion <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)" onclick="${()=>AsignarSeries(u.Id_Producto,fecha_actual,CodTipoComprobante,idTab)}">Asignar Serie</a></li>
-                                <li><a href="javascript:void(0)" onclick="${()=>EliminarFila(u.Id_Producto,idTab)}"><i class="fa fa-close"></i> Eliminar</a></li>
-                                </ul>
-                            </div> 
+                            <div style="display:flex;">
+                                <button type="button" onclick="${()=>AsignarSeries(u.Id_Producto,fecha_actual,CodTipoComprobante,idTab)}" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i></a>  
+                                <button type="button"  onclick="${()=>EliminarFila(u.Id_Producto,idTab)}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                            </div>
                         </td>
                     </tr>`
                 )}
@@ -640,10 +634,8 @@ function LlenarPendientesRecepcionar(pendientes,idTab){
 
 
 function CambioDestino(CodTipoComprobante,fecha_actual,idTab){
-    console.log("sjjsj")
     if($("#Cod_Operacion_"+idTab).val()=="21"){
-        if(!arrayValidacion.includes($("#Cod_Destino_"+idTab).val())){
-            console.log("cod_destino es diferente en validacion")
+        if(!arrayValidacion.includes($("#Cod_Destino_"+idTab).val())){ 
             CargarDatosAControles(CodTipoComprobante,fecha_actual,idTab)
             $("#btnAceptar_"+idTab).text("Recepcionar")
             $("#divRechazar_"+idTab).css("display","inline-block")
@@ -837,6 +829,7 @@ function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual,idT
     fetch(URL + '/almacenes_api/get_almacen_mov_detalle_by_id', parametros)
         .then(req => req.json())
         .then(res => { 
+            
             LlenarDetallesMovAlmacen(CodTipoComprobante,res.data.movimientos_detalle_almacen,fecha_actual,idTab)
         }).catch(function (e) {
             console.log(e);
@@ -909,7 +902,7 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual,idTab){
     
 }
 
-function RechazarEnvio(idTab){ 
+function RechazarEnvio(CodTipoComprobante,idTab){ 
     var el = yo`<div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -923,7 +916,7 @@ function RechazarEnvio(idTab){
                 </div>
                 <div class="modal-footer text-center"> 
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="${()=>ConfirmarRechazoEnvio(idTab)}">Aceptar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="${()=>ConfirmarRechazoEnvio(CodTipoComprobante,idTab)}">Aceptar</button>
                 </div>
             </div>
         </div>`
@@ -933,18 +926,128 @@ function RechazarEnvio(idTab){
 } 
 
 
-function ConfirmarRechazoEnvio(){
+function ConfirmarRechazoEnvio(CodTipoComprobante,idTab){
+    run_waitMe($('#main-contenido'), 1, "ios","Realizando operacion..."); 
+    var Cod_Almacen = global.variablesES[idTab].almacen_mov.Cod_Almacen
+    var Cod_TipoOperacion = global.variablesES[idTab].almacen_mov.Cod_TipoOperacion
+    var Cod_TipoComprobante = global.variablesES[idTab].almacen_mov.Cod_TipoComprobante
+    var Fecha = $("#Fecha_"+idTab).val()
+    var Serie = global.variablesES[idTab].almacen_mov.Serie
+    var Numero = global.variablesES[idTab].almacen_mov.Numero
+    var Motivo = $("#Motivo_"+idTab).val()
+    var Id_ComprobantePago = global.variablesES[idTab].almacen_mov.Id_ComprobantePago
+    var Flag_Anulado = global.variablesES[idTab].almacen_mov.Flag_Anulado==false?0:1
+    var Obs_AlmacenMov = global.variablesES[idTab].almacen_mov.Obs_AlmacenMov
+    var dataForm = $("#formTablaMovAlmacen_"+idTab).serializeArray() 
+    var Id_AlmacenMov = global.variablesES[idTab].almacen_mov.Id_AlmacenMov
 
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            Cod_Almacen,
+            Cod_TipoOperacion,
+            Cod_TipoComprobante, 
+            Serie,
+            Numero,
+            Motivo,
+            Id_ComprobantePago,
+            Flag_Anulado,
+            Obs_AlmacenMov, 
+            dataForm,
+            Id_AlmacenMov,
+            Fecha, 
+        })
+    }
+
+    //console.log(parametros)
+    fetch(URL + '/almacenes_api/rechazar_mov_almacen', parametros)
+        .then(req => req.json())
+        .then(res => {
+            if(res.respuesta=='ok'){
+                
+                toastr.success('Se guardo correctamente el registro','Confirmacion',{timeOut: 5000})
+                RefrescarEntradasSalidas(CodTipoComprobante,idTab)
+                 
+            }else{
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
+            }
+            $('#main-contenido').waitMe('hide');
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
-function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
+function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){ 
+
     if($("#divDestino_"+idTab).css("display")=="block" && !arrayValidacion.includes($("#Cod_Destino_"+idTab).val()) && $("#Cod_Operacion_"+idTab).val().trim()=="21"){
-         
-        run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
+        run_waitMe($('#main-contenido'), 1, "ios","Realizando operacion..."); 
         
-        var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()
+        //console.log(global.variablesES[idTab].almacen_mov)
+
+        var Cod_Almacen = global.variablesES[idTab].almacen_mov.Cod_Almacen
+        var Cod_TipoOperacion = global.variablesES[idTab].almacen_mov.Cod_TipoOperacion
+        var Cod_TipoComprobante = global.variablesES[idTab].almacen_mov.Cod_TipoComprobante
+        var Fecha = $("#Fecha_"+idTab).val()
+        var Serie = global.variablesES[idTab].almacen_mov.Serie
+        var Numero = global.variablesES[idTab].almacen_mov.Numero
+        var Motivo = $("#Motivo_"+idTab).val()
+        var Id_ComprobantePago = global.variablesES[idTab].almacen_mov.Id_ComprobantePago
+        var Flag_Anulado = global.variablesES[idTab].almacen_mov.Flag_Anulado==false?0:1
+        var Obs_AlmacenMov = global.variablesES[idTab].almacen_mov.Obs_AlmacenMov
+        var dataForm = $("#formTablaMovAlmacen_"+idTab).serializeArray() 
+        var Id_AlmacenMov = global.variablesES[idTab].almacen_mov.Id_AlmacenMov
+
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                Cod_Almacen,
+                Cod_TipoOperacion,
+                Cod_TipoComprobante, 
+                Serie,
+                Numero,
+                Motivo,
+                Id_ComprobantePago,
+                Flag_Anulado,
+                Obs_AlmacenMov, 
+                dataForm,
+                Id_AlmacenMov,
+                Fecha, 
+            })
+        }
+
+        //console.log(parametros)
+        fetch(URL + '/almacenes_api/guardar_mov_almacen_entrada', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if(res.respuesta=='ok'){
+                    toastr.success('Se guardo correctamente el registro','Confirmacion',{timeOut: 5000})
+                    RefrescarEntradasSalidas(CodTipoComprobante,idTab)
+                }else{
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
+                }
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
+
+
+       /* var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()
         var Cod_TipoOperacion = $("#Cod_Operacion_"+idTab).val()
-        var Cod_TipoComprobante = CodTipoComprobante//$("#Id_ComprobantePago").attr("data-id")
+        var Cod_TipoComprobante = CodTipoComprobante 
         var Fecha = fecha_actual
         var Serie = $("#Serie_"+idTab).val()
         var Numero = $("#Numero_"+idTab).val()
@@ -956,18 +1059,17 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
         }
         var Obs_AlmacenMov = null
         var dataForm = $("#formTablaMovAlmacen_"+idTab).serializeArray()
-
-        // destino
-        var Cod_Destino = $("#Cod_Destino_"+idTab).val()
+ 
+        var Cod_Destino = $("#Cod_Destino_"+idTab).val()*/
 
 
     }else{
         if(EsValido(idTab)){
-            run_waitMe($('#modal-superior'), 1, "ios","Realizando operacion..."); 
+            run_waitMe($('#main-contenido'), 1, "ios","Realizando operacion..."); 
             var Cod_Almacen = $("#Cod_Almacen_"+idTab).val()
             var Cod_TipoOperacion = $("#Cod_Operacion_"+idTab).val()
             var Cod_TipoComprobante = CodTipoComprobante//$("#Id_ComprobantePago").attr("data-id")
-            var Fecha = fecha_actual
+            var Fecha = $("#Fecha_"+idTab).val()
             var Serie = $("#Serie_"+idTab).val()
             var Numero = $("#Numero_"+idTab).val()
             var Motivo = $("#Motivo_"+idTab).val()
@@ -1036,13 +1138,12 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
                         });
                     }else{
                         toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
-                    }  
-                    $('#modal-superior').modal('hide') 
-                    $('#modal-superior').waitMe('hide');
+                    }   
+                    $('#main-contenido').waitMe('hide');
                 }).catch(function (e) {
                     console.log(e);
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                    $('#modal-superior').waitMe('hide');
+                    $('#main-contenido').waitMe('hide');
                 });
 
         }
@@ -1082,8 +1183,7 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante,idTab){
         AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,fecha_actual,Stock)
 }
 
-function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) {
-    LimpiarEventoModales()
+function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1141,8 +1241,7 @@ function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) {
         });
 }
 
-function EntradasSalidas(Cod_TipoComprobante) {
-    LimpiarEventoModales()
+function EntradasSalidas(Cod_TipoComprobante) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

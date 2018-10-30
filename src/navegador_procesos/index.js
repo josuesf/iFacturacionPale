@@ -12,6 +12,7 @@ import { NuevoEgreso } from '../sis_procesos/mod_ventas/recibo_egreso'
 import { NuevaVenta } from '../sis_procesos/mod_ventas/ventas'
 import { NuevoArqueoCaja } from '../sis_procesos/mod_ventas/arqueo_caja'
 import { refrescar_movimientos } from '../sis_procesos/movimientos_caja'
+import { NuevoCambioPrecio } from '../sis_procesos/mod_ventas/cambio_precio'
 
 
 import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
@@ -20,6 +21,10 @@ import { EntradasSalidas } from '../sis_procesos/mod_almacen/entradas_salidas'
 import { Cuentas } from '../sis_procesos/mod_administracion/cuentas_pagar_compra'
 import { LibroReservas } from '../sis_procesos/mod_reservas/reservas'
 import { NuevaHabitacion } from '../sis_procesos/mod_reservas/habitaciones'
+
+//Views Reportes
+import { NuevoReporteComprobante } from '../sis_procesos/mod_reportes/comprobante_pago'
+
 
 
 // administracion
@@ -44,8 +49,7 @@ import { ListarProductosServ } from '../sis_admin/mod_inicio/productos_serv/list
 import { ListarClientes } from '../sis_admin/mod_inicio/clientes_prov/listar'
 //View Contabilidad
 import {ListarCuentasBancarias} from '../sis_admin/mod_contabilidad/cuentas_bancarias/listar'
-
-
+import {ListarMesTipoCambio} from '../sis_admin/mod_tipocambio/listar/listar'
 
 function Ver(Flag_Cerrado) { 
    
@@ -53,33 +57,45 @@ function Ver(Flag_Cerrado) {
         ${!Flag_Cerrado?
             yo` 
             <ul id="main-menu" class="gui-controls"> 
-
-                <li class="gui-folder expanded">
-                    <a href="javascript:void(0)">
-                        <div class="gui-icon"><i class="fa fa-th"></i></div>
-                        <span class="title">Movimientos de Caja</span>
-                    </a> 
-                    <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><span class="title">Recibo de Ingreso</span></a></li>
-
-                        <li><a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><span class="title">Recibo de Egreso</span></a></li>
-
-                        <li><a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><span class="title">Compra y Venta de Dolares</span></a></li>
-
-                        <li><a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><span class="title"> Envio Efectivo</span></a></li>
-
-                        <li><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><span class="title"> Recepcion de Efectivo</span></a></li>
-
-                    </ul> 
-                </li>
-
+ 
                 <li class="gui-folder">
                     <a>
                         <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
                         <span class="title"> Ventas</span>
                     </a> 
                     <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => NuevaVenta()}><span class="title">Nueva Venta</span></a></li>
+
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Documentos de Ventas</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevaVenta()}><span class="title">Nueva Venta</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => ComprobantePago('14')}><span class="title">Registro de Venta</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => ComprobantePago('14',null,null,true)}><span class="title">Registro de Exportacion</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoCambioPrecio()}><span class="title">Cambio de Precios</span></a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a> 
+                                <span class="title">Documentos Contables</span>
+                            </a> 
+                        </li>
+
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Movimientos de Caja</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><span class="title">Recibo de Ingreso</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><span class="title">Recibo de Egreso</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><span class="title">Compra y Venta de Dolares</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><span class="title"> Envio Efectivo</span></a></li>
+                                <li><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><span class="title"> Recepcion de Efectivo</span></a></li>
+                            </ul>
+                        </li>
+
                     </ul> 
                 </li>
 
@@ -89,7 +105,35 @@ function Ver(Flag_Cerrado) {
                         <span class="title"> Compras</span>
                     </a> 
                     <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => ComprobantePago('08')}><span class="title">Facturas recibidas</span></a></li>
+
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Documentos de Compras</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => ComprobantePago('08')}><span class="title">Facturas recibidas</span></a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a> 
+                                <span class="title">Documentos Contables</span>
+                            </a> 
+                        </li>
+
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Movimientos de Caja</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoIngreso()}><span class="title">Recibo de Ingreso</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoEgreso()}><span class="title">Recibo de Egreso</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoCompraVentaME(true)}><span class="title">Compra y Venta de Dolares</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoEnvioEfectivo(true)}><span class="title"> Envio Efectivo</span></a></li>
+                                <li><a href="javascript:void(0);" onclick=${() => NuevaRecepcion()}><span class="title"> Recepcion de Efectivo</span></a></li>
+                            </ul>
+                        </li> 
+                         
                     </ul> 
                 </li>
 
@@ -99,8 +143,15 @@ function Ver(Flag_Cerrado) {
                         <span class="title"> Almacen</span>
                     </a> 
                     <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NE')}><span class="title"> Registro de Entradas</span></a></li>
-                        <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NS')}><span class="title"> Registro de Salidas</span></a></li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Movimientos</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NE')}><span class="title"> Registro de Entradas</span></a></li>
+                                <li><a href="javascript:void(0)" onclick=${() => EntradasSalidas('NS')}><span class="title"> Registro de Salidas</span></a></li>
+                            </ul>
+                        </li>
                     </ul> 
                 </li>
 
@@ -110,29 +161,24 @@ function Ver(Flag_Cerrado) {
                         <span class="title"> Administracion</span>
                     </a> 
                     <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => Cuentas('14')}><span class="title"> Cuentas por Cobrar</span></a></li>
-                        <li><a href="javascript:void(0)" onclick=${() => Cuentas('08')}><span class="title"> Cuentas por Pagar</span></a></li>
-                    </ul> 
-                </li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Cobros</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => Cuentas('14')}><span class="title"> Cuentas por Cobrar</span></a></li> 
+                            </ul>
+                        </li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Pagos</span>
+                            </a> 
+                            <ul> 
+                                <li><a href="javascript:void(0)" onclick=${() => Cuentas('08')}><span class="title"> Cuentas por Pagar</span></a></li>
+                            </ul>
+                        </li>
 
-                <li class="gui-folder">
-                    <a>
-                        <div class="gui-icon"><i class="fa fa-laptop"></i></div>
-                        <span class="title"> Sistema</span>
-                    </a> 
-                    <ul>
-                        <li><a href="javascript:void(0)" onclick=${() => NuevoArqueoCaja()}><span class="title"> Arqueo de Caja</span></a></li> 
-                    </ul> 
-                </li>
-
-                <li class="gui-folder">
-                    <a>
-                        <div class="gui-icon"><i class="fa fa-cog"></i></div>
-                        <span class="title"> Extras</span>
-                    </a> 
-
-                    <ul>
-
+                      
                         <li class="gui-folder">
                             <a> 
                                 <span class="title">Mantenimientos</span>
@@ -144,47 +190,7 @@ function Ver(Flag_Cerrado) {
                                 <li>
                                     <a href="javascript:void(0)" onclick=${() => ListarClientes(true)}><span class="title"> Cliente/Proveedor</span></a>
                                 </li>
-                            </ul>
-                        </li>
 
-                        <li class="gui-folder">
-                            <a> 
-                                <span class="title">Contabilidad</span>
-                            </a> 
-                            <ul>
-                                <li>
-                                    <a href="javascript:void(0)" onclick=${() => ListarCuentasBancarias(true)}><span class="title"> Cuentas Bancarias</span></a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="gui-folder">
-                            <a> 
-                                <span class="title">Logistica</span>
-                            </a> 
-                            <ul>
-                                <li>
-                                    <a href="javascript:void(0)" onclick=${() => ListarCategorias(true)}><span class="title"> Categoria</span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick=${() => ListarTurnos(true)}><span class="title"> Turnos de Atencion</span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick=${() => ListarAlmacenes(true)}><span class="title"> Almacenes</span></a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0)" onclick=${() => ListarConceptos(true)}><span class="title"> Conceptos</span></a>
-                                </li>
-                                
-                            </ul>
-                        </li>
-
-                        
-                        <li class="gui-folder">
-                            <a> 
-                                <span class="title">Configuracion</span>
-                            </a> 
-                            <ul>
                                 <li>
                                     <a href="javascript:void(0)" onclick=${() => ListarEmpresa(true)}><span class="title"> Empresa</span></a>
                                 </li>
@@ -210,43 +216,80 @@ function Ver(Flag_Cerrado) {
                                 
                             </ul>
                         </li>
-        
 
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Contabilidad</span>
+                            </a> 
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarCuentasBancarias(true)}><span class="title"> Cuentas Bancarias</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarMesTipoCambio()}><span class="title"> Tipo de Cambio</span></a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Logistica</span>
+                            </a> 
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarCategorias(true)}><span class="title"> Categoria</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarTurnos(true)}><span class="title"> Turnos de Atencion</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarAlmacenes(true)}><span class="title"> Almacenes</span></a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" onclick=${() => ListarConceptos(true)}><span class="title"> Conceptos</span></a>
+                                </li>
+                                
+                            </ul>
+                        </li>
+ 
+                        <li><a href="javascript:void(0)" onclick=${() => NuevoArqueoCaja()}><span class="title"> Arqueo de Caja</span></a></li> 
                     </ul> 
-                    
                 </li>
 
+                <li class="gui-folder">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-bar-chart-o"></i></div>
+                        <span class="title"> Reportes</span>
+                    </a>
+                    <ul>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Ventas</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteComprobante('14')}><span class="title"> Reporte de Ventas</span></a></li> 
+                            </ul>
+                        </li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Compras</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteComprobante('08')}><span class="title"> Reporte de Compras</span></a></li> 
+                            </ul>
+                        </li>
+                    </ul>        
+                </li>
             </ul>`
             :yo`
             <ul id="main-menu" class="gui-controls"> 
-
-            <li class="gui-folder expanded not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-th"></i></div>
-                    <span class="title">Movimientos de Caja</span>
-                </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title">Recibo de Ingreso</span></a></li>
-
-                    <li><a href="javascript:void(0)"><span class="title">Recibo de Egreso</span></a></li>
-
-                    <li><a href="javascript:void(0)"><span class="title">Compra y Venta de Dolares</span></a></li>
-
-                    <li><a href="javascript:void(0)"><span class="title"> Envio Efectivo</span></a></li>
-
-                    <li><a href="javascript:void(0);"><span class="title"> Recepcion de Efectivo</span></a></li>
-
-                </ul> 
-            </li>
-
+ 
             <li class="gui-folder not-active">
                 <a>
                     <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
                     <span class="title"> Ventas</span>
                 </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title">Nueva Venta</span></a></li>
-                </ul> 
+                
             </li>
 
             <li class="gui-folder not-active">
@@ -254,9 +297,7 @@ function Ver(Flag_Cerrado) {
                     <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
                     <span class="title"> Compras</span>
                 </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title">Facturas recibidas</span></a></li>
-                </ul> 
+                
             </li>
 
             <li class="gui-folder not-active">
@@ -264,10 +305,7 @@ function Ver(Flag_Cerrado) {
                     <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
                     <span class="title"> Almacen</span>
                 </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title"> Registro de Entradas</span></a></li>
-                    <li><a href="javascript:void(0)"><span class="title"> Registro de Entradas</span></a></li>
-                </ul> 
+                
             </li>
 
             <li class="gui-folder not-active">
@@ -275,112 +313,16 @@ function Ver(Flag_Cerrado) {
                     <div class="gui-icon"><i class="fa fa-cogs"></i></div>
                     <span class="title"> Administracion</span>
                 </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title"> Cuentas por Cobrar</span></a></li>
-                    <li><a href="javascript:void(0)"><span class="title"> Cuentas por Pagar</span></a></li>
-                </ul> 
-            </li>
-
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-laptop"></i></div>
-                    <span class="title"> Sistema</span>
-                </a> 
-                <ul>
-                    <li><a href="javascript:void(0)"><span class="title"> Arqueo de Caja</span></a></li> 
-                </ul> 
-            </li>
-
-
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-cog"></i></div>
-                    <span class="title"> Configuracion</span>
-                </a> 
-
-                <ul>
-
-                    <li class="gui-folder">
-                        <a> 
-                            <span class="title">Mantenimientos</span>
-                        </a> 
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Productos y servicios</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Cliente/Proveedor</span></a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="gui-folder">
-                        <a> 
-                            <span class="title">Contabilidad</span>
-                        </a> 
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Cuentas Bancarias</span></a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="gui-folder">
-                        <a> 
-                            <span class="title">Logistica</span>
-                        </a> 
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Categoria</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Turnos de Atencion</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Almacenes</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Conceptos</span></a>
-                            </li>
-                            
-                        </ul>
-                    </li>
-
-                    <li class="gui-folder">
-                        <a> 
-                            <span class="title">Configuracion</span>
-                        </a> 
-                        <ul>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Empresa</span></a>
-                            </li>
-                            
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Sucursales</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Usuarios</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Perfiles</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Cajas</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Parametros</span></a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)"><span class="title"> Modulos</span></a>
-                            </li>
-                            
-                        </ul>
-                    </li>
-
-                </ul> 
                 
             </li>
-
+ 
+            <li class="gui-folder not-active">
+                <a>
+                    <div class="gui-icon"><i class="fa fa-bar-chart-o"></i></div>
+                    <span class="title"> Reportes</span>
+                </a> 
+                
+            </li>
         </ul>
             `}`;
     var container = document.getElementById('nav-container')
@@ -538,6 +480,8 @@ function TraerTurnos(){
 }
 
 function CambiarTurnoSistema(){
+    $("#divErrorCambioTurno").css("display","none")
+    $("#textErrorCambioTurno").text('')
     run_waitMe($('#modal-alerta'), 1, "ios","Cambiando turno...");
     var Turno = $("#Turno").val()
     var Gestion = $("#Gestion").val()
@@ -556,14 +500,14 @@ function CambiarTurnoSistema(){
     }
     fetch(URL+'/turnos_api/cambiar_turno_sistema', parametros)
     .then(req => req.json())
-    .then(res => { 
+    .then(res => {  
        if(res.respuesta=='ok'){
-        location.reload();
+            window.location.href = '/'
        }else{
            $("#divErrorCambioTurno").css("display","block")
            $("#textErrorCambioTurno").text(res.data) 
-       }
-       $('#modal-alerta').waitMe('hide');
+           $('#modal-alerta').waitMe('hide');
+       } 
     }).catch(function (e) {
         console.log(e);
         $("#divErrorCambioTurno").css("display","block")

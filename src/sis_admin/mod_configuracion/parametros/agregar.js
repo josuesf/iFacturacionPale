@@ -5,10 +5,10 @@ import {ListarParametros} from './listar';
 import {URL} from '../../../constantes_entorno/constantes'
 
 
-module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
+module.exports = function NuevoParametro(_escritura,parametro) {
 
     var tab = yo`
-    <li class=""><a href="#tab_crear_parametros_2" data-toggle="tab" aria-expanded="false" id="id_tab_crear_paramtros_2">Nuevo Parametro<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class=""><a href="#tab_crear_parametros_2" data-toggle="tab" aria-expanded="false" id="id_tab_crear_paramtros_2"> ${parametro?'Editar':'Nuevo'} Parametro<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
@@ -20,25 +20,20 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
                     <header>
                         <a onclick=${()=>ListarParametros(_escritura)}
                         class="btn btn-xs btn-icon-toggle"><i class="fa fa-arrow-left"></i></a>
-                        ${perfil?'Editar':'Nuevo'} Perfil
+                        ${parametro?'Editar':'Nuevo'} Parametro
                     </header>
                 </div>
                 
                 <div class="card-body">
                     <div class="panel">
-                        
-                        <!-- form start -->
-                        <form role="form">
-                            <div class="panel-body">
-                                
-                            </div>
-                            <!-- /.box-body -->
-                
-                            
-                        </form>
-                        <div class="card-actionbar">
-                                <button onclick="${() => Guardar(_escritura, sucursal)}" class="btn btn-primary">Guardar</button>
-                            </div>
+                        <div class="table-responsive" id="tablaResponsiveParametros">
+                            <table class="table table-bordered table-striped" id="tablaParametros">
+                                <thead id="tablaHeadParametros">
+                                </thead>
+                                <tbody id="tablaBodyParametros">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -58,6 +53,183 @@ module.exports = function NuevoPerfil(_escritura,modulos, perfil) {
         $("#tabs_contents").append(el)
     } 
     $("#id_tab_crear_paramtros_2").click()
+    if(parametro)
+        LlenarTabla(parametro)
+}
+
+function ArmarTabla(vistas,columnas,parametro){
+    var thead = '<tr><td class="hidden"></td>'
+    for(var j=0;j<columnas.length;j++){ 
+        thead = thead+'<td data-id="'+columnas[j].Cod_Columna+'" data-value="'+columnas[j].Tipo+'">'+columnas[j].Columna+'</td>'  
+    }
+    
+    thead=thead+'</tr>' 
+    $("#tablaHeadParametros").html('')
+    $("#tablaHeadParametros").html(thead)
+
+    var tbody=''
+    for(var j=0;j<vistas.length;j++){
+        tbody = tbody+ '<tr>'
+        for (var key in vistas[j]){ 
+            if(key=='Estado'){
+                if(vistas[j][key]){
+                    tbody = tbody+'<td class="TD'+key+'"><div class="checkbox checkbox-inline checkbox-styled"><label><input type="checkbox" class="'+key+'" checked><span></span></label></div></td>' 
+                }else{
+                    tbody = tbody+'<td  class="TD'+key+'"><div class="checkbox checkbox-inline checkbox-styled"><label><input type="checkbox" class="'+key+'"><span></span></label></div></td>' 
+                }
+            }else{
+                if(key=='Nro'){
+                    tbody = tbody+'<td class="hidden TD'+key+'">'+vistas[j][key]+'</td>' 
+                }else{
+                    if(key=='FechaHora'){
+                        tbody = tbody+'<td class="TD'+key+'"><div class="form-group"> <input type="date" class="form-control '+key+'" value="'+vistas[j][key]+'"><div class="form-control-line"></div></div></td>' 
+                    }else{
+                        tbody = tbody+'<td class="TD'+key+'"><div class="form-group"> <input type="text" class="form-control '+key+'" value="'+vistas[j][key]+'"><div class="form-control-line"></div></div></td>'
+                    }
+                }
+            }
+        }
+        tbody=tbody+'</tr>' 
+    }
+    $("#tablaBodyParametros").html('')
+    $("#tablaBodyParametros").html(tbody)
+
+    for (var key in vistas[0]){  
+        $("."+key).change(function(){
+            //run_waitMe($('#main-contenido'), 1, "ios");
+            const rowIndex = $(this).parent().parent().parent().index('#tablaParametros tbody tr'); 
+            const tdIndex = $(this).parent().parent().index('#tablaParametros tbody tr:eq(' + rowIndex + ') td');
+            const Cod_Tabla = parametro.Cod_Tabla 
+            const Cod_Columna = $("#tablaHeadParametros > tr > td").eq(tdIndex).attr("data-id")
+            const Tipo_Columna = $("#tablaHeadParametros > tr > td").eq(tdIndex).attr("data-value")
+            var Cod_Fila = ''
+            var Valor = ''
+            switch(Tipo_Columna){
+                case 'CADENA':
+                    Cod_Fila = $(this).parent().parent().parent().find('td').eq(0).text()
+                    Valor = $(this).val()
+                    break;
+                case 'NUMERO':
+                    Cod_Fila = $(this).parent().parent().parent().find('td').eq(0).text()
+                    Valor = $(this).val()
+                break
+                case 'ENTERO':
+                    Cod_Fila = $(this).parent().parent().parent().find('td').eq(0).text()
+                    Valor = parseInt($(this).val())
+                break
+                case 'FECHAHORA':
+                    Cod_Fila = $(this).parent().parent().parent().find('td').eq(0).text()
+                    Valor = $(this).val()
+                break
+                case 'BOLEANO':
+                    Cod_Fila = $(this).parent().parent().parent().parent().find('td').eq(0).text()
+                    if($(this).is(":checked")){
+                        Valor = 1
+                    }else{
+                        Valor = 0
+                    }
+                break
+            }
+            const parametros = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Cod_Tabla,
+                    Cod_Columna,
+                    Cod_Fila,
+                    Tipo_Columna,
+                    Valor
+                })
+            }
+            
+            fetch(URL+'/parametros_api/guardar_par_fila', parametros)
+            .then(req => req.json())
+            .then(res => {
+                if (res.respuesta == 'ok') {
+                    toastr.success('Se actualizo correctamente el valor de la par par','Confirmacion',{timeOut: 5000})
+                }else{
+                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.','Error',{timeOut: 5000})
+                }   
+                $('#main-contenido').waitMe('hide');
+            }).catch(function (e) {
+                console.log(e);
+                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                $('#main-contenido').waitMe('hide');
+            });
+ 
+        })
+    }
+     
+}
+
+function LlenarVistas(vistas,columnas,parametro){ 
+    if(columnas.length>0){
+        ArmarTabla(vistas,columnas,parametro)
+    } 
+}
+
+function LlenarTabla(parametro){
+    run_waitMe($('#main-contenido'), 1, "ios");
+    var Cod_Tabla = parametro.Cod_Tabla
+    var NombreVista = parametro.Tabla
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Cod_Tabla
+        })
+    }
+    fetch(URL+'/parametros_api/get_par_columna_by_codtabla', parametros)
+        .then(req => req.json())
+        .then(res => {
+            const columnas = res.data.columnas
+            if (res.respuesta == 'ok') {
+
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        NombreVista
+                    })
+                }
+                fetch(URL+'/parametros_api/get_par_vista', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        if (res.respuesta == 'ok') {
+                            LlenarVistas(res.data.vistas,columnas,parametro)
+                            $('#main-contenido').waitMe('hide');
+                        }else{
+                            console.log(res)
+                            $('#main-contenido').waitMe('hide');
+                        }
+
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                        $('#main-contenido').waitMe('hide');
+                    });
+
+                //LlenarParametros(res.data)
+            }
+            else{
+                console.log(res)
+                $('#main-contenido').waitMe('hide');
+            }
+            
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+            $('#main-contenido').waitMe('hide');
+        });
 }
 
 function CerrarTab(){
@@ -184,3 +356,5 @@ function Guardar(_escritura, sucursal){
             $('#main-contenido').waitMe('hide');
         });
 }
+
+export {ListarParametros}

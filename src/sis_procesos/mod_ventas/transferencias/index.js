@@ -2,8 +2,7 @@
 var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
-import { refrescar_movimientos } from '../../movimientos_caja'
-import { LimpiarEventoModales } from '../../../../utility/tools' 
+import { refrescar_movimientos } from '../../movimientos_caja' 
 
 var cantidad_tabs = 0
 
@@ -665,8 +664,7 @@ function GuardarMovIngresoOtraCaja(Cod_Caja,Cod_Turno,Id_Concepto,Id_ClienteProv
 
 
 
-function RefrescarEnvioEfectivo(_escritura,idTab) {
-    LimpiarEventoModales()
+function RefrescarEnvioEfectivo(_escritura,idTab) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     var Cod_Sucursal = '0001'
@@ -705,8 +703,7 @@ function RefrescarEnvioEfectivo(_escritura,idTab) {
 }
 
 
-function NuevoEnvioEfectivo(_escritura, caja) {
-    LimpiarEventoModales()
+function NuevoEnvioEfectivo(_escritura, caja) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     var Cod_Sucursal = '0001'

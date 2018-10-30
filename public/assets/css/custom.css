@@ -227,7 +227,7 @@ table.dataTable.no-footer {
         width: 100%; 
     } 
 }
-
+ 
 
 .header-nav > li {
     position: relative;
@@ -248,4 +248,19 @@ table.dataTable.no-footer {
     white-space: initial;
     overflow:visible;
     cursor: pointer;
+}
+
+.panel-group .card.expanded {
+    margin: 0px 0px;
+}
+
+@media (max-width: 767px) {
+    .table-responsive .dropdown-menu {
+        position: static !important;
+    }
+}
+@media (min-width: 768px) {
+    .table-responsive {
+        overflow: visible;
+    }
 }

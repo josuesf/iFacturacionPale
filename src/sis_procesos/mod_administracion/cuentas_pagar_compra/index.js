@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools' 
+import {BloquearControles} from '../../../../utility/tools' 
 import { BuscarCuentasPendientes } from '../../modales/cuentas'
 import { NuevoCliente, BuscarCliente } from '../../modales' 
 
@@ -420,7 +420,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     CambioFormasPago(CodLibro,idTabPC)
     if(global.objCliente =='')
         BuscarCuentasPendientes(CodLibro,0,'1753-01-01 00:00:00','9999-12-31 23:59:59.997')
-    else{
+    else{ 
         $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
         
         /*$("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
@@ -460,8 +460,8 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     }
 
     
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
-        if(global.objCliente!=''){ 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
+        if(global.objCliente!=''){  
             $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
             $("#Nro_Documento_"+idTabPC).val(global.objCliente.Doc_Cliente)
@@ -515,34 +515,35 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
  
 }
 
-function AgregarTabla(comprobantes,idTab){
+function AgregarTabla(comprobantes,idTab){  
     var el = yo`<table id="tablaComprobantes_${idTab}" class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Vencimiento</th> 
-            <th>Documento</th>
-            <th>Total Faltante</th>
-            <th>Amortizar</th>
-            <th>Saldo</th>
-        </tr>
-    </thead>
-    <tbody>
-        ${comprobantes.map((c,index) => yo`
-        <tr>
-            <td class="hidden idComprobante">${c.id_ComprobantePago}</td>
-            <td class="FechaEmision">${c.FechaEmision}</td>
-            <td class="FechaVencimiento">${c.FechaVencimiento}</td> 
-            <td class="hidden Dias">${c.Dias}</td> 
-            <td class="Documento">${c.Documento}</td> 
-            <td class="TotalFaltante">${c.TotalFaltante}</td> 
-            <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeypress=${()=>CambioAmortizar(idTab)}></td> 
-            <td class="Saldo">${c.TotalFaltante}</td> 
-        </tr>`)}
-    </tbody>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Vencimiento</th> 
+                <th>Documento</th>
+                <th>Total Faltante</th>
+                <th>Amortizar</th>
+                <th>Saldo</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${comprobantes.map((c,index) => yo`
+            <tr>
+                <td class="hidden idComprobante">${c.id_ComprobantePago}</td>
+                <td class="FechaEmision">${c.FechaEmision.toString().split('T')[0]}</td>
+                <td class="FechaVencimiento">${c.FechaVencimiento.toString().split('T')[0]}</td> 
+                <td class="hidden Dias">${c.Dias}</td> 
+                <td class="Documento">${c.Documento}</td> 
+                <td class="TotalFaltante">${c.TotalFaltante}</td> 
+                <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeyup=${()=>CambioAmortizar(idTab)}></td> 
+                <td class="Saldo">${c.TotalFaltante}</td> 
+            </tr>`)}
+        </tbody>
 
-</table>`
-    empty(document.getElementById('divTablaComprobantes_'+idTab)).appendChild(el);
+    </table>`
+    var tabla = document.getElementById('divTablaComprobantes_'+idTab);
+    empty(tabla).appendChild(el); 
 }
 
 function CargarModalConfirmacionCuentas(CodLibro,idTab){
@@ -674,8 +675,8 @@ function CalcularTotal(idTab){
         $('#tablaComprobantes_'+idTab+' > tbody tr').each(function () {
 
             SumaAmortiza += parseFloat($(this).find("td").eq(6).find("input").val())
-            if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val()))>0)
-                $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val())))
+            if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(6).find("input").val()))>0)
+                $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(6).find("input").val())))
             else
                 $(this).find("td").eq(7).text("0.00")
             
@@ -684,7 +685,7 @@ function CalcularTotal(idTab){
 
         $("#Total_"+idTab).val(SumaTotal)
         $("#TotalAmortizar_"+idTab).val(SumaAmortiza)
-        $("#TotalFaltante_"+idTab).val(SumaTotal-SumaAmortiza)
+        $("#TotalSaldo_"+idTab).val(SumaTotal-SumaAmortiza)
 
     }catch(e){
 
@@ -748,7 +749,7 @@ function BuscarPorFecha(CodLibro,idTab){
     }
     fetch(URL + '/recibo_iegreso_api/get_cuentas_by_cobrar_pagar', parametros)
         .then(req => req.json())
-        .then(res => { 
+        .then(res => {  
             if (res.respuesta == 'ok') {
                 AgregarTabla(res.data.cuentas,idTab)
             } 
@@ -1345,7 +1346,7 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
                     .then(res => {
                         if(res.respuesta=="ok"){
                             
-                            var parametrosComprobante = [
+                            /*var parametrosComprobante = [
                                 { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output"},
                                 { nom_parametro: 'Cod_Libro', valor_parametro: res.data.comprobante_pago[0].Cod_Libro},
                                 { nom_parametro: 'Cod_Periodo', valor_parametro:res.data.comprobante_pago[0].Cod_Periodo},
@@ -1396,7 +1397,7 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
                             EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
                                 if (dataComprobante.err)
                                     return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
-                            })        
+                            })     */   
  
                         }
                     }).catch(function (e) {
@@ -1523,8 +1524,7 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
     $("#modal_proceso").modal('hide')
 }
  
-function Cuentas(Cod_Libro) {
-    LimpiarEventoModales()
+function Cuentas(Cod_Libro) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1560,8 +1560,7 @@ function Cuentas(Cod_Libro) {
             }
             fetch(URL + '/cajas_api/get_empresa', parametros)
                 .then(req => req.json())
-                .then(res => {
-                    console.log("variables empresa",variables)
+                .then(res => { 
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa
                     VerCuentas(variables,fecha_format,Cod_Libro)

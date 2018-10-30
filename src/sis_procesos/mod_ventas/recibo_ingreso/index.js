@@ -2,8 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { NuevoCliente, BuscarCliente } from '../../modales'
-import { LimpiarEventoModales } from '../../../../utility/tools'
+import { NuevoCliente, BuscarCliente } from '../../modales' 
 
 var arrayValidacion = [null,'null','',undefined]
 //var flag_cliente = false 
@@ -198,7 +197,7 @@ function CargarFormulario(variables, fecha_actual,empresa) {
     $("#id_"+idTabRI).click()
 
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -405,7 +404,7 @@ function RefrescarFormulario(variables, fecha_actual,empresa,idTabRI) {
   
     $('#tab_'+idTabRI).html(el)
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -662,8 +661,7 @@ function Guardar(idTab) {
 }
  
 
-function RefrescarIngreso(idTab){
-    LimpiarEventoModales()
+function RefrescarIngreso(idTab){ 
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_TipoComprobante = 'RI'
     var Cod_ClaseConcepto = '007'
@@ -699,8 +697,7 @@ function RefrescarIngreso(idTab){
         });
 }
 
-function NuevoIngreso() {
-    LimpiarEventoModales()
+function NuevoIngreso() { 
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_TipoComprobante = 'RI'
     var Cod_ClaseConcepto = '007'

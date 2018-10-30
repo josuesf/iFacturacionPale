@@ -1,0 +1,13 @@
+.row{
+        height:20px;
+}
+.headerTable{
+    font-size: 15px;
+    font-weight: bold;
+    height: 20px;
+    border: 2px solid;
+}
+.detailsTable{
+    border: 1px solid;
+}
+ 

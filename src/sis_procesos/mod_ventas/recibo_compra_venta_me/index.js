@@ -3,8 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { NuevoCliente,BuscarCliente } from '../../modales'
-import { LimpiarEventoModales } from '../../../../utility/tools'
+import { NuevoCliente,BuscarCliente } from '../../modales' 
 
 
 var arrayValidacion = [null,'null','',undefined]
@@ -225,7 +224,7 @@ function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
     $("#tabs_contents").append(el)
     $("#id_"+idTabCVME).click()
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -460,7 +459,7 @@ function RefrescarVer(_escritura, Serie, variables,fecha_actual,empresa,idTabCVM
     //$('#modal-proceso').modal()
     $('#tab_'+idTabCVME).html(el)
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -904,8 +903,7 @@ function GuardarCompraVentaME(variables,fecha_actual,idTab){
     }
 }
 
-function RefrescarCompraVentaME(_escritura,idTab) { 
-    LimpiarEventoModales()
+function RefrescarCompraVentaME(_escritura,idTab) {  
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {
@@ -939,8 +937,7 @@ function RefrescarCompraVentaME(_escritura,idTab) {
         });
 }
  
-function NuevoCompraVentaME(_escritura, caja) { 
-    LimpiarEventoModales()
+function NuevoCompraVentaME(_escritura, caja) {  
     run_waitMe($('#main-contenido'), 1, "ios");
     var Cod_Caja = '100'//caja.Cod_Caja
     const parametros = {

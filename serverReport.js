@@ -25,18 +25,20 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
-var errores = '';
-//app.set('view engine', 'ejs'); 
+var errores = ''; 
 app.use(express.static('public'));
 app.use('/static', express.static('formatos'));  
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 app.disable('x-powered-by');
 app.use(session({ secret: '_secret_', cookie: { maxAge: 60 * 60 * 1000 }, saveUninitialized: false, resave: false }));
-// app.use(authChecker);
  
 // configuration init jsreport
 const reportingApp = express();
+app.get('/', function (req, res) { 
+  res.redirect('/reporting');
+})
+
 app.use('/reporting', reportingApp);
 
 jsreport = require('jsreport-core')(
@@ -51,7 +53,10 @@ jsreport = require('jsreport-core')(
     extensions: {
         express: { app: reportingApp, server: server },
         'fs-store': {
-          dataDirectory: require('path').join(__dirname, 'formatos/default'),
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportes'),//almacena templates genericos para los reportes
+          dataDirectory: require('path').join(__dirname, 'formatos/default/recibos_tickets'),//almacena templates genericos de recibos y tickets
+          //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
+          //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/reportes'), // almacena templates para otro tipo de reportes que no sean comprobantes o tickets de una determinada empresa
           syncModifications: true
         },
         'authentication' : {
@@ -67,6 +72,32 @@ jsreport = require('jsreport-core')(
     appPath: "/reporting"
   }
 );
+
+app.get('/prueba', function(req, res) { 
+  //console.log("request")
+  //console.log(req.body) 
+  //console.log("configuracionb de "+GETCONFIG(app.locals.empresa[0].RUC))
+  jsreport.render({
+    template: {
+      recipe: 'html-to-xlsx',
+      engine: 'jsrender',
+      content: fs.readFileSync(require('path').join('formatos/default/reportes/templates/ReporteXTotalCliente', 'content.html'), 'utf8'),
+      //content: '<table><tr><td style="height: 50px; font-size: 35px">{{:foo}}</td><td>world</td></tr> <tr><td style="width: 20px; text-align:right">right</td><td>world</td></tr><tr><td>world</td><td>world</td></tr></table>'
+    },
+    data: {
+      'NOMBRE':'PRUEBAAAA'
+    },
+    options: { preview: true }
+  }).then(function (out) {
+     
+
+    out.stream.pipe(res)
+  }).catch(function (e) {
+    
+    console.log("Errrrrrr",e)
+    res.end(e.message);
+  });
+});
 
 /*jsreport.use(require('jsreport-import-export')());
 jsreport.use(require('jsreport-tags')());
@@ -105,6 +136,18 @@ jsreport.use(require('jsreport-public-templates')()); */
 
 jsreport.init().then(() => { 
   console.log('jsreport server started')
+  return jsreport.render({
+    template: {
+      recipe: 'xlsx',
+      engine: 'handlebars',
+      content: '{{{xlsxPrint}}}',
+      xlsxTemplate: {
+        content: fs.readFileSync('prueba.xlsx').toString('base64')
+      }
+    }
+  }).then(function (report) {
+    report.stream.pipe(fs.createWriteStream('out.xlsx'))
+  })
 }).catch((e) => { 
   console.error(e);
 });

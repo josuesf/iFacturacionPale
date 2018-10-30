@@ -2,8 +2,7 @@ var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { BuscarCliente } from '../../modales'
-import { LimpiarEventoModales } from '../../../../utility/tools'
+import { BuscarCliente } from '../../modales' 
 
 //var flag_button = false
 //var total = 0 
@@ -399,8 +398,7 @@ function Recepcionados(idTab){
 
 
 
-function RefrescarRecepcion(idTab) {
-    LimpiarEventoModales()
+function RefrescarRecepcion(idTab) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',
@@ -430,8 +428,7 @@ function RefrescarRecepcion(idTab) {
         });
 }
 
-function NuevaRecepcion() {
-    LimpiarEventoModales() 
+function NuevaRecepcion() { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const parametros = {
         method: 'POST',

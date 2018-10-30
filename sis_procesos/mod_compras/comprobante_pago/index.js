@@ -5,7 +5,7 @@ import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '..
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
-import { ConvertirCadena,BloquearControles, LimpiarEventoModales } from '../../../../utility/tools' 
+import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 import { refrescar_movimientos,preparar_impresion_comprobante } from '../../movimientos_caja'
 
 var listaFormaPago = []
@@ -607,7 +607,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
 
     CambioLicitacion()*/
     
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -694,7 +694,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     })
 
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -2891,8 +2891,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                 COD_DOCCLIENTE:Cod_TipoDoc,
                 RUC_CLIENTE:Doc_Cliente,
                 DIRECCION_CLIENTE:Direccion_Cliente,
-                FECHA_EMISION:(new Date(FechaEmision)).toLocaleDateString(),
-                FECHA_VENCIMIENTO:(new Date(FechaVencimiento)).toLocaleDateString(),
+                FECHA_EMISION: FechaEmision ,
+                FECHA_VENCIMIENTO: FechaVencimiento,
                 FORMA_PAGO:'',
                 GLOSA:Glosa,
                 OBSERVACIONES:Obs_Comprobante,
@@ -4367,8 +4367,7 @@ async function AsyncCalcularTotal(CodLibro,variables) {
 }
  
 
-function ComprobantePago(Cod_Libro,Cliente,Detalles) {
-    LimpiarEventoModales()
+function ComprobantePago(Cod_Libro,Cliente,Detalles) { 
 
     run_waitMe($('#main-contenido'), 1, "ios","Cargando ventana para el comprobante...");
     const fecha = new Date()

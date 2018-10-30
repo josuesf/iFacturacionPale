@@ -50,5 +50,43 @@ router.post('/eliminar_sucursal', function (req, res){
     Ejecutar_Procedimientos(req,res, procedimientos)
 })
 
+router.post('/get_par_columna_by_codtabla', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Tabla', valor_parametro: input.Cod_Tabla}
+    ]
+    procedimientos = [
+        {nom_respuesta:'columnas',sp_name:'URP_PAR_COLUMNA_TXTabla', parametros}
+    ]
+    Ejecutar_Procedimientos(req,res, procedimientos)
+})
+
+router.post('/get_par_vista', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'NombreVista', valor_parametro: input.NombreVista}
+    ]
+    procedimientos = [
+        {nom_respuesta:'vistas',sp_name:'USP_PAR_Cargar_Vista', parametros}
+    ]
+    Ejecutar_Procedimientos(req,res, procedimientos)
+})
+
+
+router.post('/guardar_par_fila', function (req, res){
+    input = req.body
+    parametros = [
+        {nom_parametro: 'Cod_Tabla', valor_parametro: input.Cod_Tabla},
+        {nom_parametro: 'Cod_Columna', valor_parametro: input.Cod_Columna},
+        {nom_parametro: 'Cod_Fila', valor_parametro: input.Cod_Fila},
+        {nom_parametro: input.Tipo_Columna, valor_parametro: input.Valor},
+        {nom_parametro: 'Flag_Creacion', valor_parametro: 1},
+        {nom_parametro: 'Cod_Usuario',valor_parametro:req.session.username}
+    ]
+    procedimientos = [
+        {nom_respuesta:'filas',sp_name:'USP_PAR_FILA_G', parametros}
+    ]
+    Ejecutar_Procedimientos(req,res, procedimientos)
+})
 
 module.exports = router;

@@ -447,7 +447,7 @@ function ExtraerTextoIzquierda(pSerie) {
         var _Serie = parseInt(pSerie);
         return "";
     } catch (e) {
-        return pSerie.substring(0, 1) + ExtraerTextoIzquierda(pSerie.substring(1, pSerie.Length - 1));
+        return pSerie.substring(0, 1) + ExtraerTextoIzquierda(pSerie.substring(1, pSerie.length - 1));
     }
 }
 
@@ -456,7 +456,7 @@ function ExtraerNumeroDerecha(pSerie) {
         var _Serie = parseInt(pSerie);
         return pSerie;
     } catch (e) {
-        return ExtraerNumeroDerecha(pSerie.substring(1, pSerie.Length - 1));
+        return ExtraerNumeroDerecha(pSerie.substring(1, pSerie.length - 1));
     }
 }
 

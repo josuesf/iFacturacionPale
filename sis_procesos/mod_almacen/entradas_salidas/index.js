@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools'
+import {BloquearControles} from '../../../../utility/tools'
 import { BuscarProducto } from '../../modales'
 import { BuscarComprobantePago } from '../../modales/comprobante_pago'
 import { AsignarSeriesModal } from '../../modales/series'
@@ -231,7 +231,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     $("#tabs_contents").append(el)
     $("#id_"+idTabES).click()
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -253,7 +253,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
         }
     })
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -468,7 +468,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
   
     $('#tab_'+idTabES).html(el)
 
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -490,7 +490,7 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
         }
     })
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -1042,8 +1042,7 @@ function AsignarSeries(idFila,fecha_actual,CodTipoComprobante,idTab){
         AsignarSeriesModal(Cod_Almacen, Id_Producto,Cantidad,NroDias,Series,fecha_actual,Stock)
 }
 
-function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) {
-    LimpiarEventoModales()
+function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1103,8 +1102,7 @@ function RefrescarEntradasSalidas(Cod_TipoComprobante,idTab) {
         });
 }
 
-function EntradasSalidas(Cod_TipoComprobante) {
-    LimpiarEventoModales()
+function EntradasSalidas(Cod_TipoComprobante) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1

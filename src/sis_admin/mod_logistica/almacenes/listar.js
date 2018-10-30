@@ -213,7 +213,7 @@ function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             if (res.respuesta == 'ok') {
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
-                paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
+                paginas = parseInt(paginas / 50) + (paginas % 50 != 0 ? 1 : 0)
 
                 var tipo_almacenes = res.data.tipo_almacenes
 

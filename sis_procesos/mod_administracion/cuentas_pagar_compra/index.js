@@ -1,7 +1,7 @@
 var empty = require('empty-element');
 var yo = require('yo-yo');
 import { URL } from '../../../constantes_entorno/constantes'
-import {BloquearControles,LimpiarEventoModales} from '../../../../utility/tools' 
+import {BloquearControles} from '../../../../utility/tools' 
 import { BuscarCuentasPendientes } from '../../modales/cuentas'
 import { NuevoCliente, BuscarCliente } from '../../modales' 
 
@@ -179,7 +179,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-5" id="divFecha_${idTabPC}">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha_${idTabPC}" value="${fecha_actual}" onkeypress=${()=>TraerTipoCambio(CodLibro,idTabPC)}>
+                                                    <input type="date" class="form-control input-sm" id="Fecha_${idTabPC}" value="${fecha_actual}" onkeyup=${()=>TraerTipoCambio(CodLibro,idTabPC)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -460,7 +460,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     }
 
     
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () {  
         if(global.objCliente!=''){ 
             $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
@@ -536,7 +536,7 @@ function AgregarTabla(comprobantes,idTab){
             <td class="hidden Dias">${c.Dias}</td> 
             <td class="Documento">${c.Documento}</td> 
             <td class="TotalFaltante">${c.TotalFaltante}</td> 
-            <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeypress=${()=>CambioAmortizar(idTab)}></td> 
+            <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeyup=${()=>CambioAmortizar(idTab)}></td> 
             <td class="Saldo">${c.TotalFaltante}</td> 
         </tr>`)}
     </tbody>
@@ -1523,8 +1523,7 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
     $("#modal_proceso").modal('hide')
 }
  
-function Cuentas(Cod_Libro) {
-    LimpiarEventoModales()
+function Cuentas(Cod_Libro) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     const fecha = new Date()
     const mes = fecha.getMonth() + 1
@@ -1560,8 +1559,7 @@ function Cuentas(Cod_Libro) {
             }
             fetch(URL + '/cajas_api/get_empresa', parametros)
                 .then(req => req.json())
-                .then(res => {
-                    console.log("variables empresa",variables)
+                .then(res => { 
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa
                     VerCuentas(variables,fecha_format,Cod_Libro)

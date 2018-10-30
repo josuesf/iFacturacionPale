@@ -1,3 +1,4 @@
+ 
 var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
@@ -184,12 +185,86 @@ router.post('/guardar_mov_almacen_', function (req, res){
 })
 
 
+router.post('/rechazar_mov_almacen', function (req, res){ 
+    input = req.body
+    arreglo = input.dataForm 
+    parametros = [
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
+        {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro:'Serie', valor_parametro: input.Serie},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Fecha', valor_parametro: input.Fecha},
+        {nom_parametro:'Motivo', valor_parametro: input.Motivo},
+        {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
+        {nom_parametro:'Flag_Anulado', valor_parametro: input.Flag_Anulado},
+        {nom_parametro:'Obs_AlmacenMov', valor_parametro: input.Obs_AlmacenMov},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+    ] 
+    EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
+        if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
+        
+        parametrosR1 = [
+            {nom_parametro:'Id_AlmacenMov', valor_parametro: dataMov.result[0].valor}, 
+            {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+        ] 
+        EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_EXTORNAR', parametrosR1 , function (dataMovE) {
+            if (dataMovE.error) return res.json({respuesta:"error",error:dataMovE.error}) 
+
+            parametrosR2 = [
+                {nom_parametro:'Id_AlmacenMov', valor_parametro: input.Id_ComprobantePago}, 
+                {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+            ] 
+            EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_EXTORNAR', parametrosR2 , function (dataMovE) {
+                if (dataMovE.error) return res.json({respuesta:"error",error:dataMovE.error}) 
+                return res.json({respuesta:"ok",data:{}})
+               
+            }) 
+           
+        })  
+    }) 
+})
+
+router.post('/guardar_mov_almacen_entrada', function (req, res){ 
+    input = req.body
+    arreglo = input.dataForm 
+    parametros = [
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
+        {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
+        {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
+        {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
+        {nom_parametro:'Serie', valor_parametro: input.Serie},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Fecha', valor_parametro: input.Fecha},
+        {nom_parametro:'Motivo', valor_parametro: input.Motivo},
+        {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
+        {nom_parametro:'Flag_Anulado', valor_parametro: input.Flag_Anulado},
+        {nom_parametro:'Obs_AlmacenMov', valor_parametro: input.Obs_AlmacenMov},
+        {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
+    ] 
+    EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
+        if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
+        if(arreglo.length>0){
+            recorrerMovDetalles(arreglo,0,req,dataMov.result[0].valor,function(mensaje,flag){
+                if(flag){
+                    return res.json({respuesta:"ok",data:{}})
+                }else{
+                    return res.json({respuesta:"error",detalle_error:mensaje})
+                }
+            })
+        }else{
+            return res.json({respuesta:"ok",data:{}})
+        }
+    }) 
+})
 
 
 router.post('/guardar_mov_almacen', function (req, res){ 
     input = req.body
-    arreglo = input.dataForm
-    console.log(arreglo)
+    arreglo = input.dataForm 
     parametros = [
         {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
@@ -267,9 +342,9 @@ router.post('/guardar_mov_almacen', function (req, res){
                 var parametrosDestino = [
                     {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
                     {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Destino},
-                    {nom_parametro:'Cod_TipoOperacion', valor_parametro: "NE"},
+                    {nom_parametro:'Cod_TipoOperacion', valor_parametro: "21"},
                     {nom_parametro:'Cod_Turno', valor_parametro: null},
-                    {nom_parametro:'Cod_TipoComprobante', valor_parametro: "21"},
+                    {nom_parametro:'Cod_TipoComprobante', valor_parametro: "NE"},
                     {nom_parametro:'Serie', valor_parametro: ""},
                     {nom_parametro:'Numero', valor_parametro:""},
                     {nom_parametro:'Fecha', valor_parametro: input.Fecha},
@@ -336,13 +411,15 @@ router.post('/guardar_mov_almacen', function (req, res){
                      
                     }
                 })
+                return res.json({respuesta:"ok",data:{}}) 
+            }else{
+                return res.json({respuesta:"ok",data:{}}) 
             }
-            return res.json({respuesta:"ok",data:{}}) 
         }
     })
 })
 
- 
+  
 router.post('/get_variables_entradas_salidas', function (req, res){
     try{
         var data = {}
@@ -400,6 +477,42 @@ router.post('/get_variables_entradas_salidas', function (req, res){
     }
 })
 
+
+function recorrerMovDetalles(arreglo,indice,req,Id_AlmacenMov,callback){ 
+    if(indice<arreglo.length){
+        var Item = arreglo[indice+1].value
+        var Obs_AlmacenMovD = arreglo[indice+7].value
+        if(Item!=null && Item!=''){
+            parametrosD = [
+                {nom_parametro:'Id_AlmacenMov', valor_parametro: Id_AlmacenMov},
+                {nom_parametro:'Item', valor_parametro: Item},
+            ] 
+            EXEC_SQL('USP_ALM_ALMACEN_MOV_D_TXPK', parametrosD , function (dataMovDet) {
+                if (dataMovDet.error) callback(dataMovDet.error,false)
+                parametrosR = [
+                    {nom_parametro:'Id_AlmacenMov', valor_parametro: dataMovDet.result[0].Id_AlmacenMov},
+                    { nom_parametro: 'Id_Producto', valor_parametro: dataMovDet.result[0].Id_Producto},
+                    { nom_parametro: 'Item', valor_parametro: dataMovDet.result[0].Item},
+                    { nom_parametro: 'Des_Producto', valor_parametro: dataMovDet.result[0].Des_Producto},
+                    { nom_parametro: 'Precio_Unitario', valor_parametro:dataMovDet.result[0].Precio_Unitario},
+                    { nom_parametro: 'Cantidad', valor_parametro:dataMovDet.result[0].Cantidad},
+                    { nom_parametro: 'Cod_UnidadMedida', valor_parametro:dataMovDet.result[0].Cod_UnidadMedida},
+                    { nom_parametro: 'Obs_AlmacenMovD', valor_parametro:Obs_AlmacenMovD},
+                    { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username}
+                ] 
+                EXEC_SQL('USP_ALM_ALMACEN_MOV_D_G', parametrosR, function (dataAlmacen) {
+                    if (dataAlmacen.error) callback(dataAlmacen.error,false)
+                    recorrerMovDetalles(arreglo,indice+9,req,Id_AlmacenMov,callback)
+                })
+                
+            })
+        }else{
+            callback('',true)
+        }
+    }else{
+        callback('',true)
+    }
+}
 
 
 module.exports = router;

@@ -1,0 +1,20 @@
+{
+    "shortid": "r1N7Wqln7",
+    "name": "ReporteRegistroAuxiliarDetallado",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1540562553466
+    },
+    "_id": "iX8q0gWBcBTraLoc",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

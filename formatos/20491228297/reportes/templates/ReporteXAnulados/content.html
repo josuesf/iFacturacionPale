@@ -1,0 +1,54 @@
+<style>
+    {#asset stylesExcel.css @encoding=utf8}
+</style>
+<table> 
+     
+    <tr class="row"> 
+        <td colspan="6" style="font-weight: bold;font-size: 20px;text-align:center">Reporte de Documentos Anulados</td>
+    </tr> 
+    
+     
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td style="width:auto">Nombre / Razon Social : </td>
+        <td style="width:auto">{{:NOMBRE}}</td> 
+        <td></td>
+        <td></td>
+        <td>Fecha:</td> 
+    </tr> 
+    <tr class="row">
+        <td style="width:auto">Direccion : </td>
+        <td style="width:auto">{{:DIRECCION}}</td>
+        <td></td>
+        <td></td>
+        <td>{{:FECHA_SISTEMA}}</td> 
+    </tr> 
+    <tr class="row">
+        <td style="width:auto">RUC : </td>
+        <td style="width:auto">{{:RUC}}</td>
+        
+    </tr>  
+         
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr> 
+     <tr class="row">
+        <td></td>
+    </tr> 
+     
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">N°</td>
+        <td class="headerTable" style="width:auto;">Fecha</td>
+        <td class="headerTable" style="width:auto;">Documento</td>
+        <td class="headerTable" style="width:auto;">Glosa</td>
+        <td class="headerTable" style="width:auto;">Registrado</td>
+        <td class="headerTable" style="width:auto;">Hora</td>
+    </tr> 
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

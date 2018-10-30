@@ -1,0 +1,17 @@
+{
+    "shortid": "H1l-z_YuQ",
+    "name": "TicketNES",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1537222564537
+    },
+    "_id": "5kib07z7GGmUsKbN",
+    "data": {
+        "shortid": "SJXnM_Fum"
+    },
+    "$entitySet": "templates"
+}

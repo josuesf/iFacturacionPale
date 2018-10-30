@@ -174,7 +174,7 @@ function NuevoCliente(documentos) {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="Nro_Documento_NC">Numero de Documento </label>
-                                <input type="number"  class="form-control required" id="Nro_Documento_NC">
+                                <input type="text"  class="form-control required" id="Nro_Documento_NC">
                             </div>
                         </div>
                     </div>
@@ -247,8 +247,7 @@ function AgregarTabla(clientes,idInputCliente,idInputDoc){
 function AgregarTablaProductos(productos){ 
     var el = yo`<tabla class="table table-hover">
     <thead>
-        <tr>
-            <th>Codigo</th> 
+        <tr> 
             <th>Producto</th>
             <th>Stock</th>
             <th>Moneda</th>
@@ -259,13 +258,11 @@ function AgregarTablaProductos(productos){
     </thead>
     <tbody>
         ${productos.map(u => yo`
-        <tr>
-            <td>${u.Cod_Producto}</td> 
+        <tr> 
             <td>${u.Nom_Producto}</td>  
             <td>${u.Stock_Act}</td> 
             <td>${u.Nom_Moneda}</td>  
-            <td>${u.Nom_UnidadMoneda}</td>  
-            <td>${u.Precio_Compra}</td>  
+            <td>${u.Precio_Compra}</td>    
             <td>${u.Nom_UnidadMedida}</td>
             <td><button class="btn btn-xs btn-primary" data-dismiss="modal" onclick="${()=>SeleccionarProducto(u)}"><i class="fa fa-check"></i> Elegir</button></td>
         </tr>`)}

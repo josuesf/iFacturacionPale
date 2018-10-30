@@ -31,7 +31,6 @@ router.post('/get_producto_by_codalm_codprec_stock', function (req, res) {
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
-
 router.post('/get_productos_serv', function (req, res) {
     input = req.body
     parametros1 = [
@@ -81,6 +80,19 @@ router.post('/get_lista_stock', function (req, res) {
     ]
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
+
+router.post('/get_productos_stock_by_almacen_precio', function (req, res) {
+    input = req.body 
+    parametros = [
+        {nom_parametro:'Cod_Almacen',valor_parametro:input.Cod_Almacen}, 
+        {nom_parametro:'Cod_Precio',valor_parametro:input.Cod_Precio}
+    ] 
+    procedimientos =[
+        {nom_respuesta:'productos',sp_name:'USP_PRI_PRODUCTO_STOCK_XAlmacenPrecio ',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
 
 router.post('/guardar_presentacion_ubicacion', function (req, res){
     input = req.body

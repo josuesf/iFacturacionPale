@@ -67,7 +67,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                                 <tbody>
                                                 ${movimientos.map(u => yo`
                                                 <tr>
-                                                    <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
+                                                    <td>${u.FechaEmision.toString().split('T')[0]}</td> 
                                                     <td>${u.Documento}</td>
                                                     <td>${u.Cliente}</td>
                                                     <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
@@ -147,6 +147,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var footer = document.getElementById('content_footer')
     empty(footer).appendChild(footer_element);
     $('#tablaMovimientos').DataTable({
+        "responsive": true,
         "lengthChange": false,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
@@ -157,8 +158,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
 }
 
 
-function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){  
-    console.log(arrayData)
+function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){    
     CargarPDFModal(titulo,subtitulo,subtitulo_extra,function(flag){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
@@ -166,10 +166,10 @@ function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){
                 data:arrayData.cuerpo
             };
             
-            jsreport.renderAsync(request).then(function(res) {
-                console.log(res)
+            jsreport.renderAsync(request).then(function(res) { 
                 jsreport.render(document.getElementById('divPDF'), request); 
             }).catch(function (e) { 
+                console.log(e)
                 toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
                 $('#modal-alerta').modal('hide') 
             });
@@ -267,7 +267,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                             <tbody>
                             ${movimientos.map(u => yo`
                             <tr>
-                                <td>${(new Date(u.FechaEmision)).toLocaleDateString()}</td> 
+                                <td>${u.FechaEmision.toString().split('T')[0]}</td> 
                                 <td>${u.Documento}</td>
                                 <td>${u.Cliente}</td>
                                 <td><span class="badge style-success">${u.SimboloIng} ${u.Ingreso}</span></td>
@@ -345,6 +345,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
     $('#content_footer').html(sectionFooter);
 
     $('#tablaMovimientos').DataTable({
+        "responsive": true,
         "lengthChange": false,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
@@ -379,7 +380,7 @@ function AbrirModalManguera(movimiento){
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarManguera(movimiento)}>Aceptar</button>
+                    <button type="button" class="btn btn-primary" onclick=${()=>GuardarManguera(movimiento)}>Aceptar</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -434,14 +435,14 @@ function AbrirModalCambiarTurno(movimiento){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnCambiarTurno" onclick=${()=>GuardarCambioTurno(movimiento)}>Aceptar</button>
+                <button type="button" class="btn btn-primary" onclick=${()=>GuardarCambioTurno(movimiento)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>`
-    var modal_proceso = document.getElementById('modal-alerta');
+    var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
-    $('#modal-alerta').modal()
+    $('#modal-superior').modal()
     TraerPeriodos()
 }
 
@@ -491,9 +492,9 @@ function AbrirModalConfirmacion(flag,movimiento){
     }
 
 
-    var modal_proceso = document.getElementById('modal-alerta');
+    var modal_proceso = document.getElementById('modal-superior');
     empty(modal_proceso).appendChild(el);
-    $('#modal-alerta').modal()
+    $('#modal-superior').modal()
 }
 
 
@@ -608,7 +609,7 @@ function GuardarCambioTurno(movimiento){
             fetch(URL + '/turnos_api/cambiar_comprobante_by_turno', parametrosCP)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-alerta").modal("hide") 
+                    $("#modal-superior").modal("hide") 
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -617,6 +618,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
+                    $("#modal-superior").modal("hide") 
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
@@ -640,7 +642,7 @@ function GuardarCambioTurno(movimiento){
             fetch(URL + '/turnos_api/cambiar_movimientos_by_turno', parametrosCM)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-alerta").modal("hide") 
+                    $("#modal-superior").modal("hide")  
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -649,6 +651,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
+                    $("#modal-superior").modal("hide") 
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
@@ -672,7 +675,7 @@ function GuardarCambioTurno(movimiento){
             fetch(URL + '/turnos_api/cambiar_almacen_by_turno', parametrosAM)
                 .then(req => req.json())
                 .then(res => {
-                    $("#modal-alerta").modal("hide") 
+                    $("#modal-superior").modal("hide") 
                     refrescar_movimientos_caja()
                     if (res.respuesta == 'ok') { 
                         toastr.success('Se modifico correctamente el turno','Confirmacion',{timeOut: 5000})
@@ -681,6 +684,7 @@ function GuardarCambioTurno(movimiento){
                     }
                 }).catch(function (e) {
                     console.log(e);
+                    $("#modal-superior").modal("hide") 
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                 });
             break;
@@ -691,7 +695,7 @@ function GuardarCambioTurno(movimiento){
  
 
 function AceptarConfirmacion(flag,movimiento){
-    $("#modal-alerta").modal("hide")
+    $("#modal-superior").modal("hide")
     if(flag=="eliminar"){
         VerModalJustificacion("Ingrese una justificacion de eliminacion","Por ejemplo : Por error de ingreso en monto",movimiento,flag)
     }else{ 
@@ -700,8 +704,7 @@ function AceptarConfirmacion(flag,movimiento){
 }
 
 function VerFormatoDocumento(movimiento){
-    var entidad = movimiento.Entidad
-    //console.log(movimiento)
+    var entidad = movimiento.Entidad 
     var id_Movimiento = movimiento.ID
     
     switch (entidad){
@@ -738,7 +741,7 @@ function VerFormatoDocumento(movimiento){
 }
  
 
-function ExtornarAnular(movimiento,flag) {
+function ExtornarAnular(movimiento,flag) {  
     var id_Movimiento = movimiento.ID
     var entidad = movimiento.Entidad
     var MotivoAnulacion = $("#txtJustificacion").val()
@@ -814,13 +817,17 @@ function ExtornarAnular(movimiento,flag) {
                                 fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                     .then(req => req.json())
                                     .then(res => {
-                                        $("#modal-justificacion").modal("hide")
+                                        $("#modal-justificacion").modal("hide") 
                                         if(res.respuesta=='ok'){
-                                            PrepararImpresionComprobante(id_ComprobantePago,function(flag){
-                                                if(flag)
-                                                    toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                refrescar_movimientos_caja()
-                                            })
+                                            if(res.data.comprobante_pago[0].ErrorNumber!=undefined){
+                                                toastr.error('No se pudo anular correctamente el comprobante.\n Tipo error:'+res.data.comprobante_pago[0].ErrorMessage,'Error',{timeOut: 5000})
+                                            }else{
+                                                PrepararImpresionComprobante(id_ComprobantePago,function(flag){
+                                                    if(flag)
+                                                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                    refrescar_movimientos_caja()
+                                                })
+                                            }
                                             
                                         }else{
                                             toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
@@ -846,14 +853,18 @@ function ExtornarAnular(movimiento,flag) {
                                     }
                                     fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                         .then(req => req.json())
-                                        .then(res => {
+                                        .then(res => { 
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresionComprobante(id_ComprobantePago,function(flag){
-                                                    if(flag)
-                                                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                    refrescar_movimientos_caja()
-                                                })
+                                                if(res.data.comprobante_pago[0].ErrorNumber!=undefined){
+                                                    toastr.error('No se pudo anular correctamente el comprobante.\n Tipo error:'+res.data.comprobante_pago[0].ErrorMessage,'Error',{timeOut: 5000})
+                                                }else{
+                                                    PrepararImpresionComprobante(id_ComprobantePago,function(flag){
+                                                        if(flag)
+                                                            toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                        refrescar_movimientos_caja()
+                                                    })
+                                                } 
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
@@ -878,14 +889,19 @@ function ExtornarAnular(movimiento,flag) {
                                     }
                                     fetch(URL + '/comprobantes_pago_api/extornar_comprobante_pago', parametros)
                                         .then(req => req.json())
-                                        .then(res => {
+                                        .then(res => { 
                                             $("#modal-justificacion").modal("hide")
                                             if(res.respuesta=='ok'){
-                                                PrepararImpresionComprobante(id_ComprobantePago,function(flag){
-                                                    if(flag)
-                                                        toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                                                    refrescar_movimientos_caja()
-                                                })
+                                                if(res.data.comprobante_pago[0].ErrorNumber!=undefined){
+                                                    toastr.error('No se pudo anular correctamente el comprobante.\n Tipo error:'+res.data.comprobante_pago[0].ErrorMessage,'Error',{timeOut: 5000})
+                                                }else{
+                                                    PrepararImpresionComprobante(id_ComprobantePago,function(flag){
+                                                        if(flag)
+                                                            toastr.success('Se anulo correctamente el comprobante','Confirmacion',{timeOut: 5000})
+                                                        refrescar_movimientos_caja()
+                                                    })
+                                                } 
+                                              
                                             }else{
                                                 toastr.error('No se pudo anular correctamente el comprobante','Error',{timeOut: 5000})
                                             }
@@ -972,10 +988,6 @@ function ExtornarAnular(movimiento,flag) {
 
 
             }
-
-
-
-            
         }else{
 
             switch (entidad){
@@ -1008,7 +1020,7 @@ function ExtornarAnular(movimiento,flag) {
                             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
                         });
                     break;
-                case "CAJ_COMPROBANTE_PAGO":
+                case "CAJ_COMPROBANTE_PAGO": 
                     var Justificacion = $("#txtJustificacion").val() 
                     var id_ComprobantePago = id_Movimiento
                     parametros = {
@@ -1023,7 +1035,7 @@ function ExtornarAnular(movimiento,flag) {
                             Justificacion
                         })
                     }
-                    fetch(URL + '/movimientos_caja_api/eliminar_movimiento', parametros)
+                    fetch(URL + '/movimientos_caja_api/eliminar_comprobante_pago', parametros)
                         .then(req => req.json())
                         .then(res => {
                             $("#modal-justificacion").modal("hide")
@@ -1099,6 +1111,7 @@ function RecuperarNombreComprobante(CodTipoComprobante){
 }
  
 function FormatearDataDetalles(indiceDetalles,arrayDetalles,arrayNuevo,callback){
+    console.log(arrayDetalles)
     if(indiceDetalles<arrayDetalles.length){
         arrayNuevo.push({
             'DESCRIPCION':arrayDetalles[indiceDetalles].Descripcion,
@@ -1220,7 +1233,7 @@ function PrepararImpresionAlmacen(id_Movimiento,callback){
                                             var arrayData = {
                                                 cuerpo:{
                                                     COD_TIPO_DOCUMENTO: dataAlmacen.Cod_TipoComprobante,
-                                                    FECHA_EMISION: (new Date(dataAlmacen.Fecha)).toLocaleDateString(),
+                                                    FECHA_EMISION: dataAlmacen.Fecha.toString().split('T')[0],
                                                     DOCUMENTO: nombreDoc, 
                                                     SERIE: dataAlmacen.Serie,
                                                     NUMERO: dataAlmacen.Numero, 
@@ -1312,7 +1325,7 @@ function PrepararImpresionMovimientos(id_Movimiento,callback){
                         var arrayData = {
                             cuerpo:{
                                 COD_TIPO_DOCUMENTO: res.data.movimiento[0].Cod_TipoComprobante,
-                                FECHA_EMISION: (new Date(res.data.movimiento[0].Fecha)).toLocaleDateString(),
+                                FECHA_EMISION: res.data.movimiento[0].Fecha.toString().split('T')[0],
                                 DOCUMENTO: nombreDoc, 
                                 NOM_SOLICITANTE: res.data.movimiento[0].Cliente,
                                 NUM_CUENTA: res.data.movimiento[0].Id_Concepto, 
@@ -1384,7 +1397,7 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                 }
                 fetch(URL+'/comprobantes_pago_api/get_detalle_by_comprobante_pago', parametrosDC)
                     .then(req => req.json())
-                    .then(res => {
+                    .then(res => { 
                         if(res.respuesta=='ok'){ 
                             callback(true)
                             var dataDetallesComprobante = res.data.detalles_comprobante_pago
@@ -1392,8 +1405,7 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                             var arrayNuevo = []
                             var obs_string = ''
                             FormatearDataDetalles(0,dataDetallesComprobante,arrayNuevo,function(arrayJson){  
-                                FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){
-                                    console.log("despues de data observaciones",dataComprobante)
+                                FormatearDataObservaciones(obs_string,0,dataComprobante.Obs_Comprobante,function(data_string){ 
                                     if(dataComprobante.Cod_Libro=='14'){
                                         var arrayData = {
                                             cuerpo:{
@@ -1407,8 +1419,8 @@ function PrepararImpresionComprobante(id_ComprobantePago,callback){
                                                 COD_DOCCLIENTE:dataComprobante.Cod_TipoDoc,
                                                 RUC_CLIENTE:dataComprobante.Doc_Cliente,
                                                 DIRECCION_CLIENTE:dataComprobante.Direccion_Cliente,
-                                                FECHA_EMISION: (new Date(dataComprobante.FechaEmision)).toLocaleDateString(),
-                                                FECHA_VENCIMIENTO:(new Date(dataComprobante.FechaVencimiento)).toLocaleDateString(),
+                                                FECHA_EMISION: dataComprobante.FechaEmision.toString().split('T')[0],
+                                                FECHA_VENCIMIENTO:dataComprobante.FechaVencimiento.toString().split('T')[0],
                                                 FORMA_PAGO:dataComprobante.Cod_FormaPago,
                                                 GLOSA:dataComprobante.Glosa,
                                                 OBSERVACIONES:data_string,
@@ -1501,7 +1513,7 @@ module.exports = function movimientos_caja(ctx, next) {
     }
     fetch(URL+'/movimientos_caja_api/get_movimientos', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
                     $('#base').waitMe('hide');

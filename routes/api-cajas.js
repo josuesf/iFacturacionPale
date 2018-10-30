@@ -61,6 +61,17 @@ router.post('/get_documents_by_caja', function (req, res) {
     Ejecutar_Procedimientos(req,res,procedimientos)
 });
 
+router.post('/get_caja_by_sucursal', function (req, res) {
+    input = req.body
+    parametros = [
+        {nom_parametro:'Cod_Sucursal',valor_parametro:input.Cod_Sucursal},
+    ]
+    procedimientos =[
+        {nom_respuesta:'cajas',sp_name:'USP_PRI_SUCURSAL_TCajaXSucursal',parametros}
+    ]
+    Ejecutar_Procedimientos(req,res,procedimientos)
+});
+
 router.post('/buscar_usuarios', function (req, res){
     input = req.body
     parametros = [

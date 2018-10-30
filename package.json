@@ -18,6 +18,7 @@
     "url": "https://github.com/josuesf/iFacturacionPale/issues"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "empty-element": "^1.0.0",
     "express": "^4.13.4",
     "express-session": "^1.15.6",
@@ -33,6 +34,8 @@
     "page": "^1.7.1",
     "pug": "^2.0.0-alpha6",
     "puppeteer": "^1.6.1",
+    "request": "^2.88.0",
+    "table-to-json": "^0.13.0",
     "title": "^1.0.0",
     "yo-yo": "^1.2.0"
   },

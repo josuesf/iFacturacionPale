@@ -5,34 +5,38 @@ import { NuevoCliente, BuscarCliente , AbrirModalObs , BuscarProducto } from '..
 import { AsignarSeriesModal, BuscarPorSerie } from '../../modales/series'
 import { LimpiarVenta } from '../../mod_ventas/ventas'
 import { CargarPDFModal } from '../../modales/pdf'
-import { ConvertirCadena,BloquearControles, LimpiarEventoModales } from '../../../../utility/tools' 
+import { ConvertirCadena,BloquearControles } from '../../../../utility/tools' 
 import { refrescar_movimientos,preparar_impresion_comprobante } from '../../movimientos_caja'
 
 var listaFormaPago = []
 var arrayValidacion = [null,'null','',undefined]
 var aSaldo = 0
 var aMonto = 0 
+var aExportacion = false
 var contador = 0
 var contadorPercepcion = 0
 var idFilaSeleccionadaSerie = 0
 var CodTipoOperacion = '01'
 var pCodTipoComprobanteUltimo = ''
 var flag_cliente = false 
+var diff = 0
 global.obs_xml = ''
 
-function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles) {
+function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion,Cliente,Detalles,Exportacion) {
+    diff = 0
     flag_cliente = false
     CodTipoOperacion = CodTipoOperacion
     listaFormaPago = []
     global.obs_xml = ''
     aMonto = 0 
     idFilaSeleccionadaSerie = 0
-    global.objCliente = Cliente?Cliente:''
+    global.objCliente = (Cliente || Cliente!=null)?Cliente:''
     global.objProducto = ''
     global.arraySeries = ''
     contador = 0
     contadorPercepcion = 0
     pCodTipoComprobanteUltimo = ''
+    aExportacion = Exportacion
     var el = yo`
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -235,7 +239,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                             <div class="col-sm-4" id="divFecha">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onchange=${()=>TraerTipoCambio(CodLibro)}>
+                                                    <input type="date" class="form-control input-sm" id="Fecha" value="${fecha_actual}" onchange=${()=>TraerTipoCambio(CodLibro,fecha_actual)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -412,7 +416,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <button type="button" class="btn btn-raised btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}">Percepcion</button>
+                                                <button type="button" class="btn btn-raised btn-success btn-sm btn-block" onclick="${()=>AbrirModalPercepcion(CodLibro,variables)}" disabled>Percepcion</button>
                                             </div>
                                             <div class="col-md-6">
                                                 <button type="button" class="btn btn-raised btn-warning btn-sm btn-block" id="btnBuscarSeries" onclick="${()=>BuscarPorSerie()}">Buscar Series</button>
@@ -484,7 +488,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
             </div>
     
             <div class="modal-footer">
-                <button class="btn btn-raised btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante(CodLibro,variables)}>${CodLibro=='08'?'Comprar':'Vender'}</button>
+                <button class="btn btn-raised btn-primary" id="btnAceptarGenerarComprobante" onclick=${()=>GenerarComprobante(CodLibro,variables,fecha_actual)}>${CodLibro=='08'?'Comprar':'Vender'}</button>
                 <button type="button" class="btn btn-raised btn-default pull-left" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -530,7 +534,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
         })
     } 
  
-    $("#Cuenta_CajaBancos").combobox()
+    //$("#Cuenta_CajaBancos").combobox()
      
 
     $("#modal-proceso").off('shown.bs.modal').on("shown.bs.modal", function () { 
@@ -607,7 +611,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
 
     CambioLicitacion()*/
     
-    $('#modal-superior').on('hidden.bs.modal', function () {
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
         if(global.objCliente !='' && global.objCliente){
             //console.log(global.objCliente) 
@@ -694,7 +698,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     })
 
 
-    $('#modal-otros-procesos').on('hidden.bs.modal', function () { 
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
             $("tr#"+idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
@@ -714,7 +718,7 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
    });
 
    
-    if (Detalles!=undefined){
+    if (Detalles!=undefined || Detalles!=null){
         AgregarFilaTabla_(CodLibro,variables,Detalles)
     }  
 
@@ -966,7 +970,7 @@ function VerModalFormasPago(variables,amodo,Tipo_Cambio,Monto,Cod_Moneda){
 }
 
 function AbrirModalPercepcion(CodLibro,variables){
-    var el = yo`
+    /*var el = yo`
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -994,7 +998,7 @@ function AbrirModalPercepcion(CodLibro,variables){
 
     var modal_proceso = document.getElementById('modal-otros-procesos');
     empty(modal_proceso).appendChild(el);
-    $('#modal-otros-procesos').modal()     
+    $('#modal-otros-procesos').modal()*/     
 }
 
 function AgregarFilaTabla_(CodLibro,variables,Detalles){
@@ -1078,7 +1082,7 @@ function AgregarFilaTabla_(CodLibro,variables,Detalles){
     CalcularTotal(CodLibro,variables)*/
 }
 
-function AbrirModalConfirmacion(CodLibro,variables){
+function AbrirModalConfirmacion(CodLibro,variables,fecha_actual){
     var el = yo`
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1093,7 +1097,7 @@ function AbrirModalConfirmacion(CodLibro,variables){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-raised btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables)}>Aceptar</button>
+                <button type="button" class="btn btn-raised btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables,fecha_actual)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -2058,8 +2062,11 @@ function CargarConfiguracionDefault(CodLibro,variables){
     CargarSeries(CodLibro)
     
 
-     
-    $("#divExportacion").css("display","none")
+    if(!aExportacion){
+        $("#divExportacion").css("display","none")
+    }else{
+        $("#divExportacion").css("display","block")
+    }    
     CalcularTotal(CodLibro,variables)
     $("input[name=optCredito][value='contado']").prop("checked",true)
     //CambioLicitacion()
@@ -2172,13 +2179,12 @@ function EsValido(CodLibro,callback){
 }
  
 
-function GenerarComprobante(CodLibro,variables){ 
-    console.log($("#Cliente").val())
+function GenerarComprobante(CodLibro,variables,fecha_actual){ 
     try{
         
         EsValido(CodLibro,function(flag){ 
             if(flag)
-                AbrirModalConfirmacion(CodLibro,variables)
+                AbrirModalConfirmacion(CodLibro,variables,fecha_actual)
         })
     }catch(e){
         console.log(e)
@@ -2626,8 +2632,13 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
     }
 }
 
-function EmisionCompleta(CodLibro,variables){
-    GuardarCamposEntidadComprobante(CodLibro,variables)
+function EmisionCompleta(CodLibro,variables,fecha_actual){
+    if(diff<-7){
+        toastr.error('Usted solo puede facturar hasta 7 dias atras','Error',{timeOut: 5000})
+        $("#Fecha").val(fecha_actual)
+    }else{
+        GuardarCamposEntidadComprobante(CodLibro,variables)
+    }
 }
 
 async function GuardarCamposEntidadComprobante(CodLibro,variables){
@@ -2750,7 +2761,7 @@ function PrepararImpresion(arrayData){
 function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
     run_waitMe($('#modal-alerta'), 1, "ios","Realizando operación...");
     var Cod_TipoComprobante = $("#Cod_TipoComprobante").val()
-    var Cod_TipoOperacion = Cod_TipoDocReferencia
+    var Cod_TipoOperacion = CodTipoOperacion
     var Serie = $("#Serie option:selected").text()
     var Numero = $("#Numero").val().trim()
     if((CodLibro=="14") && (Cod_TipoComprobante=="TKB" || Cod_TipoComprobante=="TKF" || Cod_TipoComprobante=="BE" || Cod_TipoComprobante=="FE" || Cod_TipoComprobante=="NP")){
@@ -2891,8 +2902,8 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                 COD_DOCCLIENTE:Cod_TipoDoc,
                 RUC_CLIENTE:Doc_Cliente,
                 DIRECCION_CLIENTE:Direccion_Cliente,
-                FECHA_EMISION:(new Date(FechaEmision)).toLocaleDateString(),
-                FECHA_VENCIMIENTO:(new Date(FechaVencimiento)).toLocaleDateString(),
+                FECHA_EMISION:FechaEmision,
+                FECHA_VENCIMIENTO:FechaVencimiento,
                 FORMA_PAGO:'',
                 GLOSA:Glosa,
                 OBSERVACIONES:Obs_Comprobante,
@@ -3523,6 +3534,7 @@ function CambioCodCuentaBancaria(CodLibro){
     fetch(URL + '/cuentas_bancarias_api/get_cheques_by_cuenta_cliente', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log("get cheques",res)
             if (res.respuesta == 'ok') {
                 var cheques = res.data.cheques 
                 LlenarCheques(cheques)
@@ -3867,7 +3879,7 @@ function CambioComprobantes(){
             event.stopPropagation();
         });
 
-        $('#Fecha').get(0).type = 'text';
+        $('#Fecha').get(0).type = 'date';
 
         $("#Fecha").bind("keypress", function(event){
             event.preventDefault();
@@ -3987,44 +3999,54 @@ function CambioMoneda(CodLibro){
     }
 }
 
-function TraerTipoCambio(CodLibro){ 
-    if($("#Cod_Moneda").val()!="PEN"){
-        try{
-            var Cod_Moneda = $("#Cod_Moneda").val()
-            var FechaHora = $("#Fecha").val()
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Cod_Moneda,
-                    FechaHora
-                })
-            }
-            fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
-                .then(req => req.json())
-                .then(res => {
-                    if (res.respuesta == 'ok') {
-                        if(res.data.tipos_cambios.length>0){
-                            if(CodLibro=="08"){
-                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+function TraerTipoCambio(CodLibro,fecha_actual){
+    var fecha = $("#Fecha").val()
+    var fechaInicio = new Date(fecha_actual).getTime();
+    var fechaFin    = new Date(fecha).getTime();
+    diff = fechaFin - fechaInicio;
+    diff = diff/(1000*60*60*24) 
+    if(diff<-7){
+        toastr.error('Usted solo puede facturar hasta 7 dias atras','Error',{timeOut: 5000})
+        $("#Fecha").val(fecha_actual)
+    }else{
+        if($("#Cod_Moneda").val()!="PEN"){
+            try{
+                var Cod_Moneda = $("#Cod_Moneda").val()
+                var FechaHora = $("#Fecha").val()
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Cod_Moneda,
+                        FechaHora
+                    })
+                }
+                fetch(URL + '/comprobantes_pago_api/get_variables_formas_pago', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        if (res.respuesta == 'ok') {
+                            if(res.data.tipos_cambios.length>0){
+                                if(CodLibro=="08"){
+                                    $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatCompra)
+                                }else{
+                                    $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                                }
                             }else{
-                                $("#Tipo_Cambio").val(res.data.tipos_cambios[0].SunatVenta)
+                                $("#Tipo_Cambio").val(1)
                             }
-                        }else{
-                            $("#Tipo_Cambio").val(1)
-                        }
-                    } 
-                }).catch(function (e) {
-                    console.log(e);
-                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                });
-
-        }catch(e){
-            $("#Tipo_Cambio").val(1)
-        }
+                        } 
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                    });
+    
+            }catch(e){
+                $("#Tipo_Cambio").val(1)
+            }
+        }   
     }
 }
  
@@ -4106,6 +4128,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
     fetch(URL + '/cuentas_bancarias_api/get_cuenta_by_sucursal', parametros)
         .then(req => req.json())
         .then(res => {
+            console.log("cuenta by sucursal",res)
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria(cuentas,CodLibro)
@@ -4361,8 +4384,7 @@ async function AsyncCalcularTotal(CodLibro,variables) {
 }
  
 
-function ComprobantePago(Cod_Libro,Cliente,Detalles) {
-    LimpiarEventoModales()
+function ComprobantePago(Cod_Libro,Cliente,Detalles,Exportacion) { 
 
     run_waitMe($('#main-contenido'), 1, "ios","Cargando ventana para el comprobante...");
     const fecha = new Date()
@@ -4398,7 +4420,7 @@ function ComprobantePago(Cod_Libro,Cliente,Detalles) {
                 .then(res => {
                     var data_empresa = res.empresa
                     variables['empresa'] = data_empresa   
-                    VerRegistroComprobante(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01',Cliente,Detalles)
+                    VerRegistroComprobante(variables,fecha_format,Cod_Libro,Cod_Libro=='08'?'02':'01',Cliente,Detalles,Exportacion)
                     $('#main-contenido').waitMe('hide');
                      
                 }).catch(function (e) {

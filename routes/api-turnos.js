@@ -149,8 +149,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                           Monto_Moneda:0
                         })
                       }
-                    });
-                    console.log("monedas total")
+                    }); 
 
                     ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
                                   "Arqueo de "+desc_caja+" para el Turno "+turno,
@@ -161,6 +160,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                                     if(flag){ 
                                       req.session.periodo = periodo
                                       req.session.gestion = gestion
+                                      req.session.turno = turno
                                       req.app.locals.turno = dataTurno.result
                                       res.json({respuesta:"ok"}) 
                                     }
@@ -179,8 +179,8 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                           Monto_Moneda:element.Monto
                         })
                       }
-                    });
-                    console.log("cierre completo 1")
+                    }); 
+
                     ArquearCaja(  dataNumero.result.length==0?1:dataNumero.result[0].Numero+1,
                                   "Arqueo de "+desc_caja+" para el Turno "+turno,
                                   turno,
@@ -190,13 +190,13 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                                     if(flag){
                                       req.session.periodo = periodo
                                       req.session.gestion = gestion
+                                      req.session.turno = turno
                                       req.app.locals.turno = dataTurno.result
                                       res.json({respuesta:"ok"}) 
                                     }
                                   }) 
                   }else{
-                    if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){
-                      console.log("cierre completo 2")
+                    if(dataSaldoAnterior.result[0].Flag_Cerrado.toString().toUpperCase()=="TRUE"){ 
                       var arregloMon=[]
                       dataSaldoAnterior.result.forEach(element => {
                         if(element.Nom_Moneda!='OTROS'){
@@ -216,6 +216,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
                                       if(flag){
                                         req.session.periodo = periodo
                                         req.session.gestion = gestion
+                                        req.session.turno = turno
                                         req.app.locals.turno = dataTurno.result
                                         res.json({respuesta:"ok"}) 
                                       }
@@ -241,6 +242,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
               req.app.locals.arqueo = dataArqueo.result
               req.session.periodo = periodo
               req.session.gestion = gestion
+              req.session.turno = turno
               req.app.locals.turno = dataTurno.result
               res.json({respuesta:"ok"}) 
             })
@@ -253,8 +255,7 @@ function CargarVariables(gestion,periodo,turno,caja,desc_caja,usuario,req,res){
     })
 }
 
-function ArquearCaja(Numero,Des_ArqueoFisico,Cod_Turno,Cod_Usuario,Cod_Caja,ArrayMonedas,req,callback){
-  console.log(ArrayMonedas)
+function ArquearCaja(Numero,Des_ArqueoFisico,Cod_Turno,Cod_Usuario,Cod_Caja,ArrayMonedas,req,callback){ 
   const fecha = new Date()
   const mes = fecha.getMonth() + 1
   const dia = fecha.getDate()

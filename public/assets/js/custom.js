@@ -86,7 +86,6 @@ $(document).on('hidden.bs.modal', function (event) {
     }
 });
  
-
  window.alert = function() {};
   
 

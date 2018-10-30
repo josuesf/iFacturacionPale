@@ -16,8 +16,8 @@ router.post('/get_movimientos', function (req, res) {
         {nom_parametro:'Cod_Turno',valor_parametro: req.app.locals.turno[0].Cod_Turno},
     ]
     procedimientos =[
-        {nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},
-       // {nom_respuesta:'movimientos',sp_name:'USP_MovimientosResumenCajaTurnoTotales',parametros},
+        //{nom_respuesta:'movimientos',sp_name:'USP_MovimientosCajaTurno',parametros},
+       {nom_respuesta:'movimientos',sp_name:'USP_MovimientosResumenCajaTurnoTotales',parametros},
         {nom_respuesta:'saldos',sp_name:'USP_SaldosXCajaTurno',parametros:parametros2},
     ]
     Ejecutar_Procedimientos(req,res,procedimientos)
@@ -133,8 +133,8 @@ router.post('/eliminar_movimiento', function (req, res) {
 router.post('/eliminar_comprobante_pago', function (req, res) {
     input = req.body
     parametros = [
-        {nom_parametro:'id_ComprobantePago',valor_parametro:parseInt(input.id_Movimiento)},
-        {nom_parametro:'Cod_Usuario',valor_parametro: req.session.username},
+        {nom_parametro:'id_ComprobantePago',valor_parametro:parseInt(input.id_ComprobantePago)},
+        {nom_parametro:'CodUsuario',valor_parametro: req.session.username},
         {nom_parametro:'Justificacion',valor_parametro: input.Justificacion}
     ]
     

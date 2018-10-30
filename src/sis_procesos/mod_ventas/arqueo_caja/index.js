@@ -3,7 +3,7 @@ var yo = require('yo-yo');
 
 import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
-import { BloquearControles,LimpiarEventoModales } from '../../../../utility/tools'
+import { BloquearControles } from '../../../../utility/tools'
 
 var aCargarEfectivo = null 
 
@@ -598,8 +598,7 @@ function AceptarConfirmacion(){
         });
 }
 
-function NuevoArqueoCaja(pCargarEfectivo) {
-    LimpiarEventoModales()
+function NuevoArqueoCaja(pCargarEfectivo) { 
     run_waitMe($('#main-contenido'), 1, "ios");
     aCargarEfectivo = true
     const fecha = new Date()

@@ -381,11 +381,11 @@ function VerNuevaVenta(variables,CodLibro) {
             //$("#Nro_Documento_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Nro_Documento)
             //$("#Cliente_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Cliente)
             //$("#Direccion_"+IdTabSeleccionado).tagsinput('add',global.objCliente.Direccion)
-            $("#Cod_TipoDoc_"+IdTabSeleccionado).val(global.objCliente.Cod_TipoDocumento)
-            $("#Nro_Documento_"+IdTabSeleccionado).val(global.objCliente.Nro_Documento)
-            $("#Cliente_"+IdTabSeleccionado).val(global.objCliente.Cliente)
-            $("#Direccion_"+IdTabSeleccionado).val(global.objCliente.Direccion)
-            $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objCliente.Id_ClienteProveedor)
+            $("#Cod_TipoDoc_"+IdTabSeleccionado).val(global.objClienteVenta.Cod_TipoDocumento)
+            $("#Nro_Documento_"+IdTabSeleccionado).val(global.objClienteVenta.Nro_Documento)
+            $("#Cliente_"+IdTabSeleccionado).val(global.objClienteVenta.Cliente)
+            $("#Direccion_"+IdTabSeleccionado).val(global.objClienteVenta.Direccion)
+            $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objClienteVenta.Id_ClienteProveedor)
 
             $("#Nro_Documento_"+IdTabSeleccionado).bind("keypress", function(event){
                 event.preventDefault();
