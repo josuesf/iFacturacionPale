@@ -49,13 +49,47 @@ function Ver(variables,CodLibro) {
                             <div class="row">
                                 <div class="panel-group" id="accordion3_${idTabReporteComprobante}">
                                     <div class="card panel expanded">
+                                        <div class="card-head card-head-sm collapsed" data-toggle="collapse" data-parent="#accordion3_${idTabReporteComprobante}" data-target="#accordion3-2_${idTabReporteComprobante}" aria-expanded="false">
+                                            <header><i class="fa fa-filter"></i> Filtro de Fechas y Turnos</header>
+                                            <div class="tools">
+                                                <a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
+                                            </div>
+                                        </div>
+                                        <div id="accordion3-2_${idTabReporteComprobante}" class="collapse in" aria-expanded="true">
+                                            <div class="card-body">	
+                                                <form class="form">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="radio radio-styled">
+                                                                <label>
+                                                                    <input type="radio" name="optionsRadiosFF_${idTabReporteComprobante}" id="optPorTurno_${idTabReporteComprobante}" onchange=${()=>CambioOpcionesFecha(idTabReporteComprobante)}>
+                                                                    <span>Por turno</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <div class="radio radio-styled">
+                                                                <label>
+                                                                    <input type="radio" name="optionsRadiosFF_${idTabReporteComprobante}" id="optPorFechas_${idTabReporteComprobante}" onchange=${()=>CambioOpcionesFecha(idTabReporteComprobante)} checked>
+                                                                    <span>Por fechas</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" id="divFiltroFechas_${idTabReporteComprobante}">
+                                                    </div>
+                                                </form>
+                                            </div> 
+                                        </div>
+                                    </div><!--end .panel -->
+                                    <div class="card panel">
                                         <div class="card-head card-head-sm" data-toggle="collapse" data-parent="#accordion3_${idTabReporteComprobante}" data-target="#accordion3-1_${idTabReporteComprobante}" aria-expanded="true">
                                             <header><i class="fa fa-filter"></i> Filtro de Oficinas y Cuentas</header>
                                             <div class="tools">
                                                 <a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
                                             </div>
                                         </div>
-                                        <div id="accordion3-1_${idTabReporteComprobante}" class="collapse in" aria-expanded="true" style="">
+                                        <div id="accordion3-1_${idTabReporteComprobante}" class="collapse" aria-expanded="true" style="">
                                             <div class="card-body">						
                                                 <form class="form">
                                                     <div class="form-group">
@@ -185,114 +219,22 @@ function Ver(variables,CodLibro) {
                                             </div>
                                         </div>
                                     </div><!--end .panel -->
-                                    <div class="card panel">
-                                        <div class="card-head card-head-sm collapsed" data-toggle="collapse" data-parent="#accordion3_${idTabReporteComprobante}" data-target="#accordion3-2_${idTabReporteComprobante}" aria-expanded="false">
-                                            <header><i class="fa fa-filter"></i> Filtro de Fechas</header>
-                                            <div class="tools">
-                                                <a class="btn btn-icon-toggle"><i class="fa fa-angle-down"></i></a>
-                                            </div>
-                                        </div>
-                                        <div id="accordion3-2_${idTabReporteComprobante}" class="collapse" aria-expanded="false" style="height: 0px;">
-                                            <div class="card-body">	
-                                                <form class="form">
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="radio radio-styled">
-                                                                <label>
-                                                                    <input type="radio" name="optionsRadiosFF_${idTabReporteComprobante}" id="optPorTurno_${idTabReporteComprobante}" onchange=${()=>CambioOpcionesFecha(idTabReporteComprobante)} checked>
-                                                                    <span>Por turno</span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="radio radio-styled">
-                                                                <label>
-                                                                    <input type="radio" name="optionsRadiosFF_${idTabReporteComprobante}" id="optPorFechas_${idTabReporteComprobante}" onchange=${()=>CambioOpcionesFecha(idTabReporteComprobante)}>
-                                                                    <span>Por fechas</span>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row" id="divFiltroFechas_${idTabReporteComprobante}">
-                                                        <div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <label>De:</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <input type="number" class="form-control" id="DeGestion_${idTabReporteComprobante}" value=${new Date().getFullYear()}  onkeyup=${()=>TraerPeriodos(idTabReporteComprobante,1)} onchange=${()=>TraerPeriodos(idTabReporteComprobante,1)}> 
-                                                                        <label>Gestion</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <label>Periodo</label>
-                                                                        <select id="DePeriodo_${idTabReporteComprobante}" class="form-control" onchange=${()=>TraerTurnos(idTabReporteComprobante,1)}> 
-                                                                            <option style="text-transform:uppercase"></option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <label>Turno</label>
-                                                                        <select id="DeTurno_${idTabReporteComprobante}" class="form-control"> 
-                                                                            <option style="text-transform:uppercase"></option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <label>Al:</label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <input type="number" class="form-control" id="AlGestion_${idTabReporteComprobante}"  value=${new Date().getFullYear()}  onkeyup=${()=>TraerPeriodos(idTabReporteComprobante,2)} onchange=${()=>TraerPeriodos(idTabReporteComprobante,2)}> 
-                                                                        <label>Gestion</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <label>Periodo</label>
-                                                                        <select id="AlPeriodo_${idTabReporteComprobante}" class="form-control" onchange=${()=>TraerTurnos(idTabReporteComprobante,2)}> 
-                                                                            <option style="text-transform:uppercase"></option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <div class="form-group"> 
-                                                                        <label>Turno</label>
-                                                                        <select id="AlTurno_${idTabReporteComprobante}" class="form-control"> 
-                                                                            <option style="text-transform:uppercase"></option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div> 
-                                        </div>
-                                    </div><!--end .panel -->
                                 </div>
                             </div>
+                            
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary btn-block" onclick=${()=>GenerarReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-file-o"></i> Generar Documento</button>
+                                    <button type="button" class="btn btn-primary btn-block" onclick=${()=>GenerarReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-file-o"></i> Ver vista previa documento</button>
+                                </div>
+                            </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="button" class="btn btn-info btn-block hidden" id="btnAbrirNavegador_${idTabReporteComprobante}" onclick=${()=>AbrirReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-eye"></i> Abrir documento en otra pestaña</button>
                                 </div>
                             </div> 
                         </div>
                         <div class="col-md-8"> 
-                            <div class="row">
-                                <div class="col-xs-4 col-xs-offset-4">
-                                    <button type="button" class="btn btn-info btn-block hidden" id="btnAbrirNavegador_${idTabReporteComprobante}" onclick=${()=>AbrirReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-eye"></i> Abrir en navegador</button>
-                                </div>
-                            </div> 
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
@@ -337,6 +279,7 @@ function Ver(variables,CodLibro) {
 
     TraerPeriodos(idTabReporteComprobante,1)
     TraerPeriodos(idTabReporteComprobante,2)
+    CambioOpcionesFecha(idTabReporteComprobante)
 
 }
 

@@ -117,7 +117,6 @@ router.get('/cambiar_password',function(req,res){
 
 router.post('/cambiar_password',function(req,res){
     var input = req.body 
-    console.log(input)
     if(!RUCValido(input.ruc)){
       res.render('cambiar_password.ejs', {err:'El RUC es inválido'});
     }else{
@@ -174,7 +173,7 @@ router.post('/cambiar_password_nueva',function(req,res){
 
 /* functions private register new */
 
-
+ 
 router.get('/register',function(req,res){
     res.render('register.ejs', { });
 })
@@ -182,6 +181,7 @@ router.get('/register',function(req,res){
 router.get('/verificacion_correo',function(req,res){  
     jsonData = localStorage.getItem(req.query.id); 
     if(jsonData!=null){
+      
       localStorage.removeItem(req.query.id) 
       res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
               '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>Su correo ha sido verificado exitosamente. En breves momentos nos comunicaremos con usted a traves del numero telefonico brindado para generarle un usuario y password para que pueda ingresar al sistema</span></h3></div>')

@@ -308,121 +308,125 @@ app.post('/login', function (req, res) {
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
+        //-- validacion extra para el caso de clientes
+        if(m.result[0].CadenaConexion!=undefined && m.result[0].CadenaConexion!=null && m.result[0].CadenaConexion!=''){
+          CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
+          EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
+            if (e.err){
+              errores = "Ocurrio un error con el servidor comuniquese con el administrador. "// +e.err
+              return res.redirect('/login');
+            } 
+            var Cod_Empresa=e.result[0].Cod_Empresa
+            p = [
+              { nom_parametro: 'Cod_Empresa', valor_parametro: Cod_Empresa }
+            ]
 
-        CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
-        
-        EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
-          if (e.err){
-            errores = "Ocurrio un error con el servidor comuniquese con el administrador. "// +e.err
-            return res.redirect('/login');
-          } 
-          var Cod_Empresa=e.result[0].Cod_Empresa
-          p = [
-            { nom_parametro: 'Cod_Empresa', valor_parametro: Cod_Empresa }
-          ]
-
-          EXEC_SQL('usp_PRI_EMPRESA_TXPK', p, function (e) {
+            EXEC_SQL('usp_PRI_EMPRESA_TXPK', p, function (e) {
+              
+              app.locals.empresa = e.result 
+              global.empresa = e.result
+              
+              //if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
+                LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
+                  if (e.err) {
+                    errores = e.err
+                    return res.redirect('/login');
+                  }
             
-            app.locals.empresa = e.result 
-            global.empresa = e.result
+                  /*if (app.locals.isla){
             
-            //if(req.body.Gestion!=undefined && req.body.Periodo!=undefined && req.body.Turno!=undefined){
-              LOGIN_SQL(req.body.usuario, req.body.password, function (e) {
-                if (e.err) {
-                  errores = e.err
-                  return res.redirect('/login');
-                }
-          
-                /*if (app.locals.isla){
-          
-                  pIsla = [
-                    { nom_parametro: 'Cod_Usuario', valor_parametro: e.Cod_Usuarios },
-                    { nom_parametro: 'Cod_Caja', valor_parametro: app.locals.caja.Cod_Caja }
-                  ]
-          
-                  EXEC_SQL('USP_CAJ_CAJAS_TXUsuario', pIsla , function (dataCajaIsla) {
-                    if (e.err) {
-                      errores = dataCajaIsla.err
-                      return res.redirect('/login'); 
-                    }
-          
-                    if(dataCajaIsla.result.length>=1){
-          
-                      req.session.authenticated = true;
-                      req.session.username = e.Cod_Usuarios
-                      req.session.nick = e.Nick
-                      req.session.turno = req.body.Turno
-                      req.session.periodo = req.body.Periodo
-                      req.session.gestion = req.body.Gestion
-                      req.session.caja = app.locals.caja.Cod_Caja 
-                      
-                      CargarVariables(req,res)
-          
-                    }else{
-                      app.locals.isla = false
-                      app.locals.apertura = false
-                      app.locals.CierreCompleto = true
-                      app.locals.caja = { Cod_Caja : null }
-                      app.locals.turno = null
-                      app.locals.sucursal = null
-                      app.locals.arqueo = null
-                      delete req.session.authenticated;
-                      errores = "No existe Relación de esta caja con el usuario Asignado.\n\n En caso que Desea agregarlo comuniquese con el administrador de sistemas."
-                      return res.redirect('/login');
-                    }
-                  })
-                }else{*/
-          
-                  req.session.authenticated = true;
-                  req.session.username = e.Cod_Usuarios
-                  req.session.nick = e.Nick
+                    pIsla = [
+                      { nom_parametro: 'Cod_Usuario', valor_parametro: e.Cod_Usuarios },
+                      { nom_parametro: 'Cod_Caja', valor_parametro: app.locals.caja.Cod_Caja }
+                    ]
             
-                  //req.session.turno = req.body.Turno
-                  //req.session.periodo = req.body.Periodo
-                  //req.session.gestion = req.body.Gestion
-                  
-                  p = [
-                    { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
-                  ]  
+                    EXEC_SQL('USP_CAJ_CAJAS_TXUsuario', pIsla , function (dataCajaIsla) {
+                      if (e.err) {
+                        errores = dataCajaIsla.err
+                        return res.redirect('/login'); 
+                      }
+            
+                      if(dataCajaIsla.result.length>=1){
+            
+                        req.session.authenticated = true;
+                        req.session.username = e.Cod_Usuarios
+                        req.session.nick = e.Nick
+                        req.session.turno = req.body.Turno
+                        req.session.periodo = req.body.Periodo
+                        req.session.gestion = req.body.Gestion
+                        req.session.caja = app.locals.caja.Cod_Caja 
+                        
+                        CargarVariables(req,res)
+            
+                      }else{
+                        app.locals.isla = false
+                        app.locals.apertura = false
+                        app.locals.CierreCompleto = true
+                        app.locals.caja = { Cod_Caja : null }
+                        app.locals.turno = null
+                        app.locals.sucursal = null
+                        app.locals.arqueo = null
+                        delete req.session.authenticated;
+                        errores = "No existe Relación de esta caja con el usuario Asignado.\n\n En caso que Desea agregarlo comuniquese con el administrador de sistemas."
+                        return res.redirect('/login');
+                      }
+                    })
+                  }else{*/
+            
+                    req.session.authenticated = true;
+                    req.session.username = e.Cod_Usuarios
+                    req.session.nick = e.Nick
+              
+                    //req.session.turno = req.body.Turno
+                    //req.session.periodo = req.body.Periodo
+                    //req.session.gestion = req.body.Gestion
+                    
+                    p = [
+                      { nom_parametro: 'Cod_Usuarios', valor_parametro: req.session.username}
+                    ]  
+            
+                    EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
+                      if(e.result.length>0){
+                        app.locals.cajasUsuarios = e.result 
+                        res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result });
+                      }else{
+            
+                        EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
+                          if(m.result.length>0){
+                            app.locals.cajasUsuarios = m.result 
+                            res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result });
+                          }else{
+                            errores = 'No existen cajas activas'
+                            app.locals.isla = false
+                            app.locals.apertura = false
+                            app.locals.CierreCompleto = true
+                            app.locals.caja = { Cod_Caja : null }
+                            app.locals.turno = null
+                            app.locals.sucursal = null
+                            app.locals.arqueo = null
+                            app.locals.cajasUsuarios=[]
+                            delete req.session.authenticated;
+                            return res.redirect('/login');
+                          }                     
+                        })
+            
+                      }                
+                    })
+                    
+                  //}
+            
+                })
+              //}else{
+              //  errores = "Todos los campos son necesarios"
+              //  return res.redirect('/login');
+              //}
           
-                  EXEC_SQL('USP_CAJ_CAJAS_TXCodCajero', p , function (e) {
-                    if(e.result.length>0){
-                      app.locals.cajasUsuarios = e.result 
-                      res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:e.result });
-                    }else{
-          
-                      EXEC_SQL('USP_CAJ_CAJAS_TActivos', [] , function (m) {
-                        if(m.result.length>0){
-                          app.locals.cajasUsuarios = m.result 
-                          res.render('logincajas.ejs', { title: 'iFacturacion - Procesos',cajas:m.result });
-                        }else{
-                          errores = 'No existen cajas activas'
-                          app.locals.isla = false
-                          app.locals.apertura = false
-                          app.locals.CierreCompleto = true
-                          app.locals.caja = { Cod_Caja : null }
-                          app.locals.turno = null
-                          app.locals.sucursal = null
-                          app.locals.arqueo = null
-                          app.locals.cajasUsuarios=[]
-                          delete req.session.authenticated;
-                          return res.redirect('/login');
-                        }                     
-                      })
-          
-                    }                
-                  })
-                  
-                //}
-          
-              })
-            //}else{
-            //  errores = "Todos los campos son necesarios"
-            //  return res.redirect('/login');
-            //}
-        
+            })
           })
-        })
+        }else{
+          errores = "No se encontro la cadena local para la conexion"
+          return res.redirect('/login');
+        }
       }else{
         errores = "No se encontro la empresa con el RUC indicado"
         return res.redirect('/login');
@@ -626,11 +630,8 @@ app.get('/prueba',function(req,res){
 
 
  
-app.post('/api/report', function(req, res) { 
-  //console.log("request") 
-  //console.log("configuracionb de ",GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO])
+app.post('/api/report', function(req, res) {  
   if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){  
-     
     if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/recibos_tickets/assets/logo.jpg'))) { 
       req.body.template.data['FLAG'] = true
     }else{
@@ -657,8 +658,7 @@ app.post('/api/report', function(req, res) {
       options: { preview: true }
     }; 
     
-    jsreport.render(request).then(function (o) {
-      //console.log(o.content.toString())
+    jsreport.render(request).then(function (o) { 
       o.result.pipe(res);
     }).catch(function (e) { 
       console.error(e)

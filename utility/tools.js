@@ -5,8 +5,8 @@ var nodemailer = require('nodemailer')
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-          user: 'xxxxx483333@gmail.com',
-          pass: 'priena1'
+          user: 'xxxxx@gmail.com',
+          pass: 'xxxxx'
       }
 });
 
@@ -370,7 +370,6 @@ function EmailValido(valor) {
 
 
 function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
-   
     rand=Math.floor((Math.random() * 100) + 54) 
     link="http://"+host+"/empresa_api/verificacion_correo?id="+rand;
     var mailOptions={
