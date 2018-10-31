@@ -420,7 +420,6 @@ function LlenarTurnos(turnos,idSelect){
     $("#"+idSelect+" option:last").attr("selected", "selected") 
 }
 
-
 function TraerPeriodos(){
     run_waitMe($('#divPeriodos'), 1, "ios","");
     var Gestion = $("#Gestion").val()  
@@ -517,23 +516,25 @@ function CambiarTurnoSistema(){
 }
 
 module.exports = function navegador(ctx, next) {
-    
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-        })
+    if(global.tipo_cliente){
+        
+    }else{
+        const parametros = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+            })
+        }
+        fetch(URL+'/cajas_api/get_arqueo', parametros)
+        .then(req => req.json())
+        .then(res => { 
+            Ver(res.arqueo[0].Flag_Cerrado)
+        }).catch(function (e) {
+            console.log(e);
+            //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        });
     }
-    fetch(URL+'/cajas_api/get_arqueo', parametros)
-    .then(req => req.json())
-    .then(res => { 
-        Ver(res.arqueo[0].Flag_Cerrado)
-    }).catch(function (e) {
-        console.log(e);
-        //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-    });
-  
 }

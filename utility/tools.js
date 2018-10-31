@@ -293,9 +293,14 @@ function LimpiarVariablesGlobales() {
 }
  
 
-function CambiarCadenaConexion(cadena) {
+function CambiarCadenaConexion(cadena,callback) {
     console.log(cadena)
-    var posicionDataSource = cadena.search("Data Source=")
+    if (cadena != null && cadena != "") {
+        global.cadenaConexion = cadena 
+    }else{
+        global.cadenaConexion = ''
+    }
+    /*var posicionDataSource = cadena.search("Data Source=")
     var posicionInitial = cadena.search(";Initial Catalog=")
     var posicionUser = cadena.search(";user id=")
     var posicionPassword = cadena.search("; password=")
@@ -310,7 +315,7 @@ function CambiarCadenaConexion(cadena) {
         global.passwordDB = ''
         global.serverDB = ''
         global.DB = ''
-    }
+    }*/
 
 }
 

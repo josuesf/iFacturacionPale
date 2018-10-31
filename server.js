@@ -297,14 +297,14 @@ app.get('/login', function (req, res) {
 
 
 app.post('/login', function (req, res) {
-
+  global.tipo_cliente = null
   parametros = [
     { nom_parametro: 'RUC', valor_parametro: req.body.RUC }
   ]
 
   EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {   
     if (m.err) {
-      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+m.err
+      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +m.err
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
@@ -313,7 +313,7 @@ app.post('/login', function (req, res) {
           CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
           EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
             if (e.err){
-              errores = "Ocurrio un error con el servidor comuniquese con el administrador. "// +e.err
+              errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +e.err
               return res.redirect('/login');
             } 
             var Cod_Empresa=e.result[0].Cod_Empresa
@@ -424,8 +424,18 @@ app.post('/login', function (req, res) {
             })
           })
         }else{
-          errores = "No se encontro la cadena local para la conexion"
-          return res.redirect('/login');
+          // login nuevo
+          global.tipo_cliente = 'comun'
+          req.session.authenticated = true;
+          req.session.username = 'D001'
+          req.session.nick = 'DEMO'
+          res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
+                                              Nom_Empresa: 'DEMO',//app.locals.empresa[0].Nom_Comercial,
+                                              Cod_Usuarios:req.session.username,
+                                              Nick:req.session.nick,
+                                              Turno:'' });
+          //errores = "No se encontro la cadena local para la conexion"
+          //return res.redirect('/login');
         }
       }else{
         errores = "No se encontro la empresa con el RUC indicado"

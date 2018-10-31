@@ -95,12 +95,16 @@ function Ver_limpio(fecha)
                                 <th>AÑO</th>
                                 <th>MES</th>
                                 <th>DIA</th>
+                                <th>SUNAT COMPRA</th>
+                                <th>SUNAT VENTA</th>
                                 <th>COMPRA</th>
                                 <th>VENTA</th>
                             </tr>
                         </thead>
                         <tbody id="content_table_cambio">
                             <tr>
+                                <td> </td>
+                                <td> </td>
                                 <td> </td>
                                 <td> </td>
                                 <td> </td>
@@ -136,6 +140,7 @@ function Ver(cambios,fecha) {
 
     var tab = yo`
     <li class=""><a href="#tab_listar_conceptos_2" data-toggle="tab" aria-expanded="false" id="id_tab_listar_conceptos_2">Tipo de cambio Monetario<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
+
     var el = yo`
     <div class="tab-pane" id="tab_listar_conceptos_2">
         <section class="content-header">
@@ -225,6 +230,8 @@ function Ver(cambios,fecha) {
                                 <th>AÑO</th>
                                 <th>MES</th>
                                 <th>DIA</th>
+                                <th data-override="SUNAT_COMPRA">COMPRA SUNAT</th>
+                                <th data-override="SUNAT_VENTA">VENTA SUNAT</th>
                                 <th>COMPRA</th>
                                 <th>VENTA</th>
                                 ${cambios[0].Id_TipoCambio ? yo`<th>ACCIONES</th>` : yo``}
@@ -237,6 +244,8 @@ function Ver(cambios,fecha) {
                                 <td>${u.anio }</td>
                                 <td>${u.mes}</td>
                                 <td>${u.dias}</td>
+                                <td>${u.SunatCompra}</td>
+                                <td>${u.SunatVenta}</td>
                                 <td id="editable-compra_${u.Id_TipoCambio}">${u.compra}</td>
                                 <td id="editable-venta_${u.Id_TipoCambio}">${u.venta}</td>
                                 ${u.Id_TipoCambio ? yo`<td><span id="iditable_buton_${u.Id_TipoCambio}" class="btn btn-xs btn-success" onclick="${()=>Editar_fila_cambio(u.Id_TipoCambio)}"><i class="fa fa-edit"></i></span></td>` : yo``}
@@ -290,11 +299,57 @@ function Editar_fila_cambio(Id_TipoCambio)
     var data2= $("#editable-venta_"+Id_TipoCambio).html()
     $("#iditable_buton_"+Id_TipoCambio).attr("disabled", true)
     $("#iditable_buton_"+Id_TipoCambio).addClass('inabilitado')
-    $("#editable-compra_"+Id_TipoCambio).html('<input type="text" id="in_editable-compra_'+Id_TipoCambio+'" value="'+data1+'">')
+    $("#editable-compra_"+Id_TipoCambio).html('<input type="number" id="in_editable-compra_'+Id_TipoCambio+'" value="'+data1+'">')
     $("#in_editable-compra_"+Id_TipoCambio).addClass('editando-compra')
-    $("#editable-venta_"+Id_TipoCambio).html('<input type="text" id="in_editable-venta_'+Id_TipoCambio+'" value="'+data2+'">')
+    $("#editable-venta_"+Id_TipoCambio).html('<input type="number" id="in_editable-venta_'+Id_TipoCambio+'" value="'+data2+'">')
     $("#in_editable-venta_"+Id_TipoCambio).addClass('editando-venta')
     $("#editable-compra_"+Id_TipoCambio).focus()
+}
+function DateNormal(str,tipo){
+    var fecha = str.split('-')
+    if(tipo=='Y')
+    {
+        return Number(fecha[0])
+    }
+    if(tipo=='M')
+    {
+       return Number(fecha[1])
+    }
+    if(tipo=='D')
+    {
+       return Number(fecha[2])
+    }
+    if(tipo=='')
+    {
+        return ''
+    }
+}
+function extractDate(str,tipo){
+    var spl = str.split('T')
+    var fecha = spl[0].split('-')
+    var hora = spl[1].split(':')
+    var fechastr = Number(fecha[0])+'-'+Number(fecha[1])+'-'+Number(fecha[2])
+    var horastr = hora[0]+':'+hora[1]
+    if(tipo=='Y')
+    {
+        return Number(fecha[0])
+    }
+    if(tipo=='M')
+    {
+       return Number(fecha[1])
+    }
+    if(tipo=='D')
+    {
+       return Number(fecha[2])
+    }
+    if(tipo=='H')
+    {
+        return horastr
+    }
+    if(tipo=='')
+    {
+        return fechastr+horastr
+    }
 }
 function Actualizar_cambios()
 {
@@ -396,10 +451,9 @@ function BuscarCambioData()
     if(fecha_val != '')
     {
        run_waitMe($('#main-contenido'), 1, "ios");
-       var fecha = new Date(fecha_val)
-       var dia = fecha.getDate() + 1
-       mes = fecha.getMonth() + 1
-       anio = fecha.getFullYear()
+       var dia = DateNormal(fecha_val,'D')
+       mes = DateNormal(fecha_val,'M')
+       anio = DateNormal(fecha_val,'Y')
        var fecha_data = [{dia:dia,mes:mes,anio:anio}]
        const parametros = {
         method: 'POST',
@@ -422,8 +476,10 @@ function BuscarCambioData()
                 res.data.cambios[0]['dias']= dia
                 res.data.cambios[0]['mes']= mes
                 res.data.cambios[0]['anio']= anio
-                res.data.cambios[0]['compra']= res.data.cambios[0].SunatCompra
-                res.data.cambios[0]['venta']= res.data.cambios[0].SunatVenta
+                res.data.cambios[0]['SunatCompra']= res.data.cambios[0].SunatCompra
+                res.data.cambios[0]['SunatVenta']= res.data.cambios[0].SunatVenta
+                res.data.cambios[0]['compra']= res.data.cambios[0].Compra
+                res.data.cambios[0]['venta']= res.data.cambios[0].Venta
                 Ver(res.data.cambios,fecha_data)
                 $('#main-contenido').waitMe('hide');
             }
@@ -465,12 +521,13 @@ function BuscarCambioData()
                     {
                         for (var i = 0; i < res.data.cambios.length; i++) 
                         {
-                            var fecha = new Date(res.data.cambios[i]['FechaHora'])
-                            res.data.cambios[i]['dias']= fecha.getDate() + 1
-                            res.data.cambios[i]['mes']= fecha.getMonth() + 1
-                            res.data.cambios[i]['anio']= fecha.getFullYear()
-                            res.data.cambios[i]['compra']= res.data.cambios[i].SunatCompra
-                            res.data.cambios[i]['venta']= res.data.cambios[i].SunatVenta
+                            res.data.cambios[i]['dias']= extractDate(res.data.cambios[i]['FechaHora'],'D')
+                            res.data.cambios[i]['mes']= extractDate(res.data.cambios[i]['FechaHora'],'M')
+                            res.data.cambios[i]['anio']= extractDate(res.data.cambios[i]['FechaHora'],'Y')
+                            res.data.cambios[i]['SunatCompra']= res.data.cambios[i].SunatCompra
+                            res.data.cambios[i]['SunatVenta']= res.data.cambios[i].SunatVenta
+                            res.data.cambios[i]['compra']= res.data.cambios[i].Compra
+                            res.data.cambios[i]['venta']= res.data.cambios[i].Venta
                         }
                         Ver(res.data.cambios,fecha_data)
                         $('#main-contenido').waitMe('hide');
@@ -504,10 +561,9 @@ function ExtraerCambioSunat()
     if(fecha_val != '')
     {
        run_waitMe($('#main-contenido'), 1, "ios");
-       var fecha = new Date(fecha_val)
-       var dia = fecha.getDate() + 1
-       mes = fecha.getMonth() + 1
-       anio = fecha.getFullYear()
+       var dia = DateNormal(fecha_val,'D')
+       mes = DateNormal(fecha_val,'M')
+       anio = DateNormal(fecha_val,'Y')
        var fecha_data = [{dia:dia,mes:mes,anio:anio}]
        const parametros = {
         method: 'POST',
@@ -530,6 +586,8 @@ function ExtraerCambioSunat()
                 res.respuesta[0].dias = dia
                 res.respuesta[0]['mes']= mes
                 res.respuesta[0]['anio']= anio
+                res.respuesta[0]['SunatCompra']= res.respuesta[0].compra
+                res.respuesta[0]['SunatVenta']= res.respuesta[0].venta
                 Ver(res.respuesta,fecha_data)
                 $('#main-contenido').waitMe('hide');
             }
@@ -573,6 +631,8 @@ function ExtraerCambioSunat()
                         {
                             res.respuesta[i]['mes']= mes
                             res.respuesta[i]['anio']= anio
+                            res.respuesta[i]['SunatCompra']= res.respuesta[i].compra
+                            res.respuesta[i]['SunatVenta']= res.respuesta[i].venta
                         }
                         Ver(res.respuesta,fecha_data)
                         $('#main-contenido').waitMe('hide');
@@ -705,22 +765,23 @@ function ListarMesTipoCambio(escritura,anio,mes)
         }
         fetch(URL+'/cambio_monetario_api/get_cambios', parametros)
             .then(req => req.json())
-            .then(res => { 
+            .then(res => {
                 if (res.data.cambios.length > 0) {
                     for (var i = 0; i < res.data.cambios.length; i++) 
                     {
-                        var fecha = new Date(res.data.cambios[i]['FechaHora'])
-                        res.data.cambios[i]['dias']= fecha.getDate() + 1
-                        res.data.cambios[i]['mes']= fecha.getMonth() + 1
-                        res.data.cambios[i]['anio']= fecha.getFullYear()
-                        res.data.cambios[i]['compra']= res.data.cambios[i].SunatCompra
-                        res.data.cambios[i]['venta']= res.data.cambios[i].SunatVenta
+                        res.data.cambios[i]['dias']= extractDate(res.data.cambios[i]['FechaHora'],'D')
+                        res.data.cambios[i]['mes']= extractDate(res.data.cambios[i]['FechaHora'],'M')
+                        res.data.cambios[i]['anio']= extractDate(res.data.cambios[i]['FechaHora'],'Y')
+                        res.data.cambios[i]['SunatCompra']= res.data.cambios[i].SunatCompra
+                        res.data.cambios[i]['SunatVenta']= res.data.cambios[i].SunatVenta
+                        res.data.cambios[i]['compra']= res.data.cambios[i].Compra
+                        res.data.cambios[i]['venta']= res.data.cambios[i].Venta
                     }
                     Ver(res.data.cambios,fecha_data)
                     $('#main-contenido').waitMe('hide');
                 }
                 else
-                    Ver_limpio(fecha_data)
+                    Ver([])
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);

@@ -45,7 +45,7 @@ router.post('/buscar_cambios', function (req, res) {
 router.post('/guardar_cambios', function (req, res) {
     input = req.body
     var Data = input.table
-    console.log(Data.length)
+    console.log(Data)
     if(Data.length > 0)
     {
         for (var i in Data) {
@@ -53,8 +53,8 @@ router.post('/guardar_cambios', function (req, res) {
             parametros = [
                 {nom_parametro:'FechaHora',valor_parametro:fecha},
                 {nom_parametro:'Cod_Moneda',valor_parametro:'USD'},
-                {nom_parametro:'SunatCompra',valor_parametro:Data[i].COMPRA},
-                {nom_parametro:'SunatVenta',valor_parametro:Data[i].VENTA},
+                {nom_parametro:'SunatCompra',valor_parametro:Data[i].SUNAT_COMPRA},
+                {nom_parametro:'SunatVenta',valor_parametro:Data[i].SUNAT_VENTA},
                 {nom_parametro:'Compra',valor_parametro:Data[i].COMPRA},
                 {nom_parametro:'Venta',valor_parametro:Data[i].VENTA},
                 {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
@@ -181,7 +181,7 @@ function extraer_mes(string)
 }
 function llenarDiaCambio(intentos,dia,mes,anio,result,callback)
 {
-    if(intentos < 10)
+    if(intentos < 100)
     {
         extraer_data(mes,anio,function(data_ini){
             encontrarItem(0,dia,data_ini,result,function(resultado){
@@ -191,19 +191,21 @@ function llenarDiaCambio(intentos,dia,mes,anio,result,callback)
                 }
                 else
                 {
-                    if(dia == 1)
+                    if(dia === 1)
                     {
-                        if(mes == 1)
+                        
+                        if(mes === 1)
                         {
-                          dia = 31;
-                          mes = 12;
-                          anio = anio-1;
+                          dia = 31
+                          mes = 12
+                          anio = anio-1
                           llenarDiaCambio(intentos +1,dia,mes,anio,[],callback)
                         }
                         else
                         {
-                            dia = diasEnUnMes(mes-1);
-                            llenarDiaCambio(intentos +1,dia,mes,anio,[],callback)
+                            
+                            dia = diasEnUnMes(mes-1,anio)
+                            llenarDiaCambio(intentos +1,dia,mes-1,anio,[],callback)
                         }
                     
                     }
@@ -218,7 +220,7 @@ function llenarDiaCambio(intentos,dia,mes,anio,result,callback)
     }
     else
     {
-       
+       callback([])
     }
     
 }

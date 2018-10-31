@@ -1,6 +1,6 @@
 function dbConfig(){
- 
-    return config = {
+    return global.cadenaConexion
+    /*return config = {
         
         user: process.env.user_database || global.userDB, 
         password: process.env.password_database || global.passwordDB,
@@ -8,7 +8,7 @@ function dbConfig(){
         database: process.env.name_database || global.DB,
         requestTimeout: 30000,
         connectionTimeout: 30000
-    }
+    }*/
 }
 
 function dbMaster(){ 
