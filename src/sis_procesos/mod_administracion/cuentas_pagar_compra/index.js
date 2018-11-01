@@ -179,7 +179,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                             <div class="col-sm-5" id="divFecha_${idTabPC}">
                                                 <div class="form-group">
                                                     <b>Fecha: </b>
-                                                    <input type="date" class="form-control input-sm" id="Fecha_${idTabPC}" value="${fecha_actual}" onkeypress=${()=>TraerTipoCambio(CodLibro,idTabPC)}>
+                                                    <input type="date" class="form-control input-sm" id="Fecha_${idTabPC}" value="${fecha_actual}" onkeyup=${()=>TraerTipoCambio(CodLibro,idTabPC)}>
                                                 </div>
                                             </div>
                                         </div>
@@ -420,7 +420,7 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     CambioFormasPago(CodLibro,idTabPC)
     if(global.objCliente =='')
         BuscarCuentasPendientes(CodLibro,0,'1753-01-01 00:00:00','9999-12-31 23:59:59.997')
-    else{ 
+    else{
         $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
         
         /*$("#Cliente").tagsinput('add',global.objCliente.Nom_Cliente)
@@ -460,8 +460,8 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     }
 
     
-    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
-        if(global.objCliente!=''){  
+    $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () {  
+        if(global.objCliente!=''){ 
             $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDocumento)
             $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
             $("#Nro_Documento_"+idTabPC).val(global.objCliente.Doc_Cliente)
@@ -515,35 +515,34 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
  
 }
 
-function AgregarTabla(comprobantes,idTab){  
+function AgregarTabla(comprobantes,idTab){
     var el = yo`<table id="tablaComprobantes_${idTab}" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Vencimiento</th> 
-                <th>Documento</th>
-                <th>Total Faltante</th>
-                <th>Amortizar</th>
-                <th>Saldo</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${comprobantes.map((c,index) => yo`
-            <tr>
-                <td class="hidden idComprobante">${c.id_ComprobantePago}</td>
-                <td class="FechaEmision">${c.FechaEmision.toString().split('T')[0]}</td>
-                <td class="FechaVencimiento">${c.FechaVencimiento.toString().split('T')[0]}</td> 
-                <td class="hidden Dias">${c.Dias}</td> 
-                <td class="Documento">${c.Documento}</td> 
-                <td class="TotalFaltante">${c.TotalFaltante}</td> 
-                <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeyup=${()=>CambioAmortizar(idTab)}></td> 
-                <td class="Saldo">${c.TotalFaltante}</td> 
-            </tr>`)}
-        </tbody>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Vencimiento</th> 
+            <th>Documento</th>
+            <th>Total Faltante</th>
+            <th>Amortizar</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${comprobantes.map((c,index) => yo`
+        <tr>
+            <td class="hidden idComprobante">${c.id_ComprobantePago}</td>
+            <td class="FechaEmision">${c.FechaEmision}</td>
+            <td class="FechaVencimiento">${c.FechaVencimiento}</td> 
+            <td class="hidden Dias">${c.Dias}</td> 
+            <td class="Documento">${c.Documento}</td> 
+            <td class="TotalFaltante">${c.TotalFaltante}</td> 
+            <td class="Amortizar"><input class="form-control" type="number" value="0.00" onkeyup=${()=>CambioAmortizar(idTab)}></td> 
+            <td class="Saldo">${c.TotalFaltante}</td> 
+        </tr>`)}
+    </tbody>
 
-    </table>`
-    var tabla = document.getElementById('divTablaComprobantes_'+idTab);
-    empty(tabla).appendChild(el); 
+</table>`
+    empty(document.getElementById('divTablaComprobantes_'+idTab)).appendChild(el);
 }
 
 function CargarModalConfirmacionCuentas(CodLibro,idTab){
@@ -675,8 +674,8 @@ function CalcularTotal(idTab){
         $('#tablaComprobantes_'+idTab+' > tbody tr').each(function () {
 
             SumaAmortiza += parseFloat($(this).find("td").eq(6).find("input").val())
-            if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(6).find("input").val()))>0)
-                $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(6).find("input").val())))
+            if((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val()))>0)
+                $(this).find("td").eq(7).text((parseFloat($(this).find("td").eq(5).text()) - parseFloat($(this).find("td").eq(5).find("input").val())))
             else
                 $(this).find("td").eq(7).text("0.00")
             
@@ -685,7 +684,7 @@ function CalcularTotal(idTab){
 
         $("#Total_"+idTab).val(SumaTotal)
         $("#TotalAmortizar_"+idTab).val(SumaAmortiza)
-        $("#TotalSaldo_"+idTab).val(SumaTotal-SumaAmortiza)
+        $("#TotalFaltante_"+idTab).val(SumaTotal-SumaAmortiza)
 
     }catch(e){
 
@@ -749,7 +748,7 @@ function BuscarPorFecha(CodLibro,idTab){
     }
     fetch(URL + '/recibo_iegreso_api/get_cuentas_by_cobrar_pagar', parametros)
         .then(req => req.json())
-        .then(res => {  
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 AgregarTabla(res.data.cuentas,idTab)
             } 
@@ -778,7 +777,7 @@ function CambioTodoFechas(idTab){
 }
 
 function CambioTodoLicitacion(idTab){
-    $("#Cod_Licitacion_"+idTab).attr("disabled",($("#optTodoLicitacion_"+idTab).is(":checked")))
+    $("#Cod_Licitacion_"+idTab).attr("disabled",($("#optTodoFechas_"+idTab).is(":checked")))
 }
 
 function CambioTodoVencimiento(idTab){
@@ -1296,11 +1295,11 @@ function GuardarMovimientoCaja(Facturas,CodLibro,idTab){
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         }); 
- 
 }
-
+ 
 function AceptarConfirmacionCuenta(CodLibro,idTab){
-    
+    run_waitMe($('#main-contenido'), 1, "ios","Realizando operacion...");
+    var flag_error = false
     var Facturas = ""
     // ------- Inicio EstablecerCamposEntidad
 
@@ -1345,64 +1344,94 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
                     .then(req => req.json())
                     .then(res => {
                         if(res.respuesta=="ok"){
-                            
-                            /*var parametrosComprobante = [
-                                { nom_parametro: 'id_ComprobantePago', valor_parametro: -1, tipo:"output"},
-                                { nom_parametro: 'Cod_Libro', valor_parametro: res.data.comprobante_pago[0].Cod_Libro},
-                                { nom_parametro: 'Cod_Periodo', valor_parametro:res.data.comprobante_pago[0].Cod_Periodo},
-                                { nom_parametro: 'Cod_Caja', valor_parametro: res.data.comprobante_pago[0].Cod_Caja},
-                                { nom_parametro: 'Cod_Turno', valor_parametro: res.data.comprobante_pago[0].Cod_Turno},
-                                { nom_parametro: 'Cod_TipoOperacion', valor_parametro: res.data.comprobante_pago[0].Cod_TipoOperacion},
-                                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: res.data.comprobante_pago[0].Cod_TipoComprobante},
-                                { nom_parametro: 'Serie', valor_parametro: res.data.comprobante_pago[0].Serie},
-                                { nom_parametro: 'Numero', valor_parametro: res.data.comprobante_pago[0].Numero},
-                                { nom_parametro: 'Id_Cliente', valor_parametro: res.data.comprobante_pago[0].Id_Cliente},
-                                { nom_parametro: 'Cod_TipoDoc', valor_parametro: res.data.comprobante_pago[0].Cod_TipoDoc},
-                                { nom_parametro: 'Doc_Cliente', valor_parametro: res.data.comprobante_pago[0].Doc_Cliente},
-                                { nom_parametro: 'Nom_Cliente', valor_parametro: res.data.comprobante_pago[0].Nom_Cliente},
-                                { nom_parametro: 'Direccion_Cliente', valor_parametro: res.data.comprobante_pago[0].Direccion_Cliente},
-                                { nom_parametro: 'FechaEmision', valor_parametro: res.data.comprobante_pago[0].FechaEmision},
-                                { nom_parametro: 'FechaVencimiento', valor_parametro: res.data.comprobante_pago[0].FechaVencimiento},
-                                { nom_parametro: 'FechaCancelacion', valor_parametro: $("#Fecha_"+idTab).val()},
-                                { nom_parametro: 'Glosa', valor_parametro: res.data.comprobante_pago[0].Glosa},
-                                { nom_parametro: 'TipoCambio', valor_parametro: res.data.comprobante_pago[0].TipoCambio},
-                                { nom_parametro: 'Flag_Anulado', valor_parametro: res.data.comprobante_pago[0].Flag_Anulado},
-                                { nom_parametro: 'Flag_Despachado', valor_parametro: res.data.comprobante_pago[0].Falg_Despachado},
-                                { nom_parametro: 'Cod_FormaPago', valor_parametro: res.data.comprobante_pago[0].Cod_FormaPago},
-                                { nom_parametro: 'Descuento_Total', valor_parametro: res.data.comprobante_pago[0].Descuento_Total},
-                                { nom_parametro: 'Cod_Moneda', valor_parametro: res.data.comprobante_pago[0].Cod_Moneda},
-                                { nom_parametro: 'Impuesto', valor_parametro: res.data.comprobante_pago[0].Impuesto},
-                                { nom_parametro: 'Total', valor_parametro: res.data.comprobante_pago[0].Total},
-                                { nom_parametro: 'Obs_Comprobante', valor_parametro: res.data.comprobante_pago[0].Obs_Comprobante},
-                                { nom_parametro: 'Id_GuiaRemision', valor_parametro: res.data.comprobante_pago[0].Id_GuiaRemision},
-                                { nom_parametro: 'GuiaRemision', valor_parametro: res.data.comprobante_pago[0].GuiaRemision},
-                                { nom_parametro: 'id_ComprobanteRef', valor_parametro: res.data.comprobante_pago[0].id_ComprobanteRef},
-                                { nom_parametro: 'Cod_Plantilla', valor_parametro: res.data.comprobante_pago[0].Cod_Plantilla},
-                                { nom_parametro: 'Nro_Ticketera', valor_parametro: res.data.comprobante_pago[0].Nro_Ticketera},
-                                { nom_parametro: 'Cod_UsuarioVendedor', valor_parametro: res.data.comprobante_pago[0].Cod_UsuarioVendedor},
-                                { nom_parametro: 'Cod_RegimenPercepcion', valor_parametro: res.data.comprobante_pago[0].Cod_RegimenPercepcion},
-                                { nom_parametro: 'Tasa_Percepcion', valor_parametro: res.data.comprobante_pago[0].Tasa_Percepcion},
-                                { nom_parametro: 'Placa_Vehiculo', valor_parametro: res.data.comprobante_pago[0].Placa_Vehiculo},
-                                { nom_parametro: 'Cod_TipoDocReferencia', valor_parametro: res.data.comprobante_pago[0].Cod_TipoDocReferencia},
-                                { nom_parametro: 'Nro_DocReferencia', valor_parametro: res.data.comprobante_pago[0].Nro_DocReferencia},
-                                { nom_parametro: 'Valor_Resumen', valor_parametro: res.data.comprobante_pago[0].Valor_Resumen},
-                                { nom_parametro: 'Valor_Firma', valor_parametro: res.data.comprobante_pago[0].Valor_Firma},
-                                { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: res.data.comprobante_pago[0].Cod_EstadoComprobante},
-                                { nom_parametro: 'MotivoAnulacion', valor_parametro: res.data.comprobante_pago[0].MotivoAnulacion},
-                                { nom_parametro: 'Otros_Cargos', valor_parametro: res.data.comprobante_pago[0].Otros_Cargos},
-                                { nom_parametro: 'Otros_Tributos', valor_parametro: res.data.comprobante_pago[0].Otros_Tributos},
-                                { nom_parametro: 'Cod_Usuario', valor_parametro: res.data.comprobante_pago[0].Cod_UsuarioAct},
-                            ]
+                            var comprobanteRecuperado = res.data.comprobante_pago[0]
+                            const parametrosComprobantePago_ = {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    Cod_Libro:comprobanteRecuperado.Cod_Libro,
+                                    Cod_TipoOperacion:comprobanteRecuperado.Cod_TipoOperacion,
+                                    Cod_TipoComprobante: comprobanteRecuperado.Cod_TipoComprobante,
+                                    Serie:comprobanteRecuperado.Serie,
+                                    Numero:comprobanteRecuperado.Numero,
+                                    Id_Cliente:comprobanteRecuperado.Id_Cliente,
+                                    Cod_TipoDoc:comprobanteRecuperado.Cod_TipoDoc,
+                                    Doc_Cliente:comprobanteRecuperado.Doc_Cliente,
+                                    Nom_Cliente:comprobanteRecuperado.Nom_Cliente,
+                                    Direccion_Cliente:comprobanteRecuperado.Direccion_Cliente,
+                                    FechaEmision:comprobanteRecuperado.FechaEmision,
+                                    FechaVencimiento:comprobanteRecuperado.FechaVencimiento,
+                                    FechaCancelacion:Fecha_FormaPago,
+                                    Glosa:comprobanteRecuperado.Glosa,
+                                    TipoCambio:comprobanteRecuperado.TipoCambio,
+                                    Flag_Anulado:comprobanteRecuperado.Flag_Anulado,
+                                    Flag_Despachado:comprobanteRecuperado.Flag_Despachado,
+                                    Cod_FormaPago:comprobanteRecuperado.Cod_FormaPago,
+                                    Descuento_Total:comprobanteRecuperado.Descuento_Total,
+                                    Cod_Moneda:comprobanteRecuperado.Cod_Moneda,
+                                    Impuesto:comprobanteRecuperado.Impuesto,
+                                    Total:comprobanteRecuperado.Total,
+                                    Obs_Comprobante:comprobanteRecuperado.Obs_Comprobante,
+                                    Id_GuiaRemision:comprobanteRecuperado.Id_GuiaRemision,
+                                    GuiaRemision:comprobanteRecuperado.GuiaRemision,
+                                    id_ComprobanteRef:comprobanteRecuperado.id_ComprobanteRef,
+                                    Cod_Plantilla:comprobanteRecuperado.Cod_Plantilla,
+                                    Nro_Ticketera:comprobanteRecuperado.Nro_Ticketera,
+                                    Cod_RegimenPercepcion:comprobanteRecuperado.Cod_RegimenPercepcion,
+                                    Tasa_Percepcion:comprobanteRecuperado.Tasa_Percepcion,
+                                    Placa_Vehiculo:comprobanteRecuperado.Placa_Vehiculo,
+                                    Cod_TipoDocReferencia:comprobanteRecuperado.Cod_TipoDocReferencia,
+                                    Nro_DocReferencia:comprobanteRecuperado.Nro_DocReferencia,
+                                    Valor_Firma:comprobanteRecuperado.Valor_Firma,
+                                    Cod_EstadoComprobante:comprobanteRecuperado.Cod_EstadoComprobante,
+                                    Motivo_Anulacion:comprobanteRecuperado.Motivo_Anulacion,
+                                    Otros_Cargos:comprobanteRecuperado.Otros_Cargos,
+                                    Otros_Tributos:comprobanteRecuperado.Otros_Tributos
+                                })
+                            }
+                            fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametrosFormaPago)
+                            .then(req => req.json())
+                            .then(res => {
+                                if(res.respuesta=="ok"){
+
+                                }else{
+                                    flag_error = true
+                                }
+                            }).catch(function (e) {
+                                console.log(e);
+                                flag_error = true
+                                return false
+                                //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                            }); 
+
+
+                            /* var parametros = [ 
+                                    { nom_parametro: 'Numero', valor_parametro: input.Numero ,tipo:"output",tipo_parametro:sql.VarChar},
+                                    
+                                    { nom_parametro: 'Valor_Resumen', valor_parametro: input.Valor_Resumen },
+                                    { nom_parametro: 'Valor_Firma', valor_parametro: input.Valor_Firma },
+                                    { nom_parametro: 'Cod_EstadoComprobante', valor_parametro: input.Cod_EstadoComprobante },
+                                    { nom_parametro: 'MotivoAnulacion', valor_parametro: input.Motivo_Anulacion },
+                                    { nom_parametro: 'Otros_Cargos', valor_parametro: input.Otros_Cargos },
+                                    { nom_parametro: 'Otros_Tributos', valor_parametro: input.Otros_Tributos, tipo_parametro: sql.Numeric },
+                                    { nom_parametro: 'Cod_Usuario', valor_parametro: req.session.username },
+                                ]
+
                             
                             EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
                                 if (dataComprobante.err)
                                     return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
-                            })     */   
+                            })   */     
  
                         }
                     }).catch(function (e) {
                         console.log(e);
-                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                        flag_error = true
+                        return false
+                        //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                     }); 
 
 
@@ -1415,113 +1444,127 @@ function AceptarConfirmacionCuenta(CodLibro,idTab){
         }         
     });
 
-    if(i>0){
-        Facturas = Facturas.substring(0,Facturas.length-2)
-    }
+    if(!flag_error){
+        if(i>0){
+            Facturas = Facturas.substring(0,Facturas.length-2)
+        }
 
-    switch($("#Cod_FormaPago_"+idTab).val()){
-        case "008":
-            GuardarMovimientoCaja(Facturas,CodLibro,idTab)
-            break
-        case "007":
-            if(CodLibro=="08"){
-                if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
-                    GuardarMovimientoBancario(Facturas,CodLibro,idTab)
-                }
-            }
-            break
-        case "011":
-            if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
+        switch($("#Cod_FormaPago_"+idTab).val()){
+            case "008":
+                GuardarMovimientoCaja(Facturas,CodLibro,idTab)
+                break
+            case "007":
                 if(CodLibro=="08"){
-                    GuardarMovimientoCaja(Facturas,CodLibro)
-                }else{
-                    if(CodLibro=="14"){
+                    if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
                         GuardarMovimientoBancario(Facturas,CodLibro,idTab)
                     }
                 }
-            }
-            break
-        case "003":
-            if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
-                if(CodLibro=="08"){
-                    GuardarMovimientoCaja(Facturas,CodLibro)
-                }else{
-                    GuardarMovimientoBancario(Facturas,CodLibro,idTab)
-                }
-            }
-            break
-    }
-
-    $('#tablaComprobantes_'+idTab+' > tbody tr').each(function () {
-        if(parseFloat($(this).find("td").eq(6).find("input").val())>0){
-            var id_ComprobantePago = parseInt($(this).find("td").eq(0).text());//parseInt()
-            var Monto = parseFloat($(this).find("td").eq(6).find("input").val())
-            Id_Movimiento_FormaPago = 0
-            if($("#Cuenta_CajaBancos_"+idTab).val()!=null || $("#Cuenta_CajaBancos_"+idTab).val()!=""){
-                Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos_"+idTab).val())
-            }
- 
-            const parametros = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id_ComprobantePago,
-                })
-            }
-            fetch(URL + '/formas_pago_api/traer_siguiente_item', parametros)
-                .then(req => req.json())
-                .then(res => {
-                    if(res.respuesta=="ok"){
-                        var Item = res.data.item[0]['']
-                        var Cod_Plantilla = null
-                        var Obs_FormaPago = ''
-
-                        const parametrosFormaPago = {
-                            method: 'POST',
-                            headers: {
-                                Accept: 'application/json',
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                id_ComprobantePago,
-                                Item,
-                                Des_FormaPago: Des_FormaPago_FormaPago,
-                                Cod_TipoFormaPago:Cod_TipoFormaPago_FormaPago,
-                                Cuenta_CajaBancos: Cuenta_CajaBancos_FormaPago,
-                                Id_Movimiento: Id_Movimiento_FormaPago,
-                                TipoCambio: TipoCambio_FormaPago,
-                                Cod_Moneda:Cod_Moneda_FormaPago,
-                                Monto,
-                                Cod_Plantilla,
-                                Obs_FormaPago,
-                                Fecha: Fecha_FormaPago,
-
-                            })
+                break
+            case "011":
+                if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
+                    if(CodLibro=="08"){
+                        GuardarMovimientoCaja(Facturas,CodLibro)
+                    }else{
+                        if(CodLibro=="14"){
+                            GuardarMovimientoBancario(Facturas,CodLibro,idTab)
                         }
-                        fetch(URL + '/formas_pago_api/guardar_forma_pago', parametrosFormaPago)
-                            .then(req => req.json())
-                            .then(res => {
-                                if(res.respuesta=="ok"){
-                                    
-                                }
-                            }).catch(function (e) {
-                                console.log(e);
-                                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                            }); 
-                        
-
                     }
-                }).catch(function (e) {
-                    console.log(e);
-                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-                }); 
-            
-        }         
-    });
-    $("#modal_proceso").modal('hide')
+                }
+                break
+            case "003":
+                if($("#Cuenta_CajaBancos_"+idTab).val()==null || $("#Cuenta_CajaBancos_"+idTab).val()==""){
+                    if(CodLibro=="08"){
+                        GuardarMovimientoCaja(Facturas,CodLibro)
+                    }else{
+                        GuardarMovimientoBancario(Facturas,CodLibro,idTab)
+                    }
+                }
+                break
+        }
+
+        $('#tablaComprobantes_'+idTab+' > tbody tr').each(function () {
+            if(parseFloat($(this).find("td").eq(6).find("input").val())>0){
+                var id_ComprobantePago = parseInt($(this).find("td").eq(0).text());//parseInt()
+                var Monto = parseFloat($(this).find("td").eq(6).find("input").val())
+                Id_Movimiento_FormaPago = 0
+                if($("#Cuenta_CajaBancos_"+idTab).val()!=null || $("#Cuenta_CajaBancos_"+idTab).val()!=""){
+                    Id_Movimiento_FormaPago = parseInt($("#Cuenta_CajaBancos_"+idTab).val())
+                }
+    
+                const parametros = {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id_ComprobantePago,
+                    })
+                }
+                fetch(URL + '/formas_pago_api/traer_siguiente_item', parametros)
+                    .then(req => req.json())
+                    .then(res => {
+                        if(res.respuesta=="ok"){
+                            var Item = res.data.item[0]['']
+                            var Cod_Plantilla = null
+                            var Obs_FormaPago = ''
+
+                            const parametrosFormaPago = {
+                                method: 'POST',
+                                headers: {
+                                    Accept: 'application/json',
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    id_ComprobantePago,
+                                    Item,
+                                    Des_FormaPago: Des_FormaPago_FormaPago,
+                                    Cod_TipoFormaPago:Cod_TipoFormaPago_FormaPago,
+                                    Cuenta_CajaBancos: Cuenta_CajaBancos_FormaPago,
+                                    Id_Movimiento: Id_Movimiento_FormaPago,
+                                    TipoCambio: TipoCambio_FormaPago,
+                                    Cod_Moneda:Cod_Moneda_FormaPago,
+                                    Monto,
+                                    Cod_Plantilla,
+                                    Obs_FormaPago,
+                                    Fecha: Fecha_FormaPago,
+
+                                })
+                            }
+                            fetch(URL + '/formas_pago_api/guardar_forma_pago', parametrosFormaPago)
+                                .then(req => req.json())
+                                .then(res => {
+                                    if(res.respuesta=="ok"){
+                                        
+                                    }else{
+                                        toastr.error('Ocurrio un error al recuperar los datos. Tipo de error: '+res.detalle_error,'Error',{timeOut: 5000})
+                                        return false
+                                    }
+                                }).catch(function (e) {
+                                    console.log(e);
+                                    toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                                    return false
+                                }); 
+                            
+
+                        }else{
+                            toastr.error('Ocurrio un error al recuperar los datos. Tipo de error: '+res.detalle_error,'Error',{timeOut: 5000})
+                            return false
+                        }
+                    }).catch(function (e) {
+                        console.log(e);
+                        toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                        return false
+                    }); 
+                
+            }         
+        });
+        //$("#modal_proceso").modal('hide')
+        $('#main-contenido').waitMe('hide');
+    }else{
+        toastr.error('Ocurrio un al momento de guardar los datos. Vuelva a intentarlo en unos momentos o comuniquese con el administrador del sistema','Error',{timeOut: 5000})
+        $('#main-contenido').waitMe('hide');
+    }
 }
  
 function Cuentas(Cod_Libro) { 
