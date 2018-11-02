@@ -258,19 +258,19 @@ app.get('/', function (req, res) {
   }
 })
 
-/*app.get('/administracion', function (req, res) {
+app.get('/consultas', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
   } else{
-    if (req.session.caja) {
+    //if (req.session.caja) {
       res.render('index.ejs', { title: 'iFacturacion',
                             Cod_Usuarios:req.session.username,
                             Nick:req.session.nick });
-    }else{
-      res.redirect('/logout');
-    }
+    //}else{
+    //  res.redirect('/logout');
+    //}
   }
-}) */
+}) 
 
 
 app.get('/login', function (req, res) { 
@@ -424,16 +424,16 @@ app.post('/login', function (req, res) {
             })
           })
         }else{
-          // login nuevo
-          global.tipo_cliente = 'comun'
+          // login nuevo 
           req.session.authenticated = true;
           req.session.username = 'D001'
           req.session.nick = 'DEMO'
-          res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
+          return res.redirect('/consultas');
+          /*res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
                                               Nom_Empresa: 'DEMO',//app.locals.empresa[0].Nom_Comercial,
                                               Cod_Usuarios:req.session.username,
                                               Nick:req.session.nick,
-                                              Turno:'' });
+                                              Turno:'' });*/
           //errores = "No se encontro la cadena local para la conexion"
           //return res.redirect('/login');
         }

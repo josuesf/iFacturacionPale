@@ -53,8 +53,8 @@ import {ListarMesTipoCambio} from '../sis_admin/mod_tipocambio/listar/listar'
 
 function Ver(Flag_Cerrado) { 
    
-    var el = yo`
-        ${!Flag_Cerrado?
+    var el =  
+        !Flag_Cerrado?
             yo` 
             <ul id="main-menu" class="gui-controls"> 
  
@@ -284,47 +284,46 @@ function Ver(Flag_Cerrado) {
             :yo`
             <ul id="main-menu" class="gui-controls"> 
  
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
-                    <span class="title"> Ventas</span>
-                </a> 
-                
-            </li>
+                <li class="gui-folder not-active">
+                    <a>
+                        <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
+                        <span class="title"> Ventas</span>
+                    </a> 
+                    
+                </li>
 
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
-                    <span class="title"> Compras</span>
-                </a> 
-                
-            </li>
+                <li class="gui-folder not-active">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
+                        <span class="title"> Compras</span>
+                    </a> 
+                    
+                </li>
 
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
-                    <span class="title"> Almacen</span>
-                </a> 
-                
-            </li>
+                <li class="gui-folder not-active">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
+                        <span class="title"> Almacen</span>
+                    </a> 
+                    
+                </li>
 
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-cogs"></i></div>
-                    <span class="title"> Administracion</span>
-                </a> 
-                
-            </li>
- 
-            <li class="gui-folder not-active">
-                <a>
-                    <div class="gui-icon"><i class="fa fa-bar-chart-o"></i></div>
-                    <span class="title"> Reportes</span>
-                </a> 
-                
-            </li>
-        </ul>
-            `}`;
+                <li class="gui-folder not-active">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-cogs"></i></div>
+                        <span class="title"> Administracion</span>
+                    </a> 
+                    
+                </li>
+    
+                <li class="gui-folder not-active">
+                    <a>
+                        <div class="gui-icon"><i class="fa fa-bar-chart-o"></i></div>
+                        <span class="title"> Reportes</span>
+                    </a> 
+                    
+                </li>
+            </ul>`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
     
@@ -516,25 +515,22 @@ function CambiarTurnoSistema(){
 }
 
 module.exports = function navegador(ctx, next) {
-    if(global.tipo_cliente){
-        
-    }else{
-        const parametros = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-            })
-        }
-        fetch(URL+'/cajas_api/get_arqueo', parametros)
-        .then(req => req.json())
-        .then(res => { 
-            Ver(res.arqueo[0].Flag_Cerrado)
-        }).catch(function (e) {
-            console.log(e);
-            //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-        });
+    
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+        })
     }
+    fetch(URL+'/cajas_api/get_arqueo', parametros)
+    .then(req => req.json())
+    .then(res => { 
+        Ver(res.arqueo[0].Flag_Cerrado)
+    }).catch(function (e) {
+        console.log(e);
+        //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+    }); 
 }
