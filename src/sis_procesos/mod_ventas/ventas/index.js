@@ -132,13 +132,6 @@ function VerNuevaVenta(variables,CodLibro) {
                                             </select>
                                         </div> 
 
-                                        <div class="col-md-12" id="divCuentaCajaBancos_${idTabVenta}">
-                                            <div class="form-group">
-                                                <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos_${idTabVenta}"> 
-                                                </select>
-                                            </div>
-                                        </div>
-
                                         <div class="col-md-12" id="divOperacion_${idTabVenta}">
                                             <div class="form-group">
                                                 <label id="lbCuentaCajaBanco_${idTabVenta}">#Operacion</label>
@@ -146,6 +139,15 @@ function VerNuevaVenta(variables,CodLibro) {
                                                 </select> 
                                             </div> 
                                         </div>
+                                        
+                                        <div class="col-md-12" id="divCuentaCajaBancos_${idTabVenta}">
+                                            <div class="form-group">
+                                                <select class="form-control input-sm select-preserve" id="Cuenta_CajaBancos_${idTabVenta}"> 
+                                                </select>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                              
                                 </div>
@@ -236,7 +238,7 @@ function VerNuevaVenta(variables,CodLibro) {
     $("#tabs_contents").append(tabContent)
     $("#id_"+idTabVenta).click()
 
-    $("#Cuenta_CajaBancos_"+idTabVenta).combobox()
+    //$("#Cuenta_CajaBancos_"+idTabVenta).combobox()
 
     TraerSimboloSOLES(variables.monedas,'PEN',idTabVenta)
     //CambioMonedaFormaPagoSoles(idTabVenta)
@@ -774,7 +776,8 @@ function CambioCodCuentaBancaria(CodLibro,idTab){
         .then(res => {
             if (res.respuesta == 'ok') {
                 var cheques = res.data.cheques 
-                LlenarCheques(cheques,idTab)
+                if(cheques)
+                    LlenarCheques(cheques,idTab)
             } 
         }).catch(function (e) {
             console.log(e);

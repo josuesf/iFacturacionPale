@@ -3537,7 +3537,8 @@ function CambioCodCuentaBancaria(CodLibro){
             console.log("get cheques",res)
             if (res.respuesta == 'ok') {
                 var cheques = res.data.cheques 
-                LlenarCheques(cheques)
+                if(cheques)
+                    LlenarCheques(cheques)
             } 
         }).catch(function (e) {
             console.log(e);
