@@ -5,7 +5,7 @@ import { NuevoConcepto } from './agregar.js'
 import { URL } from '../../../constantes_entorno/constantes'
 
 
-function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
+function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos,tamanio_pagina) {
 
     var tab = yo`
     <li class=""><a href="#tab_listar_conceptos_2" data-toggle="tab" aria-expanded="false" id="id_tab_listar_conceptos_2">Conceptos<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
@@ -49,7 +49,7 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form">
                                 <div class="form-group floating-label">
                                     <div class="input-group">
@@ -64,6 +64,30 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-2 col-md-offset-4">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Mostrar</label>
+                                        </div>
+                                        <div class="input-group-content">
+                                            <select id="nro_registros_conceptos" onchange=${()=>CambioTamanioPagina()} class="form-control input-sm">
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='10'?'selected':'':''} value="10">10</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='25'?'selected':'':''} value="25">25</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='50'?'selected':'':''} value="50">50</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='100'?'selected':'':''} value="100">100</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Registros</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -130,6 +154,10 @@ function Ver(conceptos, paginas, pagina_actual, _escritura, tipos_conceptos) {
         $("#tabs_contents").append(el)
     } 
     $("#id_tab_listar_conceptos_2").click()
+}
+
+function CambioTamanioPagina(){ 
+    ListarConceptos(true,null,null,null,$("#nro_registros_conceptos").val())
 }
 
 function CerrarTab(){
@@ -202,7 +230,7 @@ function BuscarParametroConcepto(event){
 }
 
 
-function ListarConceptos(escritura, NumeroPagina,ScripOrden,ScripWhere) {
+function ListarConceptos(escritura, NumeroPagina,ScripOrden,ScripWhere,TamanioPagina) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura = escritura;
     const parametros = {
@@ -212,7 +240,7 @@ function ListarConceptos(escritura, NumeroPagina,ScripOrden,ScripWhere) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '50',
+            TamanoPagina: TamanioPagina?TamanioPagina:'10',
             NumeroPagina: NumeroPagina || '0',
             ScripOrden: ScripOrden||' ORDER BY Id_Concepto asc',
             ScripWhere: ScripWhere||''  
@@ -224,11 +252,11 @@ function ListarConceptos(escritura, NumeroPagina,ScripOrden,ScripWhere) {
             if (res.respuesta == 'ok') {
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
-                paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
+                paginas = parseInt(paginas / (TamanioPagina?parseInt(TamanioPagina):10)) + (paginas % (TamanioPagina?parseInt(TamanioPagina):10) != 0 ? 1 : 0)
 
                 var tipos_conceptos = res.data.tipos_conceptos
 
-                Ver(res.data.conceptos, paginas, NumeroPagina || 0, _escritura, tipos_conceptos)
+                Ver(res.data.conceptos, paginas, NumeroPagina || 0, _escritura, tipos_conceptos,TamanioPagina)
             }
             else
                 Ver([])

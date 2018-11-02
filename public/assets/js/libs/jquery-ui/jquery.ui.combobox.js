@@ -176,22 +176,22 @@
                 $.ui.autocomplete.prototype.search.call(this, value, event);
             },
             
-            _change: function( event ){
+            _change: function( event ){ 
                 var select = this.element
-                if ( !this.selectedItem ) {
+                if ( !this.selectedItem ) { 
                     var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( this.element.val() ) + "$", "i" ),
                         match = $.grep( this.options.source, function(value) {
                             return matcher.test( value.label );
                         });
-                    if (match.length){
+                    if (match.length){ 
                         if (match[0].option != undefined) match[0].option.selected = true;
                     }else{
                         if(select.hasClass("select-preserve")){
-                            if (this.options.selectElement) {
+                            if (this.options.selectElement) {  
                                 var firstItem = this.options.selectElement.children("option:first");
                                 this.element.val(firstItem.text());
                                 firstItem.prop("selected", true);
-                            }else {
+                            }else { 
                                 this.element.val( "" );
                             }
                             $(event.target).data("ui-combobox").previous = null;  

@@ -968,7 +968,7 @@ table.dataTable td {
   clear: both;
 }
 .dataTables_wrapper .dataTables_length {
-  float: left;
+  float: right;
   margin: 0 0 15px 0;
 }
 .dataTables_wrapper .dataTables_length select {

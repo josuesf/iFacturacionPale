@@ -56,8 +56,8 @@ function AgregarTabla(cuentas,CodLibro){
         <tr> 
             <td>${c.Doc_Cliente}</td>
             <td>${c.Nom_Cliente}</td> 
-            <td>${c.FechaEmision}</td> 
-            <td>${c.FechaVencimiento}</td> 
+            <td>${c.FechaEmision.toString().split('T')[0]}</td> 
+            <td>${c.FechaVencimiento.toString().split('T')[0]}</td> 
             <td>${c.Documento}</td> 
             <td>${c.Moneda}</td> 
             <td>${c.TotalFaltante}</td>  
@@ -70,7 +70,7 @@ function AgregarTabla(cuentas,CodLibro){
 
     $('#example').DataTable({
         "responsive": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "oLanguage": {
             "sSearch": "Buscar:"
         }

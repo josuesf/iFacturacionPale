@@ -148,7 +148,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     empty(footer).appendChild(footer_element);
     $('#tablaMovimientos').DataTable({
         "responsive": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
             "sSearch": "Buscar:"
@@ -346,7 +346,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
 
     $('#tablaMovimientos').DataTable({
         "responsive": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
             "sSearch": "Buscar:"

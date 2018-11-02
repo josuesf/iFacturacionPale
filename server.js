@@ -304,7 +304,7 @@ app.post('/login', function (req, res) {
 
   EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {   
     if (m.err) {
-      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +m.err
+      errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+m.err
       return res.redirect('/login');
     }else{
       if(m.result.length>0){
@@ -313,7 +313,7 @@ app.post('/login', function (req, res) {
           CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion))
           EXEC_SQL('USP_PRI_EMPRESA_TraerUnicaEmpresa', [], function (e) {
             if (e.err){
-              errores = "Ocurrio un error con el servidor comuniquese con el administrador. " +e.err
+              errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+e.err
               return res.redirect('/login');
             } 
             var Cod_Empresa=e.result[0].Cod_Empresa

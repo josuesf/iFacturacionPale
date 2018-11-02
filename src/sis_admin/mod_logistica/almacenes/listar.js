@@ -5,7 +5,7 @@ import {NuevoAlmacen} from './agregar'
 import {URL} from '../../../constantes_entorno/constantes'
 
 
-function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
+function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes,tamanio_pagina) {
 
     var tab = yo`
     <li class=""><a href="#tab_listar_almacenes_2" data-toggle="tab" aria-expanded="false" id="id_tab_listar_almacenes_2">Almacenes<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
@@ -50,7 +50,7 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form">
                                 <div class="form-group floating-label">
                                     <div class="input-group">
@@ -65,6 +65,31 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-2 col-md-offset-4">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Mostrar</label>
+                                        </div>
+                                        <div class="input-group-content">
+                                            <select id="nro_registros_almacenes" onchange=${()=>CambioTamanioPagina()} class="form-control input-sm">
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='10'?'selected':'':''} value="10">10</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='25'?'selected':'':''} value="25">25</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='50'?'selected':'':''} value="50">50</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='100'?'selected':'':''} value="100">100</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Registros</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
 
                     <div class="table-responsive">
@@ -130,6 +155,9 @@ function Ver(almacenes, paginas,pagina_actual, _escritura,tipo_almacenes) {
     $("#id_tab_listar_almacenes_2").click()
 }
 
+function CambioTamanioPagina(){ 
+    ListarAlmacenes(true,null,null,null,$("#nro_registros_almacenes").val())
+}
 
 function CerrarTab(){
     $('#tab_listar_almacenes_2').remove()
@@ -191,7 +219,7 @@ function BuscarParametroAlmacen(event){
     }
 }
 
-function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere) {
+function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere,TamanioPagina) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -201,7 +229,7 @@ function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '50',
+            TamanoPagina: TamanioPagina?TamanioPagina:'10',
             NumeroPagina: NumeroPagina||'0',
             ScripOrden: ScripOrden||' ORDER BY Cod_Almacen asc',
             ScripWhere: ScripWhere||'' 
@@ -213,11 +241,11 @@ function ListarAlmacenes(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             if (res.respuesta == 'ok') {
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
-                paginas = parseInt(paginas / 50) + (paginas % 50 != 0 ? 1 : 0)
+                paginas = parseInt(paginas / (TamanioPagina?parseInt(TamanioPagina):10)) + (paginas % (TamanioPagina?parseInt(TamanioPagina):10) != 0 ? 1 : 0)
 
                 var tipo_almacenes = res.data.tipo_almacenes
 
-                Ver(res.data.almacenes, paginas,NumeroPagina||0, _escritura, tipo_almacenes)
+                Ver(res.data.almacenes, paginas,NumeroPagina||0, _escritura, tipo_almacenes,TamanioPagina)
             }
             else
                 Ver([])

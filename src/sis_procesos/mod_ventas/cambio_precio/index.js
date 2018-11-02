@@ -85,7 +85,7 @@ function Ver(variables) {
     $("#id_"+idTabCP).click() 
     $('#tablaProductos_'+idTabCP).DataTable({
         "responsive": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "order": [[ 1, "desc" ]],
         "oLanguage": {
             "sSearch": "Buscar:"
@@ -121,7 +121,7 @@ function LlenarTablaProductos(productos,idTab){
         empty(document.getElementById('divTablaProductos_'+idTab)).appendChild(el);
         $('#tablaProductos_'+idTab).DataTable({
             "responsive": true,
-            "lengthChange": false,
+            "lengthChange": true,
             "order": [[ 1, "desc" ]],
             "oLanguage": {
                 "sSearch": "Buscar:"

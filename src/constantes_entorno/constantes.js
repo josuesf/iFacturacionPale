@@ -1,7 +1,7 @@
 const fs = require('fs');  
 const ENV_WEB = true;
-var URL=ENV_WEB?'':'http://127.0.0.1:3000'
-var URL_REPORT = 'http://127.0.0.1:3000';
+var URL=ENV_WEB?'':'http://200.60.135.180:3000'
+var URL_REPORT = 'http://200.60.135.180:3000';
 
 var GETCONFIG = function GET(ruc){
     try{

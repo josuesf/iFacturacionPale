@@ -3,8 +3,9 @@ var yo = require('yo-yo');
 var NuevoPerfil = require('./agregar.js')
 
 import {URL} from '../../../constantes_entorno/constantes'
+import { ListarParametros } from '../parametros/listar.js';
 
-function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
+function Ver(perfiles, paginas,pagina_actual, _escritura,modulos,tamanio_pagina) {
 
     var tab = yo`
     <li class=""><a href="#tab_listar_perfiles_2"  data-toggle="tab" aria-expanded="false" id="id_tab_listar_perfiles_2">Perfiles<a style="padding-left: 10px;" class="btn" onclick=${()=>CerrarTab()}><i class="fa fa-close text-danger"></i></a></a></li>`
@@ -50,7 +51,7 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form">
                                 <div class="form-group floating-label">
                                     <div class="input-group">
@@ -65,6 +66,30 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-2 col-md-offset-4">
+                            <div class="form">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Mostrar</label>
+                                        </div>
+                                        <div class="input-group-content">
+                                            <select id="nro_registros_perfiles" onchange=${()=>CambioTamanioPagina()} class="form-control input-sm">
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='10'?'selected':'':''} value="10">10</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='25'?'selected':'':''} value="25">25</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='50'?'selected':'':''} value="50">50</option>
+                                                <option style="text-transform:uppercase" ${tamanio_pagina?tamanio_pagina=='100'?'selected':'':''} value="100">100</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group-btn">
+                                            <label class="control-label">Registros</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="table-responsive">
@@ -129,6 +154,10 @@ function Ver(perfiles, paginas,pagina_actual, _escritura,modulos) {
     $("#id_tab_listar_perfiles_2").click()
 }
 
+function CambioTamanioPagina(){ 
+    ListarPerfiles(true,null,null,null,$("#nro_registros_perfiles").val())
+}
+
 function CerrarTab(){
     $('#tab_listar_perfiles_2').remove()
     $('#id_tab_listar_perfiles_2').parents('li').remove()
@@ -190,7 +219,7 @@ function BuscarParametroPerfil(event){
     }
 }
 
-function ListarPerfiles(escritura,NumeroPagina,ScripOrden,ScripWhere) {
+function ListarPerfiles(escritura,NumeroPagina,ScripOrden,ScripWhere,TamanioPagina) {
     run_waitMe($('#main-contenido'), 1, "ios");
     var _escritura=escritura;
     const parametros = {
@@ -200,7 +229,7 @@ function ListarPerfiles(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            TamanoPagina: '50',
+            TamanoPagina: TamanioPagina?TamanioPagina:'10',
             NumeroPagina: NumeroPagina||'0',
             ScripOrden: ScripOrden||' ORDER BY Cod_Perfil asc',
             ScripWhere: ScripWhere||'' 
@@ -212,9 +241,9 @@ function ListarPerfiles(escritura,NumeroPagina,ScripOrden,ScripWhere) {
             if (res.respuesta == 'ok') {
                 var paginas = parseInt(res.data.num_filas[0].NroFilas)
 
-                paginas = parseInt(paginas / 20) + (paginas % 20 != 0 ? 1 : 0)
+                paginas = parseInt(paginas / (TamanioPagina?parseInt(TamanioPagina):10)) + (paginas % (TamanioPagina?parseInt(TamanioPagina):10) != 0 ? 1 : 0)
                 var modulos = res.data.modulos
-                Ver(res.data.perfiles, paginas,NumeroPagina||0, _escritura,modulos)
+                Ver(res.data.perfiles, paginas,NumeroPagina||0, _escritura,modulos,TamanioPagina)
             }
             else
                 Ver([])
