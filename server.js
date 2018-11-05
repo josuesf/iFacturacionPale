@@ -261,14 +261,10 @@ app.get('/', function (req, res) {
 app.get('/consultas', function (req, res) {
   if (!req.session || !req.session.authenticated) {
     res.redirect('/login');
-  } else{
-    //if (req.session.caja) {
+  } else{ 
       res.render('index.ejs', { title: 'iFacturacion',
                             Cod_Usuarios:req.session.username,
                             Nick:req.session.nick });
-    //}else{
-    //  res.redirect('/logout');
-    //}
   }
 }) 
 
@@ -425,17 +421,10 @@ app.post('/login', function (req, res) {
           })
         }else{
           // login nuevo 
-          req.session.authenticated = true;
-          req.session.username = 'D001'
-          req.session.nick = 'DEMO'
-          return res.redirect('/consultas');
-          /*res.render('index_procesos.ejs', {  title: 'iFacturacion - Procesos',
-                                              Nom_Empresa: 'DEMO',//app.locals.empresa[0].Nom_Comercial,
-                                              Cod_Usuarios:req.session.username,
-                                              Nick:req.session.nick,
-                                              Turno:'' });*/
-          //errores = "No se encontro la cadena local para la conexion"
-          //return res.redirect('/login');
+            req.session.authenticated = true;
+            req.session.username = 'D001'
+            req.session.nick = 'DEMO'
+            return res.redirect('/consultas');
         }
       }else{
         errores = "No se encontro la empresa con el RUC indicado"
