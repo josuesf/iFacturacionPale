@@ -3,9 +3,9 @@ var { EXEC_SQL_DBMaster} = require('./exec_sp_sql')
 var localStorage = require('localStorage')
 var nodemailer = require('nodemailer')
 var transporter = nodemailer.createTransport({
-    service: 'gmail',
+    service: 'hotmail',
     auth: {
-          user: 'xxxxx@gmail.com',
+          user: 'xxxxx@hotmail.com',
           pass: 'xxxxx'
       }
 });

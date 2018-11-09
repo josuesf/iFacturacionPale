@@ -214,7 +214,7 @@ router.post('/register',function(req,res){
                     res.render('register.ejs', {err:'No se pudo registrar la informacion de la empresa.'});
                 }
                 else{
-                    enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag){
+                    enviarCorreoConfirmacion(req.get('host'),input.email,input.ruc,function(flag,result){
                         if(flag){
                           res.render('register.ejs', {success:'Se envio el correo de verificacion a su correo. Para completar su registro es necesario verificar su correo.'});
                         }else{

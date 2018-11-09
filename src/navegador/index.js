@@ -7,35 +7,35 @@ function Ver() {
                     <li class="gui-folder not-active">
                         <a>
                             <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
-                            <span class="title"> Ventas <span class="badge style-accent"><i class="md md-lock"></i> BLOQUEADO</span></span>
+                            <span class="title"> Ventas <span class="badge style-primary"><i class="md md-lock"></i> BLOQUEADO</span></span>
                         </a> 
                         
                     </li>
                     <li class="gui-folder not-active">
                         <a>
                             <div class="gui-icon"><i class="fa fa-cart-arrow-down"></i></div>
-                            <span class="title"> Compras <span class="badge style-accent"><i class="md md-lock"></i> BLOQUEADO</span></span>
+                            <span class="title"> Compras <span class="badge style-primary"><i class="md md-lock"></i> BLOQUEADO</span></span>
                         </a> 
                         
                     </li>
                     <li class="gui-folder not-active">
                         <a>
                             <div class="gui-icon"><i class="fa fa-circle-o"></i></div>
-                            <span class="title"> Almacen <span class="badge style-accent"><i class="md md-lock"></i> BLOQUEADO</span></span>
+                            <span class="title"> Almacen <span class="badge style-primary"><i class="md md-lock"></i> BLOQUEADO</span></span>
                         </a> 
                         
                     </li>
                     <li class="gui-folder not-active">
                         <a>
                             <div class="gui-icon"><i class="fa fa-cogs"></i></div>
-                            <span class="title"> Administracion <span class="badge style-accent"><i class="md md-lock"></i> BLOQUEADO</span></span>
+                            <span class="title"> Administracion <span class="badge style-primary"><i class="md md-lock"></i> BLOQUEADO</span></span>
                         </a> 
                         
                     </li>
                     <li class="gui-folder not-active">
                         <a>
                             <div class="gui-icon"><i class="fa fa-bar-chart-o"></i></div>
-                            <span class="title"> Reportes <span class="badge style-accent"><i class="md md-lock"></i> BLOQUEADO</span></span>
+                            <span class="title"> Reportes <span class="badge style-primary"><i class="md md-lock"></i> BLOQUEADO</span></span>
                         </a> 
                     </li>
                     <li>
