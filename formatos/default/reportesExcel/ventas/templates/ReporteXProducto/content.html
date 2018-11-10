@@ -1,0 +1,62 @@
+<style>
+    {#asset stylesExcel.css @encoding=utf8}
+</style>
+<table> 
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE VENTAS</td>
+        </tr>  
+    {{else}}
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+     <tr class="row">
+        <td colspan="6" style="font-size: 15px;text-align:center">(Detallado por Producto)</td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td style="width:auto">Nombre / Razon Social : </td>
+        <td style="width:auto">{{:NOMBRE}}</td> 
+        <td></td>
+        <td></td>
+        <td>Fecha:</td> 
+    </tr> 
+    <tr class="row">
+        <td style="width:auto">Direccion : </td>
+        <td style="width:auto">{{:DIRECCION}}</td>
+        <td></td>
+        <td></td>
+        <td>{{:FECHA_SISTEMA}}</td> 
+    </tr> 
+    <tr class="row">
+        <td style="width:auto">RUC : </td>
+        <td style="width:auto">{{:RUC}}</td>
+        
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr>
+     <tr class="row">
+        <td class="headerTable" style="width:auto;">Documento</td>
+        <td class="headerTable" style="width:auto;">Fecha</td>
+        <td class="headerTable" style="width:auto;">Cliente</td>
+        <td class="headerTable" style="width:auto;">Cantidad</td>
+        <td class="headerTable" style="width:auto;">UM</td>
+        <td class="headerTable" style="width:auto;">Precio Unitario</td>
+        <td class="headerTable" style="width:auto;">Sub Total</td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

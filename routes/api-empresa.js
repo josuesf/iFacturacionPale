@@ -4,7 +4,7 @@ var sql = require("mssql");
 var md5 = require('md5')
 var localStorage = require('localStorage')
 var {Ejecutar_Procedimientos,EXEC_SQL_DBMaster,EXEC_QUERY_DBMaster,EXEC_QUERY} = require('../utility/exec_sp_sql')
-var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido,enviarCorreoConfirmacion,enviarCorreoRestaurarPassword } = require('../utility/tools')
+var { UnObfuscateString, CambiarCadenaConexion, RUCValido, EmailValido,enviarCorreoConfirmacion,enviarCorreoRestaurarPassword,enviarCorreoGeneral } = require('../utility/tools')
 // define the home page route
 router.post('/get_unica_empresa', function (req, res) {
     input = req.body
@@ -168,6 +168,18 @@ router.post('/cambiar_password_nueva',function(req,res){
 });
 
 
+/* function send email */
+
+router.post('/send_email_report',function(req,res){
+     var input = req.body
+     enviarCorreoGeneral(input.email,input.subject,input.arregloAttachment,function(flag,result){
+        if(flag){ 
+            return res.json({respuesta:"ok"})
+        }else{
+            return res.json({respuesta:"error",detalle_error:result})
+        }
+    })
+})
 
 
 
@@ -191,8 +203,6 @@ router.get('/verificacion_correo',function(req,res){
       '<p class="logo"><img src="http://palerp.com/images/logo.png" class="center"></p><h3><span>El tiempo del validez del enlace ya caduco. Reenvie de nuevo el correo de verificacion</span></h3></div>')
     }
 });
-
-
 
 router.post('/register',function(req,res){
     var input = req.body 

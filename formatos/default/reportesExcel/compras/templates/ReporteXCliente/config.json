@@ -1,0 +1,20 @@
+{
+    "shortid": "SJZxdj1hm",
+    "name": "ReporteXCliente",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1540504616898
+    },
+    "_id": "dVyi5IqoKw7GrpiV",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

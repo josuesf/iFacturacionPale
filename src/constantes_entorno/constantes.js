@@ -109,92 +109,92 @@ var GETCONFIG = function GET(ruc){
                     },
                 // fin path de los recibos y tickets
 
-                // inicio path reportes
+                // inicio path reportes ventas
                 'ReportePlanillaDiaria':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReportePlanillaDiaria', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReportePlanillaDiaria', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReportePlanillaDiaria', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReportePlanillaDiaria', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXTotalCliente':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalCliente', 'content.html'), 'utf8'), 
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalCliente', 'content.html'), 'utf8'), 
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalCliente', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalCliente', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXTotalDocumento':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalDocumento', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalDocumento', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalDocumento', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalDocumento', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXTotalProducto':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalProducto', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalProducto', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXTotalProducto', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXTotalProducto', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXDocumento':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXDocumento', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXDocumento', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXDocumento', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXDocumento', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXProducto':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXProducto', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXProducto', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXProducto', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXProducto', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXCliente':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXCliente', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXCliente', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXCliente', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXCliente', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteXAnulados':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXAnulados', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXAnulados', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteXAnulados', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteXAnulados', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteRegistroAuxiliar':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliar', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliar', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliar', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliar', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteRegistroAuxiliarDetallado':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliarDetallado', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliarDetallado', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliarDetallado', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliarDetallado', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },
                 'ReporteRegistroAuxiliarDetalladoFormaPago':
                     {
-                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliarDetalladoFormaPago', 'content.html'), 'utf8'),
+                        content: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliarDetalladoFormaPago', 'content.html'), 'utf8'),
                         recipe: "html-to-xlsx",
-                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportes/templates/ReporteRegistroAuxiliarDetalladoFormaPago', 'helpers.js'), 'utf8'),
+                        helpers: fs.readFileSync(require('path').join('formatos/'+ruc+'/reportesExcel/ventas/templates/ReporteRegistroAuxiliarDetalladoFormaPago', 'helpers.js'), 'utf8'),
                         engine: 'jsrender',
                         options: { "timeout": 60000 }
                     },

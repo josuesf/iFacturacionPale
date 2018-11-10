@@ -12,7 +12,7 @@ var ext = require('file-extension');
 var bodyParser = require("body-parser");
 var session = require('express-session'); 
 
-const fs = require('fs');   
+const fs = require('fs');  
  
 
 var storage = multer.diskStorage({
@@ -658,6 +658,7 @@ app.post('/api/report', function(req, res) {
     }; 
     
     jsreport.render(request).then(function (o) { 
+      //o.result.pipe(fs.createWriteStream(require('path').join(__dirname+'/prueba.xlsx')));
       o.result.pipe(res);
     }).catch(function (e) { 
       console.error(e)

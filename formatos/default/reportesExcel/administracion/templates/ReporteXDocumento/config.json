@@ -1,0 +1,20 @@
+{
+    "shortid": "rysg1Ikh7",
+    "name": "ReporteXDocumento",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1540504601572
+    },
+    "_id": "crACYO0vhCOtX8qa",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

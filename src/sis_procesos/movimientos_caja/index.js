@@ -1,9 +1,10 @@
 ﻿var yo = require('yo-yo')
-var empty = require('empty-element');
+var empty = require('empty-element'); 
 import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
 import { CargarPDFModal } from '../modales/pdf'
 import { ConvertirCadena } from '../../../utility/tools' 
-
+import { dirname } from 'path';
+var dockModal = null 
 
 function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var el = yo`
@@ -154,11 +155,96 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
             "sSearch": "Buscar:"
         }
     });
+
+    $("#btnSendEmail").tooltip()
+
+    $("#btnSendEmail").click(function(){
+        AbrirDialogoEnviarMensaje() 
+    })
+
     callback(true)
+    
 }
 
+function AbrirDialogoEnviarMensaje(){
+    console.log(global.variablesReporteComprobante["ReporteComprobante_0"].dataBase64)
+    var el = yo`
+        <div class="row" id="dialogo_docker">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <form class="form" id="formCompose">
+                        <div class="form-group floating-label">
+                            <input type="email" class="form-control" id="email_docker">
+                            <label for="to1">Para</label>
+                        </div>
+                        <div class="form-group floating-label">
+                            <input type="text" class="form-control" id="asunto_docker">
+                            <label>Asunto</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12"> 
+                    <em class="text-caption">Archivos para enviar:</em>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="list divider-full-bleed">
+                    <li class="tile">
+                        <a class="tile-content ink-reaction" href="#2">
+                            <div class="tile-icon">
+                               <i class="fa fa-file-pdf-o"></i>
+                            </div>
+                            <div class="tile-text">Abbey Johnson</div>
+                        </a>
+                        <a class="btn btn-flat ink-reaction">
+                            <i class="md md-delete"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div> 
+            <br>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-12 text-right"> 
+                    <button type="button" class="btn btn-primary ink-reaction" onclick=${()=>EnviarCorreoReporte()}><i class="md md-send"></i> Enviar Mensaje</button> 
+                </div>
+            </div>
+        </div>`
+    $("#dialogos-docker").append(el) 
+    $("#dialogo_docker").dockmodal({
+        id: 1,
+        initialState: "docked",
+        title: "Mensaje Nuevo"
+    });
+    
+}
 
-function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){    
+function EnviarCorreoReporte(){
+    const parametros = {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            email:"pulgarcito48@hotmail.com",
+            subject:$("#Cod_Opcion_ReporteComprobante_0 option:selected").text(),
+            arregloAttachment: global.variablesReporteComprobante["ReporteComprobante_0"].dataBase64
+        })
+    }
+    fetch(URL + '/empresa_api/send_email_report', parametros)
+        .then(req => req.json())
+        .then(res => { 
+           console.log("respuesat de correo",res)
+        }).catch(function (e) {
+            console.log(e);
+            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
+        });
+}
+
+function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){   
     CargarPDFModal(titulo,subtitulo,subtitulo_extra,function(flag){
         if(flag){
             jsreport.serverUrl = URL_REPORT; 
@@ -166,7 +252,8 @@ function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){
                 data:arrayData.cuerpo
             };
             
-            jsreport.renderAsync(request).then(function(res) { 
+            jsreport.renderAsync(request).then(function(res) {  
+                //EnviarCorreoReporte([{path:res.toDataURI().replace("data:null","data:application/pdf")}])
                 jsreport.render(document.getElementById('divPDF'), request); 
             }).catch(function (e) { 
                 console.log(e)
@@ -352,7 +439,12 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
             "sSearch": "Buscar:"
         }
     });
- 
+    
+    $("#btnSendEmail").tooltip()
+
+    $("#btnSendEmail").click(function(){
+        AbrirDialogoEnviarMensaje() 
+    })
 
 }
 

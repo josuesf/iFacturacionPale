@@ -373,6 +373,22 @@ function EmailValido(valor) {
     }
 }
 
+function enviarCorreoGeneral(toEmail,Subject,arregloAttachments,callback){  
+    var mailOptions={
+      to : toEmail,
+      subject : Subject,
+      attachments: arregloAttachments
+    }
+    transporter.sendMail(mailOptions, function (err, info) {
+      if(err){
+        callback(false,err)
+      }
+      else{ 
+        callback(true)
+      }
+    });
+}
+
 
 function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
     rand=Math.floor((Math.random() * 100) + 54) 
@@ -391,7 +407,7 @@ function enviarCorreoConfirmacion(host,toEmail,ruc,callback){
         callback(true)
         
       }
-  });
+    });
 }
 
 function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
@@ -416,4 +432,4 @@ function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
 }
  
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword}
+module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword, enviarCorreoGeneral}
