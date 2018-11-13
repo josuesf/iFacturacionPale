@@ -668,9 +668,8 @@ function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden){
                         }
                     }; 
                     jsreport.renderAsync(request).then(function(res) {  
-                        console.log("reporte general",res.toBlob())
-                        res.download("prueba.xlsx")
                         var html = $(res.toString()) 
+                        console.log(html[1])
                         if(html[1]){  
                             $('#divExcel_'+idTab).html(html[1]) 
                             $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 

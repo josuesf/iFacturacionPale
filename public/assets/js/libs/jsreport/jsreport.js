@@ -147,7 +147,7 @@ var saveAs=saveAs||function(e){"use strict";if(typeof e==="undefined"||typeof na
   }
 
   function _renderAsync (request) {
-    var self = this
+    var self = this 
 
     if (!this.serverUrl) {
       throw new Error('The script was not linked from jsreport. You need to fill jsreport.serverUrl property with valid url to jsreport server.')

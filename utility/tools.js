@@ -5,11 +5,12 @@ var nodemailer = require('nodemailer')
 var transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-          user: 'xxxxx@hotmail.com',
-          pass: 'xxxxx'
+          user: 'pulgarcito48@hotmail.com',
+          pass: 'SAS3TIGRES'
       }
 });
 
+var fs = require('fs')
 
 var sUnidades = ["", "UNO", "DOS", "TRES", "CUATRO", "CINCO", "SEIS", "SIETE", "OCHO", "NUEVE", "DIEZ", "ONCE", "DOCE", "TRECE", "CATORCE", "QUINCE", "DIECISEIS", "DIECISIETE", "DIECIOCHO", "DIECINUEVE", "VEINTE", "VEINTIUN", "VEINTIDOS", "VEINTITRES", "VEINTICUATRO", "VEINTICINCO", "VEINTISEIS", "VEINTISIETE", "VEINTIOCHO", "VEINTINUEVE"];
 
@@ -374,6 +375,7 @@ function EmailValido(valor) {
 }
 
 function enviarCorreoGeneral(toEmail,Subject,arregloAttachments,callback){  
+    console.log(arregloAttachments)
     var mailOptions={
       to : toEmail,
       subject : Subject,

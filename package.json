@@ -33,7 +33,6 @@
     "node-windows": "^0.1.14",
     "nodemailer": "^4.6.8",
     "page": "^1.7.1",
-    "pug": "^2.0.0-alpha6",
     "puppeteer": "^1.6.1",
     "request": "^2.88.0",
     "table-to-json": "^0.13.0",

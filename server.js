@@ -621,14 +621,6 @@ var server = app.listen(3000, function (err) {
   console.log('Escuchando en el puerto 3000');
 })
  
-
-app.get('/prueba',function(req,res){ 
-  res.sendFile(require('path').join(__dirname+'/views/index.html'));
-
-});
-
-
- 
 app.post('/api/report', function(req, res) {  
   if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){  
     if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/recibos_tickets/assets/logo.jpg'))) { 
@@ -654,12 +646,20 @@ app.post('/api/report', function(req, res) {
     var request = {
       template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],
       data: req.body.template.data,
-      options: { preview: true }
-    }; 
+      //options: { preview: true }
+    };
+
+    /*crearArchivoReporte(jsreport,GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],req.body.template.data).then((result)=>{
+      base64ArchivoReporte(jsreport,GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],req.body.template.data,res)
+    }).catch((err)=>{
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<i class="fa fa-warning fa-5x"></i><br/><h3><span>Ocurrio un error.'+err+'</span></h3></div>')
+    })*/
     
     jsreport.render(request).then(function (o) { 
-      //o.result.pipe(fs.createWriteStream(require('path').join(__dirname+'/prueba.xlsx')));
+      //o.result.pipe(fs.createWriteStream('pruebaEXCEL.xlsx')); 
       o.result.pipe(res);
+      //res.end('<iframe src="prueba1.xlsx"></iframe>')
     }).catch(function (e) { 
       console.error(e)
       res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
@@ -669,10 +669,42 @@ app.post('/api/report', function(req, res) {
     res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
       '<i class="fa fa-warning fa-5x"></i><br/><h3><span>No existe una configuracion del formato para el documento.</span></h3></div>')
   }
-    
 });
  
 /* FUNCTIONS PRIVATES */
+
+function crearArchivoReporte(jsreport,template,data){
+  return new Promise((resolve,reject)=>{
+    let request = {
+      template: template,
+      data: data
+    }; 
+    
+    jsreport.render(request).then(function (o) { 
+      o.result.pipe(fs.createWriteStream('prueba1.xlsx'));
+      resolve("ok")
+    }).catch(function (e) { 
+      reject(e)
+    })
+  })
+}
+
+function base64ArchivoReporte(jsreport,template,data,res){
+ 
+    let request = {
+      template: template,
+      data: data,
+      options: { preview: true }
+    }; 
+    
+    jsreport.render(request).then(function (o) { 
+      o.result.pipe(res);
+    }).catch(function (e) { 
+      console.error(e)
+      res.end('<div id="topcontainer" class="bodycontainer clearfix uk-scrollspy-init-inview uk-scrollspy-inview uk-animation-fade"  style="margin: 0 auto;width: 100%;max-width: 1000px;text-align: center;">'+
+      '<i class="fa fa-warning fa-5x"></i><br/><h3><span>Ocurrio un error.'+e+'</span></h3></div>')
+    }) 
+}
 
 function iniciarJsReport(ruc,callback){
   crearDirectorioEmpresa(ruc,function(flag){
