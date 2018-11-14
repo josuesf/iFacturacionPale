@@ -54,7 +54,7 @@ jsreport = require('jsreport-core')(
         express: { app: reportingApp, server: server },
         'fs-store': {
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/ventas'),//almacena templates genericos para los reportes excel ventas
-          dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/ventas'),//almacena templates genericos para los reportes excel ventas
+          dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/ventas'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/administracion'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/ventas'),//almacena templates genericos para los reportes pdf
           //dataDirectory: require('path').join(__dirname, 'formatos/default/recibos_tickets'),//almacena templates genericos de recibos y tickets

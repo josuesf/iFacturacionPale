@@ -2,6 +2,7 @@
 var empty = require('empty-element'); 
 import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
 import { CargarPDFModal } from '../modales/pdf'
+import { ReporteGeneralEmail,ReporteAuxiliarDetalladoEmail,ReporteAuxiliarEmail,ReporteAuxiliarDetalladoFormaPagoEmail } from '../mod_reportes/comprobante_pago/functions'
 import { ConvertirCadena } from '../../../utility/tools' 
 import { dirname } from 'path';
 var dockModal = null 
@@ -159,89 +160,192 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     $("#btnSendEmail").tooltip()
 
     $("#btnSendEmail").click(function(){
-        AbrirDialogoEnviarMensaje() 
+        AbrirDialogoEnviarMensaje("ReporteComprobanteCompra_0",false) 
     })
 
+    $("#btnUploadReport").click(function(){
+        console.log("click")
+        GenerarReporteEmail("ReporteComprobanteCompra_0",false)
+    })
     callback(true)
-    
 }
 
-function AbrirDialogoEnviarMensaje(){
-    console.log(global.variablesReporteComprobante["ReporteComprobante_0"].dataBase64)
-    var el = yo`
-        <div class="row" id="dialogo_docker">
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                    <form class="form" id="formCompose">
-                        <div class="form-group floating-label">
-                            <input type="email" class="form-control" id="email_docker">
-                            <label for="to1">Para</label>
-                        </div>
-                        <div class="form-group floating-label">
-                            <input type="text" class="form-control" id="asunto_docker">
-                            <label>Asunto</label>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12"> 
-                    <em class="text-caption">Archivos para enviar:</em>
-                </div>
-            </div>
-            <div class="row">
-                <ul class="list divider-full-bleed">
-                    <li class="tile">
-                        <a class="tile-content ink-reaction" href="#2">
-                            <div class="tile-icon">
-                               <i class="fa fa-file-pdf-o"></i>
-                            </div>
-                            <div class="tile-text">Abbey Johnson</div>
-                        </a>
-                        <a class="btn btn-flat ink-reaction">
-                            <i class="md md-delete"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div> 
-            <br>
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12 text-right"> 
-                    <button type="button" class="btn btn-primary ink-reaction" onclick=${()=>EnviarCorreoReporte()}><i class="md md-send"></i> Enviar Mensaje</button> 
-                </div>
-            </div>
-        </div>`
-    $("#dialogos-docker").append(el) 
+function LlenarReportesCorreo(idTab,tituloReporte){
+    var el = yo`<ul class="list divider-full-bleed" id="listReportes">
+            ${global.variablesReporteComprobante[idTab].dataBase64.map(e => 
+                     yo`<li class="tile">
+                            <a class="tile-content ink-reaction">
+                                <div class="tile-icon">
+                                <i class="fa fa-file-pdf-o"></i>
+                                </div>
+                                <div class="tile-text">
+                                    ${tituloReporte}
+                                    <div class="progress progress-hairline">
+                                        <div class="progress-bar progress-bar-primary-dark" style="width:100%"></div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="btn btn-flat ink-reaction">
+                                <i class="md md-delete"></i>
+                            </a>
+                        </li>`
+            )}
+            </ul>`
+    
+    $("#listReportes").append(el) 
+}
+
+function GenerarReporteEmail(idTab,flag_preview){
+    run_waitMe($('#dialogo_docker'), 1, "ios","Subiendo reporte para su envio....");
+    switch($("#Cod_Opcion_"+idTab).val()){
+        case '01':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'08',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
+                    if(flag){
+                        ReporteGeneralEmail("ReporteComprobanteVenta_0",'14',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
+                            if(flag){
+                                LlenarReportesCorreo()
+                                $('#dialogo_docker').waitMe('hide');
+                            }else{
+                                $('#dialogo_docker').waitMe('hide');
+                            }
+                        })
+                    }else{
+                        $('#dialogo_docker').waitMe('hide');
+                    }
+                })
+            }else{ 
+                ReporteGeneralEmail(idTab,'08',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
+                    console.log("ventaaaaaaaa",flag)
+                    if(flag){
+                        LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                        $('#dialogo_docker').waitMe('hide');
+                    }else{
+                        $('#dialogo_docker').waitMe('hide');
+                    }
+                })
+            }
+            break
+        case '02':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXTotalCliente","Id_Cliente",flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '03':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXTotalDocumento",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '04':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXTotalProducto","Cod_Producto",flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '05':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXCliente",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '06':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXDocumento",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '07':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXProducto",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '08':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteGeneralEmail(idTab,'14',"ReporteXAnulados",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '09':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteAuxiliarEmail(idTab,'14',"ReporteRegistroAuxiliar",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '10':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteAuxiliarDetalladoEmail(idTab,'14',"ReporteRegistroAuxiliarDetallado",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break
+        case '11':
+            if(idTab=="ReporteComprobanteCompra_0"){
+                ReporteAuxiliarDetalladoFormaPagoEmail(idTab,'14',"ReporteRegistroAuxiliarDetalladoFormaPago",null,flag_preview,function(flag,result){
+                    console.log(flag)
+                })
+            }else{
+
+            }
+            break 
+        default:
+            GenerarReporteEmail("ReporteComprobanteVenta_0",flag_preview) 
+            //console.log("defecto")
+            break
+    }
+}
+
+function AbrirDialogoEnviarMensaje(){ 
     $("#dialogo_docker").dockmodal({
         id: 1,
         initialState: "docked",
-        title: "Mensaje Nuevo"
-    });
-    
+        title: "Mensaje Nuevo",
+        buttons: [
+            {
+                html: "<i class='md md-send'></i> Enviar",
+                buttonClass: "btn btn-sm btn-primary ink-reaction",
+                click: function (e, dialog) { 
+                    dialog.dockmodal("close");
+                }
+            }
+        ]
+    }); 
+}
+
+function CargarReportesAlCorreo(){
+    //GenerarReporte('ReporteComprobanteVenta_0','14',false)
 }
 
 function EnviarCorreoReporte(){
-    const parametros = {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            email:"pulgarcito48@hotmail.com",
-            subject:$("#Cod_Opcion_ReporteComprobante_0 option:selected").text(),
-            arregloAttachment: global.variablesReporteComprobante["ReporteComprobante_0"].dataBase64
-        })
-    }
-    fetch(URL + '/empresa_api/send_email_report', parametros)
-        .then(req => req.json())
-        .then(res => { 
-           console.log("respuesat de correo",res)
-        }).catch(function (e) {
-            console.log(e);
-            toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos. Inténtelo nuevamente refrescando la pantalla','Error',{timeOut: 5000})
-        });
+    //GenerarReporte('ReporteComprobanteVenta_0','14',false)
 }
 
 function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){   

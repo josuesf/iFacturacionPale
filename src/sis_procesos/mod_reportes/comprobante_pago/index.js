@@ -14,7 +14,7 @@ function Ver(variables,CodLibro) {
     global.objProducto = ''
 
     //cantidad_tabs++
-    const idTabReporteComprobante = "ReporteComprobante_"+cantidad_tabs
+    const idTabReporteComprobante = CodLibro=='08'?("ReporteComprobanteCompra_"+cantidad_tabs):"ReporteComprobanteVenta_"+cantidad_tabs
     global.variablesReporteComprobante[idTabReporteComprobante]={idTab:idTabReporteComprobante,flag_cliente:false,flag_producto:false,excel:null, dataBase64:[]}
     
     var tab = yo`
@@ -224,13 +224,25 @@ function Ver(variables,CodLibro) {
                             
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button type="button" class="btn btn-primary btn-block" onclick=${()=>GenerarReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-file-o"></i> Ver vista previa documento</button>
+                                    <button type="button" class="btn btn-primary btn-block" onclick=${()=>GenerarReporte(idTabReporteComprobante,CodLibro,true,'Excel')}><i class="fa fa-file-excel-o"></i> Ver vista previa Excel del documento</button>
+                                </div>
+                            </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="button" class="btn btn-danger btn-block" onclick=${()=>GenerarReporte(idTabReporteComprobante,CodLibro,true,'PDF')}><i class="fa fa-file-pdf-o"></i> Ver vista previa PDF del documento</button>
                                 </div>
                             </div> 
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <button type="button" class="btn btn-info btn-block hidden" id="btnAbrirNavegador_${idTabReporteComprobante}" onclick=${()=>AbrirReporte(idTabReporteComprobante,CodLibro)}><i class="fa fa-eye"></i> Abrir documento en otra pestaña</button>
+                                </div>
+                            </div> 
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="button" class="btn btn-success btn-block hidden" id="btnEnviarCorreo_${idTabReporteComprobante}"  ><i class="fa fa-envelope"></i> Enviar por correo</button>
                                 </div>
                             </div> 
                         </div>
@@ -557,19 +569,38 @@ function CerrarTabReporteComprobante(idTab){
 }
 
 function AbrirReporte(idTab,Cod_Libro){
-    if(global.variablesReporteComprobante[idTab].excel!=null){
-        var tabOrWindow = window.open(global.variablesReporteComprobante[idTab].excel, '_blank');
-        tabOrWindow.focus();
+   
+    if(global.variablesReporteComprobante[idTab].excel){
+        if(global.variablesReporteComprobante[idTab].excel!=null){
+            var tabOrWindow = window.open(global.variablesReporteComprobante[idTab].excel, '_blank');
+            tabOrWindow.focus();
+        }else{
+            if(global.variablesReporteComprobante[idTab].pdf!=null){
+                let pdfWindow = window.open("")
+                pdfWindow.document.write("<iframe width='100%' height='100%' src='"+global.variablesReporteComprobante[idTab].pdf.replace('data:null','data:application/pdf')+"'></iframe>")
+            }else{
+                toastr.error('No se puede abrir el documento','Error',{timeOut: 5000}) 
+            } 
+        }
     }else{
-        toastr.error('No se puede abrir el documento','Error',{timeOut: 5000}) 
+        if(global.variablesReporteComprobante[idTab].pdf){
+            if(global.variablesReporteComprobante[idTab].pdf!=null){ 
+                let pdfWindow = window.open("")
+                pdfWindow.document.write("<iframe width='100%' height='100%' src='"+global.variablesReporteComprobante[idTab].pdf.replace('data:null','data:application/pdf')+"'></iframe>")
+            }else{
+                toastr.error('No se puede abrir el documento','Error',{timeOut: 5000}) 
+            }
+        }else{
+            toastr.error('No se puede abrir el documento','Error',{timeOut: 5000}) 
+        }
     }
 }   
 
-function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden){
+function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,Tipo){
     $("#btnAbrirNavegador_"+idTab).addClass("hidden") 
+    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
-        '<i class="fa fa-file-excel-o fa-5x"></i>'+
         '<br/><br/>'+
         '<i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>'+
         '<label>Cargando vista previa....</label>'+
@@ -647,6 +678,7 @@ function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden){
 
                     var request = {
                         data:{
+                            'FLAG_PREVIEW':flag_preview,
                             'COD_LIBRO':Cod_Libro,
                             'COD_TIPO_DOCUMENTO':TipoReporte,
                             'FILTRO': `Sucursal: ${Cod_Sucursal_Filtro}; Cliente/Proveedor: ${Id_Cliente_Filtro}; Caja: ${Cod_Caja_Filtro}; Producto:${Id_producto_Filtro}; Fecha Inicio: ${FechaInicio_Filtro}; Fecha Fin: ${FechaFin_Filtro}; Turno Inicio: ${Cod_TurnoInicio_Filtro}; Turno Fin: ${Cod_TurnoFinal_Filtro}; Moneda: ${Cod_Moneda_Filtro}; Forma de Pago: ${Cod_FormaPago_Filtro}; Comprobante: ${Cod_TipoComprobante_Filtro}; Serie: ${Serie_Filtro}; Categoria: ${Cod_Categoria_Filtro}`,
@@ -668,47 +700,66 @@ function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden){
                         }
                     }; 
                     jsreport.renderAsync(request).then(function(res) {  
-                        var html = $(res.toString()) 
-                        console.log(html[1])
-                        if(html[1]){  
-                            $('#divExcel_'+idTab).html(html[1]) 
-                            $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 
-                            global.variablesReporteComprobante[idTab].dataBase64.push({path:res.toDataURI().replace("data:null","data:application/vnd.ms-excel")}) 
-                            global.variablesReporteComprobante[idTab].excel = html[1].src
-                        }else{
-                            $('#divExcel_'+idTab).html(res.toString())
-                            global.variablesReporteComprobante[idTab].excel = null
-                        }
+                        switch(Tipo){
+                            case 'Excel':
+                                var html = $(res.toString())  
+                                if(html[1]){  
+                                    $('#divExcel_'+idTab).html(html[1]) 
+                                    $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 
+                                    $("#btnEnviarCorreo_"+idTab).removeClass("hidden")
+                                    global.variablesReporteComprobante[idTab].excel = html[1].src
+                                }else{
+                                    $('#divExcel_'+idTab).html(res.toString())
+                                    global.variablesReporteComprobante[idTab].excel = null
+                                }
+                                break
+                            case 'PDF':
+                                $('#divExcel_'+idTab).html('<iframe src="'+res.toDataURI().replace("data:null","data:application/pdf;base64")+'" height="100%" width="100%"></iframe>') 
+                                $("#btnEnviarCorreo_"+idTab).removeClass("hidden")
+                                $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
+                                global.variablesReporteComprobante[idTab].excel = null
+                                global.variablesReporteComprobante[idTab].pdf = res.toDataURI()
+                                break
+                        }    
                     }).catch(function (e) { 
                         console.log(e)
                         $("#divExcel_"+idTab).addClass("hidden")
                         $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                        $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                         global.variablesReporteComprobante[idTab].excel = null
+                        global.variablesReporteComprobante[idTab].pdf = null
                         toastr.error('Hubo un error al generar el documento. Tipo error : '+e.statusText,'Error',{timeOut: 5000}) 
                     });
                 }else{
                     toastr.warning("No existen datos para mostrar",'Error',{timeOut: 5000})
                     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                     $("#divExcel_"+idTab).addClass("hidden")
                     global.variablesReporteComprobante[idTab].excel = null
+                    global.variablesReporteComprobante[idTab].pdf = null
                 }
             }else{
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
                 $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                 $("#divExcel_"+idTab).addClass("hidden")
                 global.variablesReporteComprobante[idTab].excel = null
+                global.variablesReporteComprobante[idTab].pdf = null
             } 
         }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+            $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
             $("#divExcel_"+idTab).addClass("hidden")
             global.variablesReporteComprobante[idTab].excel = null
+            global.variablesReporteComprobante[idTab].pdf = null
         });
 }
 
-function ReporteAuxiliar(idTab,Cod_Libro,TipoReporte,ParametroOrden){
+function ReporteAuxiliar(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,Tipo){
     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
        '<i class="fa fa-file-excel-o fa-5x"></i>'+
@@ -780,6 +831,7 @@ function ReporteAuxiliar(idTab,Cod_Libro,TipoReporte,ParametroOrden){
 
                    var request = {
                        data:{
+                           'FLAG_PREVIEW':flag_preview,
                            'COD_LIBRO':Cod_Libro,
                            'COD_TIPO_DOCUMENTO':TipoReporte,
                            'FILTRO': `Sucursal: ${Cod_Sucursal_Filtro}; Cliente/Proveedor: ${Id_Cliente_Filtro}; Caja: ${Cod_Caja_Filtro}; Fecha Inicio: ${FechaInicio_Filtro}; Fecha Fin: ${FechaFin_Filtro}; Turno Inicio: ${Cod_TurnoInicio_Filtro}; Turno Fin: ${Cod_TurnoFinal_Filtro}; Moneda: ${Cod_Moneda_Filtro}; Forma de Pago: ${Cod_FormaPago_Filtro}; Comprobante: ${Cod_TipoComprobante_Filtro}; Serie: ${Serie_Filtro}; Categoria: ${Cod_Categoria_Filtro}`,
@@ -801,45 +853,66 @@ function ReporteAuxiliar(idTab,Cod_Libro,TipoReporte,ParametroOrden){
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                       var html = $(res.toString()) 
-                        if(html[1]){
-                            $('#divExcel_'+idTab).html(html[1]) 
-                            $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
-                            global.variablesReporteComprobante[idTab].excel = html[1].src
-                        }else{
-                            $('#divExcel_'+idTab).html(res.toString())
-                            global.variablesReporteComprobante[idTab].excel = null
-                        }
+                        switch(Tipo){
+                            case 'Excel':
+                                var html = $(res.toString())  
+                                if(html[1]){  
+                                    $('#divExcel_'+idTab).html(html[1]) 
+                                    $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 
+                                    $("#btnEnviarCorreo_"+idTab).removeClass("hidden")
+                                    global.variablesReporteComprobante[idTab].excel = html[1].src
+                                }else{
+                                    $('#divExcel_'+idTab).html(res.toString())
+                                    global.variablesReporteComprobante[idTab].excel = null
+                                }
+                                break
+                            case 'PDF':
+                                $('#divExcel_'+idTab).html('<iframe src="'+res.toDataURI().replace("data:null","data:application/pdf;base64")+'" height="100%" width="100%"></iframe>') 
+                                $("#btnEnviarCorreo_"+idTab).removeClass("hidden") 
+                                $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
+                                global.variablesReporteComprobante[idTab].excel = null
+                                global.variablesReporteComprobante[idTab].pdf = res.toDataURI()
+                                break
+                        }    
                    }).catch(function (e) { 
                        console.log(e)
                        $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                       $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                        $("#divExcel_"+idTab).addClass("hidden")
                        global.variablesReporteComprobante[idTab].excel = null
+                       global.variablesReporteComprobante[idTab].pdf = null
                        toastr.error('Hubo un error al generar el documento. Tipo error : '+e.statusText,'Error',{timeOut: 5000}) 
                    });
                }else{
                    toastr.warning("No existen datos para mostrar",'Error',{timeOut: 5000})
                    $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                   $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                    $("#divExcel_"+idTab).addClass("hidden")
                    global.variablesReporteComprobante[idTab].excel = null
+                   global.variablesReporteComprobante[idTab].pdf = null
                }
            }else{
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
                 $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                 $("#divExcel_"+idTab).addClass("hidden")
                 global.variablesReporteComprobante[idTab].excel = null
+                global.variablesReporteComprobante[idTab].pdf = null
            } 
        }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+            $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
             $("#divExcel_"+idTab).addClass("hidden")
             global.variablesReporteComprobante[idTab].excel = null
+            global.variablesReporteComprobante[idTab].pdf = null
        });
 }
 
-function ReporteAuxiliarDetallado(idTab,Cod_Libro,TipoReporte,ParametroOrden){
+function ReporteAuxiliarDetallado(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,Tipo){
     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
        '<i class="fa fa-file-excel-o fa-5x"></i>'+
@@ -914,6 +987,7 @@ function ReporteAuxiliarDetallado(idTab,Cod_Libro,TipoReporte,ParametroOrden){
 
                    var request = {
                        data:{
+                           'FLAG_PREVIEW':flag_preview,
                            'COD_LIBRO':Cod_Libro,
                            'COD_TIPO_DOCUMENTO':TipoReporte,
                            'FILTRO': `Sucursal: ${Cod_Sucursal_Filtro}; Cliente/Proveedor: ${Id_Cliente_Filtro}; Caja: ${Cod_Caja_Filtro}; Producto:${Id_producto_Filtro}; Fecha Inicio: ${FechaInicio_Filtro}; Fecha Fin: ${FechaFin_Filtro}; Turno Inicio: ${Cod_TurnoInicio_Filtro}; Turno Fin: ${Cod_TurnoFinal_Filtro}; Moneda: ${Cod_Moneda_Filtro}; Forma de Pago: ${Cod_FormaPago_Filtro}; Comprobante: ${Cod_TipoComprobante_Filtro}; Serie: ${Serie_Filtro}; Categoria: ${Cod_Categoria_Filtro}`,
@@ -935,45 +1009,66 @@ function ReporteAuxiliarDetallado(idTab,Cod_Libro,TipoReporte,ParametroOrden){
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                       var html = $(res.toString()) 
-                        if(html[1]){
-                            $('#divExcel_'+idTab).html(html[1]) 
-                            $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
-                            global.variablesReporteComprobante[idTab].excel = html[1].src
-                        }else{
-                            $('#divExcel_'+idTab).html(res.toString())
-                            global.variablesReporteComprobante[idTab].excel = null
-                        }
+                        switch(Tipo){
+                            case 'Excel':
+                                var html = $(res.toString())  
+                                if(html[1]){  
+                                    $('#divExcel_'+idTab).html(html[1]) 
+                                    $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 
+                                    $("#btnEnviarCorreo_"+idTab).removeClass("hidden")
+                                    global.variablesReporteComprobante[idTab].excel = html[1].src
+                                }else{
+                                    $('#divExcel_'+idTab).html(res.toString())
+                                    global.variablesReporteComprobante[idTab].excel = null
+                                }
+                                break
+                            case 'PDF':
+                                $('#divExcel_'+idTab).html('<iframe src="'+res.toDataURI().replace("data:null","data:application/pdf;base64")+'" height="100%" width="100%"></iframe>') 
+                                $("#btnEnviarCorreo_"+idTab).removeClass("hidden") 
+                                $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
+                                global.variablesReporteComprobante[idTab].excel = null
+                                global.variablesReporteComprobante[idTab].pdf = res.toDataURI()
+                                break
+                        }    
                    }).catch(function (e) { 
                        console.log(e)
                        $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                       $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                        $("#divExcel_"+idTab).addClass("hidden")
                        global.variablesReporteComprobante[idTab].excel = null
+                       global.variablesReporteComprobante[idTab].pdf = null
                        toastr.error('Hubo un error al generar el documento. Tipo error : '+e.statusText,'Error',{timeOut: 5000}) 
                    });
                }else{
                     toastr.warning("No existen datos para mostrar",'Error',{timeOut: 5000})
                     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                     $("#divExcel_"+idTab).addClass("hidden")
                     global.variablesReporteComprobante[idTab].excel = null
+                    global.variablesReporteComprobante[idTab].pdf = null
                }
            }else{
                 toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
                 $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                 $("#divExcel_"+idTab).addClass("hidden")
                 global.variablesReporteComprobante[idTab].excel = null
+                global.variablesReporteComprobante[idTab].pdf = null
            } 
        }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
-            $("#btnAbrirNavegador_"+idTab).addClass("hidden")     
+            $("#btnAbrirNavegador_"+idTab).addClass("hidden")  
+            $("#btnEnviarCorreo_"+idTab).addClass("hidden")    
             $("#divExcel_"+idTab).addClass("hidden")
             global.variablesReporteComprobante[idTab].excel = null
+            global.variablesReporteComprobante[idTab].pdf = null
        });
 }
 
-function ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,TipoReporte,ParametroOrden){
+function ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_cliente,flag_preview,Tipo){
     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+    $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
        '<i class="fa fa-file-excel-o fa-5x"></i>'+
@@ -1054,6 +1149,7 @@ function ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,TipoReporte,Parametro
 
                    var request = {
                        data:{
+                           'FLAG_PREVIEW':flag_preview,
                            'COD_LIBRO':Cod_Libro,
                            'COD_TIPO_DOCUMENTO':TipoReporte,
                            'FILTRO': `Sucursal: ${Cod_Sucursal_Filtro}; Cliente/Proveedor: ${Id_Cliente_Filtro}; Caja: ${Cod_Caja_Filtro}; Producto:${Id_producto_Filtro}; Fecha Inicio: ${FechaInicio_Filtro}; Fecha Fin: ${FechaFin_Filtro}; Turno Inicio: ${Cod_TurnoInicio_Filtro}; Turno Fin: ${Cod_TurnoFinal_Filtro}; Moneda: ${Cod_Moneda_Filtro}; Forma de Pago: ${Cod_FormaPago_Filtro}; Comprobante: ${Cod_TipoComprobante_Filtro}; Serie: ${Serie_Filtro}; Categoria: ${Cod_Categoria_Filtro}`,
@@ -1075,78 +1171,97 @@ function ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,TipoReporte,Parametro
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                       var html = $(res.toString()) 
-                        if(html[1]){
-                            $('#divExcel_'+idTab).html(html[1]) 
-                            $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
-                            global.variablesReporteComprobante[idTab].excel = html[1].src
-                        }else{
-                           $('#divExcel_'+idTab).html(res.toString())
-                           global.variablesReporteComprobante[idTab].excel = null
-                        }
+                        switch(Tipo){
+                            case 'Excel':
+                                var html = $(res.toString())  
+                                if(html[1]){  
+                                    $('#divExcel_'+idTab).html(html[1]) 
+                                    $("#btnAbrirNavegador_"+idTab).removeClass("hidden") 
+                                    $("#btnEnviarCorreo_"+idTab).removeClass("hidden")
+                                    global.variablesReporteComprobante[idTab].excel = html[1].src
+                                }else{
+                                    $('#divExcel_'+idTab).html(res.toString())
+                                    global.variablesReporteComprobante[idTab].excel = null
+                                }
+                                break
+                            case 'PDF':
+                                $('#divExcel_'+idTab).html('<iframe src="'+res.toDataURI().replace("data:null","data:application/pdf;base64")+'" height="100%" width="100%"></iframe>') 
+                                $("#btnEnviarCorreo_"+idTab).removeClass("hidden") 
+                                $("#btnAbrirNavegador_"+idTab).removeClass("hidden")
+                                global.variablesReporteComprobante[idTab].excel = null
+                                global.variablesReporteComprobante[idTab].pdf = res.toDataURI()
+                                break
+                        }    
                    }).catch(function (e) { 
                        console.log(e)
                        $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                       $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                        $("#divExcel_"+idTab).addClass("hidden")
                        global.variablesReporteComprobante[idTab].excel = null
+                       global.variablesReporteComprobante[idTab].pdf = null
                        toastr.error('Hubo un error al generar el documento. Tipo error : '+e.statusText,'Error',{timeOut: 5000}) 
                    });
                }else{
                    toastr.warning("No existen datos para mostrar",'Error',{timeOut: 5000})
                    $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+                   $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                    $("#divExcel_"+idTab).addClass("hidden")
                    global.variablesReporteComprobante[idTab].excel = null
+                   global.variablesReporteComprobante[idTab].pdf = null
                }
            }else{
                toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+res.detalle_error,'Error',{timeOut: 5000})
                $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+               $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
                $("#divExcel_"+idTab).addClass("hidden")
                global.variablesReporteComprobante[idTab].excel = null
+               global.variablesReporteComprobante[idTab].pdf - null
            } 
        }).catch(function (e) {
             console.log(e);
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
             $("#btnAbrirNavegador_"+idTab).addClass("hidden")
+            $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
             $("#divExcel_"+idTab).addClass("hidden")
             global.variablesReporteComprobante[idTab].excel = null
+            global.variablesReporteComprobante[idTab].pdf = null
        });
 }
 
-
-function GenerarReporte(idTab,Cod_Libro){  
+function GenerarReporte(idTab,Cod_Libro,flag_preview,Tipo){  
     switch($("#Cod_Opcion_"+idTab).val()){
         case '01':
-            ReporteGeneral(idTab,Cod_Libro,"ReportePlanillaDiaria")
+            ReporteGeneral(idTab,Cod_Libro,"ReportePlanillaDiaria_"+Tipo,null,flag_preview,Tipo)
             break
         case '02':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalCliente","Id_Cliente")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalCliente_"+Tipo,"Id_Cliente",flag_preview,Tipo)
             break
         case '03':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalDocumento")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalDocumento_"+Tipo,null,flag_preview,Tipo)
             break
         case '04':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalProducto","Cod_Producto")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXTotalProducto_"+Tipo,"Cod_Producto",flag_preview,Tipo)
             break
         case '05':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXCliente")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXCliente_"+Tipo,null,flag_preview,Tipo)
             break
         case '06':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXDocumento")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXDocumento_"+Tipo,null,flag_preview,Tipo)
             break
         case '07':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXProducto")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXProducto_"+Tipo,null,flag_preview,Tipo)
             break
         case '08':
-            ReporteGeneral(idTab,Cod_Libro,"ReporteXAnulados")
+            ReporteGeneral(idTab,Cod_Libro,"ReporteXAnulados_"+Tipo,null,flag_preview,Tipo)
             break
         case '09':
-            ReporteAuxiliar(idTab,Cod_Libro,"ReporteRegistroAuxiliar")
+            ReporteAuxiliar(idTab,Cod_Libro,"ReporteRegistroAuxiliar_"+Tipo,null,flag_preview,Tipo)
             break
         case '10':
-            ReporteAuxiliarDetallado(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetallado")
+            ReporteAuxiliarDetallado(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetallado_"+Tipo,null,flag_preview,Tipo)
             break
         case '11':
-            ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetalladoFormaPago")
+            ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetalladoFormaPago_"+Tipo,null,flag_preview,Tipo)
             break
     }
 }

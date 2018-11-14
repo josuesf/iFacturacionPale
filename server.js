@@ -641,13 +641,18 @@ app.post('/api/report', function(req, res) {
     const mes = fecha.getMonth() + 1
     const dia = fecha.getDate() 
     var fecha_format = (dia > 9 ? dia : '0' + dia) + '/' + (mes > 9 ? mes : '0' + mes) + '/' + fecha.getFullYear() + ' '+ [(fecha.getHours()>9?fecha.getHours():'0'+fecha.getHours()), (fecha.getMinutes()>9?fecha.getMinutes():'0'+fecha.getMinutes())].join(':');
-    req.body.template.data['FECHA_SISTEMA'] = fecha_format
- 
-    var request = {
+    req.body.template.data['FECHA_SISTEMA'] = fecha_format 
+    /*var request = {
       template: GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],
       data: req.body.template.data,
-      //options: { preview: true }
-    };
+      options: { preview: req.body.template.data.FLAG_PREVIEW?req.body.template.data.FLAG_PREVIEW:true }
+    };*/
+    var request = {}
+    request['template']=GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO]
+    request['data']=req.body.template.data
+    if(req.body.template.data.FLAG_PREVIEW || req.body.template.data.FLAG_PREVIEW==undefined){
+      request['options']={ preview: req.body.template.data.FLAG_PREVIEW?req.body.template.data.FLAG_PREVIEW:true }
+    }
 
     /*crearArchivoReporte(jsreport,GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],req.body.template.data).then((result)=>{
       base64ArchivoReporte(jsreport,GETCONFIG(app.locals.empresa[0].RUC)[req.body.template.data.COD_TIPO_DOCUMENTO],req.body.template.data,res)
