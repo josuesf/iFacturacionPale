@@ -1,0 +1,17 @@
+{
+    "shortid": "rkS4GjgCm",
+    "name": "ReporteXAnulados",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748586094
+    },
+    "_id": "1Ibua2zHb0AhAy5m",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "shortid": "SJLLgddpm",
+    "name": "ReporteCuentasPorPagarPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542989221423
+    },
+    "_id": "8UqpZXM68kC8QOba",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "BJXpfuVa7"
+    }
+}

@@ -3,10 +3,13 @@ var yo = require('yo-yo');
 
 import { URL, URL_REPORT } from '../../../constantes_entorno/constantes'
 import { BuscarCliente, BuscarProducto } from '../../modales' 
+import { MesActual } from '../../../../utility/tools' 
+import { ReporteGeneralEmail,ReporteAuxiliarDetalladoEmail,ReporteAuxiliarEmail,ReporteAuxiliarDetalladoFormaPagoEmail } from './functions'
 
 var cantidad_tabs = 0
 var arrayValidacion = [null,'null','',undefined]
 global.variablesReporteComprobante = {}
+var IdTabSeleccionado = null
 
 function Ver(variables,CodLibro) {
 
@@ -15,15 +18,23 @@ function Ver(variables,CodLibro) {
 
     //cantidad_tabs++
     const idTabReporteComprobante = CodLibro=='08'?("ReporteComprobanteCompra_"+cantidad_tabs):"ReporteComprobanteVenta_"+cantidad_tabs
+    IdTabSeleccionado = idTabReporteComprobante
     global.variablesReporteComprobante[idTabReporteComprobante]={idTab:idTabReporteComprobante,flag_cliente:false,flag_producto:false,excel:null, dataBase64:[]}
     
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabReporteComprobante}" data-toggle="tab" aria-expanded="false" id="id_${idTabReporteComprobante}">${CodLibro=='08'?'Reporte de Compras':'Reporte de Ventas'} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabReporteComprobante(idTabReporteComprobante)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class=""  onclick=${()=>TabSeleccionado(idTabReporteComprobante)}><a href="#tab_${idTabReporteComprobante}" data-toggle="tab" aria-expanded="false" id="id_${idTabReporteComprobante}">${CodLibro=='08'?'Reporte de Compras':'Reporte de Ventas'} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabReporteComprobante(idTabReporteComprobante)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
         <div class="tab-pane" id="tab_${idTabReporteComprobante}">
             <div class="panel">
+
+                <div class="modal"> 
+                    <div id="dialogo_docker_${idTabReporteComprobante}">
+                        
+                    </div> 
+                </div> 
+
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-4">
@@ -242,7 +253,7 @@ function Ver(variables,CodLibro) {
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <button type="button" class="btn btn-success btn-block hidden" id="btnEnviarCorreo_${idTabReporteComprobante}"  ><i class="fa fa-envelope"></i> Enviar por correo</button>
+                                    <button type="button" class="btn btn-success btn-block hidden" id="btnEnviarCorreo_${idTabReporteComprobante}" onclick=${()=>AbrirDialogoEnviarMensaje(idTabReporteComprobante,CodLibro)} ><i class="fa fa-envelope"></i> Enviar por correo</button>
                                 </div>
                             </div> 
                         </div>
@@ -276,15 +287,15 @@ function Ver(variables,CodLibro) {
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!=''){
-            $("#Producto_"+idTabReporteComprobante).val(global.objProducto.Nom_Producto)
-            $("#Producto_"+idTabReporteComprobante).attr("data-id",global.objProducto.Id_Producto)
-            global.variablesReporteComprobante[idTabReporteComprobante].flag_producto = true 
+            $("#Producto_"+IdTabSeleccionado).val(global.objProducto.Nom_Producto)
+            $("#Producto_"+IdTabSeleccionado).attr("data-id",global.objProducto.Id_Producto)
+            global.variablesReporteComprobante[IdTabSeleccionado].flag_producto = true 
         }
 
         if(global.objCliente!=''){
-            $("#Cliente_"+idTabReporteComprobante).val(global.objCliente.Cliente)
-            $("#Cliente_"+idTabReporteComprobante).attr("data-id",global.objCliente.Id_ClienteProveedor)
-            global.variablesReporteComprobante[idTabReporteComprobante].flag_cliente = true
+            $("#Cliente_"+IdTabSeleccionado).val(global.objCliente.Cliente)
+            $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objCliente.Id_ClienteProveedor)
+            global.variablesReporteComprobante[IdTabSeleccionado].flag_cliente = true
         }
     })
 
@@ -293,32 +304,97 @@ function Ver(variables,CodLibro) {
     CambioOpcionesFecha(idTabReporteComprobante) 
 }
 
-function AbrirDialogoEnviarMensaje(idTab){
+function AbrirDialogoEnviarMensaje(idTab,Cod_Libro){
 
     var el = yo`
         <div class="row" id="dialogo_${idTab}">
             <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="alert alert-callout alert-danger hidden" id="divError_${idTab}">
+                    <p id="textError_${idTab}"> </p>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12">
                 <form class="form" id="formCompose">
                     <div class="form-group floating-label">
-                        <input type="email" class="form-control" id="email_${idTab}">
-                        <label for="to1">Para</label>
+                        <input type="email" class="form-control dirty" id="email_${idTab}">
+                        <label>Para</label>
                     </div>
                     <div class="form-group floating-label">
-                        <input type="text" class="form-control" id="asunto_${idTab}">
+                        <input type="text" class="form-control dirty" id="asunto_${idTab}" value="Reporte ${$("#Cod_Opcion_"+idTab+" option:selected").text()}">
                         <label>Asunto</label>
+                    </div>
+                    <div class="form-group floating-label">
+                        <textarea type="text" class="form-control dirty" id="mensaje_${idTab}">Se le adjunta el formato pdf y excel del reporte ${$("#Cod_Opcion_"+idTab+" option:selected").text()}</textarea>
+                        <label>Mensaje</label>
                     </div>
                     <div class="form-group">
                     </div>
                 </form>
             </div>
+            <div class="col-sm-12 col-md-12 col-lg-12"> 
+                <em class="text-caption">Archivos para enviar:</em>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12" id="listReportes_${idTab}">
+            </div> 
 
         </div>`
-    $("#dialogos-docker").append(el)
+    var container = document.getElementById('dialogo_docker_'+idTab)
+    empty(container).appendChild(el);
 
-    $("#dialogo_"+idTab).dockmodal({
+    $("#dialogo_docker_"+idTab).dockmodal({
+        id: idTab,
         initialState: "docked",
-        title: "Mensaje Nuevo"
-    });
+        title: "Mensaje Nuevo",
+        buttons: [
+            {
+                html: "<i class='fa fa-paper-plane'></i> Enviar",
+                buttonClass: "btn btn-sm btn-primary ink-reaction",
+                click: function (e, dialog) { 
+                    console.log(global.variablesReporteComprobante[idTab].dataBase64)
+                    run_waitMe($('#dialogo_docker_'+idTab), 1, "ios","Enviando correo espere un momento....");
+
+                    const parametros = {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            email:$("#email_"+idTab).val(),
+                            subject:$("#asunto_"+idTab).val(),
+                            message:$("#mensaje_"+idTab).val(),
+                            arregloAttachment:global.variablesReporteComprobante[idTab].dataBase64
+                        })
+                    }
+                    fetch(URL + '/empresa_api/send_email_report', parametros)
+                        .then(req => req.json())
+                        .then(res => {
+                            console.log(res)
+                            if(res.respuesta=='ok'){
+                                dialog.dockmodal("close");
+                                global.variablesReporteComprobante[idTab].dataBase64=[] 
+                                toastr.success('Se envio correctamente el mensaje','Confirmacion',{timeOut: 5000})
+                            }else{
+                                $("#divError_"+idTab).removeClass("hidden")
+                                if(res.detalle_error.code=='EENVELOPE'){
+                                    $("#textError_"+idTab).text("Necesita un email de destinatario")
+                                }else{
+                                    $("#textError_"+idTab).text(res.detalle_error.command)
+                                }
+                                $("#divError_"+idTab).focus()
+                            }
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }).catch(function (e) {
+                            $("#divError_"+idTab).removeClass("hidden")
+                            $("#textError_"+idTab).text(e)
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        });
+                }
+            }
+        ]
+    }); 
+    GenerarReporteEmail(idTab,Cod_Libro,false)
 }
 
 function LlenarCajas(cajas,idTab){
@@ -336,6 +412,224 @@ function CambioOpciones(idTab){
         $("#divFormaPago_"+idTab).css("display","block")
     }else{
         $("#divFormaPago_"+idTab).css("display","none")
+    }
+}
+
+function LlenarReportesCorreo(idTab,tituloReporte){
+    var el = yo`<ul class="list divider-full-bleed" id="listReportes_${idTab}">
+            ${global.variablesReporteComprobante[idTab].dataBase64.map((e,index) => 
+                     yo`<li class="tile">
+                            <a class="tile-content ink-reaction">
+                                <div class="tile-icon">
+                                    <i class=${e.tipo=="Excel"?"fa fa-file-excel-o":"fa fa-file-pdf-o"}></i> 
+                                </div>
+                                <div class="tile-text">
+                                    ${tituloReporte} ${e.tipo=="Excel"?"(EXCEL)":"(PDF)"}
+                                    <div class="progress progress-hairline">
+                                        <div class="progress-bar progress-bar-primary-dark" style="width:100%"></div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a class="btn btn-flat ink-reaction" onclick=${()=>EliminarReporteCorreo(idTab,e,tituloReporte)}>
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </li>`
+            )}
+            </ul>`
+        var container = document.getElementById('listReportes_'+idTab)
+        empty(container).appendChild(el);
+}
+
+function EliminarReporteCorreo(idTab,reporte,titulo){
+    for (var i in global.variablesReporteComprobante[idTab].dataBase64) { 
+        if (global.variablesReporteComprobante[idTab].dataBase64[i].tipo == reporte.tipo) {
+            global.variablesReporteComprobante[idTab].dataBase64.splice(i, 1)
+            break 
+        }
+    } 
+    LlenarReportesCorreo(idTab,titulo) 
+}
+
+function GenerarReporteEmail(idTab,Cod_Libro,flag_preview){
+    global.variablesReporteComprobante[idTab].dataBase64=[]
+    run_waitMe($('#dialogo_docker_'+idTab), 1, "ios","Subiendo reporte para su envio....");
+    switch($("#Cod_Opcion_"+idTab).val()){
+        case '01': 
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReportePlanillaDiaria_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReportePlanillaDiaria_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '02':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalCliente_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalCliente_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '03':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalDocumento_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalDocumento_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '04':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalDocumento_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXTotalDocumento_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '05':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXCliente_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXCliente_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '06':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXDocumento_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXDocumento_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '07':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXProducto_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXProducto_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '08':
+            ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXAnulados_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteGeneralEmail(idTab,Cod_Libro,"ReporteXAnulados_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '09':
+            ReporteAuxiliarEmail(idTab,Cod_Libro,"ReporteComprobanteCompra_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteAuxiliarEmail(idTab,Cod_Libro,"ReporteComprobanteCompra_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '10':
+            ReporteAuxiliarDetalladoEmail(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetallado_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteAuxiliarDetalladoEmail(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetallado_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
+        case '11':
+            ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetalladoFormaPago_Excel",null,flag_preview,function(flag,result){ 
+                if(flag){
+                    ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetalladoFormaPago_PDF",null,flag_preview,function(flag,result){
+                        if(flag){
+                            LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }else{
+                            $('#dialogo_docker_'+idTab).waitMe('hide');
+                        }
+                    })
+                }else{
+                    $('#dialogo_docker_'+idTab).waitMe('hide');
+                }
+            })
+            break
     }
 }
 
@@ -416,7 +710,7 @@ function CambioOpcionesFecha(idTab){
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group"> 
-                        <input type="date" class="form-control" id="FechaInicio_${idTab}"> 
+                        <input type="date" class="form-control" id="FechaInicio_${idTab}" value="${MesActual('I')}"> 
                         <label>De la fecha:</label>
                     </div>
                 </div>
@@ -424,7 +718,7 @@ function CambioOpcionesFecha(idTab){
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group"> 
-                        <input type="date" class="form-control" id="FechaFin_${idTab}"> 
+                        <input type="date" class="form-control" id="FechaFin_${idTab}" value="${MesActual('F')}"> 
                         <label>Hasta la fecha:</label>
                     </div>
                 </div>
@@ -435,7 +729,6 @@ function CambioOpcionesFecha(idTab){
         empty(contenedor).appendChild(el); 
     }
 }
-
 
 function LlenarPeriodo(periodos,idTab,opcion){
     var el = yo`
@@ -450,6 +743,7 @@ function LlenarPeriodo(periodos,idTab,opcion){
         $("#AlPeriodo_"+idTab).html(el) 
     }
 }
+
 function LlenarTurnos(turnos,idTab,opcion){
     var el = yo`
         ${turnos.map(e => yo`
@@ -463,7 +757,6 @@ function LlenarTurnos(turnos,idTab,opcion){
         $("#AlTurno_"+idTab).html(el)
     }
 }
-
 
 function CambioNombreClienteReporte(e,idTab){ 
     if(e.which == 46 || e.which == 8){ 
@@ -532,8 +825,6 @@ function TraerTurnos(idTab,opcion){
         });
 }
 
-
-
 function CambioSucursalReporte(idTab){
     var Cod_Sucursal = $("#Cod_Sucursal_"+idTab).val()
     const parametros = {
@@ -560,12 +851,21 @@ function CambioSucursalReporte(idTab){
         });
 }
 
+function TabSeleccionado(idTab){
+    global.objCliente = ''
+    global.objProducto = ''
+    IdTabSeleccionado = idTab 
+}
+
+
 function CerrarTabReporteComprobante(idTab){ 
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
     delete global.variablesReporteComprobante[idTab]
+    $("#dialogo_docker_"+idTab).dockmodal("close");
+    IdTabSeleccionado = null
 }
 
 function AbrirReporte(idTab,Cod_Libro){
@@ -602,7 +902,7 @@ function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
         '<br/><br/>'+
-        '<i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>'+
+        '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i><br/><br/>'+
         '<label>Cargando vista previa....</label>'+
     '</div>') 
     var Cod_Sucursal = arrayValidacion.includes($("#Cod_Sucursal_"+idTab).val())?null:$("#Cod_Sucursal_"+idTab).val()
@@ -762,9 +1062,8 @@ function ReporteAuxiliar(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview
     $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
     $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
-       '<i class="fa fa-file-excel-o fa-5x"></i>'+
        '<br/><br/>'+
-       '<i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>'+
+       '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i><br/><br/>'+
        '<label>Cargando vista previa....</label>'+
     '</div>') 
    var Cod_Sucursal = arrayValidacion.includes($("#Cod_Sucursal_"+idTab).val())?null:$("#Cod_Sucursal_"+idTab).val()
@@ -914,10 +1213,9 @@ function ReporteAuxiliarDetallado(idTab,Cod_Libro,TipoReporte,ParametroOrden,fla
     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
     $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
-    $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
-       '<i class="fa fa-file-excel-o fa-5x"></i>'+
+    $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+ 
        '<br/><br/>'+
-       '<i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>'+
+       '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i><br/><br/>'+
        '<label>Cargando vista previa....</label>'+
     '</div>') 
    var Cod_Sucursal = arrayValidacion.includes($("#Cod_Sucursal_"+idTab).val())?null:$("#Cod_Sucursal_"+idTab).val()
@@ -1070,10 +1368,9 @@ function ReporteAuxiliarDetalladoFormaPago(idTab,Cod_Libro,TipoReporte,Parametro
     $("#btnAbrirNavegador_"+idTab).addClass("hidden")
     $("#btnEnviarCorreo_"+idTab).addClass("hidden") 
     $("#divExcel_"+idTab).removeClass("hidden")
-    $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+
-       '<i class="fa fa-file-excel-o fa-5x"></i>'+
+    $("#divExcel_"+idTab).html('<div style="margin-top:100px">'+ 
        '<br/><br/>'+
-       '<i class="fa fa-refresh fa-spin fa-5x"></i><br/><br/>'+
+       '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i><br/><br/>'+
        '<label>Cargando vista previa....</label>'+
     '</div>') 
    var Cod_Sucursal = arrayValidacion.includes($("#Cod_Sucursal_"+idTab).val())?null:$("#Cod_Sucursal_"+idTab).val()
@@ -1255,7 +1552,7 @@ function GenerarReporte(idTab,Cod_Libro,flag_preview,Tipo){
             ReporteGeneral(idTab,Cod_Libro,"ReporteXAnulados_"+Tipo,null,flag_preview,Tipo)
             break
         case '09':
-            ReporteAuxiliar(idTab,Cod_Libro,"ReporteRegistroAuxiliar_"+Tipo,null,flag_preview,Tipo)
+            ReporteAuxiliar(idTab,Cod_Libro,Cod_Libro=='08'?"ReporteRegistroAuxiliarCompra_"+Tipo:"ReporteRegistroAuxiliarVenta_"+Tipo,null,flag_preview,Tipo)
             break
         case '10':
             ReporteAuxiliarDetallado(idTab,Cod_Libro,"ReporteRegistroAuxiliarDetallado_"+Tipo,null,flag_preview,Tipo)

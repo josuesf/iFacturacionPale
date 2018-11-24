@@ -1,0 +1,17 @@
+{
+    "shortid": "HkOFuHN0m",
+    "name": "ReporteKardex",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542988209419
+    },
+    "_id": "lPScjRh2NMfAbqQs",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "HJEhQz7Rm"
+    }
+}

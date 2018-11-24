@@ -1,0 +1,58 @@
+<style>
+    {#asset stylesComprobantePDF.css @encoding=utf8} 
+</style> 
+<table>
+      <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">REGISTRO DE VENTAS</td>
+        </tr> 
+        
+    {{else}}
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">REGISTRO DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+    <tr class="row"> 
+        <td colspan="6" style="font-size: 15px;text-align:center">(Total por Cliente) </td>
+    </tr> 
+     
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr> 
+     <tr class="row">
+        <td></td>
+    </tr> 
+   
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">Documento</td>
+        <td class="headerTable" style="width:auto;">Numero</td>
+        <td class="headerTable" style="width:auto;">Cliente/Proveedor</td>
+        <td class="headerTable" style="width:auto;">Direccion</td>
+        <td class="headerTable" style="width:auto;">Total</td>
+        <td class="headerTable" style="width:auto;">Frec.</td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+</table>

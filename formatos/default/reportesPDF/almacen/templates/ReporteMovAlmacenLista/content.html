@@ -1,0 +1,73 @@
+<style>
+    {#asset stylesAlmacenPDF.css @encoding=utf8}
+</style>
+<table> 
+    <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr>  
+    
+    {{if COD_TIPOCOMPROBANTE == "NS"}} 
+
+        <tr class="row"> 
+            <td colspan="12" style="font-weight: bold;font-size: 20px;text-align:center">MOVIMIENTO DE ALMACEN SALIDAS</td>
+        </tr> 
+        
+    {{else}}
+
+        <tr class="row"> 
+            <td colspan="12" style="font-weight: bold;font-size: 20px;text-align:center">MOVIMIENTO DE ALMACEN ENTRADAS</td>
+        </tr> 
+       
+    {{/if}}   
+         
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="12"  style="text-align:center">{{:FILTRO}}</td>
+    </tr> 
+     <tr class="row">
+        <td></td>
+    </tr> 
+     
+     <tr class="row">
+        <td colspan="5"></td>
+        <td class="headerTable" style="width:auto;" colspan="2">Cantidad</td>
+        <td class="headerTable" style="width:auto;" colspan="2">Precio Unitario</td>
+        <td class="headerTable" style="width:auto;" colspan="2">Sub-Total</td> 
+    </tr>  
+     
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">Factura</td>
+        <td class="headerTable" style="width:auto;">Fecha</td>
+        <td class="headerTable" style="width:auto;">Movimiento</td>
+        <td class="headerTable" style="width:auto;">Emision</td>
+        <td class="headerTable" style="width:auto;">Producto</td>
+        <td class="headerTable" style="width:auto;">Facturado</td>
+        <td class="headerTable" style="width:auto;">Movimiento</td>
+        <td class="headerTable" style="width:auto;">Facturado</td>
+        <td class="headerTable" style="width:auto;">Movimiento</td>
+        <td class="headerTable" style="width:auto;">Facturado</td>
+        <td class="headerTable" style="width:auto;">Movimiento</td>
+        <td class="headerTable" style="width:auto;">Observaciones</td>
+    </tr> 
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

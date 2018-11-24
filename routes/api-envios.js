@@ -62,7 +62,7 @@ router.post('/guardar_movimientos_egreso_caja', function (req, res) {
 
     EXEC_SQL_OUTPUT('USP_CAJ_CAJA_MOVIMIENTOS_G', parametros , function (dataResult) {
         if (dataResult.error) return res.json({ respuesta: 'error', detalle_error: dataResult.error })
-        res.json({ respuesta: 'ok', data:dataResult.result[0].valor })
+        res.json({ respuesta: 'ok', data:dataResult.result['id_Movimiento']})//dataResult.result[0].valor })
     })
 });
 

@@ -1,0 +1,17 @@
+{
+    "shortid": "H1FZPIV0m",
+    "name": "ReporteStockFisicoPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "data": {
+        "shortid": "HJEhQz7Rm"
+    },
+    "modificationDate": {
+        "$$date": 1542988747272
+    },
+    "_id": "OE9Su9zlyMVK4PIx",
+    "$entitySet": "templates"
+}

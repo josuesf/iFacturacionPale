@@ -13,7 +13,7 @@ global.variablesRE = {}
 function CargarFormulario(variables, fecha_actual,empresa) {
     //flag_cliente=false
     global.objCliente = ''
-    cantidad_tabs++
+    //cantidad_tabs++
     const idTabRE = "RE_"+cantidad_tabs
     global.variablesRE[idTabRE]={idTab:idTabRE,flag_cliente:false,Id_ClienteProveedor:null,Obs_Recibo:null}//push({idTab:idTabRI,flag_cliente:false,Id_ClienteProveedor:null,Obs_Recibo})
     var tab = yo`

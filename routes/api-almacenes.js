@@ -163,7 +163,7 @@ router.post('/get_almacenes_by_caja', function (req, res) {
 router.post('/guardar_mov_almacen_', function (req, res){ 
     input = req.body
     parametros = [
-        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: input.Id_AlmacenMov?input.Id_AlmacenMov:-1,tipo_parametro:sql.Int, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
         {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
         {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
@@ -189,13 +189,13 @@ router.post('/rechazar_mov_almacen', function (req, res){
     input = req.body
     arreglo = input.dataForm 
     parametros = [
-        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: input.Id_AlmacenMov?input.Id_AlmacenMov:-1,tipo_parametro:sql.Int, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
         {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
         {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
-        {nom_parametro:'Serie', valor_parametro: input.Serie},
-        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar,tipo:"output"},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar,tipo:"output"},
         {nom_parametro:'Fecha', valor_parametro: input.Fecha},
         {nom_parametro:'Motivo', valor_parametro: input.Motivo},
         {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
@@ -207,7 +207,7 @@ router.post('/rechazar_mov_almacen', function (req, res){
         if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
         
         parametrosR1 = [
-            {nom_parametro:'Id_AlmacenMov', valor_parametro: dataMov.result[0].valor}, 
+            {nom_parametro:'Id_AlmacenMov', valor_parametro: dataMov.result['Id_AlmacenMov']},//dataMov.result[0].valor}, 
             {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
         ] 
         EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_EXTORNAR', parametrosR1 , function (dataMovE) {
@@ -231,13 +231,13 @@ router.post('/guardar_mov_almacen_entrada', function (req, res){
     input = req.body
     arreglo = input.dataForm 
     parametros = [
-        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: input.Id_AlmacenMov?input.Id_AlmacenMov:-1,tipo_parametro:sql.Int, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
         {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
         {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
-        {nom_parametro:'Serie', valor_parametro: input.Serie},
-        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar,tipo:"output"},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar, tipo:"output"},
         {nom_parametro:'Fecha', valor_parametro: input.Fecha},
         {nom_parametro:'Motivo', valor_parametro: input.Motivo},
         {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
@@ -248,7 +248,7 @@ router.post('/guardar_mov_almacen_entrada', function (req, res){
     EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
         if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
         if(arreglo.length>0){
-            recorrerMovDetalles(arreglo,0,req,dataMov.result[0].valor,function(mensaje,flag){
+            recorrerMovDetalles(arreglo,0,req,dataMov.result['Id_AlmacenMov'],function(mensaje,flag){
                 if(flag){
                     return res.json({respuesta:"ok",data:{}})
                 }else{
@@ -258,6 +258,7 @@ router.post('/guardar_mov_almacen_entrada', function (req, res){
         }else{
             return res.json({respuesta:"ok",data:{}})
         }
+        
     }) 
 })
 
@@ -266,13 +267,13 @@ router.post('/guardar_mov_almacen', function (req, res){
     input = req.body
     arreglo = input.dataForm 
     parametros = [
-        {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+        {nom_parametro:'Id_AlmacenMov', valor_parametro: input.Id_AlmacenMov?input.Id_AlmacenMov:-1,tipo_parametro:sql.Int, tipo:"output"},
         {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Almacen},
         {nom_parametro:'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion},
         {nom_parametro:'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno},
         {nom_parametro:'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante},
-        {nom_parametro:'Serie', valor_parametro: input.Serie},
-        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar,tipo:"output"},
+        {nom_parametro:'Numero', valor_parametro: input.Numero,tipo_parametro:sql.VarChar,tipo:"output"},
         {nom_parametro:'Fecha', valor_parametro: input.Fecha},
         {nom_parametro:'Motivo', valor_parametro: input.Motivo},
         {nom_parametro:'Id_ComprobantePago', valor_parametro: input.Id_ComprobantePago,tipo_parametro:sql.Int},
@@ -285,7 +286,7 @@ router.post('/guardar_mov_almacen', function (req, res){
     EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametros , function (dataMov) {
         if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
         else{
-            var Id_AlmacenMov = dataMov.result[0].valor  
+            var Id_AlmacenMov = dataMov.result['Id_AlmacenMov']//dataMov.result[0].valor  
             var contador = 1 
             //console.log(arreglo)
             for(var i=0;i<arreglo.length;i += 9){
@@ -340,13 +341,13 @@ router.post('/guardar_mov_almacen', function (req, res){
             if(input.Cod_Destino!=null && input.Cod_Destino!=""){
 
                 var parametrosDestino = [
-                    {nom_parametro:'Id_AlmacenMov', valor_parametro: -1, tipo:"output"},
+                    {nom_parametro:'Id_AlmacenMov', valor_parametro: 0,tipo_parametro:sql.Int, tipo:"output"},
                     {nom_parametro:'Cod_Almacen', valor_parametro: input.Cod_Destino},
                     {nom_parametro:'Cod_TipoOperacion', valor_parametro: "21"},
                     {nom_parametro:'Cod_Turno', valor_parametro: null},
                     {nom_parametro:'Cod_TipoComprobante', valor_parametro: "NE"},
-                    {nom_parametro:'Serie', valor_parametro: ""},
-                    {nom_parametro:'Numero', valor_parametro:""},
+                    {nom_parametro:'Serie', valor_parametro: "",tipo_parametro:sql.VarChar,tipo:"output"},
+                    {nom_parametro:'Numero', valor_parametro:"",tipo_parametro:sql.VarChar,tipo:"output"},
                     {nom_parametro:'Fecha', valor_parametro: input.Fecha},
                     {nom_parametro:'Motivo', valor_parametro: input.Motivo},
                     {nom_parametro:'Id_ComprobantePago', valor_parametro: Id_AlmacenMov,tipo_parametro:sql.Int},
@@ -357,7 +358,7 @@ router.post('/guardar_mov_almacen', function (req, res){
 
                 EXEC_SQL_OUTPUT('USP_ALM_ALMACEN_MOV_G', parametrosDestino , function (dataMov) {
                     if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
-                    var Id_AlmacenMov = dataMov.result[0].valor  
+                    var Id_AlmacenMov = dataMov.result['Id_AlmacenMov']//dataMov.result[0].valor  
                     var contador = 1 
                     for(var i=0;i<arreglo.length;i += 9){
 
@@ -490,7 +491,7 @@ function recorrerMovDetalles(arreglo,indice,req,Id_AlmacenMov,callback){
             EXEC_SQL('USP_ALM_ALMACEN_MOV_D_TXPK', parametrosD , function (dataMovDet) {
                 if (dataMovDet.error) callback(dataMovDet.error,false)
                 parametrosR = [
-                    {nom_parametro:'Id_AlmacenMov', valor_parametro: dataMovDet.result[0].Id_AlmacenMov},
+                    { nom_parametro:'Id_AlmacenMov', valor_parametro: dataMovDet.result[0].Id_AlmacenMov},
                     { nom_parametro: 'Id_Producto', valor_parametro: dataMovDet.result[0].Id_Producto},
                     { nom_parametro: 'Item', valor_parametro: dataMovDet.result[0].Item},
                     { nom_parametro: 'Des_Producto', valor_parametro: dataMovDet.result[0].Des_Producto},
@@ -507,10 +508,13 @@ function recorrerMovDetalles(arreglo,indice,req,Id_AlmacenMov,callback){
                 
             })
         }else{
-            callback('',true)
+            recorrerMovDetalles(arreglo,indice+9,req,Id_AlmacenMov,callback)
         }
     }else{
-        callback('',true)
+        EXEC_SQL('USP_PRI_PRODUCTO_STOCK_ActualizarStockGeneral', [] , function (dataStock) {
+            if (dataStock.error) callback(dataStock.error,false)
+            callback('',true)
+        })
     }
 }
 

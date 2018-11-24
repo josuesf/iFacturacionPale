@@ -57,7 +57,7 @@ function Ver(_escritura, turno){
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type="text" class="form-control pull-right required" id="Fecha_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,true,false):''}">
+                                                <input type="date" class="form-control pull-right required" id="Fecha_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,true,false):''}">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -69,7 +69,7 @@ function Ver(_escritura, turno){
                                                 <label>Hora inicio:</label>
 
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control timepicker required" id="Hora_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,false,true):''}">
+                                                    <input type="time" class="form-control timepicker required" id="Hora_Inicio" value="${turno?getFechaHora(turno.Fecha_Inicio,false,true):''}">
 
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
@@ -88,7 +88,7 @@ function Ver(_escritura, turno){
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-calendar"></i>
                                                 </div>
-                                                <input type="text" class="form-control pull-right required" id="Fecha_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,true,false):''}">
+                                                <input type="date" class="form-control pull-right required" id="Fecha_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,true,false):''}">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -99,7 +99,7 @@ function Ver(_escritura, turno){
                                                 <label>Hora finaliza:</label>
 
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control timepicker required" id="Hora_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,false,true):''}">
+                                                    <input type="time" class="form-control timepicker required" id="Hora_Fin"  value="${turno?getFechaHora(turno.Fecha_Fin,false,true):''}">
 
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
@@ -224,32 +224,6 @@ function Guardar(_escritura, turno){
 
 function NuevoTurno(_escritura, turno){
     Ver(_escritura, turno)
-    $.fn.datepicker.dates['es'] = {
-        days: ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
-        daysShort: ["Dom", "Lun", "Mar", "Mir", "Jue", "Vie", "Sab"],
-        daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-        months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiember", "Octubre", "Noviember", "Diciember"],
-        monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-        today: "Today",
-        clear: "Clear",
-        format: "dd/mm/yyyy",
-        titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
-        weekStart: 0
-    };
-    $('#Fecha_Inicio').datepicker({
-        autoclose: true,
-        language: 'es'
-    })
-      $('#Fecha_Fin').datepicker({
-        autoclose: true,
-        language: 'es'
-      })
-      
-        $('.timepicker').timepicker({
-            showInputs: false,
-            showMeridian: false,
-          })
-
 }
 
 export { NuevoTurno }

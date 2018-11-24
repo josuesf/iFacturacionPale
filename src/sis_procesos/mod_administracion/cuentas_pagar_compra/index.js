@@ -8,6 +8,7 @@ import { NuevoCliente, BuscarCliente } from '../../modales'
 var arrayValidacion = [null,'null','',undefined]
 var cantidad_tabs = 0
 global.variablesPC = {}
+var IdTabSeleccionado = null
 //var flag_cliente = false 
 
 function VerCuentas(variables,fecha_actual,CodLibro) {
@@ -15,10 +16,11 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
 
     cantidad_tabs++
     const idTabPC = "PC_"+cantidad_tabs
+    IdTabSeleccionado = idTabPC
     global.variablesPC[idTabPC]={idTab:idTabPC,flag_cliente:false}
 
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabPC}" data-toggle="tab" aria-expanded="false" id="id_${idTabPC}">${CodLibro=='08'?'CUENTAS POR PAGAR':'CUENTAS POR COBRAR'} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabPC(idTabPC)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class="" onclick=${()=>TabSeleccionado(idTabPC)} ><a href="#tab_${idTabPC}" data-toggle="tab" aria-expanded="false" id="id_${idTabPC}">${CodLibro=='08'?'CUENTAS POR PAGAR':'CUENTAS POR COBRAR'} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabPC(idTabPC)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     //flag_cliente = false 
@@ -316,11 +318,11 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
                                 </div>
                                 <div class="row" id="divAnulado_${idTabPC}" style="display:none">
                                     <div class="col-md-12 text-center">
-                                        <div class="small-box bg-red">
-                                            <div class="inner">
-                                                <h3 id="laAnulado_${idTabPC}">EXTORNADO</h3>
-                                            </div>
+
+                                        <div class="alert alert-callout alert-danger" id="divError" data-value="0">
+                                            <h3 id="laAnulado_${idTabPC}">EXTORNADO</h3>
                                         </div>
+ 
                                     </div>
                                 </div>
                             </div>
@@ -447,23 +449,23 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () {  
         //console.log(global.objCliente)
         if(global.objCliente!=''){ 
-            $("#Cod_TipoDoc_"+idTabPC).val(global.objCliente.Cod_TipoDoc)
-            $("#Cliente_"+idTabPC).val(global.objCliente.Nom_Cliente)
-            $("#Nro_Documento_"+idTabPC).val(global.objCliente.Doc_Cliente)
+            $("#Cod_TipoDoc_"+IdTabSeleccionado).val(global.objCliente.Cod_TipoDoc)
+            $("#Cliente_"+IdTabSeleccionado).val(global.objCliente.Nom_Cliente)
+            $("#Nro_Documento_"+IdTabSeleccionado).val(global.objCliente.Doc_Cliente)
 
-            $("#Nro_Documento_"+idTabPC).bind("keypress", function(event){
+            $("#Nro_Documento_"+IdTabSeleccionado).bind("keypress", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
             
-            $("#Cliente_"+idTabPC).bind("keypress", function(event){
+            $("#Cliente_"+IdTabSeleccionado).bind("keypress", function(event){
                 event.preventDefault();
                 event.stopPropagation();
             });
             
-            $("#Nro_Documento_"+idTabPC).attr("disabled",true);
-            $("#Cliente_"+idTabPC).attr("disabled",true);
-            $("#Cod_TipoDoc_"+idTabPC).attr("disabled",true);
+            $("#Nro_Documento_"+IdTabSeleccionado).attr("disabled",true);
+            $("#Cliente_"+IdTabSeleccionado).attr("disabled",true);
+            $("#Cod_TipoDoc_"+IdTabSeleccionado).attr("disabled",true);
 
             /*$("#Cliente").tagsinput('removeAll')
             $("#Nro_Documento").tagsinput('removeAll')
@@ -473,10 +475,10 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
             $("#Nro_Documento").tagsinput('add',global.objCliente.Doc_Cliente)
             $("#Direccion").tagsinput('add',global.objCliente.Direccion_Cliente)*/
 
-            $("#Cliente_"+idTabPC).attr("data-id",global.objCliente.Id_Cliente)
-            $("#Cod_Moneda_"+idTabPC).val(global.objCliente.Cod_Moneda)
+            $("#Cliente_"+IdTabSeleccionado).attr("data-id",global.objCliente.Id_Cliente)
+            $("#Cod_Moneda_"+IdTabSeleccionado).val(global.objCliente.Cod_Moneda)
             CargarLicitacionesCliente(global.objCliente.Id_Cliente)
-            BuscarPorFecha(CodLibro,idTabPC)
+            BuscarPorFecha(CodLibro,IdTabSeleccionado)
         }
     }) 
     
@@ -490,10 +492,10 @@ function VerCuentas(variables,fecha_actual,CodLibro) {
     $("#Cuenta_CajaBancos_"+idTabPC).parent().find('input.ui-widget').blur(function(){  
         TraerPorCuentaOperacion(idTabPC)
     })
- 
 }
 
 function RefrescarVerCuentas(variables,fecha_actual,CodLibro,idTabPC) {
+    IdTabSeleccionado = idTabPC
     global.objCliente = '' 
     global.variablesPC[idTabPC]={idTab:idTabPC,flag_cliente:false}
 
@@ -796,11 +798,11 @@ function RefrescarVerCuentas(variables,fecha_actual,CodLibro,idTabPC) {
                                 </div>
                                 <div class="row" id="divAnulado_${idTabPC}" style="display:none">
                                     <div class="col-md-12 text-center">
-                                        <div class="small-box bg-red">
-                                            <div class="inner">
-                                                <h3 id="laAnulado_${idTabPC}">EXTORNADO</h3>
-                                            </div>
+
+                                        <div class="alert alert-callout alert-danger" id="divError" data-value="0">
+                                            <h3 id="laAnulado_${idTabPC}">EXTORNADO</h3>
                                         </div>
+ 
                                     </div>
                                 </div>
                             </div>
@@ -1072,10 +1074,15 @@ function KeyPressClienteDoc(idTab){
     }  
 }
 
+function TabSeleccionado(idTab){
+    IdTabSeleccionado = idTab
+    global.objCliente = ''
+}
 
 function CerrarTabPC(idTab){ 
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
+    IdTabSeleccionado = null
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
     delete global.variablesPC[idTab]

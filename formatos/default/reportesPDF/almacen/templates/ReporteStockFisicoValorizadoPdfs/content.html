@@ -1,0 +1,42 @@
+<style>
+    {#asset stylesAlmacenPDF.css @encoding=utf8}
+</style>
+<table> 
+     <tr class="row">
+            <td colspan="4" class="headerPage">{{:EMPRESA}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SIS}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td>  
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" class="headerPage_left"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" class="headerPage_left"></td> 
+            <td colspan="4"></td>
+    </tr> 
+   
+    <tr class="row"> 
+        <td colspan="8" class="tituloCenter">REPORTE DE STOCK FISICO VALORIZADO</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+      <tr class="row">
+        <td colspan="8">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

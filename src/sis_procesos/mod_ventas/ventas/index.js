@@ -363,6 +363,7 @@ function VerNuevaVenta(variables,CodLibro) {
                         }
                         CalcularTotal(IdTabSeleccionado)
                         CalcularTotalDescuentos(IdTabSeleccionado)
+                        CalcularVuelto(IdTabSeleccionado)
                     })
                    
                     
@@ -544,7 +545,7 @@ function CargarModalConfirmacion(idTab,_CodTipoComprobante){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacion(idTab,_CodTipoComprobante)}>Aceptar</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnConfirmacion" onclick=${()=>AceptarConfirmacion(idTab,_CodTipoComprobante)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -571,7 +572,7 @@ function CargarModalConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick=${()=>LimpiarVenta(idTab)}>Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnConfirmacion" onclick=${()=>AceptarConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda)}>Aceptar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmacion" data-dismiss="modal" onclick=${()=>AceptarConfirmacionME(idTab,_MontoComprar,_NombreMoneda,_TipoCambio,_CodMoneda)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1170,13 +1171,14 @@ function EliminarFila(idFila,idTab){
     $('#'+idFila).remove()
     CalcularTotal(idTab)
     CalcularTotalDescuentos(idTab)
+    CalcularVuelto(idTab)
 }
 
 function FocusInOutCantidadVenta(idFila,idTab){
     if($('#'+idFila).find('td.Flag_Stock').text().toString()=="true"){
         //_CantidadOriginal = parseFloat($('#'+idFila).find('td.Cantidad').find('input').val())
         changeArrayJsonVentas(global.variablesVentas,idTab,[null,null,null,parseFloat($('#'+idFila).find('td.Cantidad').find('input').val()),null,null,null,null])
-    }
+    } 
 }
 
 function EditarCliente(idTab){ 
@@ -1465,20 +1467,20 @@ function CambioCantidadVenta(idFila,idTab){
                                 toastr.error('El stock maximo es de : '+parseFloat(producto.Stock_Act).toFixed(0),'Error',{timeOut: 5000})  
                                 $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                             }
-                        }else{
-                            $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
-                        }
+                        } 
                     }else{
                         $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                     }
 
                 }).catch(function (e) {
                     console.log(e);
+                    $('#'+idFila).find('td.Cantidad').find('input').val(getObjectArrayJsonVentas(global.variablesVentas,idTab)[0]._CantidadOriginal)
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
                 }); 
         } 
         RecalcularSubtotales(idTab)
         RecalcularDescuentosTotales(idTab)
+        CalcularVuelto(idTab)
     }
 }
 
@@ -1518,6 +1520,7 @@ function CambioPrecioDescuentos(idFila,idTab){
        
         RecalcularSubtotales(idTab)
         RecalcularDescuentosTotales(idTab)
+        CalcularVuelto(idTab)
     }
  
 }
@@ -1849,7 +1852,6 @@ function EmisionRapida(idTab,pCod_Moneda,callback){
             console.log(res)
             if(res.respuesta == 'ok'){
                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
-                 
                 preparar_impresion_comprobante(res.data,function(flag){
                     if(!flag){
                         toastr.error('No Puede imprimir el comprobante. Comuniquese con su Administrador.','Error',{timeOut: 5000})

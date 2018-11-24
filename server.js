@@ -11,6 +11,7 @@ var multer = require('multer');
 var ext = require('file-extension');
 var bodyParser = require("body-parser");
 var session = require('express-session'); 
+var path = require('path')
 
 const fs = require('fs');  
  
@@ -51,7 +52,7 @@ app.use('/reporting', reportingApp);
 
 jsreport = require('jsreport-core')(
   {
-    tempDirectory: require('path').join(__dirname, 'formatos/temp'),
+    tempDirectory: path.join(__dirname, 'formatos/temp'),
     store: {
       provider: 'fs'
     },
@@ -61,7 +62,7 @@ jsreport = require('jsreport-core')(
     extensions: {
         express: { app: reportingApp, server: server },
         'fs-store': {
-          dataDirectory: require('path').join(__dirname, 'formatos/default'),
+          dataDirectory: path.join(__dirname, 'formatos/default'),
           syncModifications: true
         },
         'authentication' : {
@@ -303,6 +304,7 @@ app.post('/login', function (req, res) {
       errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+m.err
       return res.redirect('/login');
     }else{
+      console.log(m)
       if(m.result.length>0){
         //-- validacion extra para el caso de clientes
         if(m.result[0].CadenaConexion!=undefined && m.result[0].CadenaConexion!=null && m.result[0].CadenaConexion!=''){
@@ -328,47 +330,7 @@ app.post('/login', function (req, res) {
                     errores = e.err
                     return res.redirect('/login');
                   }
-            
-                  /*if (app.locals.isla){
-            
-                    pIsla = [
-                      { nom_parametro: 'Cod_Usuario', valor_parametro: e.Cod_Usuarios },
-                      { nom_parametro: 'Cod_Caja', valor_parametro: app.locals.caja.Cod_Caja }
-                    ]
-            
-                    EXEC_SQL('USP_CAJ_CAJAS_TXUsuario', pIsla , function (dataCajaIsla) {
-                      if (e.err) {
-                        errores = dataCajaIsla.err
-                        return res.redirect('/login'); 
-                      }
-            
-                      if(dataCajaIsla.result.length>=1){
-            
-                        req.session.authenticated = true;
-                        req.session.username = e.Cod_Usuarios
-                        req.session.nick = e.Nick
-                        req.session.turno = req.body.Turno
-                        req.session.periodo = req.body.Periodo
-                        req.session.gestion = req.body.Gestion
-                        req.session.caja = app.locals.caja.Cod_Caja 
-                        
-                        CargarVariables(req,res)
-            
-                      }else{
-                        app.locals.isla = false
-                        app.locals.apertura = false
-                        app.locals.CierreCompleto = true
-                        app.locals.caja = { Cod_Caja : null }
-                        app.locals.turno = null
-                        app.locals.sucursal = null
-                        app.locals.arqueo = null
-                        delete req.session.authenticated;
-                        errores = "No existe Relación de esta caja con el usuario Asignado.\n\n En caso que Desea agregarlo comuniquese con el administrador de sistemas."
-                        return res.redirect('/login');
-                      }
-                    })
-                  }else{*/
-            
+           
                     req.session.authenticated = true;
                     req.session.username = e.Cod_Usuarios
                     req.session.nick = e.Nick
@@ -504,7 +466,7 @@ app.post('/loginarqueo', function (req, res) {
     EXEC_SQL_OUTPUT('USP_CAJ_ARQUEOFISICO_G', p , function (dataArqueoFisico) {
       for(var i=0;i<req.body.Cod_Moneda.length;i++){
         var parametros = [
-              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result['id_ArqueoFisico']},//dataArqueoFisico.result[0].valor},
               { nom_parametro: 'Cod_Moneda', valor_parametro: req.body.Cod_Moneda[i]},
               { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
               { nom_parametro: 'Monto', valor_parametro: req.body.Monto_Moneda[i]},
@@ -520,7 +482,7 @@ app.post('/loginarqueo', function (req, res) {
           EXEC_SQL('USP_CAJ_ARQUEOFISICO_TXCajaTurno', p , function (dataArqueoFisicoCajaTurno) {
 
             p_ = [
-              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor }
+              { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result['id_ArqueoFisico']},//dataArqueoFisico.result[0].valor }
             ] 
 
             EXEC_SQL('usp_CAJ_ARQUEOFISICO_TXPK', p_ , function (dataArqueo) {
@@ -578,6 +540,7 @@ var recepciones_api = require('./routes/api-recepciones')
 var series_api = require('./routes/api-series')
 var reservas_api = require('./routes/api-reservas')
 var services_api = require('./routes/api-services')
+var services_web_api = require('./routes/api-web-services')
 var formas_pago_api = require('./routes/api-formas-pago')
 var comprobantes_pago_api = require('./routes/api-comprobantes-pago')
 var compra_venta_moneda_extranjera_api = require('./routes/api-compra-venta-moneda-extranjera')
@@ -607,7 +570,8 @@ app.use('/envios_api', envios_api)
 app.use('/recepciones_api', recepciones_api)
 app.use('/series_api', series_api)
 app.use('/reservas_api', reservas_api)
-app.use('/ws', services_api)
+app.use('/ws_movil', services_api)
+app.use('/ws', services_web_api)
 app.use('/formas_pago_api', formas_pago_api)
 app.use('/comprobantes_pago_api', comprobantes_pago_api)
 app.use('/precios_api', precios_api)
@@ -623,12 +587,13 @@ var server = app.listen(3000, function (err) {
  
 app.post('/api/report', function(req, res) {  
   if(Object.keys(GETCONFIG(app.locals.empresa[0].RUC)).length>0){  
-    if (fs.existsSync(require('path').join(__dirname+'/formatos/'+app.locals.empresa[0].RUC+'/recibos_tickets/assets/logo.jpg'))) { 
+    /*let dir = path.join(__dirname, 'formatos/'+app.locals.empresa[0].RUC+'/recibos_tickets/assets/logo.jpg');
+    if (fs.existsSync(dir)) { 
       req.body.template.data['FLAG'] = true
     }else{
       req.body.template.data['FLAG'] = false
-    }
-  
+    }*/
+     
     req.body.template.data['NOMBRE'] = app.locals.empresa[0].RazonSocial
     req.body.template.data['DIRECCION'] = app.locals.empresa[0].Direccion
     req.body.template.data['RUC'] = app.locals.empresa[0].RUC
@@ -719,11 +684,11 @@ function iniciarJsReport(ruc,callback){
  
 function crearDirectorioEmpresa(ruc,callback){ 
   try{
-    var dir = require('path').join(__dirname, 'formatos/'+ruc);
+    var dir = path.join(__dirname, 'formatos/'+ruc);
     if (!fs.existsSync(dir)){
         fs.mkdirSync(dir);
         const fse = require('fs-extra')
-        fse.copy(require('path').join(__dirname, 'formatos/default'), require('path').join(__dirname, 'formatos/'+ruc), err => {
+        fse.copy(path.join(__dirname, 'formatos/default'), path.join(__dirname, 'formatos/'+ruc), err => {
           if (err)  callback(false)
           callback(true)
         }) 

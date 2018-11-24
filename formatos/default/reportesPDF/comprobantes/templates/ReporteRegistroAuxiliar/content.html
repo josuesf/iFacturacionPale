@@ -1,0 +1,80 @@
+<style>
+    {#asset stylesComprobantePDF.css @encoding=utf8}
+</style>
+<table> 
+
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 17px;text-align:left">{{:NOMBRE}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:leftr">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">RUC: {{:RUC}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+    
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="15" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE VENTAS</td>
+        </tr>  
+    {{else}}
+        <tr class="row"> 
+            <td colspan="15" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    
+    <tr class="row">
+        <td colspan="16">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr> 
+    
+    <tr style="border: 2px solid">
+        <td style="width:auto;height: 20px;font-weight: bold;" colspan="3" rowspan="2"></td> 
+        <td style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="4" rowspan="2">Comprobante de Pago o Documento</td> 
+        <td style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="3">Información del Cliente/Proveedor</td> 
+        <td style="width:auto;height: 20px;font-weight: bold;" colspan="5"></td> 
+    </tr>
+    
+    <tr>
+        <td  style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="2">Doc. Identidad</td> 
+        <td  style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center">Apellidos y Nombres, Denominación o Razón Social</td> 
+        <td  style="width:auto;height: 20px;font-weight: bold;" colspan="5"></td> 
+    </tr>
+    <tr>     
+        <td  class="headerTable" style="width:auto;">N°</td> 
+        <td  class="headerTable" style="width:auto;">Fecha de Emision</td> 
+        <td  class="headerTable" style="width:auto;">Fecha de Cancelacion</td> 
+        <td  class="headerTable" style="width:auto;">Ticketera</td> 
+        <td  class="headerTable" style="width:auto;">Tipo</td> 
+        <td  class="headerTable" style="width:auto;">Serie</td> 
+        <td  class="headerTable" style="width:auto;">Numero</td> 
+        <td  class="headerTable" style="width:auto;">Tipo</td> 
+        <td  class="headerTable" style="width:auto;">Numero</td>
+        <td  class="headerTable" style="width:auto;">Apellidos y Nombres, Denominación o Razón Social</td> 
+        <td  class="headerTable" style="width:auto;">Base Imponible</td>
+        <td  class="headerTable" style="width:auto;">IGV</td>
+        <td  class="headerTable" style="width:auto;">Total</td>
+        <td  class="headerTable" style="width:auto;">Turno</td>
+        <td  class="headerTable" style="width:auto;">Cuenta Contable</td>
+    </tr> 
+    {{:~recorrerArreglo(DETALLES)}}  
+</table>

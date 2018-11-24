@@ -6,7 +6,7 @@ var transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
           user: 'pulgarcito48@hotmail.com',
-          pass: 'SAS3TIGRES'
+          pass: 'OMARSAS3TIGRES'
       }
 });
 
@@ -320,7 +320,6 @@ function CambiarCadenaConexion(cadena,callback) {
 
 }
 
-
 function TraerConexion(req, res, callback) {
     parametros = [
         { nom_parametro: 'RUC', valor_parametro: req.body.RUC },
@@ -328,17 +327,17 @@ function TraerConexion(req, res, callback) {
 
     EXEC_SQL_DBMaster('USP_PRI_EMPRESA_TXRUC', parametros, function (m) {
         if (m.err) {
-            return false;
+            callback(false,m.err)
         } else {
             if (m.result.length > 0) {
                 if (m.result[0].CadenaConexion != null) {
                     CambiarCadenaConexion(UnObfuscateString(m.result[0].CadenaConexion));
-                    callback(true)
+                    callback(true,"ok")
                 } else {
-                    callback(false)
+                    callback(false,"No existe la configuracion para su conexion")
                 }
             } else {
-                callback(false)
+                callback(false,"No se encontro el RUC de la empresa")
             }
         }
     })
@@ -374,12 +373,13 @@ function EmailValido(valor) {
     }
 }
 
-function enviarCorreoGeneral(toEmail,Subject,arregloAttachments,callback){  
-    console.log(arregloAttachments)
-    var mailOptions={
-      to : toEmail,
-      subject : Subject,
-      attachments: arregloAttachments
+function enviarCorreoGeneral(toEmail,Subject,Message,arregloAttachments,callback){ 
+    
+    var mailOptions={  
+        to : toEmail,
+        subject : Subject,
+        html : "<img alt='PALE CONSULTORES' style='display:block; font-family:Arial, sans-serif; font-size:30px; line-height:34px; color:#000000;' src='http://palerp.com/images/logo.png'><br><h3><strong>Estimado cliente: </strong></h3><p>"+Message+"</p>",
+        attachments: arregloAttachments
     }
     transporter.sendMail(mailOptions, function (err, info) {
       if(err){
@@ -432,6 +432,42 @@ function enviarCorreoRestaurarPassword(host,toEmail,ruc,callback){
       }
   });
 }
- 
 
-module.exports = { ConvertirCadena, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword, enviarCorreoGeneral}
+function diasEnUnMes(mes,anio) {
+	return new Date(anio,mes,0).getDate();
+}
+
+function MesActual(flag){
+    var fecha
+    var Actual = new Date()
+    var dia = Actual.getDate()
+    var mes = Actual.getMonth() + 1
+    var anio = Actual.getFullYear()
+    if(flag == '')
+    {
+        fecha = anio+'-'+mes+'-'+dia
+        return fecha
+    }
+    else
+    {
+        if(flag == 'I')
+        {
+            fecha = anio+'-'+mes+'-01'
+            return fecha
+        }
+        if(flag == 'F')
+        {
+            
+            fecha = anio+'-'+mes+'-'+diasEnUnMes(mes,anio)
+            return fecha
+        }
+        if(flag != 'I' && flag != 'F')
+        {
+            fecha = anio+'-'+mes+'-'+dia
+            return fecha
+        }
+    } 
+}
+
+
+module.exports = { ConvertirCadena, MesActual, UnObfuscateString, CambiarCadenaConexion, TraerConexion, BloquearControles, getObjectArrayJsonVentas, changeArrayJsonVentas, changeDetallesArrayJsonVentas, deleteElementArrayJsonVentas, LimpiarVariablesGlobales, RUCValido, EmailValido,enviarCorreoConfirmacion , enviarCorreoRestaurarPassword, enviarCorreoGeneral}

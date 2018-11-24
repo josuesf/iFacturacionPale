@@ -1,0 +1,45 @@
+<style>
+    {#asset stylesExcel.css @encoding=utf8}
+</style>
+<title>Reporte de Movimientos de Caja</title>
+
+<table> 
+     <tr class="row">
+            <td colspan="4" class="headerPage">{{:EMPRESA}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SIS}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right">Pag 1.</td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" class="headerPage_left"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" class="headerPage_left"></td> 
+            <td colspan="4"></td>
+    </tr> 
+   
+    <tr class="row"> 
+        <td colspan="8" class="tituloCenter">MOVIMIENTOS DE CAJA</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+      <tr class="row">
+        <td colspan="8">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

@@ -13,7 +13,7 @@ global.variablesCVME = {}
 
 function Ver(_escritura, Serie, variables,fecha_actual,empresa) {
     global.objCliente = ''
-    cantidad_tabs++
+    //cantidad_tabs++
     const idTabCVME = "CVME_"+cantidad_tabs
     global.variablesCVME[idTabCVME]={idTab:idTabCVME,flag_cliente:false,Id_ClienteProveedor:null} 
     var tab = yo`

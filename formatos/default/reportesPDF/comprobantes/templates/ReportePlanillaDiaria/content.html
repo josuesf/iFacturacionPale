@@ -1,0 +1,60 @@
+ <style>
+    {#asset stylesComprobantePDF.css @encoding=utf8}
+ 
+</style> 
+<table> 
+      
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 17px;text-align:left">{{:NOMBRE}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:leftr">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">RUC: {{:RUC}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">PLANILLA DIARIA DE VENTAS</td>
+        </tr>  
+    {{else}}
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">PLANILLA DIARIA DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+     
+  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+     
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">Documento</td>
+        <td class="headerTable" style="width:auto;">Fecha</td>
+        <td class="headerTable" style="width:auto;">Producto</td>
+        <td class="headerTable" style="width:auto;">Cliente</td>
+        <td class="headerTable" style="width:auto;text-align:right">Cantidad</td>
+        <td class="headerTable" style="width:auto;text-align:right">Precio</td>
+        <td class="headerTable" style="width:auto;text-align:right">Total</td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

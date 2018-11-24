@@ -283,7 +283,7 @@ function ArquearCaja(Numero,Des_ArqueoFisico,Cod_Turno,Cod_Usuario,Cod_Caja,Arra
     }
     for(var i=0;i<ArrayMonedas.length;i++){
       var parametros = [
-            { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+            { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result['id_ArqueoFisico']},//dataArqueoFisico.result[0].valor},
             { nom_parametro: 'Cod_Moneda', valor_parametro: ArrayMonedas[i].Cod_Moneda},
             { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
             { nom_parametro: 'Monto', valor_parametro: ArrayMonedas[i].Monto_Moneda},

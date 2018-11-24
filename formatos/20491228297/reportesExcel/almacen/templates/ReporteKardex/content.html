@@ -1,0 +1,46 @@
+<style>
+    {#asset stylesAlmacen.css @encoding=utf8}
+</style>
+<table> 
+     
+       <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr>   
+
+    <tr class="row"> 
+        <td colspan="14" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE INVENTARIO PERMANENTE VALORIZADO - DETALLE DEL INVENTARIO VALORIZADO</td>
+    </tr> 
+        
+    
+         
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="14" style="text-align:center">{{:FILTRO}}</td>
+    </tr> 
+     <tr class="row">
+        <td></td>
+    </tr> 
+     
+     
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

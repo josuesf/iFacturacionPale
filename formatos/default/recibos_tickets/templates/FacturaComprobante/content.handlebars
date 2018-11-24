@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <style>
-         {#asset styles.css @encoding=utf8}
+         {#asset stylesComprobantes.css @encoding=utf8}
     </style>
     <script>{#asset qrcode.min.js @encoding=utf8}</script>
 </head>
@@ -16,14 +16,11 @@
                     <table>
                         <tr>
                             <td class="logo" style="max-width:250px;"><br> 
-                                {{#if FLAG}}
-                                     <img src='{#asset logo.jpg @encoding=dataURI}' style="max-width:250px;"/>
-                                {{else}}
-                                    {{NOMBRE}} 
-                                    <br>
-                                     <label>Dirección: {{DIRECCION}}</label>
-                                {{/if}} 
                                  
+                                {{NOMBRE}} 
+                                <br>
+                                <label>Dirección: {{DIRECCION}}</label>
+                               
                             </td>
                              
                         </tr>
@@ -250,4 +247,5 @@
         {{PIE_DE_PAGINA}}
     </p>
 </body>
+ 
 </html>

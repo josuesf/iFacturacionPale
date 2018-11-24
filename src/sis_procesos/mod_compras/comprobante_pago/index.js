@@ -1097,7 +1097,7 @@ function AbrirModalConfirmacion(CodLibro,variables,fecha_actual){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-raised btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables,fecha_actual)}>Aceptar</button>
+                <button type="button" class="btn btn-raised btn-primary" data-dismiss="modal" onclick=${()=>EmisionCompleta(CodLibro,variables,fecha_actual)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -2633,9 +2633,11 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
 }
 
 function EmisionCompleta(CodLibro,variables,fecha_actual){
-    if(diff<-7){
+    if(diff<-7 && CodLibro=='14'){
+         
         toastr.error('Usted solo puede facturar hasta 7 dias atras','Error',{timeOut: 5000})
         $("#Fecha").val(fecha_actual)
+      
     }else{
         GuardarCamposEntidadComprobante(CodLibro,variables)
     }
@@ -2749,7 +2751,7 @@ function PrepararImpresion(arrayData){
                         jsreport.render(document.getElementById('divPDF'), request);  
                     }).catch(function (e) {  
                         toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
-                        $('#modal-alerta').modal('hide') 
+                        $('#modal-pdf').modal('hide') 
                     });
                 }
             }) 
@@ -2930,11 +2932,11 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
             .then(res => { 
                 console.log(res)
                 if (res.respuesta == 'ok') {
-                    var idComprobante = res.data[0].valor
+                    var idComprobante = res.data['id_ComprobantePago']//res.data[0].valor
                     var Numero = res.data[1].valor
                     dataArray.cuerpo.NUMERO = Numero
 
-                    EmisionCompletaDetalles(0,CodLibro,variables,res.data[0].valor,function(flag){
+                    EmisionCompletaDetalles(0,CodLibro,variables,idComprobante,function(flag){
                     if(flag){
 
                             if(listaFormaPago.length==0){
@@ -2961,6 +2963,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                 $("#modal-proceso").modal("hide")
                                                 $('#modal-alerta').waitMe('hide');
+                                                $("#modal-alerta").modal("hide")
                                                 LimpiarVenta() 
     
                                                 if(CodLibro=='14'){
@@ -2990,6 +2993,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                         if(flagFP){
                                                             toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                             $("#modal-proceso").modal("hide")
+                                                            $("#modal-alerta").modal("hide")
                                                             $('#modal-alerta').waitMe('hide') 
                                                             LimpiarVenta()
 
@@ -3022,6 +3026,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(flagFP){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
+                                                    $("#modal-alerta").modal("hide")
                                                     $('#modal-alerta').waitMe('hide')
                                                     LimpiarVenta() 
 
@@ -3104,6 +3109,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(res.respuesta=='ok'){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
+                                                    $("#modal-alerta").modal("hide")
                                                     $('#modal-alerta').waitMe('hide') 
                                                     LimpiarVenta()
 
@@ -3197,6 +3203,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                                                 if(flag){
                                                     toastr.success('Se registro correctamente el comprobante','Confirmacion',{timeOut: 5000})
                                                     $("#modal-proceso").modal("hide")
+                                                    $("#modal-alerta").modal("hide")
                                                     $('#modal-alerta').waitMe('hide') 
                                                     LimpiarVenta()
                                                     
@@ -4006,7 +4013,7 @@ function TraerTipoCambio(CodLibro,fecha_actual){
     var fechaFin    = new Date(fecha).getTime();
     diff = fechaFin - fechaInicio;
     diff = diff/(1000*60*60*24) 
-    if(diff<-7){
+    if(diff<-7 && CodLibro=='14'){
         toastr.error('Usted solo puede facturar hasta 7 dias atras','Error',{timeOut: 5000})
         $("#Fecha").val(fecha_actual)
     }else{

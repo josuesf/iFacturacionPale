@@ -1,0 +1,20 @@
+{
+    "shortid": "HJQIf_VTX",
+    "name": "ReporteCuentasXPagar",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542747245504
+    },
+    "_id": "QR4KIVo4NUxwrKyJ",
+    "data": {
+        "shortid": "BJXpfuVa7"
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "$entitySet": "templates"
+}

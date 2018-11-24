@@ -1,0 +1,20 @@
+{
+    "shortid": "Byz_XXPTQ",
+    "name": "MovimientosXcaja",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542747238425
+    },
+    "_id": "0d96nAztDwMjeOxz",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "r1mVOEP6X"
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    }
+}

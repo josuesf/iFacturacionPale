@@ -1,0 +1,17 @@
+{
+    "shortid": "ryuFCHgCX",
+    "name": "FormaPagoXMov",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748846946
+    },
+    "_id": "FdE7LjrBBjZkZFAY",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "H1rxk8g0Q"
+    }
+}

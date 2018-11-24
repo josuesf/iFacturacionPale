@@ -274,8 +274,8 @@ router.post('/guardar_comprobante_pago', function (req, res) {
         { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
-        { nom_parametro: 'Serie', valor_parametro: input.Serie },
-        { nom_parametro: 'Numero', valor_parametro: input.Numero ,tipo:"output",tipo_parametro:sql.VarChar},
+        { nom_parametro: 'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar,tipo:"output" },
+        { nom_parametro: 'Numero', valor_parametro: input.Numero ,tipo_parametro:sql.VarChar,tipo:"output"},
         { nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente },
         { nom_parametro: 'Cod_TipoDoc', valor_parametro: input.Cod_TipoDoc },
         { nom_parametro: 'Doc_Cliente', valor_parametro: input.Doc_Cliente },
@@ -318,7 +318,7 @@ router.post('/guardar_comprobante_pago', function (req, res) {
         if (dataComprobante.err){
             return res.json({respuesta:"error",detalle_error:dataComprobante.err})  
         }else{
-            return res.json({respuesta:"ok",data:dataComprobante.result})
+            return res.json({respuesta:"ok",data:dataComprobante.result})//dataComprobante.result})
         }
     })
 })
@@ -433,7 +433,7 @@ router.post('/venta_simple', function (req, res) {
                         { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
                         { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
                         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
-                        { nom_parametro: 'Serie', valor_parametro: Serie},
+                        { nom_parametro: 'Serie', valor_parametro: Serie,tipo_parametro:sql.VarChar,tipo:"output"},
                         { nom_parametro: 'Numero', valor_parametro: Numero,tipo_parametro:sql.VarChar,tipo:"output"},
                         { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
                         { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
@@ -479,12 +479,12 @@ router.post('/venta_simple', function (req, res) {
                             return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                         }
                         
-                        DataDetalles(0,req,res,dataComprobante.result[0].valor,function(flag){ 
+                        DataDetalles(0,req,res,dataComprobante.result['id_ComprobantePago'],function(flag){ 
                             if(flag){
                                  
                                 let FormaPago = req.body.FormaPago 
                                 if(FormaPago!=null){
-                                    let id_ComprobantePago = dataComprobante.result[0].valor
+                                    let id_ComprobantePago = dataComprobante.result['id_ComprobantePago']//dataComprobante.result[0].valor
                                     GuardarCuentaBancaria(req,res,FormaPago,FechaEmision,Nom_Cliente,id_ComprobantePago,function(Id_Movimiento){
 
                                         if(Id_Movimiento!=null){
@@ -576,7 +576,7 @@ function GuardarCuentaBancaria(req,res,FormaPago,Fecha,Nom_Cliente,Id_Comprobant
             if (dataCuentaBancaria.err){
                 callback(null)
             }else{
-                callback(dataCuentaBancaria.result[0].valor)
+                callback(dataCuentaBancaria.result['Id_MovimientoCuenta'])//dataCuentaBancaria.result[0].valor)
             } 
         })
     }else{
@@ -695,7 +695,7 @@ function DataCliente(req,res,callback){
             callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
         }else{*/
             var parametrosCliente = [
-                { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
+                { nom_parametro: 'Id_ClienteProveedor',valor_parametro: Id_Cliente, tipo_parametro:sql.Int,tipo:"output"},
                 { nom_parametro: 'Cod_TipoDocumento', valor_parametro: Cod_TipoDoc },
                 { nom_parametro: 'Nro_Documento', valor_parametro: Doc_Cliente },
                 { nom_parametro: 'Cliente', valor_parametro: Nom_Cliente },
@@ -709,7 +709,7 @@ function DataCliente(req,res,callback){
                 { nom_parametro: 'RUC_Natural', valor_parametro: '' },
                 { nom_parametro: 'Foto', tipo_parametro: sql.VarBinary,valor_parametro: null },
                 { nom_parametro: 'Firma', tipo_parametro: sql.VarBinary,valor_parametro: null },
-                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'TKB' },
+                { nom_parametro: 'Cod_TipoComprobante', valor_parametro: 'TKB',tipo_parametro:sql.VarChar,tipo:"output" },
                 { nom_parametro: 'Cod_Nacionalidad', valor_parametro: '156' },
                 { nom_parametro: 'Fecha_Nacimiento', valor_parametro: null },
                 { nom_parametro: 'Cod_Sexo', valor_parametro: '01' },
@@ -731,7 +731,7 @@ function DataCliente(req,res,callback){
                 if (dataCliente.err)
                     return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
                 
-                Id_Cliente = dataCliente.result[0].valor 
+                Id_Cliente = dataCliente.result['Id_ClienteProveedor']//dataCliente.result[0].valor 
                 callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)
             })
         /*}

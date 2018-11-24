@@ -243,17 +243,10 @@ table.dataTable.no-footer {
     overflow:hidden;
 }
 
-.name-bussiness:hover{
-    width: auto;
-    white-space: initial;
-    overflow:visible;
-    cursor: pointer;
-}
-
 .panel-group .card.expanded {
     margin: 0px 0px;
 }
-
+ 
 @media (max-width: 767px) {
     .table-responsive .dropdown-menu {
         position: static !important;

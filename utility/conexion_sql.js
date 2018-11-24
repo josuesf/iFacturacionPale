@@ -1,4 +1,4 @@
-function dbConfig(){
+function dbConfig(){ 
     return global.cadenaConexion
     /*return config = {
         

@@ -171,8 +171,8 @@ router.post('/cambiar_password_nueva',function(req,res){
 /* function send email */
 
 router.post('/send_email_report',function(req,res){
-     var input = req.body
-     enviarCorreoGeneral(input.email,input.subject,input.arregloAttachment,function(flag,result){
+     var input = req.body 
+     enviarCorreoGeneral(input.email,input.subject,input.message,input.arregloAttachment,function(flag,result){
         if(flag){ 
             return res.json({respuesta:"ok"})
         }else{

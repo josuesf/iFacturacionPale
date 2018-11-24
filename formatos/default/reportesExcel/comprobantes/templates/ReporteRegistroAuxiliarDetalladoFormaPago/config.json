@@ -1,0 +1,20 @@
+{
+    "shortid": "SJ17OcgnQ",
+    "name": "ReporteRegistroAuxiliarDetalladoFormaPago",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542648648874
+    },
+    "_id": "Y3zhi9FNeSRq49lf",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

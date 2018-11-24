@@ -1,0 +1,59 @@
+<style>
+    {#asset stylesComprobantes.css @encoding=utf8}
+</style>
+<title>prueba</title>
+<table> 
+    
+    <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 20px;text-align:center">PLANILLA DIARIA DE VENTAS</td>
+        </tr>  
+    {{else}}
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 20px;text-align:center">PLANILLA DIARIA DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+     
+    <tr class="row">
+        <td></td>
+    </tr>   
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+     
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">Documento</td>
+        <td class="headerTable" style="width:auto;">Fecha</td>
+        <td class="headerTable" style="width:auto;">Producto</td>
+        <td class="headerTable" style="width:auto;">Cliente</td>
+        <td class="headerTable" style="width:auto;text-align:right">Cantidad</td>
+        <td class="headerTable" style="width:auto;text-align:right">Precio</td>
+        <td class="headerTable" style="width:auto;text-align:right">Total</td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

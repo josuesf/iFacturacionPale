@@ -122,15 +122,16 @@ function AceptarComprobante(CodLibro){
         }
         fetch(URL+'/comprobantes_pago_api/get_comprobante_by_cliente', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             if (res.respuesta == 'ok') {
-                if(res.data.length>0){
+                if(res.data.comprobante.length>0){
                     global.objComprobantePagoDetalle = {
                         Cod_TipoComprobante : Cod_TipoComprobante,
                         Serie : Serie,
                         Numero : Numero
                     }
                     global.objComprobantePago = res.data.comprobante[0]
+                    $('#modal-otros-procesos').modal('hide')  
                 }else{
                     toastr.error('No existe Comprobante','Error',{timeOut: 5000})
                     $("#NumeroModalBusquedaComprobante").val("")
@@ -139,6 +140,7 @@ function AceptarComprobante(CodLibro){
             }
         }).catch(function (e) {
             console.log(e);
+            $('#modal-otros-procesos').modal('hide')  
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 
@@ -163,9 +165,9 @@ function AceptarComprobante(CodLibro){
         }
         fetch(URL+'/comprobantes_pago_api/get_comprobante_by_tipo', parametros)
         .then(req => req.json())
-        .then(res => {
+        .then(res => { 
             if (res.respuesta == 'ok') {
-                if(res.data.length>0){
+                if(res.data.comprobante.length>0){
                     global.objComprobantePagoDetalle = {
                         Cod_TipoComprobante : Cod_TipoComprobante,
                         Serie : Serie,
@@ -173,6 +175,7 @@ function AceptarComprobante(CodLibro){
                         DocCliente : $("#txtBusquedaModalComprobantePago").val()                        
                     }
                     global.objComprobantePago = res.data.comprobante[0]
+                    $('#modal-otros-procesos').modal('hide')  
                 }else{
                     toastr.error('No existe Comprobante','Error',{timeOut: 5000})
                     $("#NumeroModalBusquedaComprobante").val("")
@@ -180,7 +183,7 @@ function AceptarComprobante(CodLibro){
                 }
             }
         }).catch(function (e) {
-            console.log(e);
+            console.log(e);  
             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
         });
 

@@ -15,8 +15,8 @@ router.post('/guardar_compra_venta_me', function (req, res) {
         {nom_parametro:'Cliente',valor_parametro:input.Cliente},
         {nom_parametro:'Des_Movimiento',valor_parametro:input.Des_Movimiento},
         {nom_parametro:'Cod_TipoComprobante',valor_parametro:input.Cod_TipoComprobante},
-        {nom_parametro:'Serie',valor_parametro:input.Serie},
-        {nom_parametro:'Numero',valor_parametro:input.Numero,tipo_parametro:sql.VarChar},
+        {nom_parametro:'Serie',valor_parametro:input.Serie,tipo_parametro:sql.VarChar,tipo:"output"},
+        {nom_parametro:'Numero',valor_parametro:input.Numero,tipo_parametro:sql.VarChar,tipo:"output"},
         {nom_parametro:'Fecha',valor_parametro:input.Fecha},
         {nom_parametro:'Tipo_Cambio',valor_parametro:input.Tipo_Cambio},
         {nom_parametro:'Ingreso',valor_parametro:input.Ingreso},
@@ -37,7 +37,7 @@ router.post('/guardar_compra_venta_me', function (req, res) {
     
     EXEC_SQL_OUTPUT('USP_CAJ_CAJA_MOVIMIENTOS_G', parametros , function (dataMov) {
         if (dataMov.error) return res.json({respuesta:"error",error:dataMov.error}) 
-        return res.json({respuesta:"ok",data:{movimiento:{ id_Movimiento:dataMov.result[0].valor }}}) 
+        return res.json({respuesta:"ok",data:{movimiento:{ id_Movimiento: dataMov.result['id_Movimiento']}}}) 
     })
 });
 

@@ -1,0 +1,20 @@
+{
+    "shortid": "Sy65MkqpQ",
+    "name": "ReporteResumenCaja",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "modificationDate": {
+        "$$date": 1542751488547
+    },
+    "_id": "Xc5VAY4IGJkJ5ChV",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rJaPEy9TX"
+    }
+}

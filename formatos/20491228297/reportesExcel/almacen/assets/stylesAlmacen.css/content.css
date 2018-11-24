@@ -1,0 +1,101 @@
+ 
+.row{
+    height:20px;
+    border: 2px solid;
+}
+.row_border{
+    border: 2px black solid;
+}
+.headerPage{
+    font-size: 17px;
+    font-weight: bold;
+    text-align: left;
+    padding: 4px;  
+}
+.headerPage_left{
+    font-size: 15px;
+    font-weight: bold;
+    text-align:left;
+    padding: 4px;  
+}
+.headerPage_right{
+    font-size: 15px;
+    font-weight: bold;
+    text-align:right;
+    padding: 4px;  
+}
+.tituloCenter{
+   font-weight: bold;
+   font-size: 15px;
+   text-align:center;
+}
+.headerTable{
+    width:auto;
+    background: rgb(181, 181, 181);
+    font-size: 15px;
+    font-weight: bold;
+    border: 2px solid;
+    text-align: center; 
+}
+.detailsTable{
+    border: 1px solid;
+    background: rgb(246, 248, 248);
+    text-align: center; 
+}
+.tablaDetalleWarning{
+    border: 1px solid;
+    background: #f8beb9;
+    text-align: center;
+    padding: 4px;  
+}
+.tablaDetalleheader{
+    border: 2px solid;
+    background: rgb(181, 181, 181);
+    padding: 4px;  
+}
+.tablaDetalleSusses{
+    border: 1px solid;
+    background: #dfffbd;
+    text-align: center;
+    padding: 4px;  
+}
+.tablaDetalleAlert{
+    border: 1px solid;
+    background: #fdffbd;
+    text-align: center;
+    padding: 4px;  
+}
+.tablaDetallePrimary{
+    border: 1px solid;
+    background: #e0eaff;
+    text-align: center;
+    padding: 4px;  
+}
+.tituloCabeceraTabla{
+   
+    font-size: 15px;
+    text-align:left;
+    padding: 4px;
+}
+.textoNegrita{
+    font-weight: bold;
+    font-size: 15px;
+    color: black;
+}
+.textoWarning{
+    font-size: 15px;
+    color: #ee6b60;
+}
+.textoSusses{
+    font-size: 15px;
+    color: #34a853;
+}
+.textoAlert{
+    font-size: 15px;
+    color: #fbbc05;
+}
+.textoPrimary{
+    font-size: 15px;
+    color: #2196f3;
+}
+ 

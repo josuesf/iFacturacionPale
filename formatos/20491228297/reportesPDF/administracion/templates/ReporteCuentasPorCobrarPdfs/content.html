@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+         {#asset stylesExcel.css @encoding=utf8}
+    </style>
+    <script> </script>
+</head>
+
+<body>
+        <table> 
+             <tr class="row">
+                    <td colspan="4" class="headerPage">{{:EMPRESA}}</td> 
+                    <td colspan="4" class="headerPage_right">{{:FECHA_SIS}}</td>
+            </tr> 
+            <tr class="row">
+                    <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+                    <td colspan="4" class="headerPage_right">Pag 1.</td>
+            </tr>  
+            <tr class="row">
+                    <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+                    <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+            </tr> 
+             <tr class="row">
+                    <td colspan="4"></td> 
+                    <td colspan="4"></td>
+            </tr> 
+             <tr class="row">
+                    <td colspan="4"></td> 
+                    <td colspan="4"></td>
+            </tr> 
+            {{if COD_LIBRO == "08"}} 
+                <tr class="row"> 
+                    <td colspan="8" class="tituloCenter">REPORTE DE CUENTAS POR PAGAR</td>
+                </tr> 
+                
+            {{else}}
+                <tr class="row"> 
+                    <td colspan="8" class="tituloCenter">REPORTE DE CUENTAS POR COBRAR</td>
+                </tr>  
+            {{/if}}  
+            <tr class="row">
+                <td></td>
+            </tr>  
+            <tr class="row">
+                <td colspan="8">{{:FILTRO}}</td>
+            </tr>  
+            <tr class="row">
+                <td></td>
+            </tr>  
+            {{:~recorrerArreglo(DETALLES)}} 
+             
+        </table>
+</body>
+</html>

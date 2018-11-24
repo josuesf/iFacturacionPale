@@ -1,0 +1,97 @@
+<style>
+    {#asset stylesComprobantes.css @encoding=utf8}
+</style>
+<table style="table-layout: fixed;"> 
+
+      <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+    
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="15" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE VENTAS</td>
+        </tr>  
+    {{else}}
+        <tr class="row"> 
+            <td colspan="15" style="font-weight: bold;font-size: 20px;text-align:center">REGISTRO DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    
+    <tr class="row">
+        <td colspan="16">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr> 
+    <tr class="row">
+        <td></td>
+    </tr> 
+    
+    <tr style="border: 2px solid">
+        <td class="headerTable" style="width:auto;height: 20px;font-weight: bold;" colspan="3" rowspan="2"></td> 
+        <td class="headerTable" style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="4" rowspan="2">Comprobante de Pago o Documento</td> 
+        <td class="headerTable" style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="3">Información del Cliente/Proveedor</td> 
+        <td class="headerTable" colspan="9"></td>
+        <td class="headerTable" colspan="2"></td>
+        <td class="headerTable" colspan="1"></td>
+        <td class="headerTable" colspan="4"></td>
+    </tr>
+    
+    <tr>
+        <td  class="headerTable" style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center" colspan="2">Doc. Identidad</td> 
+        <td  class="headerTable" style="width:auto;height: 20px;font-weight: bold;font-size: 13px;text-align:center">Apellidos y Nombres, Denominación o Razón Social</td> 
+        <td class="headerTable" colspan="9"></td> 
+        <td class="headerTable" colspan="2">Constancia  de  Déposito de Deftracción</td>  
+        <td class="headerTable" colspan="1"></td>
+        <td class="headerTable" colspan="4">Referencia del Comprobante de Pago o Documento Original que se Modifica</td>
+    </tr>
+    <tr>     
+        <td  class="headerTable" style="width:auto;">N°</td> 
+        <td  class="headerTable" style="width:auto;">Fecha de Emision</td> 
+        <td  class="headerTable" style="width:auto;">Fecha de Cancelacion</td> 
+        <td  class="headerTable" style="width:auto;">Ticketera</td> 
+        <td  class="headerTable" style="width:auto;">Tipo</td> 
+        <td  class="headerTable" style="width:auto;">Serie</td> 
+        <td  class="headerTable" style="width:auto;">Numero</td> 
+        <td  class="headerTable" style="width:auto;">Tipo</td> 
+        <td  class="headerTable" style="width:auto;">Numero</td>
+        <td  class="headerTable" style="width:auto;">Apellidos y Nombres, Denominación o Razón Social</td> 
+        <td  class="headerTable" style="width:auto;">Gravadas</td>
+        <td  class="headerTable" style="width:auto;">Exoneradas</td>
+        <td  class="headerTable" style="width:auto;">Inafectas</td>
+        <td  class="headerTable" style="width:auto;">Gratuitas</td>
+        <td  class="headerTable" style="width:auto;">ISC</td>
+        <td  class="headerTable" style="width:auto;">Otros tributos y cargos</td>
+        <td  class="headerTable" style="width:auto;">Percepcion</td>
+        <td  class="headerTable" style="width:auto;">IGV</td>
+        <td  class="headerTable" style="width:auto;">Total</td>
+        <td  class="headerTable" style="width:auto;">Numero</td>
+        <td  class="headerTable" style="width:auto;">Fecha</td>
+        <td  class="headerTable" style="width:auto;">Tipo Cambio</td>
+        <td  class="headerTable" style="width:auto;">Fecha</td>
+        <td  class="headerTable" style="width:auto;">Tipo</td>
+        <td  class="headerTable" style="width:auto;">Serie</td>
+        <td  class="headerTable" style="width:auto;">Numero</td>
+    </tr> 
+    {{:~recorrerArreglo(DETALLES)}}  
+</table>

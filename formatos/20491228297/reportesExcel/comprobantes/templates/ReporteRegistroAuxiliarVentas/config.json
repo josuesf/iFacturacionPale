@@ -1,0 +1,20 @@
+{
+    "shortid": "B1hl4TZA7",
+    "name": "ReporteRegistroAuxiliarVentas",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542735971068
+    },
+    "_id": "4TNy7k4MsUpSTkIw",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

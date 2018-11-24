@@ -1,0 +1,20 @@
+{
+    "shortid": "BkFYtUX07",
+    "name": "ReporteKardex",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542897538481
+    },
+    "_id": "nNwduyZeJQidZaux",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SygoC-Q0X"
+    }
+}

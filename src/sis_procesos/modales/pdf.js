@@ -33,15 +33,15 @@ function CargarPDFModal(titulo,subtitulo,subtitulo_extra,callback){
         </div>`
 
 
-    var modal_proceso = document.getElementById('modal-alerta');
+    var modal_proceso = document.getElementById('modal-pdf');
     empty(modal_proceso).appendChild(el); 
 
-    if($('#modal-alerta').hasClass('in')){
+    if($('#modal-pdf').hasClass('in')){
         callback(true)
     }else{
 
-        $('#modal-alerta').modal()
-        $("#modal-alerta").off('shown.bs.modal').on("shown.bs.modal", function () {
+        $('#modal-pdf').modal()
+        $("#modal-pdf").off('shown.bs.modal').on("shown.bs.modal", function () {
             callback(true)
         });
     }

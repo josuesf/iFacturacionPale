@@ -2,10 +2,8 @@
 var empty = require('empty-element'); 
 import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
 import { CargarPDFModal } from '../modales/pdf'
-import { ReporteGeneralEmail,ReporteAuxiliarDetalladoEmail,ReporteAuxiliarEmail,ReporteAuxiliarDetalladoFormaPagoEmail } from '../mod_reportes/comprobante_pago/functions'
 import { ConvertirCadena } from '../../../utility/tools' 
-import { dirname } from 'path';
-var dockModal = null 
+import { dirname } from 'path'; 
 
 function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var el = yo`
@@ -13,6 +11,10 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
             <div class="content-header" id="sectionModals">
  
                 <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
+                     
+                </div>
+
+                <div class="modal fade" id="modal-pdf" style="z-index: 999999;">
                      
                 </div>
 
@@ -38,7 +40,7 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                         <div class="card">
                             <div  class="card-head">
                                 <ul class="nav nav-tabs" id="tabs">
-                                    <li class="active"><a href="#tab_1" id="id_1" data-toggle="tab" aria-expanded="true" onclick=${()=>refrescar_movimientos_caja()}>Movimientos caja</a></li>
+                                    <li class="active"><a href="#tab_1" id="id_1" data-toggle="tab" aria-expanded="true">Movimientos caja</a></li>
                                 </ul>
                             </div>
                             <div class="tab-content" id="tabs_contents" style="padding: 10px;">
@@ -49,6 +51,12 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
                                         <div class="alert alert-callout alert-danger" role="alert">
                                             <strong><h3>EL TURNO ESTA CERRADO</h3></strong>
                                         </div>`:yo``}
+
+                                        <div class="card-head">
+                                            <div class="tools">
+                                                <a class="btn ink-reaction btn-raised btn-primary" onclick=${()=>refrescar_movimientos_caja()}><i class="fa fa-refresh"></i> Actualizar</a>
+                                            </div>
+                                        </div>
                                         
                                         <!-- /.box-header -->
                                         <div class="box-body">
@@ -156,198 +164,10 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
             "sSearch": "Buscar:"
         }
     });
-
-    $("#btnSendEmail").tooltip()
-
-    $("#btnSendEmail").click(function(){
-        AbrirDialogoEnviarMensaje("ReporteComprobanteCompra_0",false) 
-    })
-
-    $("#btnUploadReport").click(function(){
-        console.log("click")
-        GenerarReporteEmail("ReporteComprobanteCompra_0",false)
-    })
+  
     callback(true)
 }
-
-function LlenarReportesCorreo(idTab,tituloReporte){
-    var el = yo`<ul class="list divider-full-bleed" id="listReportes">
-            ${global.variablesReporteComprobante[idTab].dataBase64.map(e => 
-                     yo`<li class="tile">
-                            <a class="tile-content ink-reaction">
-                                <div class="tile-icon">
-                                <i class="fa fa-file-pdf-o"></i>
-                                </div>
-                                <div class="tile-text">
-                                    ${tituloReporte}
-                                    <div class="progress progress-hairline">
-                                        <div class="progress-bar progress-bar-primary-dark" style="width:100%"></div>
-                                    </div>
-                                </div>
-                            </a>
-                            <a class="btn btn-flat ink-reaction">
-                                <i class="md md-delete"></i>
-                            </a>
-                        </li>`
-            )}
-            </ul>`
-    
-    $("#listReportes").append(el) 
-}
-
-function GenerarReporteEmail(idTab,flag_preview){
-    run_waitMe($('#dialogo_docker'), 1, "ios","Subiendo reporte para su envio....");
-    switch($("#Cod_Opcion_"+idTab).val()){
-        case '01':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'08',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
-                    if(flag){
-                        ReporteGeneralEmail("ReporteComprobanteVenta_0",'14',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
-                            if(flag){
-                                LlenarReportesCorreo()
-                                $('#dialogo_docker').waitMe('hide');
-                            }else{
-                                $('#dialogo_docker').waitMe('hide');
-                            }
-                        })
-                    }else{
-                        $('#dialogo_docker').waitMe('hide');
-                    }
-                })
-            }else{ 
-                ReporteGeneralEmail(idTab,'08',"ReportePlanillaDiaria",null,flag_preview,function(flag,result){
-                    console.log("ventaaaaaaaa",flag)
-                    if(flag){
-                        LlenarReportesCorreo(idTab,$("#Cod_Opcion_"+idTab+" option:selected").text())
-                        $('#dialogo_docker').waitMe('hide');
-                    }else{
-                        $('#dialogo_docker').waitMe('hide');
-                    }
-                })
-            }
-            break
-        case '02':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXTotalCliente","Id_Cliente",flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '03':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXTotalDocumento",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '04':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXTotalProducto","Cod_Producto",flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '05':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXCliente",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '06':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXDocumento",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '07':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXProducto",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '08':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteGeneralEmail(idTab,'14',"ReporteXAnulados",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '09':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteAuxiliarEmail(idTab,'14',"ReporteRegistroAuxiliar",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '10':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteAuxiliarDetalladoEmail(idTab,'14',"ReporteRegistroAuxiliarDetallado",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break
-        case '11':
-            if(idTab=="ReporteComprobanteCompra_0"){
-                ReporteAuxiliarDetalladoFormaPagoEmail(idTab,'14',"ReporteRegistroAuxiliarDetalladoFormaPago",null,flag_preview,function(flag,result){
-                    console.log(flag)
-                })
-            }else{
-
-            }
-            break 
-        default:
-            GenerarReporteEmail("ReporteComprobanteVenta_0",flag_preview) 
-            //console.log("defecto")
-            break
-    }
-}
-
-function AbrirDialogoEnviarMensaje(){ 
-    $("#dialogo_docker").dockmodal({
-        id: 1,
-        initialState: "docked",
-        title: "Mensaje Nuevo",
-        buttons: [
-            {
-                html: "<i class='md md-send'></i> Enviar",
-                buttonClass: "btn btn-sm btn-primary ink-reaction",
-                click: function (e, dialog) { 
-                    dialog.dockmodal("close");
-                }
-            }
-        ]
-    }); 
-}
-
-function CargarReportesAlCorreo(){
-    //GenerarReporte('ReporteComprobanteVenta_0','14',false)
-}
-
-function EnviarCorreoReporte(){
-    //GenerarReporte('ReporteComprobanteVenta_0','14',false)
-}
-
+ 
 function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){   
     CargarPDFModal(titulo,subtitulo,subtitulo_extra,function(flag){
         if(flag){
@@ -362,7 +182,7 @@ function GenerarPDF(titulo,subtitulo,subtitulo_extra,arrayData){
             }).catch(function (e) { 
                 console.log(e)
                 toastr.error('Hubo un error al generar el documento. Intentelo mas tarde','Error',{timeOut: 5000})
-                $('#modal-alerta').modal('hide') 
+                $('#modal-pdf').modal('hide') 
             });
         }
     })
@@ -417,6 +237,11 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                     <div class="modal fade" id="modal-alerta" style="z-index: 999999;">
                      
                     </div>
+                    
+                    <div class="modal fade" id="modal-pdf" style="z-index: 999999;">
+                     
+                    </div>
+
 
                     <div class="modal modal-default fade" id="modal-justificacion" style="display: none;">
                         
@@ -439,6 +264,11 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
                     <div class="alert alert-callout alert-danger" role="alert">
                         <strong><h3>EL TURNO ESTA CERRADO</h3></strong>
                     </div>`:yo``}
+                    <div class="card-head">
+                        <div class="tools">
+                            <a class="btn ink-reaction btn-raised btn-primary" onclick=${()=>refrescar_movimientos_caja()}><i class="fa fa-refresh"></i> Actualizar</a>
+                        </div>
+                    </div>
                     <!-- /.box-header -->
                     <div class="box-body">
                         <div class="table-responsive">
@@ -543,13 +373,7 @@ function VerTabCaja(Flag_Cerrado,movimientos,saldos) {
             "sSearch": "Buscar:"
         }
     });
-    
-    $("#btnSendEmail").tooltip()
-
-    $("#btnSendEmail").click(function(){
-        AbrirDialogoEnviarMensaje() 
-    })
-
+ 
 }
 
 function AbrirModalManguera(movimiento){

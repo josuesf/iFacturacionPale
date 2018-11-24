@@ -1,0 +1,17 @@
+{
+    "shortid": "rk1L8jg07",
+    "name": "ReporteXTotalProducto",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748510062
+    },
+    "_id": "KE3gz9cvo4HtnnK6",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

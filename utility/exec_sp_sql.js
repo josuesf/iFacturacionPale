@@ -2,18 +2,15 @@ var sql = require("mssql");
 var md5 = require("md5")
 
 var { dbConfig, dbMaster } = require('./conexion_sql')
-
-
-//var dbConfig = require('./conexion_sql').dbConfig()
-//var dbMaster = require('./conexion_sql').dbMaster()
-
-//Procedimientos Almacenados
+ 
+//Procedimientos Almacenados DB MASTER
 
 var Ejecutar_Procedimientos_DBMaster = function (res, procedimientos,respuesta_previa) {
     Ejecutar_SP_SQL_DBMaster(res,procedimientos,0,respuesta_previa)
 }
+
 var Ejecutar_SP_SQL_DBMaster = function (res,procedimientos, posicion,respuesta_previa) {
-    var dbConn = new sql.Connection(dbMaster());
+    var dbConn = new sql.ConnectionPool(dbMaster());
     dbConn.connect(function (err) {
         if (err) {
             console.log("Error while connecting database :- " + err);
@@ -30,10 +27,9 @@ var Ejecutar_SP_SQL_DBMaster = function (res,procedimientos, posicion,respuesta_
         request.execute(procedimientos[posicion].sp_name, function (err, result) {
             dbConn.close()
             if (err) {
-                console.log("Error while querying database :- " + err);
                 return res.json({ respuesta: 'error',detalle_error:err })
             }
-            procedimientos[posicion].data =  result[0]
+            procedimientos[posicion].data =  result.recordset//result[0]
             if(posicion+1<procedimientos.length)
                 Ejecutar_SP_SQL(res,procedimientos,posicion+1,respuesta_previa)
             else{
@@ -53,9 +49,8 @@ var Ejecutar_SP_SQL_DBMaster = function (res,procedimientos, posicion,respuesta_
     });
 }
 
-
 var EXEC_SQL_DBMaster = function (sp_name, parametros, next) {
-    var dbConn = new sql.Connection(dbMaster());
+    var dbConn = new sql.ConnectionPool(dbMaster());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -67,17 +62,19 @@ var EXEC_SQL_DBMaster = function (sp_name, parametros, next) {
         }
         request.execute(sp_name, function (err, result) {
             dbConn.close()
+            //console.log(result.recordset)
             if (err) {
                 return next({err})
             }
-            next({result:result[0]})
+            next({result:result.recordset})
+            //next({result:result[0]})
         });
 
     });
 }
 
 var EXEC_QUERY_DBMaster = function (query, parametros, next) {
-    var dbConn = new sql.Connection(dbMaster());
+    var dbConn = new sql.ConnectionPool(dbMaster());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -92,21 +89,22 @@ var EXEC_QUERY_DBMaster = function (query, parametros, next) {
             if (err) {
                 return next({err})
             }
-            next({result:result})
+            next({result:result.recordset})
+            //next({result:result})
         });
 
     });
 }
 
-
+//Procedimientos Almacenados DB EMPRESA
 var Ejecutar_Procedimientos = function (req,res, procedimientos,respuesta_previa) {
     Ejecutar_SP_SQL(req,res,procedimientos,0,respuesta_previa)
 }
+
 var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previa) { 
-    var dbConn = new sql.Connection(dbConfig());
+    var dbConn = new sql.ConnectionPool(dbConfig());
     dbConn.connect(function (err) {
-        if (err) {
-            console.log("Error while connecting database :- " + err);
+        if (err) { 
             return res.json({ respuesta: 'error' })
         }
         // creacion Request object
@@ -120,10 +118,9 @@ var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previ
         request.execute(procedimientos[posicion].sp_name, function (err, result) {
             dbConn.close()
             if (err) {
-                console.log("Error while querying database :- " + err);
                 return res.json({ respuesta: 'error',detalle_error:err })
             }
-            procedimientos[posicion].data =  result[0]
+            procedimientos[posicion].data =  result.recordset//result[0]
             if(posicion+1<procedimientos.length)
                 Ejecutar_SP_SQL(req,res,procedimientos,posicion+1,respuesta_previa)
             else{
@@ -142,8 +139,9 @@ var Ejecutar_SP_SQL = function (req,res,procedimientos, posicion,respuesta_previ
 
     });
 }
+
 var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
-    var dbConn = new sql.Connection(dbConfig());
+    var dbConn = new sql.ConnectionPool(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -156,7 +154,8 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
                 return next({err:"Ocurrio un error en el servidor comuniquese con el administrador."})
             }
             Contrasena = md5(Contrasena)
-            usuario =  result[0]
+            //usuario =  result
+            usuario = result.recordset
             if(usuario.length==0) return next({err:'Revise sus datos ingresados'})
             if(usuario.length>0 && usuario[0].Contrasena!=Contrasena) return next({err:'Revise sus datos ingresados'})
             next({Cod_Usuarios:usuario[0].Cod_Usuarios,Nick:usuario[0].Nick})
@@ -166,7 +165,7 @@ var LOGIN_SQL = function (Cod_Usuarios, Contrasena, next) {
 }
 
 var EXEC_QUERY = function (query, parametros, next) {
-    var dbConn = new sql.Connection(dbConfig());
+    var dbConn = new sql.ConnectionPool(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -181,16 +180,15 @@ var EXEC_QUERY = function (query, parametros, next) {
             if (err) {
                 return next({err})
             }
-            next({result:result})
+            next({result:result.recordset})
+            //next({result:result})
         });
 
     });
 }
 
-
-var EXEC_SQL = function (sp_name, parametros, next) {
-    //console.log(dbConfig())
-    var dbConn = new sql.Connection(dbConfig());
+var EXEC_SQL = function (sp_name, parametros, next) { 
+    var dbConn = new sql.ConnectionPool(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -205,17 +203,18 @@ var EXEC_SQL = function (sp_name, parametros, next) {
             if (err) {
                 return next({err})
             } 
-            next({result: result[0]})
+            console.log("EXEC SQL",result)
+            next({result:result.recordset})
+            //next({result: result[0]})
         });
 
     });
 }
 
-
-var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
-    var arrayParamOutPut = []
-    var arrayResulOutPut = []
-    var dbConn = new sql.Connection(dbConfig());
+var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) { 
+    //var arrayParamOutPut = []
+    //var arrayResulOutPut = []
+    var dbConn = new sql.ConnectionPool(dbConfig());
     dbConn.connect(function (err) {
         if (err) {
             return next({err})
@@ -225,8 +224,7 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
         for (i = 0; i < param.length; i++) {
             if(param[i].tipo){
                 request.output(param[i].nom_parametro, param[i].tipo_parametro || sql.Int, param[i].valor_parametro)
-                arrayParamOutPut.push({parametro:param[i].nom_parametro})
-                //paramOutPut = param[i].nom_parametro
+                //arrayParamOutPut.push({parametro:param[i].nom_parametro}) 
             }
             else
                 request.input(param[i].nom_parametro, param[i].tipo_parametro || sql.NVarChar, param[i].valor_parametro)
@@ -237,10 +235,13 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
             if (err) {
                 return next({err})
             } 
-            LlenarArregloOutPut(0,arrayResulOutPut,arrayParamOutPut,request,function(arrayResult){
+            console.log("aruqeooooo",result)
+            //console.log(request)
+            return next({result:result.output})
+            /*LlenarArregloOutPut(0,arrayResulOutPut,arrayParamOutPut,result.output,function(arrayResult){
                 
                 return next({result:arrayResult})
-            })
+            })*/
 
             //return next({result:request.parameters[paramOutPut].value})
         });
@@ -248,16 +249,15 @@ var EXEC_SQL_OUTPUT  = function (sp_name, parametros, next) {
     });
 }
 
-
-function LlenarArregloOutPut(i,arrayResulOutPut,arrayParamOutPut,request,callback){
+/*function LlenarArregloOutPut(i,arrayResulOutPut,arrayParamOutPut,result,callback){
     if(i<arrayParamOutPut.length){
         arrayResulOutPut.push({
-            valor:request.parameters[arrayParamOutPut[i].parametro].value
+            valor:result[arrayParamOutPut[i].parametro]//request.parameters[arrayParamOutPut[i].parametro].value
         })
-        LlenarArregloOutPut(i+1,arrayResulOutPut,arrayParamOutPut,request,callback)
+        LlenarArregloOutPut(i+1,arrayResulOutPut,arrayParamOutPut,result,callback)
     }else{
         callback(arrayResulOutPut)
     }
-}
-
+}*/
+ 
 module.exports = { Ejecutar_Procedimientos,LOGIN_SQL,EXEC_SQL,EXEC_SQL_OUTPUT, Ejecutar_Procedimientos_DBMaster, EXEC_SQL_DBMaster, EXEC_QUERY_DBMaster, EXEC_QUERY }

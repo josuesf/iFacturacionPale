@@ -8,17 +8,18 @@ import { BuscarCliente } from '../../modales'
 //var total = 0 
 //var totalMonto = 0
 //var totalRecibido = 0 
-
+var IdTabSeleccionado = null
 var cantidad_tabs = 0
 global.variablesR = {}
 
 function Ver(variables) {
     //cantidad_tabs++
     const idTabR = "R_"+cantidad_tabs
+    var IdTabSeleccionado = idTabR
     global.variablesR[idTabR]={idTab:idTabR,flag_button:false,total:0,totalMonto:0,totalRecibido:0}
     
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabR}" data-toggle="tab" aria-expanded="false" id="id_${idTabR}">Recepcion de Transferencia <a style="padding-left: 10px;"  onclick=${()=>CerrarTabR(idTabR)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class="" onclick=${()=>TabSeleccionado(idTabR)} ><a href="#tab_${idTabR}" data-toggle="tab" aria-expanded="false" id="id_${idTabR}">Recepcion de Transferencia <a style="padding-left: 10px;"  onclick=${()=>CerrarTabR(idTabR)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
@@ -114,6 +115,7 @@ function Ver(variables) {
 }
 
 function RefrescarVer(variables,idTabR) {
+    IdTabSeleccionado = idTabR
     global.variablesR[idTabR]={idTab:idTabR,flag_button:false,total:0,totalMonto:0,totalRecibido:0}
     var el = yo`
         <div class="tab-pane" id="tab_${idTabR}">
@@ -192,6 +194,9 @@ function RefrescarVer(variables,idTabR) {
     $('#tab_'+idTabR).html(el)
 }
 
+function TabSeleccionado(idTab){
+    IdTabSeleccionado = idTab 
+}
 
 function CerrarTabR(idTab){ 
     $('#tab_'+idTab).remove()
@@ -199,6 +204,7 @@ function CerrarTabR(idTab){
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
     delete global.variablesR[idTab]
+    IdTabSeleccionado = null 
 }
 
 function ActualizarMontosTotales(_total,_totalMonto,_totalRecibido,idTab){

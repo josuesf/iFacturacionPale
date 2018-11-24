@@ -96,11 +96,12 @@ function ReporteGeneralEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pre
                             })
                         }
                     }; 
-                    jsreport.renderAsync(request).then(function(res) {  
-                        var index = global.variablesReporteComprobante[idTab].dataBase64.findIndex(x=>x.path==(res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")))
-                        if (index === -1){
-                            global.variablesReporteComprobante[idTab].dataBase64.push({path:res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}) 
-                        }
+                    jsreport.renderAsync(request).then(function(res) {
+                        let TR = TipoReporte.split('_')[TipoReporte.split('_').length-1]  
+                        if(TR=='Excel')
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.xlsx',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})                          
+                        else
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.pdf',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})                          
                         callback(true,"ok")
                     }).catch(function (e) {
                         console.log(e) 
@@ -204,10 +205,11 @@ function ReporteAuxiliarEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pr
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                    var index = global.variablesReporteComprobante[idTab].dataBase64.findIndex(x=>x.path==(res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")))
-                    if (index === -1){
-                        global.variablesReporteComprobante[idTab].dataBase64.push({path:res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}) 
-                    }
+                        let TR = TipoReporte.split('_')[TipoReporte.split('_').length-1]  
+                        if(TR=='Excel')
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.xlsx',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})                          
+                        else
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.pdf',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})
                     callback(true,"ok")
                    }).catch(function (e) { 
                        console.log(e)
@@ -315,10 +317,11 @@ function ReporteAuxiliarDetalladoEmail(idTab,Cod_Libro,TipoReporte,ParametroOrde
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                        var index = global.variablesReporteComprobante[idTab].dataBase64.findIndex(x=>x.path==(res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")))
-                        if (index === -1){
-                            global.variablesReporteComprobante[idTab].dataBase64.push({path:res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}) 
-                        }
+                        let TR = TipoReporte.split('_')[TipoReporte.split('_').length-1]  
+                        if(TR=='Excel')
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.xlsx',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})                          
+                        else
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.pdf',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})
                         callback(true,"ok")
                    }).catch(function (e) { 
                         callback(true,e)
@@ -335,7 +338,7 @@ function ReporteAuxiliarDetalladoEmail(idTab,Cod_Libro,TipoReporte,ParametroOrde
        });
 }
 
-function ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_cliente,flag_preview,callback){
+function ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,callback){
    var Cod_Sucursal = arrayValidacion.includes($("#Cod_Sucursal_"+idTab).val())?null:$("#Cod_Sucursal_"+idTab).val()
    var Id_Cliente = arrayValidacion.includes($("#Cliente_"+idTab).attr("data-id"))?0:parseInt($("#Cliente_"+idTab).attr("data-id"))
    var Cod_Caja = arrayValidacion.includes($("#Cod_Caja_"+idTab).val())?null:$("#Cod_Caja_"+idTab).val()
@@ -431,10 +434,11 @@ function ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,TipoReporte,Para
                        }
                    }; 
                    jsreport.renderAsync(request).then(function(res) {  
-                        var index = global.variablesReporteComprobante[idTab].dataBase64.findIndex(x=>x.path==(res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")))
-                        if (index === -1){
-                            global.variablesReporteComprobante[idTab].dataBase64.push({path:res.toDataURI().replace("data:null","data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")}) 
-                        }
+                        let TR = TipoReporte.split('_')[TipoReporte.split('_').length-1]  
+                        if(TR=='Excel')
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.xlsx',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})                          
+                        else
+                            global.variablesReporteComprobante[idTab].dataBase64.push({filename: TipoReporte+'.pdf',content:res.toDataURI().replace("data:null;base64, ",""),encoding: 'base64',tipo:TR})
                         callback(true,"ok")
                    }).catch(function (e) { 
                        console.log(e)

@@ -24,8 +24,14 @@ import { NuevaHabitacion } from '../sis_procesos/mod_reservas/habitaciones'
 
 //Views Reportes
 import { NuevoReporteComprobante } from '../sis_procesos/mod_reportes/comprobante_pago'
+import { NuevoReporteFormasPagos } from '../sis_procesos/mod_reportes/formas_pago'
+import { NuevoReporteMovimientoAlmacen } from '../sis_procesos/mod_reportes/movimientos_almacen/salidas_entradas'
+import { NuevoReporteKardex } from '../sis_procesos/mod_reportes/movimientos_almacen/kardex'
 
-
+import { ReporteCuentas } from '../sis_procesos/mod_reportes/administracion/reporte_cuentas'
+import { ReporteMovimientosCaja } from '../sis_procesos/mod_reportes/administracion/reporte_movimientos_caja'
+import { ReporteResumenCaja } from '../sis_procesos/mod_reportes/administracion/reporte_resumen_caja'
+import { ReporteStock } from '../sis_procesos/mod_reportes/movimientos_almacen/stock'
 
 // administracion
 
@@ -60,7 +66,7 @@ function Ver(Flag_Cerrado) {
  
                 <li class="gui-folder">
                     <a>
-                        <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
+                        <div class="gui-icon"><i class="fa fa-shopping-cart"></i></div>
                         <span class="title"> Ventas</span>
                     </a> 
                     <ul>
@@ -268,6 +274,7 @@ function Ver(Flag_Cerrado) {
                             </a> 
                             <ul>
                                 <li><a href="javascript:void(0)" onclick=${() => NuevoReporteComprobante('14')}><span class="title"> Reporte de Ventas</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteFormasPagos('14')}><span class="title"> Formas de Cobro</span></a></li> 
                             </ul>
                         </li>
                         <li class="gui-folder">
@@ -276,8 +283,32 @@ function Ver(Flag_Cerrado) {
                             </a> 
                             <ul>
                                 <li><a href="javascript:void(0)" onclick=${() => NuevoReporteComprobante('08')}><span class="title"> Reporte de Compras</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteFormasPagos('08')}><span class="title"> Formas de Pago</span></a></li> 
                             </ul>
                         </li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Administracion</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => ReporteCuentas('08')}><span class="title"> Cuentas por Pagar</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => ReporteCuentas('14')}><span class="title"> Cuentas por Cobrar</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => ReporteMovimientosCaja()}><span class="title"> Movimientos de Caja</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => ReporteResumenCaja()}><span class="title"> Resumen de Caja</span></a></li> 
+                            </ul>
+                        </li>
+                        <li class="gui-folder">
+                            <a> 
+                                <span class="title">Almacen</span>
+                            </a> 
+                            <ul>
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteMovimientoAlmacen('NS')}><span class="title"> Reporte de Salidas</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteMovimientoAlmacen('NE')}><span class="title"> Reporte de Entradas</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => ReporteStock()}><span class="title"> Reporte de Stock</span></a></li> 
+                                <li><a href="javascript:void(0)" onclick=${() => NuevoReporteKardex()}> <span class="title">Reporte Kardex</span></a> </li>
+                            </ul>
+                        </li>
+                       
                     </ul>        
                 </li>
             </ul>`
@@ -286,7 +317,7 @@ function Ver(Flag_Cerrado) {
  
                 <li class="gui-folder not-active">
                     <a>
-                        <div class="gui-icon"><i class="md md-shopping-cart"></i></div>
+                        <div class="gui-icon"><i class="fa fa-shopping-cart"></i></div>
                         <span class="title"> Ventas</span>
                     </a> 
                     
@@ -326,7 +357,7 @@ function Ver(Flag_Cerrado) {
             </ul>`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
-    
+ 
     $.getScript("/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js", function( data, textStatus, jqxhr ) {
     });
 
@@ -530,7 +561,6 @@ module.exports = function navegador(ctx, next) {
     .then(res => { 
         Ver(res.arqueo[0].Flag_Cerrado)
     }).catch(function (e) {
-        console.log(e);
-        //toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+        console.log(e); 
     }); 
 }

@@ -1,7 +1,6 @@
 ﻿var { LOGIN_SQL,
       EXEC_SQL_DBMaster,
-      EXEC_SQL,
-      EXEC_SQL_OUTPUT } = require('./utility/exec_sp_sql')
+      EXEC_SQL } = require('./utility/exec_sp_sql')
 
 var { UnObfuscateString, CambiarCadenaConexion } = require('./utility/tools')
 var  GETCONFIG  = require('./src/constantes_entorno/constantes')
@@ -53,10 +52,12 @@ jsreport = require('jsreport-core')(
     extensions: {
         express: { app: reportingApp, server: server },
         'fs-store': {
-          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/ventas'),//almacena templates genericos para los reportes excel ventas
-          dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/ventas'),//almacena templates genericos para los reportes excel ventas
-          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/administracion'),//almacena templates genericos para los reportes excel ventas
-          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/ventas'),//almacena templates genericos para los reportes pdf
+          dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/almacen'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/almacen'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/formas_pago'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/formas_pago'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/comprobantes'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/comprobantes'),//almacena templates genericos para los reportes pdf
           //dataDirectory: require('path').join(__dirname, 'formatos/default/recibos_tickets'),//almacena templates genericos de recibos y tickets
           //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
           //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/reportes'), // almacena templates para otro tipo de reportes que no sean comprobantes o tickets de una determinada empresa

@@ -1,0 +1,17 @@
+{
+    "shortid": "Bk4DysxCQ",
+    "name": "ReporteRegistroAuxiliar",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542660279961
+    },
+    "_id": "GEAaS5x4H4Zv6IMN",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

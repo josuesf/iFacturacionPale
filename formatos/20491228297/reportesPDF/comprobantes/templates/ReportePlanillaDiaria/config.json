@@ -1,0 +1,17 @@
+{
+    "shortid": "S1COhAOpQ",
+    "name": "ReportePlanillaDiaria",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748171713
+    },
+    "_id": "KRkOtsi2KNvK6hyK",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

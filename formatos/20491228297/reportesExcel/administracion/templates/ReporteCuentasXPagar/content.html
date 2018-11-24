@@ -1,0 +1,41 @@
+<style>
+    {#asset stylesExcel.css @encoding=utf8}
+</style>
+<title>Reporte de cuentas por pagar</title>
+
+<table> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 17px;text-align:left">{{:EMPRESA}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:leftr">{{:FECHA_SIS}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">Direccion: {{:DIRECCION}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left">Pag 1.</td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left">Ruc: {{:RUC}}</td> 
+            <td colspan="3" style="font-size: 15px;text-align:left">Usuario </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4" style="font-weight: bold;font-size: 15px;text-align:left"></td> 
+            <td colspan="3" style="font-size: 15px;text-align:left"></td>
+    </tr> 
+        <tr class="row"> 
+            <td colspan="7" style="font-weight: bold;font-size: 15px;text-align:center">REPORTE DE CUENTAS POR PAGAR</td>
+        </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

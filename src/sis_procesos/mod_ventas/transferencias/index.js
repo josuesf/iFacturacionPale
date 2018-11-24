@@ -5,13 +5,13 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja' 
 
 var cantidad_tabs = 0
-
+var IdTabSeleccionado = null
 function Ver(_escritura, variables,fecha_actual,caja_actual) {
     cantidad_tabs++
     const idTabT = "T_"+cantidad_tabs
-
+    IdTabSeleccionado = idTabT
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabT}" data-toggle="tab" aria-expanded="false" id="id_${idTabT}">Transferencias entre cajas <a style="padding-left: 10px;"  onclick=${()=>CerrarTabT(idTabT)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class="" onclick=${()=>TabSeleccionado(idTabT)}><a href="#tab_${idTabT}" data-toggle="tab" aria-expanded="false" id="id_${idTabT}">Transferencias entre cajas <a style="padding-left: 10px;"  onclick=${()=>CerrarTabT(idTabT)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
 
     var el = yo`
@@ -166,7 +166,7 @@ function Ver(_escritura, variables,fecha_actual,caja_actual) {
 }
 
 function RefrescarVer(_escritura, variables,fecha_actual,caja_actual,idTabT) {
-    
+    IdTabSeleccionado = idTabT
     var el = yo` 
             <div class="panel">
                 <div class="panel-body"  id="modal_form_${idTabT}">
@@ -312,11 +312,16 @@ function RefrescarVer(_escritura, variables,fecha_actual,caja_actual,idTabT) {
     $('#Cajero_'+idTabT).text($('p#nick').text())
 }
 
+function TabSeleccionado(idTab){
+    IdTabSeleccionado = idTab 
+}
+
 function CerrarTabT(idTab){ 
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
+    IdTabSeleccionado = null
 }
 
 

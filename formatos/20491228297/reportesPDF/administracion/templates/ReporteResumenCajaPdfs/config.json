@@ -1,0 +1,17 @@
+{
+    "shortid": "ryeN-Xcp7",
+    "name": "ReporteResumenCajaPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542752167721
+    },
+    "_id": "BChrdkaRL6y0QY0E",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rJaPEy9TX"
+    }
+}

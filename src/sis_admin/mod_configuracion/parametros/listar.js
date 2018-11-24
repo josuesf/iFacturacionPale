@@ -104,7 +104,7 @@ function Ver(parametros, paginas,pagina_actual, _escritura,tamanio_pagina) {
                                 <td>${u.Tabla}</td>
                                 <td>${u.Des_Tabla}</td> 
                                 <td>  
-                                    <i class=${u.Flag_Acceso?"fa fa-check text-success":"md md-block text-danger"}></i>
+                                    <i class=${u.Flag_Acceso?"fa fa-check text-success":"fa fa-ban text-danger"}></i>
                                  </td>
                                 <td>
                                     ${_escritura ? yo`<button class="btn btn-xs btn-success" onclick="${()=>NuevoParametro(_escritura, u)}"><i class="fa fa-edit"></i></button>` : yo``} 

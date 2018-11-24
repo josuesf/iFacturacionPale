@@ -1,0 +1,20 @@
+{
+    "shortid": "SJQawuJ2Q",
+    "name": "ReporteXProducto",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542648881850
+    },
+    "_id": "94Gkj2WYThC3Q0nB",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

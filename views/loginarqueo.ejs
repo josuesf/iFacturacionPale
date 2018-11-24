@@ -126,12 +126,12 @@
                             
                             <% if(typeof dataCierre != 'undefined') { %>
                                 <tbody>
-                                    <% dataCierre.forEach(function(e){ %>
+                                    <% dataCierre.forEach(function(e,index){ %>
                                         <% if(e.Monto!='OTROS'){ %>
                                             <tr>
-                                                <td class="hidden"><input type="text"  value="<%=e.Cod_Moneda%>" class="form-control dirty" name="Cod_Moneda[]"></td>
-                                                <td><input type="text"  value="<%=e.Nom_Moneda%>" class="form-control dirty" disabled></td>
-                                                <td><input type="number" value="<%=e.Monto%>" class="form-control dirty" name="Monto_Moneda[]"></td>
+                                                <td class="hidden"><input type="text"  value="<%=e.Cod_Moneda?e.Cod_Moneda:e.id_ArqueoFisico%>" class="form-control dirty" name="Cod_Moneda[]"></td>
+                                                <td><input type="text"  value="<%=e.Nom_Moneda?e.Nom_Moneda:e.Cod_Caja%>" class="form-control dirty" disabled></td>
+                                                <td><input type="number" value="<%=e.Monto?e.Monto:e.Cod_Turno%>" class="form-control dirty <%=e.Monto?'':'hidden'%>" name="Monto_Moneda[]"></td>
                                             </tr>
                                         <% } %>
                                     <% }) %>
@@ -166,7 +166,7 @@
     </div>
 
     <!-- BEGIN JAVASCRIPT -->
-    <script src="/assets/js/libs/jquery/jquery-1.9.1.js"></script>  
+    <script src="/assets/js/libs/jquery/jquery-1.9.1.min.js"></script>  
     <script src="/assets/js/libs/bootstrap/bootstrap.min.js"></script>
     <script src="/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js"></script> 
     <script>

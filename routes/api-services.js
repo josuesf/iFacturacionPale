@@ -44,8 +44,7 @@ router.post('/arquear_caja', function (req, res) {
     
 }); 
 
-router.post('/venta_simple', function (req, res) { 
-   console.log("v",req.body)
+router.post('/venta_simple', function (req, res) {  
     TraerConexion(req,res,function(flag){
         if(flag)
             VentaSimple(req,res)
@@ -370,7 +369,7 @@ function VentaSimple(req,res){
                                 { nom_parametro: 'Cod_Turno', valor_parametro: Cod_Turno},
                                 { nom_parametro: 'Cod_TipoOperacion', valor_parametro: Cod_TipoOperacion},
                                 { nom_parametro: 'Cod_TipoComprobante', valor_parametro: Cod_TipoComprobante},
-                                { nom_parametro: 'Serie', valor_parametro: Serie},
+                                { nom_parametro: 'Serie', valor_parametro: Serie,tipo_parametro:sql.VarChar,tipo:"output"},
                                 { nom_parametro: 'Numero', valor_parametro: Numero,tipo_parametro:sql.VarChar,tipo:"output"},
                                 { nom_parametro: 'Id_Cliente', valor_parametro: Id_Cliente},
                                 { nom_parametro: 'Cod_TipoDoc', valor_parametro: Cod_TipoDoc},
@@ -417,10 +416,10 @@ function VentaSimple(req,res){
                                     console.log(dataComprobante.err)
                                     return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                                 } 
-                                DataDetalles(0,input,dataComprobante.result[0].valor,function(flag){
+                                DataDetalles(0,input,dataComprobante.result['id_ComprobantePago'],function(flag){
                                     if(flag){
                                         const parametrosFormaPago = [
-                                            {nom_parametro:'id_ComprobantePago',valor_parametro:dataComprobante.result[0].valor},
+                                            {nom_parametro:'id_ComprobantePago',valor_parametro:dataComprobante.result['id_ComprobantePago']},
                                             {nom_parametro:'Item',valor_parametro:1},
                                             {nom_parametro:'Des_FormaPago',valor_parametro:input.Des_FormaPago},
                                             {nom_parametro:'Cod_TipoFormaPago',valor_parametro:input.Cod_FormaPago},
@@ -442,7 +441,7 @@ function VentaSimple(req,res){
                                                 console.log(dataFormaPago.err)
                                                 return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
                                             } else{
-                                                return res.json({respuesta:"ok",numero:dataComprobante.result[1].valor,serie:Serie,id_comprobante:dataComprobante.result[0].valor})
+                                                return res.json({respuesta:"ok",numero:dataComprobante.result['Numero'],serie:Serie,id_comprobante:dataComprobante.result['id_ComprobantePago']})
                                             }
                                         })
 
@@ -559,7 +558,6 @@ function DataDetalles(i,input,idComprobante,callback){
     
 }
 
-
 function DataCliente(input,callback){
     var Id_Cliente = input.Id_Cliente
     var Cod_TipoDoc = input.Cod_TipoDoc
@@ -576,7 +574,7 @@ function DataCliente(input,callback){
         callback(Id_Cliente,Cod_TipoDoc,Doc_Cliente,Nom_Cliente,Direccion_Cliente)*/
     //}else{
         var parametrosCliente = [
-            { nom_parametro: 'Id_ClienteProveedor',valor_parametro: -1, tipo:"output"},
+            { nom_parametro: 'Id_ClienteProveedor',valor_parametro: Id_Cliente?Id_Cliente:-1, tipo:"output"},
             { nom_parametro: 'Cod_TipoDocumento', valor_parametro: input.Cod_TipoDoc },
             { nom_parametro: 'Nro_Documento', valor_parametro: input.Doc_Cliente },
             { nom_parametro: 'Cliente', valor_parametro: input.Nom_Cliente },
@@ -612,7 +610,7 @@ function DataCliente(input,callback){
             if (dataCliente.err)
                 return res.json({respuesta:"error",detalle_error:'No se pudo registrar el cliente correctamente'})  
             
-            Id_Cliente = dataCliente.result[0].valor
+            Id_Cliente = dataCliente.result['Id_ClienteProveedor']//dataCliente.result[0].valor
             Cod_TipoDoc = input.Cod_TipoDoc
             Doc_Cliente = input.Doc_Cliente
             Nom_Cliente = input.Nom_Cliente
@@ -957,7 +955,6 @@ function VerificarLogin(req,res){
     })
 }
 
-
 function ArquearVerificacion(req,res){
     var Flag_Cerrado = req.body.Flag_Cerrado
     if(Flag_Cerrado=='0'){
@@ -1021,7 +1018,7 @@ function ArquearCierre(req,res){
                 if(dataArqueoFisico.err) return res.json({respuesta:"error",detalle_error:dataArqueoFisico.err}) 
                 
                     var parametros = [
-                        { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+                        { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result['id_ArqueoFisico']},//dataArqueoFisico.result[0].valor},
                         { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
                         { nom_parametro: 'Tipo', valor_parametro: "SALDO FINAL"},
                         { nom_parametro: 'Monto', valor_parametro: totalpen},
@@ -1079,7 +1076,7 @@ function ArquearApertura(req,res){
         if(dataArqueoFisico.err) return res.json({respuesta:"error",detalle_error:dataArqueoFisico.err}) 
          
             var parametros = [
-                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result[0].valor},
+                { nom_parametro: 'id_ArqueoFisico', valor_parametro: dataArqueoFisico.result['id_ArqueoFisico']},//dataArqueoFisico.result[0].valor},
                 { nom_parametro: 'Cod_Moneda', valor_parametro: 'PEN'},
                 { nom_parametro: 'Tipo', valor_parametro: "SALDO INICIAL"},
                 { nom_parametro: 'Monto', valor_parametro: req.body.Monto},
@@ -1116,7 +1113,5 @@ function TraerGestion(){
 
     return pGestion
 }
- 
- 
  
 module.exports = router;

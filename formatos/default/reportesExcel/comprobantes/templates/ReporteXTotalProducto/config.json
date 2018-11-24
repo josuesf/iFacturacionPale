@@ -1,0 +1,20 @@
+{
+    "shortid": "BJKDd3jom",
+    "name": "ReporteXTotalProducto",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542649097669
+    },
+    "_id": "zCHMTZFdGmQXxDLV",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

@@ -10,7 +10,7 @@ import { refrescar_movimientos } from '../../movimientos_caja'
 var arrayValidacion = [null,'null','',undefined]
 var cantidad_tabs = 0
 global.variablesES = {}
-
+var IdTabSeleccionado = null
 //var contador = 0
 //var idFilaSeleccionada = 0
 //var idFilaSeleccionadaSerie = 0
@@ -24,10 +24,11 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
 
     cantidad_tabs++
     const idTabES = "ES_"+cantidad_tabs
+    IdTabSeleccionado = idTabES
     global.variablesES[idTabES]={idTab:idTabES,contador:0,idFilaSeleccionada:0,idFilaSeleccionadaSerie:0,almacen_mov:null}
 
     var tab = yo`
-    <li class="" ><a href="#tab_${idTabES}" data-toggle="tab" aria-expanded="false" id="id_${idTabES}">${CodTipoComprobante=="NE"?"NOTA DE ENTRADA":"NOTA DE SALIDA - GUIA DE REMISION"} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabES(idTabES)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
+    <li class="" onclick=${()=>TabSeleccionado(idTabES)}><a href="#tab_${idTabES}" data-toggle="tab" aria-expanded="false" id="id_${idTabES}">${CodTipoComprobante=="NE"?"NOTA DE ENTRADA":"NOTA DE SALIDA - GUIA DE REMISION"} <a style="padding-left: 10px;"  onclick=${()=>CerrarTabES(idTabES)} class="btn"><i class="fa fa-close text-danger"></i></a></a></li>`
 
     var el = yo`
     <div class="tab-pane" id="tab_${idTabES}">
@@ -45,11 +46,11 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
                 </div>
                 <div class="row" id="divAnulado_${idTabES}" style="display:none">
                     <div class="col-md-12 text-center">
-                        <div class="small-box bg-red">
-                            <div class="inner">
-                                <h3 id="laAnulado">ANULADO</h3>
-                            </div>
+
+                        <div class="alert alert-callout alert-danger" id="divError" data-value="0">
+                            <h3 id="laAnulado">ANULADO</h3>
                         </div>
+
                     </div>
                 </div>
                 <div class="row">
@@ -232,30 +233,33 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     $("#id_"+idTabES).click()
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+        console.log(global.objProducto)
+        console.log(IdTabSeleccionado)
         if(global.objProducto!='' && global.objProducto){
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').val(global.objProducto.Cod_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Nom_Producto').find('input').val(global.objProducto.Nom_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Unidad_Medida').attr("data-id",global.objProducto.Cod_UnidadMedida)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_UnidadMedida').find('input').val(global.objProducto.Cod_UnidadMedida)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Unidad_Medida').text(global.objProducto.Nom_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_Producto').find('input').val(global.objProducto.Cod_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Nom_Producto').find('input').val(global.objProducto.Nom_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Unidad_Medida').attr("data-id",global.objProducto.Cod_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_UnidadMedida').find('input').val(global.objProducto.Cod_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Unidad_Medida').text(global.objProducto.Nom_UnidadMedida)
             if(global.objProducto.Precio_Venta!=null)
-                $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(global.objProducto.Precio_Venta)
+                $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(global.objProducto.Precio_Venta)
             else
-                $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(0)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cantidad').find('input').val(1)
-        }
-
-        if(global.objComprobantePago!='' && global.objComprobantePago && global.objComprobantePagoDetalle!='' && global.objComprobantePagoDetalle){
-            $("#Id_ComprobantePago_"+idTabES).attr("data-id",global.objComprobantePago.id_ComprobantePago)
-            $("#Id_ComprobantePago_"+idTabES).val(global.objComprobantePagoDetalle.DocCliente+" "+global.objComprobantePagoDetalle.Cod_TipoComprobante+" "+global.objComprobantePagoDetalle.Serie+" "+global.objComprobantePagoDetalle.Numero)
+                $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(0)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cantidad').find('input').val(1)
+        }else{
+            console.log("erorrrr")
         }
     })
 
     $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
+        }
+        if(global.objComprobantePago!='' && global.objComprobantePago && global.objComprobantePagoDetalle!='' && global.objComprobantePagoDetalle){
+            $("#Id_ComprobantePago_"+IdTabSeleccionado).attr("data-id",global.objComprobantePago.id_ComprobantePago)
+            $("#Id_ComprobantePago_"+IdTabSeleccionado).val(global.objComprobantePagoDetalle.DocCliente+" "+global.objComprobantePagoDetalle.Cod_TipoComprobante+" "+global.objComprobantePagoDetalle.Serie+" "+global.objComprobantePagoDetalle.Numero)
         }
     })
 
@@ -265,6 +269,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
 
 
 function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,idTabES) {
+    IdTabSeleccionado = idTabES
     global.arraySeries = ''
     global.objProducto = ''
     global.objComprobantePago = '' 
@@ -469,29 +474,29 @@ function RefrescarVerEntradasSalidas(variables,CodTipoComprobante,fecha_actual,i
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
         if(global.objProducto!='' && global.objProducto){
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_Producto').find('input').val(global.objProducto.Cod_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Nom_Producto').find('input').val(global.objProducto.Nom_Producto)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Unidad_Medida').attr("data-id",global.objProducto.Cod_UnidadMedida)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cod_UnidadMedida').find('input').val(global.objProducto.Cod_UnidadMedida)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Unidad_Medida').text(global.objProducto.Nom_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_Producto').find('input').val(global.objProducto.Cod_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Nom_Producto').find('input').val(global.objProducto.Nom_Producto)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Unidad_Medida').attr("data-id",global.objProducto.Cod_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_UnidadMedida').find('input').val(global.objProducto.Cod_UnidadMedida)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Unidad_Medida').text(global.objProducto.Nom_UnidadMedida)
             if(global.objProducto.Precio_Venta!=null)
-                $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(global.objProducto.Precio_Venta)
+                $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(global.objProducto.Precio_Venta)
             else
-                $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(0)
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionada).find('td.Cantidad').find('input').val(1)
+                $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(0)
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cantidad').find('input').val(1)
         }
 
         if(global.objComprobantePago!='' && global.objComprobantePago && global.objComprobantePagoDetalle!='' && global.objComprobantePagoDetalle){
-            $("#Id_ComprobantePago_"+idTabES).attr("data-id",global.objComprobantePago.id_ComprobantePago)
-            $("#Id_ComprobantePago_"+idTabES).val(global.objComprobantePagoDetalle.DocCliente+" "+global.objComprobantePagoDetalle.Cod_TipoComprobante+" "+global.objComprobantePagoDetalle.Serie+" "+global.objComprobantePagoDetalle.Numero)
+            $("#Id_ComprobantePago_"+IdTabSeleccionado).attr("data-id",global.objComprobantePago.id_ComprobantePago)
+            $("#Id_ComprobantePago_"+IdTabSeleccionado).val(global.objComprobantePagoDetalle.DocCliente+" "+global.objComprobantePagoDetalle.Cod_TipoComprobante+" "+global.objComprobantePagoDetalle.Serie+" "+global.objComprobantePagoDetalle.Numero)
         }
     })
 
     $('#modal-otros-procesos').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.arraySeries!='' && global.arraySeries){ 
-            $("tr#"+global.variablesES[idTabES].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
+            $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionadaSerie).find('td.Series').find('input').val(JSON.stringify(global.arraySeries))
         }
     })
 
@@ -675,12 +680,21 @@ function CambioDestino(CodTipoComprobante,fecha_actual,idTab){
     }
 }
 
+function TabSeleccionado(idTab){
+    IdTabSeleccionado = idTab 
+    global.arraySeries = ''
+    global.objProducto = ''
+    global.objComprobantePago = '' 
+    global.objComprobantePagoDetalle = '' 
+}
+
 function CerrarTabES(idTab){ 
     $('#tab_'+idTab).remove()
     $('#id_'+idTab).parents('li').remove()
     var tabFirst = $('#tabs a:first'); 
     tabFirst.tab('show');
     delete global.variablesES[idTab]
+    IdTabSeleccionado = null 
 }
 
 function CambioOperacion(CodTipoComprobante,idTab,fecha_actual){
@@ -793,8 +807,7 @@ function CargarDatosAControles(CodTipoComprobante,fecha_actual,idTab){
         });
 }
 
-function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual,idTab){
-    //console.log(movimientos_almacen)
+function CargarElementos(CodTipoComprobante,movimientos_almacen,fecha_actual,idTab){ 
     $("#Cod_Operacion_"+idTab).val(movimientos_almacen.Cod_TipoOperacion)
     $("#Serie_"+idTab).val(movimientos_almacen.Serie)
     $("#Numero_"+idTab).val(movimientos_almacen.Numero)
@@ -1083,6 +1096,7 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
 
             // destino
             var Cod_Destino = $("#Cod_Destino_"+idTab).val()
+            var Id_AlmacenMov = global.variablesES[idTab].almacen_mov.Id_AlmacenMov
 
 
             const parametros = {
@@ -1105,6 +1119,7 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
                     dataForm,
                     Fecha,
                     Cod_Destino,
+                    Id_AlmacenMov
                 })
             }
 
@@ -1130,16 +1145,18 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
                         .then(req => req.json())
                         .then(res => {
                             toastr.success('Se guardo correctamente el registro','Confirmacion',{timeOut: 5000})
+                            $('#main-contenido').waitMe('hide');
                             RefrescarEntradasSalidas(CodTipoComprobante,idTab)
                             //refrescar_movimientos()
                         }).catch(function (e) {
                             console.log(e);
                             toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})
+                            $('#main-contenido').waitMe('hide');
                         });
                     }else{
                         toastr.error('Ocurrio un error. Intentelo mas tarde','Error',{timeOut: 5000})
+                        $('#main-contenido').waitMe('hide');
                     }   
-                    $('#main-contenido').waitMe('hide');
                 }).catch(function (e) {
                     console.log(e);
                     toastr.error('Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e,'Error',{timeOut: 5000})

@@ -1,0 +1,17 @@
+{
+    "shortid": "r1_5qpZCQ",
+    "name": "ReporteRegistroAuxiliarCompras",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542737335477
+    },
+    "_id": "46bkWl80CSgWvSHi",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

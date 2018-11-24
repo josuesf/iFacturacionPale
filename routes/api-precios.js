@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
-var { Ejecutar_Procedimientos, EXEC_SQL, EXEC_SQL_OUTPUT } = require('../utility/exec_sp_sql')
+var { Ejecutar_Procedimientos, EXEC_SQL } = require('../utility/exec_sp_sql')
 // define the home page route
 router.post('/get_variables_cambio_precio', function (req, res) {
     input = req.body

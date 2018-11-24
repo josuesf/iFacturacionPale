@@ -389,6 +389,7 @@ function NuevoCliente(_escritura, mas_variables, cliente) {
     if (cliente) {
         CambioDepartamento(cliente.Cod_Ubigeo)
     }
+    CambioTipoDoc()
 }
 function CerrarTab(){
     $('#tab_crear_cliente_2').remove()

@@ -1,0 +1,20 @@
+{
+    "shortid": "Hk_7tia6Q",
+    "name": "FormaPagoXMov",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542647180811
+    },
+    "_id": "oaI937yrbawdTn5v",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "rybjniT6m"
+    }
+}

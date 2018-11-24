@@ -4,10 +4,10 @@ import { URL } from '../../../constantes_entorno/constantes'
 import { refrescar_movimientos } from '../../movimientos_caja'
 import { BuscarCliente } from '../../modales' 
  
-var cantidad_tabs = 0 
+var cantidad_tabs = 0  
 
 function Ver(variables) {
-    cantidad_tabs++
+    //cantidad_tabs++
     const idTabCP = "CP_"+cantidad_tabs 
     
     var tab = yo`

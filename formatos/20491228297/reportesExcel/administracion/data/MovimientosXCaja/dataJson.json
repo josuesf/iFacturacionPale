@@ -1,0 +1,31 @@
+{
+    "FILTRO":"Sucursal: Todos; Cliente/Proveedor: Todos; Caja: null; Producto:Todos; Fecha Inicio: Todos; Fecha Fin: Todos; Turno Inicio: Todos; Turno Fin: TodO",
+    "EMPRESA": "INMARKET CUSCO S.A.C.",
+    "RUC": "20491228200",
+    "DIRECCION":"Calle los Olivos 1440 interior b4",
+    "TIPO_REPORTE":"REPORTE CUENTAS POR COBRAR Y POR PAGAR",
+    "FECHA_SIS":"10/11/2018",
+    "IMPUESTO":"18",
+    "DETALLES":[{
+        "id_Movimiento":"12875",
+        "Cod_Caja":"CAJ001",
+        "Des_Caja":"Caja Nro 1",
+        "Cod_Turno":"T27/02/2018",
+        "Id_Concepto":"164",
+        "Des_Concepto":"Envio entre Cajas",
+        "Cod_ClaseConcepto":"007",
+        "Nom_TipoConcepto":"EGRESO",
+        "Id_ClienteProvedor":"1334",
+        "Cliente":"Los Bosques Maderera",
+        "Cod_TipoComprobante":"RE",
+        "Nom_TipoComprobante":"Recibo de egreso",
+        "Serie":"0001",
+        "Numero":"0000034",
+        "Fecha":"2018-10-25 16:31:51.580",
+        "Tipo_Cambio":"1.00",
+        "Ingreso":"0",
+        "Egreso":"120",
+        "Cod_MonedaIngreso":"PEN",
+        "Cod_MonedaEgreso":"PEN"
+    }]
+}

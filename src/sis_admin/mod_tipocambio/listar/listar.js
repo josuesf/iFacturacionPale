@@ -447,7 +447,6 @@ function BuscarCambioData()
     var mes = Number($("#ct_mes").val())
     var anio = Number($("#ct_anio").val())
     var fecha_val =$("#ct_fecha").val() 
-    var cambios =[]
     if(fecha_val != '')
     {
        run_waitMe($('#main-contenido'), 1, "ios");
@@ -517,7 +516,7 @@ function BuscarCambioData()
             fetch(URL+'/cambio_monetario_api/buscar_cambios', parametros)
                 .then(req => req.json())
                 .then(res => {
-                    if (res.respuesta == 'ok' && res.data.cambios.length > 1) 
+                    if (res.respuesta == 'ok' && res.data.cambios.length > 0) 
                     {
                         for (var i = 0; i < res.data.cambios.length; i++) 
                         {
@@ -581,14 +580,16 @@ function ExtraerCambioSunat()
     fetch(URL+'/cambio_monetario_api/extraer_cambio', parametros)
         .then(req => req.json())
         .then(res => {
-            if (res.respuesta.length > 0) 
+            console.log('entro a get de sunat')
+            if (res.respuesta=='ok' && res.data.cambios.length > 0) 
             {
-                res.respuesta[0].dias = dia
-                res.respuesta[0]['mes']= mes
-                res.respuesta[0]['anio']= anio
-                res.respuesta[0]['SunatCompra']= res.respuesta[0].compra
-                res.respuesta[0]['SunatVenta']= res.respuesta[0].venta
-                Ver(res.respuesta,fecha_data)
+                
+                res.data.cambios[0].dias = dia
+                res.data.cambios[0]['mes']= mes
+                res.data.cambios[0]['anio']= anio
+                res.data.cambios[0]['SunatCompra']= res.data.cambios[0].compra
+                res.data.cambios[0]['SunatVenta']= res.data.cambios[0].venta
+                Ver(res.data.cambios,fecha_data)
                 $('#main-contenido').waitMe('hide');
             }
             else
@@ -625,16 +626,16 @@ function ExtraerCambioSunat()
             fetch(URL+'/cambio_monetario_api/extraer_cambio', parametros)
                 .then(req => req.json())
                 .then(res => {
-                    if (res.respuesta.length > 1) 
+                    if (res.respuesta=='ok' && res.data.cambios.length > 0) 
                     {
-                        for (var i = 0; i < res.respuesta.length; i++) 
+                        for (var i = 0; i < res.data.cambios.length; i++) 
                         {
-                            res.respuesta[i]['mes']= mes
-                            res.respuesta[i]['anio']= anio
-                            res.respuesta[i]['SunatCompra']= res.respuesta[i].compra
-                            res.respuesta[i]['SunatVenta']= res.respuesta[i].venta
+                            res.data.cambios[i]['mes']= mes
+                            res.data.cambios[i]['anio']= anio
+                            res.data.cambios[i]['SunatCompra']= res.data.cambios[i].compra
+                            res.data.cambios[i]['SunatVenta']= res.data.cambios[i].venta
                         }
-                        Ver(res.respuesta,fecha_data)
+                        Ver(res.data.cambios,fecha_data)
                         $('#main-contenido').waitMe('hide');
                     }
                     else
@@ -766,7 +767,7 @@ function ListarMesTipoCambio(escritura,anio,mes)
         fetch(URL+'/cambio_monetario_api/get_cambios', parametros)
             .then(req => req.json())
             .then(res => {
-                if (res.data.cambios.length > 0) {
+                if (res.respuesta=='ok' && res.data.cambios.length>0) {
                     for (var i = 0; i < res.data.cambios.length; i++) 
                     {
                         res.data.cambios[i]['dias']= extractDate(res.data.cambios[i]['FechaHora'],'D')
@@ -781,7 +782,7 @@ function ListarMesTipoCambio(escritura,anio,mes)
                     $('#main-contenido').waitMe('hide');
                 }
                 else
-                    Ver([])
+                Ver_limpio(fecha_data)
                 $('#main-contenido').waitMe('hide');
             }).catch(function (e) {
                 console.log(e);

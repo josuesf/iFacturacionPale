@@ -1,0 +1,20 @@
+{
+    "shortid": "HyuTuU4AX",
+    "name": "ReporteStockFisicoValorizado",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "ry9iy_707"
+    },
+    "modificationDate": {
+        "$$date": 1542907928082
+    },
+    "_id": "ZXqx6i2PaDNt2pcd",
+    "$entitySet": "templates"
+}

@@ -5,7 +5,7 @@ var router = express.Router();
 var sql = require("mssql");
 var md5 = require('md5')
 var {Ejecutar_Procedimientos} = require('../utility/exec_sp_sql')
-var {Ejecutar_Procedimientos, EXEC_SQL, EXEC_SQL_OUTPUT} = require('../utility/exec_sp_sql')
+var {Ejecutar_Procedimientos, EXEC_SQL} = require('../utility/exec_sp_sql')
 // define the home page routeq
 router.post('/get_cambios', function (req, res) {
     input = req.body
@@ -44,8 +44,7 @@ router.post('/buscar_cambios', function (req, res) {
 })
 router.post('/guardar_cambios', function (req, res) {
     input = req.body
-    var Data = input.table
-    console.log(Data)
+    var Data = input.table 
     if(Data.length > 0)
     {
         for (var i in Data) {
@@ -59,7 +58,7 @@ router.post('/guardar_cambios', function (req, res) {
                 {nom_parametro:'Venta',valor_parametro:Data[i].VENTA},
                 {nom_parametro:'Cod_Usuario',valor_parametro:req.session.username}
             ]
-            EXEC_SQL_OUTPUT('USP_CAJ_TIPOCAMBIO_I', parametros , function (dataMov) {
+            EXEC_SQL('USP_CAJ_TIPOCAMBIO_I', parametros , function (dataMov) {
                
             })
         }
@@ -76,13 +75,13 @@ router.post('/extraer_cambio', function (req, res){
     if(input.Dia == '')
     {
         extraer_data(input.Mes,input.Anio,function(resultado){
-            res.json({respuesta :resultado})
+            res.json({respuesta :'ok',data:{cambios:resultado}})
         })
     }
     else
     {
         llenarDiaCambio(0,input.Dia,input.Mes,input.Anio,res,function(resultado){
-            res.json({respuesta :resultado})
+            res.json({respuesta :'ok',data:{cambios:resultado}})
         }) 
     }
 })

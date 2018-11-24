@@ -1,0 +1,17 @@
+{
+    "shortid": "Sk_fUPOTX",
+    "name": "ReporteCuentasPorCobrarPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542989163115
+    },
+    "_id": "xodSESLUKwJRzCsY",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "BJXpfuVa7"
+    }
+}
