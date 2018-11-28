@@ -85,6 +85,8 @@ $(document).on('hidden.bs.modal', function (event) {
       $('body').addClass('modal-open');
     }
 });
+
+
  
  window.alert = function() {};
   

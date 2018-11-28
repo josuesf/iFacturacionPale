@@ -24,7 +24,7 @@ gulp.task('styles', function () {
 
 
 function compile(watch) {
-    var bundle = browserify(['./src/index.js'], { debug: true });
+    var bundle = browserify(['./src/index.js'], { debug: false });
 
     if (watch) {
         bundle = watchify(bundle);
@@ -48,7 +48,7 @@ function compile(watch) {
 }
 function compile_procesos(watch) {
     
-    var bundle = browserify(['./src/index_procesos.js'], { debug: true });
+    var bundle = browserify(['./src/index_procesos.js'], { debug: false });
 
     if (watch) {
         bundle = watchify(bundle);
@@ -72,7 +72,7 @@ function compile_procesos(watch) {
 }
 
 function compile_login(watch) {
-    var bundle = browserify(['./src/index_login.js'], { debug: true });
+    var bundle = browserify(['./src/index_login.js'], { debug: false });
 
     if (watch) {
         bundle = watchify(bundle);

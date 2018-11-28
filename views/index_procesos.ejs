@@ -147,9 +147,21 @@
   <script src="/assets/js/libs/ckeditor/ckeditor.js"></script>
   <script src="/assets/js/libs/waitMe/waitMe.min.js"></script>
   <script src="/assets/js/libs/jquery-ui/jquery.ui.combobox.js"></script>  
-  <script src="/assets/js/libs/dockmodal/jquery.dockmodal.js"></script>  
+  <script src="/assets/js/libs/dockmodal/jquery.dockmodal.js"></script>   
+  <script type="text/javascript">
+    function script(url) {
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = url;
+        var x = document.getElementsByTagName('head')[0];
+        x.appendChild(s);
+    }
+    </script>
+    <script>
+      script('/app_proc-min.js');
+    </script>
   <!--<script src="/app_proc-min.js"></script>-->
-  <script src="/app_proc.js"></script>
 	
 	<!-- END JAVASCRIPT -->
 

@@ -18,9 +18,7 @@ import { NuevoCambioPrecio } from '../sis_procesos/mod_ventas/cambio_precio'
 import { NuevaRecepcion } from '../sis_procesos/mod_compras/recepcion_efectivo'
 import { ComprobantePago } from '../sis_procesos/mod_compras/comprobante_pago'
 import { EntradasSalidas } from '../sis_procesos/mod_almacen/entradas_salidas'
-import { Cuentas } from '../sis_procesos/mod_administracion/cuentas_pagar_compra'
-import { LibroReservas } from '../sis_procesos/mod_reservas/reservas'
-import { NuevaHabitacion } from '../sis_procesos/mod_reservas/habitaciones'
+import { Cuentas } from '../sis_procesos/mod_administracion/cuentas_pagar_compra' 
 
 //Views Reportes
 import { NuevoReporteComprobante } from '../sis_procesos/mod_reportes/comprobante_pago'
@@ -357,15 +355,25 @@ function Ver(Flag_Cerrado) {
             </ul>`;
     var container = document.getElementById('nav-container')
     empty(container).appendChild(el);
- 
+    
+    
     $.getScript("/assets/js/core/cache/63d0445130d69b2868a8d28c93309746.js", function( data, textStatus, jqxhr ) {
-    });
+    }); 
 
     $(document).ready(function(){
         $("#btnCambiarTurno").click(function(){
             AbrirModalCambiarTurno()
         })
-    })
+    }) 
+}
+
+function script(url) {
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = url;
+    var x = document.getElementsByTagName('script')[0];
+    x.parentNode.insertBefore(s, x);
 }
 
 function AbrirModalCambiarTurno(){
