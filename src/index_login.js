@@ -8,8 +8,8 @@ $(document).ready(function(){
         CambioRUC("1")
     })*/ 
     //TraerPeriodos()
-    CrearTurnoSiguiente()
-
+    //CrearTurnoSiguiente()
+    TraerTurnos()
     $("#Caja").change(function(){
         TraerTurnos()
     })

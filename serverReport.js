@@ -52,14 +52,14 @@ jsreport = require('jsreport-core')(
     extensions: {
         express: { app: reportingApp, server: server },
         'fs-store': {
-          dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/almacen'),//almacena templates genericos para los reportes excel ventas
+          //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/almacen'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/almacen'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/formas_pago'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/formas_pago'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/comprobantes'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/comprobantes'),//almacena templates genericos para los reportes pdf
           //dataDirectory: require('path').join(__dirname, 'formatos/default/recibos_tickets'),//almacena templates genericos de recibos y tickets
-          //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
+          dataDirectory: require('path').join(__dirname, 'formatos/20491228297/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
           //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/reportes'), // almacena templates para otro tipo de reportes que no sean comprobantes o tickets de una determinada empresa
           syncModifications: true
         },

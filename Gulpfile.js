@@ -6,8 +6,9 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var watchify = require('watchify');
 var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-
+var uglify = require('gulp-uglify'); 
+var minify = require('gulp-minify');  
+ 
 function bundleStyle(){
     gulp
         .src('index.scss')
@@ -62,7 +63,7 @@ function compile_procesos(watch) {
             .transform(babel, { presets: ['es2015'], plugins: ['syntax-async-functions', 'transform-regenerator'] })
             .bundle()
             .on('error', function (err) { console.log(err); this.emit('end') })
-            .pipe(source('index_procesos.js'))
+            .pipe(source('index_procesos.js')) 
             .pipe(rename('app_proc.js'))
             .pipe(gulp.dest('public'));
     }
@@ -98,14 +99,17 @@ gulp.task('build', function () {
     return compile();
 });
 
-gulp.task('compress', function () {
-    return gulp.src('./public/app.js')
-        .pipe(concat('jflcfflcdrpt.js'))
-        .pipe(gulp.dest('public'))
-        .pipe(rename('jflcfflcdrpt.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('public'));
+gulp.task('compress-pro', function() {
+    gulp.src(['./public/app_proc.js'])
+      .pipe(minify()) 
+      .pipe(gulp.dest('public'))
 });
+
+gulp.task('compress-login', function() {
+    gulp.src(['./public/app_login.js'])
+      .pipe(minify()) 
+      .pipe(gulp.dest('public'))
+}); 
 
 gulp.task('watch-css', function () {
     return gulp.watch('index.scss', ['styles']);

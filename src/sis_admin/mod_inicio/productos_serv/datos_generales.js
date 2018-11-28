@@ -443,9 +443,10 @@ function tabDatosGenerales(_escritura, variables, producto){
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
+            
             CKEDITOR.replace('editor1')
             //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5()
+            //$('.textarea').wysihtml5()
             CKEDITOR.instances['editor1'].setData(producto.Caracteristicas)
           })
     }else{
@@ -455,7 +456,7 @@ function tabDatosGenerales(_escritura, variables, producto){
             // instance, using default configuration.
             CKEDITOR.replace('editor1')
             //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5()
+            //$('.textarea').wysihtml5()
           })
     }   
 }

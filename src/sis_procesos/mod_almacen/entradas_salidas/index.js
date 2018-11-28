@@ -911,7 +911,8 @@ function AceptarRegistroEntradaSalida(CodTipoComprobante,fecha_actual,idTab){
         </div>`
     var modal_alerta = document.getElementById('modal-superior');
     empty(modal_alerta).appendChild(el);
-    $('#modal-superior').modal()   
+    //$('#modal-superior').modal()   
+    $('#modal-superior').modal('show').data('bs.modal', null);
     
 }
 
@@ -935,7 +936,8 @@ function RechazarEnvio(CodTipoComprobante,idTab){
         </div>`
     var modal_alerta = document.getElementById('modal-superior');
     empty(modal_alerta).appendChild(el);
-    $('#modal-superior').modal()   
+    $('#modal-superior').modal('show').data('bs.modal', null);
+    //$('#modal-superior').modal()   
 } 
 
 

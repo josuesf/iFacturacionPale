@@ -27,8 +27,9 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('picture');
 var app = express();
 var errores = '';
+var oneYear = 60 * 1000 * 60 * 24 * 365;
 //app.set('view engine', 'ejs'); 
-app.use(express.static('public'));
+app.use(express.static('public',{ maxAge: oneYear }));
 //app.use('/static', express.static('formatos'));  
 app.use(bodyParser.json({limit:'50mb'})); // support json encoded bodies
 app.use(bodyParser.urlencoded({ limit:'50mb',extended: true, parameterLimit: 1000000 })); // support encoded bodies 

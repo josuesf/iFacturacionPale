@@ -495,7 +495,8 @@ function VerRegistroComprobante(variables,fecha_actual,CodLibro,CodTipoOperacion
     </div>`
     var ingreso = document.getElementById('modal-proceso')
     empty(ingreso).appendChild(el)
-    $('#modal-proceso').modal('show') 
+    $('#modal-proceso').modal('show').data('bs.modal', null);
+    //$('#modal-proceso').modal('show') 
 
     if(Cliente){
         if(Cliente.Cliente!=undefined){
@@ -1097,7 +1098,7 @@ function AbrirModalConfirmacion(CodLibro,variables,fecha_actual){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-raised btn-danger pull-left" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-raised btn-primary" data-dismiss="modal" onclick=${()=>EmisionCompleta(CodLibro,variables,fecha_actual)}>Aceptar</button>
+                <button type="button" class="btn btn-raised btn-primary" onclick=${()=>EmisionCompleta(CodLibro,variables,fecha_actual)}>Aceptar</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -1105,7 +1106,7 @@ function AbrirModalConfirmacion(CodLibro,variables,fecha_actual){
 
 
     var modal_alerta = document.getElementById('modal-alerta');
-    empty(modal_alerta).appendChild(el);
+    empty(modal_alerta).appendChild(el); 
     $('#modal-alerta').modal()
 }
  
@@ -2933,7 +2934,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
                 console.log(res)
                 if (res.respuesta == 'ok') {
                     var idComprobante = res.data['id_ComprobantePago']//res.data[0].valor
-                    var Numero = res.data[1].valor
+                    var Numero = res.data['Numero']//res.data[1].valor
                     dataArray.cuerpo.NUMERO = Numero
 
                     EmisionCompletaDetalles(0,CodLibro,variables,idComprobante,function(flag){

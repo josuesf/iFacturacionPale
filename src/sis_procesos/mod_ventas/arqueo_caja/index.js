@@ -280,7 +280,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
 
     var modal_proceso = document.getElementById('modal-proceso');
     empty(modal_proceso).appendChild(el);
-    $('#modal-proceso').modal()
+    $('#modal-proceso').modal('show').data('bs.modal', null);
+    //$('#modal-proceso').modal('show')
     $('#Cajero').val($('#nick').text())
     CalcularSumaTotalDolares(resumenusd)
     CalcularSumaTotalSoles(resumenpen)

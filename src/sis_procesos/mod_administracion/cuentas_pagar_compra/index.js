@@ -1027,7 +1027,8 @@ function CargarModalConfirmacionCuentas(CodLibro,idTab){
 
     var modal_proceso = document.getElementById('modal-alerta');
     empty(modal_proceso).appendChild(el);
-    $('#modal-alerta').modal()
+    $('#modal-alerta').modal('show').data('bs.modal', null);
+    //$('#modal-alerta').modal()
 }
 
 function LlenarCuentaBancaria(cuentas,CodLibro,idTab){

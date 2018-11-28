@@ -365,7 +365,7 @@ function Ver(Flag_Cerrado) {
         $("#btnCambiarTurno").click(function(){
             AbrirModalCambiarTurno()
         })
-    })  
+    })
 }
 
 function AbrirModalCambiarTurno(){
@@ -423,7 +423,8 @@ function AbrirModalCambiarTurno(){
     </div>`
     var modal_proceso = document.getElementById('modal-alerta');
     empty(modal_proceso).appendChild(el);
-    $('#modal-alerta').modal()
+    $('#modal-alerta').modal('show').data('bs.modal', null);
+    //$('#modal-alerta').modal()
     TraerPeriodos()
 }
 
@@ -545,8 +546,14 @@ function CambiarTurnoSistema(){
     });
 }
 
-module.exports = function navegador(ctx, next) {
-    
+function navegador(Flag_Cerrado){
+    Ver(Flag_Cerrado)
+}
+
+export { navegador }
+
+/*module.exports =  function navegador(ctx, next) {
+   
     const parametros = {
         method: 'POST',
         headers: {
@@ -563,4 +570,4 @@ module.exports = function navegador(ctx, next) {
     }).catch(function (e) {
         console.log(e); 
     }); 
-}
+}*/

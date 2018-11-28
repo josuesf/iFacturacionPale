@@ -2,8 +2,8 @@
 var empty = require('empty-element'); 
 import { URL,URL_REPORT,NOMBRES_DOC } from '../../constantes_entorno/constantes'
 import { CargarPDFModal } from '../modales/pdf'
-import { ConvertirCadena } from '../../../utility/tools' 
-import { dirname } from 'path'; 
+import { ConvertirCadena } from '../../../utility/tools'
+import { navegador } from '../../navegador_procesos' 
 
 function Ver(Flag_Cerrado,movimientos,saldos,callback) {
     var el = yo`
@@ -164,7 +164,9 @@ function Ver(Flag_Cerrado,movimientos,saldos,callback) {
             "sSearch": "Buscar:"
         }
     });
-  
+
+    navegador(Flag_Cerrado)
+
     callback(true)
 }
  
@@ -1535,6 +1537,7 @@ module.exports = function movimientos_caja(ctx, next) {
         .then(req => req.json())
         .then(res => { 
             if (res.respuesta == 'ok') {
+
                 Ver(res.arqueo!=null?res.arqueo.Flag_Cerrado:true,res.data.movimientos,res.data.saldos,function(flag){
                     $('#base').waitMe('hide');
                 })

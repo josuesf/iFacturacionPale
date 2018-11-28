@@ -274,7 +274,7 @@ router.post('/guardar_comprobante_pago', function (req, res) {
         { nom_parametro: 'Cod_Turno', valor_parametro: req.app.locals.turno[0].Cod_Turno },
         { nom_parametro: 'Cod_TipoOperacion', valor_parametro: input.Cod_TipoOperacion },
         { nom_parametro: 'Cod_TipoComprobante', valor_parametro: input.Cod_TipoComprobante },
-        { nom_parametro: 'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar,tipo:"output" },
+        { nom_parametro: 'Serie', valor_parametro: input.Serie,tipo_parametro:sql.VarChar},
         { nom_parametro: 'Numero', valor_parametro: input.Numero ,tipo_parametro:sql.VarChar,tipo:"output"},
         { nom_parametro: 'Id_Cliente', valor_parametro: input.Id_Cliente },
         { nom_parametro: 'Cod_TipoDoc', valor_parametro: input.Cod_TipoDoc },

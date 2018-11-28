@@ -610,7 +610,7 @@ function MostrarCampos(indice,arreglo,opcion,idTab){
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Tipo Cambio</label>
-                                <input type="number" class="form-control input-sm" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)}>
+                                <input type="number" class="form-control input-sm" value="1.00" id="Tipo_Cambio_Venta_${idTab}" name="Tipo_Cambio_Venta_${idTab}" onkeypress=${()=>CambioTipoCambioVenta(idTab)} onblur=${()=>CambioTipoCambioVenta(idTab)}>
                             </div> 
                         </div> `
             }else{
