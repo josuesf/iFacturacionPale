@@ -1,0 +1,17 @@
+{
+    "shortid": "BysFHigAm",
+    "name": "ReporteXTotalCliente",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748534678
+    },
+    "_id": "Jf1Ykr1bPC2mB2wY",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

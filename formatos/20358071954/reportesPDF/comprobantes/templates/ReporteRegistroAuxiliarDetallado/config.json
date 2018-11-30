@@ -1,0 +1,17 @@
+{
+    "shortid": "r1rN-oxCQ",
+    "name": "ReporteRegistroAuxiliarDetallado",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748044618
+    },
+    "_id": "kmWXtOyItqDcHGZK",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

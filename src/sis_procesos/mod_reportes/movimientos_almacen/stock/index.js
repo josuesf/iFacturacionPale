@@ -352,8 +352,7 @@ function AbrirDialogoEnviarMensaje(idTab,Cod_Libro){
             {
                 html: "<i class='md md-send'></i> Enviar",
                 buttonClass: "btn btn-sm btn-primary ink-reaction",
-                click: function (e, dialog) { 
-                    console.log(global.variablesReporteStock[idTab].dataBase64)
+                click: function (e, dialog) {  
                     run_waitMe($('#dialogo_docker_'+idTab), 1, "ios","Enviando correo espere un momento....");
 
                     const parametros = {
@@ -373,8 +372,7 @@ function AbrirDialogoEnviarMensaje(idTab,Cod_Libro){
                     }
                     fetch(URL + '/empresa_api/send_email_report', parametros)
                         .then(req => req.json())
-                        .then(res => {
-                            console.log(res)
+                        .then(res => { 
                             if(res.respuesta=='ok'){
                                 dialog.dockmodal("close");
                                 global.variablesReporteStock[idTab].dataBase64=[] 
@@ -546,8 +544,7 @@ function ReporteGeneralEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pre
     }
     fetch(URL + '/reporte_api/reporte_stock', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

@@ -1,0 +1,17 @@
+{
+    "shortid": "SktYT1zRQ",
+    "name": "ReporteRegistroAuxiliarVentas",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542747463566
+    },
+    "_id": "km6tTYM2uPJjspzw",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rydqhROpm"
+    }
+}

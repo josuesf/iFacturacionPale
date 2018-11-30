@@ -90,8 +90,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                         <div class="col-md-5">
                                             <div class="nav-tabs-custom">
                                                 <ul class="nav nav-tabs" id="tabsArqueoCaja">
-                                                    <li class="active"><a href="#tabSoles" data-toggle="tab" id="tSoles" aria-expanded="true" onclick="${()=>CalcularSumaTotalSoles(resumenpen)}">Soles S/</a></li>
-                                                    <li><a href="#tabDolares" data-toggle="tab" id="tDolares" aria-expanded="true" onclick="${()=>CalcularSumaTotalDolares(resumenusd)}">Dolares $</a></li>
+                                                    <li class="active"><a href="#tabSoles" data-toggle="tab" id="tSoles" aria-expanded="true" onclick="${()=>CambioTabSoles()}">Soles S/</a></li>
+                                                    <li><a href="#tabDolares" data-toggle="tab" id="tDolares" aria-expanded="true" onclick="${()=>CambioTabDolares()}">Dolares $</a></li>
                                                 </ul>
                                                 <div class="card-body tab-content">
                                                     <div class="tab-pane active" id="tabSoles">
@@ -183,8 +183,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
                                                 <div class="col-md-12">
                                                     <div class="nav-tabs-custom">
                                                         <ul class="nav nav-tabs" id="tabsArqueoCajaBilletes">
-                                                            <li class="active"><a href="#tabSolesBilletes" id="tbSoles" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalSoles(resumenpen)}">Soles S/</a></li>
-                                                            <li ><a href="#tabDolaresBilletes" id="tbDolares" data-toggle="tab" aria-expanded="true" onclick="${()=>CalcularSumaTotalDolares(resumenusd)}">Dolares $</a></li>
+                                                            <li class="active"><a href="#tabSolesBilletes" id="tbSoles" data-toggle="tab" aria-expanded="true" onclick="${()=>CambioTabSoles()}">Soles S/</a></li>
+                                                            <li ><a href="#tabDolaresBilletes" id="tbDolares" data-toggle="tab" aria-expanded="true" onclick="${()=>CambioTabDolares()}">Dolares $</a></li>
                                                         </ul>
                                                         <div class="card-body tab-content">
                                                             <div class="tab-pane active" id="tabSolesBilletes">
@@ -286,6 +286,8 @@ function Ver(fecha_hora,caja_actual,turno_actual,arqueo,resumenpen,resumenusd) {
     CalcularSumaTotalDolares(resumenusd)
     CalcularSumaTotalSoles(resumenpen)
     CargarBilletes(arqueo)
+    CambioBilletesSoles()
+    CambioBilletesDolares()
 }
 
 function CargarModalConfirmacionArqueo(){
@@ -419,6 +421,17 @@ function CambioCantidadDolares(idInput){
     $("#CantidadBilletesDolares").val(total)
     $("#DiferenciaDolares").val(parseFloat($("#CantidadBilletesDolares").val())-parseFloat($("#SaldoTotalDolares").val()))
 }
+
+function CambioTabSoles(){ 
+    $("#tbSoles").tab('show');
+    $("#tSoles").tab('show');
+}
+
+
+function CambioTabDolares(){ 
+    $("#tbDolares").tab('show');
+    $("#tDolares").tab('show');
+}
  
 
 function CalcularSumaTotalSoles(resumen){
@@ -429,9 +442,9 @@ function CalcularSumaTotalSoles(resumen){
         }
     }
     $("#laSaldoTotalSoles").text("SALDO : S/")
-    $("#SaldoTotalSoles").val(suma)
+    $("#SaldoTotalSoles").val(parseFloat(suma).toFixed(2))
     $("#laDiferenciaSoles").text("DIFERENCIA : S/")
-    $("#DiferenciaSoles").val(-1*suma) 
+    $("#DiferenciaSoles").val(-1*parseFloat(parseFloat(suma).toFixed(2))) 
      
     $("#tbSoles").tab('show');
     $("#tSoles").tab('show');
@@ -446,9 +459,9 @@ function CalcularSumaTotalDolares(resumen){
         }
     }
     $("#laSaldoTotalDolares").text("SALDO : USD ")
-    $("#SaldoTotalDolares").val(suma)
+    $("#SaldoTotalDolares").val(parseFloat(suma).toFixed(2))
     $("#laDiferenciaDolares").text("DIFERENCIA : USD ")
-    $("#DiferenciaDolares").val(-1*suma) 
+    $("#DiferenciaDolares").val(-1*parseFloat(parseFloat(suma).toFixed(2))) 
     $("#tbDolares").tab('show');
     $("#tDolares").tab('show');
 }

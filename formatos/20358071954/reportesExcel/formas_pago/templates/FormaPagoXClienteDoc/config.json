@@ -1,0 +1,20 @@
+{
+    "shortid": "ByM19UeRm",
+    "name": "FormaPagoXClienteDoc",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "modificationDate": {
+        "$$date": 1542727706090
+    },
+    "_id": "SrAEotJrG5NRYNwJ",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "rybjniT6m"
+    }
+}

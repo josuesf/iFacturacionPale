@@ -568,12 +568,10 @@ function Guardar(_escritura, diagramas, cliente) {
                 Fax, PaginaWeb, Cod_Ubigeo, Cod_FormaPago,
                 Limite_Credito, Obs_Cliente, Num_DiaCredito
             })
-        }
-        console.log("parametros de guardado",parametros)
+        } 
         fetch(URL + '/clientes_api/guardar_cliente', parametros)
             .then(req => req.json())
-            .then(res => {
-                console.log("respuesta de save",res)
+            .then(res => { 
                 if (res.respuesta == 'ok') {
                     ListarClientes(_escritura)
                 }

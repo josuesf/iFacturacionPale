@@ -1,0 +1,20 @@
+{
+    "shortid": "S1vD1_XA7",
+    "name": "ReporteStockFisico",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542903517495
+    },
+    "_id": "hPIDOfwUUagepdvW",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "ry9iy_707"
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    }
+}

@@ -184,8 +184,7 @@ function Eliminar(_escritura, sucursal){
                     ListarSucursales(_escritura)
                     this.removeEventListener('click', Eliminar)
                 }
-                else{
-                    console.log('Error')
+                else{ 
                     this.removeEventListener('click', Eliminar)
                 }
                 $('#main-contenido').waitMe('hide');

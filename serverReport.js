@@ -59,8 +59,8 @@ jsreport = require('jsreport-core')(
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesExcel/comprobantes'),//almacena templates genericos para los reportes excel ventas
           //dataDirectory: require('path').join(__dirname, 'formatos/default/reportesPDF/comprobantes'),//almacena templates genericos para los reportes pdf
           //dataDirectory: require('path').join(__dirname, 'formatos/default/recibos_tickets'),//almacena templates genericos de recibos y tickets
-          dataDirectory: require('path').join(__dirname, 'formatos/20491228297/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
-          //dataDirectory: require('path').join(__dirname, 'formatos/[RUC DE LA EMPRESA]/reportes'), // almacena templates para otro tipo de reportes que no sean comprobantes o tickets de una determinada empresa
+          //dataDirectory: require('path').join(__dirname, 'formatos/20491228297/recibos_tickets'), //almacena templates para los recibos y tickets de una determinada empresa
+          //dataDirectory: require('path').join(__dirname, 'formatos/20491228297/reportesPDF'), // almacena templates para otro tipo de reportes que no sean comprobantes o tickets de una determinada empresa
           syncModifications: true
         },
         'authentication' : {
@@ -76,32 +76,7 @@ jsreport = require('jsreport-core')(
     appPath: "/reporting"
   }
 );
-
-app.get('/prueba', function(req, res) { 
-  //console.log("request")
-  //console.log(req.body) 
-  //console.log("configuracionb de "+GETCONFIG(app.locals.empresa[0].RUC))
-  jsreport.render({
-    template: {
-      recipe: 'html-to-xlsx',
-      engine: 'jsrender',
-      content: fs.readFileSync(require('path').join('formatos/default/reportes/templates/ReporteXTotalCliente', 'content.html'), 'utf8'),
-      //content: '<table><tr><td style="height: 50px; font-size: 35px">{{:foo}}</td><td>world</td></tr> <tr><td style="width: 20px; text-align:right">right</td><td>world</td></tr><tr><td>world</td><td>world</td></tr></table>'
-    },
-    data: {
-      'NOMBRE':'PRUEBAAAA'
-    },
-    options: { preview: true }
-  }).then(function (out) {
-     
-
-    out.stream.pipe(res)
-  }).catch(function (e) {
-    
-    console.log("Errrrrrr",e)
-    res.end(e.message);
-  });
-});
+ 
 
 /*jsreport.use(require('jsreport-import-export')());
 jsreport.use(require('jsreport-tags')());

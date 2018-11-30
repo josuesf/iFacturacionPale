@@ -110,8 +110,7 @@ function Ver(variables) {
         $("#tabs").append(tab) 
         $("#tabs_contents").append(el)
     } 
-    $("#id_"+idTabR).click()
-    console.log(global.variablesR)
+    $("#id_"+idTabR).click() 
 }
 
 function RefrescarVer(variables,idTabR) {
@@ -355,8 +354,7 @@ function Reactivar(u,idInputCliente,idTab){
                 RefrescarRecepcion(idTab)
             }else{
                 toastr.error('No se pudo colocar como pendiente a esta recepcion','Error',{timeOut: 5000})
-            }
-            console.log(res.data)
+            } 
             $('#main-contenido').waitMe('hide');
         }).catch(function (e) {
             console.log(e);
@@ -418,8 +416,7 @@ function RefrescarRecepcion(idTab) {
     fetch(URL + '/recepciones_api/get_variables_recepcion_transferencia', parametros)
         .then(req => req.json())
         .then(res => {
-            var variables = res.data
-            console.log(variables)
+            var variables = res.data 
             if (res.respuesta == 'ok') {
                 
                 RefrescarVer(variables,idTab)
@@ -448,8 +445,7 @@ function NuevaRecepcion() {
     fetch(URL + '/recepciones_api/get_variables_recepcion_transferencia', parametros)
         .then(req => req.json())
         .then(res => {
-            var variables = res.data
-            console.log(variables)
+            var variables = res.data 
             if (res.respuesta == 'ok') {
                 
                 Ver(variables)

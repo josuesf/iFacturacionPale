@@ -1,0 +1,17 @@
+{
+    "shortid": "r1IiWuK_Q",
+    "name": "FacturaComprobante",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1543248357686
+    },
+    "_id": "CQKSpVxzwraM0mZY",
+    "data": {
+        "shortid": "ryMOfdt_X"
+    },
+    "$entitySet": "templates"
+}

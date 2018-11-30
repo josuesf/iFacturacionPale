@@ -1,0 +1,48 @@
+<style>
+    {#asset stylesFormasPago.css @encoding=utf8}
+</style>
+<title> </title>
+
+<table> 
+     <tr class="row">
+            <td colspan="4" class="headerPage">{{:EMPRESA}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SIS}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+    {{if COD_LIBRO == "08"}} 
+        <tr class="row"> 
+            <td colspan="8" class="tituloCenter">FORMAS DE PAGO</td>
+        </tr> 
+        
+    {{else}}
+        <tr class="row"> 
+            <td colspan="8" class="tituloCenter">FORMAS DE COBRO</td>
+        </tr>  
+    {{/if}}  
+    <tr class="row">
+        <td colspan="8" class="tituloCenter"> (Agrupado por Movimientos)</td>
+    </tr>  
+    <tr class="row">
+        <td colspan="8">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}} 
+     
+</table>

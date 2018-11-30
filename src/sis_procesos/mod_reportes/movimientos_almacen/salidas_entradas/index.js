@@ -355,8 +355,7 @@ function AbrirDialogoEnviarMensaje(idTab,Cod_TipoComprobante){
                     }
                     fetch(URL + '/empresa_api/send_email_report', parametros)
                         .then(req => req.json())
-                        .then(res => {
-                            console.log(res)
+                        .then(res => { 
                             if(res.respuesta=='ok'){
                                 dialog.dockmodal("close");
                                 global.variablesReporteMovAlmacenes[idTab].dataBase64=[] 
@@ -422,8 +421,7 @@ function ReporteGeneral(idTab,Cod_TipoComprobante,TipoReporte,ParametroOrden,fla
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_almacen', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

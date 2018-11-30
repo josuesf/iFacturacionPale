@@ -1,0 +1,17 @@
+{
+    "shortid": "rkBjQf7AQ",
+    "name": "ReporteMovAlmacenLista",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542988463482
+    },
+    "_id": "bk5c9xGLlDY8mjAa",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "HJEhQz7Rm"
+    }
+}

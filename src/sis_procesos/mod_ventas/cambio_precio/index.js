@@ -221,8 +221,7 @@ function NuevoCambioPrecio() {
     fetch(URL + '/precios_api/get_variables_cambio_precio', parametros)
         .then(req => req.json())
         .then(res => {
-            var variables = res.data
-            console.log(variables)
+            var variables = res.data 
             if (res.respuesta == 'ok') {
                 
                 Ver(variables)

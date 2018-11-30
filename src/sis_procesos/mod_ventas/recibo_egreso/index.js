@@ -221,10 +221,7 @@ function CargarFormulario(variables, fecha_actual,empresa) {
             $("#Cod_TipoDoc_"+idTabRE).attr("disabled",true);
         }
     })
-    
-
-
-    console.log(global.variablesRE)
+     
 }
 
 function RefrescarFormulario(variables, fecha_actual,empresa,idTabRE) {
@@ -397,8 +394,7 @@ function RefrescarFormulario(variables, fecha_actual,empresa,idTabRE) {
             
         </div>`
     $('#tab_'+idTabRE).html(el)
-    //empty(ingreso).appendChild(el) 
-    console.log(global.variablesRE)
+    //empty(ingreso).appendChild(el)  
 
     $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
 
@@ -631,8 +627,7 @@ function Guardar(idTab) {
             Des_Movimiento, Cod_TipoComprobante, Serie,
             Numero, Fecha, MontoEgreso,MontoIngreso, Cod_Moneda, Obs_Movimiento
         })
-    }
-    console.log(parametros)
+    } 
     fetch(URL + '/recibo_iegreso_api/guardar_recibo', parametros)
         .then(req => req.json())
         .then(res => {

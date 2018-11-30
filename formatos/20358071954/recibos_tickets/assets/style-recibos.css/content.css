@@ -1,0 +1,56 @@
+* {
+  font-size: 11px;
+  font-family: 'Arial';
+}
+/* del emisor*/
+.nombre-empresa {
+  text-align: center;
+  margin: 0 0 0 0;
+  font-size: 12px
+}
+.direccion-empresa{
+  text-align: center;
+  margin: 0 0 0 0;
+}
+.ruc-emisor{
+  text-align: center;
+  margin: 0 0 0 0;
+}
+.tipo-doc{
+  font-weight: bold;
+  text-align: center;  
+  margin: 0 0 0 0;
+  padding: 5px 0 5px 0;
+}
+.correlativo{
+  text-align: center;
+  margin: 0 0 0 0;
+}
+.fecha-emision{
+  text-align: left;
+}
+/*del cliente*/
+.cliente{
+  text-align: left;
+  border-top: 1px dashed black;
+  border-bottom: 1px dashed black;
+  padding: 5px 0 5px 0;
+}
+
+.ticket {
+  width: 290px;
+  max-width: 290px;}
+img {
+  max-width: inherit;
+  width: inherit;
+}
+
+/*pie de pagina*/
+.pie-pagina{
+    padding-top: 64px;
+    text-align: center;
+    padding-left: 4px;
+}
+
+/*IMPRESION*/
+@media print { @page{ size: 80mm 297mm;  margin: 0 0 0 0;} } 

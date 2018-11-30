@@ -918,8 +918,7 @@ function RefrescarCompraVentaME(_escritura,idTab) {
     }
     fetch(URL + '/compra_venta_moneda_extranjera_api/get_comprobante_by_caja', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 if(res.data.comprobante_caja.length>0)
                     RefrescarTraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie,idTab)
@@ -952,8 +951,7 @@ function NuevoCompraVentaME(_escritura, caja) {
     }
     fetch(URL + '/compra_venta_moneda_extranjera_api/get_comprobante_by_caja', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 if(res.data.comprobante_caja.length>0)
                     TraerSiguienteNumeroComprobante(_escritura, res.data.comprobante_caja[0].Serie)

@@ -1680,8 +1680,7 @@ function GuardarMovimientoBancario(Facturas,CodLibro,idTab,callback){
                 callback(true)
             }else{
                 callback(false,res.detalle_error.message)
-            }
-            console.log(res)
+            } 
         }).catch(function (e) {
             console.log(e);
             callback(false,'Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e)
@@ -1751,8 +1750,7 @@ function GuardarMovimientoCaja(Facturas,CodLibro,idTab,callback){
                 callback(true)
             }else{
                 callback(false,res.detalle_error.message)
-            }
-            console.log(res)
+            } 
         }).catch(function (e) {
             console.log(e);
             callback(false,'Ocurrio un error en la conexion o al momento de cargar los datos.  Tipo error : '+e)

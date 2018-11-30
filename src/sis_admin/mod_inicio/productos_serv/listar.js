@@ -175,11 +175,9 @@ function CerrarTab(){
 //     return flagfecha?fechastr+(flaghora?' '+horastr:''):flaghora?horastr:''
 // }
 
- function EliminarProductoServ(_escritura, Id_Producto){
-     console.log("id producto",Id_Producto)
+ function EliminarProductoServ(_escritura, Id_Producto){ 
      var btnEliminar = document.getElementById('btnEliminarProducto')
-     btnEliminar.addEventListener('click', function del(ev){ 
-        console.log("click eliminar")
+     btnEliminar.addEventListener('click', function del(ev){  
         run_waitMe($('#main-contenido'), 3, "ios");
          const parametros = {
              method: 'POST',
@@ -193,8 +191,7 @@ function CerrarTab(){
          }
          fetch(URL+'/productos_serv_api/eliminar_producto', parametros)
              .then(req => req.json())
-             .then(res => {
-                console.log("respuesta de eliminacion",res)
+             .then(res => { 
                 //ListarProductosServ(_escritura,0)
                 //this.removeEventListener('click', del)
                 $('#main-contenido').waitMe('hide');

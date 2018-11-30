@@ -40,8 +40,7 @@ function ReporteGeneralEmail(idTab,TipoReporte,ParametroOrden,flag_preview,Tipo,
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_kardex', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  
@@ -137,8 +136,7 @@ function ReporteDetalladoEmail(idTab,TipoReporte,ParametroOrden,flag_preview,Tip
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_kardex_detallado', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

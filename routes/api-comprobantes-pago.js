@@ -474,8 +474,7 @@ router.post('/venta_simple', function (req, res) {
                     ] 
                     
                     EXEC_SQL_OUTPUT('USP_CAJ_COMPROBANTE_PAGO_G',parametrosComprobante, function (dataComprobante) {
-                        if (dataComprobante.err){
-                            console.log(dataComprobante.err)
+                        if (dataComprobante.err){ 
                             return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la venta'})
                         }
                         
@@ -508,8 +507,7 @@ router.post('/venta_simple', function (req, res) {
                                             ]
             
                                             EXEC_SQL('USP_CAJ_FORMA_PAGO_G',parametrosFormaPago, function (dataFormaPago) {
-                                                if (dataFormaPago.err){
-                                                    console.log(dataFormaPago.err)
+                                                if (dataFormaPago.err){ 
                                                     return res.json({respuesta:"error",detalle_error:'No se pudo guardar correctamente la forma de pago'})
                                                 } else{
                                                     return res.json({respuesta:"ok",data:id_ComprobantePago})
@@ -664,8 +662,7 @@ function DataDetalles(i,req,res,idComprobante,callback){
             ]
     
             EXEC_SQL('USP_CAJ_COMPROBANTE_D_G',parametrosComprobanteDetalles, function (dataComprobanteDetalle) {
-                if (dataComprobanteDetalle.err){
-                    console.log(dataComprobanteDetalle.err)
+                if (dataComprobanteDetalle.err){ 
                     callback(false)
                 }else{
                     DataDetalles(i+1,req,res,idComprobante,callback)

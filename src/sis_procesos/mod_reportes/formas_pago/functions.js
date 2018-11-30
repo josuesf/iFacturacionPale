@@ -43,8 +43,7 @@ function ReporteGeneralEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pre
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_forma_pago', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

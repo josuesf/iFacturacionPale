@@ -579,8 +579,7 @@ function ExtraerCambioSunat()
     }
     fetch(URL+'/cambio_monetario_api/extraer_cambio', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log('entro a get de sunat')
+        .then(res => { 
             if (res.respuesta=='ok' && res.data.cambios.length > 0) 
             {
                 

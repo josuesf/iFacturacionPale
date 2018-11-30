@@ -290,8 +290,7 @@ function AbrirDialogoEnviarMensaje(idTab){
             {
                 html: "<i class='fa fa-paper-plane'></i> Enviar",
                 buttonClass: "btn btn-sm btn-primary ink-reaction",
-                click: function (e, dialog) { 
-                    console.log(global.variablesReporteKardex[idTab].dataBase64)
+                click: function (e, dialog) {  
                     run_waitMe($('#dialogo_docker_'+idTab), 1, "ios","Enviando correo espere un momento....");
 
                     const parametros = {
@@ -310,8 +309,7 @@ function AbrirDialogoEnviarMensaje(idTab){
                     }
                     fetch(URL + '/empresa_api/send_email_report', parametros)
                         .then(req => req.json())
-                        .then(res => {
-                            console.log(res)
+                        .then(res => { 
                             if(res.respuesta=='ok'){
                                 dialog.dockmodal("close");
                                 global.variablesReporteKardex[idTab].dataBase64=[] 
@@ -602,8 +600,7 @@ function ReporteGeneral(idTab,TipoReporte,ParametroOrden,flag_preview,Tipo){
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_kardex', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  
@@ -741,8 +738,7 @@ function ReporteDetallado(idTab,TipoReporte,ParametroOrden,flag_preview,Tipo){
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_kardex_detallado', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

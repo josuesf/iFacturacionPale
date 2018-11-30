@@ -1,0 +1,66 @@
+<style>
+    {#asset stylesComprobantePDF.css @encoding=utf8}
+</style>
+<table> 
+    <tr class="row">
+            <td colspan="4" class="headerPage">{{:NOMBRE}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SISTEMA}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right"> </td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}} </td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+    {{if COD_LIBRO == "14"}} 
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">REGISTRO DE VENTAS</td>
+        </tr>   
+    {{else}}
+        <tr class="row"> 
+            <td colspan="6" style="font-weight: bold;font-size: 15px;text-align:center">REGISTRO DE COMPRAS</td>
+        </tr>  
+    {{/if}}  
+    <tr class="row">
+        <td colspan="6" style="font-size: 15px;text-align:center">(Total por Producto)</td>
+    </tr> 
+    
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="10">{{:FILTRO}}</td>
+    </tr> 
+     <tr class="row">
+        <td></td>
+    </tr> 
+     
+    <tr class="row">
+        <td class="headerTable" style="width:auto;">Codigo</td>
+        <td class="headerTable" style="width:auto;">Productos</td>
+        <td class="headerTable" style="width:auto;">Cantidad</td>
+        <td class="headerTable" style="width:auto;">UM</td>
+        <td class="headerTable" style="width:auto;">Precio Promedio</td>
+        <td class="headerTable" style="width:auto;">Total</td>
+    </tr>  
+    {{for DETALLES}}
+    <tr class="row">
+        <td class="detailsTable" style="width:auto;">{{:Cod_Producto}}</td>
+        <td class="detailsTable" style="width:auto;">{{:Nom_Producto}}</td>
+        <td class="detailsTable" style="width:auto;">{{:Cantidad}}</td>
+        <td class="detailsTable" style="width:auto;">{{:Nom_UnidadMedida}}</td>
+        <td class="detailsTable" style="width:auto;">{{:PrecioUnitario}}</td>
+        <td class="detailsTable" style="width:auto;">{{:Simbolo}} {{:Sub_Total}}</td>
+    </tr>  
+    {{/for}} 
+</table>

@@ -1,0 +1,20 @@
+{
+    "shortid": "HkSdO2-A7",
+    "name": "ReporteRegistroAuxiliarCompras",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "modificationDate": {
+        "$$date": 1542735139456
+    },
+    "_id": "QmBC5XQcQtkq1BZb",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

@@ -54,8 +54,7 @@ function ReporteGeneralEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pre
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  
@@ -163,8 +162,7 @@ function ReporteAuxiliarEmail(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_pr
    } 
    fetch(URL + '/reporte_api/reporte_auxiliar', parametros)
        .then(req => req.json())
-       .then(res => {
-           console.log(res)
+       .then(res => { 
            if(res.respuesta=='ok'){
                if(res.data.detalles.length>0){ 
                    jsreport.serverUrl = URL_REPORT;  
@@ -274,8 +272,7 @@ function ReporteAuxiliarDetalladoEmail(idTab,Cod_Libro,TipoReporte,ParametroOrde
    //console.log(parametros)
    fetch(URL + '/reporte_api/reporte_auxiliar_detallado', parametros)
        .then(req => req.json())
-       .then(res => {
-           console.log(res)
+       .then(res => { 
            if(res.respuesta=='ok'){
                if(res.data.detalles.length>0){ 
                    jsreport.serverUrl = URL_REPORT;  
@@ -391,8 +388,7 @@ function ReporteAuxiliarDetalladoFormaPagoEmail(idTab,Cod_Libro,TipoReporte,Para
    //console.log(parametros)
    fetch(URL + '/reporte_api/reporte_general', parametros)
        .then(req => req.json())
-       .then(res => {
-           console.log(res)
+       .then(res => { 
            if(res.respuesta=='ok'){
                if(res.data.detalles.length>0){ 
                    jsreport.serverUrl = URL_REPORT;  

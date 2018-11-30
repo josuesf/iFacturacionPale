@@ -1,0 +1,327 @@
+{
+    "FILTRO":"Cod_caja: Todos;Caja_name: null; Fecha Inicio: Todos; Fecha Fin: Todos; Turno Inicio: Todos; Turno Fin: Todo",
+    "EMPRESA": "INMARKET CUSCO S.A.C.",
+    "RUC": "20491228200",
+    "DIRECCION":"Calle los Olivos 1440 interior b4",
+    "TIPO_REPORTE":"REPORTE CUENTAS POR COBRAR Y POR PAGAR",
+    "FECHA_SIS":"10/11/2018",
+    "IMPUESTO":"18",
+    "COD_CAJA":"CAJ0002",
+    "CAJ_NOMBRE":"CAJA Nro 12",
+    "COD_CUENTA_BANCARIA":"0011-204-0100010169",
+    "DES_CUENTA":"BBVA SOLES LIQUIDOS",
+    "COD_MONEDA":"PEN",
+    "TIPO_MONEDA":"SOLES",
+    "MONTO_DISPONIBLE":"12000",
+    "DETALLES":[{
+        "Documento":"BE:B002-00000561",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"25",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000566",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"50",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000567",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"0",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"20",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000569",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"300",
+        "IngresoDolares":"0",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000578",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"0",
+        "IngresoDolares":"0",
+        "EgresoSoles":"100",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    },{
+        "Documento":"BE:B002-00000556",
+        "Concepto":"1",
+        "Cliente":"CLIENTES VARIOS",
+        "Movimiento":"POR LA VENTA DE MERCADERIA",
+        "IngresoSoles":"0",
+        "IngresoDolares":"100",
+        "EgresoSoles":"0",
+        "EgresoDolares":"0",
+        "Fecha":"2018-02-04 16:44:23.947"
+    }]
+}

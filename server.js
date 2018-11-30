@@ -243,8 +243,7 @@ app.get('/', function (req, res) {
     res.redirect('/login');
   } else{
     if(!app.locals.apertura){
-      if (req.session.caja) {
-        console.log("turno cambiado",app.locals.turno)
+      if (req.session.caja) { 
         CargarVariables(req,res) 
       }else{
         errores = "No tiene asignada ninguna caja. No puede iniciar sesion en el sistema"
@@ -304,8 +303,7 @@ app.post('/login', function (req, res) {
     if (m.err) {
       errores = "Ocurrio un error con el servidor comuniquese con el administrador. " //+m.err
       return res.redirect('/login');
-    }else{
-      console.log(m)
+    }else{ 
       if(m.result.length>0){
         //-- validacion extra para el caso de clientes
         if(m.result[0].CadenaConexion!=undefined && m.result[0].CadenaConexion!=null && m.result[0].CadenaConexion!=''){

@@ -343,8 +343,7 @@ function AbrirDialogoEnviarMensaje(idTab,Cod_Libro){
                     }
                     fetch(URL + '/empresa_api/send_email_report', parametros)
                         .then(req => req.json())
-                        .then(res => {
-                            console.log(res)
+                        .then(res => { 
                             if(res.respuesta=='ok'){
                                 dialog.dockmodal("close");
                                 global.variablesReporteFormaPago[idTab].dataBase64=[] 
@@ -533,8 +532,7 @@ function ReporteGeneral(idTab,Cod_Libro,TipoReporte,ParametroOrden,flag_preview,
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_forma_pago', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

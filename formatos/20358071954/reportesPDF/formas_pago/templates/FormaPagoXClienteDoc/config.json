@@ -1,0 +1,17 @@
+{
+    "shortid": "ryEy9jWRm",
+    "name": "FormaPagoXClienteDoc",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542748835984
+    },
+    "_id": "OFkAQzgfg5RhiMOn",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "H1rxk8g0Q"
+    }
+}

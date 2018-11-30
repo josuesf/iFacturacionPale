@@ -1,0 +1,17 @@
+{
+    "shortid": "ryygG_td7",
+    "name": "TicketFactura",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1537222564469
+    },
+    "_id": "2ZxeNlnI3Hmwxe84",
+    "data": {
+        "shortid": "ryMOfdt_X"
+    },
+    "$entitySet": "templates"
+}

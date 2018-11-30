@@ -5,8 +5,8 @@ var nodemailer = require('nodemailer')
 var transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
-          user: 'pulgarcito48@hotmail.com',
-          pass: 'OMARSAS3TIGRES'
+          user: 'xxxxxxxx@hotmail.com',
+          pass: 'xxxxxxxx'
       }
 });
 
@@ -275,7 +275,6 @@ function deleteElementArrayJsonVentas(arrayJson, pIdTab, pCodigo) {
         }
     }
 }
-
 
 
 function BloquearControles(event) {

@@ -1,0 +1,20 @@
+{
+    "shortid": "rkfSWcwaX",
+    "name": "ReporteCuentasXCobrar",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "data": {
+        "shortid": "BJXpfuVa7"
+    },
+    "modificationDate": {
+        "$$date": 1542747266147
+    },
+    "_id": "yiseLtrKphX3MZav",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    }
+}

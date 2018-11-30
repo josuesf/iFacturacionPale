@@ -1,0 +1,17 @@
+{
+    "shortid": "S1qQOwE0m",
+    "name": "ReporteStockFisicoValorizadoPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "data": {
+        "shortid": "HJEhQz7Rm"
+    },
+    "modificationDate": {
+        "$$date": 1542988848046
+    },
+    "_id": "ynibOsxzB21kpzRE",
+    "$entitySet": "templates"
+}

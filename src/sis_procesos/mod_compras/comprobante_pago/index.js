@@ -2576,8 +2576,7 @@ function EmisionCompletaDetalles(indiceDetalle,CodLibro,variables,idComprobante,
              
                 fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago_detalle', parametros)
                     .then(req => req.json())
-                    .then(res => {
-                        console.log(res)
+                    .then(res => { 
                         //callback(false)
                         if (res.respuesta == 'ok') {
                            /*if($("#divLicitacion").css("display")=="block" && $("#optLicitacion").is(":checked")){
@@ -2930,8 +2929,7 @@ function RecuperarParametrosEmisionCompleta(CodLibro,variables,data){
  
         fetch(URL + '/comprobantes_pago_api/guardar_comprobante_pago', parametros)
             .then(req => req.json())
-            .then(res => { 
-                console.log(res)
+            .then(res => {  
                 if (res.respuesta == 'ok') {
                     var idComprobante = res.data['id_ComprobantePago']//res.data[0].valor
                     var Numero = res.data['Numero']//res.data[1].valor
@@ -3541,8 +3539,7 @@ function CambioCodCuentaBancaria(CodLibro){
     }
     fetch(URL + '/cuentas_bancarias_api/get_cheques_by_cuenta_cliente', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log("get cheques",res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 var cheques = res.data.cheques 
                 if(cheques)
@@ -4136,8 +4133,7 @@ function TraerCuentaBancariaPorSucursal(CodLibro){
     }
     fetch(URL + '/cuentas_bancarias_api/get_cuenta_by_sucursal', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log("cuenta by sucursal",res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 var cuentas = res.data.cuentas
                 LlenarCuentaBancaria(cuentas,CodLibro)

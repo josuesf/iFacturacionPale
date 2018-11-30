@@ -216,8 +216,7 @@ function EditarCliente(_escritura, mas_variables, Id_ClienteProveedor){
     }
     fetch(URL+'/clientes_api/get_one_cliente', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log("editar cliente",res)
+        .then(res => { 
             if (res.respuesta == 'ok') {
                 NuevoCliente(_escritura,mas_variables,res.data.cliente[0])
             }

@@ -41,8 +41,7 @@ function ReporteGeneralEmail(idTab,Cod_TipoComprobante,TipoReporte,ParametroOrde
     //console.log(parametros)
     fetch(URL + '/reporte_api/reporte_general_almacen', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log(res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 if(res.data.detalles.length>0){ 
                     jsreport.serverUrl = URL_REPORT;  

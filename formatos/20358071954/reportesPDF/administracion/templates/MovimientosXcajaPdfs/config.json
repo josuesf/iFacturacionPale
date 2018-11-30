@@ -1,0 +1,17 @@
+{
+    "shortid": "BJOr8RY6Q",
+    "name": "MovimientosXcajaPdfs",
+    "recipe": "chrome-pdf",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542989131595
+    },
+    "_id": "U5rTVMEXGqmQpp3D",
+    "$entitySet": "templates",
+    "data": {
+        "shortid": "r1mVOEP6X"
+    }
+}

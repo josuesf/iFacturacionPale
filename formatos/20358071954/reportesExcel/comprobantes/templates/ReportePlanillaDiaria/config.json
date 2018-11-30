@@ -1,0 +1,20 @@
+{
+    "shortid": "H1-wH8RsX",
+    "name": "ReportePlanillaDiaria",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542648811313
+    },
+    "_id": "lgXfwslOq69i8kZO",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SkUYdDso7"
+    }
+}

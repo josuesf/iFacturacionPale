@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+         {#asset stylesExcel.css @encoding=utf8}
+    </style>
+    <script> </script>
+</head>
+
+<body>
+<table> 
+    <tr class="row">
+            <td colspan="4" class="headerPage">{{:EMPRESA}}</td> 
+            <td colspan="4" class="headerPage_right">{{:FECHA_SIS}}</td>
+    </tr> 
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">DIRECCION: {{:DIRECCION}}</td> 
+            <td colspan="4" class="headerPage_right">Pag 1.</td>
+    </tr>  
+    <tr class="row">
+            <td colspan="4" class="headerPage_left">RUC: {{:RUC}}</td> 
+            <td colspan="4" class="headerPage_right">{{:USUARIO}}</td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+     <tr class="row">
+            <td colspan="4"></td> 
+            <td colspan="4"></td>
+    </tr> 
+        <tr class="row"> 
+            <td colspan="8" class="tituloCenter">RESUMEN DE TURNO</td>
+        </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    <tr class="row">
+        <td colspan="8">{{:FILTRO}}</td>
+    </tr>  
+    <tr class="row">
+        <td></td>
+    </tr>  
+    {{:~recorrerArreglo(DETALLES)}}
+      <tr class="row">
+         <td></td>
+      </tr>
+      <tr class="row">
+      <td colspan="8" cclass="headerPage">ANEXO DE CAJA</td>
+      </tr>
+      <tr class="row">
+          <td colspan="2" class="headerTable">ID/CUENTA BANCARIA</td>
+          <td colspan="2" class="headerTable">DETALLE</td>
+          <td colspan="2" class="headerTable">SOLES</td>
+          <td colspan="2" class="headerTable">DOLARES</td>
+      </tr>
+      <tr class="row">
+          <td colspan="2"  class="detailsTable">{{:COD_CUENTA_BANCARIA}}</td>
+          <td colspan="2"  class="detailsTable">{{:DES_CUENTA}}</td>
+            {{if COD_MONEDA == "PEN"}} 
+                <td colspan="2"  class="detailsTable">{{:MONTO_DISPONIBLE}}</td>
+                <td colspan="2"  class="detailsTable"></td>
+            {{/if}} 
+             {{if COD_MONEDA == "USD"}} 
+                <td colspan="2"  class="detailsTable"></td>
+                <td colspan="2"  class="detailsTable">{{:MONTO_DISPONIBLE}}</td>
+            {{/if}}  
+          
+      </tr>
+       <tr class="row">
+          <td colspan="4"  class="detailsTable">TOTAL DISPONIBLE: </td>
+            {{if COD_MONEDA == "PEN"}} 
+                <td colspan="2"  class="detailsTable">{{:MONTO_DISPONIBLE}}</td>
+                <td colspan="2"  class="detailsTable"></td>
+            {{/if}} 
+             {{if COD_MONEDA == "USD"}} 
+                <td colspan="2"  class="detailsTable"></td>
+                <td colspan="2"  class="detailsTable">{{:MONTO_DISPONIBLE}}</td>
+            {{/if}}  
+          
+      </tr>
+</table>
+</body>
+</html>

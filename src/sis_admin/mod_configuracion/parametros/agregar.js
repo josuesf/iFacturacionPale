@@ -207,8 +207,7 @@ function LlenarTabla(parametro){
                         if (res.respuesta == 'ok') {
                             LlenarVistas(res.data.vistas,columnas,parametro)
                             $('#main-contenido').waitMe('hide');
-                        }else{
-                            console.log(res)
+                        }else{ 
                             $('#main-contenido').waitMe('hide');
                         }
 
@@ -220,8 +219,7 @@ function LlenarTabla(parametro){
 
                 //LlenarParametros(res.data)
             }
-            else{
-                console.log(res)
+            else{ 
                 $('#main-contenido').waitMe('hide');
             }
             

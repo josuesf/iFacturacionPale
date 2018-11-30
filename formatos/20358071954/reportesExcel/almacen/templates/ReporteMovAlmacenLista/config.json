@@ -1,0 +1,20 @@
+{
+    "shortid": "rkDER-mAm",
+    "name": "ReporteMovAlmacenLista",
+    "recipe": "html-to-xlsx",
+    "engine": "jsrender",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1542832859633
+    },
+    "_id": "WY4vXZpE6XWdojpJ",
+    "$entitySet": "templates",
+    "htmlToXlsx": {
+        "htmlEngine": "chrome"
+    },
+    "data": {
+        "shortid": "SygoC-Q0X"
+    }
+}

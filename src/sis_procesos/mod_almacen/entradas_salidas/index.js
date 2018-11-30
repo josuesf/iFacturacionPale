@@ -232,9 +232,7 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
     $("#tabs_contents").append(el)
     $("#id_"+idTabES).click()
 
-    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () {
-        console.log(global.objProducto)
-        console.log(IdTabSeleccionado)
+    $('#modal-superior').off('hidden.bs.modal').on('hidden.bs.modal', function () { 
         if(global.objProducto!='' && global.objProducto){
             $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Id_Producto').find('input').val(global.objProducto.Id_Producto)
             $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cod_Producto').find('input').attr("data-id",global.objProducto.Id_Producto)
@@ -248,8 +246,6 @@ function VerEntradasSalidas(variables,CodTipoComprobante,fecha_actual) {
             else
                 $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Precio_Venta').find('input').val(0)
             $("tr#"+global.variablesES[IdTabSeleccionado].idFilaSeleccionada).find('td.Cantidad').find('input').val(1)
-        }else{
-            console.log("erorrrr")
         }
     })
 
@@ -1098,7 +1094,7 @@ function AceptarRegistro(CodTipoComprobante,fecha_actual,idTab){
 
             // destino
             var Cod_Destino = $("#Cod_Destino_"+idTab).val()
-            var Id_AlmacenMov = global.variablesES[idTab].almacen_mov.Id_AlmacenMov
+            var Id_AlmacenMov = null//global.variablesES[idTab].almacen_mov.Id_AlmacenMov
 
 
             const parametros = {
@@ -1279,8 +1275,7 @@ function EntradasSalidas(Cod_TipoComprobante) {
     }
     fetch(URL + '/almacenes_api/get_variables_entradas_salidas', parametros)
         .then(req => req.json())
-        .then(res => {
-            console.log("entradas y salidad",res)
+        .then(res => { 
             if(res.respuesta=='ok'){
                 var variables = res.data 
                 const parametros = {
